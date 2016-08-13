@@ -90,6 +90,16 @@ section.jumbotron {
   }
 }
 
+
+<!--modified by Harsha -->
+.icar-toolbar-tools {max-height:44px}
+.icar-toolbar{min-height:44px}
+
+md-backdrop {top:44px;}
+md-sidenav {top:44px !important;}
+
+-->
+
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject
  *  all your sass files automatically
