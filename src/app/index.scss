@@ -174,12 +174,24 @@ md-sidenav {
   transition: background-color .3s cubic-bezier(0,0,0.2,1);
 }
 
+.xyzabc:hover {
+  //background: #FFDD00;
+  color: #ff6666;
+}
+
+.xyzabc:visited {
+  //background: #FFDD00;
+  color: #ff6666;
+}
+
+/*
 .cjGgHb .M9kDrd:hover, .M9kDrd:focus {
   background-color: #e7e7e7;
 }
 .M9kDrd.pWQY8d {
   color: #db4437;
 }
+*/
 
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject
