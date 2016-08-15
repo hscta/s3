@@ -182,7 +182,17 @@ md-sidenav {
 .xyzabc:visited {
   //background: #FFDD00;
   color: #ff6666;
+  text-decoration: none;
+  decoration: none;
 }
+
+.xyzabc:link {
+  //background: #FFDD00;
+  color: black;
+  text-decoration: none;
+  decoration: none;
+}
+
 
 /*
 .cjGgHb .M9kDrd:hover, .M9kDrd:focus {
