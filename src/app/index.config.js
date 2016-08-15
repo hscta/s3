@@ -4,7 +4,7 @@
     angular
         .module('uiplatform')
         //.service('loginModal', loginModal)
-        .config(themeConfig)
+        .config(themeConfig);
 
         // .config(loginModalConfig)
     // function loginModal($uibModal, $rootScope) {
@@ -69,7 +69,7 @@
     function themeConfig($mdIconProvider, $mdThemingProvider) {
         $mdThemingProvider
             .theme('default')
-            .primaryPalette('grey', {
+            .primaryPalette('defaultPrimary', {
                 'default': '600'
             })
             .accentPalette('teal', {

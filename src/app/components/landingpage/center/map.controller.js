@@ -6,11 +6,11 @@
 
     angular
         .module('uiplatform')
-        .controller('MapController', MapController);
+        .controller('MainMapController', MainMapController);
 
-    function MapController($scope, $rootScope, navService, $mdSidenav, $log, $document,
+    function MainMapController($scope, $rootScope, navService, $mdSidenav, $log, $document,
                            $timeout, leftnavService, $interval, requestService) {
-        $log.log('MapController');
+        $log.log('MainMapController');
         var vm = this;
 
         vm.initMap = function () {
@@ -21,20 +21,15 @@
             var mapOptions = {zoom: 13, center: myLatLng, mapTypeId: google.maps.MapTypeId.ROADMAP, heading: 90};
 
             $log.log(myLatLng);
-            var mapDiv = $document[0].getElementById('map');
-            if(mapDiv === null)
-                return;
-            vm.centerMap = new google.maps.Map(mapDiv, mapOptions);
+            vm.centerMap = new google.maps.Map($document[0].getElementById('mainmap'), mapOptions);
             //$log.log(vm.centerMap);
             vm.addSearchListener();
         };
 
         vm.addSearchListener = function() {
             $log.log("addSearchListener");
-            var mapSearchInput = document.getElementById('pac-input');
-            if(mapSearchInput === null)
-                return;
-            var autocomplete = new google.maps.places.Autocomplete(mapSearchInput);
+            var input = (document.getElementById('pac-input'));
+            var autocomplete = new google.maps.places.Autocomplete(input);
             autocomplete.bindTo('bounds', vm.centerMap);
             //var infowindowplacesearch = new google.maps.InfoWindow();
 
@@ -62,13 +57,10 @@
 
         vm.resizeMap = function() {
             $log.log("resizeMap");
-            var mapDiv = $document[0].getElementById('map');
-            if(mapDiv === null)
-                return;
-            google.maps.event.trigger(mapDiv, "resize");
+            google.maps.event.trigger(document.getElementById('mainmap'), "resize");
         };
 
-        $interval(vm.resizeMap, 1000);
+        $interval(vm.resizeMap, 500);
         vm.initMap();
     }
 })();

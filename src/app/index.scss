@@ -94,7 +94,7 @@ section.jumbotron {
 
 .icar-toolbar-tools {
   max-height:44px;
-  background: #CCE350;
+  background: white;
   //color: black;
 }
 .icar-toolbar{
@@ -155,44 +155,31 @@ md-sidenav {
   border-color: #4d90fe;
 }
 
+.M9kDrd{
+  outline: none;
+  cursor: pointer;
+  padding: 0 12px 0 20px;
+  color: rgba(0,0,0,0.87);
+  font-size: 14px;
+  height: 48px;
+  font-weight: 500;
+  opacity: .85;
+  line-height: 50px;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  transition: background-color .3s cubic-bezier(0,0,0.2,1);
+}
 
-
-//#centernav { background: #CCE350;
-//  position: absolute; height: 48px; width: auto; left: 300px; right: 50px; top: 48px; bottom: auto;
-//}
-//
-//#middle {
-//  position: absolute; height: auto; width: auto; left: 250px; right: 0; top: 100px; bottom: 0;
-//}
-//
-//#mapfiter {
-//  position: absolute; height: auto; width: 50px; left: 50px; right: 0; top: 0; bottom: 0;
-//}
-//
-//#map {
-//  position: absolute; height: auto; width: auto; left: 50px; right: 50px; top: 0; bottom: 0;
-//}
-//
-//#management {
-//  position: absolute; height: auto; width: auto; left: 50px; right: 50px; top: 0; bottom: 0;
-//}
-//
-//#righttoolbar {
-//  position: absolute; height: auto; width: 50px; left: 1300px; right: 0; top: 0; bottom: 0;
-//}
-//
-//.ldiv {
-//  position: absolute; height: auto; width: 250px; left: 0; right: 0; top: 100px; bottom: 0
-//}
-
-//.ldiv {
-//  //float: left;
-//  min-height: 92%;
-//  min-width: 15%; /* 220px; */
-//  max-width: 15%; /* 220px; */
-//  margin-left: 1px;
-//  box-sizing: border-box;
-//}
+.cjGgHb .M9kDrd:hover, .M9kDrd:focus {
+  background-color: #e7e7e7;
+}
+.M9kDrd.pWQY8d {
+  color: #db4437;
+}
 
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject
