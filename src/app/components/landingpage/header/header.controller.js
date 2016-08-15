@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('HeaderController', HeaderController);
 
-    function HeaderController(navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
+    function HeaderController($rootScope, navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
                             $mdToast, $document, loginService, requestService) {
 
         $log.log('HeaderController');
@@ -21,6 +21,7 @@
         //vm.title = $state.current.data.title;
         vm.showSimpleToast = showSimpleToast;
         vm.toggleRightSidebar = toggleRightSidebar;
+        vm.toggleLeftnav = toggleLeftnav;
 
         navService
             .loadAllItems()
@@ -30,6 +31,10 @@
 
         function toggleRightSidebar() {
             $mdSidenav('right').toggle();
+        }
+
+        function toggleLeftnav() {
+            $rootScope.$broadcast('toggleLeftnav', {});
         }
 
         function toggleItemsList() {

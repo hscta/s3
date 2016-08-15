@@ -7,6 +7,7 @@
 
     function authService($window, $log, TOKEN_KEY) {
         var vm = this;
+        $log.log("authService");
 
         vm.parseJwt = function(token) {
             //$log.log(token);
@@ -43,11 +44,10 @@
 
 
     function authInterceptor($log, $q, API, authService) {
-        var errorStatusCodes = [400, 401, 403];
         return {
             // automatically attach Authorization header
             request: function(config) {
-                $log.log(config);
+                //$log.log(config);
 
                 if(config.url.indexOf(API) === 0) {
                     if (config.method == 'POST') {
@@ -63,16 +63,9 @@
 
             },
 
-
-
-
             // If a token was sent back, save it
             response: function(res) {
                 //$log.log(res);
-                if(errorStatusCodes.indexOf(res.status) != -1) {
-                    $log.log("failure status code");
-                    return $q.reject(res);
-                }
                 //$log.log(res.config.url + ", " + API);
                 if(res.data && res.data.data) {
                     //$log.log(res.data.data.token);
@@ -81,8 +74,17 @@
                     }
                 }
 
+                //if(res.status >= 400 && res.status < 500)
+                //$log.log("resolving " + res.status);
+
+                //return $q.resolve(res);
                 return res;
-            }
+            },
+
+            // responseError: function(res) {
+            //     $log.log('interceptor');
+            //     $log.log(res);
+            // }
 
         }
     }
@@ -91,6 +93,8 @@
     function requestService($http, $log, $rootScope, authService, $q) {
         var vm = this;
         var authListeners = [];
+        var errorStatusCodes = [400, 401, 403];
+
 
         vm.getToken = function() {
             return authService.getToken();
@@ -106,9 +110,11 @@
                 return $http.post(api, data);
 
             if(authService.isAuthed() || api.indexOf('gettoken') > 0) {
-                return $http.post(api, data);
-                    //.catch(vm.checkLogin);
+                return $http.post(api, data)
+                    .catch(vm.handleFailure)
             } else {
+                $log.log("user not authenticated");
+                vm.checkLogin();
                 return $q.reject({'auth': false});
             }
         }
@@ -124,27 +130,38 @@
                 return $http.get(api);
 
             if(authService.isAuthed()) {
-                return $http.get(api)
-                    .catch(vm.checkLogin);
+                return $http.get(api);
+                    //.catch(vm.checkLogin);
             } else {
-                vm.checkLogin();
+                return vm.checkLogin();
             }
         }
 
 
         vm.addAuthListener = function(callback) {
-            //$log.log("adding callback " + callback);
+            //$log.log('adding login callback');
             authListeners.push(callback)
         }
 
+        vm.handleFailure = function(res) {
+            $log.log("api returned error");
+            $log.log(res);
+            if(errorStatusCodes.indexOf(res.status) != -1) {
+                $log.log("failure status code");
+                vm.checkLogin(true);
+            }
+        }
 
         vm.checkLogin = function(force) {
             if(!authService.isAuthed() || force) {
                 angular.forEach(authListeners, function(value, key) {
                     //$log.log(value);
+                    $log.log("showing login");
                     value();
                 });
             }
+
+            //$q.reject({'something': 'bad'});
         }
     }
 
@@ -161,14 +178,3 @@
 
 })();
 
-// function () {
-//
-//     var getToken = function() {
-//         return {"token" : "mytoken"};
-//
-//     }
-//
-//     return {
-//         getToken : getToken
-//     }
-// })

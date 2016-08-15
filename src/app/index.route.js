@@ -3,7 +3,7 @@
 
   angular
     .module('uiplatform')
-    .config(routerConfig)
+    .config(routerConfig);
 
   /** @ngInject */
   function routerConfig($stateProvider, $urlRouterProvider) {
@@ -19,25 +19,66 @@
               url: '/',
               views: {
                   '': {
-                      templateUrl: 'app/main/main.html'
+                      templateUrl: 'app/main/main.html',
+                      controller: 'MainController as vm'
                   },
                   'header@home': {
-                      templateUrl: 'app/components/landing/header/header.html',
-                      controller: 'HeaderController',
-                      controllerAs: 'HeaderController'
+                      templateUrl: 'app/components/landingpage/header/header.html',
+                      controller: 'HeaderController as vm'
                   },
                   'leftnav@home': {
-                      templateUrl: 'app/components/landing/leftnav/leftnav.html',
-                      controller: 'LeftnavController',
-                      controllerAs: 'LeftnavController'
+                      templateUrl: 'app/components/landingpage/dashboard/leftnav_dashboard.html',
+                      controller: 'LeftNavDashboardController as vm'
+                  },
+                  'lefttoolbar@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/lefttoolbar_dashboard.html',
+                      controller: 'LeftToolbarController as vm'
+                  },
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/map.html',
+                      controller: 'MapController as vm'
                   },
                   'rightnav@home': {
-                      templateUrl: 'app/components/landing/rightnav/rightnav.html',
-                      controller: 'RightnavController',
-                      controllerAs: 'RightnavController'
+                      templateUrl: 'app/components/landingpage/rightnav/rightnav_notifications.html',
+                      controller: 'RightnavController as vm'
+                  }
+                  // 'righttoolbar@home': {
+                  //     templateUrl: 'app/components/landingpage/dashboard/righttoolbar_dashboard.html',
+                  //     controller: 'RightToolbarController as vm',
+                  // },
+
+              }
+          })
+          .state('home.dashboard', {
+              url: 'home/dashboard',
+              views: {
+                  'leftnav@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnav_dashboard.html',
+                      controller: 'LeftNavDashboardController as vm'
+                  },
+                  'lefttoolbar@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/lefttoolbar_dashboard.html',
+                      controller: 'LeftToolbarDashboardController as vm'
+                  },
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/map.html',
+                      controller: 'MapController as vm'
                   }
               }
-          });
+          })
+          .state('home.management', {
+              url: 'home/management',
+              views: {
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/management/management.html',
+                      controller: 'ManagementController as vm'
+                  },
+                  'leftnav@home': {
+                      templateUrl: 'app/components/landingpage/management/leftnav_management.html',
+                      controller: 'LeftNavManagementController as vm'
+                  }
+              }
+          })
 
       $urlRouterProvider.otherwise('/');
   }

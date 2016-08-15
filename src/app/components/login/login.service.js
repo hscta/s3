@@ -44,7 +44,7 @@
     }
 
 
-    function loginService($rootScope, $http, $log, $mdDialog, API, authService, requestService) {
+    function loginService($rootScope, $http, $log, $q, $mdDialog, API, authService, requestService) {
         var vm = this;
 
         vm.login = function (username, password) {
@@ -55,9 +55,10 @@
                     password: password
                 }
             }).then(function (response) {
-                $log.log("he he he ho ho ho");
+                //$log.log("he he he ho ho ho");
                 $log.log(response);
-                return response;
+                //$rootScope.$on('getData', vm.getData);
+                //return response;
                 //authService.saveToken(response.data.token);
             });
         }

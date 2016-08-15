@@ -91,14 +91,108 @@ section.jumbotron {
 }
 
 
-<!--modified by Harsha -->
-.icar-toolbar-tools {max-height:44px}
-.icar-toolbar{min-height:44px}
 
-md-backdrop {top:44px;}
-md-sidenav {top:44px !important;}
+.icar-toolbar-tools {
+  max-height:44px;
+  background: #CCE350;
+  //color: black;
+}
+.icar-toolbar{
+  min-height:44px;
 
--->
+}
+
+md-backdrop {
+  top:44px;
+}
+md-sidenav {
+  top:44px !important;
+}
+
+#vericalToolBar {
+  background-color: rgb(255,255,255);
+  width: 50px;
+  //float:left;
+}
+
+#vericalToolBar md-icon {
+  color: grey;
+}
+
+//#toolBarTitle {
+//  writing-mode: tb-rl;
+//  //color: rgba(255,255,255,0.87);
+//}
+
+#centermap {
+  //float:left;
+  //min-height: 55%;
+  //min-width: 70%;
+  height: 550px;
+
+  //max-height: 90%;
+  //max-width: 80%;
+  //border: 1px solid red;
+  //box-sizing: border-box;
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 300;
+  //margin-top: -40px;
+  //padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 300px;
+  position: relative;
+  top:-273px;
+  left:180px;
+  z-index:1;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+
+
+//#centernav { background: #CCE350;
+//  position: absolute; height: 48px; width: auto; left: 300px; right: 50px; top: 48px; bottom: auto;
+//}
+//
+//#middle {
+//  position: absolute; height: auto; width: auto; left: 250px; right: 0; top: 100px; bottom: 0;
+//}
+//
+//#mapfiter {
+//  position: absolute; height: auto; width: 50px; left: 50px; right: 0; top: 0; bottom: 0;
+//}
+//
+//#map {
+//  position: absolute; height: auto; width: auto; left: 50px; right: 50px; top: 0; bottom: 0;
+//}
+//
+//#management {
+//  position: absolute; height: auto; width: auto; left: 50px; right: 50px; top: 0; bottom: 0;
+//}
+//
+//#righttoolbar {
+//  position: absolute; height: auto; width: 50px; left: 1300px; right: 0; top: 0; bottom: 0;
+//}
+//
+//.ldiv {
+//  position: absolute; height: auto; width: 250px; left: 0; right: 0; top: 100px; bottom: 0
+//}
+
+//.ldiv {
+//  //float: left;
+//  min-height: 92%;
+//  min-width: 15%; /* 220px; */
+//  max-width: 15%; /* 220px; */
+//  margin-left: 1px;
+//  box-sizing: border-box;
+//}
 
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject

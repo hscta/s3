@@ -1,5 +1,18 @@
 (function() {
-  'use strict';
+
+    'use strict';
+
+    angular
+        .module('uiplatform')
+        .run(runBlock);
+
+    /** @ngInject */
+    function runBlock($rootScope, $state, $log) {
+        $log.log("runBlock");
+        //$rootScope.$emit('getData', {'login': true});
+    }
+
+
 
   // angular
   //   .module('uiplatform')

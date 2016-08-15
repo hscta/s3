@@ -5,11 +5,21 @@
         .module('uiplatform')
         .controller('MainController', MainController);
 
-    function MainController(navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
+    function MainController($scope, $rootScope, navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
                             $mdToast, $document, loginService, requestService) {
 
         $log.log('MainController');
         var vm = this;
+
+
+        // $rootScope.$on('$viewContentLoading',
+        //     function(event, viewConfig) {
+        //         // Access to all the view config properties.
+        //         // and one special property 'targetView'
+        //         // viewConfig.targetView
+        //         $log.log("$viewContentLoading");
+        //         $rootScope.$emit('getLeftnavData', {'getLeftnavEvent': true});
+        //     });
 
         // vm.menuItems = [ ];
         // vm.selectItem = selectItem;
@@ -79,13 +89,13 @@
         //     );
         // }
 
-        vm.checkLogin = function() {
-            if(!loginService.isAuthed()) {
-                loginService.checkLogin();
-            }
-        }
-
-        vm.checkLogin();
+        // vm.checkLogin = function() {
+        //     if(!loginService.isAuthed()) {
+        //         loginService.checkLogin();
+        //     }
+        // }
+        //
+        // vm.checkLogin();
     }
 
 })();
