@@ -9,11 +9,17 @@
         .module('uiplatform')
         .controller('RightnavController', RightnavController);
 
-    function RightnavController(navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
+    function RightnavController($scope,navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
                               $mdToast, $document, loginService, requestService) {
 
         $log.log('RightnavController');
         var vm = this;
+
+        vm.toggleRightSidebar = function(event, data) {
+            vm.right_nav_toggle = data.right_nav_toggle;
+        }
+
+        $scope.$on('toggleRightSidebar', vm.toggleRightSidebar);
     }
 })();
 

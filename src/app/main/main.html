@@ -2,13 +2,20 @@
 
 
 <div ui-view="header"></div>
-<div ui-view="leftnav"></div>
-<div ui-view="center"></div>
 <div ui-view="rightnav"></div>
 <div ui-view="footer"></div>
 
 
+<md-content layout="row" flex class="altered">
+    <div ui-view="leftnav"></div>
 
+    <div layout="column" flex id="content">
+        <md-content layout="column" flex class="md-padding">
+            <div ui-view="center"></div>
+
+        </md-content>
+    </div>
+</md-content>
 
 <!--<div ui-view></div>-->
 

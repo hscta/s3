@@ -22,6 +22,7 @@
         vm.showSimpleToast = showSimpleToast;
         vm.toggleRightSidebar = toggleRightSidebar;
         vm.toggleLeftnav = toggleLeftnav;
+        vm.dummy = false;
 
         navService
             .loadAllItems()
@@ -34,7 +35,9 @@
         }
 
         function toggleLeftnav() {
-            $rootScope.$broadcast('toggleLeftnav', {});
+            $log.log("firing from header")
+            vm.dummy = !vm.dummy;
+            $rootScope.$broadcast('toggleLeftnav', {'dummy': vm.dummy});
         }
 
         function toggleItemsList() {
