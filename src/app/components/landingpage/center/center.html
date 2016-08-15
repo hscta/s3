@@ -1,11 +1,26 @@
 <!DOCTYPE html>
 
-<div layout="row">
+<div>
 
-    <div ui-view="lefttoolbar"></div>
+    <!--<section>-->
+        <!--<div ui-view="centernav"></div>-->
+    <!--</section>-->
 
-    <div ui-view="centermain"></div>
+    <section id="middle">
 
-    <div ui-view="righttoolbar"></div>
+        <section>
+            <div ui-view="lefttoolbar"></div>
+        </section>
+
+        <section>
+            <div ui-view="centermain"></div>
+        </section>
+
+        <section>
+            <div ui-view="righttoolbar"></div>
+        </section>
+
+    </section>
+
 
 </div>
