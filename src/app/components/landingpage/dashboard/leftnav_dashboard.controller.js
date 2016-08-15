@@ -12,8 +12,6 @@
 
         $log.log('LeftNavDashboardController');
         var vm = this;
-
-
     }
 })();
 

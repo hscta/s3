@@ -60,7 +60,7 @@
             google.maps.event.trigger(document.getElementById('map'), "resize");
         }
 
-        //$interval(vm.resizeMap, 500);
+        $interval(vm.resizeMap, 1000);
         vm.initMap();
     }
 })();

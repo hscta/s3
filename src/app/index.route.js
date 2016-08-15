@@ -32,8 +32,13 @@
                   },
                   'lefttoolbar@home': {
                       templateUrl: 'app/components/landingpage/dashboard/lefttoolbar_dashboard.html',
-                      controller: 'LeftToolbarController as vm'
+                      controller: 'LeftToolbarDashboardController as vm'
                   },
+                  'center@home': {
+                      templateUrl: 'app/components/landingpage/center/center.html',
+                      controller: 'CenterController as vm'
+                  },
+
                   'centermain@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map.html',
                       controller: 'MapController as vm'
@@ -79,6 +84,20 @@
                   }
               }
           })
+          .state('home.reports', {
+              url: 'home/reports',
+              views: {
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/reports/reports.html',
+                      controller: 'ReportsController as vm'
+                  },
+                  'leftnav@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnav_dashboard.html',
+                      controller: 'LeftNavDashboardController as vm'
+                  }
+              }
+          })
+
 
       $urlRouterProvider.otherwise('/');
   }
