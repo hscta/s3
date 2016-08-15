@@ -15,21 +15,30 @@
 
         <div id="centernav2" flex="70" style="padding-right:10px; padding-left:10px" layout="row"
              layout-align="space-around center">
-            <div>
-                <input type="text" size="50" placeholder="Search">
-                <md-button class="md-raised" aria-label="Search"> Search</md-button>
-            </div>
+            <!--<div>-->
+                <!--<input type="text" size="50" placeholder="Search">-->
+                <!--<md-button class="md-raised" aria-label="Search"> Search</md-button>-->
+            <!--</div>-->
+
+                <md-input-container md-no-float class="md-accent" flex="50">
+                    <md-icon style="color:#FFF" class="material-icons">&#xE8B6;</md-icon>
+                    <input ng-model="searchInput" placeholder="Search here" style="color:#FFF;">
+                </md-input-container>
+
+            <a ui-sref="home.dashboard">
+                <md-button class="md-raised" aria-label="Dashboard">Dashboard</md-button>
+            </a>
+            <a ui-sref="home.management">
+                <md-button class="md-raised" aria-label="Management">Management</md-button>
+            </a>
+            <a ui-sref="home.reports">
+            <md-button class="md-raised" aria-label="Reports">Reports</md-button>
+            </a>
+
+
             <div layout="row" layout-align="end center">
 
-                <a ui-sref="home.dashboard">
-                    <md-button class="md-raised" aria-label="Dashboard">Dashboard</md-button>
-                </a>
-                <a ui-sref="home.management">
-                    <md-button class="md-raised" aria-label="Management">Management</md-button>
-                </a>
-                <!--<a ui-sref="home.reports">-->
-                    <!--<md-button class="md-raised" aria-label="Reports">Reports</md-button>-->
-                <!--</a>-->
+
 
             </div>
         </div>
