@@ -16,6 +16,8 @@
         var vm = this;
 
         vm.toggleRightSidebar = function(event, data) {
+
+            $log.log('dashboard navvvvvvvv ')
             vm.right_nav_toggle = data.right_nav_toggle;
         }
 

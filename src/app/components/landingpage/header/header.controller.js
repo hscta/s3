@@ -23,6 +23,7 @@
         vm.toggleRightSidebar = toggleRightSidebar;
         vm.toggleLeftnav = toggleLeftnav;
         vm.dummy = false;
+        vm.right_nav_toggle = false;
 
         navService
             .loadAllItems()
@@ -31,7 +32,9 @@
             });
 
         function toggleRightSidebar() {
-            $mdSidenav('right').toggle();
+           // $mdSidenav('right').toggle();
+            vm.right_nav_toggle = !vm.right_nav_toggle;
+            $rootScope.$broadcast('toggleRightSidebar', {'right_nav_toggle': vm.right_nav_toggle});
         }
 
         function toggleLeftnav() {
