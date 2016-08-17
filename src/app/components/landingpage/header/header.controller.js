@@ -38,7 +38,7 @@
         }
 
         function toggleLeftnav() {
-            $log.log("firing from header")
+            //$log.log("firing from header")
             vm.dummy = !vm.dummy;
             $rootScope.$broadcast('toggleLeftnav', {'dummy': vm.dummy});
         }

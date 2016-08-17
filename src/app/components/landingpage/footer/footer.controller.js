@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('FooterController', FooterController);
 
-    function FooterController($scope, $rootScope, navService, $mdSidenav, $log, $document, leftnavService, requestService) {
+    function FooterController($scope, $rootScope, navService, $mdSidenav, $log, $document, requestService) {
 
         $log.log('FooterController');
         var vm = this;
