@@ -9,6 +9,7 @@
     /** @ngInject */
     function runBlock($rootScope, $state, $log) {
         $log.log("runBlock");
+        $rootScope.showLoginDialog = true;
         //$rootScope.$emit('getData', {'login': true});
     }
 

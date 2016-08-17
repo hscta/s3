@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($scope, $rootScope, navService, $mdSidenav, $log, $document, leftnavService, requestService) {
+    function LeftNavManagementController($scope, $rootScope, navService, $mdSidenav, $log, $document, requestService) {
 
         $log.log('LeftNavManagementController');
         var vm = this;

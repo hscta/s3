@@ -9,7 +9,7 @@
         .controller('MapController', MapController);
 
     function MapController($scope, $rootScope, navService, $mdSidenav, $log, $document,
-                           $timeout, leftnavService, $interval, requestService) {
+                           $timeout, leftNavDashboardService, $interval, requestService) {
         $log.log('MapController');
         var vm = this;
 
@@ -61,14 +61,14 @@
         };
 
         vm.resizeMap = function() {
-            $log.log("resizeMap");
+            //$log.log("resizeMap");
             var mapDiv = $document[0].getElementById('map');
             if(mapDiv === null)
                 return;
             google.maps.event.trigger(mapDiv, "resize");
         };
 
-        $interval(vm.resizeMap, 1000);
+        $interval(vm.resizeMap, 500);
         vm.initMap();
     }
 })();

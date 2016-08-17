@@ -90,7 +90,7 @@
     }
 
 
-    function requestService($http, $log, $rootScope, authService, $q) {
+    function requestService($rootScope, $http, $log, $interval, $q, authService) {
         var vm = this;
         var authListeners = [];
         var errorStatusCodes = [400, 401, 403];
@@ -127,13 +127,15 @@
                 auth = false;
 
             if(!auth)
-                return $http.get(api);
+                return $http.post(api);
 
-            if(authService.isAuthed()) {
-                return $http.get(api);
-                    //.catch(vm.checkLogin);
+            if(authService.isAuthed() || api.indexOf('gettoken') > 0) {
+                return $http.post(api)
+                    .catch(vm.handleFailure)
             } else {
-                return vm.checkLogin();
+                $log.log("user not authenticated");
+                vm.checkLogin();
+                return $q.reject({'auth': false});
             }
         }
 
@@ -155,14 +157,18 @@
         vm.checkLogin = function(force) {
             if(!authService.isAuthed() || force) {
                 angular.forEach(authListeners, function(value, key) {
-                    //$log.log(value);
-                    $log.log("showing login");
+                    // calling callback
                     value();
                 });
             }
-
-            //$q.reject({'something': 'bad'});
         }
+
+        vm.isLoginTokenValid = function() {
+            vm.checkLogin(false);
+            $interval(vm.isLoginTokenValid, 1000);
+        }
+
+        vm.isLoginTokenValid();
     }
 
     angular

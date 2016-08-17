@@ -4,22 +4,24 @@
 
 (function() {
 
-    function loginDialogController($scope, $mdDialog, $log, loginService) {
+    function loginDialogController($scope, $rootScope, $mdDialog, $log, loginService) {
         var vm = $scope;
-
+        $rootScope.showLoginDialog = false;
+        $log.log("loginDialogController");
         vm.username = "shunmugakrishnan@intellicar.in";
         vm.password = "intellicar123";
 
-        $log.log("loginDialogController");
+
         function handleLoginSuccess(res) {
-            $log.log(res);
-            $log.log("dialog handleLoginSuccess");
+            //$log.log(res);
+            $log.log("handleLoginSuccess");
+            $rootScope.showLoginDialog = false;
             $mdDialog.hide();
         }
 
         function handleLoginFailure(res) {
             $log.log(res);
-            $log.log("dialog handleLoginFailure");
+            $log.log("handleLoginFailure");
         }
 
         vm.login = function () {
@@ -72,19 +74,29 @@
         }
 
         vm.checkLogin = function () {
-            var loginDialog = $mdDialog.confirm({
-                    controller: loginDialogController,
-                    //controllerAs: loginDialogCtrl,
-                    templateUrl: '/app/components/login/login_dialog.html',
-                    clickOutsideToClose: false,
-                    escapeToClose: false
-                }
-            );
+            if($rootScope.showLoginDialog) {
+                $log.log("Showing login");
+                var loginDialog = $mdDialog.confirm({
+                        controller: loginDialogController,
+                        //controllerAs: loginDialogCtrl,
+                        templateUrl: '/app/components/login/login_dialog.html',
+                        clickOutsideToClose: false,
+                        escapeToClose: false
+                    }
+                );
 
-            $mdDialog.show(loginDialog);
+                $mdDialog.show(loginDialog);
+            }
         }
 
         requestService.addAuthListener(vm.checkLogin);
+
+        // vm.isLoginValid = function() {
+        //     vm.checkLogin();
+        //     $interval(vm.isLoginTokenValid, 1000);
+        // }
+        //
+        // vm.isLoginValid();
 
         // add authentication methods here
     }

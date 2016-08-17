@@ -10,19 +10,35 @@
         })
         .controller('LeftNavDashboardController', LeftNavDashboardController);
 
-    function LeftNavDashboardController($scope,$rootScope, navService, $mdSidenav, $log, $document, leftnavService, requestService) {
+    function LeftNavDashboardController($scope, $rootScope, $state, dashboardConstants, navService,
+                                        $mdSidenav, $log, $document,
+                                        leftNavDashboardService, requestService) {
 
         $log.log('LeftNavDashboardController');
         var vm = this;
-
+        vm.state = $state;
 
         vm.toggleLeftnav = function(event, data) {
 
-            $log.log('dashboard navvvvvvvv ')
+            //$log.log('dashboard navvvvvvvv ')
             vm.dummy = data.dummy;
         }
 
+        vm.initialize = function() {
+            console.log(vm.state);
+            if(vm.state.current.name == dashboardConstants.STATE_HOME_DASHBOARD) {
+                leftNavDashboardService.getTree();
+            }
+        }
+
+        vm.displayTree = function(data) {
+            $log.log("displayTree");
+            $log.log(data);
+        }
+
+        leftNavDashboardService.addTreeCallback(vm.displayTree);
         $scope.$on('toggleLeftnav', vm.toggleLeftnav);
+        vm.initialize();
 
         $scope.tree_data = [
             {
