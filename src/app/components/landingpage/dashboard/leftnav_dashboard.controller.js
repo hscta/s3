@@ -5,9 +5,6 @@
 (function() {
     angular
         .module('uiplatform')
-        .config(function(treeConfig){
-            treeConfig.defaultCollapsed = true; // collapse nodes by default
-        })
         .controller('LeftNavDashboardController', LeftNavDashboardController);
 
     function LeftNavDashboardController($scope,$rootScope, navService, $mdSidenav, $log, $document, leftnavService, requestService) {
