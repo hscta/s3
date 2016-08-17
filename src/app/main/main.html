@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 
 
+<style>
+    .left-nav {border-right:1px solid #CCC;}
+    .right-nav {border-left:1px solid #CCC;}
+</style>
 <div ui-view="header"></div>
 <div ui-view="footer"></div>
 
-
 <md-content layout="row" flex class="altered">
-    <div ui-view="leftnav"></div>
+    <div ui-view="leftnav" class="left-nav"></div>
 
     <div layout="column" flex id="content">
         <md-content layout="column" flex class="md-padding">
