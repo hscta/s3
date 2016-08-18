@@ -5,9 +5,9 @@
 (function() {
     angular
         .module('uiplatform')
-        .factory('dashboardConstants', dashboardConstants);
+        .factory('constantsDashboard', constantsDashboard);
 
-    function dashboardConstants() {
+    function constantsDashboard() {
         var STATE_HOME = "home";
         var STATE_HOME_DASHBOARD = "home.dashboard";
 

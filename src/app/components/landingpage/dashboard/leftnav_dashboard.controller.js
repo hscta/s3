@@ -10,7 +10,7 @@
         })
         .controller('LeftNavDashboardController', LeftNavDashboardController);
 
-    function LeftNavDashboardController($scope, $rootScope, $state, dashboardConstants, navService,
+    function LeftNavDashboardController($scope, $rootScope, $state, constantsDashboard, navService,
                                         $mdSidenav, $log, $document,
                                         leftNavDashboardService, requestService) {
 
@@ -24,21 +24,24 @@
             vm.dummy = data.dummy;
         }
 
-        vm.initialize = function() {
-            console.log(vm.state);
-            if(vm.state.current.name == dashboardConstants.STATE_HOME_DASHBOARD) {
-                leftNavDashboardService.getTree();
-            }
-        }
-
         vm.displayTree = function(data) {
             $log.log("displayTree");
             $log.log(data);
         }
 
+
+        vm.initialize = function() {
+            console.log(vm.state);
+            if(vm.state.current.name == constantsDashboard.STATE_HOME_DASHBOARD ||
+                vm.state.current.name == constantsDashboard.STATE_HOME) {
+                leftNavDashboardService.getTree();
+            }
+        }
+
         leftNavDashboardService.addTreeCallback(vm.displayTree);
-        $scope.$on('toggleLeftnav', vm.toggleLeftnav);
         vm.initialize();
+        $scope.$on('toggleLeftnav', vm.toggleLeftnav);
+
 
         $scope.tree_data = [
             {

@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('ManagementController', ManagementController);
 
-    function ManagementController($scope, $rootScope, navService, $mdSidenav, $log, $document, leftnavService, requestService) {
+    function ManagementController($scope, $rootScope, navService, $mdSidenav, $log, $document, requestService) {
 
         $log.log('ManagementController');
         var vm = this;

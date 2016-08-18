@@ -5,6 +5,17 @@
 
     'use strict';
 
+    angular
+        .module('uiplatform')
+        .constant('TOKEN_KEY', 'JWT_TOKEN_KEY')
+        .constant('API', 'http://asset.intellicar.in:10104')
+        .service('authService', authService)
+        .factory('authInterceptor', authInterceptor)
+        .service('requestService', requestService)
+        .config(function($httpProvider) {
+            $httpProvider.interceptors.push('authInterceptor');
+        })
+
     function authService($window, $log, TOKEN_KEY) {
         var vm = this;
         $log.log("authService");
@@ -165,22 +176,11 @@
 
         vm.isLoginTokenValid = function() {
             vm.checkLogin(false);
-            $interval(vm.isLoginTokenValid, 1000);
+            $interval(vm.isLoginTokenValid, 5000);
         }
 
         vm.isLoginTokenValid();
     }
-
-    angular
-        .module('uiplatform')
-        .constant('TOKEN_KEY', 'JWT_TOKEN_KEY')
-        .constant('API', 'http://asset.intellicar.in:10104')
-        .service('authService', authService)
-        .factory('authInterceptor', authInterceptor)
-        .service('requestService', requestService)
-        .config(function($httpProvider) {
-            $httpProvider.interceptors.push('authInterceptor');
-        })
 
 })();
 
