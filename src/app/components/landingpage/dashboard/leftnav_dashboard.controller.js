@@ -9,7 +9,7 @@
 
     function LeftNavDashboardController($scope, $rootScope, $state, constantsDashboard, navService,
                                         $mdSidenav, $log, $document,
-                                        leftNavDashboardService, requestService) {
+                                        leftNavDashboardService, requestService, treeDataService) {
 
         $log.log('LeftNavDashboardController');
         var vm = this;
@@ -22,8 +22,9 @@
         }
 
         vm.displayTree = function(data) {
-            $log.log("displayTree");
-            $log.log(data);
+            //$log.log("displayTree");
+           // $log.log(data);
+            $scope.tree_data = treeDataService.arrange_data(data);
         }
 
 
@@ -39,14 +40,14 @@
         vm.initialize();
         $scope.$on('toggleLeftnav', vm.toggleLeftnav);
 
-
+/*
         $scope.tree_data = [
             {
                 "id": 1,
                 "title": "node1",
                 "nodes": [
                     {
-                        "id": 11,
+                        "id": 22,
                         "title": "node1.1",
                         "nodes": [
                             {
@@ -64,12 +65,12 @@
                 ]
             },
             {
-                "id": 2,
+                "id": 7,
                 "title": "node2",
                 "nodrop": true,
                 "nodes": [
                     {
-                        "id": 21,
+                        "id": 71,
                         "title": "node2.1",
                         "nodes": []
                     },
@@ -92,5 +93,6 @@
                 ]
             }
         ];
+        */
     }
 })();
