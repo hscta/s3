@@ -13,6 +13,18 @@
         $log.log('MapController');
         var vm = this;
 
+        vm.loadMap = function() {
+            vm.map = { center: { latitude: 12.9176383, longitude: 77.6480335 }, zoom: 12 };
+            google.maps.event.addDomListener(window, "resize", function() {
+                $log.log("resize map");
+                var center = vm.map.getCenter();
+                google.maps.event.trigger(vm.map, "resize");
+                vm.map.setCenter(center);
+            });
+        }
+
+        vm.loadMap();
+
         // vm.initMap = function () {
         //     var defaultCenter = [12.9176383, 77.6480335];
         //     var lat = defaultCenter[0];
@@ -71,17 +83,6 @@
         // //$interval(vm.resizeMap, 1000);
         // vm.initMap();
 
-        vm.loadMap = function() {
-            $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
-            google.maps.event.addDomListener(window, "resize", function() {
-                $log.log("resize map");
-                //var center = $scope.map.getCenter();
-                google.maps.event.trigger($scope.map, "resize");
-                //$scope.map.setCenter(center);
-            });
-        }
-
-        vm.loadMap();
     }
 })();
 

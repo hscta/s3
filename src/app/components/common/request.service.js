@@ -106,6 +106,7 @@
         var authListeners = [];
         var errorStatusCodes = [400, 401, 403];
 
+        $log.log("requestService");
 
         vm.getToken = function() {
             return authService.getToken();
@@ -169,17 +170,19 @@
             if(!authService.isAuthed() || force) {
                 angular.forEach(authListeners, function(value, key) {
                     // calling callback
+                    $log.log("calling show login");
                     value();
                 });
             }
         }
 
         vm.isLoginTokenValid = function() {
+            $log.log("isLoginTokenVaild");
             vm.checkLogin(false);
-            $interval(vm.isLoginTokenValid, 5000);
+            //$interval(vm.isLoginTokenValid, 5000);
         }
 
-        vm.isLoginTokenValid();
+        //vm.isLoginTokenValid();
     }
 
 })();
