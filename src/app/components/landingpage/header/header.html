@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
 {{vm.left_nav_toggle}}
+
 <md-toolbar class="icar-toolbar">
     <div class="md-toolbar-tools icar-toolbar-tools" layout-align="start center" flex>
-
         <div layout="row" layout-align="start center" flex="20">
             <md-button class="md-icon-button" aria-label="Icon" ng-click="vm.toggleLeftnav()">
                 <md-tooltip>Left menu</md-tooltip>
@@ -16,25 +16,12 @@
 
         <div id="centernav2" flex="70" style="padding-right:10px; padding-left:10px" layout="row"
              layout-align="space-around center">
-
-            <!--<md-input-container md-no-float class="md-accent" flex="50">-->
-                <!--<md-icon style="color:#FFF" class="material-icons">&#xE8B6;</md-icon>-->
-                <!--<input ng-model="searchInput" placeholder="Search here" style="color:#FFF;">-->
-            <!--</md-input-container>-->
-
-            <div layout="row">
-                <a ui-sref="home.dashboard" class="M9kDrd xyzabc">Dashboard</a>
-                <a ui-sref="home.management" class="M9kDrd xyzabc">Management</a>
-                <a ui-sref="home.reports" class="M9kDrd xyzabc">Reports</a>
+                <div layout="row">
+                    <a ui-sref="home.dashboard" class="M9kDrd xyzabc">Dashboard</a>
+                    <a ui-sref="home.management" class="M9kDrd xyzabc">Management</a>
+                    <a ui-sref="home.reports" class="M9kDrd xyzabc">Reports</a>
+                </div>
             </div>
-
-
-            <div layout="row" layout-align="end center">
-
-
-
-            </div>
-        </div>
         <!--<span flex></span>-->
         <div layout="row" layout-align="end center" flex="10">
             <md-button class="md-icon-button" aria-label="notifications" ng-click="vm.toggleRightSidebar()">
@@ -46,6 +33,5 @@
                 <md-icon md-font-library="material-icons">face</md-icon>
             </md-button>
         </div>
-
     </div>
 </md-toolbar>

@@ -22,7 +22,7 @@
         vm.showSimpleToast = showSimpleToast;
         vm.toggleRightSidebar = toggleRightSidebar;
         vm.toggleLeftnav = toggleLeftnav;
-        vm.left_nav_toggle = false;
+        $rootScope.left_nav_toggle = false;
         vm.right_nav_toggle = false;
 
         navService
@@ -39,8 +39,8 @@
 
         function toggleLeftnav() {
             $log.log("firing from header", $rootScope.left_nav_toggle)
-            vm.left_nav_toggle = !vm.left_nav_toggle;
-            $rootScope.$broadcast('toggleLeftnav', {'left_nav_toggle': vm   .left_nav_toggle});
+            $rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
+         //   $rootScope.$broadcast('toggleLeftnav', {'left_nav_toggle': vm.left_nav_toggle});
         }
 
         function toggleItemsList() {

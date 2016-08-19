@@ -14,8 +14,9 @@
     </ol>
 </script>
 
+
 <md-sidenav layout="column" class="md-sidenav-left" md-component-id="left"
-            md-is-locked-open = "vm.left_nav_toggle">
+            md-is-locked-open = "left_nav_toggle">
     <div ui-tree>
         <ol ui-tree-nodes="" ng-model="tree_data" id="tree-root" ng-class="{hidden: collapsed}">
             <li ng-repeat="node in tree_data" ui-tree-node data-collapsed="node.collapsed"

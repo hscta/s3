@@ -39,7 +39,6 @@
                 node.nodes = [];
                 map[node.vehicleid] = i; // use map to look-up the parents
                 if (node.pgroupid != node.vehicleid) {
-                    if ( nodes[map[node.pgroupid]])
                         nodes[map[node.pgroupid]].nodes.push(node);
                 } else {
                     roots.push(node);

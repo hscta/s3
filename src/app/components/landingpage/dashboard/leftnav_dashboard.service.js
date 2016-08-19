@@ -29,7 +29,7 @@
                 $log.log("service getTree");
                 // $log.log(event);
                 // $log.log(data);
-                requestService.firePost(API + '/user/myvehicles', {
+                requestService.firePost(API + '/user/mygroups', {
                     "user":{
                         //"userpath":"/1/1/1/7/2/9",
                         //"grouppath":"/1/1/1/7/1/8"
@@ -41,7 +41,7 @@
                 $log.log("service getTree");
                 // $log.log(event);
                 // $log.log(data);
-                requestService.firePost(API + '/user/myvehicles', {
+                requestService.firePost(API + '/user/mygroups', {
                     "user":{
                         //"userpath":"/1/1/1/7/2/9",
                         //"grouppath":"/1/1/1/7/1/8"

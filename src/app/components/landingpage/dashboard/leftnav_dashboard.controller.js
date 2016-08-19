@@ -16,15 +16,15 @@
         vm.state = $state;
         vm.assetList =  null;
 
-        vm.toggleLeftnav = function(event, data) {
-           // $log.log('dashboard navvvvvvvv ')
-            vm.left_nav_toggle = data.left_nav_toggle;
-        }
+        // vm.toggleLeftnav = function(event, data) {
+        //    // $log.log('dashboard navvvvvvvv ')
+        //     vm.left_nav_toggle = data.left_nav_toggle;
+        // }
 
         vm.displayTree = function(data) {
             //$log.log(data.data.data);
             vm.assetList = data.data.data;
-            $scope.tree_data = treeDataService.dashboard_tree_data(data);
+            $scope.tree_data = treeDataService.management_tree_data(data);
 
             children = {};
             for(idx in vm.assetList) {
@@ -41,7 +41,6 @@
                     }
                 }
             }
-
             //$log.log(children);
             for(idx in children) {}
         }
@@ -57,6 +56,6 @@
 
         leftNavDashboardService.addTreeCallback(vm.displayTree);
         vm.initialize();
-        $scope.$on('toggleLeftnav', vm.toggleLeftnav);
+       // $scope.$on('toggleLeftnav', vm.toggleLeftnav);
     }
 })();

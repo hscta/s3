@@ -16,11 +16,11 @@
         var vm = this;
         vm.state = $state;
 
-        vm.toggleLeftnav = function(event, data) {
-            vm.left_nav_toggle = data.left_nav_toggle;
-        }
-
-        $scope.$on('toggleLeftnav', vm.toggleLeftnav);
+        // vm.toggleLeftnav = function(event, data) {
+        //     vm.left_nav_toggle = data.left_nav_toggle;
+        // }
+        //
+        // $scope.$on('toggleLeftnav', vm.toggleLeftnav);
 
         vm.displayTree = function(data) {
             //$log.log("displayTree");
