@@ -21,8 +21,7 @@
         //requestService.isLoginTokenValid();
 
         vm.isLoginTokenValid = function() {
-            $log.log("isLoginTokenVaild");
-            //requestService.checkLogin(false);
+            //$log.log("isLoginTokenVaild");
             $interval(requestService.isLoginTokenValid, 5000);
         }
 

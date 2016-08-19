@@ -12,35 +12,70 @@
                            $timeout, leftNavDashboardService, $interval, requestService) {
         $log.log('MapController');
         var vm = this;
+        var lat = 12.9176383;
+        var lng = 77.6480335;
 
-        vm.loadMap = function() {
-            vm.map = { center: { latitude: 12.9176383, longitude: 77.6480335 }, zoom: 12 };
-            google.maps.event.addDomListener(window, "resize", function() {
-                $log.log("resize map");
-                var center = vm.map.getCenter();
-                google.maps.event.trigger(vm.map, "resize");
-                vm.map.setCenter(center);
+        vm.createMarker = function() {
+            var latlng = new google.maps.LatLng(lat, lng);
+            var marker = new google.maps.Marker({
+                map: vm.inMap,
+                position: latlng,
             });
         }
 
-        vm.loadMap();
+        vm.loadMap = function() {
+            vm.inMap = { center: { latitude: lat, longitude: lng }, zoom: 12 };
+            google.maps.event.addDomListener(window, "resize", function() {
+                $log.log("resize map");
+                var center = vm.inMap.getCenter();
+                google.maps.event.trigger(vm.inMap, "resize");
+                vm.inMap.setCenter(center);
+            });
+        }
 
-        // vm.initMap = function () {
-        //     var defaultCenter = [12.9176383, 77.6480335];
-        //     var lat = defaultCenter[0];
-        //     var lng = defaultCenter[1];
-        //     var myLatLng = new google.maps.LatLng(lat, lng);
-        //     var mapOptions = {zoom: 13, center: myLatLng, mapTypeId: google.maps.MapTypeId.ROADMAP, heading: 90};
-        //
-        //     $log.log(myLatLng);
-        //     var mapDiv = $document[0].getElementById('map');
-        //     if(mapDiv === null)
-        //         return;
-        //     vm.centerMap = new google.maps.Map(mapDiv, mapOptions);
-        //     //$log.log(vm.centerMap);
-        //     vm.addSearchListener();
-        // };
-        //
+        vm.options = {
+            scrollwheel: false
+        };
+
+        var createRandomMarker = function(i, bounds, idKey) {
+            var lat_min = bounds.southwest.latitude,
+                lat_range = bounds.northeast.latitude - lat_min,
+                lng_min = bounds.southwest.longitude,
+                lng_range = bounds.northeast.longitude - lng_min;
+
+            if (idKey == null) {
+                idKey = "id";
+            }
+
+            var latitude = lat_min + (Math.random() * lat_range);
+            var longitude = lng_min + (Math.random() * lng_range);
+            var ret = {
+                latitude: latitude,
+                longitude: longitude,
+                title: 'm' + i
+            };
+            ret[idKey] = i;
+            return ret;
+        };
+
+        vm.randomMarkers = [];
+        // Get the bounds from the map once it's loaded
+        // $scope.$watch(function() {
+        //     return vm.inMap.bounds;
+        // }, function(nv, ov) {
+        //     // Only need to regenerate once
+        //     if (!ov.southwest && !nv.southwest) {
+        //         var markers = [];
+        //         for (var i = 0; i < 50; i++) {
+        //             markers.push(createRandomMarker(i, vm.inMap.bounds))
+        //         }
+        //         vm.randomMarkers = markers;
+        //     }
+        // }, true);
+
+        vm.loadMap();
+        //vm.createMarker();
+
         // vm.addSearchListener = function() {
         //     $log.log("addSearchListener");
         //     var mapSearchInput = document.getElementById('pac-input');

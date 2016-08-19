@@ -177,7 +177,7 @@
         }
 
         vm.isLoginTokenValid = function() {
-            $log.log("isLoginTokenVaild");
+            //$log.log("isLoginTokenVaild");
             vm.checkLogin(false);
             //$interval(vm.isLoginTokenValid, 5000);
         }
