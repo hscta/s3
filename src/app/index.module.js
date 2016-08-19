@@ -4,6 +4,6 @@
   angular
     .module('uiplatform', ['ngAnimate', 'ngCookies', 'ngSanitize',
       'ngMessages', 'ngAria', 'ngResource',  'ngMaterial', 'ui.bootstrap',
-      'ui.router', 'ui.tree', 'toastr', 'google.places']);
+      'ui.router', 'ui.tree', 'toastr', 'google.places', 'uiGmapgoogle-maps']);
 
 })();
