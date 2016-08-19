@@ -21,42 +21,32 @@
                 node = nodes[i];
                 node.nodes = [];
                 map[node.groupid] = i; // use map to look-up the parents
-                var main_node_id = nodes[i].groupid;
-                console.log(node.pgroupid, node.groupid);
-                if (node.pgroupid != node.groupid) {console.log('child');
+                if (node.pgroupid != node.groupid) {
                     nodes[map[node.pgroupid]].nodes.push(node);
-                } else {console.log('parent');
+                } else {
                     roots.push(node);
                 }
             }
-
-            for ( var i = 0; i < roots.length; i++ ) {
-                var node_id = roots[i].groupid;
-                roots[i].id = node_id;
-            }
-
             return roots;
             console.log(roots);
-
         };
         vm.dashboard_tree_data = function(data) {
+            console.log(data.data.data);
             var nodes = data.data.data;
             var map = {}, node, roots = [];
             for (var i = 0; i < nodes.length; i += 1) {
                 node = nodes[i];
                 node.nodes = [];
                 map[node.vehicleid] = i; // use map to look-up the parents
-                var main_node_id = nodes[i].vehicleid;
-                if (node.pgroupid != node.vehicleid) {console.log('child');
-                    nodes[map[node.pgroupid]].nodes.push(node);
-                } else {console.log('parent');
+                if (node.pgroupid != node.vehicleid) {
+                    if ( nodes[map[node.pgroupid]])
+                        nodes[map[node.pgroupid]].nodes.push(node);
+                } else {
                     roots.push(node);
                 }
             }
-
-            return roots;
             console.log(roots);
-
+            return roots;
         };
     }
 

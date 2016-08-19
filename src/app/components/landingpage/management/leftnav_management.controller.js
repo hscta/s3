@@ -24,7 +24,7 @@
 
         vm.displayTree = function(data) {
             //$log.log("displayTree");
-            // $log.log(data);
+             $log.log(data);
             $scope.tree_data = treeDataService.management_tree_data(data);
         }
 
@@ -38,6 +38,5 @@
 
         leftNavManagementService.addTreeCallback(vm.displayTree);
         vm.initialize();
-        console.log('management initialize')
     }
 })();

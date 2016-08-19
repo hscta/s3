@@ -27,9 +27,9 @@
             vm.inMap = { center: { latitude: lat, longitude: lng }, zoom: 12 };
             google.maps.event.addDomListener(window, "resize", function() {
                 $log.log("resize map");
-                var center = vm.inMap.getCenter();
+               // var center = vm.inMap.getCenter();
                 google.maps.event.trigger(vm.inMap, "resize");
-                vm.inMap.setCenter(center);
+               // vm.inMap.setCenter(center);
             });
         }
 
