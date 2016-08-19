@@ -13,63 +13,75 @@
         $log.log('MapController');
         var vm = this;
 
-        vm.initMap = function () {
-            var defaultCenter = [12.9176383, 77.6480335];
-            var lat = defaultCenter[0];
-            var lng = defaultCenter[1];
-            var myLatLng = new google.maps.LatLng(lat, lng);
-            var mapOptions = {zoom: 13, center: myLatLng, mapTypeId: google.maps.MapTypeId.ROADMAP, heading: 90};
+        // vm.initMap = function () {
+        //     var defaultCenter = [12.9176383, 77.6480335];
+        //     var lat = defaultCenter[0];
+        //     var lng = defaultCenter[1];
+        //     var myLatLng = new google.maps.LatLng(lat, lng);
+        //     var mapOptions = {zoom: 13, center: myLatLng, mapTypeId: google.maps.MapTypeId.ROADMAP, heading: 90};
+        //
+        //     $log.log(myLatLng);
+        //     var mapDiv = $document[0].getElementById('map');
+        //     if(mapDiv === null)
+        //         return;
+        //     vm.centerMap = new google.maps.Map(mapDiv, mapOptions);
+        //     //$log.log(vm.centerMap);
+        //     vm.addSearchListener();
+        // };
+        //
+        // vm.addSearchListener = function() {
+        //     $log.log("addSearchListener");
+        //     var mapSearchInput = document.getElementById('pac-input');
+        //     if(mapSearchInput === null)
+        //         return;
+        //     var autocomplete = new google.maps.places.Autocomplete(mapSearchInput);
+        //     autocomplete.bindTo('bounds', vm.centerMap);
+        //     //var infowindowplacesearch = new google.maps.InfoWindow();
+        //
+        //     autocomplete.addListener('place_changed', function() {
+        //         //infowindowplacesearch.close();
+        //         var place = autocomplete.getPlace();
+        //         if (!place.geometry) {
+        //             return;
+        //         }
+        //
+        //         // If the place has a geometry, then present it on a map.
+        //         if (place.geometry.viewport) {
+        //             vm.centerMap.fitBounds(place.geometry.viewport);
+        //         } else {
+        //             vm.centerMap.setCenter(place.geometry.location);
+        //             vm.centerMap.setZoom(17);  // Why 17? Because it looks good.
+        //         }
+        //
+        //         // infowindowplacesearch.setContent('<div><strong>' + place.name + '</strong>');
+        //         // infowindowplacesearch.setPosition(place.geometry.location);
+        //         // infowindowplacesearch.open(vm.centerMap);
+        //         // $timeout(function(){infowindowplacesearch.close()}, 3000);
+        //     });
+        // };
+        //
+        // vm.resizeMap = function() {
+        //     //$log.log("resizeMap");
+        //     var mapDiv = $document[0].getElementById('map');
+        //     if(mapDiv === null)
+        //         return;
+        //     google.maps.event.trigger(mapDiv, "resize");
+        // };
+        //
+        // //$interval(vm.resizeMap, 1000);
+        // vm.initMap();
 
-            $log.log(myLatLng);
-            var mapDiv = $document[0].getElementById('map');
-            if(mapDiv === null)
-                return;
-            vm.centerMap = new google.maps.Map(mapDiv, mapOptions);
-            //$log.log(vm.centerMap);
-            vm.addSearchListener();
-        };
-
-        vm.addSearchListener = function() {
-            $log.log("addSearchListener");
-            var mapSearchInput = document.getElementById('pac-input');
-            if(mapSearchInput === null)
-                return;
-            var autocomplete = new google.maps.places.Autocomplete(mapSearchInput);
-            autocomplete.bindTo('bounds', vm.centerMap);
-            //var infowindowplacesearch = new google.maps.InfoWindow();
-
-            autocomplete.addListener('place_changed', function() {
-                //infowindowplacesearch.close();
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    return;
-                }
-
-                // If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    vm.centerMap.fitBounds(place.geometry.viewport);
-                } else {
-                    vm.centerMap.setCenter(place.geometry.location);
-                    vm.centerMap.setZoom(17);  // Why 17? Because it looks good.
-                }
-
-                // infowindowplacesearch.setContent('<div><strong>' + place.name + '</strong>');
-                // infowindowplacesearch.setPosition(place.geometry.location);
-                // infowindowplacesearch.open(vm.centerMap);
-                // $timeout(function(){infowindowplacesearch.close()}, 3000);
+        vm.loadMap = function() {
+            $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+            google.maps.event.addDomListener(window, "resize", function() {
+                $log.log("resize map");
+                //var center = $scope.map.getCenter();
+                google.maps.event.trigger($scope.map, "resize");
+                //$scope.map.setCenter(center);
             });
-        };
+        }
 
-        vm.resizeMap = function() {
-            //$log.log("resizeMap");
-            var mapDiv = $document[0].getElementById('map');
-            if(mapDiv === null)
-                return;
-            google.maps.event.trigger(mapDiv, "resize");
-        };
-
-        $interval(vm.resizeMap, 500);
-        vm.initMap();
+        vm.loadMap();
     }
 })();
 

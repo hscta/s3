@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
-<md-sidenav layout="column" class="md-sidenav-left md-locked-open" md-component-id="left" ng-class="{'md-locked-open': vm.dummy }">
+{{vm.left_nav_toggle}}
+<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left"
+            md-is-locked-open = "vm.left_nav_toggle">
     <!-- Nested node template -->
     <script type="text/ng-template" id="nodes_renderer.html">
         <div ui-tree-handle>

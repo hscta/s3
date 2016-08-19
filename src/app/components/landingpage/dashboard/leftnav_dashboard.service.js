@@ -13,7 +13,7 @@
 
             vm.handleResponse = function(resp) {
                 $log.log("handleResponse");
-                $log.log(resp);
+                //$log.log(resp);
                 if(vm.treeCallback != null)
                     vm.treeCallback(resp);
                 //return $q.resolve(resp)
@@ -31,11 +31,28 @@
                 // $log.log(data);
                 requestService.firePost(API + '/user/myvehicles', {
                     "user":{
-                       // "userpath":"/1/1/1/7/2/9",
-                      //  "grouppath":"/1/1/1/7/1/8"
+                        //"userpath":"/1/1/1/7/2/9",
+                        //"grouppath":"/1/1/1/7/1/8"
                     }
                 }).then(vm.handleResponse, vm.handleFailure);
             };
+
+            vm.getGroups = function(event, data) {
+                $log.log("service getTree");
+                // $log.log(event);
+                // $log.log(data);
+                requestService.firePost(API + '/user/mygroups', {
+                    "user":{
+                        //"userpath":"/1/1/1/7/2/9",
+                        //"grouppath":"/1/1/1/7/1/8"
+                    }
+                }).then(vm.handleResponse, vm.handleFailure);
+            };
+
+            vm.addTreeCallback = function(callback) {
+                vm.treeCallback = callback;
+            }
+
 
             vm.addTreeCallback = function(callback) {
                 vm.treeCallback = callback;
