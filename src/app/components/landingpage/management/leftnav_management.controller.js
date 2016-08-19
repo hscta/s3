@@ -32,7 +32,7 @@
             console.log(vm.state);
             if(vm.state.current.name == constantsDashboard.STATE_HOME_MANAGEMENT ||
                 vm.state.current.name == constantsDashboard.STATE_HOME) {
-                leftNavManagementService.getTree();
+                leftNavManagementService.getMyVehicles();
             }
         }
 

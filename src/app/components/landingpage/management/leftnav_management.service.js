@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('leftNavManagementService', function($rootScope, $log, $q, API, requestService) {
+        .service('leftNavManagementService', function($rootScope, $log, $q, API, requestService, userService) {
             var vm = this;
             vm.treeCallback = null;
             $log.log("leftNavManagementService");
@@ -25,23 +25,14 @@
                 return $q.reject(resp);
             };
 
-            vm.getTree = function(event, data) {
-                $log.log("service getTree");
-                // $log.log(event);
-                // $log.log(data);
-                requestService.firePost(API + '/user/mygroups', {
-                    "user":{
-                        // "userpath":"/1/1/1/7/2/9",
-                        //  "grouppath":"/1/1/1/7/1/8"
-                    }
-                }).then(vm.handleResponse, vm.handleFailure);
+            vm.getMyVehicles = function(event, data) {
+                userService.getMyVehicles()
+                    .then(vm.handleResponse, vm.handleFailure);
             };
 
             vm.addTreeCallback = function(callback) {
                 vm.treeCallback = callback;
             }
-
-            //$rootScope.$on('getLeftnavData', vm.getTree);
         });
 
 })();

@@ -27,6 +27,7 @@
             vm.inMap = { center: { latitude: lat, longitude: lng }, zoom: 12 };
             google.maps.event.addDomListener(window, "resize", function() {
                 $log.log("resize map");
+                vm.inMap = { center: { latitude: lat, longitude: lng }, zoom: 12 };
                // var center = vm.inMap.getCenter();
                 google.maps.event.trigger(vm.inMap, "resize");
                // vm.inMap.setCenter(center);
@@ -60,11 +61,12 @@
 
         vm.randomMarkers = [];
         // Get the bounds from the map once it's loaded
+
         // $scope.$watch(function() {
         //     return vm.inMap.bounds;
         // }, function(nv, ov) {
         //     // Only need to regenerate once
-        //     if (!ov.southwest && !nv.southwest) {
+        //     if (!ov.southwest && nv.southwest) {
         //         var markers = [];
         //         for (var i = 0; i < 50; i++) {
         //             markers.push(createRandomMarker(i, vm.inMap.bounds))

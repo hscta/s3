@@ -22,40 +22,38 @@
         // }
 
         vm.displayTree = function(data) {
-            //$log.log(data.data.data);
-            vm.assetList = data.data.data;
-            $scope.tree_data = treeDataService.management_tree_data(data);
-
-            children = {};
-            for(idx in vm.assetList) {
-                first = vm.assetList[idx];
-                $log.log(first);
-                for(item in vm.assetList) {
-                    second = vm.assetList[item];
-                    if(first.groupid == second.groupid)
-                        continue;
-                    if(!(first.groupid in children))
-                        children[first.groupid] = [];
-                    if(first.groupid == second.pgroupid) {
-                        children[first.groupid].push(second);
-                    }
-                }
-            }
+            $log.log(data.data.data);
+            // vm.assetList = data.data.data;
+            // $scope.tree_data = treeDataService.management_tree_data(data);
+            //
+            // children = {};
+            // for(idx in vm.assetList) {
+            //     first = vm.assetList[idx];
+            //     $log.log(first);
+            //     for(item in vm.assetList) {
+            //         second = vm.assetList[item];
+            //         if(first.groupid == second.groupid)
+            //             continue;
+            //         if(!(first.groupid in children))
+            //             children[first.groupid] = [];
+            //         if(first.groupid == second.pgroupid) {
+            //             children[first.groupid].push(second);
+            //         }
+            //     }
+            // }
             //$log.log(children);
-            for(idx in children) {}
+            //for(idx in children) {}
         }
 
         vm.initialize = function() {
            // console.log(vm.state);
             if(vm.state.current.name == constantsDashboard.STATE_HOME_DASHBOARD ||
                 vm.state.current.name == constantsDashboard.STATE_HOME) {
-                //leftNavDashboardService.getTree();
-                leftNavDashboardService.getGroups();
+                leftNavDashboardService.getMyVehicles();
             }
         }
 
         leftNavDashboardService.addTreeCallback(vm.displayTree);
         vm.initialize();
-       // $scope.$on('toggleLeftnav', vm.toggleLeftnav);
     }
 })();
