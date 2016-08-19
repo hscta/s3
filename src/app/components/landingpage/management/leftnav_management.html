@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+    <div ui-tree-handle>
+        <a ng-click="toggle(this)" style="cursor:pointer;">
+            <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
+            <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
+        </a>
+        {{node.name}}
+    </div>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" data-nodrag ></li>
+    </ol>
+</script>
 
-<md-sidenav layout="column" class="md-sidenav-left md-locked-open" md-component-id="left" ng-class="{'md-locked-open': vm.left_nav_toggle }">
-    <!--&lt;!&ndash; Nested node template &ndash;&gt;-->
-    <!--<script type="text/ng-template" id="nodes_renderer.html">-->
-        <!--<div ui-tree-handle>-->
-            <!--<a ng-click="toggle(this)" style="cursor:pointer;">-->
-                <!--<md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>-->
-                <!--<md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>-->
-            <!--</a>-->
-            <!--{{node.name}}-->
-        <!--</div>-->
-        <!--<ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">-->
-            <!--<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" data-nodrag ></li>-->
-        <!--</ol>-->
-    <!--</script>-->
-
-    <!--<div ui-tree>-->
-        <!--<ol ui-tree-nodes="" ng-model="tree_data" id="tree-root" ng-class="{hidden: collapsed}">-->
-            <!--<li ng-repeat="node in tree_data" ui-tree-node data-collapsed="node.collapsed"-->
-                <!--ng-include="'nodes_renderer.html'" data-nodrag>-->
-            <!--</li>-->
-        <!--</ol>-->
-    <!--</div>-->
+<md-sidenav layout="column" class="md-sidenav-left md-locked-open"
+            md-component-id="left" ng-class="{'md-locked-open': vm.left_nav_toggle }">
+    <div ui-tree>
+        <ol ui-tree-nodes="" ng-model="tree_data" id="tree-root" ng-class="{hidden: collapsed}">
+            <li ng-repeat="node in tree_data" ui-tree-node data-collapsed="node.collapsed"
+                ng-include="'nodes_renderer.html'" data-nodrag>
+            </li>
+        </ol>
+    </div>
 </md-sidenav>
