@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('leftNavDashboardService', function($rootScope, $log, $q, API, requestService, userService) {
+        .service('leftNavDashboardService', function($log, intellicarAPI, $q) {
             var vm = this;
             vm.treeCallback = null;
             $log.log("leftNavDashboardService");
@@ -26,7 +26,7 @@
             };
 
             vm.getMyVehicles = function() {
-                userService.getMyVehicles()
+                intellicarAPI.userService.getMyVehicles()
                     .then(vm.handleResponse, vm.handleFailure);
             };
 

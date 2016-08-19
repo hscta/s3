@@ -8,8 +8,7 @@
         .module('uiplatform')
         .controller('MapController', MapController);
 
-    function MapController($scope, $rootScope, navService, $mdSidenav, $log, $document,
-                           $timeout, leftNavDashboardService, $interval, requestService) {
+    function MapController($scope, $rootScope, $log) {
         $log.log('MapController');
         var vm = this;
         var lat = 12.9176383;

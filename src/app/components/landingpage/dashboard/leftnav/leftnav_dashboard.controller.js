@@ -7,9 +7,8 @@
         .module('uiplatform')
         .controller('LeftNavDashboardController', LeftNavDashboardController);
 
-    function LeftNavDashboardController($scope, $rootScope, $state, constantsDashboard, navService,
-                                        $mdSidenav, $log, $document,
-                                        leftNavDashboardService, requestService, treeDataService) {
+    function LeftNavDashboardController($scope, $rootScope, $log, intellicarAPI,
+                                        leftNavDashboardService, $state) {
 
         $log.log('LeftNavDashboardController');
         var vm = this;
@@ -47,8 +46,8 @@
 
         vm.initialize = function() {
            // console.log(vm.state);
-            if(vm.state.current.name == constantsDashboard.STATE_HOME_DASHBOARD ||
-                vm.state.current.name == constantsDashboard.STATE_HOME) {
+            if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_DASHBOARD ||
+                vm.state.current.name == intellicarAPI.stateService.STATE_HOME) {
                 leftNavDashboardService.getMyVehicles();
             }
         }

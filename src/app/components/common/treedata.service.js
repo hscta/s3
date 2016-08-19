@@ -11,7 +11,7 @@
 
     function treeDataService($rootScope, $log) {
         var vm = this;
-        $log.log("leftNavDashboardService");
+        $log.log("treeDataService");
 
         vm.management_tree_data = function(data) {
             console.log(data.data.data);
@@ -30,6 +30,7 @@
             return roots;
             console.log(roots);
         };
+
         vm.dashboard_tree_data = function(data) {
             console.log(data.data.data);
             var nodes = data.data.data;

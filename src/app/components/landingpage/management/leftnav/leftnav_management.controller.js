@@ -8,9 +8,8 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($scope, $rootScope, navService, $mdSidenav, $log,
-                                         $document, requestService, leftNavManagementService,
-                                         constantsDashboard, $state, treeDataService) {
+    function LeftNavManagementController($scope, $rootScope, $log, intellicarAPI,
+                                         leftNavManagementService, $state) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
@@ -25,13 +24,13 @@
         vm.displayTree = function(data) {
             //$log.log("displayTree");
              $log.log(data);
-            $scope.tree_data = treeDataService.management_tree_data(data);
+            $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data);
         }
 
         vm.initialize = function() {
             console.log(vm.state);
-            if(vm.state.current.name == constantsDashboard.STATE_HOME_MANAGEMENT ||
-                vm.state.current.name == constantsDashboard.STATE_HOME) {
+            if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_MANAGEMENT ||
+                vm.state.current.name == intellicarAPI.stateService.STATE_HOME) {
                 leftNavManagementService.getMyVehicles();
             }
         }

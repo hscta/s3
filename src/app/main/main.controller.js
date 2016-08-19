@@ -5,8 +5,7 @@
         .module('uiplatform')
         .controller('MainController', MainController);
 
-    function MainController( $scope, $rootScope, $interval, $mdSidenav, $mdBottomSheet, $log, $q, $state,
-                            $mdToast, $document, loginService, requestService, loginService, navService) {
+    function MainController($scope, $rootScope, $log, intellicarAPI, $interval) {
 
         $log.log('MainController');
         var vm = this;
@@ -22,7 +21,7 @@
 
         vm.isLoginTokenValid = function() {
             //$log.log("isLoginTokenVaild");
-            $interval(requestService.isLoginTokenValid, 5000);
+            $interval(intellicarAPI.requestService.isLoginTokenValid, 5000);
         }
 
         vm.isLoginTokenValid();

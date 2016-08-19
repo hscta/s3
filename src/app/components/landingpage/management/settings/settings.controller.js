@@ -6,12 +6,11 @@
 
     angular
         .module('uiplatform')
-        .controller('ManagementController', ManagementController);
+        .controller('SettingsController', SettingsController);
 
-    function ManagementController($scope, $state,$rootScope, navService, $mdSidenav,
-                                  $log, $document, requestService) {
+    function SettingsController($scope, $rootScope, $log) {
 
-        $log.log('ManagementController');
+        $log.log('SettingsController');
         var vm = this;
 
         vm.toggleLeftnav = function(event, data) {

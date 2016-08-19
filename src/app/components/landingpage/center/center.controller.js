@@ -12,7 +12,7 @@
         .module('uiplatform')
         .controller('CenterController', CenterController);
 
-    function CenterController($scope, $rootScope, navService, $mdSidenav, $log, $document, requestService) {
+    function CenterController($scope, $rootScope, $log) {
         $log.log('CenterController');
         var vm = this;
     }

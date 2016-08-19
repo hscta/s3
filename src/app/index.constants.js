@@ -4,7 +4,7 @@
 
   angular
     .module('uiplatform')
-    .constant('malarkey', malarkey)
-    .constant('moment', moment);
+    //.constant('malarkey', malarkey)
+    //.constant('moment', moment);
 
 })();

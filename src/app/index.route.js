@@ -27,11 +27,11 @@
                       controller: 'HeaderController as vm'
                   },
                   'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnav_dashboard.html',
+                      templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/lefttoolbar_dashboard.html',
+                      templateUrl: 'app/components/landingpage/dashboard/lefttoolbar/lefttoolbar_dashboard.html',
                       controller: 'LeftToolbarDashboardController as vm'
                   },
                   'center@home': {
@@ -40,7 +40,7 @@
                   },
 
                   'centermain@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/map.html',
+                      templateUrl: 'app/components/landingpage/dashboard/map/map.html',
                       controller: 'MapController as vm'
                   },
                   'rightnav@home': {
@@ -58,15 +58,15 @@
               url: 'home/dashboard',
               views: {
                   'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnav_dashboard.html',
+                      templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/lefttoolbar_dashboard.html',
+                      templateUrl: 'app/components/landingpage/dashboard/lefttoolbar/lefttoolbar_dashboard.html',
                       controller: 'LeftToolbarDashboardController as vm'
                   },
                   'centermain@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/map.html',
+                      templateUrl: 'app/components/landingpage/dashboard/map/map.html',
                       controller: 'MapController as vm'
                   }
               }
@@ -75,11 +75,11 @@
               url: 'home/management',
               views: {
                   'centermain@home': {
-                      templateUrl: 'app/components/landingpage/management/management.html',
-                      controller: 'ManagementController as vm'
+                      templateUrl: 'app/components/landingpage/management/settings/settings.html',
+                      controller: 'SettingsController as vm'
                   },
                   'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/management/leftnav_management.html',
+                      templateUrl: 'app/components/landingpage/management/leftnav/leftnav_management.html',
                       controller: 'LeftNavManagementController as vm'
                   }
               }
@@ -92,7 +92,7 @@
                       controller: 'ReportsController as vm'
                   },
                   'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnav_dashboard.html',
+                      templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   }
               }

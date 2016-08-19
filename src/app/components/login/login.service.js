@@ -4,7 +4,7 @@
 
 (function() {
 
-    function loginDialogController($scope, $rootScope, $mdDialog, $log, loginService) {
+    function loginDialogController($scope, $rootScope, $log, $mdDialog, loginService) {
         var vm = $scope;
         $rootScope.showLoginDialog = false;
         $log.log("loginDialogController");
@@ -46,7 +46,7 @@
     }
 
 
-    function loginService($rootScope, $http, $log, $q, $mdDialog, API, authService, requestService) {
+    function loginService($rootScope, $log, $mdDialog, API, authService, requestService) {
         $log.log("loginService");
         var vm = this;
 
