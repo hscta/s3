@@ -4,12 +4,6 @@
 
 (function() {
 
-    angular
-        .module('uiplatform')
-        .service('loginService', loginService)
-        .controller('loginDialogController', loginDialogController);
-
-
     function loginDialogController($scope, $rootScope, $mdDialog, $log, loginService) {
         var vm = $scope;
         $rootScope.showLoginDialog = false;
@@ -53,6 +47,7 @@
 
 
     function loginService($rootScope, $http, $log, $q, $mdDialog, API, authService, requestService) {
+        $log.log("loginService");
         var vm = this;
 
         vm.login = function (username, password) {
@@ -98,6 +93,13 @@
         requestService.addAuthListener(vm.checkLogin);
     }
 
-        //.constant('API', 'http://asset.intellicar.in:10104')
+    angular
+        .module('uiplatform')
+        .service('loginService', loginService)
+        .controller('loginDialogController', loginDialogController);
+
+
+
+    //.constant('API', 'http://asset.intellicar.in:10104')
 
 })();
