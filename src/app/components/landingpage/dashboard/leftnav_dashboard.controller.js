@@ -24,6 +24,8 @@
         vm.displayTree = function(data) {
             //$log.log(data.data.data);
             vm.assetList = data.data.data;
+            $scope.tree_data = treeDataService.management_tree_data(data);
+
             children = {};
             for(idx in vm.assetList) {
                 first = vm.assetList[idx];
