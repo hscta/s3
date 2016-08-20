@@ -6,7 +6,9 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('userService', function($rootScope, $log, $q, API, requestService) {
+        .service('userService', userService);
+
+    function userService($rootScope, $log, $q, requestService) {
             var vm = this;
             $log.log("userService");
 
@@ -20,17 +22,12 @@
                 return $q.reject(resp);
             };
 
-            vm.getMyVehicles = function(event, data) {
+            vm.getMyVehicles = function(data) {
                 $log.log("service getMyVehicles");
                 // $log.log(event);
                 // $log.log(data);
-                return requestService.firePost(API + '/user/myvehicles', {
-                    "user":{
-                        //"userpath":"/1/1/1/7/2/9",
-                        //"grouppath":"/1/1/1/7/1/8"
-                    }
-                }).then(vm.handleResponse, vm.handleFailure);
+                return requestService.firePost('/user/myvehicles', {})
+                    .then(vm.handleResponse, vm.handleFailure);
             };
-        });
-
+        }
 })();

@@ -17,14 +17,14 @@
 
         $scope.$on('toggleLeftnav', vm.toggleLeftnav);
 
-        //requestService.isLoginTokenValid();
 
-        vm.isLoginTokenValid = function() {
-            //$log.log("isLoginTokenVaild");
-            $interval(intellicarAPI.requestService.isLoginTokenValid, 5000);
-        }
-
-        vm.isLoginTokenValid();
+        //To periodically check if the token is valid
+        // vm.isLoginTokenValid = function() {
+        //     //$log.log("isLoginTokenVaild");
+        //     $interval(intellicarAPI.requestService.isLoginTokenValid, 5000);
+        // }
+        //
+        // vm.isLoginTokenValid();
     }
 
 })();

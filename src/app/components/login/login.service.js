@@ -4,54 +4,18 @@
 
 (function() {
 
-    function loginDialogController($scope, $rootScope, $log, $mdDialog, loginService) {
-        var vm = $scope;
-        $rootScope.showLoginDialog = false;
-        $log.log("loginDialogController");
-        vm.username = "shunmugakrishnan@intellicar.in";
-        vm.password = "intellicar123";
+    angular
+        .module('uiplatform')
+        .service('loginService', loginService)
+        .controller('loginDialogController', loginDialogController);
 
 
-        function handleLoginSuccess(res) {
-            //$log.log(res);
-            $log.log("handleLoginSuccess");
-            $rootScope.showLoginDialog = false;
-            $mdDialog.hide();
-        }
-
-        function handleLoginFailure(res) {
-            $log.log(res);
-            $log.log("handleLoginFailure");
-        }
-
-        vm.login = function () {
-            $log.log("/gettoken")
-            loginService.login(vm.username, vm.password)
-                .then(handleLoginSuccess, handleLoginFailure)
-        }
-
-        vm.register = function () {
-            // $log.log("register");
-            // loginService.register(vm.username, vm.password)
-            //     .then(handleRequest, handleRequest)
-        }
-
-        vm.logout = function () {
-            loginService.logout();
-        }
-
-        vm.isAuthed = function () {
-            return loginService.isAuthed();
-        }
-    }
-
-
-    function loginService($rootScope, $log, $mdDialog, API, authService, requestService) {
+    function loginService($rootScope, $log, $mdDialog, authService, requestService) {
         $log.log("loginService");
         var vm = this;
 
         vm.login = function (username, password) {
-            return requestService.firePost(API + '/gettoken', {
+            return requestService.firePost('/gettoken', {
                 "user": {
                     type: "local",
                     username: username,
@@ -93,13 +57,47 @@
         requestService.addAuthListener(vm.checkLogin);
     }
 
-    angular
-        .module('uiplatform')
-        .service('loginService', loginService)
-        .controller('loginDialogController', loginDialogController);
+
+    function loginDialogController($scope, $rootScope, $log, loginService, $mdDialog, $window) {
+        var vm = $scope;
+        $rootScope.showLoginDialog = false;
+        $log.log("loginDialogController");
+        vm.username = "shunmugakrishnan@intellicar.in";
+        vm.password = "intellicar123";
 
 
+        function handleLoginSuccess(res) {
+            //$log.log(res);
+            $log.log("handleLoginSuccess");
+            $rootScope.showLoginDialog = false;
+            $mdDialog.hide();
+            $window.location.reload();
+            //$route.reload();
+        }
 
-    //.constant('API', 'http://asset.intellicar.in:10104')
+        function handleLoginFailure(res) {
+            $log.log(res);
+            $log.log("handleLoginFailure");
+        }
 
+        vm.login = function () {
+            $log.log("/gettoken")
+            loginService.login(vm.username, vm.password)
+                .then(handleLoginSuccess, handleLoginFailure)
+        }
+
+        vm.register = function () {
+            // $log.log("register");
+            // loginService.register(vm.username, vm.password)
+            //     .then(handleRequest, handleRequest)
+        }
+
+        vm.logout = function () {
+            loginService.logout();
+        }
+
+        vm.isAuthed = function () {
+            return loginService.isAuthed();
+        }
+    }
 })();

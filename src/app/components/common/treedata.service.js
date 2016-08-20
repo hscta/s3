@@ -7,7 +7,7 @@
 
     angular
         .module('uiplatform')
-        .service('treeDataService', treeDataService)
+        .service('treeDataService', treeDataService);
 
     function treeDataService($rootScope, $log) {
         var vm = this;
@@ -27,8 +27,8 @@
                     roots.push(node);
                 }
             }
-            return roots;
             console.log(roots);
+            return roots;
         };
 
         vm.dashboard_tree_data = function(data) {

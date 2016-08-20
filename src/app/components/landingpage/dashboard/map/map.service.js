@@ -79,8 +79,6 @@
                 $timeout(vm.updateMarker, 1000);
             }
 
-
-
             vm.updateMarker();
             vm.updateCenter();
             vm.updateZoom();
