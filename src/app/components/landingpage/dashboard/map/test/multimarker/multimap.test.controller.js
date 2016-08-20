@@ -6,22 +6,22 @@
 
     angular
         .module('uiplatform')
-        .controller('MapController', MapController);
+        .controller('MultiMapTestController', MultiMapTestController);
 
-    function MapController($scope, $rootScope, $log, mapService, $timeout) {
-        $log.log('MapController');
+    function MultiMapTestController($scope, $rootScope, $log, multiMapTestService, $timeout) {
+        $log.log('MultiMapTestController');
         var vm = this;
 
         vm.loadMap = function() {
             vm.inMap = {};
-            vm.inMap.zoom = mapService.getZoom();
-            vm.inMap.center = mapService.getCenter();
-            vm.inMap.bounds = mapService.getBounds();
-            vm.marker = mapService.getMarker();
+            vm.inMap.zoom = multiMapTestService.getZoom();
+            vm.inMap.center = multiMapTestService.getCenter();
+            vm.inMap.bounds = multiMapTestService.getBounds();
+            vm.marker = multiMapTestService.getMarker();
         }
 
         vm.updateZoom = function() {
-            vm.inMap.zoom = mapService.getZoom();
+            vm.inMap.zoom = multiMapTestService.getZoom();
             $timeout(vm.updateZoom, 4000);
         }
 
