@@ -31,7 +31,7 @@
             console.log(vm.state);
             if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_MANAGEMENT ||
                 vm.state.current.name == intellicarAPI.stateService.STATE_HOME) {
-                leftNavManagementService.getMyVehicles();
+                leftNavManagementService.getMyVehicles({});
             }
         }
 

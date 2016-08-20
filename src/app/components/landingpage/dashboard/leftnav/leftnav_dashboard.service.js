@@ -25,8 +25,8 @@
                 return $q.reject(resp);
             };
 
-            vm.getMyVehicles = function() {
-                intellicarAPI.userService.getMyVehicles()
+            vm.getMyVehicles = function(body) {
+                intellicarAPI.userService.getMyVehicles(body)
                     .then(vm.handleResponse, vm.handleFailure);
             };
 

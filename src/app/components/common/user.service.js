@@ -22,11 +22,10 @@
                 return $q.reject(resp);
             };
 
-            vm.getMyVehicles = function(data) {
-                $log.log("service getMyVehicles");
-                // $log.log(event);
-                // $log.log(data);
-                return requestService.firePost('/user/myvehicles', {})
+            vm.getMyVehicles = function(body) {
+                $log.log("userService getMyVehicles");
+                // $log.log(body);
+                return requestService.firePost('/user/myvehicles', body)
                     .then(vm.handleResponse, vm.handleFailure);
             };
         }

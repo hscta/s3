@@ -72,7 +72,6 @@
             $rootScope.showLoginDialog = false;
             $mdDialog.hide();
             $window.location.reload();
-            //$route.reload();
         }
 
         function handleLoginFailure(res) {

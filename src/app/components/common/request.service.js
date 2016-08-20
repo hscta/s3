@@ -20,8 +20,11 @@
             return authService.getToken();
         }
 
-        vm.firePost = function(api, data, auth) {
+        vm.firePost = function(api, body, auth) {
             api = API_HOST + api;
+
+            if(body === null)
+                body = {};
 
             if(auth == null || auth)
                 auth = true;
@@ -29,10 +32,10 @@
                 auth = false;
 
             if(!auth)
-                return $http.post(api, data);
+                return $http.post(api, body);
 
             if(authService.isAuthed() || api.indexOf('gettoken') > 0) {
-                return $http.post(api, data)
+                return $http.post(api, body)
                     .catch(vm.handleFailure)
             } else {
                 $log.log("user not authenticated");
