@@ -22,18 +22,20 @@
                 return $q.reject(resp);
             };
 
-            vm.getMyVehicles = function(body) {
-                $log.log("userService getMyVehicles");
+            vm.getMyVehicleTree = function(body) {
+                $log.log("userService getMyVehicleTree");
                 // $log.log(body);
                 return requestService.firePost('/user/myvehicles', body)
                     .then(vm.handleResponse, vm.handleFailure);
-            };
 
-            vm.getMyVehicleInfo = function(body) {
-                $log.log("userService get");
-                // $log.log(body);
-                return requestService.firePost('/vehicle/vehicleinfo', body)
-                    .then(vm.handleResponse, vm.handleFailure);
-            };
-        }
+            }
+
+        // vm.getMyUserWEditView = function(body) {
+        //     $log.log("userService getMyUserWEditView");
+        //     $log.log(body);
+        //     return requestService.firePost('/user/myusersweditview', body)
+        //         .then(vm.handleResponse, vm.handleFailure);
+        // };
+
+    }
 })();

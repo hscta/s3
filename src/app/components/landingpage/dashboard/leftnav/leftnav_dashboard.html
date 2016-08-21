@@ -48,6 +48,7 @@
         <li ng-repeat="node in node.nodes" ui-tree-node  ng-include="(node.nodes) ? 'parent_nodes_renderer.html' :  'terminal_node_renderer.html' ">  </li>
     </ol>
 </script>
+
 <!-- Template for terminal nodes -->
 <script type="text/ng-template" id="terminal_node_renderer.html">
     <div ui-tree-handle class="tree-node tree-node-content">
