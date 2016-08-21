@@ -74,26 +74,61 @@
           .state('home.management', {
               url: 'home/management',
               views: {
-                  'centermain@home': {
-                      templateUrl: 'app/components/landingpage/management/settings/settings.html',
-                      controller: 'SettingsController as vm'
-                  },
                   'leftnav@home': {
                       templateUrl: 'app/components/landingpage/management/leftnav/leftnav_management.html',
                       controller: 'LeftNavManagementController as vm'
+                  },
+                  'lefttoolbar@home': {
+                      templateUrl: 'app/components/common/views/emptydiv.html',
+                      controller: 'LeftToolbarDashboardController as vm'
+                  },
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/management/settings/settings.html',
+                      controller: 'SettingsController as vm'
+                  }
+              }
+          })
+          .state('home.managemtab1', {
+              url: '/tab1',
+              views: {
+                  'mgmttab@home.management': {
+                      templateUrl: 'app/components/landingpage/management/settings/view1.html',
+                      controller: 'Tab1Controller as vm'
+                  }
+              }
+          })
+          .state('home.management.tab2', {
+              url: '/tab2',
+              views: {
+                  'mgmttab@home.management': {
+                      templateUrl: 'app/components/landingpage/management/settings/view2.html',
+                      controller: 'Tab2Controller as vm'
+                  }
+              }
+          })
+          .state('home.management.tab3', {
+              url: '/tab3',
+              views: {
+                  'mgmttab@home.management': {
+                      templateUrl: 'app/components/landingpage/management/settings/view3.html',
+                      controller: 'Tab3Controller as vm'
                   }
               }
           })
           .state('home.reports', {
               url: 'home/reports',
               views: {
-                  'centermain@home': {
-                      templateUrl: 'app/components/landingpage/reports/reports.html',
-                      controller: 'ReportsController as vm'
-                  },
                   'leftnav@home': {
                       templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
+                  },
+                  'lefttoolbar@home': {
+                      templateUrl: 'app/components/common/views/emptydiv.html',
+                      controller: 'LeftToolbarDashboardController as vm'
+                  },
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/reports/reports.html',
+                      controller: 'ReportsController as vm'
                   }
               }
           })

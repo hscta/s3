@@ -1,29 +1,59 @@
 <!DOCTYPE html>
 
-<div layout="column"  class="sample" ng-cloak>
-    <md-content class="md-padding">
-        <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="top">
-            <md-tab id="tab1">
-                <md-tab-label>Item One</md-tab-label>
-                <md-tab-body>
-                    View for Item #1 <br/>
-                    data.selectedIndex = 0;
-                </md-tab-body>
-            </md-tab>
-            <md-tab id="tab2" ng-disabled="data.secondLocked">
-                <md-tab-label>{{data.secondLabel}}</md-tab-label>
-                <md-tab-body>
-                    View for Item #2 <br/>
-                    data.selectedIndex = 1;
-                </md-tab-body>
-            </md-tab>
-            <md-tab id="tab3">
-                <md-tab-label>Item Three</md-tab-label>
-                <md-tab-body>
-                    View for Item #3 <br/>
-                    data.selectedIndex = 2;
-                </md-tab-body>
-            </md-tab>
-        </md-tabs>
-    </md-content>
+<!--<div layout="column"  class="sample" ng-cloak>-->
+    <!--<md-content class="md-padding">-->
+        <!--<md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="top">-->
+            <!--<md-tab id="tab1">-->
+                <!--<md-tab-label>Item One</md-tab-label>-->
+                <!--<md-tab-body>-->
+                    <!--View for Item #1 <br/>-->
+                    <!--data.selectedIndex = 0;-->
+                <!--</md-tab-body>-->
+            <!--</md-tab>-->
+            <!--<md-tab id="tab2" ng-disabled="data.secondLocked">-->
+                <!--<md-tab-label>{{data.secondLabel}}</md-tab-label>-->
+                <!--<md-tab-body>-->
+                    <!--View for Item #2 <br/>-->
+                    <!--data.selectedIndex = 1;-->
+                <!--</md-tab-body>-->
+            <!--</md-tab>-->
+            <!--<md-tab id="tab3">-->
+                <!--<md-tab-label>Item Three</md-tab-label>-->
+                <!--<md-tab-body>-->
+                    <!--View for Item #3 <br/>-->
+                    <!--data.selectedIndex = 2;-->
+                <!--</md-tab-body>-->
+            <!--</md-tab>-->
+        <!--</md-tabs>-->
+    <!--</md-content>-->
+<!--</div>-->
+
+<div layout="column" class="demo" >
+
+    <!--<script type="text/ng-template" id="view2.html">  Tab #2 </script>-->
+    <!--<script type="text/ng-template" id="view3.html">  Tab #3 </script>-->
+
+    <!--<md-toolbar>-->
+        <!--<h2 class="md-toolbar-tools">-->
+            <!--<span>Settings</span>-->
+        <!--</h2>-->
+    <!--</md-toolbar>-->
+
+    <md-tabs md-stretch-tabs
+             md-selected="selectedIndex">
+        <!--<md-tab md-on-select="$state.transitionTo(home.management.tab1, params1)"><md-tab-label>Label1</md-tab-label></md-tab>-->
+        <!--<md-tab ui-sref="home.management.tab1" label="tab1"></md-tab>-->
+        <md-tab>
+            <md-tab-label><span ui-sref="home.management.tab1">tab1</span></md-tab-label>
+        </md-tab>
+        <md-tab>
+            <md-tab-label><span ui-sref="home.management.tab2">tab2</span></md-tab-label>
+        </md-tab>
+        <md-tab>
+            <md-tab-label><span ui-sref="home.management.tab3">tab3</span></md-tab-label>
+        </md-tab>
+    </md-tabs>
+
+    <div id="mytabcontent" ui-view="mgmttab" flex> </div>
+
 </div>

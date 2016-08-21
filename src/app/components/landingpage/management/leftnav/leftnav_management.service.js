@@ -30,6 +30,11 @@
                     .then(vm.listeners['getMyVehicleTree'], vm.handleFailure);
             };
 
+            vm.getMyVehiclesDash = function(body) {
+                intellicarAPI.userService.getMyVehiclesDash(body)
+                    .then(vm.listeners['getMyVehiclesDash'], vm.handleFailure);
+            };
+
             vm.addListener = function(key, listener) {
                 vm.listeners[key] = listener;
             };

@@ -8,16 +8,12 @@
         .module('uiplatform')
         .controller('SettingsController', SettingsController);
 
-    function SettingsController($scope, $rootScope, $log) {
+    function SettingsController($scope, $rootScope, $log, $state) {
 
         $log.log('SettingsController');
         var vm = this;
 
-        vm.toggleLeftnav = function(event, data) {
-            $log.log('management navvvvvvvv ')
-            vm.left_nav_toggle = data.left_nav_toggle;
-        }
-
+        $log.log('state.name = ' + $state.name);
     }
 })();
 

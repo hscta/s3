@@ -26,16 +26,24 @@
             $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         }
 
-        vm.initialize = function() {
-            console.log(vm.state);
-            if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_MANAGEMENT ||
-                vm.state.current.name == intellicarAPI.stateService.STATE_HOME) {
-                leftNavManagementService.getMyVehicleTree({});
-            }
+        vm.getMyVehiclesDash = function(data) {
+            $log.log("getMyVehiclesDash");
+            $log.log(data.data.data);
+            //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         }
 
         vm.addAllListeners = function() {
             leftNavManagementService.addListener('getMyVehicleTree', vm.getMyVehicleTree);
+            leftNavManagementService.addListener('getMyVehiclesDash', vm.getMyVehiclesDash);
+        }
+
+        vm.initialize = function() {
+            console.log(vm.state);
+            if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_MANAGEMENT) {
+                //leftNavManagementService.getMyVehicleTree({});
+                leftNavManagementService.getMyVehiclesDash({});
+
+            }
         }
 
         vm.addAllListeners();
