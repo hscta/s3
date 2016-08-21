@@ -2,12 +2,13 @@
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-    <div ui-tree-handle>
+    <div ui-tree-handle style="cursor:pointer;">
         <a ng-click="toggle(this)" style="cursor:pointer;">
             <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
             <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
         </a>
-        {{node.name}}
+        <span  ng-click="test()">{{node.pname}}</span><br/>
+        <span>{{node.name}}</span>
     </div>
     <ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">
         <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" data-nodrag ></li>

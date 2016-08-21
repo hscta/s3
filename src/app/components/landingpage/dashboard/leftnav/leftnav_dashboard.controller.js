@@ -22,6 +22,7 @@
 
         vm.displayTree = function(data) {
             $log.log(data.data.data);
+            $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data);
             // vm.assetList = data.data.data;
             // $scope.tree_data = treeDataService.management_tree_data(data);
             //
@@ -51,6 +52,11 @@
                 leftNavDashboardService.getMyVehicles({});
             }
         }
+
+        $scope.test = function (){
+            console.log('clicked');
+        }
+
 
         leftNavDashboardService.addTreeCallback(vm.displayTree);
         vm.initialize();
