@@ -14,8 +14,8 @@
         $log.log('Tab1Controller');
         var vm = this;
 
-        $log.log('state.name = ');
-        $log.log($state);
+        // $log.log('state.name = ');
+        // $log.log($state);
     }
 })();
 

@@ -67,18 +67,15 @@
         }
 
 
-        vm.addAuthListener = function(callback) {
-            //$log.log('adding login callback');
-            authListeners.push(callback)
-        }
-
-        vm.handleFailure = function(res) {
-            $log.log("api returned error");
-            $log.log(res);
-            if(errorStatusCodes.indexOf(res.status) != -1) {
+        vm.handleFailure = function(resp) {
+            $log.log("API returned error");
+            $log.log(resp);
+            if(errorStatusCodes.indexOf(resp.status) != -1) {
                 $log.log("failure status code");
                 vm.checkLogin(true);
             }
+
+            return $q.reject(resp);
         }
 
         vm.checkLogin = function(force) {
@@ -90,6 +87,12 @@
                 });
             }
         }
+
+        vm.addAuthListener = function(callback) {
+            //$log.log('adding login callback');
+            authListeners.push(callback)
+        }
+
 
         // If required. It is periodically called from maincontroller to check for valid token
         // currently disabled in maincontroller

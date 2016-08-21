@@ -13,12 +13,12 @@
         $log.log("userService");
 
         vm.handleResponse = function (resp) {
-            $log.log("handleResponse");
+            $log.log("userService handleResponse");
             return $q.resolve(resp)
         };
 
         vm.handleFailure = function (resp) {
-            $log.log("handleFailure ");
+            $log.log("userService handleFailure ");
             return $q.reject(resp);
         };
 
@@ -34,6 +34,13 @@
             $log.log("userService getMyVehiclesDash");
             $log.log(body);
             return requestService.firePost('/user/myvehiclesdash', body)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+        vm.getMyVehiclesManage = function (body) {
+            $log.log("userService getMyVehiclesManage");
+            $log.log(body);
+            return requestService.firePost('/user/myvehiclesmanage', body)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 

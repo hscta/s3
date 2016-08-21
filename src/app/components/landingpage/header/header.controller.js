@@ -38,7 +38,7 @@
         }
 
         function toggleLeftnav() {
-            $log.log("firing from header", $rootScope.left_nav_toggle)
+            //$log.log("firing from header", $rootScope.left_nav_toggle)
             $rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
          //   $rootScope.$broadcast('toggleLeftnav', {'left_nav_toggle': vm.left_nav_toggle});
         }

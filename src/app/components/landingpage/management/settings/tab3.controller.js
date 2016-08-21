@@ -15,8 +15,8 @@
         $log.log('Tab3Controller');
         var vm = this;
 
-        $log.log('state.name = ');
-        $log.log($state);
+        // $log.log('state.name = ');
+        // $log.log($state);
     }
 })();
 

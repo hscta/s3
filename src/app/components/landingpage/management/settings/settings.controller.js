@@ -13,7 +13,8 @@
         $log.log('SettingsController');
         var vm = this;
 
-        $log.log('state.name = ' + $state.name);
+        // $log.log('state.name = ');
+        // $log.log($state);
     }
 })();
 
