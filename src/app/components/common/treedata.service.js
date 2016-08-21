@@ -19,13 +19,13 @@
             var map = {}, node, roots = [];
             for (var i = 0; i < nodes.length; i += 1) {
                 node = nodes[i];
+                node.checkStatus='unchecked';
                 node.nodes = [];
                 var group_id = node.pgrouppath.split('/');
                 group_id.shift();
                 var pgroupid ;
                 var real_groupid=[];
                 var tgroupid;
-
 
                 for ( var j = 0; j < group_id.length; j++ ) {
                     if ( !(j%2 == 0) )
@@ -43,7 +43,6 @@
                  } else {
                      roots.push(node);
                  }
-                console.log('sss');
             }
             return roots;
         };

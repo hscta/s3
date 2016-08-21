@@ -22,7 +22,11 @@
 
         vm.displayTree = function(data) {
             $log.log(data.data.data);
-            $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data);
+            $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
+            var treeConfig = {
+                hirerchy: "manufacture|cartype|groups|devicetype",
+                online: true|false
+            }
             // vm.assetList = data.data.data;
             // $scope.tree_data = treeDataService.management_tree_data(data);
             //
@@ -55,7 +59,50 @@
 
         $scope.test = function (){
             console.log('clicked');
+            //leftNavDashboardService.getVehicleInfo();
         }
+
+        $scope.toggleCheck=function(node){
+            $log.log("checkStatus = " + node.checkStatus);
+            if(node.checkStatus==="checked"){
+                node.checkStatus="unchecked";
+            } else {
+                node.checkStatus="checked";
+            }
+
+            if(node.nodes.length)
+                $scope.propagateCheckFromParent(node.nodes,node.checkStatus);
+
+            $scope.verifyAllParentsCheckStatus($scope.tree_data);
+        };
+
+        $scope.propagateCheckFromParent = function(nodes, status){
+            for (var i=0; i<nodes.length; ++i) {
+                var node=nodes[i];
+                node.checkStatus=status;
+                if(node.nodes)
+                    $scope.propagateCheckFromParent(node.nodes,status)
+            }
+        };
+
+        $scope.verifyAllParentsCheckStatus = function(nodes){
+            var retVal="";
+            for (var i=0; i<nodes.length; ++i) {
+                var node=nodes[i];
+                $log.log(node);
+                if(node.nodes.length){
+                    node.checkStatus=$scope.verifyAllParentsCheckStatus(node.nodes);
+                }
+                if(retVal===""){
+                    retVal=node.checkStatus;
+                   // console.log("set ret");
+                }
+                if(retVal!=node.checkStatus)
+                    return "partlyChecked";
+
+            }
+            return retVal;
+        };
 
 
         leftNavDashboardService.addTreeCallback(vm.displayTree);

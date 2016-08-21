@@ -28,5 +28,12 @@
                 return requestService.firePost('/user/myvehicles', body)
                     .then(vm.handleResponse, vm.handleFailure);
             };
+
+            vm.getMyVehicleInfo = function(body) {
+                $log.log("userService get");
+                // $log.log(body);
+                return requestService.firePost('/vehicle/vehicleinfo', body)
+                    .then(vm.handleResponse, vm.handleFailure);
+            };
         }
 })();
