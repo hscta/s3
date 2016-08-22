@@ -33,11 +33,10 @@
             return $q.reject(data);
         };
 
-
         vm.getMyVehicleWEditView = function(body) {
             return intellicarAPI.userService.getMyVehicleWEditView(body)
                 .then(vm.handleMyVehicleWEditView, vm.handleMyVehicleWEditViewFailure);
-        }
+        };
 
     }
 })();

@@ -13,12 +13,12 @@
         $log.log("userService");
 
         vm.handleResponse = function (resp) {
-            $log.log("userService handleResponse");
+            //$log.log("userService handleResponse");
             return $q.resolve(resp)
         };
 
         vm.handleFailure = function (resp) {
-            $log.log("userService handleFailure ");
+            //$log.log("userService handleFailure ");
             return $q.reject(resp);
         };
 
@@ -29,6 +29,12 @@
                 .then(vm.handleResponse, vm.handleFailure);
 
         };
+
+        vm.getMyGroups = function(body) {
+            $log.log("userService getMyGroups");
+            return requestService.firePost('/user/mygroups', body)
+                .then(vm.handleResponse, vm.handleFailure);
+        }
 
         vm.getMyVehiclesDash = function (body) {
             $log.log("userService getMyVehiclesDash");
@@ -49,7 +55,5 @@
             return requestService.firePost('/user/myvehiclesweditview', body)
                 .then(vm.handleResponse, vm.handleFailure);
         };
-
-
     }
 })();

@@ -44,10 +44,9 @@
         }
 
         vm.initialize = function() {
-            console.log(vm.state);
+            //console.log(vm.state);
             if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_MANAGEMENT) {
-                //leftNavManagementService.getMyVehicleTree({});
-                leftNavManagementService.getMyVehiclesManage({})
+                leftNavManagementService.getTreeMyVehiclesManage({})
                     .then(vm.getMyVehiclesManage, vm.getMyVehiclesManageFailure);
 
             }
