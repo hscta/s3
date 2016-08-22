@@ -2,7 +2,7 @@
  * Created by smiddela on 15/08/16.
  */
 
-(function() {
+(function () {
 
     angular
         .module('uiplatform')
@@ -26,31 +26,27 @@
         //     $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         // }
 
-        vm.getMyVehiclesManage = function(data) {
+        vm.getMyVehiclesManage = function (data) {
             $log.log("getMyVehiclesManage");
             $log.log(data);
-            //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
-        }
+        };
 
-        vm.getMyVehiclesManageFailure = function(data) {
+        vm.getMyVehiclesManageFailure = function (data) {
             $log.log("getMyVehiclesManageFailure");
             $log.log(data);
-            //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
-        }
+        };
 
-        vm.addAllListeners = function() {
+        vm.addAllListeners = function () {
             //leftNavManagementService.addListener('getMyVehicleTree', vm.getMyVehicleTree);
             //leftNavManagementService.addListener('getMyVehiclesManage', vm.getMyVehiclesManage);
-        }
+        };
 
-        vm.initialize = function() {
+        vm.initialize = function () {
             //console.log(vm.state);
-            if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_MANAGEMENT) {
-                leftNavManagementService.getTreeMyVehiclesManage({})
-                    .then(vm.getMyVehiclesManage, vm.getMyVehiclesManageFailure);
+            leftNavManagementService.getTreeMyVehiclesManage({})
+                .then(vm.getMyVehiclesManage, vm.getMyVehiclesManageFailure);
 
-            }
-        }
+        };
 
         vm.addAllListeners();
         vm.initialize();

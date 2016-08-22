@@ -2,7 +2,7 @@
  * Created by smiddela on 15/08/16.
  */
 
-(function() {
+(function () {
     angular
         .module('uiplatform')
         .controller('LeftNavDashboardController', LeftNavDashboardController);
@@ -14,69 +14,84 @@
         var vm = this;
         vm.state = $state;
 
+        vm.getMyVehiclesDash = function (data) {
+            $log.log("getMyVehiclesDash");
+            $log.log(data);
+            //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
+        };
 
-        vm.initialize = function() {
-           // console.log(vm.state);
-            if(vm.state.current.name == intellicarAPI.stateService.STATE_HOME_DASHBOARD ||
+        vm.getMyVehiclesDashFailure = function (data) {
+            $log.log("getMyVehiclesDashFailure");
+            $log.log(data);
+            //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
+        };
+
+        vm.initialize = function () {
+            leftNavDashboardService.getTreeMyVehiclesDash({})
+                .then(vm.getMyVehiclesDash, vm.getMyVehiclesDashFailure);
+        }
+
+        vm.initialize2 = function () {
+            if (vm.state.current.name == intellicarAPI.stateService.STATE_HOME_DASHBOARD ||
                 vm.state.current.name == intellicarAPI.stateService.STATE_HOME) {
                 leftNavDashboardService.getMyVehicleTree({});
             }
         }
 
-        vm.getMyVehicleTree = function(data) {
+        vm.getMyVehicleTree = function (data) {
             $log.log(data.data.data);
             $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         }
 
 
-        $scope.test = function (){
+        $scope.test = function () {
             console.log('clicked');
             //leftNavDashboardService.getVehicleInfo();
         }
 
-        $scope.toggleCheck=function(node){
+        $scope.toggleCheck = function (node) {
             $log.log("checkStatus = " + node.checkStatus);
-            if(node.checkStatus==="checked"){
-                node.checkStatus="unchecked";
+            if (node.checkStatus === "checked") {
+                node.checkStatus = "unchecked";
             } else {
-                node.checkStatus="checked";
+                node.checkStatus = "checked";
             }
 
-            if(node.nodes.length)
-                $scope.propagateCheckFromParent(node.nodes,node.checkStatus);
+            if (node.nodes.length)
+                $scope.propagateCheckFromParent(node.nodes, node.checkStatus);
 
             $scope.verifyAllParentsCheckStatus($scope.tree_data);
         };
 
-        $scope.propagateCheckFromParent = function(nodes, status){
-            for (var i=0; i<nodes.length; ++i) {
-                var node=nodes[i];
-                node.checkStatus=status;
-                if(node.nodes)
-                    $scope.propagateCheckFromParent(node.nodes,status)
+        $scope.propagateCheckFromParent = function (nodes, status) {
+            for (var i = 0; i < nodes.length; ++i) {
+                var node = nodes[i];
+                node.checkStatus = status;
+                if (node.nodes)
+                    $scope.propagateCheckFromParent(node.nodes, status)
             }
         };
 
-        $scope.verifyAllParentsCheckStatus = function(nodes){
-            var retVal="";
-            for (var i=0; i<nodes.length; ++i) {
-                var node=nodes[i];
+        $scope.verifyAllParentsCheckStatus = function (nodes) {
+            var retVal = "";
+            for (var i = 0; i < nodes.length; ++i) {
+                var node = nodes[i];
                 $log.log(node);
-                if(node.nodes.length){
-                    node.checkStatus=$scope.verifyAllParentsCheckStatus(node.nodes);
+                if (node.nodes.length) {
+                    node.checkStatus = $scope.verifyAllParentsCheckStatus(node.nodes);
                 }
-                if(retVal===""){
-                    retVal=node.checkStatus;
-                   // console.log("set ret");
+                if (retVal === "") {
+                    retVal = node.checkStatus;
+                    // console.log("set ret");
                 }
-                if(retVal!=node.checkStatus)
+                if (retVal != node.checkStatus)
                     return "partlyChecked";
 
             }
             return retVal;
         };
 
-        vm.addAllListeners = function() {
+        vm.addAllListeners = function () {
             leftNavDashboardService.addListener('getMyVehicleTree', vm.getMyVehicleTree);
         }
 
@@ -84,31 +99,3 @@
         vm.initialize();
     }
 })();
-
-
-// var treeConfig = {
-//     hirerchy: "manufacture|cartype|groups|devicetype",
-//     online: true|false
-// }
-
-// vm.assetList =  null;
-// vm.assetList = data.data.data;
-// $scope.tree_data = treeDataService.management_tree_data(data);
-//
-// children = {};
-// for(idx in vm.assetList) {
-//     first = vm.assetList[idx];
-//     $log.log(first);
-//     for(item in vm.assetList) {
-//         second = vm.assetList[item];
-//         if(first.groupid == second.groupid)
-//             continue;
-//         if(!(first.groupid in children))
-//             children[first.groupid] = [];
-//         if(first.groupid == second.pgroupid) {
-//             children[first.groupid].push(second);
-//         }
-//     }
-// }
-//$log.log(children);
-//for(idx in children) {}

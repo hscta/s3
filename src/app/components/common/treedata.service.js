@@ -133,7 +133,7 @@
         };
 
 
-        vm.getManagedVehicleTree = function (myVehicles, myGroups) {
+        vm.getMyVehicleTree = function (myVehicles, myGroups) {
             vm.mergeVehiclePermissions(myVehicles);
 
             var vehicles = myVehicles.vehicles;
@@ -187,54 +187,40 @@
             return vehicleTree;
         };
 
-        // vm.processManagedVehicles = function (resp) {
-        //     $log.log(resp);
-        //     if (resp.data === null || resp.data.data === null) {
-        //         return $q.reject(resp);
-        //         //vm.listeners['getMyVehiclesManage'](null);
-        //     }
-        //
-        //     $log.log(resp.data.data);
-        //
-        //     var managedVehicleTree = vm.getManagedVehicleTree(resp.data.data);
-        //     return $q.resolve(managedVehicleTree);
-        // };
-
-        vm.processManagedGroups = function (managedGroupsResp) {
+        vm.processMyGroups = function (groupsResp) {
             var myGroups = {};
-            for (var idx in managedGroupsResp) {
-                var mygroup = managedGroupsResp[idx];
+            for (var idx in groupsResp) {
+                var mygroup = groupsResp[idx];
                 mygroup.ui_asset_type = 'group';
                 myGroups[mygroup.grouppath] = mygroup;
             }
             return myGroups;
         };
 
-        vm.processManagedVehicles = function (resp) {
+        vm.processMyVehicles = function (resp) {
             //$log.log(resp);
-            var managedVehiclesResp = resp[0].data.data;
-            var managedGroupsResp = resp[1].data.data;
-            var myGroups = vm.processManagedGroups(managedGroupsResp);
-            var managedVehicleTree = vm.getManagedVehicleTree(managedVehiclesResp, myGroups);
-            return $q.resolve(managedVehicleTree);
+            var vehiclesResp = resp[0].data.data;
+            var groupsResp = resp[1].data.data;
+            var myGroups = vm.processMyGroups(groupsResp);
+            var vehicleTree = vm.getMyVehicleTree(vehiclesResp, myGroups);
+            return $q.resolve(vehicleTree);
         };
-
-        // vm.getMyVehicleTree = function(body) {
-        //     intellicarAPI.userService.getMyVehicleTree(body)
-        //         .then(vm.listeners['getMyVehicleTree'], vm.handleFailure);
-        // };
-
-        // vm.getMyVehiclesManage = function (body) {
-        //     return intellicarAPI.userService.getMyVehiclesManage(body)
-        //         .then(vm.processManagedVehicles, vm.handleFailure);
-        // };
 
         vm.getTreeMyVehiclesManage = function (body) {
-            var managedVehiclesPromise = userService.getMyVehiclesManage(body);
-            var managedGroupsPromise = userService.getMyGroups(body);
-            return $q.all([managedVehiclesPromise, managedGroupsPromise])
-                .then(vm.processManagedVehicles, vm.handleFailure);
+            var vehiclesPromise = userService.getMyVehiclesManage(body);
+            var groupsPromise = userService.getMyGroups(body);
+            return $q.all([vehiclesPromise, groupsPromise])
+                .then(vm.processMyVehicles, vm.handleFailure);
         };
+
+        vm.getTreeMyVehiclesDash = function (body) {
+            var vehiclesPromise = userService.getMyVehiclesDash(body);
+            var groupsPromise = userService.getMyGroups(body);
+            return $q.all([vehiclesPromise, groupsPromise])
+                .then(vm.processMyVehicles, vm.handleFailure);
+        };
+
+
     }
 
 })();

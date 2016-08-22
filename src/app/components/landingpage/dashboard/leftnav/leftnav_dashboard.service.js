@@ -24,8 +24,12 @@
             };
 
             vm.getMyVehicleTree = function(body) {
-                intellicarAPI.userService.getMyVehicleTree(body)
+                return intellicarAPI.userService.getMyVehicleTree(body)
                     .then(vm.listeners['getMyVehicleTree'], vm.handleFailure);
+            };
+
+            vm.getTreeMyVehiclesDash = function(body) {
+                return intellicarAPI.treeDataService.getTreeMyVehiclesDash(body);
             };
 
             vm.addListener = function(key, listener) {
