@@ -42,12 +42,14 @@
         min-height: 1px;
     }
     /*md-checkbox .md-icon {width:15px; height:15px;}*/
+    md-sidenav{height:100%;}
+    md-checkbox span{font-weight:normal;}
 </style>
 
 
 <!-- Template for parent nodes -->
 <script type="text/ng-template" id="parent_nodes_renderer.html">
-    <div ui-tree-handle>
+    <div>
         <a ng-click="toggle(this)" style="cursor:pointer;">
             <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
             <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
@@ -57,7 +59,7 @@
                      ng-click="vm.toggleCheck(node)"
                      data-nodrag>
         </md-checkbox>
-        <span>{{node.info.name}}</span ><br/>
+        <span ng-class="{{node.info}}">{{node.info.name}}</span ><br/>
     </div>
     <ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">
         <li ng-repeat="node in node.nodes" ui-tree-node  ng-include="(node.nodes) ? 'parent_nodes_renderer.html' :  'terminal_node_renderer.html' ">  </li>
@@ -66,7 +68,7 @@
 
 <!-- Template for terminal nodes -->
 <script type="text/ng-template" id="terminal_node_renderer.html">
-    <div ui-tree-handle class="tree-node tree-node-content">
+    <div class="tree-node tree-node-content">
         <md-checkbox aria-label="Checkbox 1" ng-checked="node.checkStatus === 'checked'"
                      md-indeterminate="node.checkStatus === 'partlyChecked'"
                      ng-click="vm.toggleCheck(node)"
@@ -76,10 +78,8 @@
     </div>
 </script>
 
-
-
-<md-sidenav layout="column" class="md-sidenav-left" md-component-id="left"
-            md-is-locked-open = "left_nav_toggle">
+<md-sidenav  class="md-sidenav-left" md-component-id="left"
+            md-is-locked-open = "left_nav_toggle" flex>
     <!--The ROot Node-->
     <div ui-tree id="tree-root" callbacks="treeOptions">
         <ol ui-tree-nodes="" ng-model="tree_data" ng-class="{hidden: collapsed}">

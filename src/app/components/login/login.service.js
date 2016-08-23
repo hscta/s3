@@ -35,8 +35,9 @@
         }
 
         vm.isAuthed = function() {
-            return authService.isAuthed ? authService.isAuthed() : false
-            }
+            $log.log(authService.isAuthed(), 'ssssssssssssssss');
+            return authService.isAuthed ? authService.isAuthed() : false;
+        }
 
         vm.checkLogin = function () {
             if($rootScope.showLoginDialog) {
