@@ -48,24 +48,6 @@
             return roots;
         };
 
-        // vm.dashboard_tree_data = function(data) {
-        //     console.log(data.data.data);
-        //     var nodes = data.data.data;
-        //     var map = {}, node, roots = [];
-        //     for (var i = 0; i < nodes.length; i += 1) {
-        //         node = nodes[i];
-        //         node.nodes = [];
-        //         map[node.vehicleid] = i; // use map to look-up the parents
-        //         if (node.pgroupid != node.vehicleid) {
-        //                 nodes[map[node.pgroupid]].nodes.push(node);
-        //         } else {
-        //             roots.push(node);
-        //         }
-        //     }
-        //     console.log(roots);
-        //     return roots;
-        // };
-
 
         vm.getNextPathItemEnd = function (str, start) {
             var slash = '/';
@@ -82,7 +64,7 @@
             if (str.charAt(start) !== slash)
                 return -1;
 
-            if (str.substr(     start, str.length).length < 4)
+            if (str.substr(start, str.length).length < 4)
                 return -1;
 
             var firstSlash = str.indexOf(slash, start + 1);
@@ -120,22 +102,7 @@
         };
 
 
-        vm.mergeVehiclePermissions = function (data) {
-            for (var vidx in data.vehicles) {
-                var vehicle = data.vehicles[vidx];
-                vehicle.permissions = [];
-                for (var pidx in data.permissions) {
-                    var permission = data.permissions[pidx];
-                    if (vehicle.vehicleid === permission.vehicleid) {
-                        vehicle.permissions.push(permission);
-                    }
-                }
-            }
-        };
-
-
         vm.getMyVehicleTree = function (myVehicles, myGroups) {
-            vm.mergeVehiclePermissions(myVehicles);
 
             var vehicles = myVehicles.vehicles;
             var vehicleTree = {};
@@ -195,25 +162,6 @@
             return vehicleTree;
         };
 
-        vm.processMyGroups = function (groupsResp) {
-            var myGroups = {};
-            for (var idx in groupsResp) {
-                var mygroup = groupsResp[idx];
-                mygroup.ui_asset_type = 'group';
-                myGroups[mygroup.grouppath] = mygroup;
-            }
-            //$log.log(myGroups);
-            return myGroups;
-        };
-
-        vm.processMyVehicles = function (resp) {
-            //$log.log(resp);
-            var vehiclesResp = resp[0].data.data;
-            var groupsResp = resp[1].data.data;
-            var myGroups = vm.processMyGroups(groupsResp);
-            var vehicleTree = vm.getMyVehicleTree(vehiclesResp, myGroups);
-            return $q.resolve(vehicleTree);
-        };
 
         vm.buildUITree = function (genericTree, key) {
             //$log.log("buildTree " + key);
@@ -229,6 +177,7 @@
             var gtNode = genericTree[key];
             gtNode.visited = true;
 
+            //$log.log(gtNode);
             var utNode = {};
             utNode.id = key;
             utNode.title = gtNode.info.name;
@@ -259,6 +208,7 @@
             return utNode;
         };
 
+
         vm.createUITree = function (genericTree) {
             $log.log("createUITree");
             $log.log(genericTree);
@@ -271,24 +221,73 @@
                 }
             }
             return $q.resolve(uiTree);
-        }
+        };
 
-        vm.getTreeMyVehiclesManage = function (body) {
-            var vehiclesPromise = userService.getMyVehiclesManage(body);
+
+        vm.mergeVehiclePermissions = function (data) {
+            for (var idx in data.vehicles) {
+                var vehicle = data.vehicles[idx];
+                vehicle.permissions = [];
+                for (var pidx in data.permissions) {
+                    var permission = data.permissions[pidx];
+                    if (vehicle.vehicleid === permission.vehicleid) {
+                        vehicle.permissions.push(permission);
+                    }
+                }
+            }
+        };
+
+
+        vm.mergeGroupPermissions = function (data) {
+            for (var idx in data.groups) {
+                var group = data.groups[idx];
+                group.permissions = [];
+                for (var pidx in data.permissions) {
+                    var permission = data.permissions[pidx];
+                    if (group.groupid === permission.groupid) {
+                        group.permissions.push(permission);
+                    }
+                }
+            }
+        };
+
+
+        vm.processMyGroups = function (groupsResp) {
+            //$log.log(groupsResp);
+            var myGroups = {};
+            for (var idx in groupsResp.groups) {
+                var mygroup = groupsResp.groups[idx];
+                //$log.log(mygroup);
+                mygroup.ui_asset_type = 'group';
+                myGroups[mygroup.grouppath] = mygroup;
+            }
+            //$log.log(myGroups);
+            return myGroups;
+        };
+
+
+        vm.processMyVehicles = function (resp) {
+            //$log.log(resp);
+            var vehiclesResp = resp[0].data.data;
+            var groupsResp = resp[1].data.data;
+            vm.mergeVehiclePermissions(vehiclesResp);
+            vm.mergeGroupPermissions(groupsResp);
+            var myGroups = vm.processMyGroups(groupsResp);
+            var vehicleTree = vm.getMyVehicleTree(vehiclesResp, myGroups);
+            return $q.resolve(vehicleTree);
+        };
+
+
+        vm.getGenericTreeVehicles = function (body) {
+            var vehiclesPromise = userService.getMyVehicles(body);
             var groupsPromise = userService.getMyGroups(body);
             return $q.all([vehiclesPromise, groupsPromise])
                 .then(vm.processMyVehicles, vm.handleFailure);
         };
 
-        vm.getTreeMyVehiclesDash = function (body) {
-            var vehiclesPromise = userService.getMyVehiclesDash(body);
-            var groupsPromise = userService.getMyGroups(body);
-            return $q.all([vehiclesPromise, groupsPromise])
-                .then(vm.processMyVehicles, vm.handleFailure);
-        };
 
         vm.getAngularUITreeMyVehicles = function (body) {
-            var vehiclesPromise = userService.getMyVehiclesManage(body);
+            var vehiclesPromise = userService.getMyVehicles(body);
             var groupsPromise = userService.getMyGroups(body);
             return $q.all([vehiclesPromise, groupsPromise])
                 .then(vm.processMyVehicles, vm.handleFailure)

@@ -14,21 +14,21 @@
         var vm = this;
         vm.state = $state;
 
-        vm.getMyVehiclesDash = function (data) {
-            $log.log("getMyVehiclesDash");
+        vm.getMyVehicles = function (data) {
+            $log.log("getMyVehicles");
             $log.log(data);
             //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
-        vm.getMyVehiclesDashFailure = function (data) {
-            $log.log("getMyVehiclesDashFailure");
+        vm.getMyVehiclesFailure = function (data) {
+            $log.log("getMyVehiclesFailure");
             $log.log(data);
             //$scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
         vm.initialize = function () {
-            leftNavDashboardService.getTreeMyVehiclesDash({})
-                .then(vm.getMyVehiclesDash, vm.getMyVehiclesDashFailure);
+            leftNavDashboardService.getTreeMyVehicles({})
+                .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         }
 
         vm.initialize2 = function () {

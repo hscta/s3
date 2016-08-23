@@ -26,26 +26,26 @@
         //     $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         // }
 
-        vm.getMyVehiclesManage = function (data) {
-            //$log.log("getMyVehiclesManage");
+        vm.getMyVehicles = function (data) {
+            //$log.log("getMyVehicles");
             $log.log(data);
             $scope.tree_data = data;
           //  $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
-        vm.getMyVehiclesManageFailure = function (data) {
-            $log.log("getMyVehiclesManageFailure");
+        vm.getMyVehiclesFailure = function (data) {
+            $log.log("getMyVehiclesFailure");
             $log.log(data);
         };
 
         vm.addAllListeners = function () {
             //leftNavManagementService.addListener('getMyVehicleTree', vm.getMyVehicleTree);
-            //leftNavManagementService.addListener('getMyVehiclesManage', vm.getMyVehiclesManage);
+            //leftNavManagementService.addListener('getMyVehicles', vm.getMyVehicles);
         };
 
         vm.initialize = function () {
-            leftNavManagementService.getTreeMyVehiclesManage({})
-                .then(vm.getMyVehiclesManage, vm.getMyVehiclesManageFailure);
+            leftNavManagementService.getTreeMyVehicles({})
+                .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 
         vm.buttonClick = function (item) {

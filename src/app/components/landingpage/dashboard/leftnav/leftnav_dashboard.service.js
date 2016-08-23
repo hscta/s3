@@ -28,8 +28,8 @@
                     .then(vm.listeners['getMyVehicleTree'], vm.handleFailure);
             };
 
-            vm.getTreeMyVehiclesDash = function(body) {
-                return intellicarAPI.treeDataService.getTreeMyVehiclesDash(body);
+            vm.getTreeMyVehicles = function(body) {
+                return intellicarAPI.treeDataService.getAngularUITreeMyVehicles(body);
             };
 
             vm.addListener = function(key, listener) {

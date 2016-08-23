@@ -8,7 +8,7 @@
     angular
         .module('uiplatform')
         .config(managementRouter)
-        .run(function($rootScope, $state) {
+        .run(function($rootScope, $log, $state) {
 
             $rootScope.transitionTo = function(state, params) {
 
@@ -16,9 +16,9 @@
                     relative: $state.$current, notify: true });
             }
 
-            $rootScope.checkState = function (state) {
-                return $state.current.name == state ? true : false;
-            }
+            // $rootScope.checkState = function (state) {
+            //     return $state.current.name == state ? true : false;
+            // }
 
             // $rootScope.$on('$stateChangeSuccess',
             //     function(event, toState, toParams, fromState, fromParams){
@@ -31,7 +31,7 @@
             //         }
             //     })
 
-            console.log($rootScope.tab);
+            $log.log($rootScope.tab);
         });
 
 

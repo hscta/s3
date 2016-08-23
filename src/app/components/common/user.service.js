@@ -35,21 +35,9 @@
                 .then(vm.handleResponse, vm.handleFailure);
         }
 
-        vm.getMyVehiclesDash = function (body) {
-            $log.log("userService getMyVehiclesDash");
-            return requestService.firePost('/user/myvehiclesdash', body)
-                .then(vm.handleResponse, vm.handleFailure);
-        };
-
-        vm.getMyVehiclesManage = function (body) {
-            $log.log("userService getMyVehiclesManage");
-            return requestService.firePost('/user/myvehiclesmanage', body)
-                .then(vm.handleResponse, vm.handleFailure);
-        };
-
-        vm.getMyVehicleWEditView = function(body) {
-            $log.log("userService getMyVehicleWEditView");
-            return requestService.firePost('/user/myvehiclesweditview', body)
+        vm.getMyVehicles = function (body) {
+            $log.log("userService getMyVehicles");
+            return requestService.firePost('/user/myvehicles', body)
                 .then(vm.handleResponse, vm.handleFailure);
         };
     }

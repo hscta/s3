@@ -72,7 +72,7 @@
             $log.log(resp);
             if(errorStatusCodes.indexOf(resp.status) != -1) {
                 $log.log("failure status code");
-                vm.checkLogin(true);
+                //vm.checkLogin(true);
             }
 
             return $q.reject(resp);
