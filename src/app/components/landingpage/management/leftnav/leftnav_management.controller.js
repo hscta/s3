@@ -43,10 +43,8 @@
         };
 
         vm.initialize = function () {
-            //console.log(vm.state);
             leftNavManagementService.getTreeMyVehiclesManage({})
                 .then(vm.getMyVehiclesManage, vm.getMyVehiclesManageFailure);
-
         };
 
         vm.buttonClick = function (item) {

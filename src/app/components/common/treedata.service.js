@@ -148,11 +148,11 @@
                     if (!(nodePath in vehicleTree))
                         vehicleTree[nodePath] = {};
 
-                    if(vehicleTree[nodePath].info === undefined) {
+                    if (vehicleTree[nodePath].info === undefined) {
                         vehicleTree[nodePath].info = null;
                     }
 
-                    if(vehicleTree[nodePath].children === undefined) {
+                    if (vehicleTree[nodePath].children === undefined) {
                         vehicleTree[nodePath].children = null;
                     }
 
@@ -215,6 +215,63 @@
             return $q.resolve(vehicleTree);
         };
 
+        vm.buildUITree = function (genericTree, key) {
+            //$log.log("buildTree " + key);
+
+            if (genericTree === null)
+                return null;
+
+            if (genericTree[key].visited == true) {
+                //$log.log("Already visited: " + key);
+                return null;
+            }
+
+            var gtNode = genericTree[key];
+            gtNode.visited = true;
+
+            var utNode = {};
+            utNode.id = key;
+            utNode.title = gtNode.info.name;
+            utNode.info = gtNode.info;
+            utNode.nodes = [];
+
+            var resultNode = null;
+            var child = null;
+            if (gtNode.children !== null) {
+                for (var idx in gtNode.children) {
+                    child = gtNode.children[idx];
+                    //$log.log("parent: " + key + ", child = " + idx);
+                    if (child.ui_asset_type == "group") {
+                        //$log.log("inside group " + child.grouppath);
+                        resultNode = vm.buildUITree(genericTree, child.grouppath);
+                    } else if (child.ui_asset_type == "vehicle") {
+                        //$log.log("inside vehicle " + child.vehiclepath);
+                        resultNode = vm.buildUITree(genericTree, child.vehiclepath);
+                    }
+
+                    if (resultNode !== null) {
+                        utNode.nodes.push(resultNode);
+                    }
+                }
+            }
+
+            return utNode;
+        };
+
+        vm.createUITree = function (genericTree) {
+            $log.log("createUITree");
+            $log.log(genericTree);
+
+            var uiTree = [];
+            for (var key in genericTree) {
+                var resultNode = vm.buildUITree(genericTree, key);
+                if (resultNode !== null) {
+                    uiTree.push(resultNode);
+                }
+            }
+            return $q.resolve(uiTree);
+        }
+
         vm.getTreeMyVehiclesManage = function (body) {
             var vehiclesPromise = userService.getMyVehiclesManage(body);
             var groupsPromise = userService.getMyGroups(body);
@@ -229,6 +286,13 @@
                 .then(vm.processMyVehicles, vm.handleFailure);
         };
 
+        vm.getAngularUITreeMyVehicles = function (body) {
+            var vehiclesPromise = userService.getMyVehiclesManage(body);
+            var groupsPromise = userService.getMyGroups(body);
+            return $q.all([vehiclesPromise, groupsPromise])
+                .then(vm.processMyVehicles, vm.handleFailure)
+                .then(vm.createUITree, vm.handleFailure);
+        };
 
     }
 
