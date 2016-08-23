@@ -22,8 +22,8 @@
         vm.showSimpleToast = showSimpleToast;
         vm.toggleRightSidebar = toggleRightSidebar;
         vm.toggleLeftnav = toggleLeftnav;
-        $rootScope.left_nav_toggle = false;
-        vm.right_nav_toggle = false;
+        $rootScope.left_nav_toggle = true;
+        vm.right_nav_toggle = true;
 
         navService
             .loadAllItems()

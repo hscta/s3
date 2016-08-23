@@ -48,6 +48,11 @@
 
         };
 
+        vm.buttonClick = function (item) {
+            $log.log("buttonClick" + item);
+            $state.transitionTo('home.management.tab' + item, {some: "data"});
+        }
+
         vm.addAllListeners();
         vm.initialize();
 
