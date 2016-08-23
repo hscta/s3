@@ -27,7 +27,7 @@
         // }
 
         vm.getMyVehiclesManage = function (data) {
-            $log.log("getMyVehiclesManage");
+            //$log.log("getMyVehiclesManage");
             $log.log(data);
         };
 

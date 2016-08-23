@@ -24,7 +24,6 @@
 
         vm.getMyVehicleTree = function (body) {
             $log.log("userService getMyVehicleTree");
-            // $log.log(body);
             return requestService.firePost('/user/myvehicles', body)
                 .then(vm.handleResponse, vm.handleFailure);
 
@@ -38,14 +37,12 @@
 
         vm.getMyVehiclesDash = function (body) {
             $log.log("userService getMyVehiclesDash");
-            $log.log(body);
             return requestService.firePost('/user/myvehiclesdash', body)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
         vm.getMyVehiclesManage = function (body) {
             $log.log("userService getMyVehiclesManage");
-            $log.log(body);
             return requestService.firePost('/user/myvehiclesmanage', body)
                 .then(vm.handleResponse, vm.handleFailure);
         };
