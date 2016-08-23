@@ -61,10 +61,11 @@
                      ng-click="vm.toggleCheck(node)"
                      data-nodrag>
         </md-checkbox>
-        <span ng-class="{{node.info}}">{{node.info.name}}</span ><br/>
+        <span>{{node.info.name}}</span ><br/>
     </div>
     <ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">
-        <li ng-repeat="node in node.nodes" ui-tree-node  ng-include="(node.nodes) ? 'parent_nodes_renderer.html' :  'terminal_node_renderer.html' ">  </li>
+        <li ng-repeat="node in node.nodes" ui-tree-node
+            ng-include="(node.nodes) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'">  </li>
     </ol>
 </script>
 

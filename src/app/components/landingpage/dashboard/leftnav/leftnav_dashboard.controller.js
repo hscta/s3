@@ -16,9 +16,8 @@
 
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
-            $log.log(data);
+            //$log.log(data);
             vm.tree_data = data;
-            //  $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
         vm.getMyVehiclesFailure = function (data) {
@@ -28,19 +27,10 @@
 
 
         vm.initialize = function () {
-            // leftNavDashboardService.getTreeMyVehicles({})
-            //     .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
-
             leftNavDashboardService.getTreeMyVehicles({})
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
-        }
+        };
 
-        vm.initialize2 = function () {
-            if (vm.state.current.name == intellicarAPI.stateService.STATE_HOME_DASHBOARD ||
-                vm.state.current.name == intellicarAPI.stateService.STATE_HOME) {
-                leftNavDashboardService.getMyVehicleTree({});
-            }
-        }
 
         vm.getMyVehicleTree = function (data) {
             $log.log(data.data.data);
@@ -51,7 +41,7 @@
         vm.test = function () {
             console.log('clicked');
             //leftNavDashboardService.getVehicleInfo();
-        }
+        };
 
         vm.toggleCheck = function (node) {
             $log.log("checkStatus = " + node.checkStatus);
@@ -96,8 +86,8 @@
         };
 
         vm.addAllListeners = function () {
-            leftNavDashboardService.addListener('getMyVehicleTree', vm.getMyVehicleTree);
-        }
+
+        };
 
         vm.addAllListeners();
         vm.initialize();

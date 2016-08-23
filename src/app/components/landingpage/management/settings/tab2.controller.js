@@ -17,20 +17,20 @@
         // $log.log('state.name = ');
         // $log.log($state);
 
-        vm.handleMyVehicleWEditView = function(data) {
-            $log.log("Tab2Controller handleMyVehicleWEditView");
+        vm.handleMyVehicles = function(data) {
+            $log.log("Tab2Controller handleMyVehicles");
             $log.log(data);
 
             vm.data = data;
         };
 
-        vm.handleMyVehicleWEditViewFailure = function(data) {
-            $log.log("Tab2Controller handleMyVehicleWEditViewFailure");
+        vm.handleMyVehiclesFailure = function(data) {
+            $log.log("Tab2Controller handleMyVehiclesFailure");
         };
 
         vm.onGroupClick = function() {
-            tab2Service.getMyVehicleWEditView({toService:{pgrouppath: '/1/1/1/7'}})
-                .then(vm.handleMyVehicleWEditView, vm.handleMyVehicleWEditViewFailure);
+            tab2Service.getMyVehicles({group:{grouppath: '/1/1'}})
+                .then(vm.handleMyVehicles, vm.handleMyVehiclesFailure);
 
         }
 

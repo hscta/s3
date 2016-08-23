@@ -8,17 +8,19 @@
 
     angular.module('uiplatform')
         .service('intellicarAPI', function($rootScope, $log, $q,
-                                           authService, userService, requestService,
-                                           stateService, treeDataService) {
+                                           authService, requestService,
+                                           stateService, treeDataService,
+                                           userService, groupService) {
             var vm = this;
             $log.log("intellicarAPI");
 
             return {
                 authService: authService,
-                userService : userService,
                 requestService: requestService,
                 stateService: stateService,
-                treeDataService: treeDataService
+                treeDataService: treeDataService,
+                userService : userService,
+                groupService: groupService
             }
         });
 })();

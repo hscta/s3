@@ -22,21 +22,21 @@
             return $q.reject(resp);
         };
 
-        vm.handleMyVehicleWEditView = function(data) {
-            $log.log("tab2Service handleMyVehicleWEditView");
-            $log.log(data);
+        vm.handleMyVehicles = function(data) {
+            $log.log("tab2Service handleMyVehicles");
+            //$log.log(data);
             return $q.resolve(data);
         };
 
-        vm.handleMyVehicleWEditViewFailure = function(data) {
-            $log.log("tab2Service handleMyVehicleWEditViewFailure");
+        vm.handleMyVehiclesFailure = function(data) {
+            $log.log("tab2Service handleMyVehiclesFailure");
             return $q.reject(data);
         };
 
 
-        vm.getMyVehicleWEditView = function(body) {
-            return intellicarAPI.userService.getMyVehicleWEditView(body)
-                .then(vm.handleMyVehicleWEditView, vm.handleMyVehicleWEditViewFailure);
+        vm.getMyVehicles = function(body) {
+            return intellicarAPI.groupService.getMyVehicles(body)
+                .then(vm.handleMyVehicles, vm.handleMyVehiclesFailure);
         }
     }
 })();
