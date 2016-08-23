@@ -53,6 +53,48 @@
             $state.transitionTo('home.management.tab' + item, {some: "data"});
         }
 
+        vm.toggleCheck = function (node) {
+            $log.log("checkStatus = " + node.checkStatus);
+            if (node.checkStatus === "checked") {
+                node.checkStatus = "unchecked";
+            } else {
+                node.checkStatus = "checked";
+            }
+
+            if (node.nodes.length)
+                vm.propagateCheckFromParent(node.nodes, node.checkStatus);
+
+            vm.verifyAllParentsCheckStatus($scope.tree_data);
+        };
+
+        vm.propagateCheckFromParent = function (nodes, status) {
+            for (var i = 0; i < nodes.length; ++i) {
+                var node = nodes[i];
+                node.checkStatus = status;
+                if (node.nodes)
+                    vm.propagateCheckFromParent(node.nodes, status)
+            }
+        };
+
+        vm.verifyAllParentsCheckStatus = function (nodes) {
+            var retVal = "";
+            for (var i = 0; i < nodes.length; ++i) {
+                var node = nodes[i];
+                $log.log(node);
+                if (node.nodes.length) {
+                    node.checkStatus = vm.verifyAllParentsCheckStatus(node.nodes);
+                }
+                if (retVal === "") {
+                    retVal = node.checkStatus;
+                    // console.log("set ret");
+                }
+                if (retVal != node.checkStatus)
+                    return "partlyChecked";
+
+            }
+            return retVal;
+        };
+
         vm.addAllListeners();
         vm.initialize();
 

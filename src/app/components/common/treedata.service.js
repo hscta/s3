@@ -234,6 +234,7 @@
             utNode.title = gtNode.info.name;
             utNode.info = gtNode.info;
             utNode.nodes = [];
+            utNode.checkStatus = false;
 
             var resultNode = null;
             var child = null;
