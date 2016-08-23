@@ -44,15 +44,19 @@
     /*md-checkbox .md-icon {width:15px; height:15px;}*/
     md-sidenav{height:100%;}
     md-checkbox span{font-weight:normal;}
+    .angular-ui-tree-node, .angular-ui-tree-placeholder{line-height:22px;}
+
 </style>
 
 
 <!-- Template for parent nodes -->
 <script type="text/ng-template" id="parent_nodes_renderer.html">
     <div>
-        <a ng-click="toggle(this)" style="cursor:pointer;">
-            <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
-            <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
+        <a ng-click="toggle(this)" style="cursor:pointer;" ng-show="node.nodes.length > 0">
+            <md-icon md-font-library="material-icons" ng-show="collapsed">
+                keyboard_arrow_down</md-icon>
+            <md-icon md-font-library="material-icons" ng-show="!collapsed">
+                keyboard_arrow_right</md-icon>
         </a>
         <md-checkbox aria-label="Checkbox 1" ng-checked="'checked'===node.checkStatus"
                      md-indeterminate="'partlyChecked'===node.checkStatus"
@@ -82,8 +86,8 @@
             md-is-locked-open = "left_nav_toggle" flex>
     <!--The ROot Node-->
     <div ui-tree id="tree-root" callbacks="treeOptions">
-        <ol ui-tree-nodes="" ng-model="tree_data" ng-class="{hidden: collapsed}">
-            <li ng-repeat="node in tree_data" ui-tree-node data-nodrag data-collapsed="node.collapsed"
+        <ol ui-tree-nodes="" ng-model="vm.tree_data" ng-class="{hidden: collapsed}">
+            <li ng-repeat="node in vm.tree_data" ui-tree-node data-nodrag data-collapsed="node.collapsed"
                 ng-include="(node.nodes) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></li>
         </ol>
     </div>

@@ -29,7 +29,7 @@
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
             $log.log(data);
-            $scope.tree_data = data;
+            vm.tree_data = data;
           //  $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
@@ -64,7 +64,7 @@
             if (node.nodes.length)
                 vm.propagateCheckFromParent(node.nodes, node.checkStatus);
 
-            vm.verifyAllParentsCheckStatus($scope.tree_data);
+            vm.verifyAllParentsCheckStatus(vm.tree_data);
         };
 
         vm.propagateCheckFromParent = function (nodes, status) {

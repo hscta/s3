@@ -17,7 +17,7 @@
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
             $log.log(data);
-            $scope.tree_data = data;
+            vm.tree_data = data;
             //  $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
@@ -44,16 +44,16 @@
 
         vm.getMyVehicleTree = function (data) {
             $log.log(data.data.data);
-            $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
+            vm.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         }
 
 
-        $scope.test = function () {
+        vm.test = function () {
             console.log('clicked');
             //leftNavDashboardService.getVehicleInfo();
         }
 
-        $scope.toggleCheck = function (node) {
+        vm.toggleCheck = function (node) {
             $log.log("checkStatus = " + node.checkStatus);
             if (node.checkStatus === "checked") {
                 node.checkStatus = "unchecked";
@@ -62,27 +62,27 @@
             }
 
             if (node.nodes.length)
-                $scope.propagateCheckFromParent(node.nodes, node.checkStatus);
+                vm.propagateCheckFromParent(node.nodes, node.checkStatus);
 
-            $scope.verifyAllParentsCheckStatus($scope.tree_data);
+            vm.verifyAllParentsCheckStatus(vm.tree_data);
         };
 
-        $scope.propagateCheckFromParent = function (nodes, status) {
+        vm.propagateCheckFromParent = function (nodes, status) {
             for (var i = 0; i < nodes.length; ++i) {
                 var node = nodes[i];
                 node.checkStatus = status;
                 if (node.nodes)
-                    $scope.propagateCheckFromParent(node.nodes, status)
+                    vm.propagateCheckFromParent(node.nodes, status)
             }
         };
 
-        $scope.verifyAllParentsCheckStatus = function (nodes) {
+        vm.verifyAllParentsCheckStatus = function (nodes) {
             var retVal = "";
             for (var i = 0; i < nodes.length; ++i) {
                 var node = nodes[i];
                 $log.log(node);
                 if (node.nodes.length) {
-                    node.checkStatus = $scope.verifyAllParentsCheckStatus(node.nodes);
+                    node.checkStatus = vm.verifyAllParentsCheckStatus(node.nodes);
                 }
                 if (retVal === "") {
                     retVal = node.checkStatus;
