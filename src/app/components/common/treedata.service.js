@@ -108,7 +108,7 @@
             var vehicleTree = {};
             for (var vidx in vehicles) {
                 var vehicle = vehicles[vidx];
-                vehicle.ui_asset_type = 'vehicle';
+                //vehicle.ui_asset_type = 'vehicle';
                 var nodesInPath = vm.getNodesInPath(vehicle.vehiclepath);
                 for (var nidx in nodesInPath) {
                     var nodePath = nodesInPath[nidx];
@@ -224,32 +224,32 @@
         };
 
 
-        vm.mergeVehiclePermissions = function (data) {
-            for (var idx in data.vehicles) {
-                var vehicle = data.vehicles[idx];
-                vehicle.permissions = [];
-                for (var pidx in data.permissions) {
-                    var permission = data.permissions[pidx];
-                    if (vehicle.vehicleid === permission.vehicleid) {
-                        vehicle.permissions.push(permission);
-                    }
-                }
-            }
-        };
-
-
-        vm.mergeGroupPermissions = function (data) {
-            for (var idx in data.groups) {
-                var group = data.groups[idx];
-                group.permissions = [];
-                for (var pidx in data.permissions) {
-                    var permission = data.permissions[pidx];
-                    if (group.groupid === permission.groupid) {
-                        group.permissions.push(permission);
-                    }
-                }
-            }
-        };
+        // vm.mergeVehiclePermissions = function (data) {
+        //     for (var idx in data.vehicles) {
+        //         var vehicle = data.vehicles[idx];
+        //         vehicle.permissions = [];
+        //         for (var pidx in data.permissions) {
+        //             var permission = data.permissions[pidx];
+        //             if (vehicle.vehicleid === permission.vehicleid) {
+        //                 vehicle.permissions.push(permission);
+        //             }
+        //         }
+        //     }
+        // };
+        //
+        //
+        // vm.mergeGroupPermissions = function (data) {
+        //     for (var idx in data.groups) {
+        //         var group = data.groups[idx];
+        //         group.permissions = [];
+        //         for (var pidx in data.permissions) {
+        //             var permission = data.permissions[pidx];
+        //             if (group.groupid === permission.groupid) {
+        //                 group.permissions.push(permission);
+        //             }
+        //         }
+        //     }
+        // };
 
 
         vm.processMyGroups = function (groupsResp) {
@@ -258,7 +258,7 @@
             for (var idx in groupsResp.groups) {
                 var mygroup = groupsResp.groups[idx];
                 //$log.log(mygroup);
-                mygroup.ui_asset_type = 'group';
+                //mygroup.ui_asset_type = 'group';
                 myGroups[mygroup.grouppath] = mygroup;
             }
             //$log.log(myGroups);
@@ -267,11 +267,11 @@
 
 
         vm.processMyVehicles = function (resp) {
-            //$log.log(resp);
+            $log.log(resp);
             var vehiclesResp = resp[0].data.data;
             var groupsResp = resp[1].data.data;
-            vm.mergeVehiclePermissions(vehiclesResp);
-            vm.mergeGroupPermissions(groupsResp);
+            // vm.mergeVehiclePermissions(vehiclesResp);
+            // vm.mergeGroupPermissions(groupsResp);
             var myGroups = vm.processMyGroups(groupsResp);
             var vehicleTree = vm.getMyVehicleTree(vehiclesResp, myGroups);
             return $q.resolve(vehicleTree);
@@ -293,7 +293,6 @@
                 .then(vm.processMyVehicles, vm.handleFailure)
                 .then(vm.createUITree, vm.handleFailure);
         };
-
     }
 
 })();
