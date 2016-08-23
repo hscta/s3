@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 
+<style>
+    md-dialog{width:50%;}
+    .img-logo{margin:0 auto;display:block;}
+</style>
 
-<md-dialog aria-label="editContactDialog" ng-cloak>
+<md-dialog aria-label="editContactDialog">
     <md-dialog-content>
-        <div class="md-dialog-content">
-            <md-input-container md-no-float  class="inputText">
+        <img ng-src="assets/logo.png" height="100" class="img-logo md-card-image" alt="Intellicar">
+        <div class="">
+            <md-input-container class="md-block">
                 <label>Username</label>
                 <input type="text" ng-model="username"/>
-            </md-input-container><br/>
-            <md-input-container md-no-float class="inputText">
+            </md-input-container>
+            <md-input-container class="md-block">
                 <label>Password</label>
-                <input type="text" ng-model="password"/>
+                <input type="password" ng-model="password" />
             </md-input-container>
             <span style="color: red;">{{message}}</span>
         </div>

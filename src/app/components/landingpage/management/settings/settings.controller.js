@@ -7,7 +7,6 @@
     angular
         .module('uiplatform')
         .controller('SettingsController', SettingsController);
-
     function SettingsController($scope, $rootScope, $log, $state) {
 
         $log.log('SettingsController');
@@ -15,6 +14,8 @@
 
         // $log.log('state.name = ');
         // $log.log($state);
+
+
     }
 })();
 
