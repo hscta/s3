@@ -29,6 +29,7 @@
         vm.getMyVehiclesManage = function (data) {
             //$log.log("getMyVehiclesManage");
             $log.log(data);
+            $scope.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
         };
 
         vm.getMyVehiclesManageFailure = function (data) {

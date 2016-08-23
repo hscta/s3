@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 
+
+<style>
+    md-checkbox {
+        margin: 8px;
+        cursor: pointer;
+        padding-left: 0px;
+        padding-right: 0;
+        line-height: 4px;
+        min-width: 18px;
+        min-height: 1px;
+    }
+    /*md-checkbox .md-icon {width:15px; height:15px;}*/
+</style>
+
 <!-- Nested node template -->
 <!--<script type="text/ng-template" id="nodes_renderer.html">-->
     <!--<div ui-tree-handle style="cursor:pointer;">-->
@@ -17,21 +31,10 @@
     <!--</ol>-->
 <!--</script>-->
 
-<style>
-    md-checkbox {
-        margin: 8px;
-        cursor: pointer;
-        padding-left: 0px;
-        padding-right: 0;
-        line-height: 4px;
-        min-width: 18px;
-        min-height: 1px;
-    }
-</style>
 
 <!-- Template for parent nodes -->
 <script type="text/ng-template" id="parent_nodes_renderer.html">
-    <div ui-tree-handle class="tree-node tree-node-content">
+    <div ui-tree-handle>
         <a ng-click="toggle(this)" style="cursor:pointer;">
             <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
             <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
@@ -42,9 +45,13 @@
                      data-nodrag>
         </md-checkbox>
         <span>{{node.pname}}</span ><br/>
-        <span class='side-nav-fonts'>{{node.name}}</span >
+        <span ng-repeat ="vehicle in node.vehicle_details">
+            <span class='side-nav-fonts'>{{vehicle.name}}</span >
+            <br/>
+        </span>
+
     </div>
-    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">
         <li ng-repeat="node in node.nodes" ui-tree-node  ng-include="(node.nodes) ? 'parent_nodes_renderer.html' :  'terminal_node_renderer.html' ">  </li>
     </ol>
 </script>
@@ -75,8 +82,9 @@
 
     <!--The ROot Node-->
     <div ui-tree id="tree-root" callbacks="treeOptions">
-        <ol ui-tree-nodes="" ng-model="tree_data">
-            <li ng-repeat="node in tree_data" ui-tree-node ng-include="(node.nodes) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html' "></li>
+        <ol ui-tree-nodes="" ng-model="tree_data" ng-class="{hidden: collapsed}">
+            <li ng-repeat="node in tree_data" ui-tree-node data-nodrag data-collapsed="node.collapsed"
+                ng-include="(node.nodes) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></li>
         </ol>
     </div>
     </div>

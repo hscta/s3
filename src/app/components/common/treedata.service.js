@@ -13,6 +13,7 @@
         var vm = this;
         $log.log("treeDataService");
 
+
         vm.management_tree_data = function (data) {
             console.log(data.data.data);
             var nodes = data.data.data;
@@ -81,7 +82,7 @@
             if (str.charAt(start) !== slash)
                 return -1;
 
-            if (str.substr(start, str.length).length < 4)
+            if (str.substr(     start, str.length).length < 4)
                 return -1;
 
             var firstSlash = str.indexOf(slash, start + 1);
