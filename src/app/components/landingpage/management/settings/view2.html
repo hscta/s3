@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 
-<div>
-    <br>
-    <br>
-    Tab #2
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-</div>
+<!--<div class="md-accordion" ng-repeat="data in vm.data track by $index">-->
+    <!--<md-toolbar  class="md-hue-2" ng-click="data.expanded = !data.expanded">-->
+        <!--<div class="md-toolbar-tools">-->
+            <!--<h2>-->
+                <!--<span>{{data.name}}</span>-->
+            <!--</h2>-->
+            <!--<span flex=""></span>-->
+            <!--<i ng-class="{expandCollapse:true, active:data.expanded}"  class="material-icons">mode_edit</i>-->
+        <!--</div>-->
+    <!--</md-toolbar>-->
+    <!--<div ng-class="{dataContent:true, activeContent:data.expanded}">-->
+        <!--{{data.name}}-->
+    <!--</div>-->
+    <!--<div>-->
+
+<md-expansion-panel-group md-component-id="panelGroup"  ng-repeat="d in vm.data  track by $index">
+    <md-expansion-panel md-component-id="panelOne">
+        <md-expansion-panel-collapsed>{{d.name}}</md-expansion-panel-collapsed>
+        <md-expansion-panel-expanded>
+            <md-expansion-panel-header ng-click="vm.test($panel.collapse)">
+                {{d.name}}
+            </md-expansion-panel-header>
+            <md-expansion-panel-content>
+                <md-input-container>
+                <label>Vehicle Name</label>
+                <input type="text" value="{{d.name}}">
+                </md-input-container>
+            </md-expansion-panel-content>
+            <md-expansion-panel-footer>
+                <md-button class="md-warn" ng-click="$panel.collapse()">Discard</md-button>
+                <md-button class="md-warn" ng-click="$panel.collapse()">Save</md-button>
+            </md-expansion-panel-footer>
+        </md-expansion-panel-expanded>
+    </md-expansion-panel>
+</md-expansion-panel-group>
+
+    <!--<md-expansion-panel  md-component-id="1"  ng-repeat="d in vm.data  track by $index">-->
+
+    <!--<md-expansion-panel-collapsed>-->
+        <!--<div class="md-title">{{d.name}}</div>-->
+        <!--<div class="md-summary">{{d.vehicleid}}</div>-->
+        <!--<md-expansion-panel-icon>View</md-expansion-panel-icon>-->
+    <!--</md-expansion-panel-collapsed>-->
+
+
+    <!--<md-expansion-panel-expanded>-->
+
+        <!--<md-expansion-panel-header md-no-sticky="false">-->
+            <!--<div class="md-title">Vehicle Name</div>-->
+            <!--<div class="md-summary">{{d.vehicleid}}</div>-->
+            <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+        <!--</md-expansion-panel-header>-->
+
+        <!--<md-expansion-panel-content>-->
+            <!--<md-input-container>-->
+                <!--<label>Vehicle Name</label>-->
+                <!--<input type="text" value="{{d.name}}">-->
+            <!--</md-input-container>-->
+        <!--</md-expansion-panel-content>-->
+
+        <!--<md-expansion-panel-footer>-->
+            <!--<div flex></div>-->
+            <!--<md-button class="md-warn" ng-click="$panel.collapse()">Discard</md-button>-->
+            <!--<md-button class="md-warn" ng-click="$panel.collapse()">Save</md-button>-->
+        <!--</md-expansion-panel-footer>-->
+
+    <!--</md-expansion-panel-expanded>-->
+
+<!--</md-expansion-panel>-->
 

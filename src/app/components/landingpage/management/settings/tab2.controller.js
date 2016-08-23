@@ -20,6 +20,8 @@
         vm.handleMyVehicleWEditView = function(data) {
             $log.log("Tab2Controller handleMyVehicleWEditView");
             $log.log(data);
+
+            vm.data = data;
         };
 
         vm.handleMyVehicleWEditViewFailure = function(data) {
@@ -27,12 +29,17 @@
         };
 
         vm.onGroupClick = function() {
-            tab2Service.getMyVehicleWEditView({})
+            tab2Service.getMyVehicleWEditView({toService:{pgrouppath: '/1/1/1/7'}})
                 .then(vm.handleMyVehicleWEditView, vm.handleMyVehicleWEditViewFailure);
 
         }
 
         vm.onGroupClick();
+
+        vm.test = function (myfunc) {
+            $log.log('click event');
+            myfunc();
+        }
     }
 })();
 

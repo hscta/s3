@@ -7,7 +7,33 @@
 
     angular
         .module('uiplatform')
-        .config(managementRouter);
+        .config(managementRouter)
+        .run(function($rootScope, $state) {
+
+            $rootScope.transitionTo = function(state, params) {
+
+                $state.transitionTo(state, params, { location: true, inherit: true,
+                    relative: $state.$current, notify: true });
+            }
+
+            $rootScope.checkState = function (state) {
+                return $state.current.name == state ? true : false;
+            }
+
+            // $rootScope.$on('$stateChangeSuccess',
+            //     function(event, toState, toParams, fromState, fromParams){
+            //
+            //
+            //         if($state.current.name == 'tab2') {
+            //             $rootScope.tab = { selected : 1 }
+            //         } else {
+            //             $rootScope.tab = { selected : 0 }
+            //         }
+            //     })
+
+            console.log($rootScope.tab);
+        });
+
 
     /** @ngInject */
     function managementRouter($stateProvider, $urlRouterProvider) {
