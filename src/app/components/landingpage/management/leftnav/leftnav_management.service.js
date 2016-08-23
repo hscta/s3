@@ -27,7 +27,7 @@
 
 
             vm.getTreeMyVehiclesManage = function(body) {
-                return intellicarAPI.treeDataService.getTreeMyVehiclesManage(body);
+                return intellicarAPI.treeDataService.getAngularUITreeMyVehicles(body);
             };
 
 
