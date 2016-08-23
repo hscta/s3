@@ -7,10 +7,10 @@
             <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
             <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
         </a>
-        <span ng-click="test()">
-            {{node.pname}}
+        <span>
+            {{node.info.name}}
         </span><br/>
-        <span class='side-nav-fonts' style="font-weight:normal">{{node.name}}</span>
+        <!--<span class='side-nav-fonts' style="font-weight:normal">{{node.info.name}}</span>-->
     </div>
     <ol ui-tree-nodes="" ng-model="node.nodes" ng-show="collapsed">
         <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" data-nodrag></li>
@@ -27,12 +27,12 @@
             </li>
         </ol>
     </div>
-    <div>
-        <md-list>
-            <md-list-item ng-repeat="item in [1, 2, 3]">
-                <md-button ng-click="vm.buttonClick(item)">Send Signal{{item}}</md-button>
-            </md-list-item>
-        </md-list>
-    </div>
+    <!--<div>-->
+    <!--<md-list>-->
+    <!--<md-list-item ng-repeat="item in [1, 2, 3]">-->
+    <!--<md-button ng-click="vm.buttonClick(item)">Send Signal{{item}}</md-button>-->
+    <!--</md-list-item>-->
+    <!--</md-list>-->
+    <!--</div>-->
 </md-sidenav>
 
