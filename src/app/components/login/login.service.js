@@ -36,7 +36,7 @@
 
         vm.isAuthed = function() {
             return authService.isAuthed ? authService.isAuthed() : false
-        }
+            }
 
         vm.checkLogin = function () {
             if($rootScope.showLoginDialog) {
