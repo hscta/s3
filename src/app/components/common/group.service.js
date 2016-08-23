@@ -1,7 +1,6 @@
 /**
- * Created by smiddela on 23/08/16.
+ * Created by smiddela on 19/08/16.
  */
-
 
 (function () {
     'use strict';
@@ -13,39 +12,202 @@
         var vm = this;
         $log.log("groupService");
 
+
+        vm.getMyGroups = function(body) {
+            $log.log("getMyGroups");
+            return requestService.firePost('/group/mygroups', body);
+        };
+
+
+        vm.getMyVehicles = function (body) {
+            $log.log("getMyVehicles");
+            return requestService.firePost('/group/myvehicles', body);
+        };
+
+
+        vm.getMyUsers = function (body) {
+            $log.log("getMyUsers");
+            return requestService.firePost('/group/myusers', body);
+        };
+
+
+        vm.getMyRoles = function (body) {
+            $log.log("getMyRoles");
+            return requestService.firePost('/group/myroles', body);
+        };
+
+
+        vm.getMyDevices = function (body) {
+            $log.log("getMyDevices");
+            return requestService.firePost('/group/mydevices', body);
+        };
+
+
         vm.handleResponse = function (resp) {
-            //$log.log("groupService handleResponse");
+            //$log.log("handleResponse");
             return $q.resolve(resp)
         };
 
 
         vm.handleFailure = function (resp) {
-            //$log.log("groupService handleFailure ");
+            //$log.log("handleFailure ");
             return $q.reject(resp);
         };
 
 
-        vm.getMyVehicleTree = function (body) {
-            $log.log("groupService getMyVehicleTree");
-            return requestService.firePost('/user/myvehicles', body)
-                .then(vm.handleResponse, vm.handleFailure);
-
-        };
-
-
-        vm.getMyGroups = function(body) {
-            $log.log("groupService getMyGroups");
-            return requestService.firePost('/group/mygroups', body)
+        vm.getMyGroupsMap = function(body) {
+            $log.log("getMyGroupsMap");
+            return vm.getMyGroups(body)
                 .then(helperService.mergeGroupPermissions, vm.handleFailure)
+                .then(helperService.makeGroupMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
 
-        vm.getMyVehicles = function (body) {
-            $log.log("groupService getMyVehicles");
-            return requestService.firePost('/group/myvehicles', body)
+        vm.getMyVehiclesMap = function (body) {
+            $log.log("getMyVehiclesMap");
+            return vm.getMyVehicles(body)
                 .then(helperService.mergeVehiclePermissions, vm.handleFailure)
+                .then(helperService.makeVehicleMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.getMyUsersMap = function (body) {
+            $log.log("getMyUsersMap");
+            return vm.getMyUsers(body)
+                .then(helperService.mergeUserPermissions, vm.handleFailure)
+                .then(helperService.makeUserMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+
+        vm.getMyRolesMap = function (body) {
+            $log.log("getMyRolesMap");
+            return vm.getMyRoles(body)
+                .then(helperService.mergeRolePermissions, vm.handleFailure)
+                .then(helperService.makeRoleMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.getMyDevicesMap = function (body) {
+            $log.log("getMyDevicesMap");
+            return vm.getMyDevices(body)
+                .then(helperService.mergeDevicePermissions, vm.handleFailure)
+                .then(helperService.makeDeviceMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.handleDirectAssetResponse = function(resp) {
+            $log.log("handleDirectAssetResponse");
+            $log.log(resp);
+            return $q.resolve(resp);
+        };
+
+
+        vm.getMyDirectAssetsMap = function (body) {
+            $log.log("getMyDirectAssetsMap");
+            var uPromise = vm.getMyUsersMap(body);
+            var rPromise = vm.getMyRolesMap(body);
+            var vPromise = vm.getMyVehiclesMap(body);
+            var dPromise = vm.getMyDevicesMap(body);
+            var gPromise = vm.getMyGroupsMap(body);
+
+            return $q.all([uPromise, rPromise, vPromise, dPromise, gPromise])
+                .then(vm.handleDirectAssetResponse, vm.handleFailure);
+
         };
     }
 })();
+
+
+
+// /**
+//  * Created by smiddela on 23/08/16.
+//  */
+//
+//
+// (function () {
+//     'use strict';
+//
+//     angular.module('uiplatform')
+//         .service('groupService', groupService);
+//
+//     function groupService($rootScope, $log, $q, requestService, helperService) {
+//         var vm = this;
+//         $log.log("groupService");
+//
+//         vm.handleResponse = function (resp) {
+//             //$log.log("groupService handleResponse");
+//             return $q.resolve(resp)
+//         };
+//
+//
+//         vm.handleFailure = function (resp) {
+//             //$log.log("groupService handleFailure ");
+//             return $q.reject(resp);
+//         };
+//
+//
+//         vm.getMyGroups = function(body) {
+//             $log.log("groupService getMyGroups");
+//             return requestService.firePost('/group/mygroups', body)
+//                 .then(helperService.mergeGroupPermissions, vm.handleFailure)
+//                 .then(vm.handleResponse, vm.handleFailure);
+//         };
+//
+//
+//         vm.getMyVehicles = function (body) {
+//             $log.log("groupService getMyVehicles");
+//             return requestService.firePost('/group/myvehicles', body)
+//                 .then(helperService.mergeVehiclePermissions, vm.handleFailure)
+//                 .then(vm.handleResponse, vm.handleFailure);
+//         };
+//
+//
+//         vm.getMyUsers = function (body) {
+//             $log.log("groupService getMyUsers");
+//             return requestService.firePost('/group/myusers', body)
+//             .then(helperService.mergeUserPermissions, vm.handleFailure)
+//                 .then(vm.handleResponse, vm.handleFailure);
+//         };
+//
+//
+//         vm.getMyRoles = function (body) {
+//             $log.log("groupService getMyRoles");
+//             return requestService.firePost('/group/myroles', body)
+//             .then(helperService.mergeRolePermissions, vm.handleFailure)
+//                 .then(vm.handleResponse, vm.handleFailure);
+//         };
+//
+//
+//         vm.getMyDevices = function (body) {
+//             $log.log("groupService getMyDevices");
+//             return requestService.firePost('/group/mydevices', body)
+//             .then(helperService.mergeDevicePermissions, vm.handleFailure)
+//                 .then(vm.handleResponse, vm.handleFailure);
+//         };
+//
+//         vm.handleDirectAssetResponse = function(resp) {
+//             $log.log("handleDirectAssetResponse");
+//             $log.log(resp);
+//             return $q.resolve(resp);
+//         };
+//
+//
+//         vm.getMyDirectAssets = function (body) {
+//             $log.log("groupService getMyDirectAssets");
+//             var uPromise = vm.getMyUsers(body);
+//             var rPromise = vm.getMyRoles(body);
+//             var vPromise = vm.getMyVehicles(body);
+//             var dPromise = vm.getMyDevices(body);
+//             var gPromise = vm.getMyGroups(body);
+//
+//             return $q.all([uPromise, rPromise, vPromise, dPromise, gPromise])
+//                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
+//         };
+//     }
+// })();

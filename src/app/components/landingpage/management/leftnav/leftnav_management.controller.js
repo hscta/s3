@@ -17,7 +17,7 @@
 
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
-            //$log.log(data);
+            $log.log(data);
             vm.tree_data = data;
         };
 
@@ -27,11 +27,6 @@
         };
 
         vm.addAllListeners = function () {
-        };
-
-        vm.initialize = function () {
-            leftNavManagementService.getTreeMyVehicles({})
-                .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 
         vm.buttonClick = function (item) {
@@ -81,8 +76,14 @@
             return retVal;
         };
 
+
+        vm.initialize = function () {
+            leftNavManagementService.getTreeMyVehicles({})
+                .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
+        };
+
+
         vm.addAllListeners();
         vm.initialize();
-
     }
 })();

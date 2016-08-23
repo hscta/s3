@@ -102,13 +102,11 @@
         };
 
 
-        vm.getMyVehicleTree = function (myVehicles, myGroups) {
+        vm.getMyVehicleTree = function (vehicles, groups) {
 
-            var vehicles = myVehicles.vehicles;
             var vehicleTree = {};
             for (var vidx in vehicles) {
                 var vehicle = vehicles[vidx];
-                //vehicle.ui_asset_type = 'vehicle';
                 var nodesInPath = vm.getNodesInPath(vehicle.vehiclepath);
                 for (var nidx in nodesInPath) {
                     var nodePath = nodesInPath[nidx];
@@ -123,15 +121,15 @@
                         vehicleTree[nodePath].children = null;
                     }
 
-                    if (nodePath in myGroups) {
-                        vehicleTree[nodePath].info = myGroups[nodePath];
+                    if (nodePath in groups) {
+                        vehicleTree[nodePath].info = groups[nodePath];
 
                         if (nidx > 0 && nidx < nodesInPath.length) {
                             if (vehicleTree[nodesInPath[nidx - 1]].children === null) {
                                 vehicleTree[nodesInPath[nidx - 1]].children = {};
                             }
                             //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
-                            vehicleTree[nodesInPath[nidx - 1]].children[nodePath] = myGroups[nodePath];
+                            vehicleTree[nodesInPath[nidx - 1]].children[nodePath] = groups[nodePath];
                         }
                     }
 
@@ -223,24 +221,12 @@
         };
 
 
-        vm.processMyGroups = function (groupsResp) {
-            //$log.log(groupsResp);
-            var myGroups = {};
-            for (var idx in groupsResp.groups) {
-                var mygroup = groupsResp.groups[idx];
-                myGroups[mygroup.grouppath] = mygroup;
-            }
-            //$log.log(myGroups);
-            return myGroups;
-        };
-
-
         vm.processMyVehicles = function (resp) {
+            //$log.log("processMyVehicles");
             //$log.log(resp);
-            var vehiclesResp = resp[0].data.data;
-            var groupsResp = resp[1].data.data;
-            var myGroups = vm.processMyGroups(groupsResp);
-            var vehicleTree = vm.getMyVehicleTree(vehiclesResp, myGroups);
+            var vehicles = resp[0];
+            var groups = resp[1];
+            var vehicleTree = vm.getMyVehicleTree(vehicles, groups);
             return $q.resolve(vehicleTree);
         };
 
@@ -254,8 +240,8 @@
 
 
         vm.getAngularUITreeMyVehicles = function (body) {
-            var vehiclesPromise = userService.getMyVehicles(body);
-            var groupsPromise = userService.getMyGroups(body);
+            var vehiclesPromise = userService.getMyVehiclesMap(body);
+            var groupsPromise = userService.getMyGroupsMap(body);
             return $q.all([vehiclesPromise, groupsPromise])
                 .then(vm.processMyVehicles, vm.handleFailure)
                 .then(vm.createUITree, vm.handleFailure);

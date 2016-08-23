@@ -32,12 +32,6 @@
         };
 
 
-        vm.getMyVehicleTree = function (data) {
-            $log.log(data.data.data);
-            vm.tree_data = intellicarAPI.treeDataService.management_tree_data(data, {});
-        }
-
-
         vm.test = function () {
             console.log('clicked');
             //leftNavDashboardService.getVehicleInfo();
