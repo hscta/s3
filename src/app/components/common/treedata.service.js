@@ -103,7 +103,7 @@
             var startIndex = 0;
             var endIndex = 0;
             var itemStartIndex = 0;
-            //$log.log("==================" + path);
+            $log.log("==================" + path);
             while (itemStartIndex < path.length) {
                 endIndex = vm.getNextPathItemEnd(path, itemStartIndex);
                 if (endIndex == -1)
@@ -114,7 +114,7 @@
                 }
                 itemStartIndex = endIndex + 1;
             }
-            //$log.log(nodesInPath);
+            $log.log(nodesInPath);
             return nodesInPath;
         };
 
@@ -146,8 +146,14 @@
                     var nodePath = nodesInPath[nidx];
                     if (!(nodePath in vehicleTree))
                         vehicleTree[nodePath] = {};
-                    vehicleTree[nodePath].info = null;
-                    vehicleTree[nodePath].children = null;
+
+                    if(vehicleTree[nodePath].info === undefined) {
+                        vehicleTree[nodePath].info = null;
+                    }
+
+                    if(vehicleTree[nodePath].children === undefined) {
+                        vehicleTree[nodePath].children = null;
+                    }
 
                     if (nodePath in myGroups) {
                         vehicleTree[nodePath].info = myGroups[nodePath];
@@ -156,6 +162,7 @@
                             if (vehicleTree[nodesInPath[nidx - 1]].children === null) {
                                 vehicleTree[nodesInPath[nidx - 1]].children = {};
                             }
+                            $log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
                             vehicleTree[nodesInPath[nidx - 1]].children[nodePath] = myGroups[nodePath];
                         }
                     }
@@ -194,6 +201,7 @@
                 mygroup.ui_asset_type = 'group';
                 myGroups[mygroup.grouppath] = mygroup;
             }
+            $log.log(myGroups);
             return myGroups;
         };
 
