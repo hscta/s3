@@ -5,19 +5,31 @@
 (function () {
     angular
         .module('uiplatform')
-        .controller('LeftNavDashboardController', LeftNavDashboardController);
+        .controller('LeftNavDashboardController', LeftNavDashboardController)
+
+        .filter('trust', function ($sce) {
+            return function (val) {
+                return $sce.trustAsHtml(val);
+            };
+        });
 
     function LeftNavDashboardController($scope, $rootScope, $log, intellicarAPI,
-                                        leftNavDashboardService, $state) {
+                                        leftNavDashboardService, $state, $filter) {
+
+        $scope.treeFilter = $filter('uiTreeFilter');
 
         $log.log('LeftNavDashboardController');
         var vm = this;
         vm.state = $state;
+        vm.tree_search_pattern = '';
+        vm.search_results;
 
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
             //$log.log(data);
             vm.tree_data = data;
+
+            $log.log(vm.tree_data);
         };
 
         vm.getMyVehiclesFailure = function (data) {
@@ -37,46 +49,54 @@
             //leftNavDashboardService.getVehicleInfo();
         };
 
-        vm.toggleCheck = function (node) {
-            $log.log("checkStatus = " + node.checkStatus);
-            if (node.checkStatus === "checked") {
-                node.checkStatus = "unchecked";
+        vm.toggleCheck = function (item) {
+            $log.log("checkStatus = " + item.checkStatus);
+            if (item.checkStatus === "checked") {
+                item.checkStatus = "unchecked";
             } else {
-                node.checkStatus = "checked";
+                item.checkStatus = "checked";
             }
 
-            if (node.nodes.length)
-                vm.propagateCheckFromParent(node.nodes, node.checkStatus);
+            if (item.items.length)
+                vm.propagateCheckFromParent(item.items, item.checkStatus);
 
             vm.verifyAllParentsCheckStatus(vm.tree_data);
         };
 
-        vm.propagateCheckFromParent = function (nodes, status) {
-            for (var i = 0; i < nodes.length; ++i) {
-                var node = nodes[i];
-                node.checkStatus = status;
-                if (node.nodes)
-                    vm.propagateCheckFromParent(node.nodes, status)
+        vm.propagateCheckFromParent = function (items, status) {
+            for (var i = 0; i < items.length; ++i) {
+                var item = items[i];
+                item.checkStatus = status;
+                if (item.items)
+                    vm.propagateCheckFromParent(item.items, status)
             }
         };
 
-        vm.verifyAllParentsCheckStatus = function (nodes) {
+        vm.verifyAllParentsCheckStatus = function (items) {
             var retVal = "";
-            for (var i = 0; i < nodes.length; ++i) {
-                var node = nodes[i];
-                $log.log(node);
-                if (node.nodes.length) {
-                    node.checkStatus = vm.verifyAllParentsCheckStatus(node.nodes);
+            for (var i = 0; i < items.length; ++i) {
+                var item = items[i];
+                $log.log(item);
+                if (item.items.length) {
+                    item.checkStatus = vm.verifyAllParentsCheckStatus(item.items);
                 }
                 if (retVal === "") {
-                    retVal = node.checkStatus;
+                    retVal = item.checkStatus;
                     // console.log("set ret");
                 }
-                if (retVal != node.checkStatus)
+                if (retVal != item.checkStatus)
                     return "partlyChecked";
 
             }
             return retVal;
+        };
+
+        vm.expandAll = function () {
+            if ( vm.tree_search_pattern.length <= 0 ){
+                $scope.$broadcast('angular-ui-tree:expand-all');
+            } else {
+                $scope.$broadcast('angular-ui-tree:collapse-all');
+            }
         };
 
         vm.addAllListeners = function () {

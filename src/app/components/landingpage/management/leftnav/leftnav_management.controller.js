@@ -6,7 +6,7 @@
 
     angular
         .module('uiplatform')
-        .controller('LeftNavManagementController', LeftNavManagementController);
+        .controller('LeftNavManagementController', LeftNavManagementController)
 
     function LeftNavManagementController($scope, $rootScope, $log, intellicarAPI,
                                          leftNavManagementService, $state) {
@@ -14,6 +14,9 @@
         $log.log('LeftNavManagementController');
         var vm = this;
         vm.state = $state;
+
+        vm.availableFields = ['title', 'description'];
+        vm.supportedFields = ['ti   tle', 'description'];
 
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
@@ -86,4 +89,5 @@
         vm.addAllListeners();
         vm.initialize();
     }
+
 })();

@@ -180,7 +180,7 @@
             utNode.id = key;
             utNode.title = gtNode.info.name;
             utNode.info = gtNode.info;
-            utNode.nodes = [];
+            utNode.items = [];
             utNode.checkStatus = false;
 
             var resultNode = null;
@@ -198,14 +198,13 @@
                     }
 
                     if (resultNode !== null) {
-                        utNode.nodes.push(resultNode);
+                        utNode.items.push(resultNode);
                     }
                 }
             }
 
             return utNode;
         };
-
 
         vm.createUITree = function (genericTree) {
             //$log.log(genericTree);
