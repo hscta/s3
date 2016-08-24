@@ -45,7 +45,7 @@
                 node.checkStatus = "checked";
             }
 
-            if (node.nodes.length)
+            if (node.nodes && node.nodes.length)
                 vm.propagateCheckFromParent(node.nodes, node.checkStatus);
 
             vm.verifyAllParentsCheckStatus(vm.tree_data);
@@ -65,7 +65,7 @@
             for (var i = 0; i < nodes.length; ++i) {
                 var node = nodes[i];
                 $log.log(node);
-                if (node.nodes.length) {
+                if (node.nodes && node.nodes.length) {
                     node.checkStatus = vm.verifyAllParentsCheckStatus(node.nodes);
                 }
                 if (retVal === "") {

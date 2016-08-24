@@ -27,9 +27,9 @@
 
 
             vm.getTreeMyVehicles = function (body) {
-                //return intellicarAPI.treeDataService.getAngularUITreeMyVehicles(body);
+                return intellicarAPI.treeDataService.getAngularUITreeMyVehicles(body);
                 //body.group = {grouppath: '/1/1', recursive: '0'};
-                return intellicarAPI.userService.getMyDirectAssetsMap(body);
+                //return intellicarAPI.userService.getMyDirectAssetsMap(body);
             };
 
 
