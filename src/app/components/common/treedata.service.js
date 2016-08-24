@@ -145,9 +145,9 @@
 
 
         vm.getNodesInPath = function (path) {
-            if(path === null)
+            if(path === undefined)
                 return [];
-            
+
             var nodesInPath = [];
             var startIndex = 0;
             var endIndex = 0;
@@ -168,66 +168,6 @@
         };
 
 
-        vm.createGenericTree = function (resp) {
-            var groups = resp[0];
-            var vehicles = resp[1];
-
-            var vehicleTree = {};
-            for (var vidx in vehicles) {
-                var vehicle = vehicles[vidx];
-                var nodesInPath = vm.getNodesInPath(vehicle.vehiclepath);
-                for (var nidx in nodesInPath) {
-                    var nodePath = nodesInPath[nidx];
-                    if (!(nodePath in vehicleTree))
-                        vehicleTree[nodePath] = {};
-
-                    if (vehicleTree[nodePath].info === undefined) {
-                        vehicleTree[nodePath].info = null;
-                    }
-
-                    if (vehicleTree[nodePath].children === undefined) {
-                        vehicleTree[nodePath].children = null;
-                    }
-
-                    if (nodePath in groups) {
-                        vehicleTree[nodePath].info = groups[nodePath];
-
-                        if (nidx > 0 && nidx < nodesInPath.length) {
-                            if (vehicleTree[nodesInPath[nidx - 1]].children === null) {
-                                vehicleTree[nodesInPath[nidx - 1]].children = {};
-                            }
-                            //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
-                            vehicleTree[nodesInPath[nidx - 1]].children[nodePath] = groups[nodePath];
-                        }
-                    }
-
-                }
-            }
-            //$log.log(vehicleTree);
-
-            for (vidx in vehicles) {
-                vehicle = vehicles[vidx];
-                if (!(vehicle.pgrouppath in vehicleTree)) {
-                    $log.log("Deadly mistake");
-                    continue;
-                }
-
-                if (!(vehicle.vehiclepath in vehicleTree)) {
-                    $log.log("Another Deadly mistake");
-                    continue;
-                }
-
-                vehicleTree[vehicle.vehiclepath].info = vehicle;
-                if (vehicleTree[vehicle.pgrouppath].children === null) {
-                    vehicleTree[vehicle.pgrouppath].children = {};
-                }
-                vehicleTree[vehicle.pgrouppath].children[vehicle.vehiclepath] = vehicle;
-            }
-
-            //$log.log(vehicleTree);
-            return $q.resolve(vehicleTree);
-        };
-
 
         // vm.getGenericTreeVehicles = function (body) {
         //     var vehiclesPromise = userService.getMyVehicles(body);
@@ -241,7 +181,7 @@
             var groupsPromise = userService.getMyGroupsMap(body);
             var vehiclesPromise = userService.getMyVehiclesMap(body);
             return $q.all([groupsPromise, vehiclesPromise])
-                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createGenericTree2, vm.handleFailure)
                 .then(vm.createUITree, vm.handleFailure);
         };
 
@@ -257,8 +197,96 @@
                 return asset.vehiclepath;
             else if(asset.ui_asset_type == "device")
                 return asset.devicepath;
-        }
-        
+        };
+
+
+        vm.buildUITree2 = function (genericTree, key) {
+            $log.log("buildTree2 " + key);
+
+            if (genericTree === null)
+                return null;
+
+            if (genericTree[key].visited == true) {
+                //$log.log("Already visited: " + key);
+                return null;
+            }
+
+            var gtNode = genericTree[key];
+            gtNode.visited = true;
+
+            //$log.log(gtNode);
+            var utNode = {};
+            utNode.id = key;
+            utNode.title = gtNode.info.name;
+            utNode.info = gtNode.info;
+            utNode.items = [];
+            utNode.checkStatus = false;
+            utNode.collapsed = false;
+
+            var resultNode = null;
+            var child = null;
+            if (gtNode.children !== null) {
+                for (var idx in gtNode.children) {
+                    child = gtNode.children[idx];
+                    $log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
+                    resultNode = vm.buildUITree2(genericTree, vm.getAssetPath(child));
+                    $log.log(resultNode);
+
+                    // if (resultNode !== null) {
+                    //     utNode.items.push(resultNode);
+                    // }
+
+
+                    if (resultNode !== null) {
+                        var assetTypeExists = false;
+                        for(var uidx in utNode.items) {
+                            var assetType = utNode.items[uidx];
+                            $log.log(assetType.title + " == " + resultNode.info.ui_asset_type);
+                            if (assetType.title == resultNode.info.ui_asset_type) {
+                                $log.log("assetTypeExists ");
+                                assetTypeExists = true;
+                                break;
+                            }
+                        }
+
+                        if(!assetTypeExists) {
+                            $log.log("assetType does not Exists");
+                            assetType = {
+                                id: resultNode.info.ui_asset_type,
+                                title: resultNode.info.ui_asset_type,
+                                info: {name: resultNode.info.ui_asset_type + 's'},
+                                items: []
+                            };
+                            // assetType.id = resultNode.info.ui_asset_type;
+                            // assetType.title = resultNode.info.ui_asset_type;
+                            // assetType.info = {}
+                            // assetType.items = [];
+                            utNode.items.push(assetType);
+                            $log.log(assetType);
+                        }
+                        assetType.items.push(resultNode);
+                    }
+                }
+            }
+
+            return utNode;
+        };
+
+
+        vm.createUITree2 = function (genericTree) {
+            //$log.log(genericTree);
+
+            var uiTree = [];
+            for (var key in genericTree) {
+                var resultNode = vm.buildUITree2(genericTree, key);
+                if (resultNode !== null) {
+                    uiTree.push(resultNode);
+                }
+            }
+            return $q.resolve(uiTree);
+        };
+
+
         vm.createGenericTree2 = function (resp) {
             $log.log("createGenericTree2");
             $log.log(resp);
@@ -319,19 +347,201 @@
                     }
                     assetTree[asset.pgrouppath].children[vm.getAssetPath(asset)] = asset;
                 }
-
-                //$log.log(assetTree);
-                return $q.resolve(assetTree);
             }
+
+            //$log.log(assetTree);
+            return $q.resolve(assetTree);
         };
 
 
         vm.getManagementTree = function (body) {
             return userService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree2, vm.handleFailure)
-                .then(vm.createUITree, vm.handleFailure);
+                .then(vm.createUITree2, vm.handleFailure);
         };
     }
 
 })();
 
+
+
+// vm.createGenericTree3 = function (resp) {
+//     $log.log("createGenericTree3");
+//     $log.log(resp);
+//
+//
+//     var groups = resp[0];
+//
+//     var assetTree = {};
+//     for (var ridx = 1; ridx < resp.length; ridx++) {
+//         var assets = resp[ridx];
+//         for (var aidx in assets) {
+//             var asset = assets[aidx];
+//             var nodesInPath = vm.getNodesInPath(vm.getAssetPath(asset));
+//             $log.log(nodesInPath);
+//             for (var nidx in nodesInPath) {
+//                 var nodePath = nodesInPath[nidx];
+//                 if (!(nodePath in assetTree)) {
+//                     assetTree[nodePath] = {};
+//                 }
+//
+//                 if(assetTree[nodePath].children === undefined) {
+//                     assetTree[nodePath].children = {};
+//                 }
+//
+//                 //$log.log(nodePath);
+//                 //$log.log(assetTree[nodePath]);
+//                 //$log.log(assetTree[nodePath].children);
+//
+//                 //assetTree[nodePath].children[asset.ui_asset_type] = {};
+//
+//                 if (assetTree[nodePath].info === undefined) {
+//                     assetTree[nodePath].info = null;
+//                 }
+//
+//                 // if (assetTree[nodePath].children === undefined) {
+//                 //     assetTree[nodePath].children = null;
+//                 // }
+//                 //
+//                 // if (assetTree[nodePath].children[asset.ui_asset_type] === undefined) {
+//                 //     assetTree[nodePath].children[asset.ui_asset_type] = null;
+//                 // }
+//
+//                 if (nodePath in groups) {
+//                     assetTree[nodePath].info = groups[nodePath];
+//
+//                     if (nidx > 0 && nidx < nodesInPath.length) {
+//                         if (assetTree[nodesInPath[nidx - 1]].children === undefined) {
+//                             assetTree[nodesInPath[nidx - 1]].children = {};
+//                         }
+//
+//                         if (assetTree[nodesInPath[nidx - 1]].children["group"] === undefined) {
+//                             assetTree[nodesInPath[nidx - 1]].children["group"] = {};
+//                         }
+//
+//                         //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
+//                         assetTree[nodesInPath[nidx - 1]].children["group"][nodePath] = groups[nodePath];
+//                     }
+//                 } else {
+//                     if (nidx > 0 && nidx < nodesInPath.length) {
+//
+//                         if (assetTree[nodesInPath[nidx - 1]].children[asset.ui_asset_type] === undefined) {
+//                             assetTree[nodesInPath[nidx - 1]].children[asset.ui_asset_type] = {};
+//                         }
+//
+//                         if (assetTree[nodesInPath[nidx - 1]].children[asset.ui_asset_type].children === undefined) {
+//                             assetTree[nodesInPath[nidx - 1]].children[asset.ui_asset_type].children = {};
+//                         }
+//
+//                         assetTree[nodesInPath[nidx - 1]].children[asset.ui_asset_type].children[nodePath] = asset;
+//                     }
+//                 }
+//
+//             }
+//         }
+//         $log.log(assetTree);
+//
+//         for (aidx in assets) {
+//             asset = assets[aidx];
+//             if (!(asset.pgrouppath in assetTree)) {
+//                 $log.log("Deadly mistake");
+//                 continue;
+//             }
+//
+//             // if (assetTree[asset.pgrouppath].children === undefined) {
+//             //     assetTree[asset.pgrouppath].children = {};
+//             // }
+//
+//             if (!(asset.ui_asset_type in assetTree[asset.pgrouppath].children)) {
+//                 $log.log("Another Deadly mistake");
+//                 continue;
+//             }
+//
+//             if (!(vm.getAssetPath(asset) in assetTree[asset.pgrouppath].children[asset.ui_asset_type].children)) {
+//                 $log.log("You are now buried!!");
+//                 continue;
+//             }
+//
+//             assetTree[asset.pgrouppath].children[asset.ui_asset_type].info = {name: asset.ui_asset_type};
+//
+//             $log.log("mistake");
+//             $log.log(vm.getAssetPath(asset));
+//             $log.log(assetTree[asset.pgrouppath].children);
+//             $log.log(assetTree[asset.pgrouppath].children[asset.ui_asset_type].children);
+//
+//
+//             if (assetTree[asset.pgrouppath].children[asset.ui_asset_type].children === undefined) {
+//                 assetTree[asset.pgrouppath].children[asset.ui_asset_type].children = {};
+//             }
+//
+//             assetTree[asset.pgrouppath].children[asset.ui_asset_type].children[vm.getAssetPath(asset)] = asset;
+//         }
+//     }
+//
+//     $log.log(assetTree);
+//     return $q.resolve(assetTree);
+// };
+
+
+
+//
+// vm.createGenericTree = function (resp) {
+//     var groups = resp[0];
+//     var vehicles = resp[1];
+//
+//     var vehicleTree = {};
+//     for (var vidx in vehicles) {
+//         var vehicle = vehicles[vidx];
+//         var nodesInPath = vm.getNodesInPath(vehicle.vehiclepath);
+//         for (var nidx in nodesInPath) {
+//             var nodePath = nodesInPath[nidx];
+//             if (!(nodePath in vehicleTree))
+//                 vehicleTree[nodePath] = {};
+//
+//             if (vehicleTree[nodePath].info === undefined) {
+//                 vehicleTree[nodePath].info = null;
+//             }
+//
+//             if (vehicleTree[nodePath].children === undefined) {
+//                 vehicleTree[nodePath].children = null;
+//             }
+//
+//             if (nodePath in groups) {
+//                 vehicleTree[nodePath].info = groups[nodePath];
+//
+//                 if (nidx > 0 && nidx < nodesInPath.length) {
+//                     if (vehicleTree[nodesInPath[nidx - 1]].children === null) {
+//                         vehicleTree[nodesInPath[nidx - 1]].children = {};
+//                     }
+//                     //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
+//                     vehicleTree[nodesInPath[nidx - 1]].children[nodePath] = groups[nodePath];
+//                 }
+//             }
+//
+//         }
+//     }
+//     //$log.log(vehicleTree);
+//
+//     for (vidx in vehicles) {
+//         vehicle = vehicles[vidx];
+//         if (!(vehicle.pgrouppath in vehicleTree)) {
+//             $log.log("Deadly mistake");
+//             continue;
+//         }
+//
+//         if (!(vehicle.vehiclepath in vehicleTree)) {
+//             $log.log("Another Deadly mistake");
+//             continue;
+//         }
+//
+//         vehicleTree[vehicle.vehiclepath].info = vehicle;
+//         if (vehicleTree[vehicle.pgrouppath].children === null) {
+//             vehicleTree[vehicle.pgrouppath].children = {};
+//         }
+//         vehicleTree[vehicle.pgrouppath].children[vehicle.vehiclepath] = vehicle;
+//     }
+//
+//     //$log.log(vehicleTree);
+//     return $q.resolve(vehicleTree);
+// };
+//
