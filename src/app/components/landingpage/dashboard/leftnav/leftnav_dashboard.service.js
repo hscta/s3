@@ -29,7 +29,7 @@
             };
 
             vm.getTreeMyVehicles = function(body) {
-                return intellicarAPI.treeDataService.getAngularUITreeMyVehicles(body);
+                return intellicarAPI.treeDataService.getDashboardTree(body);
             };
 
             vm.addListener = function(key, listener) {

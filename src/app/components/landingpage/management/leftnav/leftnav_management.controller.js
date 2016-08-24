@@ -28,8 +28,6 @@
             //$log.log("getMyVehicles");
             $log.log(data);
             vm.tree_data = data;
-            $log.log('managementttttttttttt');
-            $log.log(vm.tree_data);
         };
 
         vm.getMyVehiclesFailure = function (data) {

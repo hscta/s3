@@ -49,6 +49,69 @@
         };
 
 
+        vm.buildUITree = function (genericTree, key) {
+            //$log.log("buildTree " + key);
+
+            if (genericTree === null)
+                return null;
+
+            if (genericTree[key].visited == true) {
+                //$log.log("Already visited: " + key);
+                return null;
+            }
+
+            var gtNode = genericTree[key];
+            gtNode.visited = true;
+
+            //$log.log(gtNode);
+            var utNode = {};
+            utNode.id = key;
+            utNode.title = gtNode.info.name;
+            utNode.info = gtNode.info;
+            utNode.items = [];
+            utNode.checkStatus = false;
+            utNode.collapsed = false;
+
+            var resultNode = null;
+            var child = null;
+            if (gtNode.children !== null) {
+                for (var idx in gtNode.children) {
+                    child = gtNode.children[idx];
+                    //$log.log("parent: " + key + ", child = " + idx);
+                    resultNode = vm.buildUITree(genericTree, vm.getAssetPath(child));
+
+                    // if (child.ui_asset_type == "group") {
+                    //     //$log.log("inside group " + child.grouppath);
+                    //     resultNode = vm.buildUITree(genericTree, child.grouppath);
+                    // } else if (child.ui_asset_type == "vehicle") {
+                    //     //$log.log("inside vehicle " + child.vehiclepath);
+                    //     resultNode = vm.buildUITree(genericTree, child.vehiclepath);
+                    // }
+
+                    if (resultNode !== null) {
+                        utNode.items.push(resultNode);
+                    }
+                }
+            }
+
+            return utNode;
+        };
+
+
+        vm.createUITree = function (genericTree) {
+            //$log.log(genericTree);
+
+            var uiTree = [];
+            for (var key in genericTree) {
+                var resultNode = vm.buildUITree(genericTree, key);
+                if (resultNode !== null) {
+                    uiTree.push(resultNode);
+                }
+            }
+            return $q.resolve(uiTree);
+        };
+
+
         vm.getNextPathItemEnd = function (str, start) {
             var slash = '/';
 
@@ -82,6 +145,9 @@
 
 
         vm.getNodesInPath = function (path) {
+            if(path === null)
+                return [];
+            
             var nodesInPath = [];
             var startIndex = 0;
             var endIndex = 0;
@@ -102,7 +168,9 @@
         };
 
 
-        vm.getMyVehicleTree = function (vehicles, groups) {
+        vm.createGenericTree = function (resp) {
+            var groups = resp[0];
+            var vehicles = resp[1];
 
             var vehicleTree = {};
             for (var vidx in vehicles) {
@@ -157,93 +225,110 @@
             }
 
             //$log.log(vehicleTree);
-            return vehicleTree;
-        };
-
-
-        vm.buildUITree = function (genericTree, key) {
-            //$log.log("buildTree " + key);
-
-            if (genericTree === null)
-                return null;
-
-            if (genericTree[key].visited == true) {
-                //$log.log("Already visited: " + key);
-                return null;
-            }
-
-            var gtNode = genericTree[key];
-            gtNode.visited = true;
-
-            //$log.log(gtNode);
-            var utNode = {};
-            utNode.id = key;
-            utNode.title = gtNode.info.name;
-            utNode.info = gtNode.info;
-            utNode.items = [];
-            utNode.checkStatus = false;
-            utNode.collapsed = false;
-
-            var resultNode = null;
-            var child = null;
-            if (gtNode.children !== null) {
-                for (var idx in gtNode.children) {
-                    child = gtNode.children[idx];
-                    //$log.log("parent: " + key + ", child = " + idx);
-                    if (child.ui_asset_type == "group") {
-                        //$log.log("inside group " + child.grouppath);
-                        resultNode = vm.buildUITree(genericTree, child.grouppath);
-                    } else if (child.ui_asset_type == "vehicle") {
-                        //$log.log("inside vehicle " + child.vehiclepath);
-                        resultNode = vm.buildUITree(genericTree, child.vehiclepath);
-                    }
-
-                    if (resultNode !== null) {
-                        utNode.items.push(resultNode);
-                    }
-                }
-            }
-
-            return utNode;
-        };
-
-        vm.createUITree = function (genericTree) {
-            //$log.log(genericTree);
-
-            var uiTree = [];
-            for (var key in genericTree) {
-                var resultNode = vm.buildUITree(genericTree, key);
-                if (resultNode !== null) {
-                    uiTree.push(resultNode);
-                }
-            }
-            return $q.resolve(uiTree);
-        };
-
-
-        vm.processMyVehicles = function (resp) {
-            //$log.log("processMyVehicles");
-            //$log.log(resp);
-            var vehicles = resp[0];
-            var groups = resp[1];
-            var vehicleTree = vm.getMyVehicleTree(vehicles, groups);
             return $q.resolve(vehicleTree);
         };
 
 
-        vm.getGenericTreeVehicles = function (body) {
-            var vehiclesPromise = userService.getMyVehicles(body);
-            var groupsPromise = userService.getMyGroups(body);
-            return $q.all([vehiclesPromise, groupsPromise])
-                .then(vm.processMyVehicles, vm.handleFailure);
+        // vm.getGenericTreeVehicles = function (body) {
+        //     var vehiclesPromise = userService.getMyVehicles(body);
+        //     var groupsPromise = userService.getMyGroups(body);
+        //     return $q.all([vehiclesPromise, groupsPromise])
+        //         .then(vm.createGenericTree, vm.handleFailure);
+        // };
+
+
+        vm.getDashboardTree = function (body) {
+            var groupsPromise = userService.getMyGroupsMap(body);
+            var vehiclesPromise = userService.getMyVehiclesMap(body);
+            return $q.all([groupsPromise, vehiclesPromise])
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createUITree, vm.handleFailure);
         };
 
 
-        vm.getAngularUITreeMyVehicles = function (body) {
-            var vehiclesPromise = userService.getMyVehiclesMap(body);
-            var groupsPromise = userService.getMyGroupsMap(body);
-            return $q.all([vehiclesPromise, groupsPromise])
-                .then(vm.processMyVehicles, vm.handleFailure)
+        vm.getAssetPath = function(asset) {
+            if(asset.ui_asset_type == "group")
+                return asset.grouppath;
+            else if(asset.ui_asset_type == "user")
+                return asset.userpath;
+            else if(asset.ui_asset_type == "role")
+                return asset.rolepath;
+            else if(asset.ui_asset_type == "vehicle")
+                return asset.vehiclepath;
+            else if(asset.ui_asset_type == "device")
+                return asset.devicepath;
+        }
+        
+        vm.createGenericTree2 = function (resp) {
+            $log.log("createGenericTree2");
+            $log.log(resp);
+
+
+            var groups = resp[0];
+
+            var assetTree = {};
+            for (var ridx = 1; ridx < resp.length; ridx++) {
+                var assets = resp[ridx];
+                for (var aidx in assets) {
+                    var asset = assets[aidx];
+                    var nodesInPath = vm.getNodesInPath(vm.getAssetPath(asset));
+                    for (var nidx in nodesInPath) {
+                        var nodePath = nodesInPath[nidx];
+                        if (!(nodePath in assetTree))
+                            assetTree[nodePath] = {};
+
+                        if (assetTree[nodePath].info === undefined) {
+                            assetTree[nodePath].info = null;
+                        }
+
+                        if (assetTree[nodePath].children === undefined) {
+                            assetTree[nodePath].children = null;
+                        }
+
+                        if (nodePath in groups) {
+                            assetTree[nodePath].info = groups[nodePath];
+
+                            if (nidx > 0 && nidx < nodesInPath.length) {
+                                if (assetTree[nodesInPath[nidx - 1]].children === null) {
+                                    assetTree[nodesInPath[nidx - 1]].children = {};
+                                }
+                                //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
+                                assetTree[nodesInPath[nidx - 1]].children[nodePath] = groups[nodePath];
+                            }
+                        }
+
+                    }
+                }
+                //$log.log(assetTree);
+
+                for (aidx in assets) {
+                    asset = assets[aidx];
+                    if (!(asset.pgrouppath in assetTree)) {
+                        $log.log("Deadly mistake");
+                        continue;
+                    }
+
+                    if (!(vm.getAssetPath(asset) in assetTree)) {
+                        $log.log("Another Deadly mistake");
+                        continue;
+                    }
+
+                    assetTree[vm.getAssetPath(asset)].info = asset;
+                    if (assetTree[asset.pgrouppath].children === null) {
+                        assetTree[asset.pgrouppath].children = {};
+                    }
+                    assetTree[asset.pgrouppath].children[vm.getAssetPath(asset)] = asset;
+                }
+
+                //$log.log(assetTree);
+                return $q.resolve(assetTree);
+            }
+        };
+
+
+        vm.getManagementTree = function (body) {
+            return userService.getMyDirectAssetsMap(body)
+                .then(vm.createGenericTree2, vm.handleFailure)
                 .then(vm.createUITree, vm.handleFailure);
         };
     }
