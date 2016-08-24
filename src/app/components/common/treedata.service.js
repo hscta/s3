@@ -182,6 +182,7 @@
             utNode.info = gtNode.info;
             utNode.items = [];
             utNode.checkStatus = false;
+            utNode.collapsed = false;
 
             var resultNode = null;
             var child = null;
