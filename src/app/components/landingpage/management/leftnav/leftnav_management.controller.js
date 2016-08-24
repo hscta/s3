@@ -16,7 +16,7 @@
         vm.state = $state;
 
         vm.availableFields = ['title', 'description'];
-        vm.supportedFields = ['ti   tle', 'description'];
+        vm.supportedFields = ['title', 'description'];
 
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
