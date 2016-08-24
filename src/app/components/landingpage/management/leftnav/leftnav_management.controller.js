@@ -19,8 +19,6 @@
 
         $scope.treeFilter = $filter('uiTreeFilter');
 
-
-
         vm.availableFields = ['title', 'description'];
         vm.supportedFields = ['title', 'description'];
 
@@ -43,42 +41,42 @@
             $state.transitionTo('home.management.tab' + item, {some: "data"});
         };
 
-        vm.toggleCheck = function (node) {
-            $log.log("checkStatus = " + node.checkStatus);
-            if (node.checkStatus === "checked") {
-                node.checkStatus = "unchecked";
+        vm.toggleCheck = function (item) {
+            $log.log("checkStatus = " + item.checkStatus);
+            if (item.checkStatus === "checked") {
+                item.checkStatus = "unchecked";
             } else {
-                node.checkStatus = "checked";
+                item.checkStatus = "checked";
             }
 
-            if (node.nodes && node.nodes.length)
-                vm.propagateCheckFromParent(node.nodes, node.checkStatus);
+            if (item.items && item.items.length)
+                vm.propagateCheckFromParent(item.items, item.checkStatus);
 
             vm.verifyAllParentsCheckStatus(vm.tree_data);
         };
 
-        vm.propagateCheckFromParent = function (nodes, status) {
-            for (var i = 0; i < nodes.length; ++i) {
-                var node = nodes[i];
-                node.checkStatus = status;
-                if (node.nodes)
-                    vm.propagateCheckFromParent(node.nodes, status)
+        vm.propagateCheckFromParent = function (items, status) {
+            for (var i = 0; i < items.length; ++i) {
+                var item = items[i];
+                item.checkStatus = status;
+                if (item.items)
+                    vm.propagateCheckFromParent(item.items, status)
             }
         };
 
-        vm.verifyAllParentsCheckStatus = function (nodes) {
+        vm.verifyAllParentsCheckStatus = function (items) {
             var retVal = "";
-            for (var i = 0; i < nodes.length; ++i) {
-                var node = nodes[i];
-                $log.log(node);
-                if (node.nodes && node.nodes.length) {
-                    node.checkStatus = vm.verifyAllParentsCheckStatus(node.nodes);
+            for (var i = 0; i < items.length; ++i) {
+                var item = items[i];
+                $log.log(item);
+                if (item.items && item.items.length) {
+                    item.checkStatus = vm.verifyAllParentsCheckStatus(item.items);
                 }
                 if (retVal === "") {
-                    retVal = node.checkStatus;
+                    retVal = item.checkStatus;
                     // console.log("set ret");
                 }
-                if (retVal != node.checkStatus)
+                if (retVal != item.checkStatus)
                     return "partlyChecked";
 
             }
@@ -90,6 +88,11 @@
             leftNavManagementService.getTreeMyVehicles({})
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
+
+        vm.test = function (info) {
+            $log.log(info);
+            $rootScope.$broadcast('test', {'info':info});
+        }
 
 
         vm.addAllListeners();
