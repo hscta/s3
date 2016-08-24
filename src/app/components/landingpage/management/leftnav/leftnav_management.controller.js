@@ -9,11 +9,17 @@
         .controller('LeftNavManagementController', LeftNavManagementController)
 
     function LeftNavManagementController($scope, $rootScope, $log, intellicarAPI,
-                                         leftNavManagementService, $state) {
+                                         leftNavManagementService, $state, $filter) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
         vm.state = $state;
+        vm.tree_search_pattern = '';
+        vm.search_results;
+
+        $scope.treeFilter = $filter('uiTreeFilter');
+
+
 
         vm.availableFields = ['title', 'description'];
         vm.supportedFields = ['title', 'description'];
@@ -22,6 +28,8 @@
             //$log.log("getMyVehicles");
             $log.log(data);
             vm.tree_data = data;
+            $log.log('managementttttttttttt');
+            $log.log(vm.tree_data);
         };
 
         vm.getMyVehiclesFailure = function (data) {
