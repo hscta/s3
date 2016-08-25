@@ -74,7 +74,7 @@
         <span class="search-result" ng-hide="!vm.search_results"> 0 results found</span>
     </md-input-container>
 
-    <div ui-tree id="tree-root" callbacks="treeOptions">
+    <div ui-tree id="tree-root" callbacks="treeOptions" ng-if="vm.tree_data.length">
         <ol ui-tree-nodes ng-model="vm.tree_data" ng-class="{hidden: collapsed}">
             <li ng-repeat="item in vm.tree_data" ui-tree-node data-nodrag data-collapsed="collapsed"
                 ng-hide="vm.search_results = !treeFilter(item, vm.tree_search_pattern, supportedFields)"

@@ -89,9 +89,9 @@
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 
-        vm.test = function (info) {
-            $log.log(info);
-            $rootScope.$broadcast('test', {'info':info});
+        vm.test = function (item) {
+            $log.log(item);
+            $rootScope.$broadcast('test', {'info':item});
         }
 
 

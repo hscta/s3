@@ -24,15 +24,21 @@
         <!--</md-tab>-->
     <!--</md-tabs>-->
 
+    <!--<md-tabs>-->
+        <!--<md-tab md-on-select="transitionTo('home.management.tab1')">-->
+            <!--<md-tab-label>Tab1</md-tab-label>-->
+        <!--</md-tab>-->
+        <!--<md-tab md-on-select="transitionTo('home.management.tab2')">-->
+            <!--<md-tab-label>Tab2</md-tab-label>-->
+        <!--</md-tab>-->
+        <!--<md-tab md-on-select="transitionTo('home.management.tab3')">-->
+            <!--<md-tab-label>Tab3</md-tab-label>-->
+        <!--</md-tab>-->
+    <!--</md-tabs>-->
+
     <md-tabs>
-        <md-tab md-on-select="transitionTo('home.management.tab1')">
-            <md-tab-label>Tab1</md-tab-label>
-        </md-tab>
-        <md-tab md-on-select="transitionTo('home.management.tab2')">
-            <md-tab-label>Tab2</md-tab-label>
-        </md-tab>
-        <md-tab md-on-select="transitionTo('home.management.tab3')">
-            <md-tab-label>Tab3</md-tab-label>
+        <md-tab md-on-select="" ng-repeat="tab in vm.tabs">
+            <md-tab-label>{{tab}}</md-tab-label>
         </md-tab>
     </md-tabs>
 
