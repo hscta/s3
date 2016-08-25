@@ -12,15 +12,7 @@
         $log.log('SettingsController');
         var vm = this;
 
-        // $log.log('state.name = ');
-        // $log.log($state);
-
-        //$log.log(settingsService.enableTabs['group'])
-
         vm.tabs = settingsService.displayTabs('group');
-
-
-        vm.selectedIndex = settingsService.selectedTabIndex;
 
         vm.getSelectedIndex = function() {
             return settingsService.selectedTabIndex;

@@ -103,9 +103,7 @@
             var tabStateIndex = settingsService.getTabIndex(tabState);
 
             var pageState = 'home.management.' + tabState;
-           // $state.go(pageState, item.info);
-            $state.go(pageState, {'index':tabStateIndex});
-            var selectedIndex = 2;
+            $state.go(pageState, item.info);
         }
 
 
