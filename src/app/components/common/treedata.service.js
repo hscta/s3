@@ -49,66 +49,17 @@
         };
 
 
-        vm.buildUITree = function (genericTree, key) {
-            //$log.log("buildTree " + key);
-
-            if (genericTree === null)
-                return null;
-
-            if (genericTree[key].visited == true) {
-                //$log.log("Already visited: " + key);
-                return null;
-            }
-
-            var gtNode = genericTree[key];
-            gtNode.visited = true;
-
-            //$log.log(gtNode);
-            var utNode = {};
-            utNode.id = key;
-            utNode.title = gtNode.info.name;
-            utNode.info = gtNode.info;
-            utNode.items = [];
-            utNode.checkStatus = false;
-            utNode.collapsed = false;
-
-            var resultNode = null;
-            var child = null;
-            if (gtNode.children !== null) {
-                for (var idx in gtNode.children) {
-                    child = gtNode.children[idx];
-                    //$log.log("parent: " + key + ", child = " + idx);
-                    resultNode = vm.buildUITree(genericTree, vm.getAssetPath(child));
-
-                    // if (child.ui_asset_type == "group") {
-                    //     //$log.log("inside group " + child.grouppath);
-                    //     resultNode = vm.buildUITree(genericTree, child.grouppath);
-                    // } else if (child.ui_asset_type == "vehicle") {
-                    //     //$log.log("inside vehicle " + child.vehiclepath);
-                    //     resultNode = vm.buildUITree(genericTree, child.vehiclepath);
-                    // }
-
-                    if (resultNode !== null) {
-                        utNode.items.push(resultNode);
-                    }
-                }
-            }
-
-            return utNode;
-        };
-
-
-        vm.createUITree = function (genericTree) {
-            //$log.log(genericTree);
-
-            var uiTree = [];
-            for (var key in genericTree) {
-                var resultNode = vm.buildUITree(genericTree, key);
-                if (resultNode !== null) {
-                    uiTree.push(resultNode);
-                }
-            }
-            return $q.resolve(uiTree);
+        vm.getAssetPath = function(asset) {
+            if(asset.ui_asset_type == "group")
+                return asset.grouppath;
+            else if(asset.ui_asset_type == "user")
+                return asset.userpath;
+            else if(asset.ui_asset_type == "role")
+                return asset.rolepath;
+            else if(asset.ui_asset_type == "vehicle")
+                return asset.vehiclepath;
+            else if(asset.ui_asset_type == "device")
+                return asset.devicepath;
         };
 
 
@@ -168,39 +119,62 @@
         };
 
 
+        vm.buildDashboardTree = function (genericTree, key) {
+            //$log.log("buildTree " + key);
 
-        // vm.getGenericTreeVehicles = function (body) {
-        //     var vehiclesPromise = userService.getMyVehicles(body);
-        //     var groupsPromise = userService.getMyGroups(body);
-        //     return $q.all([vehiclesPromise, groupsPromise])
-        //         .then(vm.createGenericTree, vm.handleFailure);
-        // };
+            if (genericTree === null)
+                return null;
 
+            if (genericTree[key].visited == true) {
+                //$log.log("Already visited: " + key);
+                return null;
+            }
 
-        vm.getDashboardTree = function (body) {
-            var groupsPromise = userService.getMyGroupsMap(body);
-            var vehiclesPromise = userService.getMyVehiclesMap(body);
-            return $q.all([groupsPromise, vehiclesPromise])
-                .then(vm.createGenericTree2, vm.handleFailure)
-                .then(vm.createUITree, vm.handleFailure);
+            var gtNode = genericTree[key];
+            gtNode.visited = true;
+
+            //$log.log(gtNode);
+            var utNode = {};
+            utNode.id = key;
+            utNode.title = gtNode.info.name;
+            utNode.info = gtNode.info;
+            utNode.items = [];
+            utNode.checkStatus = false;
+            utNode.collapsed = false;
+
+            var resultNode = null;
+            var child = null;
+            if (gtNode.children !== null) {
+                for (var idx in gtNode.children) {
+                    child = gtNode.children[idx];
+                    //$log.log("parent: " + key + ", child = " + idx);
+                    resultNode = vm.buildDashboardTree(genericTree, vm.getAssetPath(child));
+
+                    if (resultNode !== null) {
+                        utNode.items.push(resultNode);
+                    }
+                }
+            }
+
+            return utNode;
         };
 
 
-        vm.getAssetPath = function(asset) {
-            if(asset.ui_asset_type == "group")
-                return asset.grouppath;
-            else if(asset.ui_asset_type == "user")
-                return asset.userpath;
-            else if(asset.ui_asset_type == "role")
-                return asset.rolepath;
-            else if(asset.ui_asset_type == "vehicle")
-                return asset.vehiclepath;
-            else if(asset.ui_asset_type == "device")
-                return asset.devicepath;
+        vm.createDashboardTree = function (genericTree) {
+            //$log.log(genericTree);
+
+            var uiTree = [];
+            for (var key in genericTree) {
+                var resultNode = vm.buildDashboardTree(genericTree, key);
+                if (resultNode !== null) {
+                    uiTree.push(resultNode);
+                }
+            }
+            return $q.resolve(uiTree);
         };
 
 
-        vm.buildUITree2 = function (genericTree, key) {
+        vm.buildManagementTree = function (genericTree, key) {
             $log.log("buildTree2 " + key);
 
             if (genericTree === null)
@@ -229,7 +203,7 @@
                 for (var idx in gtNode.children) {
                     child = gtNode.children[idx];
                     $log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
-                    resultNode = vm.buildUITree2(genericTree, vm.getAssetPath(child));
+                    resultNode = vm.buildManagementTree(genericTree, vm.getAssetPath(child));
                     $log.log(resultNode);
 
                     // if (resultNode !== null) {
@@ -255,6 +229,7 @@
                                 id: resultNode.info.ui_asset_type,
                                 title: resultNode.info.ui_asset_type,
                                 info: {name: resultNode.info.ui_asset_type + 's'},
+                                ui_asset_type: 'asset_type',
                                 items: []
                             };
                             // assetType.id = resultNode.info.ui_asset_type;
@@ -273,12 +248,12 @@
         };
 
 
-        vm.createUITree2 = function (genericTree) {
+        vm.createManagementTree = function (genericTree) {
             //$log.log(genericTree);
 
             var uiTree = [];
             for (var key in genericTree) {
-                var resultNode = vm.buildUITree2(genericTree, key);
+                var resultNode = vm.buildManagementTree(genericTree, key);
                 if (resultNode !== null) {
                     uiTree.push(resultNode);
                 }
@@ -287,8 +262,8 @@
         };
 
 
-        vm.createGenericTree2 = function (resp) {
-            $log.log("createGenericTree2");
+        vm.createGenericTree = function (resp) {
+            $log.log("createGenericTree");
             $log.log(resp);
 
 
@@ -354,10 +329,19 @@
         };
 
 
+        vm.getDashboardTree = function (body) {
+            var groupsPromise = userService.getMyGroupsMap(body);
+            var vehiclesPromise = userService.getMyVehiclesMap(body);
+            return $q.all([groupsPromise, vehiclesPromise])
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createDashboardTree, vm.handleFailure);
+        };
+
+
         vm.getManagementTree = function (body) {
             return userService.getMyDirectAssetsMap(body)
-                .then(vm.createGenericTree2, vm.handleFailure)
-                .then(vm.createUITree2, vm.handleFailure);
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createManagementTree, vm.handleFailure);
         };
     }
 
@@ -485,7 +469,7 @@
 
 
 //
-// vm.createGenericTree = function (resp) {
+// vm.createGenericTree1 = function (resp) {
 //     var groups = resp[0];
 //     var vehicles = resp[1];
 //

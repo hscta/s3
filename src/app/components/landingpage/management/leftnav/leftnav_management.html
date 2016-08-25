@@ -35,8 +35,8 @@
 <script type="text/ng-template" id="parent_nodes_renderer.html">
     <div class="icar-wrap-text">
         <a ng-click="toggle(this)" style="cursor:pointer;" ng-show="item.items.length > 0">
-            <md-icon md-font-library="material-icons" ng-show="collapsed">keyboard_arrow_down</md-icon>
-            <md-icon md-font-library="material-icons" ng-show="!collapsed">keyboard_arrow_right</md-icon>
+            <md-icon md-font-library="material-icons" ng-show="collapsed">arrow_drop_down</md-icon>
+            <md-icon md-font-library="material-icons" ng-show="!collapsed">play_arrow</md-icon>
         </a>
         <span style="padding-left:28px;" ng-hide="item.items.length > 0"></span>
         <md-checkbox aria-label="Checkbox 1" ng-checked="'checked'===item.checkStatus"
