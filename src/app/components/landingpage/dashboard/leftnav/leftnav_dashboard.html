@@ -42,7 +42,7 @@
                      ng-click="vm.toggleCheck(item)"
                      data-nodrag>
         </md-checkbox>
-        <span>{{item.info.name}}</span ><br/>
+        <span>{{item.title}}</span ><br/>
     </div>
     <ol ui-tree-nodes ng-model="item.items" ng-show="collapsed">
         <li ng-repeat="item in item.items" ui-tree-node
@@ -59,7 +59,7 @@
                      ng-click="vm.toggleCheck(item)"
                      data-nodrag>
         </md-checkbox>
-        <span>{{item.info.name}}
+        <span>{{item.title}}
         </span>
     </div>
 </script>
