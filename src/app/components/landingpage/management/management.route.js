@@ -31,7 +31,7 @@
             //         }
             //     })
 
-            $log.log($rootScope.tab);
+            //$log.log($rootScope.tab);
         });
 
 
