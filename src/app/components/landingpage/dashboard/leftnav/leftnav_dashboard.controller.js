@@ -7,11 +7,11 @@
         .module('uiplatform')
         .controller('LeftNavDashboardController', LeftNavDashboardController)
 
-        .filter('trust', function ($sce) {
-            return function (val) {
-                return $sce.trustAsHtml(val);
-            };
-        });
+        // .filter('trust', function ($sce) {
+        //     return function (val) {
+        //         return $sce.trustAsHtml(val);
+        //     };
+        // });
 
     function LeftNavDashboardController($scope, $rootScope, $log, intellicarAPI,
                                         leftNavDashboardService, $state, $filter) {
