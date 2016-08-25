@@ -55,7 +55,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/group_mgmt.html',
                         controller: 'GroupMgmtController as vm'
                     }
-                }
+                },
             })
             .state('home.management.user', {
                 url: '/user',
@@ -64,7 +64,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/user_mgmt.html',
                         controller: 'UserMgmtController as vm'
                     }
-                }
+                },
             })
             .state('home.management.role', {
                 url: '/role',
@@ -82,7 +82,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/device_mgmt.html',
                         controller: 'DeviceMgmtController as vm'
                     }
-                }
+                },
             })
 
         $urlRouterProvider.otherwise('/');

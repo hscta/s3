@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+
+<div layout="column" class="demo" >
+
+
+    <!--<md-toolbar>-->
+        <!--<h2 class="md-toolbar-tools">-->
+            <!--<span>Settings</span>-->
+        <!--</h2>-->
+    <!--</md-toolbar>-->
+
+    <!--<md-tabs md-stretch-tabs md-selected="selectedIndex">-->
+        <!--&lt;!&ndash;<md-tab md-on-select="$state.transitionTo(home.management.tab1, params1)"><md-tab-label>Label1</md-tab-label></md-tab>&ndash;&gt;-->
+        <!--&lt;!&ndash;<md-tab ui-sref="home.management.tab1" label="tab1"></md-tab>&ndash;&gt;-->
+        <!--<md-tab>-->
+            <!--<md-tab-label><span ui-sref="home.management.tab1">tab1</span></md-tab-label>-->
+        <!--</md-tab>-->
+        <!--<md-tab>-->
+            <!--<md-tab-label><span ui-sref="home.management.tab2">tab2</span></md-tab-label>-->
+        <!--</md-tab>-->
+        <!--<md-tab>-->
+            <!--<md-tab-label><span ui-sref="home.management.tab3">tab3</span></md-tab-label>-->
+        <!--</md-tab>-->
+    <!--</md-tabs>-->
+
+    <!--<md-tabs>-->
+        <!--<md-tab md-on-select="transitionTo('home.management.tab1')">-->
+            <!--<md-tab-label>Tab1</md-tab-label>-->
+        <!--</md-tab>-->
+        <!--<md-tab md-on-select="transitionTo('home.management.tab2')">-->
+            <!--<md-tab-label>Tab2</md-tab-label>-->
+        <!--</md-tab>-->
+        <!--<md-tab md-on-select="transitionTo('home.management.tab3')">-->
+            <!--<md-tab-label>Tab3</md-tab-label>-->
+        <!--</md-tab>-->
+    <!--</md-tabs>-->
+
+    <md-tabs md-selected="vm.getSelectedIndex()">
+        <md-tab ng-repeat="tab in vm.tabs">
+            <md-tab-label>{{tab}}</md-tab-label>
+        </md-tab>
+    </md-tabs>
+    <div id="mytabcontent" ui-view="mgmttab" flex> </div>
+</div>
