@@ -5,7 +5,7 @@
     angular.module('uiplatform')
         .service('settingsService', settingsService);
 
-    function settingsService () {
+    function settingsService ($log) {
         var vm = this;
         //
         var GROUP = 'group';
@@ -33,7 +33,19 @@
         vm.displayTabs = function (typeName) {
             return vm.enableTabs[typeName];
         }
-    }
 
+        vm.selectedTabIndex = 0;
+
+        vm.getTabIndex = function(selectedTabName){
+            var tabs = vm.enableTabs['group'];
+            $log.log(tabs);
+            for ( var i = 0; i < tabs.length; i++ ){
+                if ( selectedTabName === tabs[i]){
+                    vm.selectedTabIndex = i;
+                    return i;
+                }
+            }
+        }
+    }
 })();
 

@@ -46,7 +46,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/view1.html',
                         controller: 'Tab1Controller as vm'
                     }
-                }
+                },
             })
             .state('home.management.user', {
                 url: '/tab2',
@@ -55,7 +55,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/view2.html',
                         controller: 'Tab2Controller as vm'
                     }
-                }
+                },
             })
             .state('home.management.role', {
                 url: '/tab3',
@@ -64,7 +64,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/view3.html',
                         controller: 'Tab3Controller as vm'
                     }
-                }
+                },
             })
 
         $urlRouterProvider.otherwise('/');

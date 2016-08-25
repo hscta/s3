@@ -9,13 +9,10 @@
         .module('uiplatform')
         .controller('Tab1Controller', Tab1Controller);
 
-    function Tab1Controller($scope, $rootScope, $log, $state) {
+    function Tab1Controller($scope, $rootScope, $log, $state,$stateParams) {
 
         $log.log('Tab1Controller');
         var vm = this;
-
-        // $log.log('state.name = ');
-        // $log.log($state);
     }
 })();
 

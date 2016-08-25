@@ -36,12 +36,10 @@
         <!--</md-tab>-->
     <!--</md-tabs>-->
 
-    <md-tabs>
+    <md-tabs md-selected="vm.getSelectedIndex()">
         <md-tab ng-repeat="tab in vm.tabs">
             <md-tab-label>{{tab}}</md-tab-label>
         </md-tab>
     </md-tabs>
-
     <div id="mytabcontent" ui-view="mgmttab" flex> </div>
-
 </div>

@@ -99,8 +99,13 @@
             } else {
                 tabState = item.info.ui_asset_type;
             }
+
+            var tabStateIndex = settingsService.getTabIndex(tabState);
+
             var pageState = 'home.management.' + tabState;
-            $state.go(pageState, item.info);
+           // $state.go(pageState, item.info);
+            $state.go(pageState, {'index':tabStateIndex});
+            var selectedIndex = 2;
         }
 
 

@@ -10,7 +10,7 @@
         .controller('Tab2Controller', Tab2Controller);
 
     function Tab2Controller($scope, $rootScope, $log, tab2Service, $state, $location,
-                            intellicarAPI, $mdExpansionPanel) {
+                            intellicarAPI, $mdExpansionPanel, $stateParams) {
 
         $log.log('Tab2Controller');
         var vm = this;
@@ -55,11 +55,9 @@
                 instance.expand();
             });
 
-
         }
 
         $scope.$on('test', vm.test);
-
     }
 })();
 
