@@ -39,7 +39,7 @@
     function managementRouter($stateProvider, $urlRouterProvider) {
         $stateProvider
 
-            .state('home.management.tab1', {
+            .state('home.management.group', {
                 url: '/tab1',
                 views: {
                     'mgmttab@home.management': {
@@ -48,7 +48,7 @@
                     }
                 }
             })
-            .state('home.management.tab2', {
+            .state('home.management.user', {
                 url: '/tab2',
                 views: {
                     'mgmttab@home.management': {
@@ -57,7 +57,7 @@
                     }
                 }
             })
-            .state('home.management.tab3', {
+            .state('home.management.role', {
                 url: '/tab3',
                 views: {
                     'mgmttab@home.management': {

@@ -9,7 +9,8 @@
         .controller('LeftNavManagementController', LeftNavManagementController)
 
     function LeftNavManagementController($scope, $rootScope, $log, intellicarAPI,
-                                         leftNavManagementService, $state, $filter) {
+                                         leftNavManagementService, $state, $filter,
+                                         settingsService) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
@@ -91,7 +92,15 @@
 
         vm.test = function (item) {
             $log.log(item);
-            $rootScope.$broadcast('test', {'info':item});
+            var tabState = "group";
+            //$rootScope.$broadcast('test', {'info':item});
+            if(item.id in settingsService.enableTabs) {
+                tabState = item.id;
+            } else {
+                tabState = item.info.ui_asset_type;
+            }
+            var pageState = 'home.management.' + tabState;
+            $state.go(pageState, item.info);
         }
 
 

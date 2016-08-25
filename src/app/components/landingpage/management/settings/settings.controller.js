@@ -15,8 +15,8 @@
         // $log.log('state.name = ');
         // $log.log($state);
 
-        $log.log(settingsService.enableTabs['group'])
-        vm.tabs = settingsService.displayTabs('group');
+       //$log.log(settingsService.enableTabs['group'])
+       vm.tabs = settingsService.displayTabs('group');
     }
 })();
 

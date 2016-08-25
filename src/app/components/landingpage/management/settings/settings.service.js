@@ -8,12 +8,12 @@
     function settingsService () {
         var vm = this;
         //
-        var GROUPS = 'groups';
-        var USERS = 'users';
-        var ROLES = 'roles';
-        var VEHICLES = 'vehicles';
-        var DEVICES = 'devices';
-        var REPORTS = 'reports';
+        var GROUP = 'group';
+        var USER = 'user';
+        var ROLE = 'role';
+        var VEHICLE = 'vehicle';
+        var DEVICE = 'device';
+        var REPORT = 'report';
 
         vm.displayName = function(asseType) {
             // if(assetType == 'group' || assetType == 'groups')
@@ -22,16 +22,16 @@
         }
 
         vm.enableTabs =  {
-            group: [GROUPS, USERS, ROLES, VEHICLES, DEVICES],
-            user: [USERS],
-            role: [ROLES],
-            vehicle: [VEHICLES],
-            device: [DEVICES],
-            report:[REPORTS]
+            group: [GROUP, USER, ROLE, VEHICLE, DEVICE],
+            user: [USER],
+            role: [ROLE],
+            vehicle: [VEHICLE],
+            device: [DEVICE],
+            report:[REPORT]
         };
 
-        vm.displayTabs = function (type_name) {
-            return vm.enableTabs[type_name];
+        vm.displayTabs = function (typeName) {
+            return vm.enableTabs[typeName];
         }
     }
 
