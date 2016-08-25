@@ -17,18 +17,15 @@
                 $log.log(resp);
             };
 
+
             vm.handleFailure = function(resp) {
                 $log.log("handleFailure ");
                 $log.log(resp);
                 return $q.reject(resp);
             };
 
-            vm.getMyVehicleTree = function(body) {
-                return intellicarAPI.userService.getMyVehicleTree(body)
-                    .then(vm.listeners['getMyVehicleTree'], vm.handleFailure);
-            };
 
-            vm.getTreeMyVehicles = function(body) {
+            vm.getDashboardTree = function(body) {
                 return intellicarAPI.treeDataService.getDashboardTree(body);
             };
 

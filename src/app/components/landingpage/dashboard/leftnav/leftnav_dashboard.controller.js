@@ -39,7 +39,7 @@
 
 
         vm.initialize = function () {
-            leftNavDashboardService.getTreeMyVehicles({})
+            leftNavDashboardService.getDashboardTree({})
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 

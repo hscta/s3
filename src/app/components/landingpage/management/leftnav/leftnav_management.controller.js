@@ -85,7 +85,7 @@
 
 
         vm.initialize = function () {
-            leftNavManagementService.getTreeMyVehicles({})
+            leftNavManagementService.getManagementTree({})
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 

@@ -26,9 +26,9 @@
             };
 
 
-            vm.getTreeMyVehicles = function (body) {
+            vm.getManagementTree = function (body) {
                 return intellicarAPI.treeDataService.getManagementTree(body);
-                //body.group = {grouppath: '/1/1', recursive: '0'};
+                    //body.group = {grouppath: '/1/1', recursive: '0'};
                 //return intellicarAPI.userService.getMyDirectAssetsMap(body);
             };
 
