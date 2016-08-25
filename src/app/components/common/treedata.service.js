@@ -232,8 +232,9 @@
                             assetType = {
                                 id: resultNode.info.ui_asset_type,
                                 title: resultNode.info.ui_asset_type,
-                                info: {name: resultNode.info.ui_asset_type + 's'},
-                                ui_asset_type: 'asset_type',
+                                //info: {name: resultNode.info.ui_asset_type},
+                                info: gtNode.info,
+                                ui_asset_type: 'assettype',
                                 items: []
                             };
                             // assetType.id = resultNode.info.ui_asset_type;
