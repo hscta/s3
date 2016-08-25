@@ -24,7 +24,7 @@
             //     function(event, toState, toParams, fromState, fromParams){
             //
             //
-            //         if($state.current.name == 'tab2') {
+            //         if($state.current.name == 'group') {
             //             $rootScope.tab = { selected : 1 }
             //         } else {
             //             $rootScope.tab = { selected : 0 }
@@ -39,30 +39,48 @@
     function managementRouter($stateProvider, $urlRouterProvider) {
         $stateProvider
 
-            .state('home.management.group', {
-                url: '/tab1',
+            .state('home.management.vehicle', {
+                url: '/vehicle',
                 views: {
                     'mgmttab@home.management': {
-                        templateUrl: 'app/components/landingpage/management/settings/view1.html',
-                        controller: 'Tab1Controller as vm'
+                        templateUrl: 'app/components/landingpage/management/settings/vehicle_mgmt.html',
+                        controller: 'VehicleMgmtController as vm'
+                    }
+                }
+            })
+            .state('home.management.group', {
+                url: '/group',
+                views: {
+                    'mgmttab@home.management': {
+                        templateUrl: 'app/components/landingpage/management/settings/group_mgmt.html',
+                        controller: 'GroupMgmtController as vm'
                     }
                 }
             })
             .state('home.management.user', {
-                url: '/tab2',
+                url: '/user',
                 views: {
                     'mgmttab@home.management': {
-                        templateUrl: 'app/components/landingpage/management/settings/view2.html',
-                        controller: 'Tab2Controller as vm'
+                        templateUrl: 'app/components/landingpage/management/settings/user_mgmt.html',
+                        controller: 'UserMgmtController as vm'
                     }
                 }
             })
             .state('home.management.role', {
-                url: '/tab3',
+                url: '/role',
                 views: {
                     'mgmttab@home.management': {
-                        templateUrl: 'app/components/landingpage/management/settings/view3.html',
-                        controller: 'Tab3Controller as vm'
+                        templateUrl: 'app/components/landingpage/management/settings/role_mgmt.html',
+                        controller: 'RoleMgmtController as vm'
+                    }
+                }
+            })
+            .state('home.management.device', {
+                url: '/device',
+                views: {
+                    'mgmttab@home.management': {
+                        templateUrl: 'app/components/landingpage/management/settings/device_mgmt.html',
+                        controller: 'DeviceMgmtController as vm'
                     }
                 }
             })

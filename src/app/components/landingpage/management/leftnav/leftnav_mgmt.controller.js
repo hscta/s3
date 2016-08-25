@@ -91,10 +91,11 @@
         };
 
         vm.test = function (item) {
-            $log.log(item);
+            //$log.log("clicked item");
+            //$log.log(item);
             var tabState = "group";
             //$rootScope.$broadcast('test', {'info':item});
-            if(item.id in settingsService.enableTabs) {
+            if(settingsService.tabs.indexOf(item.id) != -1) {
                 tabState = item.id;
             } else {
                 tabState = item.info.ui_asset_type;

@@ -7,35 +7,35 @@
 
     angular
         .module('uiplatform')
-        .controller('Tab2Controller', Tab2Controller);
+        .controller('GroupMgmtController', GroupMgmtController);
 
-    function Tab2Controller($scope, $rootScope, $log, tab2Service, $state, $location,
+    function GroupMgmtController($scope, $rootScope, $log, groupService, $state, $location,
                             intellicarAPI, $mdExpansionPanel) {
 
-        $log.log('Tab2Controller');
+        $log.log('GroupMgmtController');
         var vm = this;
 
         // $log.log('state.name = ');
         // $log.log($state);
 
         vm.handleMyVehicles = function(data) {
-            $log.log("Tab2Controller handleMyVehicles");
+            $log.log("GroupMgmtController handleMyVehicles");
             $log.log(data);
 
             vm.data = data;
         };
 
         vm.handleMyVehiclesFailure = function(data) {
-            $log.log("Tab2Controller handleMyVehiclesFailure");
+            $log.log("GroupMgmtController handleMyVehiclesFailure");
         };
 
         vm.onGroupClick = function() {
-            tab2Service.getMyVehicles({group:{grouppath: '/1/1'}})
+            groupService.getMyVehicles({group:{grouppath: '/1/1'}})
                 .then(vm.handleMyVehicles, vm.handleMyVehiclesFailure);
 
         }
 
-        vm.onGroupClick();
+        //vm.onGroupClick();
 
         vm.toggle_on_panel = function (myfunc) {
             $log.log('click event');
@@ -51,7 +51,7 @@
             // call $anchorScroll()
            // anchorSmoothScrollService.scrollTo('sss');
             intellicarAPI.anchorScrollService.scrollTo('sss');
-            $mdExpansionPanel().waitFor('panell').then(function (instance) {
+            $mdExpansionPanel().waitFor('panel').then(function (instance) {
                 instance.expand();
             });
 

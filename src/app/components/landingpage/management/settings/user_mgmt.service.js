@@ -6,30 +6,30 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('tab2Service', tab2Service);
+        .service('groupService', groupService);
 
-    function tab2Service($rootScope, $log, $q, intellicarAPI) {
+    function groupService($rootScope, $log, $q, intellicarAPI) {
         var vm = this;
-        $log.log("tab2Service");
+        $log.log("groupService");
 
         vm.handleResponse = function (resp) {
-            $log.log("tab2Service handleResponse");
+            $log.log("groupService handleResponse");
             return $q.resolve(resp)
         };
 
         vm.handleFailure = function (resp) {
-            $log.log("tab2Service handleFailure");
+            $log.log("groupService handleFailure");
             return $q.reject(resp);
         };
 
         vm.handleMyVehicles = function(data) {
-            $log.log("tab2Service handleMyVehicles");
+            $log.log("groupService handleMyVehicles");
             //$log.log(data);
             return $q.resolve(data);
         };
 
         vm.handleMyVehiclesFailure = function(data) {
-            $log.log("tab2Service handleMyVehiclesFailure");
+            $log.log("groupService handleMyVehiclesFailure");
             return $q.reject(data);
         };
 

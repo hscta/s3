@@ -7,11 +7,11 @@
 
     angular
         .module('uiplatform')
-        .controller('Tab1Controller', Tab1Controller);
+        .controller('VehicleMgmtController', VehicleMgmtController);
 
-    function Tab1Controller($scope, $rootScope, $log, $state) {
+    function VehicleMgmtController($scope, $rootScope, $log, $state) {
 
-        $log.log('Tab1Controller');
+        $log.log('VehicleMgmtController');
         var vm = this;
 
         // $log.log('state.name = ');

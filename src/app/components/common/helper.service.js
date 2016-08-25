@@ -15,7 +15,7 @@
 
 
         vm.mergeVehiclePermissions = function (resp) {
-            $log.log("vm.mergeVehiclePermissions");
+            //$log.log("vm.mergeVehiclePermissions");
             var data = resp.data.data;
             for (var idx in data.vehicles) {
                 var vehicle = data.vehicles[idx];
@@ -34,7 +34,7 @@
 
 
         vm.mergeGroupPermissions = function (resp) {
-            $log.log("vm.mergeGroupPermissions");
+            //$log.log("vm.mergeGroupPermissions");
             var data = resp.data.data;
             for (var idx in data.groups) {
                 var group = data.groups[idx];
@@ -52,7 +52,7 @@
         };
 
         vm.mergeUserPermissions = function (resp) {
-            $log.log("vm.mergeUserPermissions");
+            //$log.log("vm.mergeUserPermissions");
             var data = resp.data.data;
             for (var idx in data.users) {
                 var user = data.users[idx];
@@ -71,7 +71,7 @@
 
 
         vm.mergeRolePermissions = function (resp) {
-            $log.log("vm.mergeRolePermissions");
+            //$log.log("vm.mergeRolePermissions");
             var data = resp.data.data;
             for (var idx in data.roles) {
                 var role = data.roles[idx];
@@ -90,7 +90,7 @@
 
 
         vm.mergeDevicePermissions = function (resp) {
-            $log.log("vm.mergeDevicePermissions");
+            //$log.log("vm.mergeDevicePermissions");
             var data = resp.data.data;
             for (var idx in data.devices) {
                 var device = data.devices[idx];

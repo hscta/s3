@@ -8,11 +8,11 @@
 
     angular
         .module('uiplatform')
-        .controller('Tab3Controller', Tab3Controller);
+        .controller('DeviceMgmtController', DeviceMgmtController);
 
-    function Tab3Controller($scope, $rootScope, $log, $state) {
+    function DeviceMgmtController($scope, $rootScope, $log, $state) {
 
-        $log.log('Tab3Controller');
+        $log.log('DeviceMgmtController');
         var vm = this;
 
         // $log.log('state.name = ');

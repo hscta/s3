@@ -175,7 +175,7 @@
 
 
         vm.buildManagementTree = function (genericTree, key) {
-            $log.log("buildManagementTree " + key);
+            //$log.log("buildManagementTree " + key);
 
             if (genericTree === null)
                 return null;
@@ -206,9 +206,9 @@
             if (gtNode.children !== null) {
                 for (var idx in gtNode.children) {
                     child = gtNode.children[idx];
-                    $log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
+                    //$log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
                     resultNode = vm.buildManagementTree(genericTree, vm.getAssetPath(child));
-                    $log.log(resultNode);
+                    //$log.log(resultNode);
 
                     // if (resultNode !== null) {
                     //     utNode.items.push(resultNode);
@@ -219,30 +219,25 @@
                         var assetTypeExists = false;
                         for(var uidx in utNode.items) {
                             var assetType = utNode.items[uidx];
-                            $log.log(assetType.title + " == " + resultNode.info.ui_asset_type);
+                            //$log.log(assetType.title + " == " + resultNode.info.ui_asset_type);
                             if (assetType.title == resultNode.info.ui_asset_type) {
-                                $log.log("assetTypeExists ");
+                                //$log.log("assetTypeExists ");
                                 assetTypeExists = true;
                                 break;
                             }
                         }
 
                         if(!assetTypeExists) {
-                            $log.log("assetType does not Exists");
+                            //$log.log("assetType does not Exists");
                             assetType = {
                                 id: resultNode.info.ui_asset_type,
                                 title: resultNode.info.ui_asset_type,
-                                //info: {name: resultNode.info.ui_asset_type},
                                 info: gtNode.info,
                                 ui_asset_type: 'assettype',
                                 items: []
                             };
-                            // assetType.id = resultNode.info.ui_asset_type;
-                            // assetType.title = resultNode.info.ui_asset_type;
-                            // assetType.info = {}
-                            // assetType.items = [];
                             utNode.items.push(assetType);
-                            $log.log(assetType);
+                            //$log.log(assetType);
                         }
                         assetType.items.push(resultNode);
                     }
@@ -268,8 +263,8 @@
 
 
         vm.createGenericTree = function (resp) {
-            $log.log("createGenericTree");
-            $log.log(resp);
+            //$log.log("createGenericTree");
+            //$log.log(resp);
 
 
             var groups = resp[0];
@@ -329,7 +324,7 @@
                 }
             }
 
-            $log.log(assetTree);
+            //$log.log(assetTree);
             return $q.resolve(assetTree);
         };
 

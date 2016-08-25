@@ -14,31 +14,31 @@
 
 
         vm.getMyGroups = function(body) {
-            $log.log("getMyGroups");
+            // $log.log("getMyGroups");
             return requestService.firePost('/user/mygroups', body);
         };
 
 
         vm.getMyVehicles = function (body) {
-            $log.log("getMyVehicles");
+            // $log.log("getMyVehicles");
             return requestService.firePost('/user/myvehicles', body);
         };
 
 
         vm.getMyUsers = function (body) {
-            $log.log("getMyUsers");
+            // $log.log("getMyUsers");
             return requestService.firePost('/user/myusers', body);
         };
 
 
         vm.getMyRoles = function (body) {
-            $log.log("getMyRoles");
+            // $log.log("getMyRoles");
             return requestService.firePost('/user/myroles', body);
         };
 
 
         vm.getMyDevices = function (body) {
-            $log.log("getMyDevices");
+            // $log.log("getMyDevices");
             return requestService.firePost('/user/mydevices', body);
         };
 
@@ -56,7 +56,7 @@
 
 
         vm.getMyGroupsMap = function(body) {
-            $log.log("getMyGroupsMap");
+            // $log.log("getMyGroupsMap");
             return vm.getMyGroups(body)
                 .then(helperService.mergeGroupPermissions, vm.handleFailure)
                 .then(helperService.makeGroupMap, vm.handleFailure)
@@ -65,7 +65,7 @@
 
 
         vm.getMyVehiclesMap = function (body) {
-            $log.log("getMyVehiclesMap");
+            // $log.log("getMyVehiclesMap");
             return vm.getMyVehicles(body)
                 .then(helperService.mergeVehiclePermissions, vm.handleFailure)
                 .then(helperService.makeVehicleMap, vm.handleFailure)
@@ -74,7 +74,7 @@
 
 
         vm.getMyUsersMap = function (body) {
-            $log.log("getMyUsersMap");
+            // $log.log("getMyUsersMap");
             return vm.getMyUsers(body)
                 .then(helperService.mergeUserPermissions, vm.handleFailure)
                 .then(helperService.makeUserMap, vm.handleFailure)
@@ -84,7 +84,7 @@
 
 
         vm.getMyRolesMap = function (body) {
-            $log.log("getMyRolesMap");
+            // $log.log("getMyRolesMap");
             return vm.getMyRoles(body)
                 .then(helperService.mergeRolePermissions, vm.handleFailure)
                 .then(helperService.makeRoleMap, vm.handleFailure)
@@ -93,7 +93,7 @@
 
 
         vm.getMyDevicesMap = function (body) {
-            $log.log("getMyDevicesMap");
+            // $log.log("getMyDevicesMap");
             return vm.getMyDevices(body)
                 .then(helperService.mergeDevicePermissions, vm.handleFailure)
                 .then(helperService.makeDeviceMap, vm.handleFailure)
@@ -102,14 +102,14 @@
 
 
         vm.handleDirectAssetResponse = function(resp) {
-            $log.log("handleDirectAssetResponse");
+            // $log.log("handleDirectAssetResponse");
             $log.log(resp);
             return $q.resolve(resp);
         };
 
 
         vm.getMyDirectAssetsMap = function (body) {
-            $log.log("getMyDirectAssetsMap");
+            // $log.log("getMyDirectAssetsMap");
             var gPromise = vm.getMyGroupsMap(body);
             var uPromise = vm.getMyUsersMap(body);
             var rPromise = vm.getMyRolesMap(body);

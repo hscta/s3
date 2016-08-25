@@ -75,7 +75,7 @@
               url: 'home/management',
               views: {
                   'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/management/leftnav/leftnav_management.html',
+                      templateUrl: 'app/components/landingpage/management/leftnav/leftnav_mgmt.html',
                       controller: 'LeftNavManagementController as vm'
                   },
                   'lefttoolbar@home': {
@@ -83,7 +83,7 @@
                       controller: 'LeftToolbarDashboardController as vm'
                   },
                   'centermain@home': {
-                      templateUrl: 'app/components/landingpage/management/settings/settings.html',
+                      templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
                       controller: 'SettingsController as vm'
                   }
               }
