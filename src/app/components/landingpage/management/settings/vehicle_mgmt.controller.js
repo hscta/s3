@@ -16,7 +16,11 @@
 
         // $log.log('state.name = ');
         // $log.log($state);
+
+
+        vm.vehicle_details = [{'name':'maruti'}, {'name':'Suzuki'},{'name':'Yamaha'}]
     }
+
 })();
 
 
