@@ -7,7 +7,8 @@
     angular
         .module('uiplatform')
         .controller('SettingsController', SettingsController);
-    function SettingsController($scope, $rootScope, $log, $state, settingsService) {
+    function SettingsController($scope, $rootScope, $log, $state,
+                                settingsService, intellicarAPI) {
 
         $log.log('SettingsController');
         var vm = this;
@@ -19,29 +20,20 @@
         };
 
 
-        vm.getLeafState = function (absoluteState) {
-            if (absoluteState === null)
-                return null;
-
-            var startIndex = absoluteState.lastIndexOf('.');
-            if (startIndex == -1) {
-                return absoluteState;
-            }
-
-            return absoluteState.substring(startIndex + 1);
-        };
-
-
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
             //$log.log("from state = " + fromState.name);
             //$log.log("to state = " + toState.name);
-            var leafState = vm.getLeafState(toState.name);
-            //$log.log(leafState);
-            for (var idx in vm.tabs) {
-                if (leafState == vm.tabs[idx]) {
-                    //$log.log("selectedTab = " + vm.selectedTab);
-                    vm.selectedTab = idx;
-                    break;
+            var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
+            var parentState = intellicarAPI.stateService.getStateTree(toState.name).parent;
+
+            if(parentState == intellicarAPI.stateService.STATE_HOME_MANAGEMENT) {
+                //$log.log(leafState);
+                for (var idx in vm.tabs) {
+                    if (leafState == vm.tabs[idx]) {
+                        //$log.log("selectedTab = " + vm.selectedTab);
+                        vm.selectedTab = idx;
+                        break;
+                    }
                 }
             }
         });
