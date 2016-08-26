@@ -38,13 +38,13 @@
             <md-icon md-font-library="material-icons" ng-show="collapsed">arrow_drop_down</md-icon>
             <md-icon md-font-library="material-icons" ng-show="!collapsed">play_arrow</md-icon>
         </a>
-        <span style="padding-left:28px;" ng-hide="item.items.length > 0"></span>
-        <md-checkbox aria-label="Checkbox 1" ng-checked="'checked'===item.checkStatus"
-                     md-indeterminate="'partlyChecked'===item.checkStatus"
-                     ng-click="vm.toggleCheck(item)"
-                     data-nodrag>
-        </md-checkbox>
-        <span ng-click="vm.test(item)">{{item.title}}</span ><br/>
+        <!--<span style="padding-left:28px;" ng-hide="item.items.length > 0"></span>-->
+        <!--<md-checkbox aria-label="Checkbox 1" ng-checked="'checked'===item.checkStatus"-->
+                     <!--md-indeterminate="'partlyChecked'=== item.checkStatus"-->
+                     <!--ng-click="vm.toggleCheck(item)"-->
+                     <!--data-nodrag>-->
+        <!--</md-checkbox>-->
+        <span ng-click="vm.test(item);toggle(this);" style="cursor:pointer;">{{item.title}}</span ><br/>
     </div>
     <ol ui-tree-nodes ng-model="item.items" ng-show="collapsed">
         <li ng-repeat="item in item.items" ui-tree-node

@@ -91,8 +91,6 @@
         };
 
         vm.test = function (item) {
-            //$log.log("clicked item");
-            //$log.log(item);
             var tabState = "group";
             //$rootScope.$broadcast('test', {'info':item});
             if(settingsService.tabs.indexOf(item.id) != -1) {
