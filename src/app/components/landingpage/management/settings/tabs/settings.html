@@ -37,7 +37,7 @@
     <!--</md-tabs>-->
 
     <md-tabs md-selected="vm.selectedTab">
-        <md-tab ng-click="$state.go(vm.getTabState(assetType))" ng-repeat="assetType in vm.tabs">
+        <md-tab ng-click="transitionTo(vm.getTabState(assetType))" ng-repeat="assetType in vm.tabs">
             <md-tab-label>{{assetType}}</md-tab-label>
         </md-tab>
     </md-tabs>

@@ -10,11 +10,11 @@
         .config(managementRouter)
         .run(function($rootScope, $log, $state) {
 
-            // $rootScope.transitionTo = function(state, params) {
-            //
-            //     $state.transitionTo(state, params, { location: true, inherit: true,
-            //         relative: $state.$current, notify: true });
-            // }
+            $rootScope.transitionTo = function(state, params) {
+
+                $state.transitionTo(state, params, { location: true, inherit: true,
+                    relative: $state.$current, notify: true });
+            }
 
             // $rootScope.checkState = function (state) {
             //     return $state.current.name == state ? true : false;
@@ -42,8 +42,19 @@
             .state('home.management.vehicle', {
                 url: '/vehicle',
                 views: {
+                    '': {
+                        templateUrl: 'app/main/main.html',
+                        controller: 'MainController as vm'
+                    },
                     'mgmttab@home.management': {
                         templateUrl: 'app/components/landingpage/management/settings/vehicle_mgmt.html',
+                        resolve: {
+                            loadTimeData : function($stateParams, $log) {
+                                $log.log('gotcha');
+                                $log.log($stateParams);
+                                //return q.resolve($stateParams);
+                            }
+                        },
                         controller: 'VehicleMgmtController as vm'
                     }
                 }

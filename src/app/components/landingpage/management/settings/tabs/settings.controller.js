@@ -16,6 +16,8 @@
         vm.tabs = settingsService.tabs;
 
         vm.getTabState = function (assetType) {
+            //$log.log("my state");
+            $log.log(intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + assetType);
             return intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + assetType;
         };
 
