@@ -20,20 +20,18 @@
 
             .state('home.management.vehicle', {
                 url: '/vehicle',
+                params: {
+                    info : null
+                },
                 views: {
-                    '': {
-                        templateUrl: 'app/main/main.html',
-                        controller: 'MainController as vm'
-                    },
                     'mgmttab@home.management': {
                         templateUrl: 'app/components/landingpage/management/settings/vehicle_mgmt.html',
-                        resolve: {
-                            loadTimeData : function($stateParams, $log) {
-                                $log.log('gotcha');
-                                $log.log($stateParams);
-                                //return q.resolve($stateParams);
-                            }
-                        },
+                        // resolve: {
+                        //     startupData : function($stateParams, $log, startupService) {
+                        //         //$log.log($stateParams);
+                        //         return startupService.getData($stateParams.info);
+                        //     }
+                        // },
                         controller: 'VehicleMgmtController as vm'
                     }
                 }

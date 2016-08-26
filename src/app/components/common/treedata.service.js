@@ -188,10 +188,6 @@
             var gtNode = genericTree[key];
             gtNode.visited = true;
 
-            if(gtNode.info === null) {
-                gtNode.info = {name: 'My Group'};
-            }
-
             //$log.log(gtNode);
             var utNode = {};
             utNode.id = key;
@@ -277,16 +273,19 @@
                     var nodesInPath = vm.getNodesInPath(vm.getAssetPath(asset));
                     for (var nidx in nodesInPath) {
                         var nodePath = nodesInPath[nidx];
-                        if (!(nodePath in assetTree))
+                        if (!(nodePath in assetTree)) {
                             assetTree[nodePath] = {};
-
-                        if (assetTree[nodePath].info === undefined) {
                             assetTree[nodePath].info = null;
-                        }
-
-                        if (assetTree[nodePath].children === undefined) {
                             assetTree[nodePath].children = null;
                         }
+
+                        // if (assetTree[nodePath].info === undefined) {
+                        //     assetTree[nodePath].info = null;
+                        // }
+                        //
+                        // if (assetTree[nodePath].children === undefined) {
+                        //     assetTree[nodePath].children = null;
+                        // }
 
                         if (nodePath in groups) {
                             assetTree[nodePath].info = groups[nodePath];
@@ -295,11 +294,19 @@
                                 if (assetTree[nodesInPath[nidx - 1]].children === null) {
                                     assetTree[nodesInPath[nidx - 1]].children = {};
                                 }
+
+                                if (assetTree[nodesInPath[nidx - 1]].info === null) {
+                                    $log.log("my control 1111");
+                                    assetTree[nodesInPath[nidx - 1]].info = {
+                                        name: assetTree[nodePath].info.pname,
+                                        grouppath: assetTree[nodePath].info.pgrouppath
+                                    };
+                                }
+
                                 //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
                                 assetTree[nodesInPath[nidx - 1]].children[nodePath] = groups[nodePath];
                             }
                         }
-
                     }
                 }
                 //$log.log(assetTree);
@@ -320,6 +327,14 @@
                     if (assetTree[asset.pgrouppath].children === null) {
                         assetTree[asset.pgrouppath].children = {};
                     }
+
+                    if (assetTree[asset.pgrouppath].info === null) {
+                        assetTree[asset.pgrouppath].info = {
+                            name: asset.pname,
+                            grouppath: asset.pgrouppath
+                        };
+                    }
+
                     assetTree[asset.pgrouppath].children[vm.getAssetPath(asset)] = asset;
                 }
             }

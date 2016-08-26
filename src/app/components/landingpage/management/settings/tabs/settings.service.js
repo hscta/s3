@@ -1,11 +1,11 @@
-(function() {
+(function () {
     'use strict';
 
 
     angular.module('uiplatform')
         .service('settingsService', settingsService);
 
-    function settingsService ($log) {
+    function settingsService($log) {
         var vm = this;
 
         var VEHICLE = 'vehicle';
@@ -14,18 +14,23 @@
         var ROLE = 'role';
         var DEVICE = 'device';
 
-        vm.tabs = [VEHICLE, GROUP, USER, ROLE , DEVICE];
+        vm.tabs = [VEHICLE, GROUP, USER, ROLE, DEVICE];
 
-        vm.getTabIndex = function(selectedTabName){
-            $log.log(vm.tabs);
-            for ( var idx in vm.tabs){
-                if ( selectedTabName === vm.tabs[idx]){
-                    vm.selectedTabIndex = idx;
-                    return idx;
-                }
-            }
+        // vm.getTabIndex = function (selectedTabName) {
+        //     var tabIndex = vm.tabs.indexOf(selectedTabName);
+        //     if (tabIndex == -1)
+        //         return 0;
+        //
+        //     vm.selectedTab = tabIndex;
+        //     return tabIndex;
+        // }
+
+
+        vm.isValidAssetType = function (assetType) {
+            if (vm.tabs.indexOf(assetType) == -1)
+                return false;
+            return true;
         }
-
     }
 
 })();

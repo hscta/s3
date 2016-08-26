@@ -37,10 +37,10 @@
         vm.addAllListeners = function () {
         };
 
-        vm.buttonClick = function (item) {
-            $log.log("buttonClick" + item);
-            $state.transitionTo('home.management.tab' + item, {some: "data"});
-        };
+        // vm.buttonClick = function (item) {
+        //     $log.log("buttonClick" + item);
+        //     $state.transitionTo('home.management.vehicle' + item, {some: "data"});
+        // };
 
         vm.toggleCheck = function (item) {
             $log.log("checkStatus = " + item.checkStatus);
@@ -99,10 +99,10 @@
                 tabState = item.info.ui_asset_type;
             }
 
-            var tabStateIndex = settingsService.getTabIndex(tabState);
+            var pageState = intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + tabState;
 
-            var pageState = 'home.management.' + tabState;
-            $state.go(pageState, item.info);
+            //$log.log(item.info);
+            $state.go(pageState, item);
         }
 
         vm.expand_tree = function () {

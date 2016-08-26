@@ -85,6 +85,16 @@
                   'centermain@home': {
                       templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
                       controller: 'SettingsController as vm'
+                  },
+                  'mgmttab@home.management': {
+                      templateUrl: 'app/components/landingpage/management/settings/vehicle_mgmt.html',
+                      // resolve: {
+                      //     startupData : function($stateParams, $log, startupService) {
+                      //         //$log.log($stateParams);
+                      //         return startupService.getData($stateParams.info);
+                      //     }
+                      // },
+                      controller: 'VehicleMgmtController as vm'
                   }
               }
           })
