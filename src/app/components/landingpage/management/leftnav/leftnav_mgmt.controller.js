@@ -105,6 +105,12 @@
             $state.go(pageState, item.info);
         }
 
+        vm.expand_tree = function () {
+            $log.log('expand');
+            $scope.$broadcast('angular-ui-tree:collapse-all');
+
+        }
+
 
         vm.addAllListeners();
         vm.initialize();
