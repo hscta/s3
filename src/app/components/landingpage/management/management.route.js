@@ -8,30 +8,9 @@
     angular
         .module('uiplatform')
         .config(managementRouter)
-        .run(function($rootScope, $log, $state) {
-
-            $rootScope.transitionTo = function(state, params) {
-
-                $state.transitionTo(state, params, { location: true, inherit: true,
-                    relative: $state.$current, notify: true });
-            }
-
-            // $rootScope.checkState = function (state) {
-            //     return $state.current.name == state ? true : false;
-            // }
-
-            // $rootScope.$on('$stateChangeSuccess',
-            //     function(event, toState, toParams, fromState, fromParams){
-            //
-            //
-            //         if($state.current.name == 'group') {
-            //             $rootScope.tab = { selected : 1 }
-            //         } else {
-            //             $rootScope.tab = { selected : 0 }
-            //         }
-            //     })
-
-            //$log.log($rootScope.tab);
+        .run(function($rootScope, $log, $state, $stateParams) {
+            $rootScope.$state = $state;
+            $rootScope.$stateParams = $stateParams;
         });
 
 
@@ -42,8 +21,19 @@
             .state('home.management.vehicle', {
                 url: '/vehicle',
                 views: {
+                    '': {
+                        templateUrl: 'app/main/main.html',
+                        controller: 'MainController as vm'
+                    },
                     'mgmttab@home.management': {
                         templateUrl: 'app/components/landingpage/management/settings/vehicle_mgmt.html',
+                        resolve: {
+                            loadTimeData : function($stateParams, $log) {
+                                $log.log('gotcha');
+                                $log.log($stateParams);
+                                //return q.resolve($stateParams);
+                            }
+                        },
                         controller: 'VehicleMgmtController as vm'
                     }
                 }

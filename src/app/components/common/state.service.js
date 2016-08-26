@@ -8,9 +8,14 @@
         .factory('stateService', stateService);
 
     function stateService() {
+        var DOT = '.';
         var STATE_HOME = "home";
         var STATE_HOME_DASHBOARD = "home.dashboard";
-        var STATE_HOME_MANAGEMENT = "home.management"
+        var STATE_HOME_MANAGEMENT = "home.management";
+
+        var STATE_HOME_DOT = STATE_HOME + DOT;
+        var STATE_HOME_DASHBOARD_DOT = STATE_HOME_DASHBOARD + DOT;
+        var STATE_HOME_MANAGEMENT_DOT = STATE_HOME_MANAGEMENT + DOT;
 
 
         var getLeafState = function (absoluteState) {
@@ -87,6 +92,9 @@
             STATE_HOME : STATE_HOME,
             STATE_HOME_DASHBOARD : STATE_HOME_DASHBOARD,
             STATE_HOME_MANAGEMENT : STATE_HOME_MANAGEMENT,
+            STATE_HOME_DOT : STATE_HOME_DOT,
+            STATE_HOME_DASHBOARD_DOT : STATE_HOME_DASHBOARD_DOT,
+            STATE_HOME_MANAGEMENT_DOT : STATE_HOME_MANAGEMENT_DOT,
             getStateTree : getStateTree
         }
     }

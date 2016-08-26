@@ -16,7 +16,9 @@
         vm.tabs = settingsService.tabs;
 
         vm.getTabState = function (assetType) {
-            return "home.management." + assetType;
+            //$log.log("my state");
+            $log.log(intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + assetType);
+            return intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + assetType;
         };
 
 
@@ -24,16 +26,14 @@
             //$log.log("from state = " + fromState.name);
             //$log.log("to state = " + toState.name);
             var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
-            var parentState = intellicarAPI.stateService.getStateTree(toState.name).parent;
+            //var parentState = intellicarAPI.stateService.getStateTree(toState.name).parent;
 
-            if(parentState == intellicarAPI.stateService.STATE_HOME_MANAGEMENT) {
-                //$log.log(leafState);
-                for (var idx in vm.tabs) {
-                    if (leafState == vm.tabs[idx]) {
-                        //$log.log("selectedTab = " + vm.selectedTab);
-                        vm.selectedTab = idx;
-                        break;
-                    }
+            //$log.log(leafState);
+            for (var idx in vm.tabs) {
+                if (leafState == vm.tabs[idx]) {
+                    //$log.log("selectedTab = " + vm.selectedTab);
+                    vm.selectedTab = idx;
+                    break;
                 }
             }
         });
