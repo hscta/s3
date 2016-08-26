@@ -14,7 +14,7 @@
         var ROLE = 'role';
         var DEVICE = 'device';
 
-        vm.tabs = [VEHICLE, GROUP, USER, ROLE, DEVICE];
+        vm.tabs = [VEHICLE, GROUP, USER, ROLE , DEVICE];
 
         vm.getTabIndex = function(selectedTabName){
             $log.log(vm.tabs);

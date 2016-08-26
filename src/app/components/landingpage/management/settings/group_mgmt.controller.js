@@ -51,12 +51,10 @@
             // call $anchorScroll()
            // anchorSmoothScrollService.scrollTo('sss');
             intellicarAPI.anchorScrollService.scrollTo('sss');
-            $mdExpansionPanel().waitFor('panel').then(function (instance) {
+            $mdExpansionPanel().waitFor('panell').then(function (instance) {
                 instance.expand();
             });
-
-
-        }
+        };
 
         $scope.$on('test', vm.test);
 

@@ -10,11 +10,11 @@
         .config(managementRouter)
         .run(function($rootScope, $log, $state) {
 
-            $rootScope.transitionTo = function(state, params) {
-
-                $state.transitionTo(state, params, { location: true, inherit: true,
-                    relative: $state.$current, notify: true });
-            }
+            // $rootScope.transitionTo = function(state, params) {
+            //
+            //     $state.transitionTo(state, params, { location: true, inherit: true,
+            //         relative: $state.$current, notify: true });
+            // }
 
             // $rootScope.checkState = function (state) {
             //     return $state.current.name == state ? true : false;
