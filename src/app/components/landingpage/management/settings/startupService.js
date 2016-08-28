@@ -8,18 +8,8 @@
     angular.module('uiplatform')
         .service('startupService', startupService);
 
-    function startupService($rootScope, $log, $q, $state, intellicarAPI) {
+    function startupService($rootScope, $log, $q, $state, intellicarAPI, settingsService) {
         var vm = this;
         $log.log("startupService");
-
-        vm.getData = function(info) {
-            $log.log("startup info object");
-
-
-            $log.log(intellicarAPI.stateService.STATE_HOME);
-            $log.log(info);
-            //$log.log($state.current.name);
-            return intellicarAPI.stateService.getData(info, $state.current.name);
-        }
     }
 })();

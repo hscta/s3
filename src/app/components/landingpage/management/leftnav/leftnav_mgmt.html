@@ -42,6 +42,7 @@
                      <!--data-nodrag>-->
         <!--</md-checkbox>-->
         <span ng-click="vm.test(item);toggle(this);" style="cursor:pointer;">{{item.title}}</span ><br/>
+        <!--<span ui-sref="home.management.vehicle({id: item.info.vehicleid})" ng-click="toggle(this);" style="cursor:pointer;">{{item.title}}</span ><br/>-->
     </div>
     <ol ui-tree-nodes ng-model="item.items" ng-show="collapsed">
         <li ng-repeat="item in item.items" ui-tree-node

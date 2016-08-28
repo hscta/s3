@@ -96,7 +96,7 @@
 
 
         vm.getNodesInPath = function (path) {
-            if(path === undefined)
+            if(angular.isUndefined(path))
                 return [];
 
             var nodesInPath = [];
@@ -278,14 +278,6 @@
                             assetTree[nodePath].info = null;
                             assetTree[nodePath].children = null;
                         }
-
-                        // if (assetTree[nodePath].info === undefined) {
-                        //     assetTree[nodePath].info = null;
-                        // }
-                        //
-                        // if (assetTree[nodePath].children === undefined) {
-                        //     assetTree[nodePath].children = null;
-                        // }
 
                         if (nodePath in groups) {
                             assetTree[nodePath].info = groups[nodePath];

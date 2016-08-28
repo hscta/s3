@@ -111,12 +111,12 @@
         vm.getMyDirectAssetsMap = function (body) {
             $log.log("getMyDirectAssetsMap");
             var gPromise = vm.getMyGroupsMap(body);
+            var vPromise = vm.getMyVehiclesMap(body);
             var uPromise = vm.getMyUsersMap(body);
             var rPromise = vm.getMyRolesMap(body);
-            var vPromise = vm.getMyVehiclesMap(body);
             var dPromise = vm.getMyDevicesMap(body);
 
-            return $q.all([gPromise, uPromise, rPromise, vPromise, dPromise])
+            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise])
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };

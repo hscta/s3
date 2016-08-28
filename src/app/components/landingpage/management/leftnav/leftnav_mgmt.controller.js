@@ -25,7 +25,7 @@
 
         vm.getMyVehicles = function (data) {
             //$log.log("getMyVehicles");
-            $log.log(data);
+            //$log.log(data);
             vm.tree_data = data;
         };
 
@@ -90,19 +90,23 @@
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 
-        vm.test = function (item) {
-            var tabState = "group";
-            //$rootScope.$broadcast('test', {'info':item});
-            if(settingsService.tabs.indexOf(item.id) != -1) {
-                tabState = item.id;
-            } else {
-                tabState = item.info.ui_asset_type;
-            }
-
-            var pageState = intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + tabState;
-
-            //$log.log(item.info);
-            $state.go(pageState, item);
+        vm.test = function (asset) {
+            // var tab = "group";
+            // //$rootScope.$broadcast('test', {'info':asset});
+            // if(settingsService.tabs.indexOf(asset.id) != -1) {
+            //     tab = asset.id;
+            // } else {
+            //     tab = asset.info.ui_asset_type;
+            // }
+            //
+            // settingsService.setTabStateData(tab, asset);
+            //
+            // var tabState = intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + tab;
+            //
+            // //$log.log(asset.info);
+            // $state.go(tabState, asset);
+            //
+            settingsService.handleSelection(asset);
         }
 
         vm.expand_tree = function () {
