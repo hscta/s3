@@ -86,16 +86,17 @@
                       templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
                       controller: 'SettingsController as vm'
                   },
-                  'mgmttab@home.management': {
-                      templateUrl: 'app/components/landingpage/management/settings/vehicle_mgmt.html',
-                      // resolve: {
-                      //     startupData : function($stateParams, $log, startupService) {
-                      //         //$log.log($stateParams);
-                      //         return startupService.getData($stateParams.info);
-                      //     }
-                      // },
-                      controller: 'VehicleMgmtController as vm'
-                  }
+                  // 'mgmttab@home.management': {
+                  //     templateUrl: 'app/components/landingpage/management/settings/group/group_mgmt.html',
+                  //     resolve: {
+                  //         startupData : function($stateParams, $log, groupMgmtService, $state) {
+                  //             $log.log("toState " + $state.current.name);
+                  //             $log.log($stateParams);
+                  //             return groupMgmtService.getData($stateParams);
+                  //         }
+                  //     },
+                  //     controller: 'GroupMgmtController as vm'
+                  // }
               }
           })
           .state('home.reports', {

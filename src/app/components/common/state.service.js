@@ -8,13 +8,6 @@
         .factory('stateService', stateService);
 
     function stateService($log, groupService) {
-        var VEHICLE = 'vehicle';
-        var GROUP = 'group';
-        var USER = 'user';
-        var ROLE = 'role';
-        var DEVICE = 'device';
-
-
         var DOT = '.';
         var STATE_HOME = "home";
         var STATE_HOME_DASHBOARD = "home.dashboard";
@@ -96,16 +89,6 @@
         };
 
 
-        var getData = function(info, state) {
-            $log.log("stateService: getData");
-            if(info === undefined)
-                return;
-            if(info.ui_asset_type == GROUP) {
-                return groupService.getMyDirectAssetsMap({group: {grouppath: info.grouppath}});
-            }
-        };
-
-
         return {
             STATE_HOME : STATE_HOME,
             STATE_HOME_DASHBOARD : STATE_HOME_DASHBOARD,
@@ -113,9 +96,7 @@
             STATE_HOME_DOT : STATE_HOME_DOT,
             STATE_HOME_DASHBOARD_DOT : STATE_HOME_DASHBOARD_DOT,
             STATE_HOME_MANAGEMENT_DOT : STATE_HOME_MANAGEMENT_DOT,
-            getStateTree : getStateTree,
-            getData : getData,
-
+            getStateTree : getStateTree
         }
     }
 

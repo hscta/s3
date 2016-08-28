@@ -10,7 +10,9 @@
         .service('intellicarAPI', function($rootScope, $log, $q,
                                            authService, requestService,
                                            stateService, treeDataService,
-                                           userService, groupService,anchorSmoothScrollService) {
+                                           userService, groupService,
+                                           anchorSmoothScrollService,
+                                           constantFactory) {
             var vm = this;
             $log.log("intellicarAPI");
 
@@ -21,7 +23,8 @@
                 treeDataService: treeDataService,
                 userService : userService,
                 groupService: groupService,
-                anchorScrollService:anchorSmoothScrollService
+                anchorScrollService : anchorSmoothScrollService,
+                constantFactory : constantFactory
             }
         });
 })();

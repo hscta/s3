@@ -9,9 +9,12 @@
         .module('uiplatform')
         .controller('VehicleMgmtController', VehicleMgmtController);
 
-    function VehicleMgmtController($scope, $rootScope, $log, $state) {
+    function VehicleMgmtController($scope, $rootScope, $log, $state, startupData,
+                                   intellicarAPI, settingsService) {
         $log.log('VehicleMgmtController');
         var vm = this;
+        settingsService.setTab(intellicarAPI.constantFactory.VEHICLE);
+
 
         // $log.log('state.name = ');
         // $log.log($state);
@@ -26,10 +29,9 @@
             $log.log(resp);
         };
 
-
         vm.onLoad = function() {
-            // startupData
-            //     .then(vm.handleStartupData, vm.handleStartupDataFailure);
+            //$log.log("my startup data");
+            $log.log(startupData);
         };
 
         vm.onLoad();

@@ -37,6 +37,16 @@
             }
         });
 
+
+        vm.setTab = function(tabIndex) {
+            vm.selectedTab = tabIndex;
+        };
+
+        vm.init = function() {
+            settingsService.addSetTabListener(vm.setTab);
+        };
+
+        vm.init();
     }
 })();
 

@@ -9,14 +9,16 @@
         .module('uiplatform')
         .controller('GroupMgmtController', GroupMgmtController);
 
-    function GroupMgmtController($scope, $rootScope, $log, groupService, $state, $location,
-                            intellicarAPI, $mdExpansionPanel) {
+    function GroupMgmtController($scope, $rootScope, $log,
+                                 $state, $location, $mdExpansionPanel,
+                                 intellicarAPI, settingsService,
+                                 startupData) {
 
         $log.log('GroupMgmtController');
         var vm = this;
+        settingsService.setTab(intellicarAPI.constantFactory.GROUP);
 
-        // $log.log('state.name = ');
-        // $log.log($state);
+
 
         vm.handleMyVehicles = function(data) {
             $log.log("GroupMgmtController handleMyVehicles");
@@ -25,22 +27,16 @@
             vm.data = data;
         };
 
+
         vm.handleMyVehiclesFailure = function(data) {
             $log.log("GroupMgmtController handleMyVehiclesFailure");
         };
 
-        vm.onGroupClick = function() {
-            groupService.getMyVehicles({group:{grouppath: '/1/1'}})
-                .then(vm.handleMyVehicles, vm.handleMyVehiclesFailure);
-
-        }
-
-        //vm.onGroupClick();
 
         vm.toggle_on_panel = function (myfunc) {
             $log.log('click event');
             myfunc();
-        }
+        };
 
         vm.test = function(event, data) {
             vm.info = data.info;
@@ -58,6 +54,12 @@
 
         $scope.$on('test', vm.test);
 
+        vm.onLoad = function() {
+            //$log.log("my startup data");
+            $log.log(startupData);
+        };
+
+        vm.onLoad();
     }
 })();
 
