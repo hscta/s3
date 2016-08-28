@@ -11,6 +11,7 @@
                                            authService, requestService,
                                            stateService, treeDataService,
                                            userService, groupService,
+                                           mqttService,
                                            anchorSmoothScrollService,
                                            constantFactory) {
             var vm = this;
@@ -24,7 +25,8 @@
                 userService : userService,
                 groupService: groupService,
                 anchorScrollService : anchorSmoothScrollService,
-                constantFactory : constantFactory
+                constantFactory : constantFactory,
+                mqttService : mqttService
             }
         });
 })();

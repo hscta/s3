@@ -9,9 +9,22 @@
     angular.module('uiplatform')
         .service('helperService', helperService);
 
-    function helperService($rootScope, $log, $q) {
+    function helperService($rootScope, $log, $q, constantFactory) {
         var vm = this;
         $log.log("helperService");
+
+        vm.getAssetPath = function(asset) {
+            if(asset.ui_asset_type == constantFactory.GROUP)
+                return asset.grouppath;
+            else if(asset.ui_asset_type == constantFactory.USER)
+                return asset.userpath;
+            else if(asset.ui_asset_type == constantFactory.ROLE)
+                return asset.rolepath;
+            else if(asset.ui_asset_type == constantFactory.VEHICLE)
+                return asset.vehiclepath;
+            else if(asset.ui_asset_type == constantFactory.DEVICE)
+                return asset.devicepath;
+        };
 
 
         vm.mergeVehiclePermissions = function (resp) {

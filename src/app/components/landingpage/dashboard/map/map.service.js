@@ -2,24 +2,26 @@
  * Created by smiddela on 20/08/16.
  */
 
-(function() {
+(function () {
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function($log, intellicarAPI, $q, $timeout) {
+        .service('mapService', function ($log, intellicarAPI, $q, $timeout) {
             $log.log("mapService");
             var vm = this;
+            vm.msgListeners = [];
+
             var lat = 12.9176383;
             var lng = 77.6480335;
 
-            vm.center = { latitude: lat, longitude: lng };
+            vm.center = {latitude: lat, longitude: lng};
             vm.zoom = 12;
             vm.bounds = {};
 
             vm.marker = {
                 id: 0,
-                coords: { latitude: lat, longitude: lng },
-                options: { draggable: true },
+                coords: {latitude: lat, longitude: lng},
+                options: {draggable: true},
                 events: {
                     dragend: function (marker, eventName, args) {
                         $log.log('marker dragend');
@@ -39,48 +41,73 @@
             };
 
 
-            vm.getCenter = function() {
+            vm.getCenter = function () {
                 return vm.center;
-            }
+            };
 
-            vm.getZoom = function() {
+            vm.getZoom = function () {
                 return vm.zoom;
-            }
+            };
 
-            vm.getMarker = function() {
+            vm.getMarker = function () {
                 return vm.marker;
-            }
+            };
 
-            vm.getBounds = function() {
+            vm.getBounds = function () {
                 return vm.bounds;
-            }
+            };
 
-            vm.updateCenter = function() {
+            vm.updateCenter = function () {
                 //$log.log("updateCenter");
-                vm.center = { latitude: vm.marker.coords.latitude, longitude: vm.marker.coords.longitude};
+                vm.center = {latitude: vm.marker.coords.latitude, longitude: vm.marker.coords.longitude};
                 $timeout(vm.updateCenter, 1000);
-            }
+            };
 
-            vm.updateZoom = function() {
+
+            vm.updateZoom = function () {
                 //$log.log("updateZoom");
-                if(vm.zoom == 12)
+                if (vm.zoom == 12)
                     vm.zoom = 14;
                 else
                     vm.zoom = 12;
                 $timeout(vm.updateZoom, 5000);
-            }
+            };
 
-            vm.updateMarker = function() {
+
+            vm.updateMarker = function () {
                 //$log.log("updateMarker");
                 vm.marker.coords = {
                     latitude: vm.marker.coords.latitude + 0.001,
                     longitude: vm.marker.coords.longitude + 0.001
                 };
                 $timeout(vm.updateMarker, 1000);
-            }
+            };
 
-            vm.updateMarker();
-            vm.updateCenter();
-            vm.updateZoom();
+
+            vm.addMsgListener = function (listener) {
+                if (vm.msgListeners.indexOf(listener) == -1){
+                    vm.msgListeners.push(listener);
+                }
+            };
+
+
+            vm.updateMap = function (msgList) {
+                //$log.log('mapService updateMap');
+                //$log.log(msgList);
+                for(var idx in msgList) {
+                    var msg = msgList[idx];
+                    for(var eachidx in vm.msgListeners){
+                        vm.msgListeners[eachidx](msg);
+                    }
+                }
+            };
+
+
+            vm.intMap = function () {
+                $log.log('map initMap');
+                intellicarAPI.mqttService.addMsgListener(vm.updateMap);
+            };
+
+            vm.intMap();
         });
 })();

@@ -79,7 +79,7 @@
 
 
         var getStateTree = function(absoluteState) {
-            $log.log("return getStateTree");
+            //$log.log("return getStateTree");
             return {
                 leaf: getLeafState(absoluteState),
                 parent: getParentState(absoluteState),

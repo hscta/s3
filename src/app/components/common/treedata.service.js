@@ -9,7 +9,7 @@
         .module('uiplatform')
         .service('treeDataService', treeDataService);
 
-    function treeDataService($log, $q, userService) {
+    function treeDataService($log, $q, userService, helperService) {
         var vm = this;
         $log.log("treeDataService");
 
@@ -46,20 +46,6 @@
                 }
             }
             return roots;
-        };
-
-
-        vm.getAssetPath = function(asset) {
-            if(asset.ui_asset_type == "group")
-                return asset.grouppath;
-            else if(asset.ui_asset_type == "user")
-                return asset.userpath;
-            else if(asset.ui_asset_type == "role")
-                return asset.rolepath;
-            else if(asset.ui_asset_type == "vehicle")
-                return asset.vehiclepath;
-            else if(asset.ui_asset_type == "device")
-                return asset.devicepath;
         };
 
 
@@ -148,7 +134,7 @@
                 for (var idx in gtNode.children) {
                     child = gtNode.children[idx];
                     //$log.log("parent: " + key + ", child = " + idx);
-                    resultNode = vm.buildDashboardTree(genericTree, vm.getAssetPath(child));
+                    resultNode = vm.buildDashboardTree(genericTree, helperService.getAssetPath(child));
 
                     if (resultNode !== null) {
                         utNode.items.push(resultNode);
@@ -203,7 +189,7 @@
                 for (var idx in gtNode.children) {
                     child = gtNode.children[idx];
                     //$log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
-                    resultNode = vm.buildManagementTree(genericTree, vm.getAssetPath(child));
+                    resultNode = vm.buildManagementTree(genericTree, helperService.getAssetPath(child));
                     //$log.log(resultNode);
 
                     // if (resultNode !== null) {
@@ -270,7 +256,7 @@
                 var assets = resp[ridx];
                 for (var aidx in assets) {
                     var asset = assets[aidx];
-                    var nodesInPath = vm.getNodesInPath(vm.getAssetPath(asset));
+                    var nodesInPath = vm.getNodesInPath(helperService.getAssetPath(asset));
                     for (var nidx in nodesInPath) {
                         var nodePath = nodesInPath[nidx];
                         if (!(nodePath in assetTree)) {
@@ -310,12 +296,12 @@
                         continue;
                     }
 
-                    if (!(vm.getAssetPath(asset) in assetTree)) {
+                    if (!(helperService.getAssetPath(asset) in assetTree)) {
                         $log.log("Another Deadly mistake");
                         continue;
                     }
 
-                    assetTree[vm.getAssetPath(asset)].info = asset;
+                    assetTree[helperService.getAssetPath(asset)].info = asset;
                     if (assetTree[asset.pgrouppath].children === null) {
                         assetTree[asset.pgrouppath].children = {};
                     }
@@ -327,7 +313,7 @@
                         };
                     }
 
-                    assetTree[asset.pgrouppath].children[vm.getAssetPath(asset)] = asset;
+                    assetTree[asset.pgrouppath].children[helperService.getAssetPath(asset)] = asset;
                 }
             }
 
