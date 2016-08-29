@@ -32,7 +32,7 @@
 
         vm.updateMarker = function (msg) {
             // $log.log('mapController updateMarker');
-            $log.log(msg);
+          //  $log.log(msg);
 
             if(vm.randomMarkers.length < 2) {
                 vm.randomMarkers.push(msg);

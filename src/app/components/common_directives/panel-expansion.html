@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 
-<md-expansion-panel md-component-id="panelOne">
-
-    <md-expansion-panel-collapsed>
+<md-expansion-panel md-component-id="{{details.id}}">
+    <md-expansion-panel-collapsed ng-click="get_current_data(details.id)">
         <div class="md-title">{{details.name}}</div>
         <div class="md-summary"></div>
         <md-expansion-panel-icon></md-expansion-panel-icon>
     </md-expansion-panel-collapsed>
 
-
     <md-expansion-panel-expanded>
         <md-expansion-panel-header>
-            <div flex></div>
             <div class="md-title">{{details.name}}</div>
             <div class="md-summary"></div>
-            <md-button class="md-fab md-mini" aria-label="Edit">
+            <md-button class="md-fab md-mini" aria-label="Edit" ng-click="edit()">
                 <md-icon class="material-icons md-mini">mode_edit</md-icon>
                 <md-tooltip md-direction="bottom">
                     Edit
                 </md-tooltip>
             </md-button>
-            <md-button class="md-fab md-mini" aria-label="Eat cake">
+            <md-button class="md-fab md-mini" aria-label="delete" ng-click="delete(details.id)">
                 <md-icon class="material-icons md-mini">delete</md-icon>
                 <md-tooltip md-direction="bottom">
                     Delete
@@ -30,15 +27,22 @@
         </md-expansion-panel-header>
 
         <md-expansion-panel-content>
-            <h4>Content</h4>
-            <p>Put content in here</p>
+            <md-input-container>
+                <label>Vehicle Name</label>
+                <input type="text" ng-model="details.name"
+                       ng-disabled="readMode">
+            </md-input-container>
         </md-expansion-panel-content>
 
         <md-expansion-panel-footer>
             <div flex></div>
-            <md-button class="md-warn" ng-click="$panel.collapse()">Save</md-button>
-            <md-button class="md-warn" ng-click="$panel.collapse()">Discard</md-button>
+            <md-button class="md-warn" ng-click="update();">Save</md-button>
+            <md-button class="md-warn" ng-click="discard($panel)">Discard</md-button>
         </md-expansion-panel-footer>
     </md-expansion-panel-expanded>
 
+    <!--<div layout="row" layout-sm="column" layout-align="space-around">-->
+        <!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->
+    <!--</div>-->
 </md-expansion-panel>
+

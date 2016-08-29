@@ -15,11 +15,24 @@
 
         $log.log('DeviceMgmtController');
         var vm = this;
-        settingsService.setTab(intellicarAPI.constantFactory.DEVICE);
+        vm.data = [];
+      //  settingsService.setTab(intellicarAPI.constantFactory.DEVICE);
 
         vm.onLoad = function() {
-            //$log.log("my startup data");
+            $log.log("my startup data");
             $log.log(startupData);
+
+            for ( var key in startupData ){
+                vm.details = {};
+                if (startupData.hasOwnProperty(key)) {
+                    //$log.log(key + " -> " + startupData[key].name);
+                    vm.details['name'] = startupData[key].name;
+                    vm.details['id'] = startupData[key].vehicleid;
+                    $log.log(vm.details);
+                    vm.data.push(vm.details);
+                    $scope = vm.data;
+                }
+            }
         };
 
         vm.onLoad();

@@ -29,7 +29,7 @@
 
             //$log.log(leafState);
             for (var idx in vm.tabs) {
-                if (leafState == vm.tabs[idx]) {
+                if (leafState == vm.tabs[idx] && ( leafState != 'group')) {
                     //$log.log("selectedTab = " + vm.selectedTab);
                     vm.selectedTab = idx;
                     break;
@@ -38,15 +38,15 @@
         });
 
 
-        vm.setTab = function(tabIndex) {
-            vm.selectedTab = tabIndex;
-        };
+        // vm.setTab = function(tabIndex) {
+        //     vm.selectedTab = tabIndex;
+        // };
+        //
+        // vm.init = function() {
+        //     settingsService.addSetTabListener(vm.setTab);
+        // };
 
-        vm.init = function() {
-            settingsService.addSetTabListener(vm.setTab);
-        };
-
-        vm.init();
+       // vm.init();
     }
 })();
 

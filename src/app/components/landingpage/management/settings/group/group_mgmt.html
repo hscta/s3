@@ -49,17 +49,10 @@
 
 <!--</md-expansion-panel>-->
 
-<div>
-    <br>
-    <br>
-    Tab #2
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-</div>
+<md-expansion-panel-group md-component-id="panelGroup" id="/1/1">
+    <icar-panel-expansion ng-repeat="d in vm.data track by $index" details="d"></icar-panel-expansion>
+</md-expansion-panel-group>
+
+
+
 

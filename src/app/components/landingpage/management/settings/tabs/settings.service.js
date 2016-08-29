@@ -7,7 +7,7 @@
 
     function settingsService($log, $state, intellicarAPI) {
         var vm = this;
-        vm.setTabListener = null;
+        //vm.setTabListener = null;
         vm.currentGroup = null;
 
         vm.tabs = [
@@ -28,19 +28,19 @@
         };
 
 
-        vm.setTab = function(assetType) {
-            vm.setTabListener(vm.getTabIndex(assetType));
-        };
+        // vm.setTab = function(assetType) {
+        //     vm.setTabListener(vm.getTabIndex(assetType));
+        // };
 
-        vm.addSetTabListener = function(listener) {
-            vm.setTabListener = listener;
-        };
+        // vm.addSetTabListener = function(listener) {
+        //     vm.setTabListener = listener;
+        // };
 
-        vm.isValidAssetType = function (assetType) {
-            if (vm.tabs.indexOf(assetType) == -1)
-                return false;
-            return true;
-        };
+        // vm.isValidAssetType = function (assetType) {
+        //     if (vm.tabs.indexOf(assetType) == -1)
+        //         return false;
+        //     return true;
+        // };
 
 
         vm.setCurrentGroup = function(currentGroup) {
@@ -52,10 +52,10 @@
         };
 
 
-        vm.setTabStateData = function(tab, asset) {
-            $log.log(tab);
-            $log.log(asset);
-        };
+        // vm.setTabStateData = function(tab, asset) {
+        //     $log.log(tab);
+        //     $log.log(asset);
+        // };
 
 
         vm.handleSelection = function(asset) {

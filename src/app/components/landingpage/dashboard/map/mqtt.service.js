@@ -94,7 +94,7 @@
 
         // vm.onReceiveMsg = function (msg) {
         vm.onReceiveMsg = function () {
-            $log.log('mqtt onReceiveMsg');
+          //  $log.log('mqtt onReceiveMsg');
             var msg = [];
             vm.pushTestMarkers(msg);
             //$log.log(msg);

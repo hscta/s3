@@ -90,7 +90,7 @@
                 .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
         };
 
-        vm.test = function (asset) {
+        vm.test = function (asset, collapsed, toggle, obj) {
             // var tab = "group";
             // //$rootScope.$broadcast('test', {'info':asset});
             // if(settingsService.tabs.indexOf(asset.id) != -1) {
@@ -106,6 +106,10 @@
             // //$log.log(asset.info);
             // $state.go(tabState, asset);
             //
+
+            if ( !collapsed ){
+                toggle(obj);
+            }
             settingsService.handleSelection(asset);
         }
 
