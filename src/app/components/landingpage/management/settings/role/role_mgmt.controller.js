@@ -27,7 +27,7 @@
                 if (startupData.hasOwnProperty(key)) {
                     //$log.log(key + " -> " + startupData[key].name);
                     vm.details['name'] = startupData[key].name;
-                    vm.details['id'] = startupData[key].vehicleid;
+                    vm.details['id'] = startupData[key].roleid;
                     $log.log(vm.details);
                     vm.data.push(vm.details);
                     $scope = vm.data;

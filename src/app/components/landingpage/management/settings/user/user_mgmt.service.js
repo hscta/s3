@@ -24,8 +24,10 @@
 
 
         vm.getData = function(stateParams) {
-            //$log.log("user getData");
-            stateParams.state = $state.current.name;
+                $log.log("user getData");
+            settingsService.setCurrentGroup({group: {grouppath: stateParams.info.pgrouppath}});
+
+            //stateParams.state = $state.current.name;
             return intellicarAPI.groupService.getMyUsersMap(settingsService.getCurrentGroup());
         };
     }

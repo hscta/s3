@@ -15,7 +15,12 @@
 
 
         vm.getData = function(stateParams) {
-            //$log.log("vehicle getData");
+            $log.log("vehicle getData");
+
+            $log.log(stateParams.info);
+
+            settingsService.setCurrentGroup({group: {grouppath: stateParams.info.pgrouppath}});
+
             stateParams.state = $state.current.name;
             return intellicarAPI.groupService.getMyVehiclesMap(settingsService.getCurrentGroup());
         }

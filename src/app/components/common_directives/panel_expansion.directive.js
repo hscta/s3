@@ -8,7 +8,7 @@
         .module('uiplatform')
         .directive('icarPanelExpansion', icarPanelExpansion)
 
-    function icarPanelExpansion($log, $mdMedia, $mdDialog, $mdExpansionPanel) {
+    function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel) {
         return{
             restrict : 'E',
             templateUrl : 'app/components/common_directives/panel-expansion.html',
@@ -22,17 +22,13 @@
                 scope.deleted_panel_id;
                 scope.master = {};
 
-                scope.update = function(){
+                scope.save = function(){
                    $log.log('saveeeeeeeeeeeeeeeeeeee');
                };
 
                scope.discard = function($panel) {
-                   // do something here
-                   $log.log("In discard");
                    scope.readMode = true;
                    scope.details = angular.copy(scope.master);
-
-                 //  scope.details = scope.master;
                    $panel.collapse();
                }
 
@@ -60,6 +56,7 @@
                    });
                    $mdDialog.cancel();
                };
+
                scope.cancel_selected = function () {
                    $mdDialog.cancel();
                    $log.log('my delete');
@@ -67,10 +64,7 @@
 
                scope.get_current_data = function () {
                    scope.master = {};
-                   $log.log(scope.details);
                    scope.master = angular.copy(scope.details);
-                   $log.log(scope.master);
-                   $log.log(scope.details);
                };
             }
         }

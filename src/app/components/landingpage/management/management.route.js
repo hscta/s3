@@ -30,7 +30,7 @@
                         resolve: {
                             startupData : function($stateParams, $log, vehicleMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
-                                //$log.log($stateParams);
+                                $log.log($stateParams);
                                 return vehicleMgmtService.getData($stateParams);
                             }
                         },
@@ -50,7 +50,7 @@
                         resolve: {
                             startupData : function($stateParams, $log, groupMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
-                                //$log.log($stateParams);
+                                $log.log($stateParams);
                                 return groupMgmtService.getData($stateParams);
                             }
                         },
@@ -70,7 +70,7 @@
                         resolve: {
                             startupData : function($stateParams, $log, userMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
-                                //$log.log($stateParams);
+                                $log.log($stateParams);
                                 return userMgmtService.getData($stateParams);
                             }
                         },
@@ -90,7 +90,7 @@
                         resolve: {
                             startupData : function($stateParams, $log, roleMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
-                                //$log.log($stateParams);
+                                $log.log($stateParams);
                                 return roleMgmtService.getData($stateParams);
                             }
                         },
@@ -110,7 +110,7 @@
                         resolve: {
                             startupData : function($stateParams, $log, deviceMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
-                                //$log.log($stateParams);
+                                $log.log($stateParams);
                                 return deviceMgmtService.getData($stateParams);
                             }
                         },

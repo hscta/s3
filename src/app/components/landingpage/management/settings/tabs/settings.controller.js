@@ -38,6 +38,22 @@
         });
 
 
+        vm.tabClick = function(assetType) {
+            var currentGroup = settingsService.getCurrentGroup();
+            $log.log("my current group");
+            $log.log(currentGroup);
+            var stateParams = {
+                info: {
+                    pgrouppath: currentGroup.group.grouppath
+                },
+                id:'123'
+            };
+            $log.log(stateParams);
+            $log.log("my asset type " + assetType);
+            if(assetType != 'group') {
+                $state.go(vm.getTabState(assetType), stateParams);
+            }
+        }
         // vm.setTab = function(tabIndex) {
         //     vm.selectedTab = tabIndex;
         // };
