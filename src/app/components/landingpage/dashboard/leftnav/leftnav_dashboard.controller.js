@@ -5,7 +5,7 @@
 (function () {
     angular
         .module('uiplatform')
-        .controller('LeftNavDashboardController', LeftNavDashboardController)
+        .controller('LeftNavDashboardController', LeftNavDashboardController);
 
         // .filter('trust', function ($sce) {
         //     return function (val) {
@@ -24,23 +24,23 @@
         vm.tree_search_pattern = '';
         vm.search_results;
 
-        vm.getMyVehicles = function (data) {
-            //$log.log("getMyVehicles");
+        vm.getDashboardTree = function (data) {
+            //$log.log("getDashboardTree");
             //$log.log(data);
             vm.tree_data = data;
 
             $log.log(vm.tree_data);
         };
 
-        vm.getMyVehiclesFailure = function (data) {
-            $log.log("getMyVehiclesFailure");
+        vm.getDashboardTreeFailure = function (data) {
+            $log.log("getDashboardTreeFailure");
             $log.log(data);
         };
 
 
         vm.initialize = function () {
             leftNavDashboardService.getDashboardTree({})
-                .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
+                .then(vm.getDashboardTree, vm.getDashboardTreeFailure);
         };
 
 
@@ -50,33 +50,58 @@
         };
 
         vm.toggleCheck = function (item) {
-            $log.log("checkStatus = " + item.checkStatus);
+            //$log.log("checkStatus = " + item.checkStatus);
             if (item.checkStatus === "checked") {
                 item.checkStatus = "unchecked";
             } else {
                 item.checkStatus = "checked";
             }
 
-            if (item.items.length)
+            if (item.items.length) {
                 vm.propagateCheckFromParent(item.items, item.checkStatus);
+            } else {
+                //mqtt subscription for realtime data
+                vm.subscribe(item);
+            }
 
             vm.verifyAllParentsCheckStatus(vm.tree_data);
         };
+
 
         vm.propagateCheckFromParent = function (items, status) {
             for (var i = 0; i < items.length; ++i) {
                 var item = items[i];
                 item.checkStatus = status;
-                if (item.items)
-                    vm.propagateCheckFromParent(item.items, status)
+
+
+                //vm.subscribe(item);
+                //$log.log("my item");
+                //$log.log(item);
+
+                if (item.items.length) {
+                    vm.propagateCheckFromParent(item.items, status);
+                } else {
+                    //mqtt subscription for realtime data
+                    vm.subscribe(item);
+                }
             }
         };
+
+
+        vm.subscribe = function(item) {
+            if (item.checkStatus === "checked") {
+                intellicarAPI.mqttService.subscribeAsset(item);
+            } else {
+                intellicarAPI.mqttService.unsubscribeAsset(item);
+            }
+        };
+
 
         vm.verifyAllParentsCheckStatus = function (items) {
             var retVal = "";
             for (var i = 0; i < items.length; ++i) {
                 var item = items[i];
-                $log.log(item);
+                //$log.log(item);
                 if (item.items.length) {
                     item.checkStatus = vm.verifyAllParentsCheckStatus(item.items);
                 }
