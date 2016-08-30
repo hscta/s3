@@ -25,14 +25,32 @@
             //$log.log("from state = " + fromState.name);
             //$log.log("to state = " + toState.name);
             var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
-            //var parentState = intellicarAPI.stateService.getStateTree(toState.name).parent;
 
-            //$log.log(leafState);
-            for (var idx in vm.tabs) {
-                if (leafState == vm.tabs[idx] && ( leafState != 'group')) {
-                    //$log.log("selectedTab = " + vm.selectedTab);
-                    vm.selectedTab = idx;
-                    break;
+            // $log.log('stateChangeStart =================');
+            // $log.log(toParams);
+
+            if(leafState != intellicarAPI.constantFactory.GROUP || ('tabClick' in toParams)) {
+                //$log.log(leafState);
+                for (var idx in vm.tabs) {
+                    if (leafState == vm.tabs[idx]) {
+                        //$log.log("selectedTab = " + vm.selectedTab);
+                        vm.selectedTab = idx;
+                        break;
+                    }
+                }
+            } else {
+                $log.log('my to is group state ' + vm.tabs[vm.selectedTab]);
+                if(!('tabClick' in toParams)) {
+                    if (vm.tabs[vm.selectedTab] != intellicarAPI.constantFactory.GROUP) {
+                        // $log.log("my toParams");
+                        // $log.log(toParams);
+                        // $log.log("my to yahoo");
+                        var dstState = intellicarAPI.stateService.getStateTree(toState.name).parent +
+                            intellicarAPI.stateService.dotState(vm.tabs[vm.selectedTab]);
+                        // $log.log("my to after");
+                        event.preventDefault();
+                        $state.go(dstState, toParams);
+                    }
                 }
             }
         });
@@ -40,20 +58,23 @@
 
         vm.tabClick = function(assetType) {
             var currentGroup = settingsService.getCurrentGroup();
-            $log.log("my current group");
-            $log.log(currentGroup);
+            // $log.log("my to current group");
+            // $log.log(currentGroup);
             var stateParams = {
                 info: {
-                    pgrouppath: currentGroup.group.grouppath
+                    pgrouppath: currentGroup.group.grouppath,
+                    grouppath: currentGroup.group.grouppath,
+                    ui_asset_type: assetType,
+                    tabClick: true
                 },
                 id:'123'
             };
-            $log.log(stateParams);
-            $log.log("my asset type " + assetType);
-            if(assetType != 'group') {
-                $state.go(vm.getTabState(assetType), stateParams);
-            }
-        }
+            // $log.log(stateParams);
+            // $log.log("my asset type " + assetType);
+
+            $state.go(vm.getTabState(assetType), stateParams);
+        };
+
         // vm.setTab = function(tabIndex) {
         //     vm.selectedTab = tabIndex;
         // };

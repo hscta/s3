@@ -88,6 +88,10 @@
             }
         };
 
+        var dotState = function(givenState) {
+            return ('.' + givenState);
+        };
+
 
         return {
             STATE_HOME : STATE_HOME,
@@ -96,7 +100,8 @@
             STATE_HOME_DOT : STATE_HOME_DOT,
             STATE_HOME_DASHBOARD_DOT : STATE_HOME_DASHBOARD_DOT,
             STATE_HOME_MANAGEMENT_DOT : STATE_HOME_MANAGEMENT_DOT,
-            getStateTree : getStateTree
+            getStateTree : getStateTree,
+            dotState : dotState
         }
     }
 

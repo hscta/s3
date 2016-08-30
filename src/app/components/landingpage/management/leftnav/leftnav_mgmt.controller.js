@@ -110,6 +110,8 @@
             if ( !collapsed ){
                 toggle(obj);
             }
+
+            $log.log("my to before handleSelection");
             settingsService.handleSelection(asset);
         }
 

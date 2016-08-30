@@ -19,7 +19,7 @@
 
 
         vm.onLoad = function() {
-            //$log.log("my startup data");
+            $log.log("my startup data");
             $log.log(startupData);
 
             for ( var key in startupData ){

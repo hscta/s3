@@ -23,11 +23,9 @@
         };
 
 
-        vm.getData = function(stateParams) {
-                $log.log("user getData");
-            settingsService.setCurrentGroup({group: {grouppath: stateParams.info.pgrouppath}});
-
-            //stateParams.state = $state.current.name;
+        vm.getData = function (stateParams) {
+            $log.log("user getData");
+            settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyUsersMap(settingsService.getCurrentGroup());
         };
     }

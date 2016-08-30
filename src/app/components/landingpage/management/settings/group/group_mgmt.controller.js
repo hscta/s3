@@ -55,7 +55,7 @@
         $scope.$on('test', vm.test);
 
         vm.onLoad = function() {
-            //$log.log("my startup data");
+            $log.log("my startup data");
             $log.log(startupData);
 
 

@@ -49,7 +49,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/group/group_mgmt.html',
                         resolve: {
                             startupData : function($stateParams, $log, groupMgmtService, $state) {
-                                $log.log("toState " + $state.current.name);
+                                $log.log("current State " + $state.current.name);
                                 $log.log($stateParams);
                                 return groupMgmtService.getData($stateParams);
                             }

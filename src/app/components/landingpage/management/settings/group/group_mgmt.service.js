@@ -14,14 +14,9 @@
         $log.log("groupMgmtService");
 
 
-        vm.getData = function(stateParams) {
-                $log.log("group getData");
-            stateParams.state = $state.current.name;
-            $log.log(stateParams);
-            if(stateParams.info != null) {
-                settingsService.setCurrentGroup({group: {grouppath: stateParams.info.grouppath}});
-            }
-            $log.log(settingsService.getCurrentGroup());
+        vm.getData = function (stateParams) {
+            $log.log("group getData");
+            settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyGroupsMap(settingsService.getCurrentGroup());
         };
     }

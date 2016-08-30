@@ -16,9 +16,7 @@
 
         vm.getData = function(stateParams) {
             $log.log("role getData");
-            settingsService.setCurrentGroup({group: {grouppath: stateParams.info.pgrouppath}});
-
-            stateParams.state = $state.current.name;
+            settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyRolesMap(settingsService.getCurrentGroup());
         };
     }

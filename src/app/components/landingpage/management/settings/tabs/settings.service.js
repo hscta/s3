@@ -43,9 +43,21 @@
         // };
 
 
-        vm.setCurrentGroup = function(currentGroup) {
-            vm.currentGroup = currentGroup;
+        vm.setCurrentGroup = function(stateParams) {
+            var grouppath = null;
+
+            if(stateParams != null && stateParams.info != null) {
+                if (stateParams.info.ui_asset_type == intellicarAPI.constantFactory.GROUP) {
+                    grouppath = stateParams.info.grouppath;
+                } else {
+                    grouppath = stateParams.info.pgrouppath;
+                }
+            }
+
+            // $log.log("my to set grouppath: " + grouppath);
+            vm.currentGroup = {group: {grouppath: grouppath}};
         };
+
 
         vm.getCurrentGroup = function() {
             return vm.currentGroup;
@@ -59,6 +71,7 @@
 
 
         vm.handleSelection = function(asset) {
+            // $log.log("my to handleSelection");
             var tab = "group";
             //$rootScope.$broadcast('test', {'info':asset});
             if(vm.tabs.indexOf(asset.id) != -1) {
@@ -71,14 +84,14 @@
 
             var tabState = intellicarAPI.stateService.STATE_HOME_MANAGEMENT_DOT + tab;
 
-            //$log.log(tabState);
-            //$log.log(asset);
+            // $log.log("my to before cond " + tabState);
+            // $log.log(asset);
 
             if(vm.tabs.indexOf(asset.id) == -1) {
-                //$log.log('It is asset');
+                // $log.log('my to Going to state ' + tabState);
                 $state.go(tabState, asset);
             } else {
-                //$log.log('It is assetType');
+                // $log.log('my to not changing state');
             }
         }
     }

@@ -17,19 +17,18 @@
         vm.handleResponse = function (resp) {
             "device response";
             $log.log(resp);
-        }
+        };
+
 
         vm.handleFailure = function (resp) {
             "device failure response";
             $log.log(resp);
-        }
+        };
 
 
-        vm.getData = function(stateParams) {
+        vm.getData = function (stateParams) {
             $log.log("device getData");
-            settingsService.setCurrentGroup({group: {grouppath: stateParams.info.pgrouppath}});
-
-            stateParams.state = $state.current.name;
+            settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyDevicesMap(settingsService.getCurrentGroup());
         };
     }
