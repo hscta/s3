@@ -85,8 +85,8 @@
             marker = {
                 id: 17,
                 title: '/1/1/4/17',
-                latitude: vm.getLat(4),
-                longitude: vm.getLng(4)
+                latitude: vm.getLat(16),
+                longitude: vm.getLng(16)
             };
 
             msg.push(marker);

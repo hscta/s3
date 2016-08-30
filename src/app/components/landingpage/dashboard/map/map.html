@@ -6,7 +6,12 @@
                         options="vm.options" bounds="vm.inMap.bounds">
         <!--<ui-gmap-marker coords="vm.marker.coords" options="vm.marker.options"-->
         <!--events="vm.marker.events" idkey="vm.marker.id"></ui-gmap-marker>-->
-        <ui-gmap-markers models="vm.randomMarkers" coords="'self'" icon="'icon'">
+        <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
+                        options="vm.infoWindow.options" closeClick="vm.closeClick()"
+                        templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
+        >
+        </ui-gmap-window>
+        <ui-gmap-markers models="vm.randomMarkers" coords="'self'" icon="'icon'" events="vm.markersEvents">
         </ui-gmap-markers>
     </ui-gmap-google-map>
 </div>
