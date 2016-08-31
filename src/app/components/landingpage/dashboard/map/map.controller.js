@@ -8,10 +8,29 @@
         .module('uiplatform')
         .controller('MapController', MapController);
 
-    function MapController($scope, $rootScope, $log, mapService, $timeout) {
+    function MapController($scope, $rootScope, $log, mapService, $timeout, $mdDialog) {
+
+        function immobalizeController ($scope, $mdDialog){
+
+            var vm = this;
+            $log.log('immobalizeController');
+
+            $scope.cancelImmobalize = function (){
+                $log.log('cancelImmobalize');
+                $mdDialog.cancel();
+            }
+
+            $scope.okImmobilize = function (){
+                $log.log('okImmobilize');
+                $mdDialog.cancel();
+            }
+
+        }
+
         $log.log('MapController');
         var vm = this;
         vm.randomMarkers = [];
+        vm.clickedMarker = [];
 
         vm.loadMap = function() {
             vm.inMap = {};
@@ -32,7 +51,7 @@
 
         vm.updateMarker = function (msg) {
             // $log.log('mapController updateMarker');
-          //  $log.log(msg);
+            //$log.log(msg);
 
             if(vm.randomMarkers.length < 2) {
                 vm.randomMarkers.push(msg);
@@ -44,15 +63,70 @@
                     msg.title = 'mypath: ' + msg.id;
                     vm.randomMarkers[idx] = msg;
                 }
+
+                if ( vm.clickedMarker.id == marker.id ){
+                    //$log.log(msg);
+                    vm.clickedMarker = msg;
+                }
             }
         };
 
         vm.addListener = function () {
-            mapService.addMsgListener(vm.updateMarker);
+           // mapService.addMsgListener(vm.updateMarker);
+
+            vm.updateMarker({
+                id: 28,
+                title: '/1/1/1/26/1/27/4/28',
+                latitude: 12.9176383,
+                longitude: 77.6480335
+            });
         };
 
         vm.loadMap();
         vm.addListener();
+
+        vm.markersEvents = {
+            click: function(marker, eventName, model, arguments) {
+                //vm.infoWindow.model = model;
+                vm.infoWindow.show = true;
+
+                vm.clickedMarker = model;
+                vm.id = vm.clickedMarker.id;
+            }
+        };
+
+        vm.infoWindow = {
+            marker: {},
+            show: false,
+            options: {}
+        };
+
+        vm.closeClick = function(){
+            vm.infoWindow.show = false;
+        }
+
+        vm.immobalize = function () {
+            $log.log('ssssssssssssssssssssssclicked');
+            var immobalizeDialog = $mdDialog.confirm({
+                    controller: immobalizeController,
+                    templateUrl: '/app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                    clickOutsideToClose: false,
+                    escapeToClose: false
+                })
+                .ok('Yes')
+                .cancel('No');
+
+            $mdDialog.show(immobalizeDialog)
+                .then(function() {$log.log("Yes Function");}, function() {$log.log("No Function");})
+        };
+
+        vm.cancelImmobalize = function () {
+            $log.log('cancel dialog')
+            $mdDialog.cancel();
+        }
+
+
+
 
         // var createRandomMarker = function(i, bounds, idKey) {
         //     var lat_min = bounds.southwest.latitude,
@@ -95,5 +169,7 @@
 
         //vm.updateZoom();
     }
+
+
 })();
 
