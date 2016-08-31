@@ -48,7 +48,7 @@
 
             if(stateParams != null && stateParams.info != null) {
                 if (stateParams.info.ui_asset_type == intellicarAPI.constantFactory.GROUP) {
-                    grouppath = stateParams.info.grouppath;
+                    grouppath = stateParams.info.assetpath;
                 } else {
                     grouppath = stateParams.info.pgrouppath;
                 }
@@ -74,9 +74,14 @@
             // $log.log("my to handleSelection");
             var tab = "group";
             //$rootScope.$broadcast('test', {'info':asset});
+            $log.log("ho ho ho asset");
+            $log.log(asset);
+            // is it group, vehicle, device, user, role
             if(vm.tabs.indexOf(asset.id) != -1) {
+                $log.log("jai bolo");
                 tab = asset.id;
             } else {
+                $log.log("duniya " + asset.info.ui_asset_type);
                 tab = asset.info.ui_asset_type;
             }
 

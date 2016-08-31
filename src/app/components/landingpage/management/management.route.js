@@ -21,8 +21,7 @@
             .state('home.management.vehicle', {
                 url: '/vehicle',
                 params: {
-                    info : null,
-                    id : null
+                    info : null
                 },
                 views: {
                     'mgmttab@home.management': {
@@ -41,8 +40,7 @@
             .state('home.management.group', {
                 url: '/group',
                 params: {
-                    info : null,
-                    id : null
+                    info : null
                 },
                 views: {
                     'mgmttab@home.management': {
@@ -61,8 +59,7 @@
             .state('home.management.user', {
                 url: '/user',
                 params: {
-                    info : null,
-                    id : null
+                    info : null
                 },
                 views: {
                     'mgmttab@home.management': {
@@ -81,8 +78,7 @@
             .state('home.management.role', {
                 url: '/role',
                 params: {
-                    info : null,
-                    id : null
+                    info : null
                 },
                 views: {
                     'mgmttab@home.management': {
@@ -101,8 +97,7 @@
             .state('home.management.device', {
                 url: '/device',
                 params: {
-                    info : null,
-                    id : null
+                    info : null
                 },
                 views: {
                     'mgmttab@home.management': {

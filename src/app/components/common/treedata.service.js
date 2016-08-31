@@ -277,7 +277,8 @@
                                     $log.log("my control 1111");
                                     assetTree[nodesInPath[nidx - 1]].info = {
                                         name: assetTree[nodePath].info.pname,
-                                        grouppath: assetTree[nodePath].info.pgrouppath
+                                        assetpath: assetTree[nodePath].info.pgrouppath
+                                        //grouppath: assetTree[nodePath].info.pgrouppath
                                     };
                                 }
 
@@ -309,7 +310,8 @@
                     if (assetTree[asset.pgrouppath].info === null) {
                         assetTree[asset.pgrouppath].info = {
                             name: asset.pname,
-                            grouppath: asset.pgrouppath
+                            assetpath: asset.pgrouppath
+                            //grouppath: asset.pgrouppath
                         };
                     }
 
@@ -317,7 +319,7 @@
                 }
             }
 
-            //$log.log(assetTree);
+            $log.log(assetTree);
             return $q.resolve(assetTree);
         };
 

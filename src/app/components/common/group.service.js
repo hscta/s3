@@ -19,6 +19,12 @@
         };
 
 
+        vm.getMyAssetGroups = function (body) {
+            $log.log("getMyAssetGroups");
+            return requestService.firePost('/group/myassetgroups', body);
+        };
+
+
         vm.getMyVehicles = function (body) {
             $log.log("getMyVehicles");
             return requestService.firePost('/group/myvehicles', body);
@@ -58,8 +64,21 @@
         vm.getMyGroupsMap = function(body) {
             $log.log("getMyGroupsMap");
             return vm.getMyGroups(body)
-                .then(helperService.mergeGroupPermissions, vm.handleFailure)
-                .then(helperService.makeGroupMap, vm.handleFailure)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                // .then(helperService.mergeGroupPermissions, vm.handleFailure)
+                // .then(helperService.makeGroupMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.getMyAssetGroupsMap = function(body) {
+            $log.log("getMyAssetGroupsMap");
+            return vm.getMyAssetGroups(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                // .then(helperService.mergeGroupPermissions, vm.handleFailure)
+                // .then(helperService.makeGroupMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -67,8 +86,10 @@
         vm.getMyVehiclesMap = function (body) {
             $log.log("getMyVehiclesMap");
             return vm.getMyVehicles(body)
-                .then(helperService.mergeVehiclePermissions, vm.handleFailure)
-                .then(helperService.makeVehicleMap, vm.handleFailure)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                // .then(helperService.mergeVehiclePermissions, vm.handleFailure)
+                // .then(helperService.makeVehicleMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -76,8 +97,10 @@
         vm.getMyUsersMap = function (body) {
             $log.log("getMyUsersMap");
             return vm.getMyUsers(body)
-                .then(helperService.mergeUserPermissions, vm.handleFailure)
-                .then(helperService.makeUserMap, vm.handleFailure)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                // .then(helperService.mergeUserPermissions, vm.handleFailure)
+                // .then(helperService.makeUserMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -86,8 +109,10 @@
         vm.getMyRolesMap = function (body) {
             $log.log("getMyRolesMap");
             return vm.getMyRoles(body)
-                .then(helperService.mergeRolePermissions, vm.handleFailure)
-                .then(helperService.makeRoleMap, vm.handleFailure)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                // .then(helperService.mergeRolePermissions, vm.handleFailure)
+                // .then(helperService.makeRoleMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -95,8 +120,10 @@
         vm.getMyDevicesMap = function (body) {
             $log.log("getMyDevicesMap");
             return vm.getMyDevices(body)
-                .then(helperService.mergeDevicePermissions, vm.handleFailure)
-                .then(helperService.makeDeviceMap, vm.handleFailure)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                // .then(helperService.mergeDevicePermissions, vm.handleFailure)
+                // .then(helperService.makeDeviceMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 

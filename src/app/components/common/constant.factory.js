@@ -14,7 +14,9 @@
             VEHICLE: 'vehicle',
             USER: 'user',
             ROLE: 'role',
-            DEVICE: 'device'
+            DEVICE: 'device',
+            VEHICLETYPE: 'vehicletype',
+            DEVICETYPE: 'devicetype'
         }
     }
 

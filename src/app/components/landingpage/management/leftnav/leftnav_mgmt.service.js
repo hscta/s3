@@ -15,7 +15,7 @@
             vm.handleResponse = function (resp) {
                 $log.log("leftNavManagementService handleResponse");
                 $log.log(resp);
-                settingsService.setCurrentGroup({group: {grouppath: resp[0].id}});
+                //settingsService.setCurrentGroup({group: {grouppath: resp[0].id}});
                 return $q.resolve(resp);
             };
 

@@ -63,7 +63,8 @@
                 vm.details = {};
                 if (startupData.hasOwnProperty(key)) {
                     vm.details['name'] = startupData[key].name;
-                    vm.details['id'] = startupData[key].groupid;
+                    //vm.details['id'] = startupData[key].groupid;
+                    vm.details['id'] = startupData[key].assetid;
                     $log.log(vm.details);
                     vm.data.push(vm.details);
                     $scope = vm.data;
