@@ -47,7 +47,6 @@
             if (path == null)
                 return null;
 
-            //$log.log("getPathId: " + path.substring(path.lastIndexOf(SLASH) + 1));
             return path.substring(path.lastIndexOf(SLASH) + 1);
         };
 
@@ -91,7 +90,6 @@
                         break;
                 }
             }
-            //.log("length of : " + assetpath.substring(0, idx).length);
             return assetpath.substring(0, idx);
         };
 
@@ -161,7 +159,6 @@
 
 
         vm.mergeAssetPermissions = function (resp) {
-            //$log.log("vm.mergeAssetPermissions");
             var data = resp.data.data;
             for (var idx in data.assets) {
                 var asset = data.assets[idx];
@@ -180,7 +177,6 @@
 
 
         vm.makeAssetMap = function (resp) {
-            //$log.log("makeAssetMap");
             var data = resp.data.data;
             var assets = {};
             for (var idx in data.assets) {

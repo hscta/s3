@@ -58,8 +58,8 @@
 
         vm.tabClick = function(assetType) {
             var currentGroup = settingsService.getCurrentGroup();
-            // $log.log("my to current group");
-            // $log.log(currentGroup);
+            $log.log("my to current state: " + assetType);
+            $log.log(currentGroup);
             var stateParams = {
                 info: {
                     pgrouppath: currentGroup.group.grouppath,

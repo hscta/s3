@@ -94,12 +94,12 @@
                       controller: 'SettingsController as vm'
                   },
                   // 'mgmttab@home.management': {
-                  //     templateUrl: 'app/components/landingpage/management/settings/group/group_mgmt.html',
+                  //     templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
                   //     resolve: {
-                  //         startupData : function($stateParams, $log, groupMgmtService, $state) {
+                  //         startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
                   //             $log.log("toState " + $state.current.name);
-                  //             $log.log($stateParams);
-                  //             return groupMgmtService.getData($stateParams);
+                  //             //$log.log($stateParams);
+                  //             return vehicleMgmtService.getData(settingsService.getCurrentGroup());
                   //         }
                   //     },
                   //     controller: 'GroupMgmtController as vm'

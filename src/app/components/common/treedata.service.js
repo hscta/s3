@@ -82,7 +82,7 @@
 
 
         vm.getNodesInPath = function (path) {
-            if(angular.isUndefined(path))
+            if (angular.isUndefined(path))
                 return [];
 
             var nodesInPath = [];
@@ -199,7 +199,7 @@
 
                     if (resultNode !== null) {
                         var assetTypeExists = false;
-                        for(var uidx in utNode.items) {
+                        for (var uidx in utNode.items) {
                             var assetType = utNode.items[uidx];
                             //$log.log(assetType.title + " == " + resultNode.info.ui_asset_type);
                             if (assetType.title == resultNode.info.ui_asset_type) {
@@ -209,7 +209,7 @@
                             }
                         }
 
-                        if(!assetTypeExists) {
+                        if (!assetTypeExists) {
                             //$log.log("assetType does not Exists");
                             assetType = {
                                 id: resultNode.info.ui_asset_type,
@@ -244,86 +244,6 @@
         };
 
 
-        vm.createGenericTree = function (resp) {
-            //$log.log("createGenericTree");
-            //$log.log(resp);
-
-
-            var groups = resp[0];
-
-            var assetTree = {};
-            for (var ridx = 1; ridx < resp.length; ridx++) {
-                var assets = resp[ridx];
-                for (var aidx in assets) {
-                    var asset = assets[aidx];
-                    var nodesInPath = vm.getNodesInPath(helperService.getAssetPath(asset));
-                    for (var nidx in nodesInPath) {
-                        var nodePath = nodesInPath[nidx];
-                        if (!(nodePath in assetTree)) {
-                            assetTree[nodePath] = {};
-                            assetTree[nodePath].info = null;
-                            assetTree[nodePath].children = null;
-                        }
-
-                        if (nodePath in groups) {
-                            assetTree[nodePath].info = groups[nodePath];
-
-                            if (nidx > 0 && nidx < nodesInPath.length) {
-                                if (assetTree[nodesInPath[nidx - 1]].children === null) {
-                                    assetTree[nodesInPath[nidx - 1]].children = {};
-                                }
-
-                                if (assetTree[nodesInPath[nidx - 1]].info === null) {
-                                    $log.log("my control 1111");
-                                    assetTree[nodesInPath[nidx - 1]].info = {
-                                        name: assetTree[nodePath].info.pname,
-                                        assetpath: assetTree[nodePath].info.pgrouppath
-                                        //grouppath: assetTree[nodePath].info.pgrouppath
-                                    };
-                                }
-
-                                //$log.log("parent: " + nodesInPath[nidx - 1] + ", " + "child: " + nodePath);
-                                assetTree[nodesInPath[nidx - 1]].children[nodePath] = groups[nodePath];
-                            }
-                        }
-                    }
-                }
-                //$log.log(assetTree);
-
-                for (aidx in assets) {
-                    asset = assets[aidx];
-                    if (!(asset.pgrouppath in assetTree)) {
-                        $log.log("Deadly mistake");
-                        continue;
-                    }
-
-                    if (!(helperService.getAssetPath(asset) in assetTree)) {
-                        $log.log("Another Deadly mistake");
-                        continue;
-                    }
-
-                    assetTree[helperService.getAssetPath(asset)].info = asset;
-                    if (assetTree[asset.pgrouppath].children === null) {
-                        assetTree[asset.pgrouppath].children = {};
-                    }
-
-                    if (assetTree[asset.pgrouppath].info === null) {
-                        assetTree[asset.pgrouppath].info = {
-                            name: asset.pname,
-                            assetpath: asset.pgrouppath
-                            //grouppath: asset.pgrouppath
-                        };
-                    }
-
-                    assetTree[asset.pgrouppath].children[helperService.getAssetPath(asset)] = asset;
-                }
-            }
-
-            $log.log(assetTree);
-            return $q.resolve(assetTree);
-        };
-
-
         vm.getDashboardTree = function (body) {
             var groupsPromise = userService.getMyGroupsMap(body);
             var vehiclesPromise = userService.getMyVehiclesMap(body);
@@ -337,6 +257,52 @@
             return userService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createManagementTree, vm.handleFailure);
+        };
+
+
+        vm.createGenericTree = function (resp) {
+            $log.log("createGenericTree");
+            $log.log(resp);
+
+            var groups = resp[0];
+            var assetTree = {};
+
+            for (var ridx = 0; ridx < resp.length; ridx++) {
+                var assets = resp[ridx];
+                //add all the asset's allowed parent hierarchy to assetTree
+                for (var aidx in assets) {
+                    var asset = assets[aidx];
+                    //$log.log(asset);
+                    var assetpath = asset.assetpath;
+                    var pgrouppath = asset.pgrouppath;
+
+                    if (!(assetpath in assetTree)) {
+                        assetTree[assetpath] = {};
+                        assetTree[assetpath].info = asset;
+                        assetTree[assetpath].children = null;
+                        //$log.log("Added: " + assetpath);
+
+                        if (pgrouppath in groups && pgrouppath != assetpath) {
+                            if (!(pgrouppath in assetTree)) {
+                                assetTree[pgrouppath] = {};
+                                assetTree[pgrouppath].info = groups[pgrouppath];
+                                assetTree[pgrouppath].children = {};
+                                assetTree[pgrouppath].children[assetpath] = asset;
+                                //$log.log("Added " + pgrouppath + " as parent of " + assetpath);
+                                //$log.log("Added " + assetpath + " as child of " + pgrouppath);
+                            } else {
+                                if (assetTree[pgrouppath].children == null) {
+                                    assetTree[pgrouppath].children = {};
+                                }
+                                assetTree[pgrouppath].children[assetpath] = asset;
+                                //$log.log("Added " + assetpath + " as child of " + pgrouppath);
+                            }
+                        }
+                    }
+                }
+            }
+            //$log.log(assetTree);
+            return $q.resolve(assetTree);
         };
     }
 

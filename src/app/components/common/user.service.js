@@ -19,6 +19,12 @@
         };
 
 
+        vm.getMyAssetGroups = function (body) {
+            // $log.log("getMyAssetGroups");
+            return requestService.firePost('/user/myassetgroups', body);
+        };
+
+
         vm.getMyVehicles = function (body) {
             // $log.log("getMyVehicles");
             return requestService.firePost('/user/myvehicles', body);
@@ -60,8 +66,15 @@
             return vm.getMyGroups(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
-                // .then(helperService.mergeGroupPermissions, vm.handleFailure)
-                // .then(helperService.makeGroupMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.getMyAssetGroupsMap = function(body) {
+            //$log.log("getMyAssetGroupsMap");
+            return vm.getMyAssetGroups(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -71,8 +84,6 @@
             return vm.getMyVehicles(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
-                // .then(helperService.mergeVehiclePermissions, vm.handleFailure)
-                // .then(helperService.makeVehicleMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -82,8 +93,6 @@
             return vm.getMyUsers(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
-                // .then(helperService.mergeUserPermissions, vm.handleFailure)
-                // .then(helperService.makeUserMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -94,8 +103,6 @@
             return vm.getMyRoles(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
-                // .then(helperService.mergeRolePermissions, vm.handleFailure)
-                // .then(helperService.makeRoleMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -105,21 +112,19 @@
             return vm.getMyDevices(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
-                // .then(helperService.mergeDevicePermissions, vm.handleFailure)
-                // .then(helperService.makeDeviceMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
 
         vm.handleDirectAssetResponse = function(resp) {
-            // $log.log("handleDirectAssetResponse");
+            $log.log("userService handleDirectAssetResponse");
             $log.log(resp);
             return $q.resolve(resp);
         };
 
 
         vm.getMyDirectAssetsMap = function (body) {
-            // $log.log("getMyDirectAssetsMap");
+            // $log.log("userService getMyDirectAssetsMap");
             var gPromise = vm.getMyGroupsMap(body);
             var vPromise = vm.getMyVehiclesMap(body);
             var uPromise = vm.getMyUsersMap(body);
@@ -130,5 +135,20 @@
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };
+
+
+        vm.getMyDirectAssetsMap2 = function (body) {
+            // $log.log("userService getMyDirectAssetsMap");
+            var gPromise = vm.getMyAssetGroupsMap(body);
+            var vPromise = vm.getMyVehiclesMap(body);
+            var uPromise = vm.getMyUsersMap(body);
+            var rPromise = vm.getMyRolesMap(body);
+            var dPromise = vm.getMyDevicesMap(body);
+
+            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise])
+                .then(vm.handleDirectAssetResponse, vm.handleFailure);
+
+        };
+
     }
 })();

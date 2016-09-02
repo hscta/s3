@@ -15,7 +15,6 @@
             vm.handleResponse = function (resp) {
                 $log.log("leftNavManagementService handleResponse");
                 $log.log(resp);
-                //settingsService.setCurrentGroup({group: {grouppath: resp[0].id}});
                 return $q.resolve(resp);
             };
 
@@ -30,8 +29,6 @@
             vm.getManagementTree = function (body) {
                 return intellicarAPI.treeDataService.getManagementTree(body)
                     .then(vm.handleResponse, vm.handleFailure);
-                    //body.group = {grouppath: '/1/1', recursive: '0'};
-                //return intellicarAPI.userService.getMyDirectAssetsMap(body);
             };
 
 
