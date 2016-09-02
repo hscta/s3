@@ -18,7 +18,7 @@
 
         vm.getToken = function() {
             return authService.getToken();
-        }
+        };
 
         vm.firePost = function(api, body, auth) {
             api = API_HOST + api;
@@ -42,7 +42,7 @@
                 vm.checkLogin();
                 return $q.reject({'auth': false});
             }
-        }
+        };
 
 
         vm.fireGet = function(api, auth) {
@@ -64,7 +64,7 @@
                 vm.checkLogin();
                 return $q.reject({'auth': false});
             }
-        }
+        };
 
 
         vm.handleFailure = function(resp) {
@@ -76,7 +76,7 @@
             }
 
             return $q.reject(resp);
-        }
+        };
 
         vm.checkLogin = function(force) {
             if(!authService.isAuthed() || force) {
@@ -86,12 +86,12 @@
                     value();
                 });
             }
-        }
+        };
 
         vm.addAuthListener = function(callback) {
             //$log.log('adding login callback');
             authListeners.push(callback)
-        }
+        };
 
 
         // If required. It is periodically called from maincontroller to check for valid token

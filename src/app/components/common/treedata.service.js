@@ -49,59 +49,11 @@
         };
 
 
-        vm.getNextPathItemEnd = function (str, start) {
-            var slash = '/';
-
-            if (str === null)
-                return -1;
-
-            if (start === null)
-                start = 0;
-
-            if (start < 0 || start >= str.length)
-                return -1;
-
-            if (str.charAt(start) !== slash)
-                return -1;
-
-            if (str.substr(start, str.length).length < 4)
-                return -1;
-
-            var firstSlash = str.indexOf(slash, start + 1);
-            if (firstSlash != -1 && firstSlash < str.length - 1) {
-                var secondSlash = str.indexOf(slash, firstSlash + 1);
-                if (secondSlash != -1) {
-                    return secondSlash - 1;
-                } else {
-                    return str.length - 1;
-                }
+        vm.getGenericTreeIndex = function (genericTree, asset) {
+            for (var idx in genericTree) {
+                if (genericTree[idx].info.assetpath == asset.assetpath)
+                    return idx;
             }
-
-            return -1;
-        };
-
-
-        vm.getNodesInPath = function (path) {
-            if (angular.isUndefined(path))
-                return [];
-
-            var nodesInPath = [];
-            var startIndex = 0;
-            var endIndex = 0;
-            var itemStartIndex = 0;
-            //$log.log("==================" + path);
-            while (itemStartIndex < path.length) {
-                endIndex = vm.getNextPathItemEnd(path, itemStartIndex);
-                if (endIndex == -1)
-                    return null;
-                //$log.log("endIndex " + endIndex);
-                if (endIndex < path.length) {
-                    nodesInPath.push(path.substring(startIndex, endIndex + 1));
-                }
-                itemStartIndex = endIndex + 1;
-            }
-            //$log.log(nodesInPath);
-            return nodesInPath;
         };
 
 
@@ -146,6 +98,49 @@
         };
 
 
+        vm.buildDashboardTree = function (genericTree, key) {
+            //$log.log("buildDashboardTree " + key);
+
+            if (genericTree === null)
+                return null;
+
+            if (!('visited' in genericTree[key])) {
+                genericTree[key].visited = true;
+            } else if (genericTree[key].visited == true) {
+                return null;
+            }
+
+            var gtNode = genericTree[key];
+            gtNode.visited = true;
+
+            //$log.log(gtNode);
+            var utNode = {};
+            utNode.id = genericTree[key].info.assetpath;
+            utNode.title = gtNode.info.name;
+            utNode.info = gtNode.info;
+            utNode.items = [];
+            utNode.checkStatus = false;
+            utNode.collapsed = false;
+
+            var resultNode = null;
+            var child = null;
+            if (gtNode.children !== null) {
+                for (var idx in gtNode.children) {
+                    child = gtNode.children[idx];
+                    //$log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
+                    resultNode = vm.buildDashboardTree(genericTree, vm.getGenericTreeIndex(genericTree, child));
+                    //$log.log(resultNode);
+
+                    if (resultNode !== null) {
+                        utNode.items.push(resultNode);
+                    }
+                }
+            }
+
+            return utNode;
+        };
+
+
         vm.createDashboardTree = function (genericTree) {
             //$log.log(genericTree);
 
@@ -166,7 +161,9 @@
             if (genericTree === null)
                 return null;
 
-            if (genericTree[key].visited == true) {
+            if (!('visited' in genericTree[key])) {
+                genericTree[key].visited = true;
+            } else if (genericTree[key].visited == true) {
                 //$log.log("Already visited: " + key);
                 return null;
             }
@@ -176,7 +173,7 @@
 
             //$log.log(gtNode);
             var utNode = {};
-            utNode.id = key;
+            utNode.id = genericTree[key].info.assetpath;
             utNode.title = gtNode.info.name;
             utNode.info = gtNode.info;
             utNode.items = [];
@@ -189,7 +186,7 @@
                 for (var idx in gtNode.children) {
                     child = gtNode.children[idx];
                     //$log.log("parent: " + key + ", child = " + idx + ", type = " + child.ui_asset_type);
-                    resultNode = vm.buildManagementTree(genericTree, helperService.getAssetPath(child));
+                    resultNode = vm.buildManagementTree(genericTree, vm.getGenericTreeIndex(genericTree, child));
                     //$log.log(resultNode);
 
                     // if (resultNode !== null) {
@@ -244,19 +241,39 @@
         };
 
 
-        vm.getDashboardTree = function (body) {
-            var groupsPromise = userService.getMyGroupsMap(body);
-            var vehiclesPromise = userService.getMyVehiclesMap(body);
-            return $q.all([groupsPromise, vehiclesPromise])
-                .then(vm.createGenericTree, vm.handleFailure)
-                .then(vm.createDashboardTree, vm.handleFailure);
-        };
+        // His group will not come in mygroups or myassetgroups API. So we need to handle him explicitly
+        vm.addLoggedInUserToTree = function (asset, assetTree) {
+            var assetpath = asset.assetpath;
+            var pgrouppath = asset.pgrouppath;
 
+            if (!(pgrouppath in assetTree)) {
+                assetTree[pgrouppath] = {};
 
-        vm.getManagementTree = function (body) {
-            return userService.getMyDirectAssetsMap(body)
-                .then(vm.createGenericTree, vm.handleFailure)
-                .then(vm.createManagementTree, vm.handleFailure);
+                if (assetTree[pgrouppath].info == null) {
+                    assetTree[pgrouppath].info = {
+                        name: asset.pname,
+                        assetpath: asset.pgrouppath,
+                    };
+                    helperService.addAssetInfo(assetTree[pgrouppath].info);
+                }
+
+                if (assetTree[pgrouppath].children == null) {
+                    assetTree[pgrouppath].children = {};
+                    assetTree[pgrouppath].children[assetpath] = asset;
+                }
+            }
+
+            for (var gidx in assetTree) {
+                var parentPath = helperService.getParentPath(assetTree[gidx].info);
+                if (parentPath == pgrouppath) {
+                    if (!(assetTree[gidx].info.assetpath in assetTree[pgrouppath].children)) {
+                        if (assetTree[gidx].info.assetpath != pgrouppath) {
+                            // $log.log("lolli my parent of " + assetTree[gidx].info.assetpath + " is " + pgrouppath);
+                            assetTree[pgrouppath].children[assetTree[gidx].info.assetpath] = assetTree[gidx].info;
+                        }
+                    }
+                }
+            }
         };
 
 
@@ -288,6 +305,7 @@
                                 assetTree[pgrouppath].info = groups[pgrouppath];
                                 assetTree[pgrouppath].children = {};
                                 assetTree[pgrouppath].children[assetpath] = asset;
+
                                 //$log.log("Added " + pgrouppath + " as parent of " + assetpath);
                                 //$log.log("Added " + assetpath + " as child of " + pgrouppath);
                             } else {
@@ -299,10 +317,33 @@
                             }
                         }
                     }
+
+                    if('userid' in asset) {
+                        vm.addLoggedInUserToTree(asset, assetTree);
+                    }
                 }
             }
+
             //$log.log(assetTree);
-            return $q.resolve(assetTree);
+            var assetArray = helperService.sortOnAssetLevel(assetTree);
+            //$log.log(assetArray);
+            return $q.resolve(assetArray);
+        };
+
+
+        vm.getDashboardTree = function (body) {
+            var groupsPromise = userService.getMyGroupsMap(body);
+            var vehiclesPromise = userService.getMyVehiclesMap(body);
+            return $q.all([groupsPromise, vehiclesPromise])
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createDashboardTree, vm.handleFailure);
+        };
+
+
+        vm.getManagementTree = function (body) {
+            return userService.getMyDirectAssetsMap(body)
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createManagementTree, vm.handleFailure);
         };
     }
 

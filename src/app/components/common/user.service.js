@@ -13,6 +13,11 @@
         $log.log("userService");
 
 
+        vm.getMyInfo = function(body) {
+            $log.log("getMyInfo");
+            return requestService.firePost('/user/myinfo', body);
+        };
+
         vm.getMyGroups = function(body) {
             // $log.log("getMyGroups");
             return requestService.firePost('/user/mygroups', body);
@@ -58,6 +63,13 @@
         vm.handleFailure = function (resp) {
             //$log.log("handleFailure ");
             return $q.reject(resp);
+        };
+
+
+        vm.getMyInfoMap = function(body) {
+            return vm.getMyInfo(body)
+                .then(helperService.makeMapOnAssetPath, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
         };
 
 
@@ -130,25 +142,11 @@
             var uPromise = vm.getMyUsersMap(body);
             var rPromise = vm.getMyRolesMap(body);
             var dPromise = vm.getMyDevicesMap(body);
+            var myPromise = vm.getMyInfoMap(body);
 
-            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise])
+            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise, myPromise])
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };
-
-
-        vm.getMyDirectAssetsMap2 = function (body) {
-            // $log.log("userService getMyDirectAssetsMap");
-            var gPromise = vm.getMyAssetGroupsMap(body);
-            var vPromise = vm.getMyVehiclesMap(body);
-            var uPromise = vm.getMyUsersMap(body);
-            var rPromise = vm.getMyRolesMap(body);
-            var dPromise = vm.getMyDevicesMap(body);
-
-            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise])
-                .then(vm.handleDirectAssetResponse, vm.handleFailure);
-
-        };
-
     }
 })();
