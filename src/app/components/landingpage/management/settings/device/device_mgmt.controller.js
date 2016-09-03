@@ -4,7 +4,7 @@
 
 
 
-(function() {
+(function () {
 
     angular
         .module('uiplatform')
@@ -16,13 +16,13 @@
         $log.log('DeviceMgmtController');
         var vm = this;
         vm.data = [];
-      //  settingsService.setTab(intellicarAPI.constantFactory.DEVICE);
+        settingsService.setTab(intellicarAPI.constantFactory.DEVICE);
 
-        vm.onLoad = function() {
-            $log.log("my startup data");
+        vm.onLoad = function () {
+            $log.log("my device data");
             $log.log(startupData);
 
-            for ( var key in startupData ){
+            for (var key in startupData) {
                 vm.details = {};
                 if (startupData.hasOwnProperty(key)) {
                     //$log.log(key + " -> " + startupData[key].name);

@@ -13,7 +13,7 @@
             vm.listeners = {};
 
             vm.handleResponse = function (resp) {
-                $log.log("leftNavManagementService handleResponse");
+                //$log.log("leftNavManagementService handleResponse");
                 $log.log(resp);
                 return $q.resolve(resp);
             };

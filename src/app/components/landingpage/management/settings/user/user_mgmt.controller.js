@@ -4,7 +4,7 @@
 
 
 
-(function() {
+(function () {
 
     angular
         .module('uiplatform')
@@ -15,15 +15,15 @@
 
         $log.log('UserMgmtController');
         var vm = this;
-       // settingsService.setTab(intellicarAPI.constantFactory.USER);
+        settingsService.setTab(intellicarAPI.constantFactory.USER);
         vm.data = [];
 
-        vm.onLoad = function() {
-            $log.log("my startup data");
+        vm.onLoad = function () {
+            $log.log("my user data");
             $log.log((startupData));
             vm.details = {};
 
-            for ( var key in startupData ){
+            for (var key in startupData) {
                 vm.details = {};
                 if (startupData.hasOwnProperty(key)) {
                     //$log.log(key + " -> " + startupData[key].name);

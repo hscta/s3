@@ -278,8 +278,8 @@
 
 
         vm.createGenericTree = function (resp) {
-            $log.log("createGenericTree");
-            $log.log(resp);
+            //$log.log("createGenericTree");
+            //$log.log(resp);
 
             var groups = resp[0];
             var assetTree = {};

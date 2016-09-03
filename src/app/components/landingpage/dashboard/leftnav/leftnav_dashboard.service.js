@@ -13,13 +13,13 @@
             vm.listeners = {};
 
             vm.handleResponse = function(resp) {
-                $log.log("handleResponse");
+                //$log.log("leftNavDashboardService handleResponse");
                 $log.log(resp);
             };
 
 
             vm.handleFailure = function(resp) {
-                $log.log("handleFailure ");
+                $log.log("leftNavDashboardService handleFailure ");
                 $log.log(resp);
                 return $q.reject(resp);
             };

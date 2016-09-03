@@ -131,7 +131,6 @@
             if (assetTypeId == null)
                 return null;
 
-            $log.log("my asset type id: " + assetTypeId);
             return vm.assetTypeIdToAssetType[assetTypeId];
         };
 
@@ -201,10 +200,7 @@
             for (var idx in data.assets) {
                 var asset = data.assets[idx];
                 assets[asset.assetpath] = asset;
-                $log.log(asset);
             }
-            //$log.log("my info #############################");
-            //$log.log(assets);
             return $q.resolve(assets);
         };
 
@@ -218,10 +214,7 @@
                 var asset = data[idx];
                 vm.addAssetInfo(asset);
                 assets[asset.assetpath] = asset;
-                $log.log(asset);
             }
-            //$log.log("my info ===================================");
-            //$log.log(assets);
             return $q.resolve(assets);
         };
 

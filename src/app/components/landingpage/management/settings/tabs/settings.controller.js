@@ -26,8 +26,8 @@
             //$log.log("to state = " + toState.name);
             var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
 
-            // $log.log('stateChangeStart =================');
-            // $log.log(toParams);
+            $log.log('stateChangeStart =================');
+            $log.log(toParams);
 
             if(leafState != intellicarAPI.constantFactory.GROUP || ('tabClick' in toParams)) {
                 //$log.log(leafState);
@@ -58,7 +58,10 @@
 
         vm.tabClick = function(assetType) {
             var currentGroup = settingsService.getCurrentGroup();
-            $log.log("my to current state: " + assetType);
+
+            if(currentGroup == null)
+                return;
+            //$log.log("my to current state: " + assetType);
             $log.log(currentGroup);
             var stateParams = {
                 info: {
@@ -75,15 +78,15 @@
             $state.go(vm.getTabState(assetType), stateParams);
         };
 
-        // vm.setTab = function(tabIndex) {
-        //     vm.selectedTab = tabIndex;
-        // };
-        //
-        // vm.init = function() {
-        //     settingsService.addSetTabListener(vm.setTab);
-        // };
+        vm.setTab = function(tabIndex) {
+            vm.selectedTab = tabIndex;
+        };
 
-       // vm.init();
+        vm.init = function() {
+            settingsService.addSetTabListener(vm.setTab);
+        };
+
+        vm.init();
     }
 })();
 

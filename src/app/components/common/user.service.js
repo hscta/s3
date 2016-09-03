@@ -14,7 +14,7 @@
 
 
         vm.getMyInfo = function(body) {
-            $log.log("getMyInfo");
+            //$log.log("getMyInfo");
             return requestService.firePost('/user/myinfo', body);
         };
 
@@ -129,7 +129,7 @@
 
 
         vm.handleDirectAssetResponse = function(resp) {
-            $log.log("userService handleDirectAssetResponse");
+            //$log.log("userService handleDirectAssetResponse");
             $log.log(resp);
             return $q.resolve(resp);
         };
