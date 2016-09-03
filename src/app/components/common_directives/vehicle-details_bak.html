@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<style>
+    .gap {padding:10px;}
+
+</style>
+
+<div layout="row"  layout-xs="column" flex>
+    <md-input-container flex>
+        <label>Vehicle Name</label>
+        <input type="text" ng-model="details.name"
+               ng-disabled="readMode" ng-pattern="/[a-zA-Z0-9^ ]/">
+    </md-input-container>
+
+    <md-input-container flex>
+        <label>Engine No.</label>
+        <input type="text"
+               ng-disabled="readMode">
+    </md-input-container>
+
+    <md-input-container flex>
+        <label>Chassis No.</label>
+        <input type="text"
+               ng-disabled="readMode">
+    </md-input-container>
+</div>
+<div layout="row"  layout-xs="column" flex>
+
+    <md-input-container flex>
+        <label>Registration No.</label>
+        <input type="text"
+               ng-disabled="readMode">
+    </md-input-container>
+    </div>
+<div layout="row"  layout-xs="column" flex>
+    <md-select ng-model="model" placeholder="Select Model"
+    class="md-no-underline" required>
+    <md-option value="Maruti">Maruti</md-option>
+    <md-option value="Suzuki">Suzuki</md-option>
+    <md-option value="Mercedez">Mercedez</md-option>
+    <md-option value="BMW">BMW</md-option>
+    </md-select>
+
+    <md-select ng-model="fuelType" placeholder="Fuel Type"
+    class="md-no-underline" required>
+    <md-option value="Petrol">Petrol</md-option>
+    <md-option value="Diesel">Diesel</md-option>
+    <md-option value="CNG">CNG</md-option>
+    <md-option value="LPG">LPG</md-option>
+    </md-select>
+</div>
+
+<div style="border:1px solid #CCC;">
+    <ul rn-carousel rn-carousel-buffered
+        rn-carousel-auto-slide
+        class="image" style="width:400px; height:200px;margin:0 auto;" flex>
+
+        <li ng-repeat="image in slides">
+            <img ng-src="{{image.image}}" style="display:block;margin:0 auto;text-align;center;"/>
+            <!--<div ng-style="{'background-image': 'url(' + image.image + ')'}"-->
+                 <!--class="bgimage"-->
+                 <!--style="width:400px; height:200px; background-image:-->
+                 <!--url(&quot;http://lorempixel.com/450/300/people/3&quot;);-->
+                 <!--background-size:100%;">-->
+            <!--</div>-->
+        </li>
+    </ul>
+</div>
+

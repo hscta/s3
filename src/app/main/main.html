@@ -4,9 +4,10 @@
 <style>
     .left-nav {border-right:1px solid #CCC;}
     .right-nav {border-left:1px solid #CCC;}
+    md-content { height:100%;}
 </style>
+
 <div ui-view="header"></div>
-<div ui-view="footer"></div>
 
 <md-content layout="row" flex class="altered">
     <div ui-view="leftnav" class="left-nav"></div>
@@ -14,10 +15,10 @@
     <div layout="column" flex id="content">
         <md-content layout="column" flex class="md-padding">
             <div ui-view="center"></div>
-
         </md-content>
     </div>
 
-    <div class="right-nav" ui-view="rightnav"></div>
+    <div   class="right-nav" ui-view="rightnav"></div>
 </md-content>
 
+<div ui-view="footer"></div>

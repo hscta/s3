@@ -10,7 +10,8 @@
         .controller('VehicleMgmtController', VehicleMgmtController);
 
     function VehicleMgmtController($scope, $rootScope, $log, $state, startupData,
-                                   intellicarAPI, settingsService) {
+                                   intellicarAPI, settingsService, $mdExpansionPanelGroup,
+                                    $compile) {
         $log.log('VehicleMgmtController');
         var vm = this;
      //   settingsService.setTab(intellicarAPI.constantFactory.VEHICLE);
@@ -38,6 +39,7 @@
                 vm.details = {};
                 if (startupData.hasOwnProperty(key)) {
                     //$log.log(key + " -> " + startupData[key].name);
+                    vm.details.type='vehicle';
                     vm.details['name'] = startupData[key].name;
                     //vm.details['id'] = startupData[key].vehicleid;
                     vm.details['id'] = startupData[key].assetid;
@@ -46,6 +48,25 @@
                     $scope = vm.data;
                 }
             }
+        };
+
+        vm.createPanel = function () {
+            // $log.log($mdExpansionPanelGroup('panelGroup').count());
+            // vm.componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();
+            // vm.details = [];
+            // vm.details.id = vm.componentId;
+            // vm.details.name = '';
+            //
+            // $mdExpansionPanelGroup().waitFor('panelGroup').then(function (instance) {
+            //     instance.register(vm.componentId, {
+            //         templateUrl: ' app/components/landingpage/management/settings/vehicle/template.html'
+            //     })
+            //     instance.add({
+            //         templateUrl: ' app/components/landingpage/management/settings/vehicle/template.html'
+            //     })
+            // });
+            // $mdExpansionPanelGroup('panelGroup').add(vm.componentId);
+
         };
 
         vm.onLoad();

@@ -8,17 +8,33 @@
         .module('uiplatform')
         .directive('icarPanelExpansion', icarPanelExpansion)
 
-    function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel) {
+        function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
+                                $stateParams) {
         return{
             restrict : 'E',
             templateUrl : 'app/components/common_directives/panel-expansion.html',
-            //replace: false,
-            //transclude: true,
             scope: {
                 details: '='
             },
-            link: function (scope, $mdMedia) {
-                scope.readMode = true;
+            link: function (scope) {
+                $log.log($stateParams.type);
+                var type = $stateParams.type;
+                scope.templateType = 'app/components/landingpage/management/settings/'+type+'/'+type+'Details.html';
+                scope.slides = [
+                    {
+                        image: 'assets/images/car1.jpg'
+                    },
+                    {
+                        image: 'assets/images/car2.jpg'
+                    },
+                    {
+                        image: 'assets/images/car3.jpg'
+                    },
+                    {
+                        image: 'assets/images/car4.jpg'
+                    }
+                ];
+
                 scope.deleted_panel_id;
                 scope.master = {};
 
@@ -29,7 +45,7 @@
                scope.discard = function($panel) {
                    scope.readMode = true;
                    scope.details = angular.copy(scope.master);
-                   $panel.collapse();
+                   scope.collapsePanel($panel);
                }
 
                scope.edit = function(){
@@ -50,22 +66,40 @@
                    $mdDialog.show(options);
                };
 
-               scope.delete_selected = function () {
+               scope.deleteSelected = function () {
                    $mdExpansionPanel().waitFor(scope.deleted_panel_id).then(function (instance) {
                        instance.remove();
                    });
                    $mdDialog.cancel();
                };
 
-               scope.cancel_selected = function () {
+               scope.cancelSelected = function () {
                    $mdDialog.cancel();
                    $log.log('my delete');
                };
 
-               scope.get_current_data = function () {
+               scope.getCurrentData = function () {
                    scope.master = {};
                    scope.master = angular.copy(scope.details);
                };
+
+               scope.collapsePanel = function($panel) {
+                   scope.readMode = true;
+                   $panel.collapse();
+               };
+
+                // scope.createPanel = function($panel) {
+                //     var componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();
+                //
+                //     $mdExpansionPanelGroup().waitFor('panelGroup').then(function (instance) {
+                //         instance.register(componentId, {
+                //             templateUrl: 'app/components/common_directives/panel-expansion.html'
+                //         })
+                //         instance.add({
+                //             templateUrl: 'app/components/common_directives/panel-expansion.html'
+                //         })
+                //     });
+                // }
             }
         }
     }

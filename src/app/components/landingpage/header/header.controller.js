@@ -10,7 +10,7 @@
         .controller('HeaderController', HeaderController);
 
     function HeaderController($rootScope, $scope, navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
-                            $mdToast, $document, loginService, requestService) {
+                            $mdToast, $document, loginService, requestService, loginService) {
 
         $log.log('HeaderController');
         var vm = this;
@@ -30,6 +30,11 @@
             .then(function(menuItems) {
                 vm.menuItems = [].concat(menuItems);
             });
+
+        vm.logout = function () {
+            $log.log('ssssssssssssssssssssssssssss')
+            loginService.logout();
+        }
 
         function toggleRightSidebar() {
            // $mdSidenav('right').toggle();

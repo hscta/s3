@@ -30,6 +30,7 @@
                             startupData : function($stateParams, $log, vehicleMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
                                 $log.log($stateParams);
+                                $stateParams.type="vehicle";
                                 return vehicleMgmtService.getData($stateParams);
                             }
                         },
@@ -106,6 +107,7 @@
                             startupData : function($stateParams, $log, deviceMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
                                 $log.log($stateParams);
+                                $stateParams.type="device";
                                 return deviceMgmtService.getData($stateParams);
                             }
                         },

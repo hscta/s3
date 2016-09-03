@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 
-{{vm.left_nav_toggle}}
-
 <md-toolbar class="icar-toolbar">
-    <div class="md-toolbar-tools icar-toolbar-tools" layout-align="start center" flex>
-        <div layout="row" layout-align="start center" flex="20">
+    <div class="md-toolbar-tools icar-toolbar-tools" layout-align="start center">
+        <div layout="row" layout-align="start center"  flex="30">
             <md-button class="md-icon-button" aria-label="Icon" ng-click="vm.toggleLeftnav()">
                 <md-tooltip>Left menu</md-tooltip>
                 <md-icon md-font-library="material-icons">dehaze</md-icon>
@@ -14,7 +12,7 @@
             </h2>
         </div>
 
-        <div id="centernav2" flex="70" style="padding-right:10px; padding-left:10px" layout="row"
+        <div id="centernav2" flex="40"
              layout-align="space-around center">
                 <div layout="row">
                     <a ui-sref="home.dashboard" class="M9kDrd xyzabc">Dashboard</a>
@@ -22,13 +20,13 @@
                     <a ui-sref="home.reports" class="M9kDrd xyzabc">Reports</a>
                 </div>
             <!--<md-tabs>-->
-                <!--<md-tab md-on-select="transitionTo('home.dashboard')">-->
+                <!--<md-tab md-on-select="$state.go('home.dashboard')">-->
                     <!--<md-tab-label>Dashboard</md-tab-label>-->
                 <!--</md-tab>-->
-                <!--<md-tab md-on-select="transitionTo('home.management')">-->
+                <!--<md-tab md-on-select="$state.go('home.management')">-->
                     <!--<md-tab-label>Management</md-tab-label>-->
                 <!--</md-tab>-->
-                <!--<md-tab md-on-select="transitionTo('home.reports')">-->
+                <!--<md-tab md-on-select="$state.go('home.reports')">-->
                     <!--<md-tab-label>Reports</md-tab-label>-->
                 <!--</md-tab>-->
             <!--</md-tabs>-->
@@ -36,15 +34,25 @@
 
 
         <!--<span flex></span>-->
-        <div layout="row" layout-align="end center" flex="10">
+        <div layout="row" layout-align="end center"  flex="30">
             <md-button class="md-icon-button" aria-label="notifications" ng-click="vm.toggleRightSidebar()">
                 <md-tooltip>Alerts</md-tooltip>
                 <md-icon md-font-library="material-icons">notifications</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="User">
-                <md-tooltip>User</md-tooltip>
-                <md-icon md-font-library="material-icons">face</md-icon>
-            </md-button>
+
+            <md-menu md-offset="0 2" style="margin:0;">
+                <md-button class="md-icon-button" aria-label="User" ng-click="$mdOpenMenu()">
+                    <md-tooltip>User</md-tooltip>
+                    <md-icon md-font-library="material-icons">face</md-icon>
+                </md-button>
+                <md-menu-content width="3">
+                    <md-menu-item><md-button ng-click="$mdCloseMenu()">Profile</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="vm.logout();$mdCloseMenu()">Log out</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+
+
         </div>
     </div>
 </md-toolbar>
