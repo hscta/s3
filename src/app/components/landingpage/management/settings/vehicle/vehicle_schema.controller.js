@@ -9,7 +9,8 @@
         .module('uiplatform')
         .controller('VehicleSchemaController', VehicleSchemaController);
 
-    function VehicleSchemaController ($compile, schemaService, $log, $scope, $document) {
+    function VehicleSchemaController ($compile, schemaService, $log, $scope, $document,
+                                    $timeout) {
         var vm = this;
         var schema = [
             {
@@ -44,24 +45,14 @@
             },
         ];
         vm.str = schemaService.parseSchema($scope, schema);
-        angular.element(document.getElementById('demo')).append($compile(vm.str)($scope));
 
-        // $scope.items=[1,2,3,4];
-        $scope.selected = [];
-        $scope.toggle = function (item, list) {
-            var idx = list.indexOf(item);
-            if (idx > -1) {
-                list.splice(idx, 1);
-            }
-            else {
-                list.push(item);
-            }
-        };
-        $scope.exists = function (item, list) {
-            return list.indexOf(item) > -1;
-        };
 
-        $scope.chipmodel = [];
+        $log.log(document.getElementById($scope.details.id));
+
+        $timeout(function(){
+            $log.log(document.getElementById($scope.details.id));
+            angular.element(document.getElementById($scope.details.id)).append($compile(vm.str)($scope));
+        });
     };
 
 })();

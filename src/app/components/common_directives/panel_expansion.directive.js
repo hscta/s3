@@ -11,13 +11,12 @@
         function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
                                 $stateParams) {
         return{
-            restrict : 'E',
+            restrict : 'ACE',
             templateUrl : 'app/components/common_directives/panel-expansion.html',
             scope: {
                 details: '='
             },
             link: function (scope) {
-                $log.log($stateParams.type);
                 var type = $stateParams.type;
                 scope.templateType = 'app/components/landingpage/management/settings/'+type+'/'+type+'Details.html';
                 scope.slides = [
@@ -42,10 +41,10 @@
                    $log.log('saveeeeeeeeeeeeeeeeeeee');
                };
 
-               scope.discard = function($panel) {
+               scope.discard = function(panelId) {
                    scope.readMode = true;
                    scope.details = angular.copy(scope.master);
-                   scope.collapsePanel($panel);
+                   scope.collapsePanel(panelId);
                }
 
                scope.edit = function(){
@@ -83,10 +82,17 @@
                    scope.master = angular.copy(scope.details);
                };
 
-               scope.collapsePanel = function($panel) {
+               scope.collapsePanel = function(panelId) {
+                   $log.log(panelId);
+                   panelId = panelId.toString();
+                   $mdExpansionPanel(panelId).collapse();
+                   // $mdExpansionPanel().waitFor(panelId).then(function (instance) {
+                   //     instance.collapse({animation: false});
+                   // });
                    scope.readMode = true;
-                   $panel.collapse();
                };
+
+               scope.panelCount = $mdExpansionPanelGroup('panelGroup').count();
 
                 // scope.createPanel = function($panel) {
                 //     var componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();

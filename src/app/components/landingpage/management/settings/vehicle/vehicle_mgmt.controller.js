@@ -36,43 +36,31 @@
             $log.log(startupData);
 
             for ( var key in startupData ){
-                vm.details = {};
+                var details = {};
                 if (startupData.hasOwnProperty(key)) {
                     //$log.log(key + " -> " + startupData[key].name);
-                    vm.details.type='vehicle';
-                    vm.details['name'] = startupData[key].name;
+                    details.type='vehicle';
+                    details['name'] = startupData[key].name;
                     //vm.details['id'] = startupData[key].vehicleid;
-                    vm.details['id'] = startupData[key].assetid;
-                    $log.log(vm.details);
-                    vm.data.push(vm.details);
-                    $scope = vm.data;
+                    details['id'] = startupData[key].assetid;
+                    $log.log(details);
+                    vm.data.push(details);
+                    //$scope = vm.data;
                 }
             }
         };
 
         vm.createPanel = function () {
-            // $log.log($mdExpansionPanelGroup('panelGroup').count());
-            // vm.componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();
-            // vm.details = [];
-            // vm.details.id = vm.componentId;
-            // vm.details.name = '';
-            //
-            // $mdExpansionPanelGroup().waitFor('panelGroup').then(function (instance) {
-            //     instance.register(vm.componentId, {
-            //         templateUrl: ' app/components/landingpage/management/settings/vehicle/template.html'
-            //     })
-            //     instance.add({
-            //         templateUrl: ' app/components/landingpage/management/settings/vehicle/template.html'
-            //     })
-            // });
-            // $mdExpansionPanelGroup('panelGroup').add(vm.componentId);
+            vm.componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();
+            $log.log(vm.componentId);
+            var details = {};
+            details.id = vm.componentId;
+            details.name = "new" + vm.data.length;
 
+            vm.data.unshift(details);
         };
-
         vm.onLoad();
     }
-
-
 })();
 
 

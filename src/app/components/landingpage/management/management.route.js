@@ -48,6 +48,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/group/group_mgmt.html',
                         resolve: {
                             startupData : function($stateParams, $log, groupMgmtService, $state) {
+                                $stateParams.type="group";
                                 $log.log("current State " + $state.current.name);
                                 $log.log($stateParams);
                                 return groupMgmtService.getData($stateParams);
@@ -67,6 +68,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/user/user_mgmt.html',
                         resolve: {
                             startupData : function($stateParams, $log, userMgmtService, $state) {
+                                $stateParams.type="user";
                                 $log.log("toState " + $state.current.name);
                                 $log.log($stateParams);
                                 return userMgmtService.getData($stateParams);
@@ -86,6 +88,7 @@
                         templateUrl: 'app/components/landingpage/management/settings/role/role_mgmt.html',
                         resolve: {
                             startupData : function($stateParams, $log, roleMgmtService, $state) {
+                                $stateParams.type="role";
                                 $log.log("toState " + $state.current.name);
                                 $log.log($stateParams);
                                 return roleMgmtService.getData($stateParams);
