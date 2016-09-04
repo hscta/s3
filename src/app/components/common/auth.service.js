@@ -26,15 +26,15 @@
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace('-', '+').replace('_', '/');
             return angular.fromJson($window.atob(base64));
-        }
+        };
 
         vm.saveToken = function (token) {
             $window.localStorage[TOKEN_KEY] = token;
-        }
+        };
 
         vm.getToken = function () {
             return $window.localStorage[TOKEN_KEY];
-        }
+        };
 
         vm.isAuthed = function () {
             var token = vm.getToken();
@@ -44,7 +44,7 @@
             } else {
                 return false;
             }
-        }
+        };
 
         vm.logout = function () {
             $window.localStorage.removeItem(TOKEN_KEY);
@@ -82,7 +82,7 @@
                 }
 
                 return res;
-            },
+            }
 
             // responseError: function(res) {
             //     $log.log('interceptor');

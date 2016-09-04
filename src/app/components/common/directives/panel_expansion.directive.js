@@ -12,7 +12,7 @@
                                 $stateParams) {
         return{
             restrict : 'ACE',
-            templateUrl : 'app/components/common_directives/panel-expansion.html',
+            templateUrl : 'app/components/common/directives/panel-expansion.html',
             scope: {
                 details: '='
             },
@@ -56,7 +56,7 @@
                scope.delete = function(ev) {
                    $log.log('deleteeeeeeeeeeeeeeeee');
                    var options = {
-                       templateUrl: '/app/components/common_directives/panel_delete_dialog.html',
+                       templateUrl: '/app/components/common/directives/panel_delete_dialog.html',
                        scope: scope,
                        preserveScope: true,
                    };
@@ -99,10 +99,10 @@
                 //
                 //     $mdExpansionPanelGroup().waitFor('panelGroup').then(function (instance) {
                 //         instance.register(componentId, {
-                //             templateUrl: 'app/components/common_directives/panel-expansion.html'
+                //             templateUrl: 'app/components/common/directives/panel-expansion.html'
                 //         })
                 //         instance.add({
-                //             templateUrl: 'app/components/common_directives/panel-expansion.html'
+                //             templateUrl: 'app/components/common/directives/panel-expansion.html'
                 //         })
                 //     });
                 // }

@@ -27,13 +27,13 @@
 
             myScope.chipmodel = [];
 
-            var x = "<div id='demo1'>";
+            var itemTemplate = "<div id='demo1'>";
             for ( var i = 0; i < schema.length; i++ ) {
 
                 switch ( schema[i].type ){
                     case "text" : case "number" : case "file" :
                     case "password" : case "email" :
-                        x += '<md-input-container>\
+                        itemTemplate += '<md-input-container>\
                                  <input aria-label="field" placeholder="'+schema[i].name+'" \
                                     type="'+schema[i].type+'"/>\
                               </md-input-container>';
@@ -42,21 +42,21 @@
                     case 'select':
 
                         if ( schema[i].selection_type == 'multiple')
-                            x += ' <md-select ng-model="fuelType" aria-label="schema[i].name" \
+                            itemTemplate += ' <md-select ng-model="fuelType" aria-label="schema[i].name" \
                                 placeholder="'+schema[i].name+'" class="md-no-underline" multiple>';
                         else
-                            x += ' <md-select ng-model="fuelType" aria-label="schema[i].name" \
+                            itemTemplate += ' <md-select ng-model="fuelType" aria-label="schema[i].name" \
                                     placeholder="'+schema[i].name+'" class="md-no-underline">';
 
                         for ( var j = 0; j < schema[i].val.length; j++ ) {
-                            x += '<md-option value="'+schema[i].val[j]+'">'+schema[i].val[j]+'</md-option>';
+                            itemTemplate += '<md-option value="'+schema[i].val[j]+'">'+schema[i].val[j]+'</md-option>';
                         }
-                        x += '</md-select>';
+                        itemTemplate += '</md-select>';
                         break;
 
                     case 'checkbox':
                         myScope.items = [1,2,3,4];
-                        x+= '<legend>'+schema[i].name+'</legend>\
+                        itemTemplate += '<legend>'+schema[i].name+'</legend>\
                                 <div layout="row" layout-wrap flex>\
                                     <div flex="50" ng-repeat="item in items">\
                                         <md-checkbox ng-checked="exists(item, selected)" \
@@ -71,7 +71,7 @@
                         break;
 
                     case "chips":
-                        x+= '<md-chips \
+                        itemTemplate += '<md-chips \
                                 ng-model="chipmodel" \
                                 readonly="false" \
                                 md-removable="true" \
@@ -83,8 +83,8 @@
                         break;
                 }
             }
-            x += '</div>';
-            return x;
+            itemTemplate += '</div>';
+            return itemTemplate;
         }
     }
 })();
