@@ -5,9 +5,9 @@
 (function () {
     angular
         .module('uiplatform')
-        .factory('constantFactory', constantFactory);
+        .factory('appConstants', appConstants);
 
-    function constantFactory() {
+    function appConstants() {
 
         return {
             GROUP: 'group',

@@ -15,7 +15,7 @@
 
         $log.log('UserMgmtController');
         var vm = this;
-        settingsService.setTab(intellicarAPI.constantFactory.USER);
+        settingsService.setTab(intellicarAPI.appConstants.USER);
         vm.data = [];
 
         vm.onLoad = function () {

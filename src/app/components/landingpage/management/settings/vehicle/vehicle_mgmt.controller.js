@@ -14,7 +14,7 @@
                                     $compile) {
         $log.log('VehicleMgmtController');
         var vm = this;
-     //   settingsService.setTab(intellicarAPI.constantFactory.VEHICLE);
+     //   settingsService.setTab(intellicarAPI.appConstants.VEHICLE);
 
 
         // $log.log('state.name = ');

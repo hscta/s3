@@ -29,7 +29,7 @@
             $log.log('stateChangeStart =================');
             $log.log(toParams);
 
-            if(leafState != intellicarAPI.constantFactory.GROUP || ('tabClick' in toParams)) {
+            if(leafState != intellicarAPI.appConstants.GROUP || ('tabClick' in toParams)) {
                 //$log.log(leafState);
                 for (var idx in vm.tabs) {
                     if (leafState == vm.tabs[idx]) {
@@ -41,7 +41,7 @@
             } else {
                 $log.log('my to is group state ' + vm.tabs[vm.selectedTab]);
                 if(!('tabClick' in toParams)) {
-                    if (vm.tabs[vm.selectedTab] != intellicarAPI.constantFactory.GROUP) {
+                    if (vm.tabs[vm.selectedTab] != intellicarAPI.appConstants.GROUP) {
                         // $log.log("my toParams");
                         // $log.log(toParams);
                         // $log.log("my to yahoo");

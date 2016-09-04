@@ -14,7 +14,7 @@
                                 intellicarAPI, settingsService, startupData) {
         $log.log('RoleMgmtController');
         var vm = this;
-        settingsService.setTab(intellicarAPI.constantFactory.ROLE);
+        settingsService.setTab(intellicarAPI.appConstants.ROLE);
         vm.data = [];
 
 

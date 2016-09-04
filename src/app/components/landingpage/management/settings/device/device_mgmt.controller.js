@@ -16,7 +16,7 @@
         $log.log('DeviceMgmtController');
         var vm = this;
         vm.data = [];
-        settingsService.setTab(intellicarAPI.constantFactory.DEVICE);
+        settingsService.setTab(intellicarAPI.appConstants.DEVICE);
 
         vm.onLoad = function () {
             $log.log("my device data");

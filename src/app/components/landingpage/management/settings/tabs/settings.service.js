@@ -11,11 +11,11 @@
         vm.currentGroup = null;
 
         vm.tabs = [
-            intellicarAPI.constantFactory.VEHICLE,
-            intellicarAPI.constantFactory.GROUP,
-            intellicarAPI.constantFactory.USER,
-            intellicarAPI.constantFactory.ROLE,
-            intellicarAPI.constantFactory.DEVICE
+            intellicarAPI.appConstants.VEHICLE,
+            intellicarAPI.appConstants.GROUP,
+            intellicarAPI.appConstants.USER,
+            intellicarAPI.appConstants.ROLE,
+            intellicarAPI.appConstants.DEVICE
         ];
 
 
@@ -47,7 +47,7 @@
             var grouppath = null;
 
             if(stateParams != null && stateParams.info != null) {
-                if (stateParams.info.ui_asset_type == intellicarAPI.constantFactory.GROUP) {
+                if (stateParams.info.ui_asset_type == intellicarAPI.appConstants.GROUP) {
                     grouppath = stateParams.info.assetpath;
                 } else {
                     grouppath = stateParams.info.pgrouppath;

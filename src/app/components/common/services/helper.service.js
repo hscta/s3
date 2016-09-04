@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('helperService', helperService);
 
-    function helperService($rootScope, $log, $q, constantFactory) {
+    function helperService($rootScope, $log, $q, appConstants) {
         var vm = this;
         $log.log("helperService");
 
@@ -21,26 +21,26 @@
         var PGROUP_ID = 'pgroupid';
         var UI_ASSET_TYPE = 'ui_asset_type';
 
-        vm.assetTypeToAssetTypeId = {
-            group: '1',
-            user: '2',
-            role: '3',
-            vehicle: '4',
-            vehicletype: '5',
-            device: '6',
-            devicetype: '7'
-        };
-
-
+        // should be same as defined in backend
         vm.assetTypeIdToAssetType = {
-            '1': constantFactory.GROUP,
-            '2': constantFactory.USER,
-            '3': constantFactory.ROLE,
-            '4': constantFactory.VEHICLE,
-            '5': constantFactory.VEHICLETYPE,
-            '6': constantFactory.DEVICE,
-            '7': constantFactory.DEVICETYPE
+            '1': appConstants.GROUP,
+            '2': appConstants.USER,
+            '3': appConstants.ROLE,
+            '4': appConstants.VEHICLE,
+            '5': appConstants.VEHICLETYPE,
+            '6': appConstants.DEVICE,
+            '7': appConstants.DEVICETYPE
         };
+
+
+        // generating reverse lookup
+        vm.assetTypeToAssetTypeId = function() {
+            var assetTypeToAssetTypeId = {};
+            for(var idx in vm.assetTypeIdToAssetType) {
+                assetTypeToAssetTypeId[vm.assetTypeIdToAssetType[idx]] = idx;
+            }
+            return assetTypeToAssetTypeId;
+        }();
 
 
         vm.getPathId = function (path) {

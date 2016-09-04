@@ -16,7 +16,7 @@
 
         $log.log('GroupMgmtController');
         var vm = this;
-        settingsService.setTab(intellicarAPI.constantFactory.GROUP);
+        settingsService.setTab(intellicarAPI.appConstants.GROUP);
         vm.data = [];
 
 

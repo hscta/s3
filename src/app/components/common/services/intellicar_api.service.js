@@ -13,7 +13,7 @@
                                            userService, groupService,
                                            mqttService,
                                            anchorSmoothScrollService,
-                                           constantFactory) {
+                                           appConstants) {
             var vm = this;
             $log.log("intellicarAPI");
 
@@ -25,7 +25,7 @@
                 userService : userService,
                 groupService: groupService,
                 anchorScrollService : anchorSmoothScrollService,
-                constantFactory : constantFactory,
+                appConstants : appConstants,
                 mqttService : mqttService
             }
         });
