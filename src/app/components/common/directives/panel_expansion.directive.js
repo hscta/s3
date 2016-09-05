@@ -13,6 +13,7 @@
         return{
             restrict : 'ACE',
             templateUrl : 'app/components/common/directives/panel-expansion.html',
+            trasclude:true,
             scope: {
                 details: '='
             },
@@ -88,7 +89,10 @@
                    scope.readMode = true;
                };
 
-               scope.panelCount = $mdExpansionPanelGroup('panelGroup').count();
+               scope.panelCount = $mdExpansionPanelGroup('panelGroup').count() + 1;
+
+                $log.log(scope.panelCount);
+
             }
         }
     }
