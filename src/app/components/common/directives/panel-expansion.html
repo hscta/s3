@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 
+
+
 <md-expansion-panel md-component-id="{{panelCount + 1}}" flex>
-    <md-expansion-panel-collapsed ng-click="getCurrentData(details.id)" flex>
+    <md-expansion-panel-collapsed ng-click="getCurrentData(panelCount+1)" flex>
         <div class="md-title">{{details.name}}</div>
-        <div class="md-summary"></div>
+        <div class="md-summary">demo</div>
         <md-expansion-panel-icon></md-expansion-panel-icon>
     </md-expansion-panel-collapsed>
 

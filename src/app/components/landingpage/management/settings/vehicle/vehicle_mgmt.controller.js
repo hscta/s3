@@ -51,12 +51,9 @@
         };
 
         vm.createPanel = function () {
-            vm.componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();
-            $log.log(vm.componentId);
             var details = {};
             details.id = vm.componentId;
             details.name = "new" + vm.data.length;
-
             vm.data.unshift(details);
         };
         vm.onLoad();
