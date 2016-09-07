@@ -7,10 +7,10 @@
 var response = [
     ["perm1", "SETTINGS_TAG_1", {
         // output => <input type="number">
-        "key1": {"type": "int", "displayname": "Display Name1", "select": false},
+        "key1": {"type": "int", "displayname": "Display Name1", "select": [0, 1, [1,3,9,27,81]]},
 
         // output => <input type="text">
-        "key2": {"type": "string", "displayname": "Display Name2", "select": false},
+        "key2": {"type": "string", "displayname": "Display Name2", "select": null},
 
         // output => List of integers in items with Add button
         "key3": {"type": "[int]", "displayname": "Display Name3", "select": false, "items": [1, 2, 3, 4]},
