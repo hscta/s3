@@ -7,7 +7,13 @@
 var response = [
     ["perm1", "SETTINGS_TAG_1", {
         // output => <input type="number">
-        "key1": {"type": "int", "displayname": "Display Name1", "select": [0, 1, [1,3,9,27,81]]},
+        "key1": {"type": ["int"], "displayname": "Display Name1", "displaydesc":"This will come in the hint", 
+        "select": [0, 1, [1,3,9,27,81]], "default":[3], "editable":true},
+        
+        "keyobj": {"type":[{"level2key1":{"type":"int", "displayname":"Level 2 Key", "default":10, "editable":true}}],
+        "displayname":"Level 2 Keys Array", "default":[{"level2key1":100}, {"level2key1":200}], "checkfun":{"type":"udf",
+        "func":'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema){
+            return {"status":"FAILURE", "errmsg":"I haven't yet checked it"};}'}},
 
         // output => <input type="text">
         "key2": {"type": "string", "displayname": "Display Name2", "select": null},
