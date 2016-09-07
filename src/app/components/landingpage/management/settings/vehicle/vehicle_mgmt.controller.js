@@ -35,14 +35,16 @@
             $log.log("my vehicle data");
             $log.log(startupData);
 
+            var len = 0;
             for ( var key in startupData ){
                 var details = {};
                 if (startupData.hasOwnProperty(key)) {
-                    //$log.log(key + " -> " + startupData[key].name);
+                    $log.log(startupData[key]);
                     details.type='vehicle';
                     details['name'] = startupData[key].name;
                     //vm.details['id'] = startupData[key].vehicleid;
                     details['id'] = startupData[key].assetid;
+                    vm.details['len'] = i++;
                     $log.log(details);
                     vm.data.push(details);
                     //$scope = vm.data;
@@ -50,9 +52,43 @@
             }
         };
 
+        // scope.panelSchema = [{
+        //     section:'vehicle Details',
+        //     order:1,
+        //     description:"vehicle description"
+        // },{
+        //     section:"Devices",
+        //     order:2,
+        //     description:"device description"
+        // }];
+
+        var schema = [
+            {
+                name:"fuelType",
+                type:"select",
+                val:["option1", "option2", "option3"],
+                selcted_val:["option1"]
+            }, {
+                name:"multiselect",
+                type:"select",
+                val:["option1", "option2", "option3"],
+                selcted_val:["option1"],
+                selection_type:"multiple"
+            }, {
+                name:"Car Number",
+                type:"text"
+            }, {
+                name:"Chassis Number",
+                type:"number"
+            }, {
+                name:"E-mail",
+                type:"email"
+            }
+        ];
+
         vm.createPanel = function () {
             var details = {};
-            details.id = vm.componentId;
+            details.len = vm.data.length;
             details.name = "new" + vm.data.length;
             vm.data.unshift(details);
         };

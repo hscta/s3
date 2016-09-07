@@ -33,19 +33,19 @@
                 switch ( schema[i].type ){
                     case "text" : case "number" : case "file" :
                     case "password" : case "email" :
-                        itemTemplate += '<md-input-container>\
-                                 <input aria-label="field" placeholder="'+schema[i].name+'" \
+                    itemTemplate += '<md-input-container>\
+                                 <input aria-label="field" ng-model="schemaData[' + i + '].data" placeholder="'+schema[i].name+'" \
                                     type="'+schema[i].type+'"/>\
                               </md-input-container>';
-                        break;
+                    break;
 
                     case 'select':
 
                         if ( schema[i].selection_type == 'multiple')
-                            itemTemplate += ' <md-select ng-model="fuelType" aria-label="schema[i].name" \
+                            itemTemplate += ' <md-select ng-model="schemaData[' + i + '].data"  aria-label="schema[i].name" \
                                 placeholder="'+schema[i].name+'" class="md-no-underline" multiple>';
                         else
-                            itemTemplate += ' <md-select ng-model="fuelType" aria-label="schema[i].name" \
+                            itemTemplate += ' <md-select ng-model="schemaData[' + i + '].data" aria-label="schema[i].name" \
                                     placeholder="'+schema[i].name+'" class="md-no-underline">';
 
                         for ( var j = 0; j < schema[i].val.length; j++ ) {

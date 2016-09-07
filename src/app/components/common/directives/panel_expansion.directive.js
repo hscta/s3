@@ -8,18 +8,18 @@
         .module('uiplatform')
         .directive('icarPanelExpansion', icarPanelExpansion)
 
-        function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
-                                $stateParams) {
+    function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
+                                $stateParams, $compile) {
         return{
-            restrict : 'ACE',
+            restrict : 'E',
             templateUrl : 'app/components/common/directives/panel-expansion.html',
             trasclude:true,
             scope: {
-                details: '='
+                details: '=',
+                myFunc: '&clickPanel',
+                fields : '='
             },
             link: function (scope) {
-                var type = $stateParams.type;
-                scope.templateType = 'app/components/landingpage/management/settings/'+type+'/'+type+'Details.html';
                 scope.slides = [
                     {
                         image: 'assets/images/car1.jpg'
@@ -39,60 +39,79 @@
                 scope.master = {};
 
                 scope.save = function(){
-                   $log.log('saveeeeeeeeeeeeeeeeeeee');
-               };
+                    $log.log("=============================================")
+                    $log.log(scope.schemaData);
+                };
 
-               scope.discard = function(panelId) {
-                   scope.readMode = true;
-                   scope.details = angular.copy(scope.master);
-                  // scope.collapsePanel(panelId);
-               }
+                scope.discard = function(panelId) {
+                    scope.readMode = true;
+                    scope.details = angular.copy(scope.master);
+                    // scope.collapsePanel(panelId);
+                }
 
-               scope.edit = function(){
-                   if ( scope.readMode )
-                       scope.readMode = false;
-               };
+                scope.edit = function(){
+                    if ( scope.readMode )
+                        scope.readMode = false;
+                };
 
-               scope.delete = function(ev) {
-                   $log.log('deleteeeeeeeeeeeeeeeee');
-                   var options = {
-                       templateUrl: '/app/components/common_directives/panel_delete_dialog.html',
-                       scope: scope,
-                       preserveScope: true,
-                   };
+                scope.delete = function(ev) {
+                    var options = {
+                        templateUrl: '/app/components/common_directives/panel_delete_dialog.html',
+                        scope: scope,
+                        preserveScope: true,
+                    };
 
-                   scope.deleted_panel_id = ev.toString();
-                   $mdDialog.show(options);
-               };
+                    scope.deleted_panel_id = ev.toString();
+                    $mdDialog.show(options);
+                };
 
-               scope.deleteSelected = function () {
-                   $mdExpansionPanel().waitFor(scope.deleted_panel_id).then(function (instance) {
-                       instance.remove();
-                   });
-                   $mdDialog.cancel();
-               };
+                scope.deleteSelected = function () {
+                    $mdExpansionPanel().waitFor(scope.deleted_panel_id).then(function (instance) {
+                        instance.remove();
+                    });
+                    $mdDialog.cancel();
+                };
 
-               scope.cancelSelected = function () {
-                   $mdDialog.cancel();
-                   $log.log('my delete');
-               };
+                scope.cancelSelected = function () {
+                    $mdDialog.cancel();
+                    $log.log('my delete');
+                };
 
-               scope.getCurrentData = function () {
-                   scope.master = {};
-                   scope.master = angular.copy(scope.details);
-               };
 
-               scope.collapsePanel = function(panelId) {
-                   $log.log(panelId);
-                   panelId = panelId.toString();
-                   $mdExpansionPanel(panelId).collapse();
-                   scope.readMode = true;
-               };
+                scope.panelSchema = [{
+                    section:'vehicle Details',
+                    order:1,
+                    description:"vehicle description"
+                },{
+                    section:"Devices",
+                    order:2,
+                    description:"device description"
+                }];
 
-               scope.panelCount = $mdExpansionPanelGroup('panelGroup').count() + 1;
+                scope.getCurrentData = function (panelId) {
+                    scope.master = {};
+                    scope.master = angular.copy(scope.details);
+                    $log.log(panelId);
 
-                $log.log(scope.panelCount);
+                    scope.myFunc()
+                        .then (function(data){
+                            $log.log("inside directive");
+                            $log.log(data);
+                            angular.element(document.getElementById('fields_content'))
+                                .html($compile(scope.fields)(scope));
+                            scope.schemaData = data[1];
+                            $log.log("received in directive ++++++++++++++++++++++++++");
+                            $log.log(scope.schemaData);
+                            $log.log(scope.fields);
+                        });
+                };
 
+                scope.collapsePanel = function(panelId) {
+                    $log.log(panelId);
+                    panelId = panelId.toString();
+                    $mdExpansionPanel(panelId).collapse();
+                    scope.readMode = true;
+                };
             }
         }
     }

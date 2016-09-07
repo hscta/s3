@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 
-<md-expansion-panel-group md-component-id="panelGroup" id="/1/1" multiple="true" flex>
-    <md-button ng-click="vm.createPanel()">Add Roles</md-button flex>
+<!--<md-expansion-panel-group md-component-id="panelGroup" id="/1/1" multiple="true" flex>-->
+    <!--<md-button ng-click="vm.addRole()">Add Roles</md-button flex>-->
 
-    <icar-panel-expansion  ng-animate="'animate'" ng-repeat="d in vm.data track by $index" details="d"></icar-panel-expansion>
+    <!--<icar-panel-expansion  ng-animate="'animate'" ng-repeat="d in vm.data track by $index" details="d"></icar-panel-expansion>-->
+<!--</md-expansion-panel-group>-->
+
+<md-expansion-panel-group md-component-id="panelGroup" id="/1/1" flex multiple="true">
+    <md-button ng-click="vm.createPanel()">Add Vehicle</md-button flex>
+    <div id="new_panel"></div>
+    <md-expansion-panel ng-repeat="d in vm.data track by $index">
+        <md-expansion-panel-collapsed></md-expansion-panel-collapsed>
+        <md-expansion-panel-expanded>
+            <md-expansion-panel-header></md-expansion-panel-header>
+            <md-expansion-panel-content>
+                <md-expansion-panel-group md-component-id="panelGroup2"
+                                          id="/1/1" flex multiple="true">
+                <icar-panel-expansion click-panel="vm.onClickPanel(param)" ng-animate="'animate'"
+                                      ng-repeat="d in vm.panelSchema track by $index" details="d"
+                fields="vm.fields">
+                </icar-panel-expansion>
+            </md-expansion-panel-content>
+        </md-expansion-panel-expanded>
+    </md-expansion-panel>
 </md-expansion-panel-group>
-
 

@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 
+<!--<script type="text/ng-template" id="fields-template.html">-->
 
+    <!--<div> <h1>HTML Content </h1></div>-->
 
-<md-expansion-panel md-component-id="{{details.len}}" flex>
-    <md-expansion-panel-collapsed ng-click="getCurrentData(details.len)" flex>
-        <div class="md-title">{{details.name}}</div>
+    <!--<div ng-bind-html="fields"></div>-->
+<!--</script>-->
+
+<md-expansion-panel md-component-id="{{details.order}}" flex>
+    <md-expansion-panel-collapsed ng-click="getCurrentData(details.order)" flex>
+        <div class="md-title">{{details.section}}</div>
         <div class="md-summary">demo</div>
         <md-expansion-panel-icon></md-expansion-panel-icon>
     </md-expansion-panel-collapsed>
 
     <md-expansion-panel-expanded flex>
-        <md-expansion-panel-header ng-click="collapsePanel(details.len)" flex>
+        <md-expansion-panel-header ng-click="collapsePanel(details.order)" flex>
 
-            <div class="md-title">{{details.name}}</div>
+            <div class="md-title">{{details.section}}</div>
             <div class="md-summary"></div>
 
             <md-expansion-panel-icon></md-expansion-panel-icon>
         </md-expansion-panel-header>
 
-        <md-expansion-panel-content
-            ng-include="templateType" flex>
+        <md-expansion-panel-content flex id="fields_content">
         </md-expansion-panel-content>
 
         <md-expansion-panel-footer flex>
