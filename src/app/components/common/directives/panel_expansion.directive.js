@@ -13,6 +13,7 @@
         return{
             restrict : 'ACE',
             templateUrl : 'app/components/common/directives/panel-expansion.html',
+            trasclude:true,
             scope: {
                 details: '='
             },
@@ -44,19 +45,18 @@
                scope.discard = function(panelId) {
                    scope.readMode = true;
                    scope.details = angular.copy(scope.master);
-                   scope.collapsePanel(panelId);
+                  // scope.collapsePanel(panelId);
                }
 
                scope.edit = function(){
                    if ( scope.readMode )
                        scope.readMode = false;
-                   $log.log('edittttttttttttttttttttt');
                };
 
                scope.delete = function(ev) {
                    $log.log('deleteeeeeeeeeeeeeeeee');
                    var options = {
-                       templateUrl: '/app/components/common/directives/panel_delete_dialog.html',
+                       templateUrl: '/app/components/common_directives/panel_delete_dialog.html',
                        scope: scope,
                        preserveScope: true,
                    };
@@ -86,26 +86,13 @@
                    $log.log(panelId);
                    panelId = panelId.toString();
                    $mdExpansionPanel(panelId).collapse();
-                   // $mdExpansionPanel().waitFor(panelId).then(function (instance) {
-                   //     instance.collapse({animation: false});
-                   // });
                    scope.readMode = true;
                };
 
-               scope.panelCount = $mdExpansionPanelGroup('panelGroup').count();
+               scope.panelCount = $mdExpansionPanelGroup('panelGroup').count() + 1;
 
-                // scope.createPanel = function($panel) {
-                //     var componentId = ($mdExpansionPanelGroup('panelGroup').count() + 1).toString();
-                //
-                //     $mdExpansionPanelGroup().waitFor('panelGroup').then(function (instance) {
-                //         instance.register(componentId, {
-                //             templateUrl: 'app/components/common/directives/panel-expansion.html'
-                //         })
-                //         instance.add({
-                //             templateUrl: 'app/components/common/directives/panel-expansion.html'
-                //         })
-                //     });
-                // }
+                $log.log(scope.panelCount);
+
             }
         }
     }

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 
-<md-expansion-panel md-component-id="{{panelCount + 1}}" flex>
-    <md-expansion-panel-collapsed ng-click="getCurrentData(details.id)" flex>
+
+
+<md-expansion-panel md-component-id="{{details.len}}" flex>
+    <md-expansion-panel-collapsed ng-click="getCurrentData(details.len)" flex>
         <div class="md-title">{{details.name}}</div>
-        <div class="md-summary"></div>
+        <div class="md-summary">demo</div>
         <md-expansion-panel-icon></md-expansion-panel-icon>
     </md-expansion-panel-collapsed>
 
     <md-expansion-panel-expanded flex>
-        <md-expansion-panel-header ng-click="collapsePanel(panelCount + 1)" flex>
+        <md-expansion-panel-header ng-click="collapsePanel(details.len)" flex>
 
             <div class="md-title">{{details.name}}</div>
             <div class="md-summary"></div>
@@ -23,7 +25,7 @@
         <md-expansion-panel-footer flex>
             <div flex></div>
             <md-button class="md-warn" ng-click="save();">Save</md-button>
-            <md-button class="md-warn" ng-click="discard(panelCount+1)">Discard</md-button>
+            <md-button class="md-warn" ng-click="discard(details.len)">Discard</md-button>
             <md-button class="md-fab md-mini" aria-label="Edit" ng-click="edit()">
                 <md-icon class="material-icons md-mini">mode_edit</md-icon>
                 <md-tooltip md-direction="bottom">

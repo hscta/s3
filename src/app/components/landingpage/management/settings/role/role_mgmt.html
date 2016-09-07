@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 
-<md-expansion-panel-group md-component-id="panelGroup" id="/1/1">
-    <icar-panel-expansion ng-repeat="d in vm.data track by $index" details="d"></icar-panel-expansion>
+<md-expansion-panel-group md-component-id="panelGroup" id="/1/1" multiple="true" flex>
+    <md-button ng-click="vm.createPanel()">Add Roles</md-button flex>
+
+    <icar-panel-expansion  ng-animate="'animate'" ng-repeat="d in vm.data track by $index" details="d"></icar-panel-expansion>
 </md-expansion-panel-group>
 
 
