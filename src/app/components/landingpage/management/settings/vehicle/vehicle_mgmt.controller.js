@@ -32,30 +32,37 @@
         };
 
         vm.onLoad = function() {
+            vm.data.push({name: "One", assetid: 1, assetpath: '1/1/1/17', type: 'vehicle'});
+            vm.data.push({name: "Two", assetid: 2, assetpath: '1/1/1/25', type: 'vehicle'});
+
             $log.log("my vehicle data");
             $log.log(startupData);
 
-            for ( var key in startupData ){
-                var details = {};
-                if (startupData.hasOwnProperty(key)) {
-                    //$log.log(key + " -> " + startupData[key].name);
-                    details.type='vehicle';
-                    details['name'] = startupData[key].name;
-                    //vm.details['id'] = startupData[key].vehicleid;
-                    details['id'] = startupData[key].assetid;
-                    $log.log(details);
-                    vm.data.push(details);
-                    //$scope = vm.data;
-                }
-            }
+            // for ( var key in startupData ){
+            //     var details = {};
+            //     if (startupData.hasOwnProperty(key)) {
+            //         //$log.log(key + " -> " + startupData[key].name);
+            //         details.type='vehicle';
+            //         details['name'] = startupData[key].name;
+            //         //vm.details['id'] = startupData[key].vehicleid;
+            //         details['id'] = startupData[key].assetid;
+            //         $log.log(details);
+            //         vm.data.push(details);
+            //         //$scope = vm.data;
+            //     }
+            // }
         };
 
-        vm.createPanel = function () {
-            var details = {};
-            details.id = vm.componentId;
-            details.name = "new" + vm.data.length;
-            vm.data.unshift(details);
-        };
+        // vm.createPanel = function () {
+        //     // vm.componentId = ($mdExpansionPanelGroup('vehicleGroup').count() + 1).toString();
+        //     // $log.log(vm.componentId);
+        //     // var details = {};
+        //     // details.id = vm.componentId;
+        //     // details.name = "new" + vm.data.length;
+        //     //
+        //     // vm.data.unshift(details);
+        // };
+
         vm.onLoad();
     }
 })();

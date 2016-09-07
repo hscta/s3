@@ -68,7 +68,6 @@
                 }
 
                 return config;
-
             },
 
             // If a token was sent back, save it

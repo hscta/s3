@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<!--<div ng-include src="icar-expanel-templates.html"></div>-->
+<!--<link rel="import" href="app/components/common/directives/icar-expanel/icar-expanel-templates.html">-->
+
+<script type="text/ng-template" id="panel-header.html">
+    <div layout="row" flex>
+        <div>I am panel header</div>
+        <div>{{details.name}}</div>
+        <md-expansion-panel-icon></md-expansion-panel-icon>
+    </div>
+</script>
+
+<script type="text/ng-template" id="panel-content.html">
+    <div layout="row" flex>
+        <div>I am panel content</div>
+        <div>{{details.assetpath}}</div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="panel-footer.html">
+    <div layout="row" flex>
+        <div>I am panel footer</div>
+        <md-button class="md-warn" ng-click="save()">Save</md-button>
+        <md-button class="md-warn" ng-click="discard()">Discard</md-button>
+        <md-button class="md-fab md-mini" aria-label="Edit" ng-click="edit()">
+            <md-icon class="material-icons md-mini">mode_edit</md-icon>
+            <md-tooltip md-direction="bottom">
+                Edit
+            </md-tooltip>
+        </md-button>
+        <md-button class="md-fab md-mini" aria-label="delete" ng-click="delete(details.id)">
+            <md-icon class="material-icons md-mini">delete</md-icon>
+            <md-tooltip md-direction="bottom">
+                Delete
+            </md-tooltip>
+        </md-button>
+    </div>
+</script>
+
+
+
+
+<md-expansion-panel md-component-id="details.assetpath" flex>
+
+    <md-expansion-panel-collapsed ng-click="expandCollapse($panel)" flex>
+        <div ng-include="headerTemplate"></div>
+    </md-expansion-panel-collapsed>
+
+    <md-expansion-panel-expanded flex>
+        <md-expansion-panel-header ng-click="expandCollapse($panel)" flex>
+            <div ng-include="headerTemplate"></div>
+        </md-expansion-panel-header>
+
+        <md-expansion-panel-content ng-include="contentTemplate" flex>
+        </md-expansion-panel-content>
+
+        <md-expansion-panel-footer flex>
+            <div ng-include="footerTemplate"></div>
+        </md-expansion-panel-footer>
+    </md-expansion-panel-expanded>
+
+</md-expansion-panel>
+

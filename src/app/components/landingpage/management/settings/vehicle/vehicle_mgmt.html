@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 
 
-<md-expansion-panel-group md-component-id="panelGroup" id="/1/1" flex multiple="true">
-    <md-button ng-click="vm.createPanel()">Add Vehicle</md-button flex>
-    <div id="new_panel"></div>
-    <icar-panel-expansion ng-repeat="d in vm.data track by $index" details="d"
-                          layout></icar-panel-expansion>
+<md-expansion-panel-group md-component-id="vehicleGroup" id="/1/1" flex>
+    <!--<md-button ng-click="vm.createPanel()">Add Vehicle</md-button>-->
+    <!--<div id="new_panel"></div>-->
+    <icar-expanel ng-repeat="myvehicle in vm.data track by $index"
+                  details="myvehicle" layout></icar-expanel>
 </md-expansion-panel-group>
 

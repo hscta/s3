@@ -8,12 +8,13 @@
 
     angular.module('uiplatform')
         .service('intellicarAPI', function($rootScope, $log, $q,
+                                           appConstants,
                                            authService, requestService,
                                            stateService, treeDataService,
                                            userService, groupService,
                                            mqttService,
-                                           anchorSmoothScrollService,
-                                           appConstants) {
+                                           anchorSmoothScrollService
+                                           ) {
             var vm = this;
             $log.log("intellicarAPI");
 
