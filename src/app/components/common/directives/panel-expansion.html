@@ -15,7 +15,7 @@
     </md-expansion-panel-collapsed>
 
     <md-expansion-panel-expanded flex>
-        <md-expansion-panel-header ng-click="collapsePanel(details.order)" flex>
+        <md-expansion-panel-header ng-click="collapsePanel(details.order)" md-no-sticky="true" flex>
 
             <div class="md-title">{{details.section}}</div>
             <div class="md-summary"></div>
@@ -23,10 +23,22 @@
             <md-expansion-panel-icon></md-expansion-panel-icon>
         </md-expansion-panel-header>
 
-        <md-expansion-panel-content flex id="fields_content">
+        {{selectedIndex}}
+
+        <md-expansion-panel-content flex id="">
+            <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
+                <md-tab ng-repeat="tab in tabs"
+                        ng-disabled="tab.disabled"
+                        label="{{tab.title}}"
+                        md-on-select="activeTab(selectedIndex)">
+                    <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
+                        <div bind-html-compile="tab.content"></div>
+                    </div>
+                </md-tab>
+            </md-tabs>
         </md-expansion-panel-content>
 
-        <md-expansion-panel-footer flex>
+        <md-expansion-panel-footer md-no-sticky="true" flex>
             <div flex></div>
             <md-button class="md-warn" ng-click="save();">Save</md-button>
             <md-button class="md-warn" ng-click="discard(details.len)">Discard</md-button>

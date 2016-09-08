@@ -12,7 +12,7 @@
 
     function RoleMgmtController($scope, $rootScope, $log, $q, $state,
                                 intellicarAPI, settingsService, startupData,
-                                $mdExpansionPanelGroup, schemaService,  $interval,
+                                $mdExpansionPanelGroup, schemaNewService,  $interval,
                                 roleMgmtService) {
         $log.log('RoleMgmtController');
         var vm = this;
@@ -120,13 +120,11 @@
                     "select": null, "editable": true, "default": null
                 },
 
-
                 // output => List of integers in items (Read only)
                 "key3": {
                     "type": ["int"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
                     "select": null, "editable": false, "default": [1, 2, 3, 4, 5]
                 },
-
 
                 // output => List of strings in items (Read only)
                 "key4": {
@@ -134,20 +132,17 @@
                     "select": null, "editable": false, "default": ['a', 'b', 'c', 'd']
                 },
 
-
                 // output => List of integers in items
                 "key5": {
                     "type": ["int"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
                     "select": null, "editable": true, "default": [1, 2, 3, 4, 5]
                 },
 
-
                 // output => List of strings in items
                 "key6": {
                     "type": ["string"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
                     "select": null, "editable": true, "default": ['a', 'b', 'c', 'd']
                 },
-
 
                 // output => List of integers in items with checkboxes (no items are selected at this point in time)
                 "key7": {
@@ -156,14 +151,12 @@
                     "editable": true, "default": [3]
                 },
 
-
                 // output => List of strings in items with checkboxes (no items are selected at this point in time)
                 "key8": {
                     "type": ["string"], "displayname": "Display Name8", "displaydesc": "This will come in the hint",
                     "select": [0, 10000, ['a', 'b', 'c']],
                     "editable": true, "default": ["b"]
                 },
-
 
                 // type is object
                 "key5": {
@@ -183,7 +176,6 @@
                         '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
                     }
                 },
-
 
                 // type is [object]
                 "key7": {
@@ -231,25 +223,27 @@
                     }
                 }
 
-            }]
+            }],
+            ["perm2", "SETTINGS_TAG_2", {}]
         ];
 
-        var count = 4;
+        // var count = 4;
+        //
+        // vm.addOptions = function () {
+        //     count++;
+        //     schema[0].val.push('option'+count);
+        //     $log.log(schema[0]);
+        //     vm.fields = schemaService.parseSchema($scope, schema);
+        // };
 
-        vm.addOptions = function () {
-            count++;
-            schema[0].val.push('option'+count);
-            $log.log(schema[0]);
-            vm.fields = schemaService.parseSchema($scope, schema);
-        };
 
-        //$interval(vm.addOptions, 2000);
+        vm.fields = schemaNewService.parseSchema(newSchema);
 
         $log.log(vm.fields);
 
         vm.onClickPanel = function(test) {
            // $log.log("open", test);
-            vm.addOptions();
+           // vm.addOptions();
             var roleSchema = roleMgmtService.getDetails();
             //return schemaPromise;
             //var mydefer = $q.defer();

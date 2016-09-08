@@ -9,7 +9,7 @@
         .directive('icarPanelExpansion', icarPanelExpansion)
 
     function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
-                                $stateParams, $compile) {
+                                $stateParams, $compile, $sce) {
         return{
             restrict : 'E',
             templateUrl : 'app/components/common/directives/panel-expansion.html',
@@ -104,6 +104,29 @@
                             $log.log(scope.schemaData);
                             $log.log(scope.fields);
                         });
+                };
+
+                scope.tabs = [
+                    { title: 'Nine', content: "<md-input-container>\
+                                                  <label>Vehicle Name</label>\
+                                                  <input type='text'>\
+                                                </md-input-container>"
+                    },
+                    { title: 'Ten', content: "<md-input-container>\
+                                                  <label>Device Name</label>\
+                                                  <input type='text'>\
+                                                </md-input-container>"
+                    }
+                ];
+
+                scope.selectedIndex = 0;
+
+                scope.activeTab = function (tabIndex){
+                  //   $log.log(scope.tabs[tabIndex].content);
+                  //   scope.mycontent = $compile(scope.tabs[tabIndex].content)(scope);
+                  // //  scope.tabs[tabIndex].content = $sce.trustAsHtml('<div class="md-display-4">TAB3 CONTENT</div>');
+                  //   scope.tabs[tabIndex].content  = $compile(scope.tabs[tabIndex].content)(scope);
+                  //   $log.log(scope.tabs[tabIndex].content);
                 };
 
                 scope.collapsePanel = function(panelId) {
