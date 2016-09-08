@@ -1,28 +1,10 @@
 <!DOCTYPE html>
 
 
-<md-expansion-panel-group md-component-id="panelGroup" id="/1/1" flex multiple="true">
-    <md-button ng-click="vm.createPanel()">Add Vehicle</md-button flex>
-    <div id="new_panel"></div>
-    <!--<md-expansion-panel ng-repeat="d in vm.data track by $index" details="d"-->
-                          <!--layout></md-expansion-panel>-->
-
-    <!--<md-expansion-panel-group md-component-id="sdf" id="sdf"-->
-    <!--flex multiple="true">-->
-
-    <md-expansion-panel ng-repeat="d in vm.data track by $index">
-    <md-expansion-panel-collapsed></md-expansion-panel-collapsed>
-    <md-expansion-panel-expanded>
-    <md-expansion-panel-header></md-expansion-panel-header>
-    <md-expansion-panel-content>
-        <icar-panel-expansion  ng-animate="'animate'" ng-repeat="d in vm.data track by $index"
-                               details="d"></icar-panel-expansion>
-
-    </md-expansion-panel-content>
-    <md-expansion-panel-footer></md-expansion-panel-footer>
-    </md-expansion-panel-expanded>
-    </md-expansion-panel>
-
-    <!--</md-expansion-panel-group>-->
+<md-expansion-panel-group md-component-id="vehicleGroup" id="/1/1" flex>
+    <!--<md-button ng-click="vm.createPanel()">Add Vehicle</md-button>-->
+    <!--<div id="new_panel"></div>-->
+    <icar-expanel ng-repeat="myvehicle in vm.data track by $index"
+                  details="myvehicle" layout></icar-expanel>
 </md-expansion-panel-group>
 
