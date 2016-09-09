@@ -291,8 +291,11 @@
                 attr += ' value="' + section.default[0] + '" ';
             }
 
-            element += '<label>' + section.displayname + '</label>' +
-                '<input ' + attr + '> </input>';
+            if(section.hasOwnProperty('displayname') && section.displayname) {
+                element += '<label>' + section.displayname + '</label>';
+            }
+
+            element += '<input ' + attr + '> </input>';
 
             element += '</div>';
 
