@@ -152,6 +152,7 @@
                     }
                 },
 
+
                 "key12": {
                     "type": {
                         "level2key1": {
@@ -275,7 +276,7 @@
             if(section == null)
                 return null;
 
-            var element = '';
+            var element = '<div>';
             var attr = '';
 
             if(section.hasOwnProperty('type') && section.type) {
@@ -286,25 +287,44 @@
                 attr += ' ng-disabled="true" ';
             }
 
-            if(section.hasOwnProperty('default') && section.default) {
-                attr += ' value="' + section.default + '" ';
+            if(section.hasOwnProperty('default') && section.default && section.default.length > 0) {
+                attr += ' value="' + section.default[0] + '" ';
             }
 
             element += '<label>' + section.displayname + '</label>' +
                 '<input ' + attr + '> </input>';
 
+            element += '</div>';
+
             return element;
         };
 
 
-        var createElement = function (section, key) {
+        var createReadOnlyList = function(section, key) {
+
+        };
+
+
+        var createSelectList = function(section, key) {
+
+        };
+
+
+        var createElement = function (section, key, sectionType) {
             var element;
             //$log.log(section.type);
-            switch (section.type) {
+            switch (sectionType) {
 
-                case ELEMENT_TYPE_NUMBER:
-                case ELEMENT_TYPE_TEXT:
+                case SECTION_TYPE_PRIMITIVE:
                     element = createInputField(section, key);
+                    break;
+
+                case SECTION_TYPE_PRIMITIVE_ARRAY:
+                    if(select) {
+                        createSelectList(section, key);
+                    } else {
+                        createReadOnlyList(section, key);
+                    }
                     break;
 
                 default:
@@ -320,25 +340,25 @@
                 return null;
             }
 
-            var type = getSectionType(section);
+            var sectionType = getSectionType(section);
 
-            if (type === SECTION_TYPE_INVALID) {
+            if (sectionType === SECTION_TYPE_INVALID) {
                 return null;
             }
 
             var sectionComponents;
-            if (type === SECTION_TYPE_PRIMITIVE) {
-                sectionComponents = createElement(section, key);
-            } else if (type === SECTION_TYPE_OBJECT) {
+            if (sectionType === SECTION_TYPE_PRIMITIVE) {
+                sectionComponents = createElement(section, key, sectionType);
+            } else if (sectionType === SECTION_TYPE_OBJECT) {
                 sectionComponents = {};
                 for (var idx in section.type) {
                     var subSection = section.type[idx];
                     sectionComponents[idx] = parseSection(subSection, idx);
                 }
-            } else if (type === SECTION_TYPE_PRIMITIVE_ARRAY || type === SECTION_TYPE_OBJECT_ARRAY) {
+            } else if (sectionType === SECTION_TYPE_PRIMITIVE_ARRAY || sectionType === SECTION_TYPE_OBJECT_ARRAY) {
                 sectionComponents = [];
                 if (section.select == null && section.default != null) {
-                    var tmpSection = {};
+                    var tmpSection = section;
                     tmpSection.type = section.type[0];
                     for (var pidx in section.default) {
                         sectionComponents.push(parseSection(tmpSection, pidx));
