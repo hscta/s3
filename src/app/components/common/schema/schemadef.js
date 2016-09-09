@@ -18,49 +18,49 @@
             ["perm1", "SETTINGS_TAG_1", {
                 // output => <input type="number">
                 "key1": {
-                    "type": "int", "displayname": "Display Name1", "displaydesc": "This will come in the hint",
-                    "select": null, "editable": true, "default": null
+                    "type": "number", "displayname": "Display Name1", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": false, "default": null
                 },
 
 
                 // output => <input type="text">
                 "key2": {
-                    "type": "string", "displayname": "Display Name2", "displaydesc": "This will come in the hint",
-                    "select": null, "editable": true, "default": null
+                    "type": "text", "displayname": "Display Name2", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": true, "default": 10
                 },
 
 
-                // output => List of integers in items (Read only)
+                // output => List of numbers in items (Read only)
                 "key3": {
-                    "type": ["int"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
+                    "type": ["number"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
                     "select": null, "editable": false, "default": [1, 2, 3, 4, 5]
                 },
 
 
                 // output => List of strings in items (Read only)
                 "key4": {
-                    "type": ["string"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
+                    "type": ["text"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
                     "select": null, "editable": false, "default": ['a', 'b', 'c', 'd']
                 },
 
 
-                // output => List of integers in items
+                // output => List of numbers in items with Add button
                 "key5": {
-                    "type": ["int"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
+                    "type": ["number"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
                     "select": null, "editable": true, "default": [1, 2, 3, 4, 5]
                 },
 
 
-                // output => List of strings in items
+                // output => List of strings in items with Add button
                 "key6": {
-                    "type": ["string"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
+                    "type": ["text"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
                     "select": null, "editable": true, "default": ['a', 'b', 'c', 'd']
                 },
 
 
-                // output => List of integers in items with checkboxes (no items are selected at this point in time)
+                // output => List of numbers in items with checkboxes (no items are selected at this point in time)
                 "key7": {
-                    "type": ["int"], "displayname": "Display Name7", "displaydesc": "This will come in the hint",
+                    "type": ["number"], "displayname": "Display Name7", "displaydesc": "This will come in the hint",
                     "select": [0, 1, [1, 3, 9, 27, 81]],
                     "editable": true, "default": [3]
                 },
@@ -68,7 +68,7 @@
 
                 // output => List of strings in items with checkboxes (no items are selected at this point in time)
                 "key8": {
-                    "type": ["string"], "displayname": "Display Name8", "displaydesc": "This will come in the hint",
+                    "type": ["text"], "displayname": "Display Name8", "displaydesc": "This will come in the hint",
                     "select": [0, 10000, ['a', 'b', 'c']],
                     "editable": true, "default": ["b"]
                 },
@@ -78,13 +78,15 @@
                 "key9": {
                     "type": {
                         "level2key1": {
-                            "type": "int", "displayname": "Level2 key1", "default": 10, "editable": true
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
                         },
                         "level2key2": {
-                            "type": "string", "displayname": "Level2 key2", "default": "abc", "editable": true
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
                         }
                     },
-                    "displayname": "Level 2 Keys Array",
+                    "displayname": "Key9 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
                     "default": {"level2key1": 100, "level2key2": "200"},
                     "checkfun": {
                         "type": "udf",
@@ -98,13 +100,15 @@
                 "key10": {
                     "type": [{
                         "level2key1": {
-                            "type": "int", "displayname": "Level 2 Key1", "default": 10, "editable": true
+                            "type": "number", "displayname": "Level 2 Key1", "default": 10, "editable": true
                         },
                         "level2key2": {
-                            "type": "string", "displayname": "Level 2 Key2", "default": "10", "editable": true
+                            "type": "text", "displayname": "Level 2 Key2", "default": "10", "editable": true
                         }
                     }],
-                    "displayname": "Level 2 Keys Array",
+                    "displayname": "Key10 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
                     "default": [{"level2key1": 100, "level2key2": "100"}, {"level2key1": 200, "level2key2": "200"}],
                     "checkfun": {
                         "type": "udf",
@@ -114,32 +118,101 @@
                 },
 
 
-                // type is [[object]]
                 "key11": {
-                    "type": [
-                        [
-                            {
-                                "level2key1": {
-                                    "type": "int", "displayname": "Level 2 Key1", "default": 10, "editable": true
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        },
+                        "level2key3": {
+                            "type": {
+                                "level3key1": {
+                                    "type": "number", "displayname": "Level 3 Key1", "default": 10, "editable": true
                                 },
-                                "level2key2": {
-                                    "type": "string", "displayname": "Level 2 Key2", "default": "10", "editable": true
+                                "level3key2": {
+                                    "type": "text", "displayname": "Level 3 Key2", "default": "10", "editable": true
                                 }
-                            }
-                        ]
-                    ],
-                    "displayname": "Level 2 Keys Array",
-                    "default": [
-                        [{"level2key1": 100, "level2key2": "100"}, {"level2key1": 200, "level2key2": "200"}],
-                        [{"level2key1": 300, "level2key2": "300"}, {"level2key1": 400, "level2key2": "400"}]
-                    ],
+                            },
+                            "displayname": "Key11 Level 3 Keys Array",
+                            "select": null,
+                            "editable": false,
+                            "default": {"level3key1": 100, "level3key2": "200"},
+                        }
+                    },
+                    "displayname": "Key11 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
+                },
+
+                "key12": {
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        },
+                        "level2key3": {
+                            "type": {
+                                "level3key1": {
+                                    "type": "number", "displayname": "Level 3 Key1", "default": 10, "editable": true
+                                },
+                                "level3key2": {
+                                    "type": "text", "displayname": "Level 3 Key2", "default": "10", "editable": true
+                                },
+                                "level3key3": {
+                                    "type": [{
+                                        "level4key1": {
+                                            "type": "number",
+                                            "displayname": "Level 4 Key1",
+                                            "default": 10,
+                                            "editable": true
+                                        },
+                                        "level4key2": {
+                                            "type": "text",
+                                            "displayname": "Level 4 Key2",
+                                            "default": "10",
+                                            "editable": true
+                                        }
+                                    }],
+                                    "displayname": "Key12 Level 4 Keys Array",
+                                    "select": null,
+                                    "editable": false,
+                                    "default": [{"level4key1": 100, "level4key2": "100"}, {
+                                        "level4key1": 200,
+                                        "level4key2": "200"
+                                    }],
+                                    "checkfun": {
+                                        "type": "udf",
+                                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                                    }
+                                },
+                            },
+                            "displayname": "Key12 Level 3 Keys Array",
+                            "select": null,
+                            "editable": false,
+                            "default": {"level3key1": 100, "level3key2": "200"},
+                        }
+                    },
+                    "displayname": "Key12 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
                     "checkfun": {
                         "type": "udf",
                         "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
                         '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
                     }
                 }
-
             }]
         ];
 
@@ -148,17 +221,155 @@
         var TAB_NAME = 1;
         var TAB_SCHEMA = 2;
 
-        var parseSchema = function (schema) {
-            for (var sidx in schema) {
-                var tab = schema[sidx];
-                var perm = tab[PERM];
-                var tabName = tab[TAB_NAME];
-                var tabSchema = tab[TAB_SCHEMA];
-                for (var tidx in tabSchema) {
+        var SECTION_TYPE_INVALID = -1;
+        var SECTION_TYPE_PRIMITIVE = 0;
+        var SECTION_TYPE_PRIMITIVE_ARRAY = 1;
+        var SECTION_TYPE_OBJECT = 2;
+        var SECTION_TYPE_OBJECT_ARRAY = 3;
 
+        var ELEMENT_TYPE_NUMBER = 'number';
+        var ELEMENT_TYPE_TEXT = 'text';
+
+        var getPrimitiveType = function (sectionType) {
+            switch (sectionType) {
+                case ELEMENT_TYPE_NUMBER:
+                    return SECTION_TYPE_PRIMITIVE;
+                case ELEMENT_TYPE_TEXT:
+                    return SECTION_TYPE_PRIMITIVE;
+            }
+
+            return SECTION_TYPE_INVALID;
+        };
+
+
+        var getArrayType = function (sectionType) {
+            if (sectionType.constructor === String && getPrimitiveType(sectionType) === SECTION_TYPE_PRIMITIVE)
+                return SECTION_TYPE_PRIMITIVE_ARRAY;
+            else if (sectionType.constructor === Object || sectionType.constructor === Array)
+                return SECTION_TYPE_OBJECT_ARRAY;
+
+            return SECTION_TYPE_INVALID;
+        };
+
+
+        var getSectionType = function (section) {
+            if (section.hasOwnProperty('type')) {
+                var sectionType = section.type;
+                if (sectionType.constructor === String) {
+                    return getPrimitiveType(sectionType);
+                } else if (sectionType.constructor === Object) {
+                    return SECTION_TYPE_OBJECT;
+                } else if (sectionType.constructor === Array) {
+                    if (sectionType.length === 1) {
+                        return getArrayType(sectionType[0]);
+                    }
                 }
             }
+
+            $log.log("returning INVALID");
+            return SECTION_TYPE_INVALID;
         };
+
+
+        var createInputField = function(section, key) {
+            if(section == null)
+                return null;
+
+            var element = '';
+            var attr = '';
+
+            if(section.hasOwnProperty('type') && section.type) {
+                attr += ' type="' + section.type + '" ';
+            }
+
+            if(section.hasOwnProperty('editable') && !section.editable) {
+                attr += ' ng-disabled="true" ';
+            }
+
+            if(section.hasOwnProperty('default') && section.default) {
+                attr += ' value="' + section.default + '" ';
+            }
+
+            element += '<label>' + section.displayname + '</label>' +
+                '<input ' + attr + '> </input>';
+
+            return element;
+        };
+
+
+        var createElement = function (section, key) {
+            var element;
+            //$log.log(section.type);
+            switch (section.type) {
+
+                case ELEMENT_TYPE_NUMBER:
+                case ELEMENT_TYPE_TEXT:
+                    element = createInputField(section, key);
+                    break;
+
+                default:
+                    element = '<span>Unexpected section.type</span>';
+            }
+
+            return element;
+        };
+
+
+        var parseSection = function (section, key) {
+            if (section == null || key == null) {
+                return null;
+            }
+
+            var type = getSectionType(section);
+
+            if (type === SECTION_TYPE_INVALID) {
+                return null;
+            }
+
+            var sectionComponents;
+            if (type === SECTION_TYPE_PRIMITIVE) {
+                sectionComponents = createElement(section, key);
+            } else if (type === SECTION_TYPE_OBJECT) {
+                sectionComponents = {};
+                for (var idx in section.type) {
+                    var subSection = section.type[idx];
+                    sectionComponents[idx] = parseSection(subSection, idx);
+                }
+            } else if (type === SECTION_TYPE_PRIMITIVE_ARRAY || type === SECTION_TYPE_OBJECT_ARRAY) {
+                sectionComponents = [];
+                if (section.select == null && section.default != null) {
+                    var tmpSection = {};
+                    tmpSection.type = section.type[0];
+                    for (var pidx in section.default) {
+                        sectionComponents.push(parseSection(tmpSection, pidx));
+                    }
+                }
+            }
+
+            $log.log(sectionComponents);
+            return sectionComponents;
+        };
+
+
+        var parseSchema = function (schema) {
+            var uiComponents = {};
+            for (var sidx in schema) {
+                var tab = schema[sidx];
+                var tabPerm = tab[PERM];
+                var tabName = tab[TAB_NAME];
+                var tabSchema = tab[TAB_SCHEMA];
+                uiComponents[tabName] = {};
+                for (var key in tabSchema) {
+                    var section = tabSchema[key];
+                    uiComponents[tabName][key] = parseSection(section, key);
+                }
+            }
+            $log.log(uiComponents);
+            return uiComponents;
+        };
+
+
+        parseSchema(schemaDef);
 
     }
 })();
