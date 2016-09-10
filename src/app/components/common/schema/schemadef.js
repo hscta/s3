@@ -359,23 +359,23 @@
             if (section == null)
                 return null;
 
-            return {field: 'icar-input', data: section, key: key};
+            return {_schema_uidata: {field: 'icar-input', data: section, key: key} };
         };
 
 
         var createReadOnlyList = function (section, key) {
 
-            return {field: 'icar-readonly-list', data: section, key: key};
+            return {_schema_uidata: {field: 'icar-readonly-list', data: section, key: key}};
         };
 
 
         var createEditableList = function (section, key) {
-            return {field: 'icar-editable-list', data: section, key: key};
+            return {_schema_uidata: {field: 'icar-editable-list', data: section, key: key}};
         };
 
 
         var createSelectList = function (section, key) {
-            return {field: 'icar-select-list', data: section, key: key};
+            return {_schema_uidata: {field: 'icar-select-list', data: section, key: key}};
         };
 
 
