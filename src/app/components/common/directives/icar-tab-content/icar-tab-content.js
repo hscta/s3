@@ -21,9 +21,11 @@
             link: function (scope, element, attrs) {
                 $log.log("icar-tab-content loaded");
 
-                scope.parseContent = function(content) {
+                scope.parseContent = function(content, parentDiv) {
                     //$log.log("inside parseContent");
                     //$log.log(content);
+                    var newElement = $compile('<div></div>')(scope);
+                    parentDiv.append(newElement);
                     $log.log(element);
 
                     for(var idx in content) {
@@ -32,11 +34,10 @@
                             $log.log("child.key = " + child.key);
                             var childScope = scope.$new(false);
                             childScope.content = child;
-                            //angular.element(element.children()[0]).append($compile('<input type="text" value="10">')(scope));
-                            angular.element(element.children()[0]).append($compile(scope.getIcarDirective(child))(childScope));
+                            newElement.append($compile(scope.getIcarDirective(child))(childScope));
                         } else {
                             if(typeof child === 'object') {
-                                scope.parseContent(child);
+                                scope.parseContent(child, newElement);
                             }
                         }
                     }
@@ -50,7 +51,7 @@
                     return '<' + content.field + '></' + content.field + '>';
                 };
 
-                scope.parseContent(scope.tabContent);
+                scope.parseContent(scope.tabContent, angular.element(element.children()[0]));
                 $log.log(scope.tabContent);
             }
         }
