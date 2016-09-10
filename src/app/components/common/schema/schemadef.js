@@ -319,7 +319,7 @@
                 }
             }
 
-            $log.log("returning INVALID");
+            //$log.log("returning INVALID");
             return SECTION_TYPE_INVALID;
         };
 
@@ -450,7 +450,7 @@
                 }
             }
 
-            $log.log(sectionComponents);
+            //$log.log(sectionComponents);
             return sectionComponents;
         };
 
@@ -468,12 +468,21 @@
                     uiComponents[tabName][key] = parseSection(section, key);
                 }
             }
-            $log.log(uiComponents);
+            //$log.log(uiComponents);
             return uiComponents;
         };
 
 
-        parseSchema(schemaDef);
+        //parseSchema(schemaDef);
 
+        var getSchema = function() {
+            return parseSchema(schemaDef);
+        };
+
+
+        return {
+            //parseSchema : parseSchema,
+            getSchema : getSchema
+        };
     }
 })();
