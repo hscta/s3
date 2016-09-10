@@ -3,10 +3,6 @@
  */
 
 
-/**
- * Created by smiddela on 06/09/16.
- */
-
 
 (function () {
 

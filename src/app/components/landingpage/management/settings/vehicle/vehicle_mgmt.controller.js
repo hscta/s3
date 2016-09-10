@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('VehicleMgmtController', VehicleMgmtController);
 
-    function VehicleMgmtController($scope, $rootScope, $log, $state, startupData,
+    function VehicleMgmtController($scope, $rootScope, $log, $state, //startupData,
                                    intellicarAPI, settingsService, $mdExpansionPanelGroup,
                                     $compile) {
         $log.log('VehicleMgmtController');
@@ -36,7 +36,10 @@
             vm.data.push({name: "Two", assetid: 2, assetpath: '1/1/1/25', type: 'vehicle'});
 
             $log.log("my vehicle data");
-            $log.log(startupData);
+            //$log.log(startupData);
+
+            vm.schema = intellicarAPI.schemaDefService.getSchema();
+            $log.log(vm.schema);
 
             // for ( var key in startupData ){
             //     var details = {};
