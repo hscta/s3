@@ -41,6 +41,8 @@
             vm.schema = intellicarAPI.schemaDefService.getSchema();
             $log.log(vm.schema);
 
+            // vm.schema.SETTINGS_TAG_1.key1._schema_uidata.data.default = '1000';
+
             // for ( var key in startupData ){
             //     var details = {};
             //     if (startupData.hasOwnProperty(key)) {

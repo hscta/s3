@@ -11,12 +11,15 @@
     function icarInput($log, $mdDialog, $stateParams) {
         return {
             restrict: 'AE',
-            template: '<div></div>',
-
+            template: '<md-input-container>\
+                        <label>Username</label>\
+                       <input type="text" ng-model="content.data.default" ng-disabled="!content.data.editable">\
+                        </md-input-container>\
+                        </md-input-container>',
             link : function(scope, element, attrs) {
-                $log.log("inside icarInput Directive");
-                $log.log(scope.content);
-                $log.log(attrs);
+                    $log.log("inside icarInput Directive");
+                    $log.log(scope.content);
+                    $log.log(attrs);
             }
         }
     }
