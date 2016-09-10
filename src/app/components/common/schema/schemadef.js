@@ -44,14 +44,14 @@
                 },
 
 
-                // output => List of numbers in items with Add button
+                // output => List of numbers in items with Add button (Add/Remove anything)
                 "key5": {
                     "type": ["number"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
                     "select": null, "editable": true, "default": [1, 2, 3, 4, 5]
                 },
 
 
-                // output => List of strings in items with Add button
+                // output => List of strings in items with Add button (Add/Remove anything)
                 "key6": {
                     "type": ["text"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
                     "select": null, "editable": true, "default": ['a', 'b', 'c', 'd']
@@ -213,6 +213,58 @@
                         "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
                         '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
                     }
+                },
+
+                "key13": {
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        },
+                        "level2key3": {
+                            "type" : {
+                                "level3key1": {
+                                    "type": ["number"],
+                                    "displayname": "Level3 key1",
+                                    "displaydesc": "This will come in the hint",
+                                    "select": [0, 1, [1, 3, 9, 27, 81]],
+                                    "editable": true,
+                                    "default": [3]
+                                },
+                                "level3key2": {
+                                    "type": ["text"],
+                                    "displayname": "Level3 key2",
+                                    "displaydesc": "This will come in the hint",
+                                    "select": null,
+                                    "editable": true,
+                                    "default": ['a', 'b', 'c', 'd']
+                                },
+                                "level3key3": {
+                                    "type": ["number"],
+                                    "displayname": "Level3 key3",
+                                    "displaydesc": "This will come in the hint",
+                                    "select": null,
+                                    "editable": false,
+                                    "default": [1, 2, 3, 4, 5]
+                                }
+                            },
+                            "displayname": "Level2 key2", "default":{"key1":{}, "key2":{}, "key3":{}}
+                        },
+                        "level2key4": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        }
+                    },
+                    "displayname": "Key13 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
                 }
             }]
         ];
@@ -272,69 +324,86 @@
         };
 
 
-        var createInputField = function(section, key) {
-            if(section == null)
+        // var createInputField = function (section, key) {
+        //     if (section == null)
+        //         return null;
+        //
+        //     var element = '<div>';
+        //     var attr = '';
+        //
+        //     if (section.hasOwnProperty('type') && section.type) {
+        //         attr += ' type="' + section.type + '" ';
+        //     }
+        //
+        //     if (section.hasOwnProperty('editable') && !section.editable) {
+        //         attr += ' ng-disabled="true" ';
+        //     }
+        //
+        //     if (section.hasOwnProperty('default') && section.default && section.default.length > 0) {
+        //         attr += ' value="' + section.default[0] + '" ';
+        //     }
+        //
+        //     if (section.hasOwnProperty('displayname') && section.displayname) {
+        //         element += '<label>' + section.displayname + '</label>';
+        //     }
+        //
+        //     element += '<input ' + attr + '> </input>';
+        //
+        //     element += '</div>';
+        //
+        //     return element;
+        // };
+
+
+        var createInputField = function (section, key) {
+            if (section == null)
                 return null;
 
-            var element = '<div>';
-            var attr = '';
-
-            if(section.hasOwnProperty('type') && section.type) {
-                attr += ' type="' + section.type + '" ';
-            }
-
-            if(section.hasOwnProperty('editable') && !section.editable) {
-                attr += ' ng-disabled="true" ';
-            }
-
-            if(section.hasOwnProperty('default') && section.default && section.default.length > 0) {
-                attr += ' value="' + section.default[0] + '" ';
-            }
-
-            if(section.hasOwnProperty('displayname') && section.displayname) {
-                element += '<label>' + section.displayname + '</label>';
-            }
-
-            element += '<input ' + attr + '> </input>';
-
-            element += '</div>';
-
-            return element;
+            return {field: 'icar-input', data: section, key: key};
         };
 
 
-        var createReadOnlyList = function(section, key) {
+        var createReadOnlyList = function (section, key) {
 
+            return {field: 'icar-readonly-list', data: section, key: key};
         };
 
 
-        var createSelectList = function(section, key) {
+        var createEditableList = function (section, key) {
+            return {field: 'icar-editable-list', data: section, key: key};
+        };
 
+
+        var createSelectList = function (section, key) {
+            return {field: 'icar-select-list', data: section, key: key};
         };
 
 
         var createElement = function (section, key, sectionType) {
-            var element;
+            //var element;
             //$log.log(section.type);
             switch (sectionType) {
 
                 case SECTION_TYPE_PRIMITIVE:
-                    element = createInputField(section, key);
+                    return createInputField(section, key);
                     break;
 
                 case SECTION_TYPE_PRIMITIVE_ARRAY:
-                    if(select) {
-                        createSelectList(section, key);
-                    } else {
-                        createReadOnlyList(section, key);
+                    if (section.select) {
+                        return createSelectList(section, key);
+                    } else if (section.default) {
+                        if (!section.editable)
+                            return createReadOnlyList(section, key);
+                        else
+                            return createEditableList(section, key);
                     }
                     break;
 
                 default:
-                    element = '<span>Unexpected section.type</span>';
+                    return '<span>Unexpected section.type</span>';
             }
 
-            return element;
+            //return element;
         };
 
 
@@ -354,17 +423,29 @@
                 sectionComponents = createElement(section, key, sectionType);
             } else if (sectionType === SECTION_TYPE_OBJECT) {
                 sectionComponents = {};
-                for (var idx in section.type) {
-                    var subSection = section.type[idx];
-                    sectionComponents[idx] = parseSection(subSection, idx);
+                for (var subSectionKey in section.type) {
+                    var subSection = section.type[subSectionKey];
+                    sectionComponents[subSectionKey] = parseSection(subSection, subSectionKey, sectionType);
                 }
             } else if (sectionType === SECTION_TYPE_PRIMITIVE_ARRAY || sectionType === SECTION_TYPE_OBJECT_ARRAY) {
-                sectionComponents = [];
-                if (section.select == null && section.default != null) {
-                    var tmpSection = section;
-                    tmpSection.type = section.type[0];
-                    for (var pidx in section.default) {
-                        sectionComponents.push(parseSection(tmpSection, pidx));
+                var tmpSection = angular.copy(section);
+                tmpSection.type = section.type[0];
+
+                var valueList = null;
+                if (!section.select && section.default && section.default.length > 0) {
+                    valueList = section.default;
+                } else if (section.select && section.select.length == 3) {
+                    valueList = section.select[2];
+                }
+
+                if (valueList) {
+                    if (sectionType === SECTION_TYPE_PRIMITIVE_ARRAY) {
+                        sectionComponents = createElement(tmpSection, key, sectionType);
+                    } else if (sectionType === SECTION_TYPE_OBJECT_ARRAY) {
+                        sectionComponents = [];
+                        for (var subSectionKey in valueList) {
+                            sectionComponents.push(parseSection(tmpSection, subSectionKey, sectionType));
+                        }
                     }
                 }
             }
