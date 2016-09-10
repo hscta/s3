@@ -1,12 +1,41 @@
 <!DOCTYPE html>
 
 
-<!--<md-expansion-panel-group md-component-id="vehicleGroup" id="/1/1" flex>-->
+<md-expansion-panel-group md-component-id="vehicleGroup" id="/1/1" flex>
     <!--<icar-expanel ng-repeat="myvehicle in vm.data track by $index"-->
-                  <!--details="myvehicle" layout></icar-expanel>-->
-<!--</md-expansion-panel-group>-->
+    <!--details="myvehicle" layout></icar-expanel>-->
+
+    <md-expansion-panel md-component-id="$index" ng-repeat="myvehicle in vm.data track by $index">
+
+        <md-expansion-panel-collapsed>
+            <div class="md-title">{{myvehicle.name}}</div>
+            <div class="md-summary"></div>
+            <md-expansion-panel-icon></md-expansion-panel-icon>
+        </md-expansion-panel-collapsed>
 
 
-    <icar-tab-content tab-content="vm.schema">
-    </icar-tab-content>
+        <md-expansion-panel-expanded>
+
+            <md-expansion-panel-header ng-click="$panel.collapse()">
+                <div class="md-title">{{myvehicle.name}}</div>
+                <div class="md-summary"></div>
+                <md-expansion-panel-icon></md-expansion-panel-icon>
+            </md-expansion-panel-header>
+
+            <md-expansion-panel-content>
+                <icar-expanel ng-repeat="myvehicle in vm.data track by $index"
+                              details="myvehicle"  schema="vm.schema" layout></icar-expanel>
+            </md-expansion-panel-content>
+
+            <md-expansion-panel-footer  md-no-sticky="true">
+            </md-expansion-panel-footer>
+
+        </md-expansion-panel-expanded>
+
+    </md-expansion-panel>
+
+
+</md-expansion-panel-group>
+
+
 

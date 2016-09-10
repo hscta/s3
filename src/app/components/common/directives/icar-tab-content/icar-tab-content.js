@@ -24,7 +24,7 @@
                 scope.parseContent = function(content, parentDiv) {
                     //$log.log("inside parseContent");
                     //$log.log(content);
-                    var newElement = $compile('<div></div>')(scope);
+                    var newElement = $compile('<fieldset></fieldset>')(scope);
                     parentDiv.append(newElement);
                     $log.log(element);
 

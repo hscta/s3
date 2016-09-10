@@ -3,6 +3,11 @@
 <!--<div ng-include src="icar-expanel-templates.html"></div>-->
 <!--<link rel="import" href="app/components/common/directives/icar-expanel/icar-expanel-templates.html">-->
 
+<style>
+    md-tabs:not(.md-no-tab-content):not(.md-dynamic-height){
+        min-height:360px;
+    }
+</style>
 <script type="text/ng-template" id="panel-header.html">
     <div layout="row" flex>
         <div>I am panel header</div>
@@ -13,8 +18,19 @@
 
 <script type="text/ng-template" id="panel-content.html">
     <div layout="row" flex>
-        <div>I am panel content</div>
-        <div>{{details.assetpath}}</div>
+        <div flex>
+            <md-tabs flex>
+                <md-tab ng-repeat="(key, tab) in schema">
+                    <md-tab-label>
+                        {{key}}
+                    </md-tab-label>
+                    <md-tab-body>
+                        <icar-tab-content tab-content="tab">
+                        </icar-tab-content>
+                    </md-tab-body>
+                </md-tab>
+            </md-tabs>
+        </div>
     </div>
 </script>
 
@@ -43,19 +59,20 @@
 
 <md-expansion-panel md-component-id="details.assetpath" flex>
 
-    <md-expansion-panel-collapsed ng-click="expandCollapse($panel)" flex>
+    <md-expansion-panel-collapsed ng-click="expandCollapse($panel)" md-no-sticky="true" flex>
         <div ng-include="headerTemplate"></div>
     </md-expansion-panel-collapsed>
 
     <md-expansion-panel-expanded flex>
-        <md-expansion-panel-header ng-click="expandCollapse($panel)" flex>
+        <md-expansion-panel-header ng-click="expandCollapse($panel)"  md-no-sticky="true" flex>
             <div ng-include="headerTemplate"></div>
         </md-expansion-panel-header>
 
         <md-expansion-panel-content ng-include="contentTemplate" flex>
+            <!--<icar-tab-content tab-content="vm.schema"></icar-tab-content>-->
         </md-expansion-panel-content>
 
-        <md-expansion-panel-footer flex>
+        <md-expansion-panel-footer md-no-sticky="true" flex>
             <div ng-include="footerTemplate"></div>
         </md-expansion-panel-footer>
     </md-expansion-panel-expanded>

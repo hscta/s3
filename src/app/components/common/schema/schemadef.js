@@ -26,7 +26,260 @@
                 // output => <input type="text">
                 "key2": {
                     "type": "text", "displayname": "Display Name2", "displaydesc": "This will come in the hint",
-                    "select": null, "editable": true, "default": 10
+                    "select": null, "editable": false, "default": 10
+                },
+
+
+                // output => List of numbers in items (Read only)
+                "key3": {
+                    "type": ["number"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": false, "default": [1, 2, 3, 4, 5]
+                },
+
+
+                // output => List of strings in items (Read only)
+                "key4": {
+                    "type": ["text"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": false, "default": ['a', 'b', 'c', 'd']
+                },
+
+
+                // output => List of numbers in items with Add button (Add/Remove anything)
+                "key5": {
+                    "type": ["number"], "displayname": "Display Name3", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": true, "default": [1, 2, 3, 4, 5]
+                },
+
+
+                // output => List of strings in items with Add button (Add/Remove anything)
+                "key6": {
+                    "type": ["text"], "displayname": "Display Name4", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": true, "default": ['a', 'b', 'c', 'd']
+                },
+
+
+                // output => List of numbers in items with checkboxes (no items are selected at this point in time)
+                "key7": {
+                    "type": ["number"], "displayname": "Display Name7", "displaydesc": "This will come in the hint",
+                    "select": [0, 1, [1, 3, 9, 27, 81]],
+                    "editable": true, "default": [3]
+                },
+
+
+                // output => List of strings in items with checkboxes (no items are selected at this point in time)
+                "key8": {
+                    "type": ["text"], "displayname": "Display Name8", "displaydesc": "This will come in the hint",
+                    "select": [0, 10000, ['a', 'b', 'c']],
+                    "editable": true, "default": ["b"]
+                },
+
+
+                // type is object
+                "key9": {
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        }
+                    },
+                    "displayname": "Key9 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
+                },
+
+
+                // type is [object]
+                "key10": {
+                    "type": [{
+                        "level2key1": {
+                            "type": "number", "displayname": "Level 2 Key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level 2 Key2", "default": "10", "editable": true
+                        }
+                    }],
+                    "displayname": "Key10 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": [{"level2key1": 100, "level2key2": "100"}, {"level2key1": 200, "level2key2": "200"}],
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
+                },
+
+
+                "key11": {
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        },
+                        "level2key3": {
+                            "type": {
+                                "level3key1": {
+                                    "type": "number", "displayname": "Level 3 Key1", "default": 10, "editable": true
+                                },
+                                "level3key2": {
+                                    "type": "text", "displayname": "Level 3 Key2", "default": "10", "editable": true
+                                }
+                            },
+                            "displayname": "Key11 Level 3 Keys Array",
+                            "select": null,
+                            "editable": false,
+                            "default": {"level3key1": 100, "level3key2": "200"},
+                        }
+                    },
+                    "displayname": "Key11 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
+                },
+
+
+                "key12": {
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        },
+                        "level2key3": {
+                            "type": {
+                                "level3key1": {
+                                    "type": "number", "displayname": "Level 3 Key1", "default": 10, "editable": true
+                                },
+                                "level3key2": {
+                                    "type": "text", "displayname": "Level 3 Key2", "default": "10", "editable": true
+                                },
+                                "level3key3": {
+                                    "type": [{
+                                        "level4key1": {
+                                            "type": "number",
+                                            "displayname": "Level 4 Key1",
+                                            "default": 10,
+                                            "editable": true
+                                        },
+                                        "level4key2": {
+                                            "type": "text",
+                                            "displayname": "Level 4 Key2",
+                                            "default": "10",
+                                            "editable": true
+                                        }
+                                    }],
+                                    "displayname": "Key12 Level 4 Keys Array",
+                                    "select": null,
+                                    "editable": false,
+                                    "default": [{"level4key1": 100, "level4key2": "100"}, {
+                                        "level4key1": 200,
+                                        "level4key2": "200"
+                                    }],
+                                    "checkfun": {
+                                        "type": "udf",
+                                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                                    }
+                                },
+                            },
+                            "displayname": "Key12 Level 3 Keys Array",
+                            "select": null,
+                            "editable": false,
+                            "default": {"level3key1": 100, "level3key2": "200"},
+                        }
+                    },
+                    "displayname": "Key12 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
+                },
+
+                "key13": {
+                    "type": {
+                        "level2key1": {
+                            "type": "number", "displayname": "Level2 key1", "default": 10, "editable": true
+                        },
+                        "level2key2": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        },
+                        "level2key3": {
+                            "type" : {
+                                "level3key1": {
+                                    "type": ["number"],
+                                    "displayname": "Level3 key1",
+                                    "displaydesc": "This will come in the hint",
+                                    "select": [0, 1, [1, 3, 9, 27, 81]],
+                                    "editable": true,
+                                    "default": [3]
+                                },
+                                "level3key2": {
+                                    "type": ["text"],
+                                    "displayname": "Level3 key2",
+                                    "displaydesc": "This will come in the hint",
+                                    "select": null,
+                                    "editable": true,
+                                    "default": ['a', 'b', 'c', 'd']
+                                },
+                                "level3key3": {
+                                    "type": ["number"],
+                                    "displayname": "Level3 key3",
+                                    "displaydesc": "This will come in the hint",
+                                    "select": null,
+                                    "editable": false,
+                                    "default": [1, 2, 3, 4, 5]
+                                }
+                            },
+                            "displayname": "Level2 key2", "default":{"key1":{}, "key2":{}, "key3":{}}
+                        },
+                        "level2key4": {
+                            "type": "text", "displayname": "Level2 key2", "default": "abc", "editable": true
+                        }
+                    },
+                    "displayname": "Key13 Level 2 Keys Array",
+                    "select": null,
+                    "editable": false,
+                    "default": {"level2key1": 100, "level2key2": "200"},
+                    "checkfun": {
+                        "type": "udf",
+                        "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
+                        '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
+                    }
+                }
+            }],
+
+                ["perm1", "SETTINGS_TAG_2", {
+                // output => <input type="number">
+                "key1": {
+                    "type": "number", "displayname": "Display Name1", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": false, "default": null
+                },
+
+
+                // output => <input type="text">
+                "key2": {
+                    "type": "text", "displayname": "Display Name2", "displaydesc": "This will come in the hint",
+                    "select": null, "editable": false, "default": 10
                 },
 
 
@@ -267,6 +520,7 @@
                     }
                 }
             }]
+
         ];
 
 

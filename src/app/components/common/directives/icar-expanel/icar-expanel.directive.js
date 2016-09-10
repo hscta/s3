@@ -16,6 +16,7 @@
             templateUrl: 'app/components/common/directives/icar-expanel/icar-expanel.html',
             scope: {
                 details: '=',
+                schema: '='
             },
 
             link: function (scope) {
