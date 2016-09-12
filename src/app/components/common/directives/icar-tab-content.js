@@ -45,9 +45,6 @@
 
 
                 scope.getIcarDirective = function(content) {
-                    // $log.log("getIcarDirective");
-                    // $log.log(content);
-                    //return '<' + content.field + ' icar-data="' + content.key + '"><' + content.field + '>';
                     return '<legend>'+content.key+'</legend><' + content.field + '></' + content.field + '>';
                 };
 

@@ -61,16 +61,15 @@
                 // output => List of numbers in items with checkboxes (no items are selected at this point in time)
                 "key7": {
                     "type": ["number"], "displayname": "Display Name7", "displaydesc": "This will come in the hint",
-                    "select": [0, 1, [1, 3, 9, 27, 81]],
+                    "select": [0, 1, [1, 3, 9, 27, 81, 243]],
                     "editable": true, "default": [3]
                 },
-
 
                 // output => List of strings in items with checkboxes (no items are selected at this point in time)
                 "key8": {
                     "type": ["text"], "displayname": "Display Name8", "displaydesc": "This will come in the hint",
                     "select": [0, 10000, ['a', 'b', 'c']],
-                    "editable": true, "default": ["b"]
+                    "editable": true, "default": ["a", "c"]
                 },
 
 
@@ -725,7 +724,7 @@
             $log.log(uiComponents);
             return uiComponents;
         };
-        
+
         var getSchema = function() {
             return parseSchema(schemaDef);
         };
