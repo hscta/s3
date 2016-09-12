@@ -181,11 +181,11 @@
             for (var idx in data.assets) {
                 var asset = data.assets[idx];
                 vm.addAssetInfo(asset);
-                asset.permissions = [];
+                //asset.permissions = [];
                 for (var pidx in data.permissions) {
                     var permission = data.permissions[pidx];
                     if (asset.assetpath === permission.assetpath) {
-                        asset.permissions.push(permission);
+                        asset.permissions = JSON.parse(permission.permid);
                     }
                 }
             }

@@ -23,14 +23,14 @@
         vm.availableFields = ['title', 'description'];
         vm.supportedFields = ['title', 'description'];
 
-        vm.getMyVehicles = function (data) {
-            //$log.log("getMyVehicles");
-            //$log.log(data);
+        vm.handleResponse = function (data) {
+            //$log.log("handleResponse");
+            $log.log(data);
             vm.tree_data = data;
         };
 
-        vm.getMyVehiclesFailure = function (data) {
-            $log.log("getMyVehiclesFailure");
+        vm.handleResponseFailure = function (data) {
+            $log.log("handleResponseFailure");
             $log.log(data);
         };
 
@@ -87,7 +87,7 @@
 
         vm.initialize = function () {
             leftNavManagementService.getManagementTree({})
-                .then(vm.getMyVehicles, vm.getMyVehiclesFailure);
+                .then(vm.handleResponse, vm.handleResponseFailure);
         };
 
         vm.test = function (asset, collapsed, toggle, obj) {
@@ -107,11 +107,10 @@
             // $state.go(tabState, asset);
             //
 
-            if ( !collapsed ){
+            if (!collapsed) {
                 toggle(obj);
             }
 
-            $log.log("my to before handleSelection");
             settingsService.handleSelection(asset);
         }
 

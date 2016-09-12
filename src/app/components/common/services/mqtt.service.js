@@ -21,6 +21,7 @@
         vm.initSocket = function () {
             //$log.log('mqtt initSocket');
             if (vm.socket === null) {
+                $log.log("Connecting to MQTT server");
                 vm.connect();
                 vm.socket.on('connect', vm.onConnect);
                 vm.socket.on('close', vm.onClose);
@@ -30,7 +31,7 @@
 
         vm.onConnect = function () {
             $log.log('mqtt onConnect');
-            if (vm.socket != null) {
+            if (vm.socket !== null) {
                 //vm.connected = true;
                 vm.sendToken();
                 vm.socket.on('authsuccess', vm.onAuthSuccess);
@@ -45,8 +46,10 @@
         };
 
         vm.sendToken = function () {
-            $log.log('mqtt sendToken');
-            vm.socket.emit('authtoken', authService.getToken());
+            if(vm.socket) {
+                $log.log('mqtt sendToken');
+                vm.socket.emit('authtoken', authService.getToken());
+            }
         };
 
         vm.onAuthSuccess = function () {
@@ -101,7 +104,7 @@
             for (var eachidx in vm.msgListeners) {
                 vm.msgListeners[eachidx](msg);
             }
-            $timeout(vm.onReceiveMsg, 2000);
+            //$timeout(vm.onReceiveMsg, 2000);
         };
 
         vm.onClose = function () {
@@ -144,15 +147,13 @@
         };
 
         vm.initSocket();
-        $timeout(vm.onReceiveMsg, 2000);
+        //$timeout(vm.onReceiveMsg, 2000);
 
         return {
             addMsgListener: vm.addMsgListener,
             subscribeAsset: vm.subscribeAsset,
             unsubscribeAsset: vm.unsubscribeAsset
         }
-
-
     }
 
 })();

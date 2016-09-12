@@ -13,7 +13,7 @@
     function readOnlyList($log, $mdDialog, $stateParams) {
         return {
             restrict: 'AE',
-            templateUrl: 'app/components/common/directives/readonly-list/readonly-list.html',
+            templateUrl: 'app/components/common/directives/readonly-list.html',
             scope: {
                 listData: '=',
             },

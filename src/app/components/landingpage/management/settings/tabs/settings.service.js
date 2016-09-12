@@ -71,14 +71,10 @@
 
 
         vm.handleSelection = function(asset) {
-            // $log.log("my to handleSelection");
             var tab = "group";
-            //$rootScope.$broadcast('test', {'info':asset});
-            $log.log("ho ho ho asset");
-            $log.log(asset);
+            // $log.log(asset);
             // is it group, vehicle, device, user, role
             if(vm.tabs.indexOf(asset.id) != -1) {
-                $log.log("jai bolo");
                 tab = asset.id;
             } else {
                 $log.log("duniya " + asset.info.ui_asset_type);

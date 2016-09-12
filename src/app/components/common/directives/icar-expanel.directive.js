@@ -13,7 +13,7 @@
                          $stateParams) {
         return {
             restrict: 'ACE',
-            templateUrl: 'app/components/common/directives/icar-expanel/icar-expanel.html',
+            templateUrl: 'app/components/common/directives/icar-expanel.html',
             scope: {
                 details: '=',
                 schema: '='
