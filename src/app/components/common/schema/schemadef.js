@@ -722,17 +722,13 @@
                     uiComponents[tabName][key] = parseSection(section, key);
                 }
             }
-            //$log.log(uiComponents);
+            $log.log(uiComponents);
             return uiComponents;
         };
-
-
-        //parseSchema(schemaDef);
-
+        
         var getSchema = function() {
             return parseSchema(schemaDef);
         };
-
 
         return {
             //parseSchema : parseSchema,

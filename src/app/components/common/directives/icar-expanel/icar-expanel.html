@@ -26,7 +26,7 @@
                     </md-tab-label>
                     <md-tab-body>
                         <icar-tab-content tab-content="tab">
-                        </icar-tab-content>
+                        </icar-tab-content layout="row">
                     </md-tab-body>
                 </md-tab>
             </md-tabs>
@@ -36,7 +36,6 @@
 
 <script type="text/ng-template" id="panel-footer.html">
     <div layout="row" flex>
-        <div>I am panel footer</div>
         <md-button class="md-warn" ng-click="save()">Save</md-button>
         <md-button class="md-warn" ng-click="discard()">Discard</md-button>
         <md-button class="md-fab md-mini" aria-label="Edit" ng-click="edit()">

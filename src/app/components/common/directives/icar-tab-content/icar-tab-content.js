@@ -24,7 +24,7 @@
                 scope.parseContent = function(content, parentDiv) {
                     //$log.log("inside parseContent");
                     //$log.log(content);
-                    var newElement = $compile('<fieldset></fieldset>')(scope);
+                    var newElement = $compile('<fieldset layout="row"></fieldset>')(scope);
                     parentDiv.append(newElement);
                     $log.log(element);
 
@@ -48,7 +48,7 @@
                     $log.log("getIcarDirective");
                     $log.log(content);
                     //return '<' + content.field + ' icar-data="' + content.key + '"><' + content.field + '>';
-                    return '<' + content.field + '></' + content.field + '>';
+                    return '<legend>'+content.key+'</legend><' + content.field + '></' + content.field + '>';
                 };
 
                 scope.parseContent(scope.tabContent, angular.element(element.children()[0]));
