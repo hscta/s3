@@ -16,9 +16,9 @@
                        <input type="text" ng-model="content.data.model" ng-disabled="!content.data.editable">\
                         </md-input-container>',
             link : function(scope, element, attrs) {
-                    $log.log("inside icarInput Directive");
-                    $log.log(scope.content);
-                    $log.log(attrs);
+                    // $log.log("inside icarInput Directive");
+                    // $log.log(scope.content);
+                    // $log.log(attrs);
             }
         }
     }

@@ -333,8 +333,9 @@
 
         vm.getDashboardTree = function (body) {
             var groupsPromise = userService.getMyGroupsMap(body);
-            var vehiclesPromise = userService.getMyVehiclesMap(body);
-            return $q.all([groupsPromise, vehiclesPromise])
+            //var vehiclesPromise = userService.getMyVehiclesMap(body);
+            //return $q.all([groupsPromise, vehiclesPromise])
+            return $q.all([groupsPromise])
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createDashboardTree, vm.handleFailure);
         };

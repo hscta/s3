@@ -26,12 +26,12 @@
                     //$log.log(content);
                     var newElement = $compile('<fieldset layout="row"></fieldset>')(scope);
                     parentDiv.append(newElement);
-                    $log.log(element);
+                    // $log.log(element);
 
                     for(var idx in content) {
                         var child = content[idx];
                         if(idx == '_schema_uidata') {
-                            $log.log("child.key = " + child.key);
+                            // $log.log("child.key = " + child.key);
                             var childScope = scope.$new(false);
                             childScope.content = child;
                             newElement.append($compile(scope.getIcarDirective(child))(childScope));
@@ -45,20 +45,20 @@
 
 
                 scope.getIcarDirective = function(content) {
-                    $log.log("getIcarDirective");
-                    $log.log(content);
+                    // $log.log("getIcarDirective");
+                    // $log.log(content);
                     //return '<' + content.field + ' icar-data="' + content.key + '"><' + content.field + '>';
                     return '<legend>'+content.key+'</legend><' + content.field + '></' + content.field + '>';
                 };
 
                 scope.parseContent(scope.tabContent, angular.element(element.children()[0]));
-                $log.log(scope.tabContent);
+                // $log.log(scope.tabContent);
             }
         }
     }
 
     function addContent($log) {
-        $log.log("addContent directive");
+        // $log.log("addContent directive");
 
         return {
             restrict: 'A',
