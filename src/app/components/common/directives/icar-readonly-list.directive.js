@@ -12,9 +12,9 @@
     function icarReadonlyList($log) {
         return {
             restrict: 'AE',
-            template: '<md-content>\
-                        <label>Username</label>\
-                            <div ng-repeat="d in data">{{d}}</div>\
+            template: '<md-content layout="row" layout-wrap>\
+                        <label flex="100">Username</label><br/>\
+                            <div ng-repeat="d in data" layout-padding>{{d}}</div>\
                         </md-content>',
             link : function(scope, element, attrs) {
                 // $log.log("inside icarInput Directive");

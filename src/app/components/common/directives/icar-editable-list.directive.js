@@ -12,7 +12,7 @@
         return {
             restrict: 'AE',
             template: '<h2 class="md-title">{{displayName}}</h2>\
-                       <md-chips ng-model="data">\
+                       <md-chips ng-model="data" layout="row" layout-wrap>\
                             ng-model="data"\
                             readonly="false"\
                             md-removable="true"\
@@ -21,7 +21,7 @@
                        </md-chips>',
 
             link : function(scope, element, attrs) {
-                 $log.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ");
+                $log.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ");
                 $log.log(scope.content);
                 // $log.log(attrs);
 

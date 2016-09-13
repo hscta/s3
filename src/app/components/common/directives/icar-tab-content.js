@@ -13,7 +13,7 @@
     function icarTabContent($log, $compile, $stateParams) {
         return {
             restrict: 'E',
-            template: '<div></div>',
+            template: '<div style="overflow:hidden;"></div>',
             scope: {
                 tabContent: '='
             },
