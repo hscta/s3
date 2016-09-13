@@ -22,9 +22,7 @@
                 $log.log("icar-tab-content loaded");
 
                 scope.parseContent = function(content, parentDiv) {
-                    //$log.log("inside parseContent");
-                    //$log.log(content);
-                    var newElement = $compile('<fieldset layout="row"></fieldset>')(scope);
+                    var newElement = $compile('<fieldset layout="row" style="border:1px solid #ccc;"></fieldset>')(scope);
                     parentDiv.append(newElement);
                     // $log.log(element);
 
@@ -49,14 +47,11 @@
                 };
 
                 scope.parseContent(scope.tabContent, angular.element(element.children()[0]));
-                // $log.log(scope.tabContent);
             }
         }
     }
 
     function addContent($log) {
-        // $log.log("addContent directive");
-
         return {
             restrict: 'A',
             compile: function(element, attrs) {
