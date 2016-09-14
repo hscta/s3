@@ -28,16 +28,18 @@
                 //return response;
                 //authService.saveToken(response.data.token);
             });
-        }
+        };
 
         vm.logout = function() {
             authService.logout && authService.logout()
-        }
+            $rootScope.showLoginDialog = true;
+            vm.checkLogin();
+        };
 
         vm.isAuthed = function() {
-            $log.log(authService.isAuthed(), 'ssssssssssssssss');
+            //$log.log(authService.isAuthed());
             return authService.isAuthed ? authService.isAuthed() : false;
-        }
+        };
 
         vm.checkLogin = function () {
             if($rootScope.showLoginDialog) {
@@ -53,7 +55,7 @@
 
                 $mdDialog.show(loginDialog);
             }
-        }
+        };
 
         requestService.addAuthListener(vm.checkLogin);
     }
@@ -84,20 +86,21 @@
             $log.log("/gettoken")
             loginService.login(vm.username, vm.password)
                 .then(handleLoginSuccess, handleLoginFailure)
-        }
-
-        vm.register = function () {
-            // $log.log("register");
-            // loginService.register(vm.username, vm.password)
-            //     .then(handleRequest, handleRequest)
-        }
+        };
 
         vm.logout = function () {
             loginService.logout();
-        }
+        };
 
-        vm.isAuthed = function () {
-            return loginService.isAuthed();
-        }
+
+        // vm.register = function () {
+        //     // $log.log("register");
+        //     // loginService.register(vm.username, vm.password)
+        //     //     .then(handleRequest, handleRequest)
+        // };
+        //
+        // vm.isAuthed = function () {
+        //     return loginService.isAuthed();
+        // }
     }
 })();
