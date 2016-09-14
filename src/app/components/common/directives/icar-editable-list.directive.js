@@ -21,12 +21,6 @@
                        </md-chips>',
 
             link : function(scope, element, attrs) {
-<<<<<<< Updated upstream
-                    // $log.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ");
-                    // $log.log(scope.content);
-=======
-                $log.log(scope.content);
->>>>>>> Stashed changes
                 // $log.log(attrs);
 
 
