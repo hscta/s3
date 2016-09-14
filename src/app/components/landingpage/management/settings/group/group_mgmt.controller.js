@@ -18,7 +18,7 @@
         settingsService.setTab(intellicarAPI.appConstants.GROUP);
         var vm = this;
         vm.assets = [];
-        vm.newGroupName ='';
+        vm.newGroupName = '';
         vm.groupBtnStatus = false;
 
 
@@ -36,9 +36,15 @@
         };
 
         vm.createGroup = function () {
-            $log.log('clicked', vm.newGroupName);
-            vm.groupBtnStatus = true;
-            return intellicarAPI.groupService.createNewGroup(vm.newGroupName);
+            groupMgmtService.createGroup(vm.newGroupName)
+                .then(function (resp) {
+                        $log.log(resp);
+                        $rootScope.$emit('MGMT_TREE_CHANGE', {});
+                    },
+                    function (resp) {
+                        $log.log("CREATE GROUP FAILED");
+                        $log.log(resp)
+                    });
         };
 
         vm.onLoad();

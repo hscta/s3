@@ -19,5 +19,16 @@
             settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyGroupsMap(settingsService.getCurrentGroup());
         };
+
+
+        vm.createGroup = function (newGroupName) {
+            var postBody = {group: {
+                pgrouppath: settingsService.getCurrentGroup().group.grouppath,
+                name: newGroupName
+            }};
+
+            return intellicarAPI.groupService.createGroup(postBody);
+        };
+
     }
 })();
