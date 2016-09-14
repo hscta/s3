@@ -12,11 +12,6 @@
         var vm = this;
         $log.log("groupService");
 
-        vm.createGroup = function(body) {
-            // $log.log("getMyGroups");
-            return requestService.firePost('/group/create', body);
-        };
-
         vm.getMyGroups = function(body) {
             // $log.log("getMyGroups");
             return requestService.firePost('/group/mygroups', body);
