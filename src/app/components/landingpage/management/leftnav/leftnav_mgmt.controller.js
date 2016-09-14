@@ -18,7 +18,7 @@
         vm.tree_search_pattern = '';
         vm.search_results;
 
-        $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);
+
 
         $scope.treeFilter = $filter('uiTreeFilter');
 
@@ -39,6 +39,7 @@
 
 
         vm.initialize = function () {
+            $log.log("vm.initialize");
             leftNavManagementService.getManagementTree({})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
@@ -60,6 +61,7 @@
         };
 
         vm.initialize();
+        $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);
     }
 
 })();

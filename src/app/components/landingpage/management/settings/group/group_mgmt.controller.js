@@ -10,15 +10,14 @@
         .controller('GroupMgmtController', GroupMgmtController);
 
     function GroupMgmtController($scope, $rootScope, $log,
-                                 $state, $location, $mdExpansionPanel,
-                                 intellicarAPI, settingsService,
-                                 startupData) {
+                                 intellicarAPI, groupMgmtService,
+                                 settingsService, startupData) {
 
         $log.log('GroupMgmtController');
         settingsService.setTab(intellicarAPI.appConstants.GROUP);
         var vm = this;
         vm.assets = [];
-        vm.newGroupName ='';
+        vm.newGroupName = '';
         vm.groupBtnStatus = false;
         vm.isdiplay = false;
         vm.showBtn = false;
@@ -44,7 +43,7 @@
             groupMgmtService.createGroup(vm.newGroupName)
                 .then(function (resp) {
                         $log.log(resp);
-                        $rootScope.$emit('MGMT_TREE_CHANGE', {});
+                        $rootScope.$emit('EVENT_MGMT_TREE_CHANGE', {});
                     },
                     function (resp) {
                         $log.log("CREATE GROUP FAILED");
@@ -52,10 +51,11 @@
                     });
         };
 
-        vm.showNewGroupField = function() {
+        vm.showNewGroupField = function () {
             $log.log('show/hide');
             vm.isdiplay = !vm.isdiplay;
-        }
+        };
+
         vm.onLoad();
     }
 })();
