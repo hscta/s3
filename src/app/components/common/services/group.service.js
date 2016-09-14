@@ -60,7 +60,7 @@
 
         vm.handleResponse = function (resp) {
             //$log.log("handleResponse");
-            return $q.resolve(resp)
+            return $q.resolve(resp);
         };
 
 
