@@ -18,6 +18,8 @@
         var vm = this;
         settingsService.setTab(intellicarAPI.appConstants.GROUP);
         vm.data = [];
+        vm.newGroupName ='';
+        vm.groupBtnStatus = false;
 
 
         vm.handleMyVehicles = function (data) {
@@ -68,6 +70,12 @@
                     $scope = vm.data;
                 }
             }
+        };
+
+        vm.createGroup = function () {
+            $log.log('clicked', vm.newGroupName);
+            vm.groupBtnStatus = true;
+            return intellicarAPI.groupService.createNewGroup(vm.newGroupName);
         };
 
         vm.onLoad();

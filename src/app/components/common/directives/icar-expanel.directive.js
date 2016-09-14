@@ -20,6 +20,7 @@
             },
 
             link: function (scope) {
+                $log.log('sssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
                 scope.contentTemplate = "panel-content.html";
                 scope.headerTemplate = "panel-header.html";
                 scope.footerTemplate = "panel-footer.html";

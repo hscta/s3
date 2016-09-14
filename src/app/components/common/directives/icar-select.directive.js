@@ -20,7 +20,7 @@
                                     ng-checked="isChecked()"\
                                     md-indeterminate="isIndeterminate()"\
                                     ng-click="toggleAll()"  ng-show="showSelectAll">\
-                                    <span ng-if="isChecked()">Un-</span>Select All\
+                                    <span ng-if="isChecked()" style="font-size:14px;">Un-</span>Select All\
                                 </md-checkbox flex>\
                             </div>\
                             <div class="" ng-repeat="item in items" layout-padding>\

@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 
-<md-expansion-panel-group md-component-id="panelGroup" id="/1/1">
-    <icar-panel-expansion ng-repeat="d in vm.data" details="d"></icar-panel-expansion>
-</md-expansion-panel-group>
+
+<md-content layout="column">
+    <md-input-container flex>
+        <label>Username</label>
+        <input type="text">
+    </md-input-container>
+
+    <md-button class="md-accent" flex="66">Create User</md-button>
+</md-content>
 

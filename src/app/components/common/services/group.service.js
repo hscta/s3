@@ -12,6 +12,10 @@
         var vm = this;
         $log.log("groupService");
 
+        vm.createGroup = function(body) {
+            // $log.log("getMyGroups");
+            return requestService.firePost('/group/create', body);
+        };
 
         vm.getMyGroups = function(body) {
             // $log.log("getMyGroups");
@@ -145,5 +149,10 @@
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };
+
+        vm.createNewGroup = function (groupName){
+            $log.log(groupName);
+            return 'success';
+        } ;
     }
 })();

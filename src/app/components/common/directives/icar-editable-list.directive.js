@@ -11,8 +11,8 @@
     function icarEditableList($log) {
         return {
             restrict: 'AE',
-            template: '<h2 class="md-title">{{displayName}}</h2>\
-                       <md-chips ng-model="data" layout="row" layout-wrap>\
+            template: '<label>{{displayName}}</label>\
+                       <md-chips ng-model="data" layout="row" layout-wrap flex="100">\
                             ng-model="data"\
                             readonly="false"\
                             md-removable="true"\
@@ -21,8 +21,12 @@
                        </md-chips>',
 
             link : function(scope, element, attrs) {
+<<<<<<< Updated upstream
                     // $log.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ");
                     // $log.log(scope.content);
+=======
+                $log.log(scope.content);
+>>>>>>> Stashed changes
                 // $log.log(attrs);
 
 

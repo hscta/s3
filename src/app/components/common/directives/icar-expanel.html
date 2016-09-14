@@ -11,8 +11,8 @@
 
 <script type="text/ng-template" id="panel-header.html">
     <div layout="row" flex>
-        <div>I am panel header</div>
         <div>{{details.name}}</div>
+        <div class="md-summary"></div>
         <md-expansion-panel-icon></md-expansion-panel-icon>
     </div>
 </script>
@@ -26,8 +26,7 @@
                         {{key}}
                     </md-tab-label>
                     <md-tab-body>
-                        <icar-tab-content tab-content="tab">
-                        </icar-tab-content layout="row">
+                        <icar-tab-content tab-content="tab"></icar-tab-content>
                     </md-tab-body>
                 </md-tab>
             </md-tabs>
@@ -53,7 +52,6 @@
         </md-button>
     </div>
 </script>
-
 
 
 

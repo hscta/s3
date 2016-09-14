@@ -16,10 +16,6 @@
         var vm = this;
         //   settingsService.setTab(intellicarAPI.appConstants.VEHICLE);
 
-
-        // $log.log('state.name = ');
-        // $log.log($state);
-        //vm.vehicle_details = [{'name':'maruti'}, {'name':'Suzuki'},{'name':'Yamaha'}]
         vm.data = [];
 
         vm.handleStartupData = function (resp) {
