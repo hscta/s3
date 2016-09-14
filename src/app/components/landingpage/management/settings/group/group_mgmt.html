@@ -16,22 +16,25 @@
     }
 </style>
 
-<md-button class="md-accent" ng-click="vm.showNewGroupField()">Add New Group</md-button>
+<md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewGroupField()">
+    Add New Group
+</md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
-    <md-content layout="column">
+    <md-content layout="row">
         <md-input-container flex>
             <label>Enter Group Name</label>
             <input type="text" ng-model="vm.newGroupName"  maxlength="10">
         </md-input-container>
 
-        <md-button class="md-accent" ng-click="vm.createGroup();" flex="9"
+        <md-button class="md-button md-accent" ng-click="vm.createGroup();" flex="20"
                    ng-disabled="vm.groupBtnStatus">Create Group</md-button>
     </md-content>
-</div>
+</div><br/>
 
 <script type="text/ng-template" id="outside-panel-header.html">
-    <div class="md-title">{{myAsset.name}}</div>
+    <div class="md-title" style="display:inline;">{{myAsset.name}}</div>
+    <div class="md-summary"></div>
     <md-expansion-panel-icon></md-expansion-panel-icon>
 </script>
 
@@ -52,7 +55,7 @@
 
         <md-expansion-panel-expanded>
             <md-expansion-panel-header ng-click="$panel.collapse()">
-                <div ng-include="'outside-panel-header.html'"></div>
+                <div style="display:inherit;width:100%;" ng-include="'outside-panel-header.html'"></div>
             </md-expansion-panel-header>
 
             <md-expansion-panel-content>

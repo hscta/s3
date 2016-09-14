@@ -18,9 +18,10 @@
         settingsService.setTab(intellicarAPI.appConstants.GROUP);
         var vm = this;
         vm.assets = [];
-        vm.newGroupName = '';
+        vm.newGroupName ='';
         vm.groupBtnStatus = false;
         vm.isdiplay = false;
+        vm.showBtn = false;
 
 
         vm.handleMyVehiclesFailure = function (data) {
@@ -34,6 +35,9 @@
                 vm.assets.push(startupData[key]);
             }
             $log.log(vm.assets);
+
+            if ( settingsService.getCurrentGroup().group.grouppath )
+                vm.showBtn = true;
         };
 
         vm.createGroup = function () {
@@ -52,7 +56,6 @@
             $log.log('show/hide');
             vm.isdiplay = !vm.isdiplay;
         }
- vm.isdiplay = !vm.isdip
         vm.onLoad();
     }
 })();
