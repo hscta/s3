@@ -10,3 +10,41 @@
     <md-button class="md-accent" flex="66">Create User</md-button>
 </md-content>
 
+
+<script type="text/ng-template" id="outside-panel-header.html">
+    <div class="md-title">{{myAsset.name}}</div>
+    <div class="md-summary"></div>
+    <md-expansion-panel-icon></md-expansion-panel-icon>
+</script>
+
+<script type="text/ng-template" id="outside-panel-content.html">
+    <div class="md-title">{{myAsset.name}}</div>
+    <!--<icar-expanel ng-repeat="item in vm.vehicleinfo track by $index"-->
+    <!--details="item" schema="item.schema" layout></icar-expanel>-->
+</script>
+
+<md-expansion-panel-group md-component-id="vehicleGroup" flex>
+
+    <md-expansion-panel md-component-id="$index" ng-repeat="myAsset in vm.assets track by $index">
+
+        <md-expansion-panel-collapsed ng-include="'outside-panel-header.html'">
+        </md-expansion-panel-collapsed>
+
+        <md-expansion-panel-expanded>
+            <md-expansion-panel-header ng-click="$panel.collapse()">
+                <span ng-include="'outside-panel-header.html'"></span>
+            </md-expansion-panel-header>
+
+            <md-expansion-panel-content>
+                <div ng-include="'outside-panel-content.html'"></div>
+            </md-expansion-panel-content>
+
+            <md-expansion-panel-footer  md-no-sticky="true">
+            </md-expansion-panel-footer>
+        </md-expansion-panel-expanded>
+
+    </md-expansion-panel>
+</md-expansion-panel-group>
+
+
+

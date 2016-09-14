@@ -14,26 +14,18 @@
                                 intellicarAPI, settingsService, startupData) {
 
         $log.log('UserMgmtController');
-        var vm = this;
         settingsService.setTab(intellicarAPI.appConstants.USER);
-        vm.data = [];
+        var vm = this;
+        vm.assets = [];
 
         vm.onLoad = function () {
-            $log.log("my user data");
-            $log.log((startupData));
-            vm.details = {};
-
+            $log.log(startupData);
+            vm.assets = [];
             for (var key in startupData) {
-                vm.details = {};
-                if (startupData.hasOwnProperty(key)) {
-                    //$log.log(key + " -> " + startupData[key].name);
-                    vm.details['name'] = startupData[key].name;
-                    //vm.details['id'] = startupData[key].userid;
-                    vm.details['id'] = startupData[key].assetid;
-                    $log.log(vm.details);
-                    vm.data.push(vm.details);
-                }
+                vm.assets.push(startupData[key]);
             }
+
+            $log.log(vm.assets);
         };
 
         vm.onLoad();

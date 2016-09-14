@@ -19,13 +19,5 @@
             settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyRolesMap(settingsService.getCurrentGroup());
         };
-
-        vm.getDetails = function () {
-            return intellicarAPI.groupService.getMyRolesMap(settingsService.getCurrentGroup());
-        };
-
-        vm.getSchemaData = function() {
-
-        }
     }
 })();
