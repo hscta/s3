@@ -38,8 +38,18 @@
             $log.log("my vehicle data");
             //$log.log(startupData);
 
-            vm.schema = intellicarAPI.schemaDefService.getSchema();
+            vm.schema = intellicarAPI.schemaService.getSchema();
             $log.log(vm.schema);
+
+            vm.schemaData = intellicarAPI.schemaService.getSchemaData();
+            $log.log(vm.schemaData);
+
+            intellicarAPI.schemaService.bindDataToSchema(vm.schema, vm.schemaData);
+            $log.log(vm.schema);
+            //$log.log(JSON.flatten(vm.schema));
+            //$log.log(JSON.flatten2(vm.schemaData));
+
+
 
             // vm.schema.SETTINGS_TAG_1.key1._schema_uidata.data.default = '1000';
 

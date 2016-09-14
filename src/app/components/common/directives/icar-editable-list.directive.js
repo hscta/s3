@@ -21,8 +21,8 @@
                        </md-chips>',
 
             link : function(scope, element, attrs) {
-                $log.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ");
-                $log.log(scope.content);
+                    // $log.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ");
+                    // $log.log(scope.content);
                 // $log.log(attrs);
 
 

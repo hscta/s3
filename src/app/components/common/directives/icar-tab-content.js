@@ -19,7 +19,7 @@
             },
 
             link: function (scope, element, attrs) {
-                $log.log("icar-tab-content loaded");
+                //$log.log("icar-tab-content loaded");
 
                 scope.parseContent = function(content, parentDiv) {
                     var newElement = $compile('<fieldset layout="row" style="border:1px solid #ccc;"></fieldset>')(scope);

@@ -13,7 +13,7 @@
             restrict: 'AE',
             template: '<md-input-container>\
                         <label>Username</label>\
-                       <input type="text" ng-model="content.data.model" ng-disabled="!content.data.editable">\
+                       <input type="text" ng-model="content.data.default" ng-disabled="!content.data.editable">\
                         </md-input-container>',
             link : function(scope, element, attrs) {
                     // $log.log("inside icarInput Directive");

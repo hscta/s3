@@ -37,7 +37,7 @@
                 scope.maxSelection = scope.content.data.select[1];
 
 
-                $log.log(scope.maxSelection, scope.content.data.select[2].length);
+                //$log.log(scope.maxSelection, scope.content.data.select[2].length);
                 if ( scope.maxSelection >= scope.content.data.select[2].length )
                     scope.showSelectAll = true;
                 else

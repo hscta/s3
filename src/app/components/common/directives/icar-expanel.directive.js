@@ -30,7 +30,7 @@
                     .ok('Yes')
                     .cancel('No');
 
-                $log.log("icarExpanel directive loaded");
+                //$log.log("icarExpanel directive loaded");
 
                 scope.discard = function () {
                 };
