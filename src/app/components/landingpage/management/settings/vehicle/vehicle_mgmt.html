@@ -2,6 +2,7 @@
 
 <script type="text/ng-template" id="outside-panel-header.html">
     <div class="md-title">{{myAsset.name}}</div>
+    <div class="md-summary"></div>
     <md-expansion-panel-icon></md-expansion-panel-icon>
 </script>
 
@@ -20,7 +21,7 @@
 
         <md-expansion-panel-expanded>
             <md-expansion-panel-header ng-click="$panel.collapse()">
-                <div ng-include="'outside-panel-header.html'"></div>
+                <span ng-include="'outside-panel-header.html'"></span>
             </md-expansion-panel-header>
 
             <md-expansion-panel-content>
