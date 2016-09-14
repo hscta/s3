@@ -35,7 +35,7 @@
             }
             $log.log(vm.assets);
 
-            if ( settingsService.getCurrentGroup().group.grouppath )
+            if ( settingsService.getCurrentGroupPath() )
                 vm.showBtn = true;
         };
 
