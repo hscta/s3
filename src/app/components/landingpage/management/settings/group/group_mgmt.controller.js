@@ -20,6 +20,7 @@
         vm.assets = [];
         vm.newGroupName = '';
         vm.groupBtnStatus = false;
+        vm.isdiplay = false;
 
 
         vm.handleMyVehiclesFailure = function (data) {
@@ -47,6 +48,11 @@
                     });
         };
 
+        vm.showNewGroupField = function() {
+            $log.log('show/hide');
+            vm.isdiplay = !vm.isdiplay;
+        }
+ vm.isdiplay = !vm.isdip
         vm.onLoad();
     }
 })();
