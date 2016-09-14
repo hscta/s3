@@ -49,6 +49,16 @@
         };
 
 
+        vm.createGroup = function(body) {
+            return requestService.firePost('/group/create', body);
+        };
+
+
+        vm.assignRole = function(body) {
+            return requestService.firePost('/group/assignrole', body);
+        };
+
+
         vm.handleResponse = function (resp) {
             //$log.log("handleResponse");
             return $q.resolve(resp)

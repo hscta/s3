@@ -54,7 +54,7 @@
                 }
             }
 
-            // $log.log("my to set grouppath: " + grouppath);
+            $log.log("setCurrentGroup grouppath: " + grouppath);
             vm.currentGroup = {group: {grouppath: grouppath}};
         };
 

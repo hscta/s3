@@ -12,7 +12,7 @@
 
     function RoleMgmtController($scope, $rootScope, $log, $q, $state,
                                 intellicarAPI, settingsService, startupData,
-                                $mdExpansionPanelGroup, schemaNewService,  $interval,
+                                $mdExpansionPanelGroup,  $interval,
                                 roleMgmtService) {
         $log.log('RoleMgmtController');
         var vm = this;
@@ -236,10 +236,6 @@
         //     vm.fields = schemaService.parseSchema($scope, schema);
         // };
 
-
-        vm.fields = schemaNewService.parseSchema(newSchema);
-
-        $log.log(vm.fields);
 
         vm.onClickPanel = function(test) {
            // $log.log("open", test);

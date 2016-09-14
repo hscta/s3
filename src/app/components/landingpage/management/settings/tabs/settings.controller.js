@@ -66,7 +66,6 @@
             var stateParams = {
                 info: {
                     pgrouppath: currentGroup.group.grouppath,
-                    //grouppath: currentGroup.group.grouppath,
                     assetpath: currentGroup.group.grouppath,
                     ui_asset_type: assetType,
                     tabClick: true
