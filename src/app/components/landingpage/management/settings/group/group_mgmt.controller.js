@@ -43,7 +43,7 @@
             groupMgmtService.createGroup(vm.newGroupName)
                 .then(function (resp) {
                         $log.log(resp);
-                        $rootScope.$emit('EVENT_MGMT_TREE_CHANGE', {});
+                        $rootScope.$broadcast('EVENT_MGMT_TREE_CHANGE', {});
                     },
                     function (resp) {
                         $log.log("CREATE GROUP FAILED");

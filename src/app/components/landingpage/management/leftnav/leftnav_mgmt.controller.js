@@ -38,7 +38,7 @@
         };
 
 
-        vm.initialize = function () {
+        vm.initialize = function (data) {
             $log.log("vm.initialize");
             leftNavManagementService.getManagementTree({})
                 .then(vm.handleResponse, vm.handleResponseFailure);
