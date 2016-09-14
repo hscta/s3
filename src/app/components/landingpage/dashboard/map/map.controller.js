@@ -106,7 +106,6 @@
         }
 
         vm.immobalize = function () {
-            $log.log('ssssssssssssssssssssssclicked');
             var immobalizeDialog = $mdDialog.confirm({
                     controller: immobalizeController,
                     templateUrl: '/app/components/landingpage/dashboard/map/immobalize-dialog.html',

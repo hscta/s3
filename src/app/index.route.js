@@ -95,13 +95,13 @@
                   },
                   'mgmttab@home.management': {
                       templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
-                      // resolve: {
-                      //     startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
-                      //         $log.log("toState " + $state.current.name);
-                      //         //$log.log($stateParams);
-                      //         return vehicleMgmtService.getData(settingsService.getCurrentGroup());
-                      //     }
-                      // },
+                      resolve: {
+                          startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
+                              $log.log("toState " + $state.current.name);
+                              //$log.log($stateParams);
+                              return vehicleMgmtService.getData(settingsService.getCurrentGroup());
+                          }
+                      },
                       controller: 'VehicleMgmtController as vm'
                   }
               }
