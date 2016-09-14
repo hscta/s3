@@ -21,14 +21,13 @@
         };
 
 
-        vm.createGroup = function (newGroupName) {
-            var postBody = {group: {
-                pgrouppath: settingsService.getCurrentGroup().group.grouppath,
-                name: newGroupName
+        vm.createGroup = function (newGroup) {
+            var body = {group: {
+                pgrouppath: settingsService.getCurrentGroupPath(),
+                name: newGroup.name
             }};
 
-            return intellicarAPI.groupService.createGroup(postBody);
+            return intellicarAPI.groupService.createGroup(body);
         };
-
     }
 })();

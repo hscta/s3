@@ -54,6 +54,11 @@
         };
 
 
+        vm.createUser = function(body) {
+            return requestService.firePost('/user/create', body);
+        };
+
+
         vm.handleResponse = function (resp) {
             //$log.log("handleResponse");
             return $q.resolve(resp)

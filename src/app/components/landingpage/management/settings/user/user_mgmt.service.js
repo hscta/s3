@@ -28,5 +28,16 @@
             settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyUsersMap(settingsService.getCurrentGroup());
         };
+
+
+        vm.createUser = function (newUser) {
+            var body = {user: {
+                pgrouppath: settingsService.getCurrentGroupPath(),
+                name: newUser.name,
+                usermeta: {password: newUser.password}
+            }};
+
+            return intellicarAPI.userService.createUser(body);
+        };
     }
 })();

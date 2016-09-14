@@ -64,6 +64,10 @@
         };
 
 
+        vm.getCurrentGroupPath = function() {
+            return vm.currentGroup.group.grouppath;
+        }
+
         // vm.setTabStateData = function(tab, asset) {
         //     $log.log(tab);
         //     $log.log(asset);

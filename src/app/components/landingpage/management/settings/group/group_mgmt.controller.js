@@ -17,7 +17,7 @@
         settingsService.setTab(intellicarAPI.appConstants.GROUP);
         var vm = this;
         vm.assets = [];
-        vm.newGroupName = '';
+        vm.newGroup = {};
         vm.groupBtnStatus = false;
         vm.isdiplay = false;
         vm.showBtn = false;
@@ -40,9 +40,10 @@
         };
 
         vm.createGroup = function () {
-            groupMgmtService.createGroup(vm.newGroupName)
+            groupMgmtService.createGroup(vm.newGroup)
                 .then(function (resp) {
                         $log.log(resp);
+                        vm.newGroup = {};
                         $rootScope.$broadcast('EVENT_MGMT_TREE_CHANGE', {});
                     },
                     function (resp) {
