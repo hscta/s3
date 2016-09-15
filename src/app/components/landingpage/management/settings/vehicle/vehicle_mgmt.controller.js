@@ -15,6 +15,10 @@
         settingsService.setTab(intellicarAPI.appConstants.VEHICLE);
         var vm = this;
         vm.assets = [];
+        vm.groupBtnStatus = false;
+        vm.isdiplay = false;
+        vm.showBtn = false;
+
 
         vm.handleStartupData = function (resp) {
             $log.log(resp);
@@ -33,7 +37,17 @@
             }
 
             $log.log(vm.assets);
+
+            if ( settingsService.getCurrentGroupPath() )
+                vm.showBtn = true;
         };
+
+        vm.showNewVehicleField = function () {
+            $log.log('show/hide');
+            vm.isdiplay = !vm.isdiplay;
+            vm.msg = ""
+        };
+
 
         vm.onLoad();
     }

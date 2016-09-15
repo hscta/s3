@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 
+<style>
+    .icar-new-group {
+        border: 1px solid #ccc;
+        display:none;
+    }
+    .icar-new-group.active {
+        display:block;
+    }
+</style>
 
+<md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewRoleField()">
+    Create Role
+</md-button>
+
+<div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
 <md-content layout="column">
     <md-input-container flex>
         <label>Enter Role Name</label>
         <input type="text" ng-model="vm.newGroupName">
     </md-input-container>
 
-    <md-button class="md-accent" ng-click="vm.createGroup();" flex="66">Add Role</md-button>
+    <md-button class="md-accent" ng-click="vm.createGroup();" flex="66">Create Role</md-button>
 </md-content>
-
+</div><br/>
 
 <script type="text/ng-template" id="outside-panel-header.html">
     <div class="md-title">{{myAsset.name}}</div>
@@ -32,7 +46,7 @@
 
         <md-expansion-panel-expanded>
             <md-expansion-panel-header ng-click="$panel.collapse()">
-                <span ng-include="'outside-panel-header.html'"></span>
+                <div style="display:inherit;width:100%;" ng-include="'outside-panel-header.html'"></div>
             </md-expansion-panel-header>
 
             <md-expansion-panel-content>

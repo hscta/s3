@@ -10,15 +10,13 @@
 
     function LeftNavManagementController($scope, $log, intellicarAPI,
                                          leftNavManagementService, $state, $filter,
-                                         settingsService) {
+                                         settingsService, treeDataService) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
         vm.state = $state;
         vm.tree_search_pattern = '';
         vm.search_results;
-
-
 
         $scope.treeFilter = $filter('uiTreeFilter');
 
@@ -49,7 +47,6 @@
             if (!collapsed) {
                 toggle(obj);
             }
-
             settingsService.handleSelection(asset);
         };
 
@@ -59,6 +56,17 @@
             $scope.$broadcast('angular-ui-tree:collapse-all');
 
         };
+
+        // vm.expandAll = function () {
+        //     if ( vm.tree_search_pattern.length <= 0 ){
+        //         $scope.$broadcast('angular-ui-tree:expand-all');
+        //         $log.log('Expanddddddddddddd')
+        //
+        //     } else {
+        //         $scope.$broadcast('angular-ui-tree:expand-all');
+        //         $log.log('Collapseeeeeeeeeeeeeee');
+        //     }
+        // };
 
         vm.initialize();
         $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);

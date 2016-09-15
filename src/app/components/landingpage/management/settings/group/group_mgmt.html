@@ -17,10 +17,11 @@
 </style>
 
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewGroupField()">
-    Add New Group
+    Create Group
 </md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
+    <div class="error" ng-show="vm.msg" style="color:red">{{vm.msg}}</div>
     <md-content layout="row">
         <md-input-container flex>
             <label>Enter Group Name</label>

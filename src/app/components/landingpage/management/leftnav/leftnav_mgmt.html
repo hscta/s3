@@ -31,14 +31,16 @@
 <!-- Template for parent nodes -->
 <script type="text/ng-template" id="parent_nodes_renderer.html">
     <div class="icar-wrap-text">
-        <a ng-click="toggle(this)" style="cursor:pointer;" ng-show="item.items.length > 0">
-            <md-icon md-font-library="material-icons" ng-show="collapsed">arrow_drop_down</md-icon>
-            <md-icon md-font-library="material-icons" ng-show="!collapsed">play_arrow</md-icon>
+        <a ng-click="toggle(this); item.collapsed = !item.collapsed" style="cursor:pointer;" ng-show="item.items.length > 0">
+            <md-icon md-font-library="material-icons" ng-show="item.collapsed">arrow_drop_down</md-icon>
+            <md-icon md-font-library="material-icons" ng-show="!item.collapsed">play_arrow</md-icon>
         </a>
         <span ng-hide="item.items.length" style="padding-left:20px;"></span>
-        <span ng-click="vm.test(item, collapsed, toggle, this);" style="cursor:pointer;">{{item.title | titleCase }}</span ><br/>
+        <span ng-click="vm.test(item, item.collapsed, toggle, this); item.collapsed = !item.collapsed"
+              style="cursor:pointer;">{{item.title | titleCase }}
+        </span ><br/>
     </div>
-    <ol ui-tree-nodes ng-model="item.items" ng-show="collapsed">
+    <ol ui-tree-nodes ng-model="item.items" ng-show="item.collapsed">
         <li ng-repeat="item in item.items" ui-tree-node
             ng-hide="!treeFilter(item, vm.tree_search_pattern, supportedFields)"
             ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'">  </li>
@@ -53,7 +55,7 @@
                      ng-click="vm.toggleCheck(item)"
                      data-nodrag>
         </md-checkbox>
-        <span>{{item.title | titleCase}}
+        <span style="cursor:default;">{{item.title | titleCase}}
         </span>
     </div>
 </script>
@@ -72,7 +74,7 @@
 
     <div ui-tree id="tree-root" callbacks="treeOptions">
         <ol ui-tree-nodes ng-model="vm.tree_data" ng-class="{hidden: collapsed}">
-            <li ng-repeat="item in vm.tree_data" ui-tree-node data-nodrag data-collapsed="collapsed"
+            <li ng-repeat="item in vm.tree_data" ui-tree-node data-nodrag data-collapsed="item.collapsed"
                 ng-hide="vm.search_results = !treeFilter(item, vm.tree_search_pattern, supportedFields)"
                 ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></li>
         </ol>

@@ -13,6 +13,8 @@
         var vm = this;
         $log.log("treeDataService");
 
+        vm.collapsedStatus = false;
+
 
         vm.management_tree_data = function (data) {
             console.log(data.data.data);
@@ -78,7 +80,7 @@
             utNode.info = gtNode.info;
             utNode.items = [];
             utNode.checkStatus = false;
-            utNode.collapsed = false;
+            utNode.collapsed = vm.collapsedStatus;
 
             var resultNode = null;
             var child = null;
@@ -120,7 +122,7 @@
             utNode.info = gtNode.info;
             utNode.items = [];
             utNode.checkStatus = false;
-            utNode.collapsed = false;
+            utNode.collapsed = vm.collapsedStatus;
 
             var resultNode = null;
             var child = null;
@@ -178,7 +180,7 @@
             utNode.info = gtNode.info;
             utNode.items = [];
             utNode.checkStatus = false;
-            utNode.collapsed = false;
+            utNode.collapsed = vm.collapsedStatus;
 
             var resultNode = null;
             var child = null;
@@ -213,7 +215,8 @@
                                 title: resultNode.info.ui_asset_type,
                                 info: gtNode.info,
                                 ui_asset_type: 'assettype',
-                                items: []
+                                items: [],
+                                collapsed:vm.collapsedStatus
                             };
                             utNode.items.push(assetType);
                             //$log.log(assetType);
@@ -297,6 +300,7 @@
                         assetTree[assetpath] = {};
                         assetTree[assetpath].info = asset;
                         assetTree[assetpath].children = null;
+                        assetTree[assetpath].collapsed = vm.collapsedStatus;
                         //$log.log("Added: " + assetpath);
 
                         if (pgrouppath in groups && pgrouppath != assetpath) {
@@ -305,6 +309,7 @@
                                 assetTree[pgrouppath].info = groups[pgrouppath];
                                 assetTree[pgrouppath].children = {};
                                 assetTree[pgrouppath].children[assetpath] = asset;
+                                assetTree[pgrouppath].collapsed = vm.collapsedStatus;
 
                                 //$log.log("Added " + pgrouppath + " as parent of " + assetpath);
                                 //$log.log("Added " + assetpath + " as child of " + pgrouppath);

@@ -19,6 +19,10 @@
         var vm = this;
         vm.assets = [];
         vm.newUser = {};
+        vm.groupBtnStatus = false;
+        vm.isdiplay = false;
+        vm.showBtn = false;
+
 
         vm.onLoad = function () {
             $log.log(startupData);
@@ -28,20 +32,38 @@
             }
 
             $log.log(vm.assets);
+
+
+            if ( settingsService.getCurrentGroupPath() )
+                vm.showBtn = true;
         };
 
 
         vm.createUser = function () {
-            userMgmtService.createUser(vm.newUser)
-                .then(function (resp) {
-                        $log.log(resp);
-                        vm.newUser = {};
-                        $rootScope.$broadcast('EVENT_MGMT_TREE_CHANGE', {});
-                    },
-                    function (resp) {
-                        $log.log("CREATE USER FAILED");
-                        $log.log(resp)
-                    });
+            if (vm.newUser.password === vm.confirmPassword) {
+                userMgmtService.createUser(vm.newUser)
+                    .then(function (resp) {
+                            $log.log(resp);
+                            vm.newUser = {};
+                            vm.confirmPassword = '';
+                            $rootScope.$broadcast('EVENT_MGMT_TREE_CHANGE', {});
+                            vm.errorMsg = "User created successfully."
+                        },
+                        function (resp) {
+                            $log.log("CREATE USER FAILED");
+                            $log.log(resp);
+                            vm.errorMsg = "Failed to create user."
+                        });
+            }else {
+                vm.errorMsg = "Passwords do not match";
+                return;
+            }
+        };
+
+        vm.showNewUserField = function () {
+            $log.log('show/hide');
+            vm.errorMsg = ""
+            vm.isdiplay = !vm.isdiplay;
         };
 
 

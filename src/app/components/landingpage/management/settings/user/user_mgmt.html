@@ -1,15 +1,41 @@
 <!DOCTYPE html>
 
+<style>
+    .icar-new-group {
+        border: 1px solid #ccc;
+        display:none;
+    }
+    .icar-new-group.active {
+        display:block;
+    }
+</style>
 
-<md-content layout="column">
-    <md-input-container flex>
-        <div layout="row"><label>Username</label> <input type="text" ng-model="vm.newUser.name"></div>
-    </md-input-container>
-    <md-input-container flex>
-        <div layout="row"><label>Password</label> <input type="password" ng-model="vm.newUser.password"></div>
-    </md-input-container>
-    <md-button class="md-accent" ng-click="vm.createUser()" flex="66">Create User</md-button>
-</md-content>
+<md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewUserField()">
+    Create User
+</md-button>
+
+<div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
+    <md-content layout="column"><br/>
+        <div class="error" ng-show="vm.errorMsg" style="color:red">{{vm.errorMsg}}</div>
+        <md-input-container flex>
+            <div layout="row">
+                <label>Username</label>
+                <input type="text" ng-model="vm.newUser.name"></div>
+        </md-input-container>
+        <md-input-container flex>
+            <div layout="row">
+                <label>Password</label>
+                <input type="password" ng-model="vm.newUser.password"></div>
+        </md-input-container>
+        <md-input-container flex>
+            <div layout="row">
+                <label>Confirm Password</label>
+                <input type="password" ng-model="vm.confirmPassword"></div>
+        </md-input-container>
+        <md-button class="md-accent" ng-click="vm.createUser()" flex="66">Create User</md-button>
+    </md-content>
+</div><br/>
+
 
 
 <script type="text/ng-template" id="outside-panel-header.html">
@@ -33,7 +59,7 @@
 
         <md-expansion-panel-expanded>
             <md-expansion-panel-header ng-click="$panel.collapse()">
-                <span ng-include="'outside-panel-header.html'"></span>
+                <div style="display:inherit;width:100%;" ng-include="'outside-panel-header.html'"></div>
             </md-expansion-panel-header>
 
             <md-expansion-panel-content>

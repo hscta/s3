@@ -17,6 +17,9 @@
         settingsService.setTab(intellicarAPI.appConstants.ROLE);
         var vm = this;
         vm.assets = [];
+        vm.groupBtnStatus = false;
+        vm.isdiplay = false;
+        vm.showBtn = false;
 
         vm.onLoad = function () {
             $log.log(startupData);
@@ -26,6 +29,13 @@
             }
 
             $log.log(vm.assets);
+            if ( settingsService.getCurrentGroupPath() )
+                vm.showBtn = true;
+        };
+
+        vm.showNewRoleField = function () {
+            $log.log('show/hide');
+            vm.isdiplay = !vm.isdiplay;
         };
 
         vm.onLoad();
