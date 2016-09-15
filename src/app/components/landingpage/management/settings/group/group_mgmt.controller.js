@@ -11,7 +11,7 @@
 
     function GroupMgmtController($scope, $rootScope, $log,
                                  intellicarAPI, groupMgmtService,
-                                 settingsService, startupData, $q) {
+                                 settingsService, startupData, $q, $stateParams) {
 
         $log.log('GroupMgmtController');
         settingsService.setTab(intellicarAPI.appConstants.GROUP);
@@ -28,11 +28,24 @@
 
         vm.onLoad = function () {
             $log.log(startupData);
+            vm.panelData ( startupData);
+
+
+            //
+            // window.setTimeout(function(){
+            //     var newData = groupMgmtService.getData((settingsService.getCurrentGroup()));
+            //
+            //     $log.log(newData);
+            //     $log.log($q.resolve(newData));
+            // }, 5000);
+
+        };
+
+        vm.panelData = function (data) {
             vm.assets = [];
-            for (var key in startupData) {
-                vm.assets.push(startupData[key]);
+            for (var key in data) {
+                vm.assets.push(data[key]);
             }
-            $log.log(vm.assets);
 
             if ( settingsService.getCurrentGroupPath() )
                 vm.showBtn = true;
@@ -47,9 +60,11 @@
                         $rootScope.$broadcast('EVENT_MGMT_TREE_CHANGE', {});
                         vm.groupBtnStatus = false;
                         vm.msg = "Group created Successfully."
-                        vm.group = $q.resolve(resp.data.data);
-                    $log.log(resp);
-                    $log.log(vm.group);
+                        groupMgmtService.getData($stateParams).then(
+                            function(resp) {
+                                vm.panelData(resp);
+                            }
+                        );
                     },
                     function (resp) {
                         $log.log("CREATE GROUP FAILED");
