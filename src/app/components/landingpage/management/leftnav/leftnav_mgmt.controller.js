@@ -53,8 +53,26 @@
 
         vm.expand_tree = function () {
             $log.log('expand');
-            $scope.$broadcast('angular-ui-tree:collapse-all');
+           // $scope.$broadcast('angular-ui-tree:collapse-all');
+            var duplicateTree;
 
+            // if ( vm.tree_search_pattern === '' )
+            //     angular.copy(duplicateTree, vm.tree_data);
+            // else {
+            //     angular.copy(vm.tree_data, duplicateTree);
+            // }
+            vm.filterTree(vm.tree_data);
+
+        };
+
+
+        vm.filterTree = function (data) {
+            for (var i = 0; i < data.length; i++) {
+                data[i].collapsed = true;
+
+                if (data[i].items.length)
+                    vm.filterTree(data[i].items)
+            }
         };
 
         // vm.expandAll = function () {
