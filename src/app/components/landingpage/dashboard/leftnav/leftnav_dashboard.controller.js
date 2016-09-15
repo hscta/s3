@@ -28,8 +28,7 @@
             //$log.log("getDashboardTree");
             //$log.log(data);
             vm.tree_data = data;
-
-            $log.log(vm.tree_data);
+            //$log.log(vm.tree_data);
         };
 
         vm.getDashboardTreeFailure = function (data) {

@@ -26,7 +26,7 @@
             //$log.log("to state = " + toState.name);
             var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
 
-            $log.log('stateChangeStart =================');
+            //$log.log('stateChangeStart =================');
             $log.log(toParams);
 
             if(leafState != intellicarAPI.appConstants.GROUP || ('tabClick' in toParams)) {
@@ -39,7 +39,7 @@
                     }
                 }
             } else {
-                $log.log('my to is group state ' + vm.tabs[vm.selectedTab]);
+                $log.log('selected tab ' + vm.tabs[vm.selectedTab]);
                 if(!('tabClick' in toParams)) {
                     if (vm.tabs[vm.selectedTab] != intellicarAPI.appConstants.GROUP) {
                         // $log.log("my toParams");

@@ -116,15 +116,15 @@
                 'lng': 0,
                 'speed' : 0,
                 'direction' : 0,
-                'satilites' : 0,
+                'satellite' : 0,
                 'devicebattery': 0,
                 'carbattery': 0
             };
 
-            vm.immobilize = {
-                'statustime': 0,
+            vm.immobilizeMsg = {
                 'status': 0,
-                'lastcommandsent': 0
+                'statustime': 0,
+                'lastcommandtime': 0
             };
         });
 })();
