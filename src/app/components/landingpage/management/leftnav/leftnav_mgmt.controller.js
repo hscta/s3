@@ -43,11 +43,11 @@
         };
 
 
-        vm.test = function (asset, collapsed, toggle, obj) {
+        vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
             if (!collapsed) {
                 toggle(obj);
             }
-            settingsService.handleSelection(asset);
+            settingsService.handleAssetClick(asset);
         };
 
 

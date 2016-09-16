@@ -22,13 +22,12 @@
 
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+            //$log.log('stateChangeStart =================');
             //$log.log("from state = " + fromState.name);
             //$log.log("to state = " + toState.name);
-            var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
-
-            //$log.log('stateChangeStart =================');
             $log.log(toParams);
 
+            var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
             if(leafState != intellicarAPI.appConstants.GROUP || ('tabClick' in toParams)) {
                 //$log.log(leafState);
                 for (var idx in vm.tabs) {
@@ -39,15 +38,13 @@
                     }
                 }
             } else {
-                $log.log('selected tab ' + vm.tabs[vm.selectedTab]);
+                //$log.log('selected tab ' + vm.tabs[vm.selectedTab]);
                 if(!('tabClick' in toParams)) {
                     if (vm.tabs[vm.selectedTab] != intellicarAPI.appConstants.GROUP) {
                         // $log.log("my toParams");
                         // $log.log(toParams);
-                        // $log.log("my to yahoo");
                         var dstState = intellicarAPI.stateService.getStateTree(toState.name).parent +
                             intellicarAPI.stateService.dotState(vm.tabs[vm.selectedTab]);
-                        // $log.log("my to after");
                         event.preventDefault();
                         $state.go(dstState, toParams);
                     }

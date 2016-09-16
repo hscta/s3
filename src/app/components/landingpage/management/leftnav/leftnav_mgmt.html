@@ -36,7 +36,7 @@
             <md-icon md-font-library="material-icons" ng-show="!item.collapsed">play_arrow</md-icon>
         </a>
         <span ng-hide="item.items.length" style="padding-left:20px;"></span>
-        <span ng-click="vm.test(item, item.collapsed, toggle, this); item.collapsed = !item.collapsed"
+        <span ng-click="vm.handleAssetClick(item, item.collapsed, toggle, this); item.collapsed = !item.collapsed"
               style="cursor:pointer;">{{item.title | titleCase }}
         </span ><br/>
     </div>

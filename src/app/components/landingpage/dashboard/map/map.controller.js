@@ -52,7 +52,8 @@
 
 
         vm.getVehicleData = function (msg) {
-            var vehicleNumber = parseInt(msg[0]);
+            var topic = msg[0].split('/');
+            var vehicleNumber = parseInt(topic[topic.length  - 1]);
             var vehicleData = msg[1];
             vehicleData.id = vehicleNumber;
             vehicleData.title = 'Car Number: ' + vehicleNumber;

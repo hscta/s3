@@ -36,12 +36,12 @@
             vm.setTabListener = listener;
         };
 
-        // vm.isValidAssetType = function (assetType) {
-        //     if (vm.tabs.indexOf(assetType) == -1)
-        //         return false;
-        //     return true;
-        // };
 
+        // vm.setCurrentGroup = function(stateParams) {
+        //     $log.log("setCurrentGroup grouppath: " + grouppath);
+        //     vm.currentGroup = {group: {grouppath: vm.getRequestedGroupPath(stateParams)}};
+        //     $log.log(vm.currentGroup);
+        // };
 
         vm.setCurrentGroup = function(stateParams) {
             var grouppath = null;
@@ -54,8 +54,8 @@
                 }
             }
 
-            $log.log("setCurrentGroup grouppath: " + grouppath);
             vm.currentGroup = {group: {grouppath: grouppath}};
+            //return grouppath;
         };
 
 
@@ -64,17 +64,31 @@
         };
 
 
+        vm.getRequestedGroupPath = function(stateParams) {
+            var grouppath = null;
+
+            if(stateParams != null && stateParams.info != null) {
+                if (stateParams.info.ui_asset_type == intellicarAPI.appConstants.GROUP) {
+                    grouppath = stateParams.info.assetpath;
+                } else {
+                    grouppath = stateParams.info.pgrouppath;
+                }
+            }
+
+            return grouppath;
+        };
+
+
         vm.getCurrentGroupPath = function() {
-            return vm.currentGroup.group.grouppath;
-        }
+            if('group' in vm.currentGroup && 'grouppath' in vm.currentGroup.group)
+                return vm.currentGroup.group.grouppath;
 
-        // vm.setTabStateData = function(tab, asset) {
-        //     $log.log(tab);
-        //     $log.log(asset);
-        // };
+            return null;
+        };
 
 
-        vm.handleSelection = function(asset) {
+
+        vm.handleAssetClick = function(asset) {
             var tab = "group";
             // $log.log(asset);
             // is it group, vehicle, device, user, role
@@ -96,7 +110,7 @@
                 // $log.log('my to Going to state ' + tabState);
                 $state.go(tabState, asset);
             } else {
-                // $log.log('my to not changing state');
+                $log.log('Not changing state');
             }
         }
     }

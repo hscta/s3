@@ -97,8 +97,8 @@
                       templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
                       resolve: {
                           startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
-                              $log.log("toState " + $state.current.name);
-                              //$log.log($stateParams);
+                              //$log.log("index.route toState " + $state.current.name);
+                              //$log.log($state);
                               return vehicleMgmtService.getData(settingsService.getCurrentGroup());
                           }
                       },
