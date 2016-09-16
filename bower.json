@@ -37,5 +37,10 @@
     "jquery": "~2.1.4",
     "angular": "~1.5.3",
     "angular-material": "~1.0.0"
+  },
+  "overrides": {
+      "socket.io-client": {
+          "main": "socket.io.js"
+      }
   }
 }

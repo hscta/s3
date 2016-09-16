@@ -47,7 +47,7 @@
                 var loginDialog = $mdDialog.confirm({
                         controller: loginDialogController,
                         //controllerAs: loginDialogCtrl,
-                        templateUrl: '/app/components/login/login_dialog.html',
+                        templateUrl: 'app/components/login/login_dialog.html',
                         clickOutsideToClose: false,
                         escapeToClose: false
                     }
