@@ -79,7 +79,7 @@
             vehicleData.carbattery = vehicleData.carbattery.toPrecision(4);
             vehicleData.devbattery = vehicleData.devbattery.toPrecision(4);
             vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Not Running";
-            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Mobilized" : "Immobilized";
+            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Running" : "Immobilized";
             vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)","");
             return vehicleData;
         };
@@ -90,7 +90,7 @@
             //$log.log(msg);
             var isNewVehicle = true;
             var vehicleData = vm.processVehicleData(msg);
-            //$log.log(vehicleData);
+            $log.log(vehicleData);
 
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
@@ -121,11 +121,18 @@
 
 
         vm.markersEvents = {
-            click: function (marker, eventName, model, arguments) {
+            click: function (marker, eventName, model, args) {
                 $log.log(model);
-                vm.infoWindow.show = true;
                 vm.clickedMarker = model;
-            }
+                vm.infoWindow.show = true;
+            },
+            mouseover: function (marker, eventName, model, args) {
+                vm.clickedMarker = model;
+                vm.infoWindow.show = true;
+            },
+            // mouseout: function (marker, eventName, model, args) {
+            //     vm.infoWindow.show = false;
+            // }
         };
 
 
