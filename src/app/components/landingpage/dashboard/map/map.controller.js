@@ -136,16 +136,23 @@
             mapService.addMsgListener(vm.updateMarker);
         };
 
+        vm.mapEvents = {
+            click : function(){
+                vm.infoWindow.show = false;
+            }
+        };
 
         vm.markersEvents = {
-            click: function (marker, eventName, model, args) {
-                $log.log(model);
-                vm.clickedMarker = model;
-                vm.infoWindow.show = true;
-            },
+            // click: function (marker, eventName, model, args) {
+            //     $log.log(model);
+            //     vm.clickedMarker = model;
+            //     vm.infoWindow.show = true;
+            // },
             mouseover: function (marker, eventName, model, args) {
                 vm.clickedMarker = model;
-                vm.infoWindow.show = true;
+                window.setTimeout(function(){
+                    vm.infoWindow.show = true;
+                },200);
             },
             // mouseout: function (marker, eventName, model, args) {
             //     vm.infoWindow.show = false;
@@ -156,7 +163,8 @@
         vm.infoWindow = {
             marker: {},
             show: false,
-            options: {}
+            options: {
+            }
         };
 
 
