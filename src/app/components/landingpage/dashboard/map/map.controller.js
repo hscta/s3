@@ -78,6 +78,7 @@
             vehicleData.direction = vehicleData.direction.toPrecision(4);
             vehicleData.carbattery = vehicleData.carbattery.toPrecision(4);
             vehicleData.devbattery = vehicleData.devbattery.toPrecision(4);
+            vehicleData.timestamp = new Date(vehicleData.timestamp);
             return vehicleData;
         };
 
