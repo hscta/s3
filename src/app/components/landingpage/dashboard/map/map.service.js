@@ -115,22 +115,5 @@
             };
 
             vm.intMap();
-
-            vm.mapMsg = {
-                'timebucket': 0,
-                'lat': 0,
-                'lng': 0,
-                'speed' : 0,
-                'direction' : 0,
-                'satellite' : 0,
-                'devicebattery': 0,
-                'carbattery': 0
-            };
-
-            vm.immobilizeMsg = {
-                'status': 0,
-                'statustime': 0,
-                'lastcommandtime': 0
-            };
         });
 })();

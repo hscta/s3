@@ -35,7 +35,7 @@
             vm.inMap.zoom = mapService.getZoom();
             vm.inMap.center = mapService.getCenter();
             vm.inMap.bounds = mapService.getBounds();
-            vm.marker = mapService.getMarker();
+            //vm.marker = mapService.getMarker();
         };
 
 
@@ -70,20 +70,21 @@
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
                 if (marker.id == vehicleData.id) {
+                    if(Math.abs(marker.latitude - vehicleData.latitude) > 0.03 || Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
+                        $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) + ", " + marker.latitude + ", " + marker.longitude);
+                        $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) + ", " + vehicleData.latitude + ", " + vehicleData.longitude);
+                    }
+                    
                     vm.inMarkers[idx] = vehicleData;
                     isNewVehicle = false;
-                }
-
-                if (vm.clickedMarker.id == marker.id) {
-                    //$log.log(msg);
-                    vm.clickedMarker = vehicleData;
-                    $log.log(vm.clickedMarker);
                 }
             }
 
             if(isNewVehicle) {
                 vm.inMarkers.push(vehicleData);
             }
+
+            $log.log("Number of vehicles = " + vm.inMarkers.length);
         };
 
 
@@ -94,11 +95,9 @@
 
         vm.markersEvents = {
             click: function (marker, eventName, model, arguments) {
-                //vm.infoWindow.model = model;
+                $log.log(model);
                 vm.infoWindow.show = true;
-
                 vm.clickedMarker = model;
-                vm.id = vm.clickedMarker.id;
             }
         };
 
