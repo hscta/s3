@@ -12,9 +12,12 @@
         padding:5px;
     }
 </style>
+<div>{{!left_nav_toggle}}</div>
+<div>{{right_nav_toggle}}</div>
 <div ng-cloak>
     <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
-                        options="vm.options" bounds="vm.inMap.bounds">
+                        options="vm.options" bounds="vm.inMap.bounds"
+                        refresh="!left_nav_toggle">
         <!--<ui-gmap-marker coords="vm.marker.coords" options="vm.marker.options"-->
         <!--events="vm.marker.events" idkey="vm.marker.id"></ui-gmap-marker>-->
         <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"

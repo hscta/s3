@@ -91,11 +91,10 @@
             vehicleData.id = vehicleNumber;
             vehicleData.icon = vm.setMarkerIcon(vehicleData);
             vehicleData.title = vehicleNumber;
-            if ('speed' in vehicleData && vehicleData.speed > 0)
-                vehicleData.speed = vehicleData.speed.toPrecision(4);
-            vehicleData.direction = vehicleData.direction.toPrecision(4);
-            vehicleData.carbattery = vehicleData.carbattery.toPrecision(4);
-            vehicleData.devbattery = vehicleData.devbattery.toPrecision(4);
+            vehicleData.speed = parseFloat(vehicleData.speed).toFixed(2);
+            vehicleData.direction = parseFloat(vehicleData.direction).toFixed(2);
+            vehicleData.carbattery = parseFloat(vehicleData.carbattery).toFixed(2);
+            vehicleData.devbattery = parseFloat(vehicleData.devbattery).toFixed(2);
             vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Not Running";
             vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Mobilized" : "Immobilized";
             vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
