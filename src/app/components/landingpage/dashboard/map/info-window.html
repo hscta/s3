@@ -1,7 +1,56 @@
+<div layout="column" >
+    <md-table-container>
+        <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+            <tbody md-body>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Car Number</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.title}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Id</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.id}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Speed</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.speed}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Odometer</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.odometer}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Direction</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.direction}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Altitude</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.altitude}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Ignition Status</strong> </td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.ignitionstatus}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Speed</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.speed}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Car Battery</strong> </td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.carbattery}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Device Battery</strong> </td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.devbattery}}</td>
+            </tr>
+            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell><strong>Satellites</strong></td>
+                <td md-cell>{{$parent.$parent.vm.clickedMarker.nosatellites}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </md-table-container>
 
-<div flex>
-    <div>
-
-        <md-button class="md-raised md-primary" ng-click="$parent.$parent.vm.immobalize()">Immobalize</md-button>
-    </div>
+    <md-button class="md-raised md-primary" ng-click="$parent.$parent.vm.immobalize()">
+        Immobalize
+    </md-button>
 </div>

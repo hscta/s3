@@ -14,7 +14,6 @@
         vm.inMarkers = [];
         vm.clickedMarker = {};
 
-
         function immobalizeController($scope, $mdDialog) {
             var vm = this;
             $log.log('immobalizeController');
@@ -56,7 +55,7 @@
             var vehicleNumber = parseInt(topic[topic.length  - 1]);
             var vehicleData = msg[1];
             vehicleData.id = vehicleNumber;
-            vehicleData.title = 'Car Number: ' + vehicleNumber;
+            vehicleData.title = vehicleNumber;
             return vehicleData;
         };
 
@@ -66,7 +65,7 @@
             //$log.log(msg);
             var isNewVehicle = true;
             var vehicleData = vm.getVehicleData(msg);
-            $log.log(vehicleData);
+            //$log.log(vehicleData);
 
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
@@ -78,6 +77,7 @@
                 if (vm.clickedMarker.id == marker.id) {
                     //$log.log(msg);
                     vm.clickedMarker = vehicleData;
+                    $log.log(vm.clickedMarker);
                 }
             }
 

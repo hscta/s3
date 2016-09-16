@@ -25,7 +25,7 @@
             $log.log(startupData);
             vm.assets = [];
             for (var key in startupData) {
-                vm.assets.push(startupData[key]);
+                 vm.assets.push(startupData[key]);
             }
 
             $log.log(vm.assets);
