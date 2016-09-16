@@ -100,7 +100,7 @@
                         $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
                             ", " + vehicleData.latitude + ", " + vehicleData.longitude);
                     }
-                    
+
                     vm.inMarkers[idx] = vehicleData;
                     isNewVehicle = false;
                 }
@@ -139,7 +139,7 @@
         };
 
 
-        vm.immobalize = function () {
+        vm.immobalize = function (status) {
             var immobalizeDialog = $mdDialog.confirm({
                 controller: immobalizeController,
                 templateUrl: '/app/components/landingpage/dashboard/map/immobalize-dialog.html',
