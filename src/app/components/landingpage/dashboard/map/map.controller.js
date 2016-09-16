@@ -8,11 +8,14 @@
         .module('uiplatform')
         .controller('MapController', MapController);
 
-    function MapController($scope, $rootScope, $log, mapService, $timeout, $mdDialog) {
+    function MapController($scope, $rootScope, $log, mapService,
+                           $timeout, $mdDialog, $document, $interval) {
         $log.log('MapController');
         var vm = this;
         vm.inMarkers = [];
         vm.clickedMarker = {};
+        vm.showMap = true;
+        vm.mapControl = {};
 
         function immobalizeController($scope, $mdDialog) {
             var vm = this;
@@ -47,25 +50,6 @@
 
         vm.options = {
             //scrollwheel: false
-        };
-
-
-        var testData = {
-            id: 2056245,
-            odometer: 458,
-            speed: 0.144,
-            direction: 0,
-            carbattery: 13.764706,
-            devbattery: 4.002353,
-            ignitionstatus: 1,
-            latitude: 19.068246270422406,
-            longitude: 72.90032345164258,
-            messagetype: 11,
-            mobilistatus: 1,
-            nosatellites: 17,
-            timestamp: 1474024383000,
-            altitude: 1,
-            title: 2056245
         };
 
 
@@ -127,7 +111,7 @@
 
             if (isNewVehicle) {
                 vm.inMarkers.push(vehicleData);
-                $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
+                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
         };
 
@@ -139,8 +123,19 @@
         vm.mapEvents = {
             click : function(){
                 vm.infoWindow.show = false;
-            }
+            },
+
+            // resize : function() {
+            //     $log.log("resize event triggered");
+            // }
         };
+
+        vm.resizeMap = function() {
+            google.maps.event.trigger(vm.mapControl.getGMap(), 'resize');
+            return true;
+        };
+
+        $interval(vm.resizeMap, 500);
 
         vm.markersEvents = {
             // click: function (marker, eventName, model, args) {
@@ -151,6 +146,7 @@
             mouseover: function (marker, eventName, model, args) {
                 vm.clickedMarker = model;
                 window.setTimeout(function(){
+                31
                     vm.infoWindow.show = true;
                 },200);
             },
@@ -196,34 +192,39 @@
             $log.log('cancel dialog');
             $mdDialog.cancel();
         };
-
+        
 
         vm.loadMap();
         vm.addListener();
+
+        // $scope.$watch(function() {
+        //     return $rootScope.left_nav_toggle;
+        // }, function() {
+        //     $log.log("leftnavtoggle " + $rootScope.left_nav_toggle);
+        //     for(var i = 0; i < 100; i++) {
+        //         google.maps.event.trigger(vm.mapControl.getGMap(), 'resize');
+        //     }
+        // });
     }
-})
-();
+})();
 
 
-// vm.updateMarkerTest = function (msg) {
-//     // $log.log('mapController updateMarker');
-//     //$log.log(msg);
-//
-//     if (vm.inMarkers.length < 2) {
-//         vm.inMarkers.push(msg);
-//     }
-//
-//     for (var idx in vm.inMarkers) {
-//         var marker = vm.inMarkers[idx];
-//         if (marker.id == msg.id) {
-//             msg.title = 'mypath: ' + msg.id;
-//             vm.inMarkers[idx] = msg;
-//         }
-//
-//         if (vm.clickedMarker.id == marker.id) {
-//             //$log.log(msg);
-//             vm.clickedMarker = msg;
-//         }
-//     }
-// };
-
+/*
+var testData = {
+    id: 2056245,
+    odometer: 458,
+    speed: 0.144,
+    direction: 0,
+    carbattery: 13.764706,
+    devbattery: 4.002353,
+    ignitionstatus: 1,
+    latitude: 19.068246270422406,
+    longitude: 72.90032345164258,
+    messagetype: 11,
+    mobilistatus: 1,
+    nosatellites: 17,
+    timestamp: 1474024383000,
+    altitude: 1,
+    title: 2056245
+};
+*/

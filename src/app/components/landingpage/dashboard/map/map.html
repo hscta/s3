@@ -13,15 +13,10 @@
     }
 </style>
 
-<!--<div>{{!left_nav_toggle}}</div>-->
-<!--<div>{{right_nav_toggle}}</div>-->
-<div ng-cloak>
+<div id="mapCanvas" ng-if="vm.showMap" ng-cloak>
     <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
-                        options="vm.options" bounds="vm.inMap.bounds" events="vm.mapEvents">
-                        options="vm.options" bounds="vm.inMap.bounds"
-                        refresh="!left_nav_toggle">
-        <!--<ui-gmap-marker coords="vm.marker.coords" options="vm.marker.options"-->
-        <!--events="vm.marker.events" idkey="vm.marker.id"></ui-gmap-marker>-->
+                        options="vm.options" bounds="vm.inMap.bounds" events="vm.mapEvents"
+                        control="vm.mapControl">
         <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
                         options="vm.infoWindow.options" closeClick="vm.closeClick()"
                         templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
