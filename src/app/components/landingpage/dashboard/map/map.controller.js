@@ -12,7 +12,7 @@
         $log.log('MapController');
         var vm = this;
         vm.inMarkers = [];
-        vm.clickedMarker = [];
+        vm.clickedMarker = {};
 
 
         function immobalizeController($scope, $mdDialog) {
@@ -51,9 +51,38 @@
         };
 
 
+        vm.getVehicleData = function (msg) {
+            var vehicleNumber = parseInt(msg[0]);
+            var vehicleData = msg[1];
+            vehicleData.id = vehicleNumber;
+            vehicleData.title = 'Car Number: ' + vehicleNumber;
+            return vehicleData;
+        };
+
+
         vm.updateMarker = function (msg) {
-            //$log.log('mapController updateMarker');
-            $log.log(msg);
+            //  $log.log('mapController updateMarker');
+            //$log.log(msg);
+            var isNewVehicle = true;
+            var vehicleData = vm.getVehicleData(msg);
+            $log.log(vehicleData);
+
+            for (var idx in vm.inMarkers) {
+                var marker = vm.inMarkers[idx];
+                if (marker.id == vehicleData.id) {
+                    vm.inMarkers[idx] = vehicleData;
+                    isNewVehicle = false;
+                }
+
+                if (vm.clickedMarker.id == marker.id) {
+                    //$log.log(msg);
+                    vm.clickedMarker = vehicleData;
+                }
+            }
+
+            if(isNewVehicle) {
+                vm.inMarkers.push(vehicleData);
+            }
         };
 
 
@@ -113,8 +142,8 @@
         vm.loadMap();
         vm.addListener();
     }
-})();
-
+})
+();
 
 
 // vm.updateMarkerTest = function (msg) {

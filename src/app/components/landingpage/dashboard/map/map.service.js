@@ -94,11 +94,14 @@
             vm.updateMap = function (msgList) {
                 //$log.log('mapService updateMap');
                 //$log.log(msgList);
-                for(var idx in msgList) {
-                    var msg = msgList[idx];
-                    for(var eachidx in vm.msgListeners){
-                        vm.msgListeners[eachidx](msg);
-                    }
+                // for(var idx in msgList) {
+                //     var msg = msgList[idx];
+                //     for(var eachidx in vm.msgListeners){
+                //         vm.msgListeners[eachidx](msg);
+                //     }
+                // }
+                for (var eachidx in vm.msgListeners) {
+                    vm.msgListeners[eachidx](msgList);
                 }
             };
 

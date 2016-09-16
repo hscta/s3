@@ -72,7 +72,7 @@
 
         vm.onReceiveMsg = function (msg) {
             //$log.log('mqtt onReceiveMsg');
-            msg = vm.getVehicleData();
+            //msg = vm.getVehicleData();
             //$log.log(msg);
             for (var eachidx in vm.msgListeners) {
                 vm.msgListeners[eachidx](msg);
@@ -154,7 +154,7 @@
         };
 
         vm.initSocket();
-        $interval(vm.onReceiveMsg, 2000);
+        //$interval(vm.onReceiveMsg, 2000);
 
 
         return {
