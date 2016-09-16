@@ -78,7 +78,9 @@
             vehicleData.direction = vehicleData.direction.toPrecision(4);
             vehicleData.carbattery = vehicleData.carbattery.toPrecision(4);
             vehicleData.devbattery = vehicleData.devbattery.toPrecision(4);
-            vehicleData.timestamp = new Date(vehicleData.timestamp);
+            vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Not Running";
+            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Running" : "Immobilized";
+            vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)","");
             return vehicleData;
         };
 
