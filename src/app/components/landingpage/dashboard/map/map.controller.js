@@ -50,12 +50,34 @@
         };
 
 
-        vm.getVehicleData = function (msg) {
+        var testData = {
+            id: 2056245,
+            odometer: 458,
+            speed: 0.144,
+            direction: 0,
+            carbattery: 13.764706,
+            devbattery: 4.002353,
+            ignitionstatus: 1,
+            latitude: 19.068246270422406,
+            longitude: 72.90032345164258,
+            messagetype: 11,
+            mobilistatus: 1,
+            nosatellites: 17,
+            timestamp: 1474024383000,
+            altitude: 1,
+            title: 2056245
+        };
+
+        vm.processVehicleData = function (msg) {
             var topic = msg[0].split('/');
             var vehicleNumber = parseInt(topic[topic.length  - 1]);
             var vehicleData = msg[1];
             vehicleData.id = vehicleNumber;
             vehicleData.title = vehicleNumber;
+            vehicleData.speed = vehicleData.speed.toPrecision(4);
+            vehicleData.direction = vehicleData.direction.toPrecision(4);
+            vehicleData.carbattery = vehicleData.carbattery.toPrecision(4);
+            vehicleData.devbattery = vehicleData.devbattery.toPrecision(4);
             return vehicleData;
         };
 
@@ -64,8 +86,8 @@
             //  $log.log('mapController updateMarker');
             //$log.log(msg);
             var isNewVehicle = true;
-            var vehicleData = vm.getVehicleData(msg);
-            //$log.log(vehicleData);
+            var vehicleData = vm.processVehicleData(msg);
+            $log.log(vehicleData);
 
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];

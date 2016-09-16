@@ -125,7 +125,7 @@
         };
 
 
-        vm.getVehicleData = function () {
+        vm.processVehicleData = function () {
             vm.toggleTestData = !vm.toggleTestData;
 
             if (vm.toggleTestData) {
