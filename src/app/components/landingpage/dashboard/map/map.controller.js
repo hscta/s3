@@ -68,19 +68,37 @@
             title: 2056245
         };
 
+
+        vm.setMarkerIcon = function (vehicleData) {
+            var iconColor = 'green';
+
+            if (!vehicleData.mobilistatus) {
+                iconColor = 'red';
+            } else if (!vehicleData.ignitionstatus) {
+                iconColor = 'green';
+            } else if(vehicleData.ignitionstatus) {
+                iconColor = 'blue';
+            }
+
+            return 'http://maps.google.com/mapfiles/ms/icons/' + iconColor + '-dot.png';
+        };
+
+
         vm.processVehicleData = function (msg) {
             var topic = msg[0].split('/');
-            var vehicleNumber = parseInt(topic[topic.length  - 1]);
+            var vehicleNumber = parseInt(topic[topic.length - 1]);
             var vehicleData = msg[1];
             vehicleData.id = vehicleNumber;
+            vehicleData.icon = vm.setMarkerIcon(vehicleData);
             vehicleData.title = vehicleNumber;
-            vehicleData.speed = vehicleData.speed.toPrecision(4);
+            if ('speed' in vehicleData && vehicleData.speed > 0)
+                vehicleData.speed = vehicleData.speed.toPrecision(4);
             vehicleData.direction = vehicleData.direction.toPrecision(4);
             vehicleData.carbattery = vehicleData.carbattery.toPrecision(4);
             vehicleData.devbattery = vehicleData.devbattery.toPrecision(4);
             vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Not Running";
-            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Running" : "Immobilized";
-            vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)","");
+            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Mobilized" : "Immobilized";
+            vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
             return vehicleData;
         };
 
@@ -90,12 +108,12 @@
             //$log.log(msg);
             var isNewVehicle = true;
             var vehicleData = vm.processVehicleData(msg);
-            $log.log(vehicleData);
+            //$log.log(vehicleData);
 
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
                 if (marker.id == vehicleData.id) {
-                    if(Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
+                    if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
                         Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
                         $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
                             ", " + marker.latitude + ", " + marker.longitude);
@@ -108,7 +126,7 @@
                 }
             }
 
-            if(isNewVehicle) {
+            if (isNewVehicle) {
                 vm.inMarkers.push(vehicleData);
                 $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }

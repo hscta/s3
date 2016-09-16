@@ -65,8 +65,11 @@
         var vm = $scope;
         $rootScope.showLoginDialog = false;
         $log.log("loginDialogController");
-        vm.username = "shunmugakrishnan@intellicar.in";
-        vm.password = "intellicar123";
+        //vm.username = "shunmugakrishnan@intellicar.in";
+        //vm.password = "intellicar123";
+
+        vm.username = "anujkumar.k@olacabs.com";
+        vm.password = "ola123";
 
 
         function handleLoginSuccess(res) {
