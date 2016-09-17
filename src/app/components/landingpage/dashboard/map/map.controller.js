@@ -60,7 +60,7 @@
                 iconColor = 'red';
             } else if (!vehicleData.ignitionstatus) {
                 iconColor = 'green';
-            } else if(vehicleData.ignitionstatus) {
+            } else if (vehicleData.ignitionstatus) {
                 iconColor = 'blue';
             }
 
@@ -121,17 +121,21 @@
         };
 
         vm.mapEvents = {
-            click : function(){
+            click: function () {
                 vm.infoWindow.show = false;
-            }
+            },
+
+            // resize : function() {
+            //     $log.log("resize event triggered");
+            // }
         };
 
-        vm.resizeMap = function() {
+        vm.resizeMap = function () {
             google.maps.event.trigger(vm.mapControl.getGMap(), 'resize');
             return true;
         };
 
-        $interval(vm.resizeMap, 200);
+        $interval(vm.resizeMap, 500);
 
         vm.markersEvents = {
             // click: function (marker, eventName, model, args) {
@@ -140,22 +144,16 @@
             //     vm.infoWindow.show = true;
             // },
             mouseover: function (marker, eventName, model, args) {
-                    vm.infoWindow.show = true;
-            }
                 vm.clickedMarker = model;
                 vm.infoWindow.show = true;
-            },
-            // mouseout: function (marker, eventName, model, args) {
-            //     vm.infoWindow.show = false;
-            // }
+            }
         };
 
 
         vm.infoWindow = {
             marker: {},
             show: false,
-            options: {
-            }
+            options: {}
         };
 
 
@@ -167,7 +165,7 @@
         vm.immobalize = function (status) {
             var immobalizeDialog = $mdDialog.confirm({
                 controller: immobalizeController,
-                templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                templateUrl: '/app/components/landingpage/dashboard/map/immobalize-dialog.html',
                 clickOutsideToClose: false,
                 escapeToClose: false
             })
@@ -191,6 +189,15 @@
 
         vm.loadMap();
         vm.addListener();
+
+        // $scope.$watch(function() {
+        //     return $rootScope.left_nav_toggle;
+        // }, function() {
+        //     $log.log("leftnavtoggle " + $rootScope.left_nav_toggle);
+        //     for(var i = 0; i < 100; i++) {
+        //         google.maps.event.trigger(vm.mapControl.getGMap(), 'resize');
+        //     }
+        // });
     }
 })();
 
