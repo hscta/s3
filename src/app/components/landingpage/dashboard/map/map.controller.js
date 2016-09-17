@@ -33,7 +33,7 @@
             options: {
                 maxWidth: 300,
                 disableAutoPan: false,
-                pixelOffset : {
+                pixelOffset: {
                     width: 0,
                     height: -20
                 }
@@ -115,14 +115,14 @@
         };
 
 
-        vm.infoWindowClose = function() {
+        vm.infoWindowClose = function () {
             //vm.inMap.window.control.hideWindow();
             vm.infoWindow.control.hideWindow();
             vm.infoWindow.show = false;
         };
 
 
-        vm.infoWindowShow = function() {
+        vm.infoWindowShow = function () {
             //vm.inMap.window.control.showWindow();
             vm.infoWindow.control.showWindow();
             vm.infoWindow.show = true;
@@ -167,7 +167,7 @@
         };
 
 
-        vm.getMarkerCenter = function(marker) {
+        vm.getMarkerCenter = function (marker) {
             return {latitude: marker.latitude, longitude: marker.longitude};
         };
 
@@ -245,12 +245,12 @@
 
         vm.runFilters = function () {
             //$log.log("runFilters");
-            var filtered = 0;
             if (vm.filterStr.length === 0) {
                 vm.setMarkersVisible(true);
                 return;
             }
 
+            var filtered = 0;
             var matchedIdx = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
@@ -266,9 +266,13 @@
                 }
             }
 
-            if(matchedIdx) {
+            if (matchedIdx) {
+                if (filtered == vm.inMarkers.length) {
+                    matchedIdx = Math.floor(filtered / 2);
+                }
                 vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
+
             $log.log("Filtered vehicles = " + filtered);
         };
 
@@ -283,22 +287,22 @@
         //$interval(vm.applyMapSearch, 2000);
 
 
-        vm.showHistory = function (){
+        vm.showHistory = function () {
             //$log.log(vm.clickedMarker);
             $mdDialog.show({
                 controller: vm.HistoryDialogController,
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:true,
+                clickOutsideToClose: true,
                 locals: {
-                    params:{
+                    params: {
                         markerObj: vm.clickedMarker
                     }
                 }
             });
         };
 
-        vm.HistoryDialogController = function($scope, $log, mapService, $interval, params) {
+        vm.HistoryDialogController = function ($scope, $log, mapService, $interval, params) {
             var vm = this;
             $scope.inMap = {};
             $scope.inMap.zoom = mapService.getZoom();
