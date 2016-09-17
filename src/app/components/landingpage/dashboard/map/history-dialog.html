@@ -1,54 +1,91 @@
 <!DOCTYPE html>
 
 <style>
+
     /*.md-dialog-container{width:100%;height:500px;}*/
-    #mapCanvas{width:80%;}
-
-    /*md-dialog.fullscreen-dialog {*/
-        /*max-width: 100%;*/
-        /*max-height: 100%;*/
-        /*width: 100%;*/
-        /*height: 100%;*/
-        /*border-radius: 0;*/
-    /*}*/
-
-    .angular-google-map,
-    .angular-google-map-container {
-        width: 100%;
-    }
 </style>
 
-<div id="mapCanvas">
-    <md-dialog aria-label="Locatin Tracking History">
+<!--<div id="mapCanvas">-->
+<!--<md-dialog aria-label="Locatin Tracking History">-->
+<!--<md-toolbar>-->
+<!--<div class="md-toolbar-tools">-->
+<!--<h2>Locatin Tracking History</h2>-->
+<!--<span flex></span>-->
+<!--<md-button class="md-icon-button" ng-click="cancel()">-->
+<!--<md-icon md-font-library="material-icons">close</md-icon>-->
+<!--</md-button>-->
+<!--</div>-->
+<!--</md-toolbar>-->
+
+<!--<md-dialog-content>-->
+<!--<div class="md-dialog-content">-->
+<!--<ui-gmap-google-map center='inMap.center' zoom='inMap.zoom' draggable="true"-->
+<!--options="mapOptions" bounds="inMap.bounds"-->
+<!--control="mapControl">-->
+
+<!--&lt;!&ndash;<ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"&ndash;&gt;-->
+<!--&lt;!&ndash;options="vm.infoWindow.options" closeClick="vm.closeClick()"&ndash;&gt;-->
+<!--&lt;!&ndash;templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"&ndash;&gt;-->
+<!--&lt;!&ndash;templateParameter="vm.clickedMarkerObj"&ndash;&gt;-->
+<!--&lt;!&ndash;isIconVisibleOnClick="true">&ndash;&gt;-->
+<!--&lt;!&ndash;</ui-gmap-window>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<ui-gmap-markers models="vm.inMarkers" coords="'self'" icon="'icon'" options="'options'"&ndash;&gt;-->
+<!--&lt;!&ndash;events="vm.markersEvents">&ndash;&gt;-->
+<!--&lt;!&ndash;</ui-gmap-markers>&ndash;&gt;-->
+
+<!--</ui-gmap-google-map>-->
+<!--</div>-->
+<!--</md-dialog-content>-->
+<!--</md-dialog>-->
+<!--</div>-->
+
+<md-dialog aria-label="Mango (Fruit)">
+    <form ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Locatin Tracking History</h2>
+                <h2>Location Tracker History</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon md-font-library="material-icons">close</md-icon>
                 </md-button>
             </div>
         </md-toolbar>
+        <div layout="row">
+            <!--<md-select ng-model="ctrl.number" flex>-->
+                <!--<md-select-label>Vehicle List</md-select-label>-->
+                <!--<md-option selected="1">Vehicle1</md-option>-->
+                <!--<md-option>Vehicle2</md-option>-->
+                <!--<md-option>Vehicle4</md-option>-->
+                <!--<md-option>Vehicle2</md-option>-->
+                <!--<md-option>Vehicle3</md-option>-->
+            <!--</md-select>-->
+            <md-input-container>
+                <label>Vehicle No</label>
+                <input type="text" ng-model="vehicleNo">
+            </md-input-container>
+            <md-input-container>
+                <label>Search</label>
+                <input type="text" ng-model="searchText">
+            </md-input-container>
+            <md-input-container>
+                <label>Search</label>
+                <input type="text" ng-model="searchText">
+            </md-input-container>
+            <md-button class="md-raised md-accent">Track</md-button>
+        </div>
 
-        <md-dialog-content layout="column">
+        <md-dialog-content>
             <div class="md-dialog-content">
                 <ui-gmap-google-map center='inMap.center' zoom='inMap.zoom' draggable="true"
                                     options="mapOptions" bounds="inMap.bounds"
                                     control="mapControl">
 
-                    <!--<ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"-->
-                                    <!--options="vm.infoWindow.options" closeClick="vm.closeClick()"-->
-                                    <!--templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"-->
-                                    <!--templateParameter="vm.clickedMarkerObj"-->
-                                    <!--isIconVisibleOnClick="true">-->
-                    <!--</ui-gmap-window>-->
-
-                    <!--<ui-gmap-markers models="vm.inMarkers" coords="'self'" icon="'icon'" options="'options'"-->
-                                     <!--events="vm.markersEvents">-->
-                    <!--</ui-gmap-markers>-->
-
                 </ui-gmap-google-map>
             </div>
         </md-dialog-content>
-    </md-dialog>
-</div>
+
+        <md-dialog-actions layout="row">
+        </md-dialog-actions>
+    </form>
+</md-dialog>

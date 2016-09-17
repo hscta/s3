@@ -273,29 +273,30 @@
         //$interval(vm.applyMapSearch, 2000);
 
 
-        vm.showHistory = function (id) {
-            $log.log(id);
+        vm.showHistory = function (){
+            $log.log(vm.clickedMarker);
             $mdDialog.show({
                 controller: vm.HistoryDialogController,
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose: true,
-                fullscreen: false,
+                clickOutsideToClose:true,
                 locals: {
-                    id: id
+                    params:{
+                        markerObj: vm.clickedMarker
+                    }
                 }
-            })
+            });
         };
 
-        vm.HistoryDialogController = function ($scope, $log, id, mapService) {
+        vm.HistoryDialogController = function($scope, $log, mapService, $interval, params) {
             var vm = this;
-            $log.log(id);
             $scope.inMap = {};
             $scope.inMap.zoom = mapService.getZoom();
             $scope.inMap.center = mapService.getCenter();
             $scope.inMap.bounds = mapService.getBounds();
             $scope.mapControl = {};
-            $log.log(vm.inMap)
+
+            $scope.vehicleNo = params.markerObj.title;
             $scope.mapOptions = {
                 //scrollwheel: false
             };
@@ -303,8 +304,15 @@
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };
-        };
 
+            $scope.resizeMap = function () {
+                google.maps.event.trigger($scope.mapControl.getGMap(), 'resize');
+                return true;
+            };
+
+            $interval($scope.resizeMap, 500);
+
+        };
 
         vm.addListener = function () {
             mapService.addMsgListener(vm.updateMarker);
@@ -317,23 +325,3 @@
     }
 })();
 
-
-/*
- var testData = {
- id: 2056245,
- odometer: 458,
- speed: 0.144,
- direction: 0,
- carbattery: 13.764706,
- devbattery: 4.002353,
- ignitionstatus: 1,
- latitude: 19.068246270422406,
- longitude: 72.90032345164258,
- messagetype: 11,
- mobilistatus: 1,
- nosatellites: 17,
- timestamp: 1474024383000,
- altitude: 1,
- title: 2056245
- };
- */
