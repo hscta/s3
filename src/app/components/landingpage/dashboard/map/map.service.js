@@ -125,6 +125,7 @@
                 vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
                 vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
                 vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Stopped";
+                vehicleData.ignitionONOFF = vehicleData.ignitionstatus ? "ig on" : "ig off";
                 vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Active" : "Immobilized";
                 //vehicleData.active = vehicleData.mobilistatus ? "Active" : "Inactive";
                 vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
