@@ -123,11 +123,7 @@
         vm.mapEvents = {
             click : function(){
                 vm.infoWindow.show = false;
-            },
-
-            // resize : function() {
-            //     $log.log("resize event triggered");
-            // }
+            }
         };
 
         vm.resizeMap = function() {
@@ -135,7 +131,7 @@
             return true;
         };
 
-        $interval(vm.resizeMap, 500);
+        $interval(vm.resizeMap, 200);
 
         vm.markersEvents = {
             // click: function (marker, eventName, model, args) {
@@ -144,15 +140,8 @@
             //     vm.infoWindow.show = true;
             // },
             mouseover: function (marker, eventName, model, args) {
-                vm.clickedMarker = model;
-                window.setTimeout(function(){
-                31
                     vm.infoWindow.show = true;
-                },200);
-            },
-            // mouseout: function (marker, eventName, model, args) {
-            //     vm.infoWindow.show = false;
-            // }
+            }
         };
 
 
@@ -172,7 +161,7 @@
         vm.immobalize = function (status) {
             var immobalizeDialog = $mdDialog.confirm({
                 controller: immobalizeController,
-                templateUrl: '/app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
                 clickOutsideToClose: false,
                 escapeToClose: false
             })
@@ -196,15 +185,6 @@
 
         vm.loadMap();
         vm.addListener();
-
-        // $scope.$watch(function() {
-        //     return $rootScope.left_nav_toggle;
-        // }, function() {
-        //     $log.log("leftnavtoggle " + $rootScope.left_nav_toggle);
-        //     for(var i = 0; i < 100; i++) {
-        //         google.maps.event.trigger(vm.mapControl.getGMap(), 'resize');
-        //     }
-        // });
     }
 })();
 
