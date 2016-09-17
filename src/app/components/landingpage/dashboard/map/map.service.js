@@ -103,8 +103,11 @@
                 //         vm.msgListeners[eachidx](msg);
                 //     }
                 // }
-                for (var eachidx in vm.msgListeners) {
-                    vm.msgListeners[eachidx](msgList);
+                if(msgList.length == 2 && msgList[0] != null && msgList[1] != null
+                && msgList[0] != undefined && msgList[1] != undefined) {
+                    for (var eachidx in vm.msgListeners) {
+                        vm.msgListeners[eachidx](msgList);
+                    }
                 }
             };
 

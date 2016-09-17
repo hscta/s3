@@ -16,6 +16,8 @@
         vm.clickedMarker = {};
         vm.showMap = true;
         vm.mapControl = {};
+        vm.mapSearchStr = '';
+        vm.excludeMapSearch = ['icon'];
 
         function immobalizeController($scope, $mdDialog) {
             var vm = this;
@@ -48,22 +50,25 @@
         };
 
 
-        vm.options = {
+        vm.mapOptions = {
             //scrollwheel: false
         };
 
 
         vm.setMarkerIcon = function (vehicleData) {
-            var iconColor = 'green';
+            var iconColor = 'orange';
 
             if (!vehicleData.mobilistatus) {
                 iconColor = 'red';
-            } else if (!vehicleData.ignitionstatus) {
-                iconColor = 'green';
-            } else if (vehicleData.ignitionstatus) {
-                iconColor = 'blue';
+            } else {
+                if (vehicleData.ignitionstatus) {
+                    iconColor = 'blue';
+                } else {
+                    iconColor = 'green';
+                }
             }
 
+            vehicleData.iconColor = iconColor;
             return 'http://maps.google.com/mapfiles/ms/icons/' + iconColor + '-dot.png';
         };
 
@@ -75,12 +80,13 @@
             vehicleData.id = vehicleNumber;
             vehicleData.icon = vm.setMarkerIcon(vehicleData);
             vehicleData.title = vehicleNumber;
-            vehicleData.speed = parseFloat(vehicleData.speed).toFixed(2);
-            vehicleData.direction = parseFloat(vehicleData.direction).toFixed(2);
-            vehicleData.carbattery = parseFloat(vehicleData.carbattery).toFixed(2);
-            vehicleData.devbattery = parseFloat(vehicleData.devbattery).toFixed(2);
-            vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Not Running";
-            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Mobilized" : "Immobilized";
+            vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
+            vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
+            vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
+            vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
+            vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Stopped";
+            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Active" : "Immobilized";
+            //vehicleData.active = vehicleData.mobilistatus ? "Active" : "Inactive";
             vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
             return vehicleData;
         };
@@ -104,13 +110,16 @@
                             ", " + vehicleData.latitude + ", " + vehicleData.longitude);
                     }
 
+                    vehicleData.options = vm.inMarkers[idx].options;
                     vm.inMarkers[idx] = vehicleData;
                     isNewVehicle = false;
                 }
             }
 
             if (isNewVehicle) {
+                vehicleData.options = {};
                 vm.inMarkers.push(vehicleData);
+                vm.mapSearch();
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
         };
@@ -123,7 +132,7 @@
         vm.mapEvents = {
             click: function () {
                 vm.infoWindow.show = false;
-            },
+            }
 
             // resize : function() {
             //     $log.log("resize event triggered");
@@ -165,7 +174,7 @@
         vm.immobalize = function (status) {
             var immobalizeDialog = $mdDialog.confirm({
                 controller: immobalizeController,
-                templateUrl: '/app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
                 clickOutsideToClose: false,
                 escapeToClose: false
             })
@@ -185,6 +194,62 @@
             $log.log('cancel dialog');
             $mdDialog.cancel();
         };
+
+        vm.setMarkersVisible = function (flag) {
+            for (var idx in vm.inMarkers) {
+                var marker = vm.inMarkers[idx];
+                marker.options.visible = flag;
+            }
+        };
+
+
+        vm.matchesAnyMarkerData = function (marker, searchStr) {
+            for (eachidx in marker) {
+                if (vm.excludeMapSearch.indexOf(eachidx) != -1)
+                    continue;
+
+                lowercaseSearchStr = searchStr.toString().toLowerCase();
+                lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
+
+                if (lowercaseMarkerStr.includes(lowercaseSearchStr)) {
+                    //$log.log(lowercaseSearchStr + " = " + lowercaseMarkerStr);
+                    return true;
+                }
+            }
+
+            //$log.log("not matching " + marker.id);
+            return false;
+        };
+
+        vm.mapSearch = function () {
+            var matched = 0;
+            if (vm.mapSearchStr.length === 0) {
+                vm.setMarkersVisible(true);
+                return;
+            }
+
+            for (var idx in vm.inMarkers) {
+                var marker = vm.inMarkers[idx];
+                if (!vm.matchesAnyMarkerData(marker, vm.mapSearchStr)) {
+                    //$log.log(marker);
+                    marker.options.visible = false;
+
+                } else {
+                    matched++;
+                }
+            }
+            $log.log("Search matched " + matched + " vehicles");
+        };
+
+
+        vm.applyMapSearch = function () {
+            if (vm.mapSearchStr.length > 0) {
+                //$log.log("applyMapSearch");
+                vm.mapSearch();
+            }
+        };
+
+        //$interval(vm.applyMapSearch, 2000);
 
 
         vm.loadMap();

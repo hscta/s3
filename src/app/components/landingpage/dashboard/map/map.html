@@ -2,30 +2,40 @@
 
 <style>
     .infowindow-img {
-        height:30px;
-        width:30px;
+        height: 30px;
+        width: 30px;
     }
+
     .infowindow-devbattery-img {
-        height:50px;
+        height: 50px;
     }
+
     .icar-padding {
-        padding:5px;
+        padding: 5px;
     }
 </style>
 
-<div id="mapCanvas">
-    <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
-                        options="vm.options" bounds="vm.inMap.bounds" events="vm.mapEvents"
-                        control="vm.mapControl">
+<div>
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search..." size="50"
+               ng-model="vm.mapSearchStr" ng-change="vm.mapSearch()"/>
+    </div>
 
-        <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
-                        options="vm.infoWindow.options" closeClick="vm.closeClick()"
-                        templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
-                        isIconVisibleOnClick="true">
-        </ui-gmap-window>
+    <div id="mapCanvas">
+        <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
+                            options="vm.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
+                            control="vm.mapControl">
 
-        <ui-gmap-markers models="vm.inMarkers" coords="'self'" icon="'icon'" events="vm.markersEvents">
-        </ui-gmap-markers>
+            <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
+                            options="vm.infoWindow.options" closeClick="vm.closeClick()"
+                            templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
+                            isIconVisibleOnClick="true">
+            </ui-gmap-window>
 
-    </ui-gmap-google-map>
+            <ui-gmap-markers models="vm.inMarkers" coords="'self'" icon="'icon'" options="'options'"
+                             events="vm.markersEvents">
+            </ui-gmap-markers>
+
+        </ui-gmap-google-map>
+    </div>
 </div>
