@@ -124,14 +124,12 @@
 
         vm.infoWindowShow = function() {
             //vm.inMap.window.control.showWindow();
-            //vm.inMap.window.control.hideWindow();
             vm.infoWindow.control.showWindow();
             vm.infoWindow.show = true;
         };
 
         vm.mapEvents = {
             click: function () {
-                //vm.infoWindow.show = false;
                 vm.infoWindowClose();
             }
 
@@ -228,12 +226,12 @@
 
 
         vm.matchesAnyMarkerData = function (marker, searchStr) {
-            for (eachidx in marker) {
+            for (var eachidx in marker) {
                 if (vm.excludeMapSearch.indexOf(eachidx) != -1)
                     continue;
 
-                lowercaseSearchStr = searchStr.toString().toLowerCase();
-                lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
+                var lowercaseSearchStr = searchStr.toString().toLowerCase();
+                var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
                 if (lowercaseMarkerStr.includes(lowercaseSearchStr)) {
                     //$log.log(lowercaseSearchStr + " = " + lowercaseMarkerStr);
@@ -246,7 +244,8 @@
         };
 
         vm.runFilters = function () {
-            var matched = 0;
+            //$log.log("runFilters");
+            var filtered = 0;
             if (vm.filterStr.length === 0) {
                 vm.setMarkersVisible(true);
                 return;
@@ -260,17 +259,17 @@
                     marker.options.visible = false;
 
                 } else {
-                    //vm.infoWindow.show = false;
+                    marker.options.visible = true;
                     vm.infoWindowClose();
-                    matched++;
+                    filtered++;
                     matchedIdx = idx;
                 }
             }
 
             if(matchedIdx) {
-                //vm.inMap.center
+                vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
-            $log.log("Search matched " + matched + " vehicles");
+            $log.log("Filtered vehicles = " + filtered);
         };
 
 
