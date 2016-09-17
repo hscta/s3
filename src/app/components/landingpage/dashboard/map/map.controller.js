@@ -16,7 +16,7 @@
         vm.inMarkers = [];
         vm.clickedMarker = {};
         vm.mapControl = {};
-        vm.mapSearchStr = '';
+        vm.filterStr = '';
         vm.excludeMapSearch = ['icon'];
         vm.searchbox = {
             template: 'searchbox.tpl.html',
@@ -109,7 +109,7 @@
             if (isNewVehicle) {
                 vehicleData.options = {};
                 vm.inMarkers.push(vehicleData);
-                vm.mapSearch();
+                vm.runFilters();
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
         };
@@ -164,23 +164,25 @@
                 };
 
                 vm.infoWindowShow();
-                $log.log(vm.infoWindow);
+                //$log.log(vm.infoWindow);
             }
         };
 
 
-        vm.alertClick = function (alertid) {
+        vm.getMarkerCenter = function(marker) {
+            return {latitude: marker.latitude, longitude: marker.longitude};
+        };
 
+
+        vm.alertClick = function (alertid) {
             for (var idx in vm.inMarkers) {
-                $log.log(vm.inMarkers[idx].id + " == " + alertid);
                 if (vm.inMarkers[idx].id == alertid) {
                     vm.clickedMarker = vm.inMarkers[idx];
                     break;
                 }
             }
-            $log.log("map alert clicked " + alertid);
+            //$log.log(vm.clickedMarker);
 
-            $log.log(vm.clickedMarker);
             vm.clickedMarkerObj = {
                 clickedMarker: vm.clickedMarker,
                 immoblize: vm.immobalize,
@@ -188,7 +190,8 @@
             };
 
             vm.infoWindowShow();
-            vm.inMap.center = {latitude: vm.clickedMarker.latitude + 0.05, longitude: vm.clickedMarker.longitude};
+            //vm.inMap.center = {latitude: vm.clickedMarker.latitude + 0.05, longitude: vm.clickedMarker.longitude};
+            vm.inMap.center = vm.getMarkerCenter(vm.clickedMarker);
         };
 
 
@@ -212,7 +215,7 @@
 
 
         vm.cancelImmobalize = function () {
-            $log.log('cancel dialog');
+            //$log.log('cancel dialog');
             $mdDialog.cancel();
         };
 
@@ -242,16 +245,17 @@
             return false;
         };
 
-        vm.mapSearch = function () {
+        vm.runFilters = function () {
             var matched = 0;
-            if (vm.mapSearchStr.length === 0) {
+            if (vm.filterStr.length === 0) {
                 vm.setMarkersVisible(true);
                 return;
             }
 
+            var matchedIdx = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
-                if (!vm.matchesAnyMarkerData(marker, vm.mapSearchStr)) {
+                if (!vm.matchesAnyMarkerData(marker, vm.filterStr)) {
                     //$log.log(marker);
                     marker.options.visible = false;
 
@@ -259,16 +263,21 @@
                     //vm.infoWindow.show = false;
                     vm.infoWindowClose();
                     matched++;
+                    matchedIdx = idx;
                 }
+            }
+
+            if(matchedIdx) {
+                //vm.inMap.center
             }
             $log.log("Search matched " + matched + " vehicles");
         };
 
 
         vm.applyMapSearch = function () {
-            if (vm.mapSearchStr.length > 0) {
+            if (vm.filterStr.length > 0) {
                 //$log.log("applyMapSearch");
-                vm.mapSearch();
+                vm.runFilters();
             }
         };
 
@@ -276,7 +285,7 @@
 
 
         vm.showHistory = function (){
-            $log.log(vm.clickedMarker);
+            //$log.log(vm.clickedMarker);
             $mdDialog.show({
                 controller: vm.HistoryDialogController,
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',

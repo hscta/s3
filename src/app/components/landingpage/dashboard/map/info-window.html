@@ -21,48 +21,50 @@
             </tr>
 
             <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Ignition Status</strong> </td>
+                <td md-cell><strong>Ignition Status</strong></td>
                 <td md-cell>{{parameter.clickedMarker.ignitionstatus}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Mobilize Status</strong></td>
+                <td md-cell><strong>Mobility Status</strong></td>
                 <td md-cell>{{parameter.clickedMarker.mobilistatusStr}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Car Battery</strong> </td>
+                <td md-cell><strong>Car Battery</strong></td>
                 <td md-cell>{{parameter.clickedMarker.carbattery}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Device Battery</strong> </td>
+                <td md-cell><strong>Device Battery</strong></td>
                 <td md-cell>{{parameter.clickedMarker.devbattery}}</td>
             </tr>
-            <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Satellites</strong></td>
-                <td md-cell>{{parameter.clickedMarker.nosatellites}}</td>
-            </tr>
-            <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Direction</strong></td>
-                <td md-cell>{{parameter.clickedMarker.direction}}</td>
-            </tr>
-            <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Altitude</strong></td>
-                <td md-cell>{{parameter.clickedMarker.altitude}}</td>
-            </tr>
+            <!--<tr md-row md-select-id="name" md-auto-select>-->
+            <!--<td md-cell><strong>Satellites</strong></td>-->
+            <!--<td md-cell>{{parameter.clickedMarker.nosatellites}}</td>-->
+            <!--</tr>-->
+            <!--<tr md-row md-select-id="name" md-auto-select>-->
+            <!--<td md-cell><strong>Direction</strong></td>-->
+            <!--<td md-cell>{{parameter.clickedMarker.direction}}</td>-->
+            <!--</tr>-->
+            <!--<tr md-row md-select-id="name" md-auto-select>-->
+            <!--<td md-cell><strong>Altitude</strong></td>-->
+            <!--<td md-cell>{{parameter.clickedMarker.altitude}}</td>-->
+            <!--</tr>-->
             </tbody>
         </table>
     </md-table-container>
 
-    <md-button class="md-raised md-accent"
-               ng-click="parameter.immoblize(parameter.clickedMarker.mobilistatus)">
+    <div layout="row">
+        <md-button class="md-primary"
+                   ng-click="parameter.immoblize(parameter.clickedMarker.mobilistatus)">
         <span ng-show="parameter.clickedMarker.mobilistatus">
             Immoblize
         </span>
-        <span ng-hide="parameter.clickedMarker.mobilistatus">
+            <span ng-hide="parameter.clickedMarker.mobilistatus">
            Moblize
         </span>
-    </md-button>
+        </md-button>
 
-    <md-button class="md-primary" ng-click="parameter.showHistory()">
-        History
-    </md-button>
+        <md-button class="md-raised md-accent" ng-click="parameter.showHistory()">
+            History
+        </md-button>
+    </div>
 </div>
