@@ -13,16 +13,14 @@
     .icar-padding {
         padding: 5px;
     }
-    .map-area{padding:0;}
 </style>
 
-<div class="map-area">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Search..." size="50"
                ng-model="vm.mapSearchStr" ng-change="vm.mapSearch()"/>
     </div>
 
-    <div id="mapCanvas">
+    <div id="mapCanvas" layout-fill>
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
                             options="vm.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
                             control="vm.mapControl">
@@ -40,4 +38,3 @@
 
         </ui-gmap-google-map>
     </div>
-</div>

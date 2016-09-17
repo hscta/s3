@@ -299,6 +299,10 @@
             $scope.mapOptions = {
                 //scrollwheel: false
             };
+
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
         };
 
 

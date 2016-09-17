@@ -2,18 +2,18 @@
 
 
 <style>
-    .left-nav {border-right:1px solid #CCC;}
+    .left-nav {border-right:1px solid #CCC;width:24%;}
     .right-nav {border-left:1px solid #CCC;}
-    md-content { height:100%;}
+
 </style>
 
 <div ui-view="header"></div>
 
-<md-content layout="row" flex class="altered my-content">
+<md-content layout="row" flex class="altered">
     <div ui-view="leftnavalert" class="left-nav"></div>
 
-    <div layout="column" flex id="content">
-        <md-content class="map-area" layout="column" flex class="md-padding">
+    <div layout="column" flex id="content" layout-fill>
+        <md-content layout="column" layout-fill>
             <div ui-view="center"></div>
         </md-content>
     </div>
