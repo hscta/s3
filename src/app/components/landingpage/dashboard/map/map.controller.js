@@ -142,6 +142,12 @@
             mouseover: function (marker, eventName, model, args) {
                     vm.infoWindow.show = true;
             }
+                vm.clickedMarker = model;
+                vm.infoWindow.show = true;
+            },
+            // mouseout: function (marker, eventName, model, args) {
+            //     vm.infoWindow.show = false;
+            // }
         };
 
 
@@ -181,7 +187,7 @@
             $log.log('cancel dialog');
             $mdDialog.cancel();
         };
-        
+
 
         vm.loadMap();
         vm.addListener();
@@ -190,21 +196,21 @@
 
 
 /*
-var testData = {
-    id: 2056245,
-    odometer: 458,
-    speed: 0.144,
-    direction: 0,
-    carbattery: 13.764706,
-    devbattery: 4.002353,
-    ignitionstatus: 1,
-    latitude: 19.068246270422406,
-    longitude: 72.90032345164258,
-    messagetype: 11,
-    mobilistatus: 1,
-    nosatellites: 17,
-    timestamp: 1474024383000,
-    altitude: 1,
-    title: 2056245
-};
-*/
+ var testData = {
+ id: 2056245,
+ odometer: 458,
+ speed: 0.144,
+ direction: 0,
+ carbattery: 13.764706,
+ devbattery: 4.002353,
+ ignitionstatus: 1,
+ latitude: 19.068246270422406,
+ longitude: 72.90032345164258,
+ messagetype: 11,
+ mobilistatus: 1,
+ nosatellites: 17,
+ timestamp: 1474024383000,
+ altitude: 1,
+ title: 2056245
+ };
+ */

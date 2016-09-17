@@ -11,7 +11,8 @@ var util = require('util');
 
 var proxyMiddleware = require('http-proxy-middleware');
 
-function browserSyncInit(baseDir, browser) {
+
+function browserSyncInit(baseDir, browser, isRemote) {
   browser = browser === undefined ? 'default' : browser;
 
   var routes = null;
@@ -35,12 +36,28 @@ function browserSyncInit(baseDir, browser) {
    */
   // server.middleware = proxyMiddleware('/users', {target: 'http://jsonplaceholder.typicode.com', changeOrigin: true});
 
-  browserSync.instance = browserSync.init({
-    startPath: '/',
-    server: server,
-    browser: browser,
-    notify: false
-  });
+    if (isRemote) {
+      browserSync.instance = browserSync.init({
+        port:10114,
+        startPath: '/',
+        server: server,
+        browser: browser,
+        notify: false,
+        codeSync: false,
+        ghostMode: {
+            clicks: false,
+            forms: false,
+            scroll: false
+        }
+      });
+    }else {
+      browserSync.instance = browserSync.init({
+        startPath: '/',
+        server: server,
+        browser: browser,
+        notify: true,
+      });
+    }
 }
 
 browserSync.use(browserSyncSpa({
@@ -48,11 +65,11 @@ browserSync.use(browserSyncSpa({
 }));
 
 gulp.task('serve', ['watch'], function () {
-  browserSyncInit([path.join(conf.paths.tmp, '/serve'), conf.paths.src]);
+  browserSyncInit([path.join(conf.paths.tmp, '/serve'), conf.paths.src], null, false);
 });
 
 gulp.task('serve:dist', ['build'], function () {
-  browserSyncInit(conf.paths.dist);
+  browserSyncInit(conf.paths.dist, null, true);
 });
 
 gulp.task('serve:e2e', ['inject'], function () {
