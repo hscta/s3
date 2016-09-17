@@ -2,7 +2,7 @@
 
 
 <style>
-    .left-nav {border-right:1px solid #CCC;width:24%;}
+    .left-nav {border-right:1px solid #CCC;}
     .right-nav {border-left:1px solid #CCC;}
 
 </style>
@@ -12,8 +12,8 @@
 <md-content layout="row" flex class="altered">
     <div ui-view="leftnavalert" class="left-nav"></div>
 
-    <div layout="column" flex id="content" layout-fill>
-        <md-content layout="column" layout-fill>
+    <div layout="column" flex id="content">
+        <md-content layout="column">
             <div ui-view="center"></div>
         </md-content>
     </div>
