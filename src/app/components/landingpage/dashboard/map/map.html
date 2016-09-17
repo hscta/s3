@@ -13,9 +13,10 @@
     .icar-padding {
         padding: 5px;
     }
+    .map-area{padding:0;}
 </style>
 
-<div>
+<div class="map-area">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Search..." size="50"
                ng-model="vm.mapSearchStr" ng-change="vm.mapSearch()"/>
@@ -29,6 +30,7 @@
             <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
                             options="vm.infoWindow.options" closeClick="vm.closeClick()"
                             templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
+                            templateParameter="vm.clickedMarkerObj"
                             isIconVisibleOnClick="true">
             </ui-gmap-window>
 

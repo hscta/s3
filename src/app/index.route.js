@@ -33,8 +33,12 @@
                       templateUrl: 'app/components/landingpage/header/header.html',
                       controller: 'HeaderController as vm'
                   },
-                  'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
+                  'leftnavtree@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnavtree/leftnav_dashboard.html',
+                      controller: 'LeftNavDashboardController as vm'
+                  },
+                  'leftnavalert@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnavalert/leftnavalert_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {
@@ -64,8 +68,12 @@
           .state('home.dashboard', {
               url: 'home/dashboard',
               views: {
-                  'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
+                  'leftnavtree@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnavtree/leftnav_dashboard.html',
+                      controller: 'LeftNavDashboardController as vm'
+                  },
+                  'leftnavalert@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnavalert/leftnavalert_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {
@@ -109,8 +117,8 @@
           .state('home.reports', {
               url: 'home/reports',
               views: {
-                  'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnav/leftnav_dashboard.html',
+                  'leftnavtree@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/leftnavtree/leftnav_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {

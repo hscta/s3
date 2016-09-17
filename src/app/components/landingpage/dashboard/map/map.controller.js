@@ -8,6 +8,21 @@
         .module('uiplatform')
         .controller('MapController', MapController);
 
+    // var HistoryDialogController = function($scope, $log, id, mapService) {
+    //     var vm = this;
+    //     $log.log(id);
+    //     vm.inMap = {};
+    //     vm.inMap.zoom = mapService.getZoom();
+    //     vm.inMap.center = mapService.getCenter();
+    //     vm.inMap.bounds = mapService.getBounds();
+    //     vm.mapControl = {};
+    //     $log.log(vm.inMap)
+    //     vm.mapOptions = {
+    //         //scrollwheel: false
+    //     };
+    // };
+
+
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval) {
         $log.log('MapController');
@@ -154,6 +169,12 @@
             // },
             mouseover: function (marker, eventName, model, args) {
                 vm.clickedMarker = model;
+
+                vm.clickedMarkerObj ={
+                    clickedMarker : vm.clickedMarker,
+                    immoblize : vm.immobalize,
+                    showHistory: vm.showHistory
+                }
                 vm.infoWindow.show = true;
             }
         };
@@ -250,6 +271,36 @@
         };
 
         //$interval(vm.applyMapSearch, 2000);
+
+
+        vm.showHistory = function (id){
+            $log.log(id);
+            $mdDialog.show({
+                controller: vm.HistoryDialogController,
+                templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose:true,
+                fullscreen: false,
+                locals: {
+                    id: id
+                }
+            })
+        };
+
+        vm.HistoryDialogController = function($scope, $log, id, mapService) {
+            var vm = this;
+            $log.log(id);
+            $scope.inMap = {};
+            $scope.inMap.zoom = mapService.getZoom();
+            $scope.inMap.center = mapService.getCenter();
+            $scope.inMap.bounds = mapService.getBounds();
+            $scope.mapControl = {};
+            $log.log(vm.inMap)
+            $scope.mapOptions = {
+                //scrollwheel: false
+            };
+        };
+
 
 
         vm.loadMap();

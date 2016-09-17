@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<style>
+    /*.md-dialog-container{width:100%;height:500px;}*/
+    /*#mapCanvas{width:80%;}*/
+</style>
+
+<div id="mapCanvas">
+    <md-dialog aria-label="Locatin Tracking History">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Locatin Tracking History</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-font-library="material-icons">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <ui-gmap-google-map center='inMap.center' zoom='inMap.zoom' draggable="true"
+                                    options="mapOptions" bounds="inMap.bounds"
+                                    control="mapControl">
+
+                    <!--<ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"-->
+                                    <!--options="vm.infoWindow.options" closeClick="vm.closeClick()"-->
+                                    <!--templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"-->
+                                    <!--templateParameter="vm.clickedMarkerObj"-->
+                                    <!--isIconVisibleOnClick="true">-->
+                    <!--</ui-gmap-window>-->
+
+                    <!--<ui-gmap-markers models="vm.inMarkers" coords="'self'" icon="'icon'" options="'options'"-->
+                                     <!--events="vm.markersEvents">-->
+                    <!--</ui-gmap-markers>-->
+
+                </ui-gmap-google-map>
+            </div>
+        </md-dialog-content>
+    </md-dialog>
+</div>
