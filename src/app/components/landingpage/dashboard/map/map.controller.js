@@ -173,6 +173,7 @@
             //     vm.clickedMarker = model;
             //     vm.infoWindow.show = true;
             // },
+
             mouseover: function (marker, eventName, model, args) {
                 vm.clickedMarker = model;
 
