@@ -94,19 +94,49 @@
             };
 
 
+            vm.setMarkerIcon = function (vehicleData) {
+                var iconColor = 'orange';
+
+                if (!vehicleData.mobilistatus) {
+                    iconColor = 'red';
+                } else {
+                    if (vehicleData.ignitionstatus) {
+                        iconColor = 'blue';
+                    } else {
+                        iconColor = 'green';
+                    }
+                }
+
+                vehicleData.iconColor = iconColor;
+                return 'http://maps.google.com/mapfiles/ms/icons/' + iconColor + '-dot.png';
+            };
+
+
+            vm.processVehicleData = function (msg) {
+                var topic = msg[0].split('/');
+                var vehicleNumber = parseInt(topic[topic.length - 1]);
+                var vehicleData = msg[1];
+                vehicleData.id = vehicleNumber;
+                vehicleData.title = vehicleNumber;
+                vehicleData.icon = vm.setMarkerIcon(vehicleData);
+                vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
+                vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
+                vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
+                vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
+                vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Stopped";
+                vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Active" : "Immobilized";
+                //vehicleData.active = vehicleData.mobilistatus ? "Active" : "Inactive";
+                vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
+                return vehicleData;
+            };
+
+
             vm.updateMap = function (msgList) {
-                //$log.log('mapService updateMap');
-                //$log.log(msgList);
-                // for(var idx in msgList) {
-                //     var msg = msgList[idx];
-                //     for(var eachidx in vm.msgListeners){
-                //         vm.msgListeners[eachidx](msg);
-                //     }
-                // }
                 if(msgList.length == 2 && msgList[0] != null && msgList[1] != null
                 && msgList[0] != undefined && msgList[1] != undefined) {
+                    var vehicleData = vm.processVehicleData(msgList);
                     for (var eachidx in vm.msgListeners) {
-                        vm.msgListeners[eachidx](msgList);
+                        vm.msgListeners[eachidx](vehicleData);
                     }
                 }
             };

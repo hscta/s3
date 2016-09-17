@@ -27,13 +27,30 @@
         <!--<md-divider ></md-divider>-->
     <!--</md-list>-->
 
+
+    <!--<md-content layout-fill class="alert-md-content">-->
+        <!--<md-list class="md-dense" flex>-->
+            <!--<md-list-item class="md-3-line" ng-repeat="alert in vm.alertDetails">-->
+                <!--<div class="md-list-item-text" layout="column">-->
+                    <!--<h3>Alert</h3>-->
+                    <!--<h4>{{alert.name}}</h4>-->
+                    <!--<p>{{alert.assetpath}}</p>-->
+                <!--</div>-->
+                <!--<md-button class="md-button md-accent" ng-click="vm.alertResolve(alert.id)">Resolve</md-button>-->
+            <!--</md-list-item>-->
+            <!--<md-divider ></md-divider>-->
+        <!--</md-list>-->
+    <!--</md-content>-->
+
+
     <md-content layout-fill class="alert-md-content">
         <md-list class="md-dense" flex>
-            <md-list-item class="md-3-line" ng-repeat="alert in vm.alertDetails">
-                <div class="md-list-item-text" layout="column">
+            <md-list-item class="md-3-line" ng-repeat="alert in vm.inMarkers">
+                <div class="md-list-item-text" layout="column" ng-click="vm.alertClick(alert.id)">
                     <h3>Alert</h3>
-                    <h4>{{alert.name}}</h4>
-                    <p>{{alert.assetpath}}</p>
+                    <h4>{{alert.id}}</h4>
+                    <p>{{alert.carbattery}}</p>
+                    <p>{{alert.speed}}</p>
                 </div>
                 <md-button class="md-button md-accent" ng-click="vm.alertResolve(alert.id)">Resolve</md-button>
             </md-list-item>
@@ -41,6 +58,6 @@
         </md-list>
     </md-content>
 
-    </md-sidenav>
+</md-sidenav>
 
 

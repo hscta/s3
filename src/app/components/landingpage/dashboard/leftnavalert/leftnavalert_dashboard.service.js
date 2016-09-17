@@ -2,33 +2,47 @@
  * Created by harshas on 17/9/16.
  */
 
-(function(){
+(function () {
     angular
         .module('uiplatform')
-        .service('leftNavAlertDashboardService', function($log, intellicarAPI, $q) {
+        .service('leftNavAlertDashboardService', function ($log, intellicarAPI, $q) {
             $log.log("leftNavDashboardAlertService");
 
             var vm = this;
-            vm.listeners = {};
+            vm.msgListeners = [];
 
-            vm.handleResponse = function(resp) {
+            vm.handleResponse = function (resp) {
                 //$log.log("leftNavDashboardService handleResponse");
                 $log.log(resp);
             };
 
 
-            vm.handleFailure = function(resp) {
+            vm.handleFailure = function (resp) {
                 $log.log("leftNavDashboardService handleFailure ");
                 $log.log(resp);
                 return $q.reject(resp);
             };
 
-            vm.getDashboardAlerts = function(body) {
+            vm.getDashboardAlerts = function (body) {
                 return intellicarAPI.treeDataService.getDashboardTree(body);
             };
 
-            vm.addListener = function(key, listener) {
-                vm.listeners[key] = listener;
+            // vm.addListener = function(key, listener) {
+            //     vm.listeners[key] = listener;
+            // };
+
+
+            vm.alertClick = function (alertid) {
+                for (var eachidx in vm.msgListeners) {
+                    vm.msgListeners[eachidx](alertid);
+                }
+            };
+
+
+            vm.addListener = function (listener) {
+                if (vm.msgListeners.indexOf(listener) == -1) {
+                    vm.msgListeners.push(listener);
+                }
             };
         });
 })();

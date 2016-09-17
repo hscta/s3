@@ -24,21 +24,37 @@
 
 
     function MapController($scope, $rootScope, $log, mapService,
-                           $timeout, $mdDialog, $document, $interval) {
+                           $timeout, $mdDialog, $document, $interval,
+                           leftNavAlertDashboardService) {
         $log.log('MapController');
         var vm = this;
         vm.inMarkers = [];
         vm.clickedMarker = {};
-        vm.showMap = true;
         vm.mapControl = {};
         vm.mapSearchStr = '';
         vm.excludeMapSearch = ['icon'];
         vm.searchbox = {
-            template:'searchbox.tpl.html',
-                events:{
-                places_changed: function (searchBox) {}
+            template: 'searchbox.tpl.html',
+            events: {
+                places_changed: function (searchBox) {
+                }
             }
         };
+
+
+        vm.infoWindow = {
+            show: false,
+            control: {},
+            options: {
+                maxWidth: 300,
+                disableAutoPan: false,
+                pixelOffset : {
+                    width: 0,
+                    height: -20
+                }
+            }
+        };
+
 
         function immobalizeController($scope, $mdDialog) {
             var vm = this;
@@ -76,50 +92,11 @@
         };
 
 
-        vm.setMarkerIcon = function (vehicleData) {
-            var iconColor = 'orange';
-
-            if (!vehicleData.mobilistatus) {
-                iconColor = 'red';
-            } else {
-                if (vehicleData.ignitionstatus) {
-                    iconColor = 'blue';
-                } else {
-                    iconColor = 'green';
-                }
-            }
-
-            vehicleData.iconColor = iconColor;
-            return 'http://maps.google.com/mapfiles/ms/icons/' + iconColor + '-dot.png';
-        };
-
-
-        vm.processVehicleData = function (msg) {
-            var topic = msg[0].split('/');
-            var vehicleNumber = parseInt(topic[topic.length - 1]);
-            var vehicleData = msg[1];
-            vehicleData.id = vehicleNumber;
-            vehicleData.icon = vm.setMarkerIcon(vehicleData);
-            vehicleData.title = vehicleNumber;
-            vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
-            vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
-            vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
-            vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
-            vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "Running" : "Stopped";
-            vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Active" : "Immobilized";
-            //vehicleData.active = vehicleData.mobilistatus ? "Active" : "Inactive";
-            vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
-            return vehicleData;
-        };
-
-
-        vm.updateMarker = function (msg) {
+        vm.updateMarker = function (vehicleData) {
             //  $log.log('mapController updateMarker');
             //$log.log(msg);
             var isNewVehicle = true;
-            var vehicleData = vm.processVehicleData(msg);
-            //$log.log(vehicleData);
-
+            //var vehicleData = vm.processVehicleData(msg);
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
                 if (marker.id == vehicleData.id) {
@@ -137,6 +114,8 @@
                 }
             }
 
+            //$log.log(vehicleData);
+
             if (isNewVehicle) {
                 vehicleData.options = {};
                 vm.inMarkers.push(vehicleData);
@@ -145,10 +124,6 @@
             }
         };
 
-
-        vm.addListener = function () {
-            mapService.addMsgListener(vm.updateMarker);
-        };
 
         vm.mapEvents = {
             click: function () {
@@ -177,20 +152,37 @@
             mouseover: function (marker, eventName, model, args) {
                 vm.clickedMarker = model;
 
-                vm.clickedMarkerObj ={
-                    clickedMarker : vm.clickedMarker,
-                    immoblize : vm.immobalize,
+                vm.clickedMarkerObj = {
+                    clickedMarker: vm.clickedMarker,
+                    immoblize: vm.immobalize,
                     showHistory: vm.showHistory
-                }
+                };
+
                 vm.infoWindow.show = true;
+                $log.log(vm.infoWindow);
             }
         };
 
 
-        vm.infoWindow = {
-            marker: {},
-            show: false,
-            options: {}
+        vm.alertClick = function (alertid) {
+
+            for (var idx in vm.inMarkers) {
+                $log.log(vm.inMarkers[idx].id + " == " + alertid);
+                if (vm.inMarkers[idx].id == alertid) {
+                    vm.clickedMarker = vm.inMarkers[idx];
+                    break;
+                }
+            }
+            $log.log("map alert clicked " + alertid);
+
+            $log.log(vm.clickedMarker);
+            vm.clickedMarkerObj = {
+                clickedMarker: vm.clickedMarker,
+                immoblize: vm.immobalize,
+                showHistory: vm.showHistory
+            };
+
+            vm.infoWindow.show = true;
         };
 
 
@@ -281,13 +273,13 @@
         //$interval(vm.applyMapSearch, 2000);
 
 
-        vm.showHistory = function (id){
+        vm.showHistory = function (id) {
             $log.log(id);
             $mdDialog.show({
                 controller: vm.HistoryDialogController,
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:true,
+                clickOutsideToClose: true,
                 fullscreen: false,
                 locals: {
                     id: id
@@ -295,7 +287,7 @@
             })
         };
 
-        vm.HistoryDialogController = function($scope, $log, id, mapService) {
+        vm.HistoryDialogController = function ($scope, $log, id, mapService) {
             var vm = this;
             $log.log(id);
             $scope.inMap = {};
@@ -308,24 +300,20 @@
                 //scrollwheel: false
             };
 
-            $scope.cancel = function() {
+            $scope.cancel = function () {
                 $mdDialog.cancel();
             };
         };
 
 
+        vm.addListener = function () {
+            mapService.addMsgListener(vm.updateMarker);
+            leftNavAlertDashboardService.addListener(vm.alertClick);
+        };
+
 
         vm.loadMap();
         vm.addListener();
-
-        // $scope.$watch(function() {
-        //     return $rootScope.left_nav_toggle;
-        // }, function() {
-        //     $log.log("leftnavtoggle " + $rootScope.left_nav_toggle);
-        //     for(var i = 0; i < 100; i++) {
-        //         google.maps.event.trigger(vm.mapControl.getGMap(), 'resize');
-        //     }
-        // });
     }
 })();
 
