@@ -33,6 +33,12 @@
         vm.mapControl = {};
         vm.mapSearchStr = '';
         vm.excludeMapSearch = ['icon'];
+        vm.searchbox = {
+            template:'searchbox.tpl.html',
+                events:{
+                places_changed: function (searchBox) {}
+            }
+        };
 
         function immobalizeController($scope, $mdDialog) {
             var vm = this;
@@ -256,6 +262,7 @@
                     marker.options.visible = false;
 
                 } else {
+                    vm.infoWindow.show = false;
                     matched++;
                 }
             }
