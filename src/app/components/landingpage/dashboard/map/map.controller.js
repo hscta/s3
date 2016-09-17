@@ -8,21 +8,6 @@
         .module('uiplatform')
         .controller('MapController', MapController);
 
-    // var HistoryDialogController = function($scope, $log, id, mapService) {
-    //     var vm = this;
-    //     $log.log(id);
-    //     vm.inMap = {};
-    //     vm.inMap.zoom = mapService.getZoom();
-    //     vm.inMap.center = mapService.getCenter();
-    //     vm.inMap.bounds = mapService.getBounds();
-    //     vm.mapControl = {};
-    //     $log.log(vm.inMap)
-    //     vm.mapOptions = {
-    //         //scrollwheel: false
-    //     };
-    // };
-
-
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
                            leftNavAlertDashboardService) {
@@ -73,7 +58,12 @@
 
 
         vm.loadMap = function () {
-            vm.inMap = {};
+            vm.inMap = {
+                window: {
+                    control: {},
+                    show: false
+                }
+            };
             vm.inMap.zoom = mapService.getZoom();
             vm.inMap.center = mapService.getCenter();
             vm.inMap.bounds = mapService.getBounds();
@@ -125,9 +115,24 @@
         };
 
 
+        vm.infoWindowClose = function() {
+            //vm.inMap.window.control.hideWindow();
+            vm.infoWindow.control.hideWindow();
+            vm.infoWindow.show = false;
+        };
+
+
+        vm.infoWindowShow = function() {
+            //vm.inMap.window.control.showWindow();
+            //vm.inMap.window.control.hideWindow();
+            vm.infoWindow.control.showWindow();
+            vm.infoWindow.show = true;
+        };
+
         vm.mapEvents = {
             click: function () {
-                vm.infoWindow.show = false;
+                //vm.infoWindow.show = false;
+                vm.infoWindowClose();
             }
 
             // resize : function() {
@@ -146,7 +151,7 @@
             // click: function (marker, eventName, model, args) {
             //     $log.log(model);
             //     vm.clickedMarker = model;
-            //     vm.infoWindow.show = true;
+            //     vm.infoWindowShow();
             // },
 
             mouseover: function (marker, eventName, model, args) {
@@ -158,7 +163,7 @@
                     showHistory: vm.showHistory
                 };
 
-                vm.infoWindow.show = true;
+                vm.infoWindowShow();
                 $log.log(vm.infoWindow);
             }
         };
@@ -182,12 +187,8 @@
                 showHistory: vm.showHistory
             };
 
-            vm.infoWindow.show = true;
-        };
-
-
-        vm.closeClick = function () {
-            vm.infoWindow.show = false;
+            vm.infoWindowShow();
+            vm.inMap.center = {latitude: vm.clickedMarker.latitude + 0.05, longitude: vm.clickedMarker.longitude};
         };
 
 
@@ -255,7 +256,8 @@
                     marker.options.visible = false;
 
                 } else {
-                    vm.infoWindow.show = false;
+                    //vm.infoWindow.show = false;
+                    vm.infoWindowClose();
                     matched++;
                 }
             }
