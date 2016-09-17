@@ -4,7 +4,7 @@
     .md-button{
         text-transform:capitalize;
     }
-    .alert-md-content{height:300px;overflow:scroll-y;}
+    .alert-md-content{height:540px;overflow:scroll-y;}
 </style>
 <md-sidenav  class="md-sidenav-left" md-component-id="left"
              md-is-locked-open = "left_nav_toggle" layout="column" layout-fill>
@@ -43,7 +43,7 @@
     <!--</md-content>-->
 
 
-    <md-content layout-fill class="alert-md-content">
+    <md-content class="alert-md-content">
         <md-list class="md-dense" flex>
             <md-list-item class="md-3-line" ng-repeat="alert in vm.inMarkers">
                 <div class="md-list-item-text" layout="column" ng-click="vm.alertClick(alert.id)">
