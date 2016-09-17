@@ -19,16 +19,16 @@
         };
 
         var count = 0;
-        vm.formatAlertData = function (data){
+        vm.formatAlertData = function (data) {
             var details = {};
-            for ( var i = 0; i < data.length; i++ ) {
+            for (var i = 0; i < data.length; i++) {
                 details = {};
                 details.name = data[i].info.name;
                 details.assetpath = data[i].info.assetpath;
                 details.id = count++;
                 vm.alertDetails.push(details);
 
-                if ( data[i].items.length )
+                if (data[i].items.length)
                     vm.formatAlertData(data[i].items)
             }
         };
@@ -39,12 +39,24 @@
         };
 
 
-        vm.alertResolve = function (alertId){
+        vm.alertResolve2 = function (alertId) {
             $log.log(alertId);
-            for ( var i = 0; i < vm.alertDetails.length; i++ ) {
-                if ( alertId == vm.alertDetails[i].id ){
+            for (var i = 0; i < vm.alertDetails.length; i++) {
+                if (alertId == vm.alertDetails[i].id) {
                     $log.log('matched');
-                    vm.alertDetails.splice(i,1);
+                    vm.alertDetails.splice(i, 1);
+                    return;
+                }
+            }
+        };
+
+
+        vm.alertResolve = function (alertid) {
+            $log.log(alertid);
+            for (var i = 0; i < vm.inMarkers.length; i++) {
+                if (alertid == vm.inMarkers[i].id) {
+                    $log.log('matched');
+                    vm.inMarkers.splice(i, 1);
                     return;
                 }
             }
@@ -74,7 +86,7 @@
         };
 
 
-        vm.alertClick = function(alertid) {
+        vm.alertClick = function (alertid) {
             leftNavAlertDashboardService.alertClick(alertid);
         };
 

@@ -20,9 +20,10 @@
             <md-list-item class="md-3-line" ng-repeat="alert in vm.inMarkers">
                 <div class="md-list-item-text" layout="column" ng-click="vm.alertClick(alert.id)">
                     <h3>Alert</h3>
-                    <h4>{{alert.id}}</h4>
-                    <p>{{alert.carbattery}}</p>
-                    <p>{{alert.speed}}</p>
+                    <h4>Car Number: {{alert.id}}</h4>
+                    <p>Odometer: {{alert.odometer}}</p>
+                    <p>Ignition: {{alert.ignitionstatus}}</p>
+                    <p>Mobility: {{alert.mobilistatusStr}}</p>
                 </div>
                 <md-button class="md-button md-accent" ng-click="vm.alertResolve(alert.id)">Resolve</md-button>
             </md-list-item>

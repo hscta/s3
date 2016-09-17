@@ -6,7 +6,9 @@
 
     angular
         .module('uiplatform')
-        .controller('MapController', MapController);
+        .controller('MapController', MapController)
+        .controller('HistoryDialogController', HistoryDialogController)
+        .controller('ImmobalizeController', ImmobalizeController);
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
@@ -39,22 +41,6 @@
                 }
             }
         };
-
-
-        function immobalizeController($scope, $mdDialog) {
-            var vm = this;
-            $log.log('immobalizeController');
-
-            $scope.cancelImmobalize = function () {
-                $log.log('cancelImmobalize');
-                $mdDialog.cancel();
-            };
-
-            $scope.okImmobilize = function () {
-                $log.log('okImmobilize');
-                $mdDialog.cancel();
-            }
-        }
 
 
         vm.loadMap = function () {
@@ -193,30 +179,6 @@
         };
 
 
-        vm.immobalize = function (status) {
-            var immobalizeDialog = $mdDialog.confirm({
-                controller: immobalizeController,
-                templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
-                clickOutsideToClose: false,
-                escapeToClose: false
-            })
-                .ok('Yes')
-                .cancel('No');
-
-            $mdDialog.show(immobalizeDialog)
-                .then(function () {
-                    $log.log("Yes Function");
-                }, function () {
-                    $log.log("No Function");
-                })
-        };
-
-
-        vm.cancelImmobalize = function () {
-            //$log.log('cancel dialog');
-            $mdDialog.cancel();
-        };
-
         vm.setMarkersVisible = function (flag) {
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
@@ -290,7 +252,7 @@
         vm.showHistory = function () {
             //$log.log(vm.clickedMarker);
             $mdDialog.show({
-                controller: vm.HistoryDialogController,
+                controller: 'HistoryDialogController',
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
@@ -302,31 +264,30 @@
             });
         };
 
-        vm.HistoryDialogController = function ($scope, $log, mapService, $interval, params) {
-            var vm = this;
-            $scope.inMap = {};
-            $scope.inMap.zoom = mapService.getZoom();
-            $scope.inMap.center = mapService.getCenter();
-            $scope.inMap.bounds = mapService.getBounds();
-            $scope.mapControl = {};
+        vm.immobalize = function (status) {
+            var immobalizeDialog = $mdDialog.confirm({
+                controller: 'ImmobalizeController',
+                templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                clickOutsideToClose: false,
+                escapeToClose: false
+            })
+                .ok('Yes')
+                .cancel('No');
 
-            $scope.vehicleNo = params.markerObj.title;
-            $scope.mapOptions = {
-                //scrollwheel: false
-            };
-
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-
-            $scope.resizeMap = function () {
-                google.maps.event.trigger($scope.mapControl.getGMap(), 'resize');
-                return true;
-            };
-
-            $interval($scope.resizeMap, 500);
-
+            $mdDialog.show(immobalizeDialog)
+                .then(function () {
+                    $log.log("Yes Function");
+                }, function () {
+                    $log.log("No Function");
+                })
         };
+
+
+        vm.cancelImmobalize = function () {
+            //$log.log('cancel dialog');
+            $mdDialog.cancel();
+        };
+
 
         vm.addListener = function () {
             mapService.addMsgListener(vm.updateMarker);
@@ -337,5 +298,50 @@
         vm.loadMap();
         vm.addListener();
     }
+
+
+    function HistoryDialogController($scope, $log, $mdDialog, mapService, $interval, params) {
+        //var vm = this;
+        //$log.log($scope);
+
+        $scope.inMap = {};
+        $scope.inMap.zoom = mapService.getZoom();
+        $scope.inMap.center = mapService.getCenter();
+        $scope.inMap.bounds = mapService.getBounds();
+        $scope.mapControl = {};
+
+        $scope.vehicleNo = params.markerObj.title;
+        $scope.mapOptions = {
+            //scrollwheel: false
+        };
+
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+
+        $scope.resizeMap = function () {
+            google.maps.event.trigger($scope.mapControl.getGMap(), 'resize');
+            return true;
+        };
+
+        $interval($scope.resizeMap, 500);
+    }
+
+
+    function ImmobalizeController($scope, $log, $mdDialog) {
+        //var vm = this;
+        $log.log('ImmobalizeController');
+
+        $scope.cancelImmobalize = function () {
+            $log.log('cancelImmobalize');
+            $mdDialog.cancel();
+        };
+
+        $scope.okImmobilize = function () {
+            $log.log('okImmobilize');
+            $mdDialog.cancel();
+        }
+    }
+
 })();
 
