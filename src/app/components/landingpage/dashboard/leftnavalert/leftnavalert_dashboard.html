@@ -12,12 +12,12 @@
     <!--The ROot Node-->
     <md-input-container class="container-margin">
         <label>Search alerts</label>
-        <input type="text" ng-model="searchText">
+        <input type="text" ng-model="vm.searchAlertStr">
     </md-input-container>
 
     <md-content class="alert-md-content">
         <md-list class="md-dense" flex>
-            <md-list-item class="md-3-line" ng-repeat="alert in vm.inMarkers">
+            <md-list-item class="md-3-line" ng-repeat="alert in vm.inMarkers | filter:{$: vm.searchAlertStr}">
                 <div class="md-list-item-text" layout="column" ng-click="vm.alertClick(alert.id)">
                     <h3>Alert</h3>
                     <h4>Car Number: {{alert.id}}</h4>
