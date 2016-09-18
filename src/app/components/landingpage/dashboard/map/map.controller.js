@@ -325,33 +325,30 @@
 
         $scope.inMap = {};
         $scope.inMap.zoom = mapService.getZoom();
-        $scope.inMap.center = mapService.getCenter();
-        $scope.inMap.bounds = mapService.getBounds();
+        $scope.inMap.center = params.markerObj;
+        //$scope.inMap.bounds = mapService.getBounds();
         $scope.mapControl = {};
         $scope.errorMsg = "";
-        $log.log(params);
+        //$log.log(params);
 
         uiGmapGoogleMapApi.then(function (maps) {
             //$log.log("uiGmapGoogleMapApi loaded");
             $scope.trace = {
-                // models: [],
                 path: [],
                 stroke: {color: "blue", weight: 2, opacity: 1},
                 icons: [{
                     icon: {
-                        path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
                     },
-                    offset: '25px',
-                    repeat: '25px'
+                    offset: '50px',
+                    repeat: '200px'
                 }],
                 clickable: true,
                 visible: true,
-                geodesic: true,
+                //geodesic: true,
                 fit: true,
                 static: true,
                 events: {},
-                // control: {},
-                // doRebuildAll: false
             };
 
             $scope.vehicleNo = params.markerObj.title;
@@ -379,7 +376,7 @@
             var hrs8 = 28800 * MILLISEC;
             var hrs12 = 43200 * MILLISEC;
             var hrs24 = 86400 * MILLISEC;
-            var hrs48 = hrs24 * 2;
+            var hrs48 = (hrs24 + 1) * 2;
             var timeLimit = hrs48;
 
             $scope.getHistory = function () {
@@ -429,8 +426,8 @@
 
 
             $scope.drawTrace = function (resp) {
-                $log.log("drawTrace");
-                $log.log(resp);
+                //$log.log("drawTrace");
+                //$log.log(resp);
                 $scope.trace.path = [];
                 for (var idx in resp.data.data) {
                     var position = resp.data.data[idx];
@@ -450,13 +447,18 @@
                 $scope.trace.path.sort(compare);
 
                 if($scope.trace.path.length) {
-                    var midPoint = $scope.trace.path.length / 2;
-                    $scope.inMap.center = position;
+                    var midPoint = Math.floor($scope.trace.path.length / 2);
+                    $log.log("midpoint" + midPoint);
+                    $scope.inMap.center = $scope.trace.path[midPoint];
+                    // $scope.trace.fit = false;
+                    // setTimeout($scope.fitBounds, 1000);
                 }
-
-                // $scope.trace.models = $scope.trace.path;
             };
 
+
+            $scope.fitBounds = function() {
+                $scope.trace.fit = true;
+            };
 
             $scope.handleGetLocationFailure = function (resp) {
                 $log.log("handleGetLocationFailure");
