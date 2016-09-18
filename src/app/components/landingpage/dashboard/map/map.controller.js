@@ -254,6 +254,16 @@
         };
         //$interval(vm.applyMapSearch, 2000);
 
+        vm.onRoad = false;
+        vm.offRoad = false;
+
+        vm.onRoadCheck = function(){
+            vm.onRoad = !vm.onRoad;
+        };
+
+        vm.offRoadCheck = function(){
+            vm.offRoad = !vm.offRoad;
+        };
 
         vm.showHistory = function () {
             //$log.log(vm.clickedMarker);

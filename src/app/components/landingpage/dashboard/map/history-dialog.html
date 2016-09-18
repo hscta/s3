@@ -23,9 +23,25 @@
         font-size: 10px;
         min-height: 20px;
     }
+
+    /*.md-dialog-container {*/
+        /*display: flex;*/
+        /*justify-content: center;*/
+        /*align-items: center;*/
+        /*position: absolute;*/
+        /*left: 0;*/
+        /*top: 0;*/
+        /*right: 0;*/
+        /*bottom: 0;*/
+        /*z-index: $z-index-dialog;*/
+    /*}*/
+
+    /*.md-dialog-container{height:100%;}*/
+    /*md-dialog{max-width:100%;}*/
+
 </style>
 
-<md-dialog aria-label="Location Tracker History">
+<md-dialog aria-label="Location Tracker History" ng-cloak flex="85">
     <md-toolbar>
         <div class="md-toolbar-tools md-accent">
             <h2>Location Tracker History</h2>
@@ -37,7 +53,7 @@
     </md-toolbar>
     <span class="error-msg" layout>{{errorMsg}}</span><br/>
 
-    <div layout="row" class="input-fields">
+    <div layout="row" class="input-fields" layout-align="space-around center">
         <md-input-container>
             <label>Vehicle No</label>
             <input type="text" ng-model="vehicleNo" readonly>

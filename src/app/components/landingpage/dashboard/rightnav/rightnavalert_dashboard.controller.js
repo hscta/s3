@@ -105,5 +105,22 @@
 
         //vm.initialize();
         vm.addListener();
+
+        vm.collapseAlertPanel = function(panel){
+            panel.collapse();
+        }
+
+        vm.navAlerts = [
+            {
+                category:'Geofence alert',
+                alarms:[{id:'1234'}, {odometer:'20'},{ignition:'On'}, {mobility:'moblized'}]
+            }, {
+                category:'Device Pulled out',
+                alarms:[{id:'4567'}, {odometer:'32'},{ignition:'off'}, {mobility:'moblized'}]
+            }, {
+                category:'City limit alert',
+                alarms:[{id:'8910'}, {odometer:'40'},{ignition:'On'}, {mobility:'moblized'}]
+            }
+        ]
     }
 })();

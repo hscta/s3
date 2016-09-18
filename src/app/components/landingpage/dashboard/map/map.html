@@ -26,20 +26,12 @@
     .icon-font{font-size:25px;}
 
     li:hover{
-        /*color: #fff !important;*/
-        /*text-shadow: 0 2px 0 #111;*/
-        /*-webkit-box-shadow: inset 0 1px 3px #464646;*/
-        /*-moz-box-shadow: inset 0 1px 3px #464646;*/
-        /*-o-box-shadow: inset 0 1px 3px #464646;*/
-        /*-ms-box-shadow: inset 0 1px 3px #464646;*/
-        /*box-shadow: inset 0 1px 3px #464646;*/
-        /*-webkit-transform: scale(1.09,1.09);*/
-        /*-moz-transform: scale(1.09,1.09);*/
-        /*-o-transform: scale(1.09,1.09);*/
-        /*transform: scale(1.09,1.09);*/
         box-shadow:1px 0px 6px 0px;
         cursor:pointer;
     }
+    /*.icar-checkbox{*/
+        /*transform:scale(0.8);*/
+    /*}*/
 </style>
 
 <!--<script type="text/ng-template" id="searchbox.tpl.html">-->
@@ -55,21 +47,23 @@
 <div>
     <!--layout="row" layout-align="center center"-->
     <div layout="row" flex>
-        <md-input-container class="container-margin">
+        <md-input-container class="container-margin" flex="30">
             <input type="text" placeholder="Apply filters..." size="50"
                    ng-model="vm.filterStr" ng-change="vm.runFilters()"/>
         </md-input-container>
+        <div layout="row"  layout-align="center center">
+            <md-checkbox class='icar-checkbox' ng-model="vm.offRoad"
+                         aria-label="on road" ng-change="">
+                On Road
+            </md-checkbox>
+            <md-checkbox class='icar-checkbox' ng-model="vm.offRoad" aria-label="off road" flex>
+                Off Road
+            </md-checkbox>
+        </div>
 
         <ul id="nav" layout="row" layout-align="end center" flex>
             <li layout-align="center center">
-                <md-checkbox ng-model="isChecked" aria-label="Finished?">
-                    On Road
-                </md-checkbox>
-            </li>
-            <li layout-align="center center">
-                <md-checkbox ng-model="isChecked" aria-label="Finished?">
-                    Off Road
-                </md-checkbox>
+
             </li>
             <li ng-click="vm.getFilteredData('')" layout-align="center center">
                 <md-icon class="icon-font" md-font-library="material-icons">visibility</md-icon>
