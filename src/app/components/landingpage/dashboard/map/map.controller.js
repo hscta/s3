@@ -262,6 +262,7 @@
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
+                escapeToClose:false,
                 locals: {
                     params: {
                         markerObj: vm.clickedMarker,

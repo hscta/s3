@@ -43,7 +43,7 @@ function browserSyncInit(baseDir, browser, isRemote) {
         server: server,
         browser: browser,
         notify: false,
-        codeSync: false,
+        codeSync: true,
         ghostMode: {
             clicks: false,
             forms: false,
@@ -56,6 +56,7 @@ function browserSyncInit(baseDir, browser, isRemote) {
         server: server,
         browser: browser,
         notify: true,
+        codeSync: true
       });
     }
 }

@@ -38,10 +38,8 @@
     <span class="error-msg" layout>{{errorMsg}}</span><br/>
 
     <div layout="row" class="input-fields">
-        <md-input-container>
-            <label>Vehicle No</label>
-            <input type="text" ng-model="vehicleNo" readonly>
-        </md-input-container>
+       <!--<input type="text" id="date-start">-->
+       <!--<input type="text" id="date-end">-->
 
 
         <md-input-container>
@@ -75,7 +73,6 @@
                         visible="trace.visible"
                         geodesic="trace.geodesic"
                         icons="trace.icons"
-                        <!--doRebuildAll="trace.doRebuildAll"-->
                 >
             </ui-gmap-google-map>
         </div>
@@ -84,12 +81,22 @@
 
 <script>
     $(document).ready(function () {
-//        $scope.calendarObj = $('#start_time').datetimepicker({
-//            mask: '9999/19/39 29:59'
-//        });
-//
-//        $('#end_time').datetimepicker({
-//            mask: '9999/19/39 29:59'
-//        });
+         $('#start_time').datetimepicker({
+            mask: '9999/19/39 29:59'
+        });
+
+        $('#end_time').datetimepicker({
+            mask: '9999/19/39 29:59'
+        });
     });
+
+
+//$('#date-start').bootstrapMaterialDatePicker({ format : 'dddd DD MMMM YYYY - HH:mm' });
+//$('#date-end').bootstrapMaterialDatePicker({ format : 'dddd DD MMMM YYYY - HH:mm' });
+
+//$('#date-end').bootstrapMaterialDatePicker({ weekStart : 0 });
+//$('#date-start').bootstrapMaterialDatePicker({ weekStart : 0 }).on('change', function(e, date)
+//{
+//    $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
+//});
 </script>
