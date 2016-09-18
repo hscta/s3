@@ -59,6 +59,10 @@
                    ng-model="vm.filterStr" ng-change="vm.runFilters()"/>
         </md-input-container>
         <ul id="nav" layout="row" layout-align="end center" flex>
+            <li ng-click="vm.getFilteredData('')" layout-align="center center">
+                <md-icon class="icon-font" md-font-library="material-icons">visibility</md-icon>
+                <md-tooltip>Show all</md-tooltip>
+            </li>
             <li ng-click="vm.getFilteredData('Running')" layout-align="center center">
                 <md-icon class="icon-font" md-font-library="material-icons">time_to_leave</md-icon>
                 <md-tooltip>Ignition On vehicles</md-tooltip>
