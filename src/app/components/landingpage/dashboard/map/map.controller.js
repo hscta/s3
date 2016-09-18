@@ -258,7 +258,8 @@
                 clickOutsideToClose: true,
                 locals: {
                     params: {
-                        markerObj: vm.clickedMarker
+                        markerObj: vm.clickedMarker,
+                        mainMarkers: vm.inMarkers
                     }
                 }
             });
@@ -310,6 +311,23 @@
         $scope.inMap.bounds = mapService.getBounds();
         $scope.mapControl = {};
         $scope.errorMsg = "";
+        $log.log($scope.params);
+
+        $scope.trace = {
+            models: [],
+            path: [],
+            stroke: {color: "blue", weight: 2, opacity: 1},
+            icons: [{ icon: {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                offset: '60%'
+            }}],
+            clickable: true,
+            fit: true,
+            static: true,
+            events: {},
+            control: {},
+            doRebuildAll: true
+        };
 
         $scope.vehicleNo = params.markerObj.title;
         $scope.mapOptions = {
@@ -341,6 +359,29 @@
             $log.log(date);
         };
 
+
+
+        $scope.initController = function() {
+            $log.log($scope.trace);
+            var blrlat = 12.9176383;
+            var blrlng = 77.6480335;
+            var mumlat = 19.19554947109134;
+            var mumlng = 72.83638193466376;
+            var chelat = 13.146503;
+            var chelng = 80.059998;
+            var hydlat = 17.464052;
+            var hydlng = 78.456785;
+
+            var blr = {id: 1, latitude: blrlat, longitude: blrlng};
+            var mumbai = {id: 2, latitude: mumlat, longitude: mumlng};
+            var chennai = {id: 3, latitude: chelat, longitude: chelng};
+            var hyd = {id: 4, latitude: hydlat, longitude: hydlng};
+
+            $scope.trace.path = [mumbai, blr, chennai, hyd];
+            $scope.trace.models = $scope.trace.path;
+        };
+
+        $scope.initController();
         $interval($scope.resizeMap, 500);
     }
 

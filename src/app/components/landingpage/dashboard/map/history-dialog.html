@@ -2,64 +2,91 @@
 
 <style>
 
-    md-toolbar{min-height:20px;}
-    .map-dialog{padding:0 !important}
-    .map-dialog-content{overflow:hidden;}
-    .input-fields{margin-top:-24px;}
-    .error-msg{color:#f00; font-size:10px;min-height:20px;}
+    md-toolbar {
+        min-height: 20px;
+    }
+
+    .map-dialog {
+        padding: 0 !important
+    }
+
+    .map-dialog-content {
+        overflow: hidden;
+    }
+
+    .input-fields {
+        margin-top: -24px;
+    }
+
+    .error-msg {
+        color: #f00;
+        font-size: 10px;
+        min-height: 20px;
+    }
 </style>
 
 <md-dialog aria-label="Mango (Fruit)">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>Location Tracker History</h2>
-                <span flex></span>
-                <md-button class="md-icon-button" ng-click="cancel()">
-                    <md-icon md-font-library="material-icons">close</md-icon>
-                </md-button>
-            </div>
-        </md-toolbar>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Location Tracker History</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-font-library="material-icons">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
     <span class="error-msg" layout>{{errorMsg}}</span><br/>
 
     <div layout="row" class="input-fields">
-            <md-input-container>
-                <label>Vehicle No</label>
-                <input type="text" ng-model="vehicleNo" readonly>
-            </md-input-container>
+        <md-input-container>
+            <label>Vehicle No</label>
+            <input type="text" ng-model="vehicleNo" readonly>
+        </md-input-container>
 
 
-            <md-input-container>
-                <label>Start Time</label>
-                <input type="text" id="start_time" ng-model="startTime">
-            </md-input-container>
+        <md-input-container>
+            <label>Start Time</label>
+            <input type="text" id="start_time" ng-model="startTime">
+        </md-input-container>
 
-            <md-input-container>
-                <label>End Time</label>
-                <input type="text" id="end_time" ng-model="EndTime">
-            </md-input-container>
+        <md-input-container>
+            <label>End Time</label>
+            <input type="text" id="end_time" ng-model="EndTime">
+        </md-input-container>
 
-            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+        <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+    </div>
+
+    <md-dialog-content class="map-dialog-content" layout-fill>
+        <div class="md-dialog-content map-dialog">
+            <ui-gmap-google-map center='inMap.center' zoom='inMap.zoom' draggable="true"
+                                options="mapOptions" bounds="inMap.bounds"
+                                control="mapControl">
+
+                <ui-gmap-polylines
+                        models="trace.models"
+                        path="trace.path"
+                        stroke="trace.stroke"
+                        clickable="trace.clickable"
+                        fit="trace.fit"
+                        events="trace.events"
+                        static="trace.static"
+                        control="trace.control"
+                        doRebuildAll="trace.doRebuildAll"
+                >
+            </ui-gmap-google-map>
         </div>
-
-        <md-dialog-content class="map-dialog-content" layout-fill>
-            <div class="md-dialog-content map-dialog">
-                <ui-gmap-google-map center='inMap.center' zoom='inMap.zoom' draggable="true"
-                                    options="mapOptions" bounds="inMap.bounds"
-                                    control="mapControl">
-
-                </ui-gmap-google-map>
-            </div>
-        </md-dialog-content>
+    </md-dialog-content>
 </md-dialog>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#start_time').datetimepicker({
-            mask:'9999/19/39 29:59'
+            mask: '9999/19/39 29:59'
         });
 
         $('#end_time').datetimepicker({
-            mask:'9999/19/39 29:59'
+            mask: '9999/19/39 29:59'
         });
     });
 </script>
