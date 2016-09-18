@@ -12,7 +12,7 @@
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
-                           leftNavAlertDashboardService) {
+                           rightNavAlertDashboardService) {
         $log.log('MapController');
         var vm = this;
         vm.inMarkers = [];
@@ -291,7 +291,7 @@
 
         vm.addListener = function () {
             mapService.addMsgListener(vm.updateMarker);
-            leftNavAlertDashboardService.addListener(vm.alertClick);
+            rightNavAlertDashboardService.addListener(vm.alertClick);
         };
 
 

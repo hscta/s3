@@ -20,9 +20,9 @@
         vm.showActions = showActions;
         //vm.title = $state.current.data.title;
         vm.showSimpleToast = showSimpleToast;
-        vm.toggleRightSidebar = toggleRightSidebar;
-        vm.toggleLeftnav = toggleLeftnav;
-        $rootScope.left_nav_toggle = true;
+            vm.toggleLeftnav = toggleLeftnav;
+        $rootScope.left_nav_toggle = false;
+        $rootScope.right_nav_toggle = true;
         vm.right_nav_toggle = true;
 
         navService
@@ -35,16 +35,15 @@
             loginService.logout();
         };
 
-        function toggleRightSidebar() {
+        vm.toggleRightSidebar = function (){
            // $mdSidenav('right').toggle();
-            vm.right_nav_toggle = !vm.right_nav_toggle;
-            $rootScope.$broadcast('toggleRightSidebar', {'right_nav_toggle': vm.right_nav_toggle});
-        }
+           //  vm.right_nav_toggle = !vm.right_nav_toggle;
+           //  $rootScope.$broadcast('toggleRightSidebar', {'right_nav_toggle': vm.right_nav_toggle});
+            $rootScope.right_nav_toggle = !$rootScope.right_nav_toggle;
+        };
 
         function toggleLeftnav() {
-            //$log.log("firing from header", $rootScope.left_nav_toggle)
             $rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
-         //   $rootScope.$broadcast('toggleLeftnav', {'left_nav_toggle': vm.left_nav_toggle});
         }
 
         function toggleItemsList() {

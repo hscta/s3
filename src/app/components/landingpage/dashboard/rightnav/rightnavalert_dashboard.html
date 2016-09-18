@@ -7,8 +7,8 @@
     .alert-md-content{height:590px;overflow:scroll-y;}
     .container-margin{margin-bottom: 0; padding:0; height:31px}
 </style>
-<md-sidenav  class="md-sidenav-left" md-component-id="left"
-             md-is-locked-open = "left_nav_toggle" layout="column"  flex>
+<md-sidenav  class="md-sidenav-right" md-component-id="right"
+             md-is-locked-open = "right_nav_toggle" layout="column"  flex>
     <!--The ROot Node-->
     <md-input-container class="container-margin">
         <label>Search alerts</label>
@@ -27,7 +27,6 @@
                 </div>
                 <md-button class="md-button md-accent" ng-click="vm.alertResolve(alert.id)">Resolve</md-button>
             </md-list-item>
-            <md-divider ></md-divider>
         </md-list>
     </md-content>
 

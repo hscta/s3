@@ -37,10 +37,6 @@
                       templateUrl: 'app/components/landingpage/dashboard/leftnavtree/leftnav_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
-                  'leftnavalert@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnavalert/leftnavalert_dashboard.html',
-                      controller: 'LeftNavDashboardController as vm'
-                  },
                   'lefttoolbar@home': {
                       templateUrl: 'app/components/landingpage/dashboard/lefttoolbar/lefttoolbar_dashboard.html',
                       controller: 'LeftToolbarDashboardController as vm'
@@ -49,14 +45,13 @@
                       templateUrl: 'app/components/landingpage/center/center.html',
                       controller: 'CenterController as vm'
                   },
-
                   'centermain@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map/map.html',
                       controller: 'MapController as vm'
                   },
                   'rightnav@home': {
-                      templateUrl: 'app/components/landingpage/rightnav/rightnav_notifications.html',
-                      controller: 'RightnavController as vm'
+                      templateUrl: 'app/components/landingpage/dashboard/rightnav/rightnavalert_dashboard.html',
+                      controller: 'RightNavDashboardController as vm'
                   }
                   // 'righttoolbar@home': {
                   //     templateUrl: 'app/components/landingpage/dashboard/righttoolbar_dashboard.html',
@@ -70,10 +65,6 @@
               views: {
                   'leftnavtree@home': {
                       templateUrl: 'app/components/landingpage/dashboard/leftnavtree/leftnav_dashboard.html',
-                      controller: 'LeftNavDashboardController as vm'
-                  },
-                  'leftnavalert@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnavalert/leftnavalert_dashboard.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {

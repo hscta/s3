@@ -127,7 +127,7 @@
             $log.log('expand');
             $scope.$broadcast('angular-ui-tree:collapse-all');
 
-        }
+        };
 
         vm.addAllListeners = function () {
 

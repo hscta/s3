@@ -5,9 +5,9 @@
 (function () {
     angular
         .module('uiplatform')
-        .controller('LeftNavDashboardController', LeftNavDashboardController);
+        .controller('RightNavDashboardController', RightNavDashboardController);
 
-    function LeftNavDashboardController($log, leftNavAlertDashboardService, mapService) {
+    function RightNavDashboardController($log, rightNavAlertDashboardService, mapService) {
         var vm = this;
         vm.alertDetails = [];
         vm.inMarkers = [];
@@ -88,7 +88,7 @@
 
 
         vm.alertClick = function (alertid) {
-            leftNavAlertDashboardService.alertClick(alertid);
+            rightNavAlertDashboardService.alertClick(alertid);
         };
 
 
@@ -98,7 +98,7 @@
 
 
         vm.initialize = function () {
-            leftNavAlertDashboardService.getDashboardAlerts({})
+            rightNavAlertDashboardService.getDashboardAlerts({})
                 .then(vm.getDashboardAlerts, vm.getDashboardAlertsFailure);
         };
 

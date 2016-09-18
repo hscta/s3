@@ -5,8 +5,8 @@
 (function () {
     angular
         .module('uiplatform')
-        .service('leftNavAlertDashboardService', function ($log, intellicarAPI, $q) {
-            $log.log("leftNavDashboardAlertService");
+        .service('rightNavAlertDashboardService', function ($log, intellicarAPI, $q) {
+            $log.log("rightNavDashboardAlertService");
 
             var vm = this;
             vm.msgListeners = [];
@@ -18,7 +18,7 @@
 
 
             vm.handleFailure = function (resp) {
-                $log.log("leftNavDashboardService handleFailure ");
+                $log.log("rightNavDashboardService handleFailure ");
                 $log.log(resp);
                 return $q.reject(resp);
             };
