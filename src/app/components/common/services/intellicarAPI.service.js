@@ -12,9 +12,10 @@
                                            authService, requestService,
                                            stateService, treeDataService,
                                            userService, groupService,
-                                           mqttService,
-                                           anchorSmoothScrollService,
-                                           schemaService
+                                           mqttService, schemaService,
+                                           reportService,
+                                           anchorSmoothScrollService
+
                                            ) {
             var vm = this;
             $log.log("intellicarAPI");
@@ -29,7 +30,8 @@
                 anchorScrollService : anchorSmoothScrollService,
                 appConstants : appConstants,
                 mqttService : mqttService,
-                schemaService : schemaService
+                schemaService : schemaService,
+                reportService : reportService
             }
         });
 })();

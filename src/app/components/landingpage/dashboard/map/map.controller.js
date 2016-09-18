@@ -307,7 +307,8 @@
     }
 
 
-    function HistoryDialogController($scope, $log, $mdDialog, mapService, $interval, params) {
+    function HistoryDialogController($scope, $log, $mdDialog, mapService, $interval,
+                                     uiGmapGoogleMapApi, params, intellicarAPI) {
         //var vm = this;
         //$log.log($scope);
 
@@ -319,78 +320,104 @@
         $scope.errorMsg = "";
         $log.log($scope.params);
 
-        $scope.trace = {
-            models: [],
-            path: [],
-            stroke: {color: "blue", weight: 2, opacity: 1},
-            icons: [{ icon: {
-                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                offset: '60%'
-            }}],
-            clickable: true,
-            fit: true,
-            static: true,
-            events: {},
-            control: {},
-            doRebuildAll: true
-        };
+        uiGmapGoogleMapApi.then(function (maps) {
+            //$log.log("uiGmapGoogleMapApi loaded");
+            $scope.trace = {
+                models: [],
+                path: [],
+                stroke: {color: "blue", weight: 2, opacity: 1},
+                icons: [{
+                    icon: {
+                        path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                    },
+                    offset: '25px',
+                    repeat: '25px'
+                }],
+                clickable: true,
+                visible: true,
+                geodesic: true,
+                fit: true,
+                static: true,
+                events: {},
+                control: {},
+                // doRebuildAll: true
+            };
 
-        $scope.vehicleNo = params.markerObj.title;
-        $scope.mapOptions = {
-            //scrollwheel: false
-        };
+            $scope.vehicleNo = params.markerObj.title;
+            $scope.mapOptions = {
+                //scrollwheel: false
+            };
 
-        $scope.cancel = function () {
-            $mdDialog.cancel();
-        };
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
 
-        $scope.resizeMap = function () {
-            google.maps.event.trigger($scope.mapControl.getGMap(), 'resize');
-            return true;
-        };
+            $scope.resizeMap = function () {
+                google.maps.event.trigger($scope.mapControl.getGMap(), 'resize');
+                return true;
+            };
 
-        $scope.startTime;
-        $scope.endTime;
+            $scope.startTime;
+            $scope.endTime;
 
-        $scope.getHistory = function(){
-            $log.log($scope.startTime);
+            $scope.getHistory = function () {
+                $log.log($scope.startTime);
 
-            if (!($scope.startTime || $scope.endTime) ) {
-                $log.log('errror');
-                $scope.errorMsg = "Enter Start Time and End Time.";
-                return;
-            }
-            $scope.errorMsg='';
-            var date = new Date($scope.startTime);
-            $log.log(date);
-        };
+                if (!$scope.startTime || !$scope.endTime) {
+                    $log.log('errror');
+                    $scope.errorMsg = "Enter Start Time and End Time.";
+                    return;
+                }
+
+                // var starttime = new Date($scope.startTime).getTime();
+                // var endtime = new Date($scope.endTime).getTime();
+                //
+                // var body = {
+                //     vehiclepath: $scope.vehicleNo,
+                //     starttime: starttime,
+                //     endtime: endtime
+                // };
+                //
+                // intellicarAPI.reportService.getDeviceLocation(body)
+                //     .then($scope.drawTrace, $scope.handleGetLocationFailure);
+            };
 
 
+            $scope.drawTrace = function() {
+                $log.log("drawTrace");
+            };
 
-        $scope.initController = function() {
-            $log.log($scope.trace);
-            var blrlat = 12.9176383;
-            var blrlng = 77.6480335;
-            var mumlat = 19.19554947109134;
-            var mumlng = 72.83638193466376;
-            var chelat = 13.146503;
-            var chelng = 80.059998;
-            var hydlat = 17.464052;
-            var hydlng = 78.456785;
 
-            var blr = {id: 1, latitude: blrlat, longitude: blrlng};
-            var mumbai = {id: 2, latitude: mumlat, longitude: mumlng};
-            var chennai = {id: 3, latitude: chelat, longitude: chelng};
-            var hyd = {id: 4, latitude: hydlat, longitude: hydlng};
+            $scope.handleGetLocationFailure = function() {
+                $log.log("handleGetLocationFailure");
+            };
 
-            $scope.trace.path = [mumbai, blr, chennai, hyd];
-            $scope.trace.models = $scope.trace.path;
-        };
 
-        $scope.initController();
-        $interval($scope.resizeMap, 500);
+            $scope.initController = function () {
+                $log.log($scope.trace);
+                var blrlat = 12.9176383;
+                var blrlng = 77.6480335;
+                var mumlat = 19.19554947109134;
+                var mumlng = 72.83638193466376;
+                var chelat = 13.146503;
+                var chelng = 80.059998;
+                var hydlat = 17.464052;
+                var hydlng = 78.456785;
 
-    };
+                var blr = {id: 1, latitude: blrlat, longitude: blrlng};
+                var mumbai = {id: 2, latitude: mumlat, longitude: mumlng};
+                var chennai = {id: 3, latitude: chelat, longitude: chelng};
+                var hyd = {id: 4, latitude: hydlat, longitude: hydlng};
+
+                $scope.trace.path = [mumbai, blr, chennai, hyd];
+                $scope.trace.models = $scope.trace.path;
+            };
+
+            $scope.initController();
+            $interval($scope.resizeMap, 500);
+        });
+
+    }
 
 
     function ImmobalizeController($scope, $log, $mdDialog) {

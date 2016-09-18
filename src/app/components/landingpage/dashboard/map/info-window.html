@@ -21,12 +21,12 @@
             </tr>
 
             <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Ignition Status</strong></td>
-                <td md-cell>{{parameter.clickedMarker.ignitionstatus}}</td>
+                <td md-cell><strong>Ignition</strong></td>
+                <td md-cell>{{parameter.clickedMarker.ignitionstatus ? 'On' : 'Off'}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
-                <td md-cell><strong>Mobility Status</strong></td>
-                <td md-cell>{{parameter.clickedMarker.mobilistatusStr}}</td>
+                <td md-cell><strong>Mobility</strong></td>
+                <td md-cell>{{parameter.clickedMarker.mobilistatusFilter}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
                 <td md-cell><strong>Car Battery</strong></td>

@@ -124,9 +124,9 @@
                 vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
                 vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
                 vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
-                vehicleData.ignitionstatus = vehicleData.ignitionstatus ? "On" : "Off";
-                vehicleData.ignitionONOFF = vehicleData.ignitionstatus ? "Running" : "Stopped";
-                vehicleData.mobilistatusStr = vehicleData.mobilistatus ? "Active" : "Immobilized";
+                vehicleData.ignitionstatusStr = vehicleData.ignitionstatus ? "On" : "Off";
+                vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
+                vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
                 vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
                 return vehicleData;
             };
@@ -136,6 +136,7 @@
                 if(msgList.length == 2 && msgList[0] != null && msgList[1] != null
                 && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
+                    $log.log(vehicleData);
                     for (var eachidx in vm.msgListeners) {
                         vm.msgListeners[eachidx](vehicleData);
                     }
