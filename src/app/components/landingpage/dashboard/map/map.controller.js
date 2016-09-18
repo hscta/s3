@@ -247,7 +247,7 @@
         };
 
 
-        vm.getFilteredData = function(filterStr){
+        vm.getFilteredData = function (filterStr) {
             $log.log('getFilterdDAta');
             vm.filterStr = filterStr;
             vm.runFilters();
@@ -272,7 +272,7 @@
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
-                escapeToClose:false,
+                escapeToClose: false,
                 locals: {
                     params: {
                         markerObj: vm.clickedMarker,
@@ -329,12 +329,12 @@
         $scope.inMap.bounds = mapService.getBounds();
         $scope.mapControl = {};
         $scope.errorMsg = "";
-        $log.log($scope.params);
+        $log.log(params);
 
         uiGmapGoogleMapApi.then(function (maps) {
             //$log.log("uiGmapGoogleMapApi loaded");
             $scope.trace = {
-                models: [],
+                // models: [],
                 path: [],
                 stroke: {color: "blue", weight: 2, opacity: 1},
                 icons: [{
@@ -350,8 +350,8 @@
                 fit: true,
                 static: true,
                 events: {},
-                control: {},
-                // doRebuildAll: true
+                // control: {},
+                // doRebuildAll: false
             };
 
             $scope.vehicleNo = params.markerObj.title;
@@ -368,44 +368,104 @@
                 return true;
             };
 
-            $scope.startTime;
-            $scope.endTime;
+            //var dateFormat = 'YYYY-MM-DD HH:mm';
+            var dateFormat = 'YYYY/MM/DD HH:mm';
+            $scope.startTime = moment().subtract(24, 'hour').format(dateFormat);
+            $scope.endTime = moment().format(dateFormat);
+
+            var MILLISEC = 1000;
+            var hrs6 = 21600 * MILLISEC;
+            var hrs3 = 10800 * MILLISEC;
+            var hrs8 = 28800 * MILLISEC;
+            var hrs12 = 43200 * MILLISEC;
+            var hrs24 = 86400 * MILLISEC;
+            var hrs48 = hrs24 * 2;
+            var timeLimit = hrs48;
 
             $scope.getHistory = function () {
-                $log.log($scope.startTime);
+                if ($scope.startTime && $scope.endTime) {
+                    if ($scope.startTime.length && $scope.endTime.length) {
 
-                if (!$scope.startTime || !$scope.endTime) {
-                    $log.log('errror');
-                    $scope.errorMsg = "Enter Start Time and End Time.";
+                        // $log.log($scope.startTime);
+                        // $log.log($scope.endTime);
+
+                        // var starttime = moment($scope.startTime).format(dateFormat);
+                        // var endtime = moment($scope.endTime).format(dateFormat);
+
+                        var starttime = new Date($scope.startTime).getTime();
+                        var endtime = new Date($scope.endTime).getTime();
+
+                        if(endtime - starttime > timeLimit)
+                            endtime = starttime + timeLimit;
+
+                        // $log.log(starttime);
+                        // $log.log(endtime);
+
+                        if (endtime <= starttime) {
+                            $scope.errorMsg = "End time should be >= Start time";
+                            return;
+                        }
+
+                        var body = {
+                            vehicle: {
+                                vehiclepath: $scope.vehicleNo.toString(),
+                                starttime: starttime,
+                                endtime: endtime
+                            }
+                        };
+
+                        intellicarAPI.reportService.getDeviceLocation(body)
+                            .then($scope.drawTrace, $scope.handleGetLocationFailure);
+
+                    } else {
+                        $scope.errorMsg = "Enter valid start and end time";
+                        return;
+                    }
+                } else {
+                    $scope.errorMsg = "Enter valid start and end time.";
                     return;
                 }
-
-                // var starttime = new Date($scope.startTime).getTime();
-                // var endtime = new Date($scope.endTime).getTime();
-                //
-                // var body = {
-                //     vehiclepath: $scope.vehicleNo,
-                //     starttime: starttime,
-                //     endtime: endtime
-                // };
-                //
-                // intellicarAPI.reportService.getDeviceLocation(body)
-                //     .then($scope.drawTrace, $scope.handleGetLocationFailure);
             };
 
 
-            $scope.drawTrace = function() {
+            $scope.drawTrace = function (resp) {
                 $log.log("drawTrace");
+                $log.log(resp);
+                $scope.trace.path = [];
+                for (var idx in resp.data.data) {
+                    var position = resp.data.data[idx];
+                    if(position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
+                        $log.log("Not a number");
+                        $log.log(position);
+                        continue;
+                    }
+                    position.id = $scope.vehicleNo;
+                    position.gpstime = parseInt(position.gpstime);
+                    $scope.trace.path.push(position);
+                }
+
+                function compare(a, b) {
+                    return a.gpstime - b.gpstime;
+                }
+                $scope.trace.path.sort(compare);
+
+                if($scope.trace.path.length) {
+                    var midPoint = $scope.trace.path.length / 2;
+                    $scope.inMap.center = position;
+                }
+
+                // $scope.trace.models = $scope.trace.path;
             };
 
 
-            $scope.handleGetLocationFailure = function() {
+            $scope.handleGetLocationFailure = function (resp) {
                 $log.log("handleGetLocationFailure");
+                $log.log(resp);
             };
 
 
             $scope.initController = function () {
-                $log.log($scope.trace);
+                //$log.log($scope.trace);
                 var blrlat = 12.9176383;
                 var blrlng = 77.6480335;
                 var mumlat = 19.19554947109134;
@@ -421,10 +481,10 @@
                 var hyd = {id: 4, latitude: hydlat, longitude: hydlng};
 
                 $scope.trace.path = [mumbai, blr, chennai, hyd];
-                $scope.trace.models = $scope.trace.path;
+                // $scope.trace.models = $scope.trace.path;
             };
 
-            $scope.initController();
+            //$scope.initController();
             $interval($scope.resizeMap, 500);
         });
 

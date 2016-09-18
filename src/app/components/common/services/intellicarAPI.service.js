@@ -8,7 +8,7 @@
 
     angular.module('uiplatform')
         .service('intellicarAPI', function($rootScope, $log, $q,
-                                           appConstants,
+                                           appConstants, helperService,
                                            authService, requestService,
                                            stateService, treeDataService,
                                            userService, groupService,
@@ -21,6 +21,7 @@
             $log.log("intellicarAPI");
 
             return {
+                helperService: helperService,
                 authService: authService,
                 requestService: requestService,
                 stateService: stateService,

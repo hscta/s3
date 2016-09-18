@@ -96,11 +96,11 @@
 
 
         vm.subscribe = function (path) {
-            $log.log("subscribe: " + path);
+            // $log.log("subscribe: " + path);
             var msg = {};
             msg.data = [];
             msg.data.push(['gps', [{path: path}]]);
-            $log.log(msg);
+            //$log.log(msg);
             vm.socket.emit('subscribe', msg);
         };
 
@@ -110,18 +110,18 @@
             var msg = {};
             msg.data = [];
             msg.data.push(['gps', [{path: path}]]);
-            $log.log(msg);
+            //$log.log(msg);
             vm.socket.emit('unsubscribe', msg);
         };
 
 
         vm.subscribeAsset = function (asset) {
-            vm.subscribe(helperService.getAssetPath(asset.info));
+            vm.subscribe(helperService.getAssetPath(asset));
         };
 
 
         vm.unsubscribeAsset = function (asset) {
-            vm.unsubscribe(helperService.getAssetPath(asset.info));
+            vm.unsubscribe(helperService.getAssetPath(asset));
         };
 
 

@@ -24,22 +24,39 @@
         vm.tree_search_pattern = '';
         vm.search_results;
 
-        vm.getDashboardTree = function (data) {
-            //$log.log("getDashboardTree");
+        vm.handleDashboardTree = function (data) {
+            //$log.log("handleDashboardTree");
             //$log.log(data);
             vm.tree_data = data;
             //$log.log(vm.tree_data);
         };
 
-        vm.getDashboardTreeFailure = function (data) {
-            $log.log("getDashboardTreeFailure");
+        vm.handleFailure = function (data) {
+            $log.log("handleFailure");
             $log.log(data);
         };
 
 
         vm.initialize = function () {
-            leftNavDashboardService.getDashboardTree({})
-                .then(vm.getDashboardTree, vm.getDashboardTreeFailure);
+            // leftNavDashboardService.getDashboardTree({})
+            //     .then(vm.handleDashboardTree, vm.handleFailure);
+
+            vm.getMyVehicles();
+        };
+
+
+        vm.handleMyVehicles = function(resp) {
+            $log.log(resp);
+            //subscribe all assets
+            for(var idx in resp) {
+                vm.subscribe(resp[idx], true);
+            }
+        };
+
+
+        vm.getMyVehicles = function() {
+            leftNavDashboardService.getMyVehicles({})
+                .then(vm.handleMyVehicles, vm.handleFailure);
         };
 
 
@@ -60,7 +77,7 @@
                 vm.propagateCheckFromParent(item.items, item.checkStatus);
             } else {
                 //mqtt subscription for realtime data
-                vm.subscribe(item);
+                vm.subscribeCheckStatus(item);
             }
 
             vm.verifyAllParentsCheckStatus(vm.tree_data);
@@ -72,26 +89,30 @@
                 var item = items[i];
                 item.checkStatus = status;
 
-
-                //vm.subscribe(item);
-                //$log.log("my item");
-                //$log.log(item);
-
                 if (item.items.length) {
                     vm.propagateCheckFromParent(item.items, status);
                 } else {
                     //mqtt subscription for realtime data
-                    vm.subscribe(item);
+                    vm.subscribeCheckStatus(item);
                 }
             }
         };
 
 
-        vm.subscribe = function(item) {
+        vm.subscribeCheckStatus = function(item) {
             if (item.checkStatus === "checked") {
-                intellicarAPI.mqttService.subscribeAsset(item);
+                intellicarAPI.mqttService.subscribeAsset(item.info);
             } else {
-                intellicarAPI.mqttService.unsubscribeAsset(item);
+                intellicarAPI.mqttService.unsubscribeAsset(item.info);
+            }
+        };
+
+
+        vm.subscribe = function(asset, flag) {
+            if(flag) {
+                intellicarAPI.mqttService.subscribeAsset(asset);
+            } else {
+                intellicarAPI.mqttService.unsubscribeAsset(asset);
             }
         };
 

@@ -29,6 +29,12 @@
                 return intellicarAPI.treeDataService.getDashboardTree(body);
             };
 
+
+            vm.getMyVehicles = function(body) {
+                return intellicarAPI.userService.getMyVehiclesMap(body);
+            };
+
+
             vm.addListener = function(key, listener) {
                 vm.listeners[key] = listener;
             };

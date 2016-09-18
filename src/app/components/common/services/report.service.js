@@ -16,7 +16,7 @@
         var vm = this;
 
         vm.getDeviceLocation = function(body) {
-            return requestService.firePost('/report/rtgps', body);
+            return requestService.firePost('/reports/rtgps/trackhistory', body);
         }
     }
 
