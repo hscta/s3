@@ -11,6 +11,7 @@
         var vm = this;
         vm.alertDetails = [];
         vm.inMarkers = [];
+        vm.searchAlertStr = '';
         vm.getDashboardAlerts = function (data) {
             $log.log(data);
             vm.formatAlertData(data);
