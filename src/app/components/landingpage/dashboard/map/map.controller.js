@@ -389,7 +389,8 @@
 
         $scope.initController();
         $interval($scope.resizeMap, 500);
-    }
+
+    };
 
 
     function ImmobalizeController($scope, $log, $mdDialog) {
