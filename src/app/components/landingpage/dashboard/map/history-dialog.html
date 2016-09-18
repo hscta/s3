@@ -38,9 +38,10 @@
     <span class="error-msg" layout>{{errorMsg}}</span><br/>
 
     <div layout="row" class="input-fields">
-       <!--<input type="text" id="date-start">-->
-       <!--<input type="text" id="date-end">-->
-
+        <md-input-container>
+            <label>Vehicle No</label>
+            <input type="text" ng-model="vehicleNo" readonly>
+        </md-input-container>
 
         <md-input-container>
             <label>Start Time</label>

@@ -59,7 +59,18 @@
             <input type="text" placeholder="Apply filters..." size="50"
                    ng-model="vm.filterStr" ng-change="vm.runFilters()"/>
         </md-input-container>
+
         <ul id="nav" layout="row" layout-align="end center" flex>
+            <li layout-align="center center">
+                <md-checkbox ng-model="isChecked" aria-label="Finished?">
+                    On Road
+                </md-checkbox>
+            </li>
+            <li layout-align="center center">
+                <md-checkbox ng-model="isChecked" aria-label="Finished?">
+                    Off Road
+                </md-checkbox>
+            </li>
             <li ng-click="vm.getFilteredData('')" layout-align="center center">
                 <md-icon class="icon-font" md-font-library="material-icons">visibility</md-icon>
                 <md-tooltip>Show all</md-tooltip>
