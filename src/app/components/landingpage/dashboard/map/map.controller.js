@@ -309,6 +309,7 @@
         $scope.inMap.center = mapService.getCenter();
         $scope.inMap.bounds = mapService.getBounds();
         $scope.mapControl = {};
+        $scope.errorMsg = "";
 
         $scope.vehicleNo = params.markerObj.title;
         $scope.mapOptions = {
@@ -322,6 +323,22 @@
         $scope.resizeMap = function () {
             google.maps.event.trigger($scope.mapControl.getGMap(), 'resize');
             return true;
+        };
+
+        $scope.startTime;
+        $scope.endTime;
+
+        $scope.getHistory = function(){
+            $log.log($scope.startTime);
+
+            if (!$scope.startTime || !$scope.endTime ) {
+                $log.log('errror');
+                $scope.errorMsg = "Enter Start Time and End Time.";
+                return;
+            }
+
+            var date = new Date($scope.startTime);
+            $log.log(date);
         };
 
         $interval($scope.resizeMap, 500);
