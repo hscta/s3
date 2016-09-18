@@ -16,23 +16,66 @@
     .map-area{padding:0;}
 
     .container-margin{margin-bottom: 0; padding:0; height:31px}
+    ul{
+        margin:0;
+    }
+    ul li{
+        width:100%; height:100%; list-style:none;
+    }
+    li{  line-height:2.5;padding:0 15px 0 15px; text-align:center;}
+    .icon-font{font-size:25px;}
+
+    li:hover{
+        /*color: #fff !important;*/
+        /*text-shadow: 0 2px 0 #111;*/
+        /*-webkit-box-shadow: inset 0 1px 3px #464646;*/
+        /*-moz-box-shadow: inset 0 1px 3px #464646;*/
+        /*-o-box-shadow: inset 0 1px 3px #464646;*/
+        /*-ms-box-shadow: inset 0 1px 3px #464646;*/
+        /*box-shadow: inset 0 1px 3px #464646;*/
+        /*-webkit-transform: scale(1.09,1.09);*/
+        /*-moz-transform: scale(1.09,1.09);*/
+        /*-o-transform: scale(1.09,1.09);*/
+        /*transform: scale(1.09,1.09);*/
+        box-shadow:1px 0px 6px 0px;
+        cursor:pointer;
+    }
 </style>
 
 <!--<script type="text/ng-template" id="searchbox.tpl.html">-->
-    <!--<input id="pac-input" type="text" placeholder="Google Search..." mg-model="vm.pacInput">-->
+<!--<input id="pac-input" type="text" placeholder="Google Search..." mg-model="vm.pacInput">-->
 <!--</script>-->
 
 
 <!--<script type="text/ng-template" id="control.tpl.html">-->
-    <!--<button class="btn btn-sm btn-primary" ng-class="{'btn-warning': danger}" ng-click="controlClick()">{{controlText}}</button>-->
+<!--<button class="btn btn-sm btn-primary" ng-class="{'btn-warning': danger}" ng-click="controlClick()">{{controlText}}</button>-->
 <!--</script>-->
 
 <div>
     <!--layout="row" layout-align="center center"-->
-    <div>
+    <div layout="row" flex>
         <md-input-container class="container-margin">
-        <input type="text" placeholder="Apply filters..." size="50" ng-model="vm.filterStr" ng-change="vm.runFilters()"/>
+            <input type="text" placeholder="Apply filters..." size="50"
+                   ng-model="vm.filterStr" ng-change="vm.runFilters()"/>
         </md-input-container>
+        <ul id="nav" layout="row" layout-align="end center" flex>
+            <li ng-click="vm.getFilteredData('Running')" layout-align="center center">
+                <md-icon class="icon-font" md-font-library="material-icons">time_to_leave</md-icon>
+                <md-tooltip>Ignition On vehicles</md-tooltip>
+            </li>
+            <li ng-click="vm.getFilteredData('Stopped')">
+                <md-icon class="icon-font" md-font-library="material-icons">radio_button_checked</md-icon>
+                <md-tooltip>Ignition Off vehicles</md-tooltip>
+            </li>
+            <li ng-click="vm.getFilteredData('Active')">
+                <md-icon class="icon-font" md-font-library="material-icons">lock_open</md-icon>
+                <md-tooltip>Active vehicles</md-tooltip>
+            </li>
+            <li ng-click="vm.getFilteredData('Immobilized')">
+                <md-icon class="icon-font" md-font-library="material-icons">lock</md-icon>
+                <md-tooltip>Immoblized vehicles</md-tooltip>
+            </li>
+        </ul>
     </div>
 
     <div id="mapCanvas">
@@ -55,9 +98,9 @@
             </ui-gmap-window>
 
             <!--<ui-gmap-map-control>-->
-                <!--<div>-->
-                    <!--&lt;!&ndash;<button class="btn btn-sm btn-primary" ng-class="{'btn-warning': danger}" ng-click="vm.controlClick()">{{controlText}}</button>&ndash;&gt;-->
-                <!--</div>-->
+            <!--<div>-->
+            <!--&lt;!&ndash;<button class="btn btn-sm btn-primary" ng-class="{'btn-warning': danger}" ng-click="vm.controlClick()">{{controlText}}</button>&ndash;&gt;-->
+            <!--</div>-->
             <!--</ui-gmap-map-control>-->
 
         </ui-gmap-google-map>

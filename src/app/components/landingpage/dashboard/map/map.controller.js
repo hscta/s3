@@ -246,6 +246,12 @@
             }
         };
 
+
+        vm.getFilteredData = function(filterStr){
+            $log.log('getFilterdDAta');
+            vm.filterStr = filterStr;
+            vm.runFilters();
+        };
         //$interval(vm.applyMapSearch, 2000);
 
 
@@ -349,12 +355,12 @@
         $scope.getHistory = function(){
             $log.log($scope.startTime);
 
-            if (!$scope.startTime || !$scope.endTime ) {
+            if (!($scope.startTime || $scope.endTime) ) {
                 $log.log('errror');
                 $scope.errorMsg = "Enter Start Time and End Time.";
                 return;
             }
-
+            $scope.errorMsg='';
             var date = new Date($scope.startTime);
             $log.log(date);
         };
