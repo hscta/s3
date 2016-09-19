@@ -538,16 +538,39 @@
                     // setTimeout($scope.fitBounds, 1000);
                 }
 
-
-                var idx = 0;
-                $interval(function(){
-                    $log.log($scope.trace.path[idx]);
-                    $scope.historyMarker = $scope.trace.path[idx];
-                    idx ++;
-                    if (!idx) idx = 0;
-                },100);
+               // $scope.playAnim();
             };
 
+            $scope.animationCount = 0;
+
+            $scope.playAnim = function(){
+                $log.log('animation');
+                $log.log($scope.trace.path);
+                if($scope.trace.path.length)
+                    $scope.animateMarker = $interval(function(){
+                        //$log.log($scope.trace.path[$scope.animationCount]);
+                        $scope.historyMarker = $scope.trace.path[$scope.animationCount];
+                        $scope.animationCount ++;
+                        if (!$scope.animationCount) {
+                            $scope.animationCount = 0;
+                            $log.log('complete')
+                        }
+                    },100);
+            };
+
+            $scope.stopInterval = function () {
+                $interval.cancel($scope.animateMarker);
+                $scope.animationCount=0;
+            };
+
+            $scope.pauseInterval = function () {
+                    $interval.cancel($scope.animateMarker);
+                    $scope.animateMarker = undefined;
+            };
+
+            $scope.$on('$destroy', function() {
+                $scope.stopInterval();
+            });
 
             $scope.fitBounds = function() {
                 $scope.trace.fit = true;
@@ -557,6 +580,8 @@
                 $log.log("handleGetLocationFailure");
                 $log.log(resp);
             };
+
+            // $scope.playAnim();
 
             $scope.initController = function () {
                 //$log.log($scope.trace);
@@ -599,16 +624,26 @@
             $mdDialog.cancel();
         }
     }
-     function InnerMapController($scope, $log, $mdDialog) {
-         var vm=this;
+    function InnerMapController($scope, $log, $mdDialog) {
+        var vm=this;
 
-         $scope.traceRoute = function(){
-            $log.log('trace route');
-         };
+        $scope.play = true;
+        $scope.traceRoute = function(){
+            //$log.log('trace route');
 
+            if ( $scope.play){
+                $scope.playAnim();
+                $scope.play = false;
+            }else{
+                $scope.pauseInterval();
+                $scope.play = true;
+            }
+        };
+
+        $scope.stopRouteAnim=function(){
+            $scope.stopInterval();
+            $scope.play=true;
+        };
     }
-
-
-
 })();
 
