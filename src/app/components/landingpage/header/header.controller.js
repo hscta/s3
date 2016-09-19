@@ -43,7 +43,7 @@
         };
 
         function toggleLeftnav() {
-            $rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
+            //$rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
         }
 
         function toggleItemsList() {

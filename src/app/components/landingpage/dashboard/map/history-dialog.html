@@ -78,25 +78,37 @@
                                 options="mapOptions" bounds="inMap.bounds"
                                 control="mapControl">
 
+                <ui-gmap-map-control
+                    position="TOP_RIGHT"
+                >
+                    <div ng-controller="InnerMapController">
+                        <md-button class="md-fab md-primary md-mini" ng-click="traceRoute()">
+                            <md-icon class="icon-font" md-font-library="material-icons">play_arrow</md-icon>
+                            <!--<md-icon class="icon-font" md-font-library="material-icons">pause</md-icon>-->
+                        </md-button>
+                    </div>
+                </ui-gmap-map-control>
+
+
                 <ui-gmap-marker
-                        idkey="'self'"
-                        coords="historyMarker"
-                        click="historyMarker.click"
-                        options="historyMarker.options"
-                        events="historyMarker.events"
-                        control="historyMarker.control">
+                    idkey="'self'"
+                    coords="historyMarker"
+                    click="historyMarker.click"
+                    options="historyMarker.options"
+                    events="historyMarker.events"
+                    control="historyMarker.control">
                 </ui-gmap-marker>
 
                 <ui-gmap-polyline
-                        path="trace.path"
-                        stroke="trace.stroke"
-                        clickable="trace.clickable"
-                        geodesic="trace.geodesic"
-                        visible="trace.visible"
-                        fit="trace.fit"
-                        static="trace.static"
-                        events="trace.events"
-                        icons="trace.icons">
+                    path="trace.path"
+                    stroke="trace.stroke"
+                    clickable="trace.clickable"
+                    geodesic="trace.geodesic"
+                    visible="trace.visible"
+                    fit="trace.fit"
+                    static="trace.static"
+                    events="trace.events"
+                    icons="trace.icons">
                 </ui-gmap-polyline>
 
             </ui-gmap-google-map>
