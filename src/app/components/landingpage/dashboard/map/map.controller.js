@@ -8,7 +8,8 @@
         .module('uiplatform')
         .controller('MapController', MapController)
         .controller('HistoryDialogController', HistoryDialogController)
-        .controller('ImmobalizeController', ImmobalizeController);
+        .controller('ImmobalizeController', ImmobalizeController)
+        .controller('InnerMapController', InnerMapController)
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
@@ -507,10 +508,10 @@
             };
 
 
+            var idx = 0;
             $scope.drawTrace = function (resp) {
-                //$log.log("drawTrace");
-                //$log.log(resp);
                 $scope.trace.path = [];
+
                 for (var idx in resp.data.data) {
                     var position = resp.data.data[idx];
                     if(position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
@@ -536,6 +537,15 @@
                     // $scope.trace.fit = false;
                     // setTimeout($scope.fitBounds, 1000);
                 }
+
+
+                var idx = 0;
+                $interval(function(){
+                    $log.log($scope.trace.path[idx]);
+                    $scope.historyMarker = $scope.trace.path[idx];
+                    idx ++;
+                    if (!idx) idx = 0;
+                },100);
             };
 
 
@@ -547,7 +557,6 @@
                 $log.log("handleGetLocationFailure");
                 $log.log(resp);
             };
-
 
             $scope.initController = function () {
                 //$log.log($scope.trace);
@@ -590,6 +599,16 @@
             $mdDialog.cancel();
         }
     }
+     function InnerMapController($scope, $log, $mdDialog) {
+         var vm=this;
+
+         $scope.traceRoute = function(){
+            $log.log('trace route');
+         };
+
+    }
+
+
 
 })();
 
