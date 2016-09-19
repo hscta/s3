@@ -254,7 +254,7 @@
         vm.runStats = function() {
             for(var filter in vehicleStats) {
                 if(filter === 'showall') {
-                    vehicleStats[filter] = vm.getStats('active') + vm.getStats('immobilized');
+                    vehicleStats[filter] = vm.inMarkers.length;
                 } else {
                     vehicleStats[filter] = vm.getStats(filter);
                 }
