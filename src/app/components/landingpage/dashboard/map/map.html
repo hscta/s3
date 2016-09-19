@@ -57,10 +57,11 @@
         </md-input-container>
         <div layout="row"  layout-align="center center">
             <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
-                         aria-label="onroaded" ng-change="">
+                         aria-label="onroaded" ng-change="vm.onRoadCheck()">
                 On Roaded
             </md-checkbox>
-            <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded" aria-label="offroaded" flex>
+            <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
+                         aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>
                 Off Roaded
             </md-checkbox>
         </div>
