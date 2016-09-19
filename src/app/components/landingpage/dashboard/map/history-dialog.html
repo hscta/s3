@@ -28,6 +28,10 @@
     md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar){
         background:#d1e934;
     }
+    .play-pause-btns{
+        background:#d1e934 !important;
+    }
+
     /*.md-dialog-container {*/
     /*display: flex;*/
     /*justify-content: center;*/
@@ -86,13 +90,13 @@
                     position="TOP_RIGHT"
                 >
                     <div ng-controller="InnerMapController">
-                        <md-button class="md-fab md-primary md-mini" ng-show="play" ng-click="traceRoute()">
+                        <md-button class="md-fab md-primary md-mini play-pause-btns" ng-show="play" ng-click="traceRoute()">
                             <md-icon class="icon-font" md-font-library="material-icons">play_arrow</md-icon>
                         </md-button>
-                        <md-button class="md-fab md-primary md-mini" ng-hide="play" ng-click="traceRoute()">
+                        <md-button class="md-fab md-primary md-mini play-pause-btns" ng-hide="play" ng-click="traceRoute()">
                             <md-icon class="icon-font" md-font-library="material-icons">pause</md-icon>
                         </md-button>
-                        <md-button class="md-fab md-primary md-mini" ng-click="stopRouteAnim()">
+                        <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopRouteAnim()">
                             <md-icon class="icon-font" md-font-library="material-icons">stop</md-icon>
                         </md-button>
                     </div>
