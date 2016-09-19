@@ -206,14 +206,54 @@
             return false;
         };
 
+
+        vm.onRoaded = true;
+        vm.offRoaded = false;
+
+        vm.onRoadCheck = function () {
+            $log.log("onroad check");
+            vm.runFilters(vm.filterStr);
+            vm.runStats();
+        };
+
+        vm.offRoadCheck = function () {
+            $log.log("offroad check");
+            vm.runFilters(vm.filterStr);
+            vm.runStats();
+        };
+
+        vm.checkRoaded = function (marker) {
+            if (marker.meta.onroad){
+                if (vm.onRoaded){
+                    return true;
+                }
+            }else{
+                if (vm.offRoaded){
+                    return true;
+                }
+            }
+            // if (marker.meta.onroad === vm.onRoaded) {
+            //     $log.log("onroad");
+            //     return true;
+            // }
+            //
+            // if (marker.meta.onroad !== vm.offRoaded) {
+            //     $log.log("offroad");
+            //     return true;
+            // }
+            //
+            // $log.log("false");
+            return false;
+        };
+
         vm.runFilters = function (filterStr) {
             //$log.log("runFilters");
 
 
-            if (filterStr.length === 0) {
-                vm.setMarkersVisible(true);
-                return;
-            }
+            // if (filterStr.length === 0) {
+            //     vm.setMarkersVisible(true);
+            //     return;
+            // }
 
             var filtered = 0;
             var matchedIdx = 0;
@@ -229,6 +269,8 @@
                     filtered++;
                     matchedIdx = idx;
                 }
+
+                marker.options.visible = vm.checkRoaded(marker);
             }
 
             if (matchedIdx) {
@@ -238,9 +280,8 @@
                 vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
 
-            $log.log("Filtered vehicles = " + filtered);
+            // $log.log("Filtered vehicles = " + filtered);
         };
-
 
 
         vm.vehicleStats = {
@@ -252,10 +293,10 @@
         };
 
 
-        vm.runStats = function() {
-            for(var filter in vm.vehicleStats) {
-                if(filter === 'showall') {
-                    vm.vehicleStats[filter] = vm.inMarkers.length;
+        vm.runStats = function () {
+            for (var filter in vm.vehicleStats) {
+                if (filter === 'showall') {
+                    vm.vehicleStats[filter] = vm.getStats(filter);
                 } else {
                     vm.vehicleStats[filter] = vm.getStats(filter);
                 }
@@ -268,8 +309,14 @@
             var count = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
-                if (vm.matchesAnyMarkerData(marker, filterStr)) {
-                    count++;
+                if(vm.checkRoaded(marker)) {
+                    if (vm.matchesAnyMarkerData(marker, filterStr)) {
+                        count++;
+                    } else{
+                        if(filterStr == "showall") {
+                            count++;
+                        }
+                    }
                 }
             }
 
@@ -279,60 +326,12 @@
 
         $interval(vm.runStats, 5000);
 
-        vm.runFilters = function (filterStr) {
-            //$log.log("runFilters");
-
-
-            if (filterStr.length === 0) {
-                vm.setMarkersVisible(true);
-                return;
-            }
-
-            var filtered = 0;
-            var matchedIdx = 0;
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (!vm.matchesAnyMarkerData(marker, filterStr)) {
-                    //$log.log(marker);
-                    marker.options.visible = false;
-
-                } else {
-                    marker.options.visible = true;
-                    vm.infoWindowClose();
-                    filtered++;
-                    matchedIdx = idx;
-                }
-            }
-
-            if (matchedIdx) {
-                if (filtered == vm.inMarkers.length) {
-                    matchedIdx = Math.floor(filtered / 2);
-                }
-                vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
-            }
-
-            $log.log("Filtered vehicles = " + filtered);
-        };
-
 
         vm.getFilteredData = function (filterStr) {
-            $log.log('getFilterdDAta');
             vm.filterStr = filterStr;
             vm.runFilters(vm.filterStr);
         };
 
-
-
-        vm.onRoaded = false;
-        vm.offRoaded = false;
-
-        vm.onRoadCheck = function(){
-            vm.onRoaded = !vm.onRoaded;
-        };
-
-        vm.offRoadCheck = function(){
-            vm.offRoaded = !vm.offRoaded;
-        };
 
         vm.showHistory = function () {
             //$log.log(vm.clickedMarker);
@@ -475,7 +474,7 @@
                         var starttime = new Date($scope.startTime).getTime();
                         var endtime = new Date($scope.endTime).getTime();
 
-                        if(endtime - starttime > timeLimit)
+                        if (endtime - starttime > timeLimit)
                             endtime = starttime + timeLimit;
 
                         // $log.log(starttime);
@@ -514,7 +513,7 @@
 
                 for (var idx in resp.data.data) {
                     var position = resp.data.data[idx];
-                    if(position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
+                    if (position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
                         $log.log("Not a number");
                         $log.log(position);
                         continue;
@@ -527,9 +526,10 @@
                 function compare(a, b) {
                     return a.gpstime - b.gpstime;
                 }
+
                 $scope.trace.path.sort(compare);
 
-                if($scope.trace.path.length) {
+                if ($scope.trace.path.length) {
                     var midPoint = Math.floor($scope.trace.path.length / 2);
                     $log.log("midpoint" + midPoint);
                     $scope.inMap.center = $scope.trace.path[midPoint];
@@ -540,16 +540,16 @@
 
 
                 var idx = 0;
-                $interval(function(){
+                $interval(function () {
                     $log.log($scope.trace.path[idx]);
                     $scope.historyMarker = $scope.trace.path[idx];
-                    idx ++;
+                    idx++;
                     if (!idx) idx = 0;
-                },100);
+                }, 100);
             };
 
 
-            $scope.fitBounds = function() {
+            $scope.fitBounds = function () {
                 $scope.trace.fit = true;
             };
 
@@ -599,16 +599,54 @@
             $mdDialog.cancel();
         }
     }
-     function InnerMapController($scope, $log, $mdDialog) {
-         var vm=this;
 
-         $scope.traceRoute = function(){
+    function InnerMapController($scope, $log, $mdDialog) {
+        var vm = this;
+
+        $scope.traceRoute = function () {
             $log.log('trace route');
-         };
+        };
 
     }
 
 
-
 })();
+
+
+// vm.runFilters = function (filterStr) {
+//     //$log.log("runFilters");
+//
+//
+//     if (filterStr.length === 0) {
+//         vm.setMarkersVisible(true);
+//         return;
+//     }
+//
+//     var filtered = 0;
+//     var matchedIdx = 0;
+//     for (var idx in vm.inMarkers) {
+//         var marker = vm.inMarkers[idx];
+//         if (!vm.matchesAnyMarkerData(marker, filterStr)) {
+//             //$log.log(marker);
+//             marker.options.visible = false;
+//
+//         } else {
+//             marker.options.visible = true;
+//             vm.infoWindowClose();
+//             filtered++;
+//             matchedIdx = idx;
+//         }
+//     }
+//
+//     if (matchedIdx) {
+//         if (filtered == vm.inMarkers.length) {
+//             matchedIdx = Math.floor(filtered / 2);
+//         }
+//         vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
+//     }
+//
+//     $log.log("Filtered vehicles = " + filtered);
+// };
+
+
 
