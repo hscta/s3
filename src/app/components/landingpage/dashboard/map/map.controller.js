@@ -270,7 +270,7 @@
                     matchedIdx = idx;
                 }
 
-                marker.options.visible = vm.checkRoaded(marker);
+                marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
             }
 
             if (matchedIdx) {
