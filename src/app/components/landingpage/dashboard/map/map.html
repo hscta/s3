@@ -53,7 +53,7 @@
     <div layout="row" flex>
         <md-input-container class="container-margin" flex="30">
             <input type="text" placeholder="Apply filters..." size="50"
-                   ng-model="vm.filterStr" ng-change="vm.runFilters()"/>
+                   ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
         <div layout="row"  layout-align="center center">
             <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"

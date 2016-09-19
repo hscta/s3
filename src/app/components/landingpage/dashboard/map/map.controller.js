@@ -196,8 +196,8 @@
                 var lowercaseSearchStr = searchStr.toString().toLowerCase();
                 var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
+                //$log.log(lowercaseSearchStr + " = " + lowercaseMarkerStr);
                 if (lowercaseMarkerStr.includes(lowercaseSearchStr)) {
-                    //$log.log(lowercaseSearchStr + " = " + lowercaseMarkerStr);
                     return true;
                 }
             }
@@ -433,7 +433,8 @@
             //     control: {}
             // };
 
-            $scope.vehicleNo = params.markerObj.deviceid;
+            $scope.deviceid = params.markerObj.deviceid;
+            $scope.vehicleNumber = params.markerObj.title;
             $scope.mapOptions = {
                 //scrollwheel: false
             };
@@ -487,7 +488,7 @@
 
                         var body = {
                             vehicle: {
-                                vehiclepath: $scope.vehicleNo.toString(),
+                                vehiclepath: $scope.deviceid.toString(),
                                 starttime: starttime,
                                 endtime: endtime
                             }
@@ -518,7 +519,7 @@
                         $log.log(position);
                         continue;
                     }
-                    position.id = $scope.vehicleNo;
+                    position.id = $scope.deviceid;
                     position.gpstime = parseInt(position.gpstime);
                     $scope.trace.path.push(position);
                 }
