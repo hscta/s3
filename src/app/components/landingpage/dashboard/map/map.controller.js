@@ -433,7 +433,7 @@
             //     control: {}
             // };
 
-            $scope.vehicleNo = params.markerObj.title;
+            $scope.vehicleNo = params.markerObj.deviceid;
             $scope.mapOptions = {
                 //scrollwheel: false
             };
