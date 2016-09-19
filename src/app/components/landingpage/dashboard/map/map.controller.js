@@ -242,7 +242,7 @@
 
 
 
-        var vehicleStats = {
+        vm.vehicleStats = {
             showall: 0,
             running: 0,
             stopped: 0,
@@ -252,15 +252,15 @@
 
 
         vm.runStats = function() {
-            for(var filter in vehicleStats) {
+            for(var filter in vm.vehicleStats) {
                 if(filter === 'showall') {
-                    vehicleStats[filter] = vm.inMarkers.length;
+                    vm.vehicleStats[filter] = vm.inMarkers.length;
                 } else {
-                    vehicleStats[filter] = vm.getStats(filter);
+                    vm.vehicleStats[filter] = vm.getStats(filter);
                 }
             }
 
-            $log.log(vehicleStats);
+            $log.log(vm.vehicleStats);
         };
 
         vm.getStats = function (filterStr) {

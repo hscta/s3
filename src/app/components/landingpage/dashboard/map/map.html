@@ -30,9 +30,9 @@
         cursor:pointer;
     }
     .li-clicked{
-        background:#000;
+        background: #d1e934;
     }
-    .md-light{color:#FFF;}
+    .md-light{color:#000;}
     /*.icar-checkbox{*/
         /*transform:scale(0.8);*/
     /*}*/
@@ -71,7 +71,7 @@
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='']"
                          class="icon-font" md-font-library="material-icons">visibility</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='']"
-                      style="font-size: 13px;">Show All</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.showall}}</span>
                 <md-tooltip>Show all</md-tooltip>
             </li>
             <li  ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
@@ -79,7 +79,7 @@
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
                          class="icon-font" md-font-library="material-icons">time_to_leave</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
-                      style="font-size: 13px;">Show All</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.running}}</span>
                 <md-tooltip>Ignition On vehicles</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Stopped']"
@@ -88,7 +88,7 @@
                          class="icon-font" md-font-library="material-icons">
                     radio_button_checked</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
-                      style="font-size: 13px;">Show All</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.stopped}}</span>
                 <md-tooltip>Ignition Off vehicles</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Active']"
@@ -96,7 +96,7 @@
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
                          class="icon-font" md-font-library="material-icons">lock_open</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
-                      style="font-size: 13px;">Show All</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.active}}</span>
                 <md-tooltip>Active vehicles</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"
@@ -104,7 +104,7 @@
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
                          class="icon-font" md-font-library="material-icons">lock</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
-                      style="font-size: 13px;">Show All</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>
                 <md-tooltip>Immoblized vehicles</md-tooltip>
             </li>
         </ul>
