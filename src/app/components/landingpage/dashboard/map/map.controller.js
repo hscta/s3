@@ -545,8 +545,7 @@
             $scope.animationCount = 0;
 
             $scope.playAnim = function(){
-                $log.log('animation');
-                $log.log($scope.trace.path);
+                // $log.log($scope.trace.path);
                 if($scope.trace.path.length)
                     $scope.animateMarker = $interval(function(){
                         //$log.log($scope.trace.path[$scope.animationCount]);
@@ -554,7 +553,7 @@
                         $scope.animationCount ++;
                         if (!$scope.animationCount) {
                             $scope.animationCount = 0;
-                            $log.log('complete')
+                            // $log.log('complete')
                         }
                     },100);
             };
