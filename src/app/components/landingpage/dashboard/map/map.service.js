@@ -115,9 +115,9 @@
 
             vm.processVehicleData = function (msg) {
                 var topic = msg[0].split('/');
-                var vehicleNumber = parseInt(topic[topic.length - 1]);
+                var vehicleNumber = topic[topic.length - 1];
                 var vehicleData = msg[1];
-                vehicleData.id = vehicleNumber;
+                vehicleData.id = parseInt(vehicleData.deviceid);
                 vehicleData.title = vehicleNumber;
                 vehicleData.icon = vm.setMarkerIcon(vehicleData);
                 vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));

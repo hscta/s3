@@ -108,17 +108,17 @@
 
         vm.collapseAlertPanel = function(panel){
             panel.collapse();
-        }
+        };
 
         vm.navAlerts = [
             {
-                category:'Geofence alert',
+                category:'Geofence',
                 alarms:[{id:'1234'}, {odometer:'20'},{ignition:'On'}, {mobility:'moblized'}]
             }, {
-                category:'Device Pulled out',
+                category:'Device pullout',
                 alarms:[{id:'4567'}, {odometer:'32'},{ignition:'off'}, {mobility:'moblized'}]
             }, {
-                category:'City limit alert',
+                category:'City limit',
                 alarms:[{id:'8910'}, {odometer:'40'},{ignition:'On'}, {mobility:'moblized'}]
             }
         ]

@@ -38,15 +38,13 @@
 
 
         vm.initialize = function () {
-            // leftNavDashboardService.getDashboardTree({})
-            //     .then(vm.handleDashboardTree, vm.handleFailure);
-
-            vm.getMyVehicles();
+            leftNavDashboardService.getDashboardTree({})
+                .then(vm.handleDashboardTree, vm.handleFailure);
         };
 
 
         vm.handleMyVehicles = function(resp) {
-            //$log.log(resp);
+            $log.log(resp);
             //subscribe all assets
             for(var idx in resp) {
                 vm.subscribe(resp[idx], true);
@@ -155,6 +153,7 @@
         };
 
         vm.addAllListeners();
-        vm.initialize();
+        //vm.initialize();
+        vm.getMyVehicles();
     }
 })();

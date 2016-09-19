@@ -260,7 +260,7 @@
                 }
             }
 
-            $log.log(vm.vehicleStats);
+            // $log.log(vm.vehicleStats);
         };
 
         vm.getStats = function (filterStr) {
@@ -272,7 +272,7 @@
                 }
             }
 
-            $log.log("Filtered vehicles = " + count);
+            //$log.log("Filtered vehicles = " + count);
             return count;
         };
 
@@ -322,15 +322,15 @@
 
 
 
-        vm.onRoad = false;
-        vm.offRoad = false;
+        vm.onRoaded = false;
+        vm.offRoaded = false;
 
         vm.onRoadCheck = function(){
-            vm.onRoad = !vm.onRoad;
+            vm.onRoaded = !vm.onRoaded;
         };
 
         vm.offRoadCheck = function(){
-            vm.offRoad = !vm.offRoad;
+            vm.offRoaded = !vm.offRoaded;
         };
 
         vm.showHistory = function () {

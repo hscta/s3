@@ -13,7 +13,7 @@
         $log.log("mqttService");
 
         var vm = this;
-        vm.socketiohost = 'http://in1.intellicar.in:10105';
+        vm.socketiohost = 'http://in3.intellicar.in:10105';
         vm.socket = null;
         vm.msgListeners = [];
         vm.socket = null;
@@ -29,6 +29,7 @@
                 vm.socket.on('connect', vm.onConnect);
                 vm.socket.on('close', vm.onClose);
             }
+
             $timeout(vm.initSocket, 5000);
         };
 
@@ -61,6 +62,10 @@
 
         vm.onAuthSuccess = function () {
             $log.log('mqtt authSuccess');
+            //vm.socket.emit('subscribe', ['gps', [{path: "vehiclepath"}]]);
+            for(var idx in vm.subscriptionList) {
+                vm.subscribeChannel(vm.subscriptionList[idx]);
+            }
         };
 
 
@@ -95,8 +100,27 @@
         };
 
 
-        vm.subscribe = function (path) {
-            // $log.log("subscribe: " + path);
+        vm.subscriptionList = [];
+
+
+        vm.subscribe = function(path) {
+            if(vm.subscriptionList.indexOf(path) == -1) {
+                vm.subscriptionList.push(path);
+                vm.subscribeChannel(path);
+            }
+        };
+
+
+        vm.unsubscribe = function(path) {
+            var index = vm.subscriptionList.indexOf(path);
+            if(index > -1) {
+                vm.unsubscribeChannel(path);
+                vm.subscriptionList.splice(index, 1);
+            }
+        };
+
+        vm.subscribeChannel = function (path) {
+            //$log.log("subscribe: " + path);
             var msg = {};
             msg.data = [];
             msg.data.push(['gps', [{path: path}]]);
@@ -105,7 +129,7 @@
         };
 
 
-        vm.unsubscribe = function (path) {
+        vm.unsubscribeChannel = function (path) {
             $log.log("unsubscribe: " + path);
             var msg = {};
             msg.data = [];
