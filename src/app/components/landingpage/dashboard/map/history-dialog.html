@@ -25,15 +25,15 @@
     }
 
     /*.md-dialog-container {*/
-        /*display: flex;*/
-        /*justify-content: center;*/
-        /*align-items: center;*/
-        /*position: absolute;*/
-        /*left: 0;*/
-        /*top: 0;*/
-        /*right: 0;*/
-        /*bottom: 0;*/
-        /*z-index: $z-index-dialog;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*top: 0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*z-index: $z-index-dialog;*/
     /*}*/
 
     /*.md-dialog-container{height:100%;}*/
@@ -78,20 +78,14 @@
                                 options="mapOptions" bounds="inMap.bounds"
                                 control="mapControl">
 
-                <!--<ui-gmap-polylines-->
-                        <!--models="trace.models"-->
-                        <!--path="trace.path"-->
-                        <!--stroke="trace.stroke"-->
-                        <!--clickable="trace.clickable"-->
-                        <!--fit="trace.fit"-->
-                        <!--events="trace.events"-->
-                        <!--static="trace.static"-->
-                        <!--control="trace.control"-->
-                        <!--visible="trace.visible"-->
-                        <!--geodesic="trace.geodesic"-->
-                        <!--icons="trace.icons"-->
-                        <!--doRebuildAll="trace.doRebuildAll"-->
-                <!--&gt;-->
+                <ui-gmap-marker
+                        idkey="'self'"
+                        coords="historyMarker"
+                        click="historyMarker.click"
+                        options="historyMarker.options"
+                        events="historyMarker.events"
+                        control="historyMarker.control">
+                </ui-gmap-marker>
 
                 <ui-gmap-polyline
                         path="trace.path"
@@ -102,8 +96,8 @@
                         fit="trace.fit"
                         static="trace.static"
                         events="trace.events"
-                        icons="trace.icons"
-                >
+                        icons="trace.icons">
+                </ui-gmap-polyline>
 
             </ui-gmap-google-map>
         </div>

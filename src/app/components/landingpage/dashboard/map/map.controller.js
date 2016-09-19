@@ -95,7 +95,7 @@
             if (isNewVehicle) {
                 vehicleData.options = {};
                 vm.inMarkers.push(vehicleData);
-                vm.runFilters();
+                vm.runFilters(vm.filterStr);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
         };
@@ -205,9 +205,11 @@
             return false;
         };
 
-        vm.runFilters = function () {
+        vm.runFilters = function (filterStr) {
             //$log.log("runFilters");
-            if (vm.filterStr.length === 0) {
+
+
+            if (filterStr.length === 0) {
                 vm.setMarkersVisible(true);
                 return;
             }
@@ -216,7 +218,7 @@
             var matchedIdx = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
-                if (!vm.matchesAnyMarkerData(marker, vm.filterStr)) {
+                if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                     //$log.log(marker);
                     marker.options.visible = false;
 
@@ -239,20 +241,86 @@
         };
 
 
-        vm.applyMapSearch = function () {
-            if (vm.filterStr.length > 0) {
-                //$log.log("applyMapSearch");
-                vm.runFilters();
+
+        var vehicleStats = {
+            showall: 0,
+            running: 0,
+            stopped: 0,
+            active: 0,
+            immobilized: 0
+        };
+
+
+        vm.runStats = function() {
+            for(var filter in vehicleStats) {
+                if(filter === 'showall') {
+                    vehicleStats[filter] = vm.getStats('active') + vm.getStats('immobilized');
+                } else {
+                    vehicleStats[filter] = vm.getStats(filter);
+                }
             }
+
+            $log.log(vehicleStats);
+        };
+
+        vm.getStats = function (filterStr) {
+            var count = 0;
+            for (var idx in vm.inMarkers) {
+                var marker = vm.inMarkers[idx];
+                if (vm.matchesAnyMarkerData(marker, filterStr)) {
+                    count++;
+                }
+            }
+
+            $log.log("Filtered vehicles = " + count);
+            return count;
+        };
+
+        $interval(vm.runStats, 5000);
+
+        vm.runFilters = function (filterStr) {
+            //$log.log("runFilters");
+
+
+            if (filterStr.length === 0) {
+                vm.setMarkersVisible(true);
+                return;
+            }
+
+            var filtered = 0;
+            var matchedIdx = 0;
+            for (var idx in vm.inMarkers) {
+                var marker = vm.inMarkers[idx];
+                if (!vm.matchesAnyMarkerData(marker, filterStr)) {
+                    //$log.log(marker);
+                    marker.options.visible = false;
+
+                } else {
+                    marker.options.visible = true;
+                    vm.infoWindowClose();
+                    filtered++;
+                    matchedIdx = idx;
+                }
+            }
+
+            if (matchedIdx) {
+                if (filtered == vm.inMarkers.length) {
+                    matchedIdx = Math.floor(filtered / 2);
+                }
+                vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
+            }
+
+            $log.log("Filtered vehicles = " + filtered);
         };
 
 
         vm.getFilteredData = function (filterStr) {
             $log.log('getFilterdDAta');
             vm.filterStr = filterStr;
-            vm.runFilters();
+            vm.runFilters(vm.filterStr);
         };
-        //$interval(vm.applyMapSearch, 2000);
+
+
 
         vm.onRoad = false;
         vm.offRoad = false;
@@ -324,7 +392,8 @@
         //$log.log($scope);
 
         $scope.inMap = {};
-        $scope.inMap.zoom = mapService.getZoom();
+        var initialZoom = mapService.getZoom();
+        $scope.inMap.zoom = initialZoom;
         $scope.inMap.center = params.markerObj;
         //$scope.inMap.bounds = mapService.getBounds();
         $scope.mapControl = {};
@@ -340,16 +409,29 @@
                     icon: {
                         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
                     },
-                    offset: '50px',
-                    repeat: '200px'
+                    offset: '0px',
+                    repeat: '100px'
                 }],
                 clickable: true,
                 visible: true,
-                //geodesic: true,
+                geodesic: true,
                 fit: true,
                 static: true,
-                events: {},
+                events: {}
             };
+
+            $scope.historyMarker = params.markerObj;
+            //$log.log("my marker");
+            //$log.log($scope.historyMarker);
+
+            // $scope.historyMarker = {
+            //     id: params.markerObj.id,
+            //     coords: {latitude: params.markerObj.latitude, longitude: params.markerObj.longitude},
+            //     click: function() {},
+            //     options: {},
+            //     events: {},
+            //     control: {}
+            // };
 
             $scope.vehicleNo = params.markerObj.title;
             $scope.mapOptions = {
@@ -450,6 +532,7 @@
                     var midPoint = Math.floor($scope.trace.path.length / 2);
                     $log.log("midpoint" + midPoint);
                     $scope.inMap.center = $scope.trace.path[midPoint];
+                    $scope.inMap.zoom = initialZoom - 1;
                     // $scope.trace.fit = false;
                     // setTimeout($scope.fitBounds, 1000);
                 }
