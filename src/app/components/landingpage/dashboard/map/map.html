@@ -22,13 +22,17 @@
     ul li{
         width:100%; height:100%; list-style:none;
     }
-    li{  line-height:2.5;padding:0 15px 0 15px; text-align:center;}
+    li{ text-align:center;}
     .icon-font{font-size:25px;}
 
     li:hover{
         box-shadow:1px 0px 6px 0px;
         cursor:pointer;
     }
+    .li-clicked{
+        background:#000;
+    }
+    .md-light{color:#FFF;}
     /*.icar-checkbox{*/
         /*transform:scale(0.8);*/
     /*}*/
@@ -62,27 +66,45 @@
         </div>
 
         <ul id="nav" layout="row" layout-align="end center" flex>
-            <li layout-align="center center">
-
-            </li>
-            <li ng-click="vm.getFilteredData('')" layout-align="center center">
-                <md-icon class="icon-font" md-font-library="material-icons">visibility</md-icon>
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='']"
+                ng-click="vm.getFilteredData('')" layout="column" layout-align="center center">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='']"
+                         class="icon-font" md-font-library="material-icons">visibility</md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='']"
+                      style="font-size: 13px;">Show All</span>
                 <md-tooltip>Show all</md-tooltip>
             </li>
-            <li ng-click="vm.getFilteredData('Running')" layout-align="center center">
-                <md-icon class="icon-font" md-font-library="material-icons">time_to_leave</md-icon>
+            <li  ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
+                 ng-click="vm.getFilteredData('Running')" layout="column" layout-align="center center">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
+                         class="icon-font" md-font-library="material-icons">time_to_leave</md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
+                      style="font-size: 13px;">Show All</span>
                 <md-tooltip>Ignition On vehicles</md-tooltip>
             </li>
-            <li ng-click="vm.getFilteredData('Stopped')">
-                <md-icon class="icon-font" md-font-library="material-icons">radio_button_checked</md-icon>
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Stopped']"
+                ng-click="vm.getFilteredData('Stopped')" layout="column" >
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
+                         class="icon-font" md-font-library="material-icons">
+                    radio_button_checked</md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
+                      style="font-size: 13px;">Show All</span>
                 <md-tooltip>Ignition Off vehicles</md-tooltip>
             </li>
-            <li ng-click="vm.getFilteredData('Active')">
-                <md-icon class="icon-font" md-font-library="material-icons">lock_open</md-icon>
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Active']"
+                ng-click="vm.getFilteredData('Active')" layout="column" >
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
+                         class="icon-font" md-font-library="material-icons">lock_open</md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
+                      style="font-size: 13px;">Show All</span>
                 <md-tooltip>Active vehicles</md-tooltip>
             </li>
-            <li ng-click="vm.getFilteredData('Immobilized')">
-                <md-icon class="icon-font" md-font-library="material-icons">lock</md-icon>
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"
+                ng-click="vm.getFilteredData('Immobilized')" layout="column" >
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
+                         class="icon-font" md-font-library="material-icons">lock</md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
+                      style="font-size: 13px;">Show All</span>
                 <md-tooltip>Immoblized vehicles</md-tooltip>
             </li>
         </ul>
