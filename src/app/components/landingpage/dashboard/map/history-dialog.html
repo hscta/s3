@@ -24,12 +24,12 @@
         min-height: 20px;
     }
 
-
-    md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar){
-        background:#d1e934;
+    md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+        background: #d1e934;
     }
-    .play-pause-btns{
-        background:#d1e934 !important;
+
+    .play-pause-btns {
+        background: #d1e934 !important;
     }
 
     /*.md-dialog-container {*/
@@ -63,21 +63,25 @@
         height: 10px;
     }
 
-    .btn-img{
-        background:url('assets/images/play.png') no-repeat;
-        width:13px;
+    .btn-img {
+        background: url('assets/images/play.png') no-repeat;
+        width: 13px;
     }
 
-    .btn:hover{
-        cursor:pointer;
+    .btn:hover {
+        cursor: pointer;
     }
-    .history-dialog .angular-google-map-container{
-        height:477px;
+
+    .history-dialog .angular-google-map-container {
+        height: 477px;
     }
 </style>
 
-<script type="text/ng-template" id="content">
-    </script>
+<script type="text/ng-template" id="historyInfoWindow.html">
+    <div>
+        Location Time: <strong>{{parameter.data.time | date : 'dd MMM yyyy - h:mm a'}}</strong>
+    </div>
+</script>
 
 <md-dialog aria-label="Location Tracker History" ng-cloak flex="85">
     <md-toolbar>
@@ -91,58 +95,70 @@
     </md-toolbar>
     <span class="error-msg">{{errorMsg}}</span><br/>
 
-    <div layout="row" class="input-fields" layout-align="space-around center">
-        <md-input-container>
-            <label>Vehicle No</label>
-            <input type="text" ng-model="vehicleNumber" readonly>
-        </md-input-container>
+    <div layout="row" layout-align="space-around center">
+        <div layout="row" class="input-fields" layout-align="space-around center" flex>
+            <md-input-container>
+                <label>Vehicle No</label>
+                <input type="text" ng-model="vehicleNumber" readonly>
+            </md-input-container>
 
-        <md-input-container>
-            <label>Start Time</label>
-            <input type="text" id="start_time" ng-model="startTime">
-        </md-input-container>
+            <md-input-container>
+                <label>Start Time</label>
+                <input type="text" id="start_time" ng-model="startTime">
+            </md-input-container>
 
-        <md-input-container>
-            <label>End Time</label>
-            <input type="text" id="end_time" ng-model="endTime">
-        </md-input-container>
-
-        <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+            <md-input-container>
+                <label>End Time</label>
+                <input type="text" id="end_time" ng-model="endTime">
+            </md-input-container>
+        </div>
+        <div layout="row" layout-align="end start">
+            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+        </div>
     </div>
 
     <md-dialog-content class="map-dialog-content" layout-fill>
-        <div class="md-dialog-content map-dialog history-dialog" >
+        <div class="md-dialog-content map-dialog history-dialog">
             <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom' draggable="true"
                                 options="historyMap.mapOptions" bounds="historyMap.bounds"
                                 control="historyMap.mapControl">
 
                 <ui-gmap-map-control
-                    template="app/components/landingpage/dashboard/map/history-map-control.html"
-                    controller="InnerMapController"
-                    position="top-right"></ui-gmap-map-control>
+                        template="app/components/landingpage/dashboard/map/history-map-control.html"
+                        controller="InnerMapController"
+                        position="top-right"></ui-gmap-map-control>
 
                 </ui-gmap-map-control>
 
                 <ui-gmap-marker
-                    idkey="'self'"
-                    coords="clickedMarker"
-                    click="clickedMarker.click"
-                    options="clickedMarker.options"
-                    events="clickedMarker.events"
-                    control="clickedMarker.control">
+                        idkey="'self'"
+                        coords="clickedMarker"
+                        click="clickedMarker.click"
+                        options="clickedMarker.options"
+                        events="clickedMarker.events"
+                        control="clickedMarker.control">
                 </ui-gmap-marker>
 
                 <ui-gmap-polyline
-                    path="trace.path"
-                    stroke="trace.stroke"
-                    clickable="trace.clickable"
-                    geodesic="trace.geodesic"
-                    visible="trace.visible"
-                    fit="trace.fit"
-                    static="trace.static"
-                    events="trace.events"
-                    icons="trace.icons">
+                        path="trace.path"
+                        stroke="trace.stroke"
+                        clickable="trace.clickable"
+                        geodesic="trace.geodesic"
+                        visible="trace.visible"
+                        fit="trace.fit"
+                        static="trace.static"
+                        events="trace.events"
+                        icons="trace.icons">
                 </ui-gmap-polyline>
+
+                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
+                                control="historyInfoWindow.control"
+                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
+                                templateUrl="'historyInfoWindow.html'"
+                                templateParameter="historyInfoWindow"
+                                isIconVisibleOnClick="true">
+                </ui-gmap-window>
+
             </ui-gmap-google-map>
         </div>
     </md-dialog-content>

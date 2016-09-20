@@ -363,15 +363,7 @@
         var initialZoom = mapService.getZoom();
         $scope.historyMap.zoom = initialZoom;
         $scope.historyMap.center = $scope.clickedMarker;
-        //$scope.historyMap.bounds = mapService.getBounds();
         $scope.errorMsg = "";
-        //$log.log(params);
-
-       // $scope.clickedMarker = $scope.clickedMarker;
-
-
-        historyService.setData('historyMap', $scope.historyMap);
-
         $scope.deviceid = $scope.clickedMarker.deviceid;
         $scope.vehicleNumber = $scope.clickedMarker.title;
 
@@ -396,6 +388,25 @@
         };
 
         $scope.clickedMarker.trace = $scope.trace;
+
+        $scope.historyInfoWindow = {
+            show: false,
+            coords: $scope.clickedMarker,
+            control: {},
+            options: {
+                maxWidth: 300,
+                disableAutoPan: false,
+                pixelOffset: {
+                    width: 0,
+                    height: -25
+                }
+            },
+            data: {}
+        };
+
+        historyService.setData('historyMap', $scope.historyMap);
+        historyService.setData('historyInfoWindow', $scope.historyInfoWindow);
+
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -467,7 +478,6 @@
         };
 
 
-        var idx = 0;
         $scope.drawTrace = function (resp) {
 
             historyService.setData('getHistory', true);
@@ -498,33 +508,33 @@
                 $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
 
                 var midPoint = Math.floor($scope.trace.path.length / 2);
-                //$log.log("midpoint" + midPoint);
                 $scope.historyMap.center = $scope.trace.path[midPoint];
                 $scope.historyMap.zoom = initialZoom - 1;
-                // $scope.trace.fit = false;
-                // setTimeout($scope.fitBounds, 1000);
-            }
 
-            // $scope.playAnim();
+                $scope.historyInfoWindow.coords = $scope.clickedMarker;
+                $scope.historyInfoWindow.data.time = new Date($scope.trace.path[0].gpstime);
+                $scope.historyInfoWindow.show = true;
+            }
         };
+
 
         $scope.fitBounds = function () {
             $scope.trace.fit = true;
         };
+
 
         $scope.handleGetLocationFailure = function (resp) {
             $log.log("handleGetLocationFailure");
             $log.log(resp);
         };
 
-        // $scope.playAnim();
 
-        $scope.getClickedMarker = function() {
+        $scope.getClickedMarker = function () {
             return $scope.clickedMarker;
         };
 
-        historyService.setData('clickedMarker', $scope.clickedMarker);
 
+        historyService.setData('clickedMarker', $scope.clickedMarker);
         $interval($scope.resizeMap, 500);
     }
 
@@ -544,72 +554,124 @@
         }
     }
 
-    function InnerMapController($scope, $log, $mdDialog, historyService,  $interval) {
+    function InnerMapController($scope, $log, $mdDialog, historyService, $interval) {
 
         var marker = historyService.getData('clickedMarker');
         var historyMap = historyService.getData('historyMap');
+        var historyInfoWindow = historyService.getData('historyInfoWindow');
 
         var animationCount = 0;
 
+        $scope.play = true;
+
+
         $scope.playAnim = function () {
-            historyService.setData('getHistory', false);
-            $log.log(marker);
+            //historyService.setData('getHistory', false);
+            //$log.log(marker);
             if (marker.trace.path.length) {
-                $log.log(marker.trace.path);
+                //$log.log(marker.trace.path);
                 $scope.animateMarker = $interval(function () {
-                    //$log.log(historyService.getData('getHistory') );
-                    if ( !historyService.getData('getHistory') ) {
+                    if ($scope.gotHistory()) {
+                        //historyInfoWindow.show = false;
+                        //historyInfoWindow.control.hideWindow();
                         marker.latitude = marker.trace.path[animationCount].latitude;
                         marker.longitude = marker.trace.path[animationCount].longitude;
-                        //historyMap.center = marker;
+                        //historyInfoWindow.coords = marker;
+                        //historyInfoWindow.show = true;
+                        //historyInfoWindow.control.showWindow();
+                        historyInfoWindow.data.time = marker.trace.path[animationCount].gpstime;
+                        $scope.moveMapWithMarker(marker);
                         animationCount++;
                         if (animationCount >= marker.trace.path.length) {
                             animationCount = 0;
                         }
-                    }else {
+                    } else {
                         $scope.stopInterval();
-                        animationCount=0;
+                        animationCount = 0;
                         $scope.play = true;
                     }
                 }, 100);
             }
         };
 
+
         $scope.stopInterval = function () {
             $interval.cancel($scope.animateMarker);
             animationCount = 0;
-            marker.latitude = marker.trace.path[animationCount].latitude;
-            marker.longitude = marker.trace.path[animationCount].longitude;
             $scope.play = true;
+
+            if(marker.trace.path.length > 0) {
+                marker.latitude = marker.trace.path[animationCount].latitude;
+                marker.longitude = marker.trace.path[animationCount].longitude;
+            }
         };
+
 
         $scope.pauseInterval = function () {
             $interval.cancel($scope.animateMarker);
             $scope.animateMarker = undefined;
         };
 
+
         $scope.$on('$destroy', function () {
             $scope.stopInterval();
         });
 
-        $scope.play = true;
+
         $scope.traceRoute = function () {
             //$log.log('trace route');
-
-
-                if ($scope.play) {
-                    $scope.playAnim();
-                    $scope.play = false;
-                } else {
-                    $scope.pauseInterval();
-                    $scope.play = true;
-                }
-
+            if ($scope.play) {
+                $scope.playAnim();
+                $scope.play = false;
+            } else {
+                $scope.pauseInterval();
+                $scope.play = true;
+            }
         };
+
 
         $scope.stopRouteAnim = function () {
             $scope.stopInterval();
             $scope.play = true;
+        };
+
+
+        $scope.gotHistory = function() {
+            return historyService.getData('getHistory');
+        };
+
+
+        $scope.moveMapWithMarker = function (latLng) {
+            var map = historyMap.mapControl.getGMap();
+
+            var projection = map.getProjection();
+            var bounds = map.getBounds();
+
+            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
+
+            var scale = Math.pow(2, map.getZoom());
+            var worldPoint = projection.fromLatLngToPoint(new google.maps.LatLng({
+                lat: latLng.latitude,
+                lng: latLng.longitude
+            }));
+
+            var xx = Math.abs((worldPoint.x - centerPoint.x) * scale);
+            var yy = Math.abs((worldPoint.y - centerPoint.y) * scale);
+
+            var fxx = Math.floor((worldPoint.x - centerPoint.x) * scale);
+            var fyy = Math.floor((worldPoint.y - centerPoint.y) * scale);
+
+            // if(yy < 0) {
+            //     yy *= -1;
+            // }
+
+            // $log.log("xx = " + xx);
+            // $log.log("yy = " + yy);
+
+
+            if (xx > 400 || yy > 200) {
+                map.panBy(fxx, fyy);
+            }
         };
     }
 
