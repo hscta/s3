@@ -72,17 +72,18 @@
         // vm.password = "ola123";
 
 
-        function handleLoginSuccess(res) {
-            //$log.log(res);
-            $log.log("handleLoginSuccess");
+        function handleLoginSuccess(resp) {
+            //$log.log(resp);
+            //$log.log("handleLoginSuccess");
             $rootScope.showLoginDialog = false;
             $mdDialog.hide();
             $window.location.reload();
         }
 
-        function handleLoginFailure(res) {
-            $log.log(res);
+        function handleLoginFailure(resp) {
+            $log.log(resp);
             $log.log("handleLoginFailure");
+            vm.message = resp.data.msg;
         }
 
         vm.login = function () {

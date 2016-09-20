@@ -41,7 +41,7 @@
     .icon-running{color:#6991FD;}
     .icon-stopped{color:#0C8;}
     .icon-active{color:#000;}
-    .icon-immobilized{color:#F00;}
+    .icon-immobilized{color: rgba(245, 86, 94, 0.85);}
 
 </style>
 
@@ -67,7 +67,7 @@
 
         <ul id="nav" layout="row" layout-align="end center" flex>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='']"
-                ng-click="vm.getFilteredData('')" layout="column" layout-align="center center">
+                ng-click="vm.runFilters('')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='']"
                          class="icon-font icon-visibility" md-font-library="material-icons">visibility</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='']"
@@ -75,7 +75,7 @@
                 <md-tooltip>All</md-tooltip>
             </li>
             <li  ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
-                 ng-click="vm.getFilteredData('Running')" layout="column" layout-align="center center">
+                 ng-click="vm.runFilters('Running')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
                          class="icon-font icon-running" md-font-library="material-icons">time_to_leave</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
@@ -83,7 +83,7 @@
                 <md-tooltip>Ignition On</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Stopped']"
-                ng-click="vm.getFilteredData('Stopped')" layout="column" >
+                ng-click="vm.runFilters('Stopped')" layout="column" >
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
                          class="icon-font icon-stopped" md-font-library="material-icons">
                     radio_button_checked</md-icon>
@@ -92,7 +92,7 @@
                 <md-tooltip>Ignition Off</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Active']"
-                ng-click="vm.getFilteredData('Active')" layout="column" >
+                ng-click="vm.runFilters('Active')" layout="column" >
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
                          class="icon-font icon-active" md-font-library="material-icons">lock_open</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
@@ -100,7 +100,7 @@
                 <md-tooltip>Active</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"
-                ng-click="vm.getFilteredData('Immobilized')" layout="column" >
+                ng-click="vm.runFilters('Immobilized')" layout="column" >
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
                          class="icon-font icon-immobilized" md-font-library="material-icons">lock</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"

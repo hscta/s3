@@ -16,16 +16,17 @@
                            rightNavAlertDashboardService) {
         $log.log('MapController');
         var vm = this;
+
         vm.inMap = {
             mapOptions: {},
             mapControl: {}
         };
+
         vm.inMarkers = [];
         vm.clickedMarker = {};
 
         vm.filterStr = '';
-        vm.excludeMapSearch = ['icon'];
-
+        vm.excludeFilters = ['icon'];
 
         vm.infoWindow = {
             show: false,
@@ -39,6 +40,29 @@
                 }
             }
         };
+
+        vm.mapEvents = {
+            click: function () {
+                vm.infoWindowClose();
+            }
+        };
+
+        vm.markersEvents = {
+            click: function (marker, eventName, model, args) {
+                vm.clickedMarker = model;
+
+                vm.clickedMarkerObj = {
+                    clickedMarker: vm.clickedMarker,
+                    immoblize: vm.immobalize,
+                    showHistory: vm.showHistory
+                };
+
+                vm.infoWindowShow();
+            }
+        };
+
+        vm.onRoaded = true;
+        vm.offRoaded = false;
 
 
         vm.loadMap = function () {
@@ -60,13 +84,13 @@
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
                 if (marker.id == vehicleData.id) {
-                    if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
-                        Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
-                        $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
-                            ", " + marker.latitude + ", " + marker.longitude);
-                        $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
-                            ", " + vehicleData.latitude + ", " + vehicleData.longitude);
-                    }
+                    // if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
+                    //     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
+                    //     $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
+                    //         ", " + marker.latitude + ", " + marker.longitude);
+                    //     $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
+                    //         ", " + vehicleData.latitude + ", " + vehicleData.longitude);
+                    // }
 
                     vehicleData.options = vm.inMarkers[idx].options;
                     vm.inMarkers[idx] = vehicleData;
@@ -96,11 +120,6 @@
             vm.infoWindow.show = true;
         };
 
-        vm.mapEvents = {
-            click: function () {
-                vm.infoWindowClose();
-            }
-        };
 
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.inMap.mapControl.getGMap(), 'resize');
@@ -108,21 +127,6 @@
         };
 
         $interval(vm.resizeMap, 500);
-
-        vm.markersEvents = {
-            mouseover: function (marker, eventName, model, args) {
-                vm.clickedMarker = model;
-
-                vm.clickedMarkerObj = {
-                    clickedMarker: vm.clickedMarker,
-                    immoblize: vm.immobalize,
-                    showHistory: vm.showHistory
-                };
-
-                vm.infoWindowShow();
-            }
-        };
-
 
         vm.getMarkerCenter = function (marker) {
             return {latitude: marker.latitude, longitude: marker.longitude};
@@ -160,7 +164,7 @@
 
         vm.matchesAnyMarkerData = function (marker, searchStr) {
             for (var eachidx in marker) {
-                if (vm.excludeMapSearch.indexOf(eachidx) != -1)
+                if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
                 var lowercaseSearchStr = searchStr.toString().toLowerCase();
@@ -177,20 +181,19 @@
         };
 
 
-        vm.onRoaded = true;
-        vm.offRoaded = false;
-
         vm.onRoadCheck = function () {
-            $log.log("onroad check");
+            //$log.log("onroad check");
             vm.runFilters(vm.filterStr);
             vm.runStats();
         };
+
 
         vm.offRoadCheck = function () {
-            $log.log("offroad check");
+            //$log.log("offroad check");
             vm.runFilters(vm.filterStr);
             vm.runStats();
         };
+
 
         vm.checkRoaded = function (marker) {
             if (marker.meta.onroad) {
@@ -202,19 +205,11 @@
                     return true;
                 }
             }
-            // if (marker.meta.onroad === vm.onRoaded) {
-            //     $log.log("onroad");
-            //     return true;
-            // }
-            //
-            // if (marker.meta.onroad !== vm.offRoaded) {
-            //     $log.log("offroad");
-            //     return true;
-            // }
-            //
+
             // $log.log("false");
             return false;
         };
+
 
         vm.runFilters = function (filterStr) {
             //$log.log("runFilters");
@@ -224,6 +219,9 @@
             //     vm.setMarkersVisible(true);
             //     return;
             // }
+
+            vm.filterStr = filterStr;
+            vm.infoWindowClose();
 
             var filtered = 0;
             var matchedIdx = 0;
@@ -235,7 +233,6 @@
 
                 } else {
                     marker.options.visible = true;
-                    vm.infoWindowClose();
                     filtered++;
                     matchedIdx = idx;
                 }
@@ -243,10 +240,11 @@
                 marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
             }
 
+            // if at least one marker matched the filter string
             if (matchedIdx) {
-                if (filtered == vm.inMarkers.length) {
-                    matchedIdx = Math.floor(filtered / 2);
-                }
+                // if (filtered == vm.inMarkers.length) {
+                //     matchedIdx = Math.floor(filtered / 2);
+                // }
                 vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
 
@@ -283,7 +281,7 @@
                     if (vm.matchesAnyMarkerData(marker, filterStr)) {
                         count++;
                     } else {
-                        if (filterStr == "showall") {
+                        if (filterStr === "showall") {
                             count++;
                         }
                     }
@@ -294,13 +292,7 @@
             return count;
         };
 
-        $interval(vm.runStats, 5000);
-
-
-        vm.getFilteredData = function (filterStr) {
-            vm.filterStr = filterStr;
-            vm.runFilters(vm.filterStr);
-        };
+        $interval(vm.runStats, 3000);
 
 
         vm.showHistory = function () {
@@ -361,7 +353,7 @@
         //var vm = this;
         //$log.log($scope);
 
-        $scope.inMap = {
+        $scope.historyMap = {
             mapOptions: {},
             mapControl: {}
         };
@@ -369,16 +361,16 @@
         $scope.clickedMarker = angular.copy(params.clickedMarker);
 
         var initialZoom = mapService.getZoom();
-        $scope.inMap.zoom = initialZoom;
-        $scope.inMap.center = $scope.clickedMarker;
-        //$scope.inMap.bounds = mapService.getBounds();
+        $scope.historyMap.zoom = initialZoom;
+        $scope.historyMap.center = $scope.clickedMarker;
+        //$scope.historyMap.bounds = mapService.getBounds();
         $scope.errorMsg = "";
         //$log.log(params);
 
        // $scope.clickedMarker = $scope.clickedMarker;
 
 
-        historyService.setData('inMap', $scope.inMap);
+        historyService.setData('historyMap', $scope.historyMap);
 
         $scope.deviceid = $scope.clickedMarker.deviceid;
         $scope.vehicleNumber = $scope.clickedMarker.title;
@@ -410,7 +402,7 @@
         };
 
         $scope.resizeMap = function () {
-            google.maps.event.trigger($scope.inMap.mapControl.getGMap(), 'resize');
+            google.maps.event.trigger($scope.historyMap.mapControl.getGMap(), 'resize');
             return true;
         };
 
@@ -507,8 +499,8 @@
 
                 var midPoint = Math.floor($scope.trace.path.length / 2);
                 //$log.log("midpoint" + midPoint);
-                $scope.inMap.center = $scope.trace.path[midPoint];
-                $scope.inMap.zoom = initialZoom - 1;
+                $scope.historyMap.center = $scope.trace.path[midPoint];
+                $scope.historyMap.zoom = initialZoom - 1;
                 // $scope.trace.fit = false;
                 // setTimeout($scope.fitBounds, 1000);
             }
@@ -555,7 +547,7 @@
     function InnerMapController($scope, $log, $mdDialog, historyService,  $interval) {
 
         var marker = historyService.getData('clickedMarker');
-        var inMap = historyService.getData('inMap');
+        var historyMap = historyService.getData('historyMap');
 
         var animationCount = 0;
 
@@ -569,7 +561,7 @@
                     if ( !historyService.getData('getHistory') ) {
                         marker.latitude = marker.trace.path[animationCount].latitude;
                         marker.longitude = marker.trace.path[animationCount].longitude;
-                        inMap.center = marker;
+                        //historyMap.center = marker;
                         animationCount++;
                         if (animationCount >= marker.trace.path.length) {
                             animationCount = 0;

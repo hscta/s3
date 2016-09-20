@@ -14,8 +14,8 @@
 <!--<script type="text/ng-template" id="login_dialog.html">-->
 <md-dialog aria-label="authLoginDialog">
     <md-dialog-content>
-        <img ng-src="assets/logo.png" height="100" class="img-logo md-card-image" alt="Intellicar">
-        <div class="">
+        <img ng-src="assets/logo.png" height="120" class="img-logo md-card-image" alt="Intellicar">
+        <div>
             <md-input-container class="md-block">
                 <label>Username</label>
                 <input type="text" ng-model="username"/>
@@ -24,7 +24,9 @@
                 <label>Password</label>
                 <input type="password" ng-model="password"/>
             </md-input-container>
-            <span style="color: red;">{{message}}</span>
+            <div flex layout-align="center center">
+                <span style="color: red;" layout-align="center center" flex>{{message}}</span>
+            </div>
         </div>
     </md-dialog-content>
 
