@@ -38,14 +38,6 @@
     /*}*/
 </style>
 
-<!--<script type="text/ng-template" id="searchbox.tpl.html">-->
-<!--<input id="pac-input" type="text" placeholder="Google Search..." mg-model="vm.pacInput">-->
-<!--</script>-->
-
-
-<!--<script type="text/ng-template" id="control.tpl.html">-->
-<!--<button class="btn btn-sm btn-primary" ng-class="{'btn-warning': danger}" ng-click="controlClick()">{{controlText}}</button>-->
-<!--</script>-->
 
 
 <div>
@@ -113,8 +105,8 @@
 
     <div id="mapCanvas">
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
-                            options="vm.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
-                            control="vm.mapControl">
+                            options="vm.inMap.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
+                            control="vm.inMap.mapControl">
 
             <!--<ui-gmap-search-box template="vm.searchbox.template" events="vm.searchbox.events" position="LEFT_TOP"></ui-gmap-search-box>-->
 

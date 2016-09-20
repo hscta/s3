@@ -18,7 +18,7 @@
             var lng = 72.83638193466376;
 
             vm.center = {latitude: lat, longitude: lng};
-            vm.zoom = 12;
+            vm.zoom = 10;
             vm.bounds = {};
 
             vm.getCenter = function () {
