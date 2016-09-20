@@ -651,16 +651,25 @@
     *  Jquery code for fixing resolution problem of map
     *
     * */
+    var wh = $(window).height();
+    var header_height = 95;
 
-    $(window).ready(function () {
-        var wh = $(window).height();
-        var header_height = 95;
+    function setMapHeight(){
+
+        wh = $(window).height()
         isRendered('.angular-google-map-container', function(el){
             el.css('height',(wh - header_height) + 'px');
         });
+    }
+
+    $(window).ready(function () {
+        setMapHeight();
     });
 
 
+    $(window).resize(function () {
+        setMapHeight();
+    });
     function isRendered(el,callback){
         var isr_interval = setInterval(function () {
             if ($(el).length > 0) {
