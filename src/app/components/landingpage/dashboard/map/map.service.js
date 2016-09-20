@@ -127,7 +127,7 @@
                 vehicleData.ignitionstatusStr = vehicleData.ignitionstatus ? "On" : "Off";
                 vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
                 vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
-                vehicleData.timestamp = new Date(vehicleData.timestamp).toString().replace(" GMT+0530 (IST)", "");
+                vehicleData.timestamp = new Date(vehicleData.timestamp);
                 return vehicleData;
             };
 

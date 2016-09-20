@@ -230,3 +230,37 @@ md-toolbar{border-bottom:1px solid #CCC;}
 // injector
 // endinjector
 
+.trPadding td{
+    padding:1px 4px;
+}
+
+.trPadding td:nth-child(1) {
+    white-space: nowrap;
+}
+.trPadding td:nth-child(1) ,
+    .trPadding td:nth-child(3) {
+    white-space: nowrap;
+}
+.md-button.md-small {
+    height: 25px;
+    line-height: 25px;
+    min-height: 25px;
+    min-width:1%;
+    vertical-align: top;
+    font-size: 13px;
+    padding: 0 10px;
+    margin:5px;
+}
+
+/* Map info window css */
+
+.infoWBtn{
+    margin-top:10px!important;
+    margin-bottom:10px!important;
+}
+.infoWHead td{
+    padding-top:10px;
+}
+.infoWmiddle{
+    padding-right:25px!important;
+}

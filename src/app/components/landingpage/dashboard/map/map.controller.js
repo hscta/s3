@@ -646,5 +646,30 @@
         };
     }
 
+
+    /*
+    *  Jquery code for fixing resolution problem of map
+    *
+    * */
+
+    $(window).ready(function () {
+        var wh = $(window).height();
+        var header_height = 95;
+        isRendered('.angular-google-map-container', function(el){
+            el.css('height',(wh - header_height) + 'px');
+        });
+    });
+
+
+    function isRendered(el,callback){
+        var isr_interval = setInterval(function () {
+            if ($(el).length > 0) {
+                callback($(el));
+                clearInterval(isr_interval);
+            }
+        },200)
+    }
+
+
 })();
 

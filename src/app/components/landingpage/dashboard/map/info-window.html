@@ -1,38 +1,33 @@
 <div layout="column">
+    <div class="info-w-header">
+    </div>
     <md-table-container>
-        <table md-table md-row-select multiple>
+        <table md-table md-row-select multiple class="trPadding">
             <tbody md-body>
-            <tr md-row md-select-id="name" md-auto-select>
+            <tr md-row md-select-id="name" class="infoWHead" md-auto-select>
                 <td md-cell><strong>Car Number</strong></td>
-                <td md-cell>{{parameter.clickedMarker.title}}</td>
+                <td md-cell colspan="3">{{parameter.clickedMarker.title}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
                 <td md-cell><strong>Last seen at</strong></td>
-                <td md-cell>{{parameter.clickedMarker.timestamp}}</td>
+                <td md-cell colspan="3">{{parameter.clickedMarker.timestamp | date : 'dd MMM yyyy - h:mm a'}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
                 <td md-cell><strong>Odometer</strong></td>
-                <td md-cell>{{parameter.clickedMarker.odometer}}</td>
-            </tr>
-
-            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell class="infoWmiddle">{{parameter.clickedMarker.odometer}}</td>
                 <td md-cell><strong>Speed</strong></td>
                 <td md-cell>{{parameter.clickedMarker.speed}}</td>
             </tr>
 
             <tr md-row md-select-id="name" md-auto-select>
                 <td md-cell><strong>Ignition</strong></td>
-                <td md-cell>{{parameter.clickedMarker.ignitionstatus ? 'On' : 'Off'}}</td>
-            </tr>
-            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell class="infoWmiddle">{{parameter.clickedMarker.ignitionstatus ? 'On' : 'Off'}}</td>
                 <td md-cell><strong>Mobility</strong></td>
                 <td md-cell>{{parameter.clickedMarker.mobilistatusFilter}}</td>
             </tr>
             <tr md-row md-select-id="name" md-auto-select>
                 <td md-cell><strong>Car Battery</strong></td>
-                <td md-cell>{{parameter.clickedMarker.carbattery}}</td>
-            </tr>
-            <tr md-row md-select-id="name" md-auto-select>
+                <td md-cell class="infoWmiddle">{{parameter.clickedMarker.carbattery}}</td>
                 <td md-cell><strong>Device Battery</strong></td>
                 <td md-cell>{{parameter.clickedMarker.devbattery}}</td>
             </tr>
@@ -53,17 +48,12 @@
     </md-table-container>
 
     <div layout="row">
-        <md-button class="md-primary"
-                   ng-click="parameter.immoblize(parameter.clickedMarker.mobilistatus)">
-        <span ng-show="parameter.clickedMarker.mobilistatus">
-            Immoblize
-        </span>
-            <span ng-hide="parameter.clickedMarker.mobilistatus">
-           Moblize
-        </span>
+        <md-button class="infoWBtn md-raised md-small infoWBtn" ng-click="parameter.immoblize(parameter.clickedMarker.mobilistatus)">
+            <span ng-show="parameter.clickedMarker.mobilistatus"> Immoblize </span>
+            <span ng-hide="parameter.clickedMarker.mobilistatus"> Moblize </span>
         </md-button>
 
-        <md-button class="md-raised md-accent" ng-click="parameter.showHistory()">
+        <md-button class="md-raised md-accent md-small infoWBtn" ng-click="parameter.showHistory()">
             History
         </md-button>
     </div>

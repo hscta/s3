@@ -31,6 +31,10 @@
                 vm.menuItems = [].concat(menuItems);
             });
 
+        vm.changePassword = function () {
+
+        };
+
         vm.logout = function () {
             loginService.logout();
         };
