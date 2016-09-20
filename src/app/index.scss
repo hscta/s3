@@ -255,8 +255,11 @@ md-toolbar{border-bottom:1px solid #CCC;}
 /* Map info window css */
 
 .infoWBtn{
-    margin-top:10px!important;
-    margin-bottom:10px!important;
+    margin:10px 20px!important;
+    min-width:100px!important;
+}
+.infoWBtn:nth-child(1){
+    margin-left:calc( 50% - 110px )!important;
 }
 .infoWHead td{
     padding-top:10px;
