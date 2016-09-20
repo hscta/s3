@@ -47,7 +47,37 @@
     /*.md-dialog-container{height:100%;}*/
     /*md-dialog{max-width:100%;}*/
 
+    .btn {
+        background-color: #d1e934;
+        border: none;
+        color: white;
+        padding: 18px 12px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        /* border-radius: 100%; */
+        width: 10px;
+        box-shadow: 1px 1px 8px 0px #FFF;
+        height: 10px;
+    }
+
+    .btn-img{
+        background:url('assets/images/play.png') no-repeat;
+        width:13px;
+    }
+
+    .btn:hover{
+        cursor:pointer;
+    }
+    .history-dialog .angular-google-map-container{
+        height:477px;
+    }
 </style>
+
+<script type="text/ng-template" id="content">
+    </script>
 
 <md-dialog aria-label="Location Tracker History" ng-cloak flex="85">
     <md-toolbar>
@@ -81,35 +111,25 @@
     </div>
 
     <md-dialog-content class="map-dialog-content" layout-fill>
-        <div class="md-dialog-content map-dialog">
+        <div class="md-dialog-content map-dialog history-dialog" >
             <ui-gmap-google-map center='inMap.center' zoom='inMap.zoom' draggable="true"
                                 options="inMap.mapOptions" bounds="inMap.bounds"
                                 control="inMap.mapControl">
 
                 <ui-gmap-map-control
-                    position="TOP_RIGHT"
-                >
-                    <div ng-controller="InnerMapController">
-                        <md-button class="md-fab md-primary md-mini play-pause-btns" ng-show="play" ng-click="traceRoute()">
-                            <md-icon class="icon-font" md-font-library="material-icons">play_arrow</md-icon>
-                        </md-button>
-                        <md-button class="md-fab md-primary md-mini play-pause-btns" ng-hide="play" ng-click="traceRoute()">
-                            <md-icon class="icon-font" md-font-library="material-icons">pause</md-icon>
-                        </md-button>
-                        <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopRouteAnim()">
-                            <md-icon class="icon-font" md-font-library="material-icons">stop</md-icon>
-                        </md-button>
-                    </div>
-                </ui-gmap-map-control>
+                    template="app/components/landingpage/dashboard/map/history-map-control.html"
+                    controller="InnerMapController"
+                    position="top-right"></ui-gmap-map-control>
 
+                </ui-gmap-map-control>
 
                 <ui-gmap-marker
                     idkey="'self'"
-                    coords="historyMarker"
-                    click="historyMarker.click"
-                    options="historyMarker.options"
-                    events="historyMarker.events"
-                    control="historyMarker.control">
+                    coords="clickedMarker"
+                    click="clickedMarker.click"
+                    options="clickedMarker.options"
+                    events="clickedMarker.events"
+                    control="clickedMarker.control">
                 </ui-gmap-marker>
 
                 <ui-gmap-polyline
@@ -123,7 +143,6 @@
                     events="trace.events"
                     icons="trace.icons">
                 </ui-gmap-polyline>
-
             </ui-gmap-google-map>
         </div>
     </md-dialog-content>
@@ -142,14 +161,4 @@
 
         });
     });
-
-
-    //$('#date-start').bootstrapMaterialDatePicker({ format : 'dddd DD MMMM YYYY - HH:mm' });
-    //$('#date-end').bootstrapMaterialDatePicker({ format : 'dddd DD MMMM YYYY - HH:mm' });
-
-    //$('#date-end').bootstrapMaterialDatePicker({ weekStart : 0 });
-    //$('#date-start').bootstrapMaterialDatePicker({ weekStart : 0 }).on('change', function(e, date)
-    //{
-    //    $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
-    //});
 </script>

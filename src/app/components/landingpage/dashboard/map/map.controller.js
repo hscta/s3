@@ -357,7 +357,7 @@
 
 
     function HistoryController($scope, $log, $mdDialog, mapService,
-                                     $interval, params, intellicarAPI, historyService) {
+                               $interval, params, intellicarAPI, historyService) {
         //var vm = this;
         //$log.log($scope);
 
@@ -366,12 +366,23 @@
             mapControl: {}
         };
 
+        $scope.clickedMarker = angular.copy(params.clickedMarker);
+
         var initialZoom = mapService.getZoom();
         $scope.inMap.zoom = initialZoom;
-        $scope.inMap.center = params.clickedMarker;
+        $scope.inMap.center = $scope.clickedMarker;
         //$scope.inMap.bounds = mapService.getBounds();
         $scope.errorMsg = "";
         //$log.log(params);
+
+       // $scope.clickedMarker = $scope.clickedMarker;
+
+
+        historyService.setData('inMap', $scope.inMap);
+
+        $scope.deviceid = $scope.clickedMarker.deviceid;
+        $scope.vehicleNumber = $scope.clickedMarker.title;
+
 
         //$log.log("uiGmapGoogleMapApi loaded");
         $scope.trace = {
@@ -381,7 +392,7 @@
                 icon: {
                     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
                 },
-                offset: '0px',
+                offset: '100px',
                 repeat: '100px'
             }],
             clickable: true,
@@ -392,9 +403,7 @@
             events: {}
         };
 
-        $scope.clickedMarker = params.clickedMarker;
-        $scope.deviceid = params.clickedMarker.deviceid;
-        $scope.vehicleNumber = params.clickedMarker.title;
+        $scope.clickedMarker.trace = $scope.trace;
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -454,6 +463,7 @@
                     intellicarAPI.reportService.getDeviceLocation(body)
                         .then($scope.drawTrace, $scope.handleGetLocationFailure);
 
+
                 } else {
                     $scope.errorMsg = "Enter valid start and end time";
                     return;
@@ -467,6 +477,9 @@
 
         var idx = 0;
         $scope.drawTrace = function (resp) {
+
+            historyService.setData('getHistory', true);
+
             $scope.trace.path = [];
 
             for (var idx in resp.data.data) {
@@ -487,7 +500,11 @@
 
             $scope.trace.path.sort(compare);
 
+
             if ($scope.trace.path.length) {
+                $scope.clickedMarker.latitude = $scope.trace.path[0].latitude;
+                $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
+
                 var midPoint = Math.floor($scope.trace.path.length / 2);
                 //$log.log("midpoint" + midPoint);
                 $scope.inMap.center = $scope.trace.path[midPoint];
@@ -498,36 +515,6 @@
 
             // $scope.playAnim();
         };
-
-        $scope.animationCount = 0;
-
-        $scope.playAnim = function () {
-            // $log.log($scope.trace.path);
-            if ($scope.trace.path.length)
-                $scope.animateMarker = $interval(function () {
-                    //$log.log($scope.trace.path[$scope.animationCount]);
-                    $scope.clickedMarker = $scope.trace.path[$scope.animationCount];
-                    $scope.animationCount++;
-                    if (!$scope.animationCount) {
-                        $scope.animationCount = 0;
-                        // $log.log('complete')
-                    }
-                }, 100);
-        };
-
-        $scope.stopInterval = function () {
-            $interval.cancel($scope.animateMarker);
-            $scope.animationCount = 0;
-        };
-
-        $scope.pauseInterval = function () {
-            $interval.cancel($scope.animateMarker);
-            $scope.animateMarker = undefined;
-        };
-
-        $scope.$on('$destroy', function () {
-            $scope.stopInterval();
-        });
 
         $scope.fitBounds = function () {
             $scope.trace.fit = true;
@@ -565,28 +552,73 @@
         }
     }
 
-    function InnerMapController($scope, $log, $mdDialog, historyService) {
-        var vm = this;
+    function InnerMapController($scope, $log, $mdDialog, historyService,  $interval) {
+
+        var marker = historyService.getData('clickedMarker');
+        var inMap = historyService.getData('inMap');
+
+        var animationCount = 0;
+
+        $scope.playAnim = function () {
+            historyService.setData('getHistory', false);
+            $log.log(marker);
+            if (marker.trace.path.length) {
+                $log.log(marker.trace.path);
+                $scope.animateMarker = $interval(function () {
+                    //$log.log(historyService.getData('getHistory') );
+                    if ( !historyService.getData('getHistory') ) {
+                        marker.latitude = marker.trace.path[animationCount].latitude;
+                        marker.longitude = marker.trace.path[animationCount].longitude;
+                        inMap.center = marker;
+                        animationCount++;
+                        if (animationCount >= marker.trace.path.length) {
+                            animationCount = 0;
+                        }
+                    }else {
+                        $scope.stopInterval();
+                        animationCount=0;
+                        $scope.play = true;
+                    }
+                }, 100);
+            }
+        };
+
+        $scope.stopInterval = function () {
+            $interval.cancel($scope.animateMarker);
+            animationCount = 0;
+            marker.latitude = marker.trace.path[animationCount].latitude;
+            marker.longitude = marker.trace.path[animationCount].longitude;
+            $scope.play = true;
+        };
+
+        $scope.pauseInterval = function () {
+            $interval.cancel($scope.animateMarker);
+            $scope.animateMarker = undefined;
+        };
+
+        $scope.$on('$destroy', function () {
+            $scope.stopInterval();
+        });
 
         $scope.play = true;
         $scope.traceRoute = function () {
             //$log.log('trace route');
 
-            if ($scope.play) {
-                $scope.playAnim();
-                $scope.play = false;
-            } else {
-                $scope.pauseInterval();
-                $scope.play = true;
-            }
+
+                if ($scope.play) {
+                    $scope.playAnim();
+                    $scope.play = false;
+                } else {
+                    $scope.pauseInterval();
+                    $scope.play = true;
+                }
+
         };
 
         $scope.stopRouteAnim = function () {
             $scope.stopInterval();
             $scope.play = true;
         };
-
-        $log.log(historyService.getData('clickedMarker'));
     }
 
 
@@ -613,6 +645,7 @@
     $(window).resize(function () {
         setMapHeight();
     });
+
     function isRendered(el, callback) {
         var isr_interval = setInterval(function () {
             if ($(el).length > 0) {
