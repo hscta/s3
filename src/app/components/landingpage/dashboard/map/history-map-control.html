@@ -2,25 +2,24 @@
 
 
 <div ng-show="gotHistory()">
-
-    <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="rewind()">
+    <!--<md-tooltip>Playing {{getAnimationRate()}} secs in 1 sec</md-tooltip>-->
+    <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="goSlow()">
         <md-icon class="icon-font" md-font-library="material-icons">fast_rewind</md-icon>
-        <md-tooltip>Fast Forward</md-tooltip>
+        <md-tooltip>Go Slow</md-tooltip>
     </md-button>
-    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-show="play" ng-click="traceRoute()">
+    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-show="play" ng-click="playAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">play_arrow</md-icon>
         <md-tooltip>Play</md-tooltip>
     </md-button>
-    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-hide="play" ng-click="traceRoute()">
+    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-hide="play" ng-click="pauseAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">pause</md-icon>
-        <md-tooltip>Pause {{ffrate}}<br/>{{ffrate}}
-        </md-tooltip>
+        <md-tooltip>Pause</md-tooltip>
     </md-button>
     <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="fastForward()">
         <md-icon class="icon-font" md-font-library="material-icons">fast_forward</md-icon>
-        <md-tooltip>Slow</md-tooltip>
+        <md-tooltip>Go Fast</md-tooltip>
     </md-button>
-    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopInterval()">
+    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">stop</md-icon>
         <md-tooltip>Stop</md-tooltip>
     </md-button>
