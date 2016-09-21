@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<div ng-show="gotHistory()">
+
+    <!--<md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="traceRoute()">-->
+        <!--<md-icon class="icon-font" md-font-library="material-icons">fast_rewind</md-icon>-->
+        <!--<md-tooltip>Fast Forward</md-tooltip>-->
+    <!--</md-button>-->
+    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-show="play" ng-click="traceRoute()">
+        <md-icon class="icon-font" md-font-library="material-icons">play_arrow</md-icon>
+        <md-tooltip>Play</md-tooltip>
+    </md-button>
+    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-hide="play" ng-click="traceRoute()">
+        <md-icon class="icon-font" md-font-library="material-icons">pause</md-icon>
+        <md-tooltip>Pause</md-tooltip>
+    </md-button>
+    <!--<md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="traceRoute()">-->
+        <!--<md-icon class="icon-font" md-font-library="material-icons">fast_forward</md-icon>-->
+        <!--<md-tooltip>Rewind</md-tooltip>-->
+    <!--</md-button>-->
+
+    <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopInterval()">
+        <md-icon class="icon-font" md-font-library="material-icons">stop</md-icon>
+        <md-tooltip>Stop</md-tooltip>
+    </md-button>
+</div>

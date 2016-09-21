@@ -36,16 +36,15 @@
     /*.icar-checkbox{*/
         /*transform:scale(0.8);*/
     /*}*/
+
+    .icon-visibility{color:#000;}
+    .icon-running{color:#6991FD;}
+    .icon-stopped{color:#0C8;}
+    .icon-active{color:#000;}
+    .icon-immobilized{color: rgba(245, 86, 94, 0.85);}
+
 </style>
 
-<!--<script type="text/ng-template" id="searchbox.tpl.html">-->
-<!--<input id="pac-input" type="text" placeholder="Google Search..." mg-model="vm.pacInput">-->
-<!--</script>-->
-
-
-<!--<script type="text/ng-template" id="control.tpl.html">-->
-<!--<button class="btn btn-sm btn-primary" ng-class="{'btn-warning': danger}" ng-click="controlClick()">{{controlText}}</button>-->
-<!--</script>-->
 
 
 <div>
@@ -68,42 +67,42 @@
 
         <ul id="nav" layout="row" layout-align="end center" flex>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='']"
-                ng-click="vm.getFilteredData('')" layout="column" layout-align="center center">
+                ng-click="vm.runFilters('')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='']"
-                         class="icon-font" md-font-library="material-icons">visibility</md-icon>
+                         class="icon-font icon-visibility" md-font-library="material-icons">visibility</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='']"
                       style="font-size: 13px;">{{vm.vehicleStats.showall}}</span>
                 <md-tooltip>All</md-tooltip>
             </li>
             <li  ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
-                 ng-click="vm.getFilteredData('Running')" layout="column" layout-align="center center">
+                 ng-click="vm.runFilters('Running')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
-                         class="icon-font" md-font-library="material-icons">time_to_leave</md-icon>
+                         class="icon-font icon-running" md-font-library="material-icons">time_to_leave</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
                       style="font-size: 13px;">{{vm.vehicleStats.running}}</span>
                 <md-tooltip>Ignition On</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Stopped']"
-                ng-click="vm.getFilteredData('Stopped')" layout="column" >
+                ng-click="vm.runFilters('Stopped')" layout="column" >
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
-                         class="icon-font" md-font-library="material-icons">
+                         class="icon-font icon-stopped" md-font-library="material-icons">
                     radio_button_checked</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
                       style="font-size: 13px;">{{vm.vehicleStats.stopped}}</span>
                 <md-tooltip>Ignition Off</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Active']"
-                ng-click="vm.getFilteredData('Active')" layout="column" >
+                ng-click="vm.runFilters('Active')" layout="column" >
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
-                         class="icon-font" md-font-library="material-icons">lock_open</md-icon>
+                         class="icon-font icon-active" md-font-library="material-icons">lock_open</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
                       style="font-size: 13px;">{{vm.vehicleStats.active}}</span>
                 <md-tooltip>Active</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"
-                ng-click="vm.getFilteredData('Immobilized')" layout="column" >
+                ng-click="vm.runFilters('Immobilized')" layout="column" >
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
-                         class="icon-font" md-font-library="material-icons">lock</md-icon>
+                         class="icon-font icon-immobilized" md-font-library="material-icons">lock</md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
                       style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>
                 <md-tooltip>Immoblized</md-tooltip>
@@ -115,9 +114,9 @@
         <div class="ltb_item" ng-repeat="item in vm.leftTB" >
             <div class="ltbi_button">
                 <div class="ltbi_icon">
-                    <i class="fa fa-desktop" aria-hidden="true"></i>
+                    <i class="fa {{item.icon}}" aria-hidden="true"></i>
                 </div>
-                <div class="ltbi_name">Dashboard</div>
+                <div class="ltbi_name">{{item.name}}</div>
             </div>
             <div class="ltbi_cont">
                 <md-input-container class="md-input-cont">
@@ -126,57 +125,11 @@
                 </md-input-container>
             </div>
         </div>
-
-        <div class="ltb_item">
-            <div class="ltbi_button">
-                <div class="ltbi_icon">
-                    <i class="fa fa-cab" aria-hidden="true"></i>
-                </div>
-                <div class="ltbi_name">Cab {{vm.leftTB}}</div>
-            </div>
-            <div class="ltbi_cont"></div>
-        </div>
-        <div class="ltb_item">
-            <div class="ltbi_button">
-                <div class="ltbi_icon">
-                    <i class="fa fa-tasks" aria-hidden="true"></i>
-                </div>
-                <div class="ltbi_name">Tasks</div>
-            </div>
-            <div class="ltbi_cont"></div>
-        </div>
-        <div class="ltb_item">
-            <div class="ltbi_button">
-                <div class="ltbi_icon">
-                    <i class="fa fa-tag" aria-hidden="true"></i>
-                </div>
-                <div class="ltbi_name">Tags</div>
-            </div>
-            <div class="ltbi_cont"></div>
-        </div>
-        <div class="ltb_item">
-            <div class="ltbi_button">
-                <div class="ltbi_icon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </div>
-                <div class="ltbi_name">User</div>
-            </div>
-            <div class="ltbi_cont"></div>
-        </div>
-        <div class="ltb_item">
-            <div class="ltbi_button">
-                <div class="ltbi_icon">
-                    <i class="fa fa-gear" aria-hidden="true"></i>
-                </div>
-                <div class="ltbi_name">Settings</div>
-            </div>
-            <div class="ltbi_cont"></div>
-        </div>
     </div>
     <div id="mapCanvas" style="margin-left:90px">
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
-                            options="vm.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
-                            control="vm.mapControl">
+                            options="vm.inMap.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
+                            control="vm.inMap.mapControl">
 
             <!--<ui-gmap-search-box template="vm.searchbox.template" events="vm.searchbox.events" position="LEFT_TOP"></ui-gmap-search-box>-->
 

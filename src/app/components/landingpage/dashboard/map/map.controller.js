@@ -5,13 +5,6 @@
 (function () {
 
 
-    vm.leftTB = [
-        {'name':'Dashboard', 'icon':'fa-dashboard' },
-        {'name':'Dashboard', 'icon':'fa-dashboard' },
-    ]
-
-    vm.leftTB = 'hello';
-
     angular
         .module('uiplatform')
         .controller('MapController', MapController)
@@ -36,6 +29,17 @@
                 }
             }
         };
+
+
+
+        vm.leftTB = [
+            {'name':'Dashboard', 'icon':'fa-desktop' },
+            {'name':'Cab Service', 'icon':'fa-cab' },
+            {'name':'Tasks', 'icon':'fa-tasks' },
+            {'name':'Tags', 'icon':'fa-tag' },
+            {'name':'User', 'icon':'fa-user' },
+            {'name':'Settings', 'icon':'fa-gears' },
+        ];
 
 
         vm.infoWindow = {
