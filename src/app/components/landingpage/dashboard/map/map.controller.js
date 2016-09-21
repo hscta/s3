@@ -702,10 +702,7 @@
 
         var moveMapWithMarker = function (marker) {
             var map = historyMap.mapControl.getGMap();
-
             var projection = map.getProjection();
-            var bounds = map.getBounds();
-
             var centerPoint = projection.fromLatLngToPoint(map.getCenter());
 
             var scale = Math.pow(2, map.getZoom());
