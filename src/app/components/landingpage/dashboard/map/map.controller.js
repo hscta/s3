@@ -1,7 +1,3 @@
-/**
- * Created by smiddela on 14/08/16.
- */
-
 (function () {
 
     angular
@@ -16,6 +12,21 @@
                            rightNavAlertDashboardService) {
         $log.log('MapController');
         var vm = this;
+
+        vm.leftToolbar = false;
+
+
+        vm.leftTB = [
+            {'name':'Dashboard', 'icon':'fa-desktop' },
+            {'name':'Cab Service', 'icon':'fa-cab' },
+            {'name':'Tasks', 'icon':'fa-tasks' },
+            {'name':'Tags', 'icon':'fa-tag' },
+            {'name':'User', 'icon':'fa-user' },
+            {'name':'Settings', 'icon':'fa-gears' },
+        ];
+
+
+
 
         vm.inMap = {
             mapOptions: {},
@@ -61,6 +72,7 @@
             }
         };
 
+
         vm.onRoaded = true;
         vm.offRoaded = false;
 
@@ -76,6 +88,7 @@
             vm.inMap.zoom = mapService.getZoom();
             $timeout(vm.updateZoom, 4000);
         };
+
 
 
         vm.updateMarker = function (vehicleData) {
@@ -684,39 +697,5 @@
     }
 
 
-    /*
-     *  Jquery code for fixing resolution problem of map
-     *
-     * */
-    var wh = $(window).height();
-    var header_height = 95;
-
-    function setMapHeight() {
-
-        wh = $(window).height();
-        isRendered('.angular-google-map-container', function (el) {
-            el.css('height', (wh - header_height) + 'px');
-        });
-    }
-
-    $(window).ready(function () {
-        setMapHeight();
-    });
-
-
-    $(window).resize(function () {
-        setMapHeight();
-    });
-
-    function isRendered(el, callback) {
-        var isr_interval = setInterval(function () {
-            if ($(el).length > 0) {
-                callback($(el));
-                clearInterval(isr_interval);
-            }
-        }, 200)
-    }
-
 
 })();
-

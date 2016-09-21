@@ -80,23 +80,32 @@
 </style>
 
 <script type="text/ng-template" id="historyInfoWindow.html">
-    <div layout="column">
-        <div>
-            <strong>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm a'}}</strong>
-        </div>
-        <div>
-            Odometer: <strong>{{parameter.data.odometer}}</strong>
-        </div>
-        <div>
-            Speed: <strong>{{parameter.data.speed}}</strong>
-        </div>
+    <div style="width:150px; height:82px; max-width:150px; min-width:150px; overflow:hidden; padding-top:5px;">
+        <table>
+            <tr>
+                <td>Date</td>
+                <td><strong>{{parameter.data.gpstime | date : 'dd MMM yyyy'}}</strong></td>
+            </tr>
+            <tr>
+                <td>Time</td>
+                <td><strong>{{parameter.data.gpstime | date : 'h:mm a'}}</strong></td>
+            </tr>
+            <tr>
+                <td style="padding-right:5px;">Odometer</td>
+                <td><strong>{{parameter.data.odometer}}</strong></td>
+            </tr>
+            <tr>
+                <td>Speed</td>
+                <td><strong>{{parameter.data.speed}}</strong></td>
+            </tr>
+        </table>
     </div>
 </script>
 
 <md-dialog aria-label="Location Tracker History" ng-cloak flex="85">
-    <md-toolbar>
+    <md-toolbar style="height:42px; text-align:center;">
         <div class="md-toolbar-tools md-accent">
-            <h2 layout-align="center center">Location History</h2>
+            <h2 layout-align="center center" style="width:100%">Location History</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
                 <md-icon md-font-library="material-icons">close</md-icon>

@@ -49,7 +49,7 @@
 
 <div>
     <!--layout="row" layout-align="center center"-->
-    <div layout="row" flex>
+    <div layout="row" flex  >
         <md-input-container class="container-margin" flex="30">
             <input type="text" placeholder="Apply filters..." size="50"
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
@@ -109,8 +109,24 @@
             </li>
         </ul>
     </div>
+    <div class="lefttoolbar" ng-show="vm.leftToolbar"}>
 
-    <div id="mapCanvas">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB" >
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa {{item.icon}}" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">{{item.name}}</div>
+            </div>
+            <div class="ltbi_cont">
+                <md-input-container class="md-input-cont">
+                    <label>Color</label>
+                    <input type="text" ng-model="color" >
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+    <div id="mapCanvas" ng-class="{'active':vm.leftToolbar}">
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
                             options="vm.inMap.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
                             control="vm.inMap.mapControl">
