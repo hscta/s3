@@ -137,15 +137,7 @@ md-toolbar{border-bottom:1px solid #CCC;}
 //}
 
 #centermap {
-  //float:left;
-  //min-height: 55%;
-  //min-width: 70%;
-  height: 590px;
-
-  //max-height: 90%;
-  //max-width: 80%;
-  //border: 1px solid red;
-  //box-sizing: border-box;
+  //height: 590px;
 }
 
 #pac-input {
@@ -367,4 +359,10 @@ md-toolbar{border-bottom:1px solid #CCC;}
     .ltbi_cont{
         left:90px;
     }
+}
+
+
+.angular-google-map-container,
+.mainHeader{
+    @include transition(0.5s);
 }

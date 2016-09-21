@@ -27,4 +27,27 @@
         // vm.isLoginTokenValid();
     }
 
+    var headerYVal = 80;
+    var wh = $(window).height();
+
+    $(document).mousemove(function(event){
+        if(event.pageY < headerYVal){
+            showHeader();
+            headerYVal = 150;
+        }else{
+            hideHeader();
+            headerYVal = 80;
+        }
+    });
+
+    function hideHeader() {
+        $('.mainHeader').css({'margin-top':'-45px'});
+        $('.angular-google-map-container').css('height', (wh - 50) + 'px');
+    }
+
+    function showHeader() {
+        $('.mainHeader').css({'margin-top':'0'});
+        $('.angular-google-map-container').css('height', (wh - 95) + 'px');
+    }
+
 })();
