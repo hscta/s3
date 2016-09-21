@@ -109,7 +109,7 @@
             </li>
         </ul>
     </div>
-    <div class="lefttoolbar">
+    <div class="lefttoolbar" ng-show="vm.leftToolbar"}>
 
         <div class="ltb_item" ng-repeat="item in vm.leftTB" >
             <div class="ltbi_button">
@@ -126,7 +126,7 @@
             </div>
         </div>
     </div>
-    <div id="mapCanvas" style="margin-left:90px">
+    <div id="mapCanvas" ng-class="{'active':vm.leftToolbar}">
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
                             options="vm.inMap.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
                             control="vm.inMap.mapControl">

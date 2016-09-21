@@ -13,6 +13,21 @@
         $log.log('MapController');
         var vm = this;
 
+        vm.leftToolbar = false;
+
+
+        vm.leftTB = [
+            {'name':'Dashboard', 'icon':'fa-desktop' },
+            {'name':'Cab Service', 'icon':'fa-cab' },
+            {'name':'Tasks', 'icon':'fa-tasks' },
+            {'name':'Tags', 'icon':'fa-tag' },
+            {'name':'User', 'icon':'fa-user' },
+            {'name':'Settings', 'icon':'fa-gears' },
+        ];
+
+
+
+
         vm.inMap = {
             mapOptions: {},
             mapControl: {}
@@ -56,16 +71,6 @@
                 vm.infoWindowShow();
             }
         };
-
-
-        vm.leftTB = [
-            {'name':'Dashboard', 'icon':'fa-desktop' },
-            {'name':'Cab Service', 'icon':'fa-cab' },
-            {'name':'Tasks', 'icon':'fa-tasks' },
-            {'name':'Tags', 'icon':'fa-tag' },
-            {'name':'User', 'icon':'fa-user' },
-            {'name':'Settings', 'icon':'fa-gears' },
-        ];
 
 
         vm.onRoaded = true;
@@ -691,39 +696,6 @@
         };
     }
 
-
-    /*
-     *  Jquery code for fixing resolution problem of map
-     *
-     * */
-    var wh = $(window).height();
-    var header_height = 50;
-
-    function setMapHeight() {
-
-        wh = $(window).height();
-        isRendered('.angular-google-map-container', function (el) {
-            el.css('height', (wh - header_height) + 'px');
-        });
-    }
-
-    $(window).ready(function () {
-        setMapHeight();
-    });
-
-
-    $(window).resize(function () {
-        setMapHeight();
-    });
-
-    function isRendered(el, callback) {
-        var isr_interval = setInterval(function () {
-            if ($(el).length > 0) {
-                callback($(el));
-                clearInterval(isr_interval);
-            }
-        }, 200)
-    }
 
 
 })();

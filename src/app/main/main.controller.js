@@ -27,27 +27,71 @@
         // vm.isLoginTokenValid();
     }
 
+
+
+    /*
+     *  Jquery code for fixing resolution problem of map
+     *
+     * */
+
+    headerAutoHide = false;
+
+    var wh = $(window).height();
+    var header_height = 95;
+    if(headerAutoHide){
+        $('.mainHeader').css({'margin-top':'-45px'});
+        header_height = 50;
+    }
+
+    function setMapHeight() {
+
+        wh = $(window).height();
+        isRendered('.angular-google-map-container', function (el) {
+            el.css('height', (wh - header_height) + 'px');
+        });
+    }
+
+    $(window).ready(function () {
+        setMapHeight();
+    });
+
+
+    $(window).resize(function () {
+        setMapHeight();
+    });
+
+    function isRendered(el, callback) {
+        var isr_interval = setInterval(function () {
+            if ($(el).length > 0) {
+                callback($(el));
+                clearInterval(isr_interval);
+            }
+        }, 200)
+    }
+
+
+
     var headerYVal = 80;
     var wh = $(window).height();
 
     $(document).mousemove(function(event){
-        if(event.pageY < headerYVal){
-            showHeader();
-            headerYVal = 150;
-        }else{
-            hideHeader();
-            headerYVal = 80;
+        if(headerAutoHide) {
+            if (event.pageY < headerYVal) {
+                showHeader();
+                headerYVal = 150;
+            } else {
+                hideHeader();
+                headerYVal = 80;
+            }
         }
     });
 
     function hideHeader() {
         $('.mainHeader').css({'margin-top':'-45px'});
-        $('.angular-google-map-container').css('height', (wh - 50) + 'px');
     }
 
     function showHeader() {
         $('.mainHeader').css({'margin-top':'0'});
-        $('.angular-google-map-container').css('height', (wh - 95) + 'px');
     }
 
 })();
