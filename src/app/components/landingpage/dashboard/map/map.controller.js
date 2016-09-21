@@ -394,7 +394,7 @@
             coords: $scope.clickedMarker,
             control: {},
             options: {
-                maxWidth: 300,
+                //maxWidth: 300,
                 disableAutoPan: false,
                 pixelOffset: {
                     width: 0,
@@ -480,6 +480,7 @@
 
         $scope.drawTrace = function (resp) {
 
+            $log.log(resp);
             historyService.setData('getHistory', true);
 
             $scope.trace.path = [];
@@ -493,6 +494,8 @@
                 }
                 position.id = $scope.deviceid;
                 position.gpstime = parseInt(position.gpstime);
+                position.odometer = position.odometer;
+                position.speed = parseInt(position.speed.toFixed(2));
                 $scope.trace.path.push(position);
             }
 
@@ -507,12 +510,15 @@
                 $scope.clickedMarker.latitude = $scope.trace.path[0].latitude;
                 $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
 
+
                 var midPoint = Math.floor($scope.trace.path.length / 2);
                 $scope.historyMap.center = $scope.trace.path[midPoint];
                 $scope.historyMap.zoom = initialZoom - 1;
 
                 $scope.historyInfoWindow.coords = $scope.clickedMarker;
-                $scope.historyInfoWindow.data.time = new Date($scope.trace.path[0].gpstime);
+                $scope.historyInfoWindow.data.gpstime = new Date($scope.trace.path[0].gpstime);
+                $scope.historyInfoWindow.data.odometer = $scope.trace.path[0].odometer;
+                $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
                 $scope.historyInfoWindow.show = true;
             }
         };
@@ -579,7 +585,9 @@
                         //historyInfoWindow.coords = marker;
                         //historyInfoWindow.show = true;
                         //historyInfoWindow.control.showWindow();
-                        historyInfoWindow.data.time = marker.trace.path[animationCount].gpstime;
+                        historyInfoWindow.data.gpstime = marker.trace.path[animationCount].gpstime;
+                        historyInfoWindow.data.odometer = marker.trace.path[animationCount].odometer;
+                        historyInfoWindow.data.speed = marker.trace.path[animationCount].speed;
                         $scope.moveMapWithMarker(marker);
                         animationCount++;
                         if (animationCount >= marker.trace.path.length) {

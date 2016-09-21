@@ -78,8 +78,16 @@
 </style>
 
 <script type="text/ng-template" id="historyInfoWindow.html">
-    <div>
-        Location Time: <strong>{{parameter.data.time | date : 'dd MMM yyyy - h:mm a'}}</strong>
+    <div layout="column">
+        <div>
+            <strong>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm a'}}</strong>
+        </div>
+        <div>
+            Odometer: <strong>{{parameter.data.odometer}}</strong>
+        </div>
+        <div>
+            Speed: <strong>{{parameter.data.speed}}</strong>
+        </div>
     </div>
 </script>
 
