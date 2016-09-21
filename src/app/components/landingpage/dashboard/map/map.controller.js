@@ -591,7 +591,7 @@
         var marker = historyService.getData('clickedMarker');
         var historyMap = historyService.getData('historyMap');
         var historyInfoWindow = historyService.getData('historyInfoWindow');
-        var timeIncreaseBy = 150000;
+        var timeIncreaseBy = 120000;
         var initialTime;
         var tracePoint;
         var animationCount = 0;
