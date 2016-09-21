@@ -80,23 +80,19 @@
 </style>
 
 <script type="text/ng-template" id="historyInfoWindow.html">
-    <div style="width:150px; height:82px; max-width:150px; min-width:150px; overflow:hidden; padding-top:5px;">
+    <div style="width:230px; height:62px; max-width:210px; min-width:230px; overflow:hidden; padding-top:5px;">
         <table>
             <tr>
-                <td>Date</td>
-                <td><strong>{{parameter.data.gpstime | date : 'dd MMM yyyy'}}</strong></td>
+                <td><strong>Date</strong></td>
+                <td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm a'}}</td>
             </tr>
             <tr>
-                <td>Time</td>
-                <td><strong>{{parameter.data.gpstime | date : 'h:mm a'}}</strong></td>
+                <td style="padding-right:5px;"><strong>Odometer</strong></td>
+                <td>{{parameter.data.odometer}}</td>
             </tr>
             <tr>
-                <td style="padding-right:5px;">Odometer</td>
-                <td><strong>{{parameter.data.odometer}}</strong></td>
-            </tr>
-            <tr>
-                <td>Speed</td>
-                <td><strong>{{parameter.data.speed}}</strong></td>
+                <td><strong>Speed</strong></td>
+                <td>{{parameter.data.speed}}</td>
             </tr>
         </table>
     </div>
