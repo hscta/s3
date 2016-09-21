@@ -50,7 +50,7 @@
 
 <div>
     <!--layout="row" layout-align="center center"-->
-    <div layout="row" flex>
+    <div layout="row" flex  >
         <md-input-container class="container-margin" flex="30">
             <input type="text" placeholder="Apply filters..." size="50"
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
@@ -110,8 +110,70 @@
             </li>
         </ul>
     </div>
+    <div class="lefttoolbar">
 
-    <div id="mapCanvas">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB" >
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa fa-desktop" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">Dashboard</div>
+            </div>
+            <div class="ltbi_cont">
+                <md-input-container class="md-input-cont">
+                    <label>Color</label>
+                    <input type="text" ng-model="color" >
+                </md-input-container>
+            </div>
+        </div>
+
+        <div class="ltb_item">
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa fa-cab" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">Cab {{vm.leftTB}}</div>
+            </div>
+            <div class="ltbi_cont"></div>
+        </div>
+        <div class="ltb_item">
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa fa-tasks" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">Tasks</div>
+            </div>
+            <div class="ltbi_cont"></div>
+        </div>
+        <div class="ltb_item">
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa fa-tag" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">Tags</div>
+            </div>
+            <div class="ltbi_cont"></div>
+        </div>
+        <div class="ltb_item">
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">User</div>
+            </div>
+            <div class="ltbi_cont"></div>
+        </div>
+        <div class="ltb_item">
+            <div class="ltbi_button">
+                <div class="ltbi_icon">
+                    <i class="fa fa-gear" aria-hidden="true"></i>
+                </div>
+                <div class="ltbi_name">Settings</div>
+            </div>
+            <div class="ltbi_cont"></div>
+        </div>
+    </div>
+    <div id="mapCanvas" style="margin-left:90px">
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
                             options="vm.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
                             control="vm.mapControl">

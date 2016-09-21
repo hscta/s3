@@ -4,6 +4,14 @@
 
 (function () {
 
+
+    vm.leftTB = [
+        {'name':'Dashboard', 'icon':'fa-dashboard' },
+        {'name':'Dashboard', 'icon':'fa-dashboard' },
+    ]
+
+    vm.leftTB = 'hello';
+
     angular
         .module('uiplatform')
         .controller('MapController', MapController)
@@ -665,7 +673,6 @@
     $(window).ready(function () {
         setMapHeight();
     });
-
 
     $(window).resize(function () {
         setMapHeight();
