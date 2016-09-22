@@ -391,9 +391,83 @@ body{
     height:600px;
     width:100%;
 }
-
+.geo-cont,
 .geo-leftbar{
     float:left;
+    position: relative;
+    width:20%;
+    height:100%;
+}
+.geo-cont{
+    box-sizing:border-box;
+    border-left:#ccc 1px solid;
+    width:80%;
+}
+.geo-rep-item-head,
+.geo-rep-item{
+    width:100%;
+    padding: 10px 20px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    font-size: 85%;
+    color: #555;
+}
+.geo-rep-item-head{
+    text-align: center;
+    font-size: 120%;
+}
+
+.geo-rep-item.active{
+    background-color: #eee;
+}
+.geo-rep-item:hover{
+    cursor: pointer;
+    background: #f4f4f4;
+}
+
+.geo-mul-back{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.geo-multiSel{
     width:200px;
-    
+    position: relative;
+    z-index:100;
+    .geo-ms-cont{
+        width:120%;
+        position: absolute;
+        left:0;
+        top:90%;
+        border-top:1px solid #ddd;
+        @include shadow(2px 5px 8px rgba(0,0,0,0.3));
+        max-height:400px;
+        overflow-y: auto;
+        background-color: #fff;
+        h3{
+            font-size:13px!important;
+            padding-top:3px;
+        }
+        .md-checkbox {
+            width: 24px;
+            margin-left: 3px;
+            margin-right: 10px;
+            margin-top: 12px;
+        }
+        md-list-item.md-2-line,
+        md-list-item.md-2-line > .md-no-style {
+            height: auto;
+            min-height: 30px!important;
+        }
+        .md-list-item-text{
+            margin:4px 10px!important;
+        }
+        md-list-item .md-list-item-inner > md-checkbox{
+            margin:0!important;
+        }
+    }
 }

@@ -39,6 +39,7 @@
             }
         };
 
+
         vm.mapEvents = {
             click: function () {
                 vm.infoWindowClose();
