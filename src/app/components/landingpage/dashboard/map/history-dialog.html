@@ -77,26 +77,37 @@
     .history-dialog .angular-google-map-container {
         height: 554px;
     }
+
+     .md-button{
+         margin:6px 1px;
+     }
+
+    .md-button.md-fab.md-mini{
+        line-height:37px;
+        width:34px;
+        height:36px;
+    }
+
+    .icon-font {
+        font-size: 19px;
+    }
+
 </style>
 
 <script type="text/ng-template" id="historyInfoWindow.html">
-    <div style="width:150px; height:82px; max-width:150px; min-width:150px; overflow:hidden; padding-top:5px;">
+    <div style="width:230px; height:62px; max-width:230px; min-width:230px; overflow:hidden; padding-top:5px;">
         <table>
             <tr>
-                <td>Date</td>
-                <td><strong>{{parameter.data.gpstime | date : 'dd MMM yyyy'}}</strong></td>
+                <td><strong>Date</strong></td>
+                <td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm:ss a'}}</td>
             </tr>
             <tr>
-                <td>Time</td>
-                <td><strong>{{parameter.data.gpstime | date : 'h:mm a'}}</strong></td>
+                <td style="padding-right:5px;"><strong>Odometer</strong></td>
+                <td>{{parameter.data.odometer}} km</td>
             </tr>
             <tr>
-                <td style="padding-right:5px;">Odometer</td>
-                <td><strong>{{parameter.data.odometer}}</strong></td>
-            </tr>
-            <tr>
-                <td>Speed</td>
-                <td><strong>{{parameter.data.speed}}</strong></td>
+                <td><strong>Speed</strong></td>
+                <td>{{parameter.data.speed}} kmph</td>
             </tr>
         </table>
     </div>
@@ -112,7 +123,6 @@
             </md-button>
         </div>
     </md-toolbar>
-
     <md-content     >
         <md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect md-dynamic-height>
 
@@ -203,7 +213,15 @@
 
                 <md-tab-body >
                     <div class="geofence-cont" ng-controller="GeofenceController as vm">
-                        {{vm.test}}
+                        <div class="geo-leftbar">
+
+                        </div>
+                        <div class="geo-cont">
+                            <div class="geoc-head">
+
+                            </div>
+                            <div class="geoc-body"></div>
+                        </div>
                     </div>
                 </md-tab-body>
             </md-tab>
