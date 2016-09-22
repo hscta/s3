@@ -5,10 +5,10 @@
         .controller('MapController', MapController)
         .controller('HistoryController', HistoryController)
         .controller('ImmobalizeController', ImmobalizeController)
-        .controller('InnerMapController', InnerMapController)
+        .controller('InnerMapController', InnerMapController);
 
-    function MapController($scope, $rootScope, $log, mapService,
-                           $timeout, $mdDialog, $document, $interval,
+    function MapController($scope, $log, mapService,
+                           $timeout, $mdDialog, $interval, historyService,
                            rightNavAlertDashboardService) {
         $log.log('MapController');
         var vm = this;
@@ -355,6 +355,7 @@
 
         vm.loadMap();
         vm.addListener();
+        historyService.setData('inMarkers', vm.inMarkers);
     }
 
 
@@ -371,11 +372,12 @@
         };
 
         var initialZoom = mapService.getZoom();
-        $scope.historyMap.zoom = initialZoom;
+        $scope.inMarkers = angular.copy(historyService.getData('inMarkers'));
         $scope.clickedMarker = angular.copy(params.clickedMarker);
+        $scope.historyMap.zoom = initialZoom;
         $scope.historyMap.center = $scope.clickedMarker;
         $scope.deviceid = $scope.clickedMarker.deviceid;
-        $scope.vehicleNumber = $scope.clickedMarker.title;
+        $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
         $scope.errorMsg = "";
 
 
@@ -553,18 +555,24 @@
             return $scope.clickedMarker;
         };
 
-        $scope.getMyVehicles = function () {
-            intellicarAPI.userService.getMyVehiclesMap({})
-                .then(function (resp) {
-                    $log.log(resp);
-                    $scope.vehicles = resp;
-                }, function (resp) {
-                    $log.log("handleMyVehiclesFailure");
-                    $log.log(resp);
-                });
+        // $scope.getMyVehicles = function () {
+        //     intellicarAPI.userService.getMyVehiclesMap({})
+        //         .then(function (resp) {
+        //             $log.log(resp);
+        //             $scope.vehicles = resp;
+        //         }, function (resp) {
+        //             $log.log("handleMyVehiclesFailure");
+        //             $log.log(resp);
+        //         });
+        // };
+        //
+        // $scope.getMyVehicles();
+
+        var getMyVehicles = function() {
+            $log.log($scope.inMarkers);
         };
 
-        $scope.getMyVehicles();
+        getMyVehicles();
 
         historyService.setData('clickedMarker', $scope.clickedMarker);
         $interval($scope.resizeMap, 500);
@@ -613,7 +621,9 @@
                             historyInfoWindow.data.gpstime = tracePoint.gpstime;
                             historyInfoWindow.data.odometer = tracePoint.odometer;
                             historyInfoWindow.data.speed = tracePoint.speed;
-                            moveMapWithMarker(marker);
+                            if(animationCount % 10 === 0) {
+                                moveMapWithMarker(marker);
+                            }
                             animationCount++;
                         } else {
                             break;
@@ -622,6 +632,7 @@
 
                     if (animationCount >= marker.trace.path.length || !$scope.gotHistory()) {
                         $scope.stopAnimation();
+                        moveMapWithMarker(marker);
                     }
 
                 }, 100);
@@ -656,6 +667,7 @@
                     .hideDelay(3000)
             );
         };
+
 
         $scope.stopAnimation = function () {
             $interval.cancel($scope.animateMarker);
