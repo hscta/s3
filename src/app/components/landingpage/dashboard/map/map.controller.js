@@ -9,24 +9,11 @@
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
-                           rightNavAlertDashboardService) {
+                           rightNavAlertDashboardService,MapLeftToolBarService) {
         $log.log('MapController');
         var vm = this;
 
-        vm.leftToolbar = false;
-
-
-        vm.leftTB = [
-            {'name':'Dashboard', 'icon':'fa-desktop' },
-            {'name':'Cab Service', 'icon':'fa-cab' },
-            {'name':'Tasks', 'icon':'fa-tasks' },
-            {'name':'Tags', 'icon':'fa-tag' },
-            {'name':'User', 'icon':'fa-user' },
-            {'name':'Settings', 'icon':'fa-gears' },
-        ];
-
-
-
+        vm.leftToolbar = MapLeftToolBarService.toolbar;
 
         vm.inMap = {
             mapOptions: {},
@@ -55,8 +42,12 @@
         vm.mapEvents = {
             click: function () {
                 vm.infoWindowClose();
+            },
+            zoom: function () {
+                console.log('map scrolling');
             }
         };
+
 
         vm.markersEvents = {
             click: function (marker, eventName, model, args) {
@@ -310,8 +301,9 @@
 
         vm.showHistory = function () {
             //$log.log(vm.clickedMarker);
+            MapLeftToolBarService.dialogTab = 0;
             $mdDialog.show({
-                controller: 'HistoryController',
+                controller: 'HistoryController as vm',
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
@@ -362,9 +354,11 @@
 
 
     function HistoryController($scope, $log, $mdDialog, mapService,
-                               $interval, params, intellicarAPI, historyService) {
+                               $interval, params, intellicarAPI, historyService, MapLeftToolBarService) {
         //var vm = this;
         //$log.log($scope);
+        var vm = this;
+        vm.selectedTab = MapLeftToolBarService.dialogTab;
 
         $scope.historyMap = {
             mapOptions: {},

@@ -94,6 +94,7 @@
                 }
             };
 
+            var zoomLevelIcon = 'big';
 
             vm.setMarkerIcon = function (vehicleData) {
                 var iconColor = 'orange';
@@ -108,8 +109,23 @@
                     }
                 }
 
+                if(checkZoomLevel(0,5)){
+                    zoomLevelIcon = 'small';
+                }else if(checkZoomLevel(6,9)){
+                    zoomLevelIcon = 'medium';
+                }else{
+                    zoomLevelIcon = 'big';
+                }
+
+                function checkZoomLevel(min,max){
+                    if(vm.zoom <= max && vm.zoom >= min){
+                        return true;
+                    }
+                    return false;
+                }
+
                 vehicleData.iconColor = iconColor;
-                return 'http://maps.google.com/mapfiles/ms/icons/' + iconColor + '-dot.png';
+                return 'assets/images/markers/'+zoomLevelIcon+'/' + iconColor + '-dot.png';
             };
 
 
@@ -150,5 +166,12 @@
             };
 
             vm.intMap();
+
+            // Map Icon functions
+
+            vm.setMapIcon = function (zoom) {
+                vm.zoom = zoom;
+            }
+
         });
 })();

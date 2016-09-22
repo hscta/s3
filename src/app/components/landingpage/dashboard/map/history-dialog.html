@@ -75,7 +75,7 @@
     }
 
     .history-dialog .angular-google-map-container {
-        height: 477px;
+        height: 554px;
     }
 </style>
 
@@ -105,81 +105,110 @@
 <md-dialog aria-label="Location Tracker History" ng-cloak flex="85">
     <md-toolbar style="height:42px; text-align:center;">
         <div class="md-toolbar-tools md-accent">
-            <h2 layout-align="center center" style="width:100%">Location History</h2>
+            <h2 layout-align="center center" style="width:100%" ng-click="another()">Location History</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
                 <md-icon md-font-library="material-icons">close</md-icon>
             </md-button>
         </div>
     </md-toolbar>
-    <span class="error-msg">{{errorMsg}}</span><br/>
 
-    <div layout="row" layout-align="space-around center">
-        <div layout="row" class="input-fields" layout-align="space-around center" flex>
-            <md-input-container class="container-margin">
-                <label>Vehicle No</label>
-                <input type="text" ng-model="vehicleNumber" readonly>
-            </md-input-container>
+    <md-content     >
+        <md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect md-dynamic-height>
 
-            <md-input-container class="container-margin">
-                <label>Start Time</label>
-                <input type="text" id="start_time" ng-model="startTime">
-            </md-input-container>
+            <md-tab>
+                <md-tab-label>
+                    History
+                    <md-tooltip md-direction="bottom">Vehicle History</md-tooltip>
+                </md-tab-label>
 
-            <md-input-container class="container-margin">
-                <label>End Time</label>
-                <input type="text" id="end_time" ng-model="endTime">
-            </md-input-container>
-            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
-        </div>
-        <div layout="row" layout-align="end start">
-        </div>
-    </div>
+                <md-tab-body>
 
-    <md-dialog-content class="map-dialog-content">
-        <div class="md-dialog-content map-dialog history-dialog">
-            <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom' draggable="true"
-                                options="historyMap.mapOptions" bounds="historyMap.bounds"
-                                control="historyMap.mapControl">
+                    <span class="error-msg">{{errorMsg}}</span><br/>
 
-                <ui-gmap-map-control
-                        template="app/components/landingpage/dashboard/map/history-map-control.html"
-                        controller="InnerMapController"
-                        position="top-right"></ui-gmap-map-control>
+                    <div layout="row" layout-align="space-around center">
+                        <div layout="row" class="input-fields" layout-align="space-around center" flex>
+                            <md-input-container class="container-margin">
+                                <label>Vehicle No</label>
+                                <input type="text" ng-model="vehicleNumber" readonly>
+                            </md-input-container>
 
-                </ui-gmap-map-control>
+                            <md-input-container class="container-margin">
+                                <label>Start Time</label>
+                                <input type="text" id="start_time" ng-model="startTime">
+                            </md-input-container>
 
-                <ui-gmap-marker
-                        idkey="'self'"
-                        coords="clickedMarker"
-                        click="clickedMarker.click"
-                        options="clickedMarker.options"
-                        events="clickedMarker.events"
-                        control="clickedMarker.control">
-                </ui-gmap-marker>
+                            <md-input-container class="container-margin">
+                                <label>End Time</label>
+                                <input type="text" id="end_time" ng-model="endTime">
+                            </md-input-container>
+                            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+                        </div>
+                        <div layout="row" layout-align="end start">
+                        </div>
+                    </div>
 
-                <ui-gmap-polyline
-                        path="trace.path"
-                        stroke="trace.stroke"
-                        clickable="trace.clickable"
-                        geodesic="trace.geodesic"
-                        visible="trace.visible"
-                        fit="trace.fit"
-                        static="trace.static"
-                        events="trace.events"
-                        icons="trace.icons">
-                </ui-gmap-polyline>
+                    <md-dialog-content class="map-dialog-content">
+                        <div class="md-dialog-content map-dialog history-dialog">
+                            <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom' draggable="true"
+                                                options="historyMap.mapOptions" bounds="historyMap.bounds"
+                                                control="historyMap.mapControl">
 
-                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
-                                control="historyInfoWindow.control"
-                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
-                                templateUrl="'historyInfoWindow.html'"
-                                templateParameter="historyInfoWindow"
-                                isIconVisibleOnClick="true">
-                </ui-gmap-window>
+                                <ui-gmap-map-control
+                                    template="app/components/landingpage/dashboard/map/history-map-control.html"
+                                    controller="InnerMapController"
+                                    position="top-right"></ui-gmap-map-control>
 
-            </ui-gmap-google-map>
-        </div>
+                                </ui-gmap-map-control>
+
+                                <ui-gmap-marker
+                                    idkey="'self'"
+                                    coords="clickedMarker"
+                                    click="clickedMarker.click"
+                                    options="clickedMarker.options"
+                                    events="clickedMarker.events"
+                                    control="clickedMarker.control">
+                                </ui-gmap-marker>
+
+                                <ui-gmap-polyline
+                                    path="trace.path"
+                                    stroke="trace.stroke"
+                                    clickable="trace.clickable"
+                                    geodesic="trace.geodesic"
+                                    visible="trace.visible"
+                                    fit="trace.fit"
+                                    static="trace.static"
+                                    events="trace.events"
+                                    icons="trace.icons">
+                                </ui-gmap-polyline>
+
+                                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
+                                                control="historyInfoWindow.control"
+                                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
+                                                templateUrl="'historyInfoWindow.html'"
+                                                templateParameter="historyInfoWindow"
+                                                isIconVisibleOnClick="true">
+                                </ui-gmap-window>
+
+                            </ui-gmap-google-map>
+                        </div>
+                </md-tab-body>
+            </md-tab>
+
+            <md-tab  >
+                <md-tab-label>
+                    Geofence
+                    <md-tooltip md-direction="bottom">Geofence </md-tooltip>
+                </md-tab-label>
+
+                <md-tab-body >
+                    <div class="geofence-cont" ng-controller="GeofenceController as vm">
+                        {{vm.test}}
+                    </div>
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
+    </md-content>
     </md-dialog-content>
 </md-dialog>
 

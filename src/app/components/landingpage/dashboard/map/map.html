@@ -109,16 +109,15 @@
             </li>
         </ul>
     </div>
-    <div class="lefttoolbar" ng-show="vm.leftToolbar"}>
-
-        <div class="ltb_item" ng-repeat="item in vm.leftTB" >
-            <div class="ltbi_button">
+    <div class="lefttoolbar" ng-show="vm.leftToolbar" ng-controller="MapLeftToolBarController as vm">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB">
+            <div class="ltbi_button" ng-click="vm.buttonClick(item.tab)">
                 <div class="ltbi_icon">
                     <i class="fa {{item.icon}}" aria-hidden="true"></i>
                 </div>
                 <div class="ltbi_name">{{item.name}}</div>
             </div>
-            <div class="ltbi_cont">
+            <div class="ltbi_cont" ng-if="item.content">
                 <md-input-container class="md-input-cont">
                     <label>Color</label>
                     <input type="text" ng-model="color" >
