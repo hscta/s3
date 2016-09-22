@@ -8,7 +8,7 @@
         .controller('InnerMapController', InnerMapController);
 
     function MapController($scope, $log, mapService,
-                           $timeout, $mdDialog, $interval, historyService,
+                           $mdDialog, $interval, historyService,
                            rightNavAlertDashboardService) {
         $log.log('MapController');
         var vm = this;
@@ -79,12 +79,6 @@
             vm.inMap.zoom = mapService.getZoom();
             vm.inMap.center = mapService.getCenter();
             vm.inMap.bounds = mapService.getBounds();
-        };
-
-
-        vm.updateZoom = function () {
-            vm.inMap.zoom = mapService.getZoom();
-            $timeout(vm.updateZoom, 4000);
         };
 
 
@@ -219,8 +213,11 @@
         vm.runFilters = function (filterStr) {
             //$log.log("runFilters");
 
+            if(vm.filterStr !== filterStr)
+                vm.infoWindowClose();
+
             vm.filterStr = filterStr;
-            vm.infoWindowClose();
+
 
             var filtered = 0;
             var matchedIdx = 0;
