@@ -55,14 +55,26 @@
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
         <div layout="row"  layout-align="center center">
-            <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
-                         aria-label="onroaded" ng-change="vm.onRoadCheck()">
-                On Roaded
-            </md-checkbox>
-            <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
-                         aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>
-                Off Roaded
-            </md-checkbox>
+            <div class="toggleButton"ng-class="{'active':vm.onRoaded}">
+                On Road
+                <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
+                             aria-label="onroaded" ng-change="vm.onRoadCheck()">
+                </md-checkbox>
+            </div>
+            <div class="toggleButton"ng-class="{'active':vm.offRoaded}">
+                Off Road
+                <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
+                             aria-label="onroaded" ng-change="vm.offRoadCheck()">
+                </md-checkbox>
+            </div>
+            <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
+                         <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
+                <!--On Roaded-->
+            <!--</md-checkbox>-->
+            <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"-->
+                         <!--aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>-->
+                <!--Off Roaded-->
+            <!--</md-checkbox>-->
         </div>
 
         <ul id="nav" layout="row" layout-align="end center" flex>
