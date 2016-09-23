@@ -10,6 +10,8 @@
         var vm = this;
         vm.toolbar = true;
 
+        // vm.dialogTab = 0;
+
 
         vm.getService = function(id){
             if(id == 'geofences'){
@@ -17,7 +19,7 @@
             }
         }
 
-
+        //historyService.setData('selectedTab', vm.dialogTab);
     }
 
 

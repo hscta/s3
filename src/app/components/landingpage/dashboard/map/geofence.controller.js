@@ -9,7 +9,7 @@
 
     function GeofenceController($scope, $rootScope, $log, mapService,
                                 $timeout, $mdDialog, $document, $interval,
-                                rightNavAlertDashboardService,MapLeftToolBarService) {
+                                rightNavAlertDashboardService,MapLeftToolBarService, historyService) {
 
         var vm = this;
 
@@ -109,6 +109,13 @@
             {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1300000, 'location':'Electronic City'},
             {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+1200000, 'location':'Agaara Lake'},
         ]
+
+        vm.getHistory = function (tr) {
+            console.log(tr);
+
+            historyService.setData('selectedTab', 0);
+            console.log(historyService.getData('selectedTab'));
+        }
 
     }
 

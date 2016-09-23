@@ -9,7 +9,7 @@
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
-                           rightNavAlertDashboardService,MapLeftToolBarService) {
+                           rightNavAlertDashboardService,MapLeftToolBarService,historyService) {
         $log.log('MapController');
         var vm = this;
 
@@ -301,7 +301,8 @@
 
         vm.showHistory = function () {
             //$log.log(vm.clickedMarker);
-            MapLeftToolBarService.dialogTab = 0;
+            vm.selectedTab = 0;
+            historyService.setData('selectedTab', vm.selectedTab);
             $mdDialog.show({
                 controller: 'HistoryController as vm',
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
@@ -358,7 +359,10 @@
         //var vm = this;
         //$log.log($scope);
         var vm = this;
-        vm.selectedTab = MapLeftToolBarService.dialogTab;
+
+        $scope.getSelectedTab = function () {
+            return historyService.getData('selectedTab');
+        }
 
         $log.log('HistoryController');
 
