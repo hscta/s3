@@ -81,9 +81,38 @@
             console.log(vm.currFence);
         }
 
+        vm.tableSort = {'id':1,'str':'name','reverse':false};
 
+        vm.setSort = function (id,str) {
+          if(id == vm.tableSort.id){
+              if(vm.tableSort.reverse){
+                  vm.tableSort = {'id':id,'str':str,'reverse':false};
+              }else{
+                  vm.tableSort = {'id':id,'str':'-'+str,'reverse':true};
+              }
+          }else{
+              vm.tableSort = {'id':id,'str':str,'reverse':false};
+          }
+          console.log(vm.tableSort);
+        };
+
+        vm.currTable = [
+            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime(), 'location':'Silk Board'},
+            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1000 , 'location':'Electronic City'},
+            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+20000, 'location':'Agaara Lake'},
+            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+30000, 'location':'Electronic City'},
+            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+50000, 'location':'Silk Board'},
+            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1000000, 'location':'Electronic City'},
+            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+70000, 'location':'Agaara Lake'},
+            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+5000000, 'location':'Electronic City'},
+            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+1400000, 'location':'Silk Board'},
+            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1300000, 'location':'Electronic City'},
+            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+1200000, 'location':'Agaara Lake'},
+        ]
 
     }
+
+    console.log(new Date().getTime());
 
 })();
 

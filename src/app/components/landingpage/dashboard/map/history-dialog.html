@@ -261,7 +261,38 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="geoc-body" ></div>
+                            <div class="geoc-body">
+                                <table class="geo-table">
+                                    <tr>
+                                        <th ng-click="vm.setSort(1,'name')">
+                                            Vehicle Number
+                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-up"></i>
+                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-down"></i>
+                                        </th>
+                                        <th ng-click="vm.setSort(2,'evet')">
+                                            Event
+                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-up"></i>
+                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-down"></i>
+                                        </th>
+                                        <th ng-click="vm.setSort(3,'time')">
+                                            Time
+                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-up"></i>
+                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-down"></i>
+                                        </th>
+                                        <th ng-click="vm.setSort(4,'location')">
+                                            Location
+                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-up"></i>
+                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-down"></i>
+                                        </th>
+                                    </tr>
+                                    <tr ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">
+                                        <td >{{tr.name}}</td>
+                                        <td >{{tr.event}}</td>
+                                        <td >{{tr.time | date : 'HH mm ss a'}}</td>
+                                        <td >{{tr.location}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </md-tab-body>
@@ -281,7 +312,6 @@
         $('#end_time').datetimepicker({
             mask: '9999/19/39 29:59',
             format: 'Y-M-d H:i'
-
         });
     });
 </script>
