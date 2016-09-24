@@ -26,15 +26,19 @@
                 <td md-cell>{{parameter.clickedMarker.mobilistatusFilter}}</td>
             </tr>
             <tr md-row md-select-id="carbattery" md-auto-select>
-                <td md-cell><strong>Car Battery</strong></td>
-                <td md-cell class="infoWmiddle">{{parameter.clickedMarker.carbattery}}</td>
-                <td md-cell><strong>Device Battery</strong></td>
-                <td md-cell>{{parameter.clickedMarker.devbattery}}</td>
+                <td md-cell>
+                    <strong>Car Battery</strong> 
+                </td>
+                <td md-cell class="infoWmiddle" 
+                    ng-class="{'redBattery' : parameter.clickedMarker.carbattery < 9.5 ">{{parameter.clickedMarker.carbattery}}</td>
+                <td md-cell><strong>Device Battery</strong>  
+                </td>
+                <td md-cell 
+                    ng-class="{'redBattery' : parameter.clickedMarker.devbattery < 3.55 }">{{parameter.clickedMarker.devbattery}}</td>
             </tr>
             </tbody>
         </table>
     </md-table-container>
-
     <div layout="row">
         <md-button class="infoWBtn md-raised md-small infoWBtn"
                    ng-click="parameter.immoblize(parameter.clickedMarker.mobilistatus)">

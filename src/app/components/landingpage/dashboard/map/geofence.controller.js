@@ -11,6 +11,7 @@
                                 $timeout, $mdDialog, $document, $interval,
                                 rightNavAlertDashboardService,MapLeftToolBarService, historyService) {
 
+        $log.log("GeofenceController");
         var vm = this;
 
         vm.reports = [
@@ -84,16 +85,16 @@
         vm.tableSort = {'id':1,'str':'name','reverse':false};
 
         vm.setSort = function (id,str) {
-          if(id == vm.tableSort.id){
-              if(vm.tableSort.reverse){
-                  vm.tableSort = {'id':id,'str':str,'reverse':false};
-              }else{
-                  vm.tableSort = {'id':id,'str':'-'+str,'reverse':true};
-              }
-          }else{
-              vm.tableSort = {'id':id,'str':str,'reverse':false};
-          }
-          console.log(vm.tableSort);
+            if(id == vm.tableSort.id){
+                if(vm.tableSort.reverse){
+                    vm.tableSort = {'id':id,'str':str,'reverse':false};
+                }else{
+                    vm.tableSort = {'id':id,'str':'-'+str,'reverse':true};
+                }
+            }else{
+                vm.tableSort = {'id':id,'str':str,'reverse':false};
+            }
+            console.log(vm.tableSort);
         };
 
         vm.currTable = [
@@ -126,3 +127,4 @@
 /**
  * Created by User on 22-09-2016.
  */
+

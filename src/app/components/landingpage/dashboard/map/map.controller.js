@@ -13,7 +13,9 @@
         $log.log('MapController');
         var vm = this;
 
-        vm.leftToolbar = MapLeftToolBarService.toolbar;
+        vm.leftToolbar = function (){
+            return MapLeftToolBarService.getToolbarVar();
+        }
 
         vm.inMap = {
             mapOptions: {},
@@ -44,10 +46,50 @@
             click: function () {
                 vm.infoWindowClose();
             },
-            zoom: function () {
-                console.log('map scrolling');
+            zoom_changed: function () {
+                vm.changeMarkerIcon();
             }
         };
+        var iconColor = 'orange';
+        var zoomLevelIcon;
+        vm.changeMarkerIcon = function() {
+            vm.zoomMapZoom = vm.inMap.mapControl.getGMap().zoom;
+            mapService.setZoom(vm.zoomMapZoom);
+
+            for(var i=0; i < vm.inMarkers.length; i++){
+                iconColor = 'orange';
+
+                if (!vm.inMarkers[i].mobilistatus) {
+                    iconColor = 'red';
+                    vm.inMarkers.options.animation = 'BOUNCE';
+                } else {
+                    if (vm.inMarkers[i].ignitionstatus) {
+                        iconColor = 'blue';
+                    } else {
+                        iconColor = 'green';
+                    }
+                }
+
+                if(checkZoomLevel(0,6)){
+                    zoomLevelIcon = 'extra_small';
+                }else if(checkZoomLevel(7,8)){
+                    zoomLevelIcon = 'small';
+                }else if(checkZoomLevel(9,9)){
+                    zoomLevelIcon = 'medium';
+                }else{
+                    zoomLevelIcon = 'big';
+                }
+
+                vm.inMarkers[i].icon = 'assets/images/markers/'+zoomLevelIcon+'/' + iconColor + '-dot.png';
+            }
+        }
+
+        function checkZoomLevel(min,max){
+            if(vm.zoomMapZoom <= max && vm.zoomMapZoom >= min){
+                return true;
+            }
+            return false;
+        }
 
 
         vm.markersEvents = {
@@ -63,6 +105,10 @@
                 vm.infoWindowShow();
             }
         };
+
+        // vm.markerOptions = {
+        //     animation:false;
+        // }
 
 
         vm.onRoaded = true;
@@ -106,6 +152,7 @@
 
             if (isNewVehicle) {
                 vehicleData.options = {};
+                vehicleData.options.animation = google.maps.Animation.BOUNCE;  
                 vm.inMarkers.push(vehicleData);
                 vm.runFilters(vm.filterStr);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
@@ -304,7 +351,7 @@
             vm.selectedTab = 0;
             historyService.setData('selectedTab', vm.selectedTab);
             $mdDialog.show({
-                controller: 'HistoryController as vm',
+                controller: 'DialogController as vm',
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
@@ -363,11 +410,8 @@
         $scope.selectedTab = historyService.getData('selectedTab');
 
         $scope.getSelectedTab = function () {
-            $scope.selectedTab = historyService.getData('selectedTab');
+            return historyService.getData('selectedTab');
         };
-
-
-
 
         $log.log('HistoryController');
 

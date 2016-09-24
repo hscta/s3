@@ -121,7 +121,7 @@
             </li>
         </ul>
     </div>
-    <div class="lefttoolbar" ng-show="vm.leftToolbar" ng-controller="MapLeftToolBarController as vm">
+    <div class="lefttoolbar" ng-class="{'active':vm.leftToolbar()}" ng-controller="MapLeftToolBarController as vm">
         <div class="ltb_item" ng-repeat="item in vm.leftTB">
             <div class="ltbi_button" ng-click="vm.buttonClick(item.tab)">
                 <div class="ltbi_icon">
@@ -136,8 +136,13 @@
                 </md-input-container>
             </div>
         </div>
+        <div class="ltb_button" ng-click="vm.toggleBar()" ng-class="{'active':vm.leftToolbar()}">
+            <div class="ltbb_bar -bar1"></div>
+            <div class="ltbb_bar -bar2"></div>
+            <div class="ltbb_bar -bar3"></div>
+        </div>
     </div>
-    <div id="mapCanvas" ng-class="{'active':vm.leftToolbar}">
+    <div id="mapCanvas" ng-class="{'active':vm.leftToolbar()}">
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' draggable="true"
                             options="vm.inMap.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
                             control="vm.inMap.mapControl">

@@ -10,6 +10,18 @@
         var vm = this;
         vm.toolbar = true;
 
+        vm.getToolbarVar = function(){
+            return vm.toolbar;
+        }
+
+        vm.hide = function(){
+            vm.toolbar = false;
+        }
+
+        vm.show = function(){
+            vm.toolbar = true;
+        }
+
         // vm.dialogTab = 0;
 
 

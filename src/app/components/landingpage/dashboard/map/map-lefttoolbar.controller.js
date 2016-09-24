@@ -13,8 +13,20 @@
                               $timeout, $mdDialog, $document, $interval,
                               rightNavAlertDashboardService,MapLeftToolBarService) {
 
-        var vm = this;
-        vm.leftToolbar = MapLeftToolBarService.toolbar;
+        var vm = this; 
+
+        vm.leftToolbar = function (){
+            return MapLeftToolBarService.getToolbarVar(); 
+        }
+
+        vm.toggleBar = function(){
+            if(vm.leftToolbar()){
+                MapLeftToolBarService.hide();
+            }else{
+                MapLeftToolBarService.show();
+            }
+        }
+
 
         vm.leftTB = [
             {'name':'Geofences', 'icon':'fa-globe', 'tab':1 },
@@ -29,7 +41,7 @@
             // vm.service = MapLeftToolBarService.getService(id);
             MapLeftToolBarService.dialogTab = tab;
             $mdDialog.show({
-                controller: 'HistoryController',
+                controller: 'DialogController',
                 templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,

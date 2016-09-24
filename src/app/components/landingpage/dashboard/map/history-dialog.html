@@ -123,181 +123,25 @@
             </md-button>
         </div>
     </md-toolbar>
-    <md-content     >
+    <md-content>
         <md-tabs class="" md-selected="selectedTab" md-align-tabs="top" md-border-bottom md-autoselect md-dynamic-height>
-
             <md-tab>
-                <md-tab-label>
-                    History
-                    <md-tooltip md-direction="bottom">Vehicle History</md-tooltip>
-                </md-tab-label>
-
-                <md-tab-body>
-
-                    <span class="error-msg">{{errorMsg}}</span><br/>
-
-                    <div layout="row" layout-align="space-around center">
-                        <div layout="row" class="input-fields" layout-align="space-around center" flex>
-                            <md-input-container class="container-margin">
-                                <label>Vehicle No</label>
-                                <input type="text" ng-model="vehicleNumber" readonly>
-                            </md-input-container>
-
-                            <md-input-container class="container-margin">
-                                <label>Start Time</label>
-                                <input type="text" id="start_time" ng-model="startTime">
-                            </md-input-container>
-
-                            <md-input-container class="container-margin">
-                                <label>End Time</label>
-                                <input type="text" id="end_time" ng-model="endTime">
-                            </md-input-container>
-                            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
-                        </div>
-                        <div layout="row" layout-align="end start">
-                        </div>
-                    </div>
-
-                    <md-dialog-content class="map-dialog-content">
-                        <div class="md-dialog-content map-dialog history-dialog">
-                            <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom' draggable="true"
-                                                options="historyMap.mapOptions" bounds="historyMap.bounds"
-                                                control="historyMap.mapControl">
-
-                                <ui-gmap-map-control
-                                    template="app/components/landingpage/dashboard/map/history-map-control.html"
-                                    controller="InnerMapController"
-                                    position="top-right"></ui-gmap-map-control>
-
-                                </ui-gmap-map-control>
-
-                                <ui-gmap-marker
-                                    idkey="'self'"
-                                    coords="clickedMarker"
-                                    click="clickedMarker.click"
-                                    options="clickedMarker.options"
-                                    events="clickedMarker.events"
-                                    control="clickedMarker.control">
-                                </ui-gmap-marker>
-
-                                <ui-gmap-polyline
-                                    path="trace.path"
-                                    stroke="trace.stroke"
-                                    clickable="trace.clickable"
-                                    geodesic="trace.geodesic"
-                                    visible="trace.visible"
-                                    fit="trace.fit"
-                                    static="trace.static"
-                                    events="trace.events"
-                                    icons="trace.icons">
-                                </ui-gmap-polyline>
-
-                                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
-                                                control="historyInfoWindow.control"
-                                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
-                                                templateUrl="'historyInfoWindow.html'"
-                                                templateParameter="historyInfoWindow"
-                                                isIconVisibleOnClick="true">
-                                </ui-gmap-window>
-
-                            </ui-gmap-google-map>
-                        </div>
-                </md-tab-body>
+                <!--<md-tab-label>-->
+                <!--History-->
+                <!--<md-tooltip md-direction="bottom">Vehicle History</md-tooltip>-->
+                <!--</md-tab-label>-->
+                <a ui-sref="home.history" style="width:100%; height:100%">History</a>
             </md-tab>
-
-            <md-tab  >
-                <md-tab-label>
-                    Geofence
-                    <md-tooltip md-direction="bottom">Geofence </md-tooltip>
-                </md-tab-label>
-
-                <md-tab-body >
-                    <div class="geofence-cont" ng-controller="GeofenceController as vm">
-                        <div class="geo-leftbar" ng-click="vm.vehicleFilterVar = false">
-                            <div class="geo-rep-item-head">Reports</div>
-                            <div class="geo-rep-item" ng-class="{'active':vm.currRep.id == rep.id}" ng-repeat="rep in vm.reports" ng-click="vm.setReport(rep)">{{rep.name}}</div>
-                        </div>
-                        <div class="geo-cont" >
-                            <div class="geoc-head">
-
-                                <span class="error-msg">{{errorMsg}}</span><br/>
-
-                                <div layout="row" layout-align="space-around center">
-                                    <div layout="row" class="input-fields" layout-align="space-around center" flex>
-                                        <md-input-container class="container-margin">
-                                            <label>Fences</label>
-                                            <md-select ng-model="vm.currFence">
-                                                <md-option ng-value="opt" ng-repeat="opt in vm.currRep.fences">{{ opt.name }}</md-option>
-                                            </md-select>
-                                        </md-input-container>
-                                        <div class="geo-mul-back" ng-if="vm.vehicleFilterVar" ng-click="vm.vehicleFilterVar = false"></div>
-                                        <md-input-container class="container-margin geo-multiSel">
-                                            <label>Vehicle Name</label>
-                                            <input type="text" ng-focus="vm.vehicleFilterVar = true" ng-model="vm.vehicleFilter">
-                                            <div class="geo-ms-cont" ng-if="vm.vehicleFilterVar">
-                                                <md-list>
-                                                    <md-list-item class="md-2-line" ng-repeat="item in vm.currFence.vehicles | filter : vm.vehicleFilter">
-                                                        <md-checkbox ng-model="item.done"></md-checkbox>
-                                                        <div class="md-list-item-text">
-                                                            <h3>{{item.name}}</h3>
-                                                        </div>
-                                                    </md-list-item>
-                                                </md-list>
-                                            </div>
-                                        </md-input-container>
-
-                                        <md-input-container class="container-margin">
-                                            <label>Start Time</label>
-                                            <input type="text" id="start_time" ng-model="startTime">
-                                        </md-input-container>
-
-                                        <md-input-container class="container-margin">
-                                            <label>End Time</label>
-                                            <input type="text" id="end_time" ng-model="endTime">
-                                        </md-input-container>
-                                        <md-button class="md-accent">Get Report</md-button>
-                                     </div>
-                                    <div layout="row" layout-align="end start">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="geoc-body">
-                                <table class="geo-table">
-                                    <tr>
-                                        <th ng-click="vm.setSort(1,'name')">
-                                            Vehicle Number
-                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-up"></i>
-                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-down"></i>
-                                        </th>
-                                        <th ng-click="vm.setSort(2,'event')">
-                                            Event
-                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-up"></i>
-                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-down"></i>
-                                        </th>
-                                        <th ng-click="vm.setSort(3,'time')">
-                                            Time
-                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-up"></i>
-                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-down"></i>
-                                        </th>
-                                        <th ng-click="vm.setSort(4,'location')">
-                                            Location
-                                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-up"></i>
-                                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-down"></i>
-                                        </th>
-                                    </tr>
-                                    <tr ng-click="vm.getHistory(tr)" ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">
-                                        <td >{{tr.name}}</td>
-                                        <td >{{tr.event}}</td>
-                                        <td >{{tr.time | date : 'HH mm ss a'}}</td>
-                                        <td >{{tr.location}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </md-tab-body>
+            <md-tab>
+                <!--<md-tab-label>-->
+                <!--History-->
+                <!--<md-tooltip md-direction="bottom">Vehicle History</md-tooltip>-->
+                <!--</md-tab-label>-->
+                <a ui-sref="home.geofence" style="width:100%; height:100%">Geofence</a>
             </md-tab>
         </md-tabs>
+        <div flex ui-view="dialogview" style="width:100%; height:550px; background:#eee;">
+        </div>
     </md-content>
     </md-dialog-content>
 </md-dialog>

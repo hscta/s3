@@ -77,6 +77,24 @@
                   }
               }
           })
+          .state('home.history', {
+              url: 'history',
+              views: {
+                  'dialogview@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/map/dialog/history.html',
+                      controller: 'HistoryController as vm'
+                  }
+              }
+          })
+          .state('home.geofence', {
+              url: 'geofence',
+              views: {
+                  'dialogview@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/map/dialog/geofence.html',
+                      controller: 'GeofenceController as vm'
+                  }
+              }
+          })
           .state('home.management', {
               url: 'home/management',
               views: {
