@@ -109,15 +109,20 @@
                     }
                 }
 
-                if(checkZoomLevel(0,5)){
+                console.log(vm.zoom);
+
+                if(checkZoomLevel(0,3)){
+                    zoomLevelIcon = 'extra_small';
+                }else if(checkZoomLevel(4,6)){
                     zoomLevelIcon = 'small';
-                }else if(checkZoomLevel(6,9)){
+                }else if(checkZoomLevel(7,9)){
                     zoomLevelIcon = 'medium';
                 }else{
                     zoomLevelIcon = 'big';
                 }
 
                 function checkZoomLevel(min,max){
+                    // console.log(vm.zoom +' <= '+ max +' && '+ vm.zoom +' >= '+ min);
                     if(vm.zoom <= max && vm.zoom >= min){
                         return true;
                     }

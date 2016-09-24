@@ -360,9 +360,14 @@
         //$log.log($scope);
         var vm = this;
 
+        $scope.selectedTab = historyService.getData('selectedTab');
+
         $scope.getSelectedTab = function () {
-            return historyService.getData('selectedTab');
-        }
+            $scope.selectedTab = historyService.getData('selectedTab');
+        };
+
+
+
 
         $log.log('HistoryController');
 
