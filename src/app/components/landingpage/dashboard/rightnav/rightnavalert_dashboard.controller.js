@@ -112,6 +112,9 @@
 
         vm.navAlerts = [
             {
+                category:'Hub Report',
+                alarms:[{id:'8910'}, {odometer:'40'},{ignition:'On'}, {mobility:'moblized'}]
+            }, {
                 category:'Geofence',
                 alarms:[{id:'1234'}, {odometer:'20'},{ignition:'On'}, {mobility:'moblized'}]
             }, {
@@ -121,6 +124,15 @@
                 category:'City limit',
                 alarms:[{id:'8910'}, {odometer:'40'},{ignition:'On'}, {mobility:'moblized'}]
             }
-        ]
+        ];
+
+
+        vm.mydata = rightNavAlertDashboardService.reports();
+
+
+        $log.log(vm.mydata);
+        $log.log(typeof(vm.mydata));
+        $log.log(vm.mydata.length);
+      //  $log.log((vm.mydata['servicecenterreport'].fences));
     }
 })();

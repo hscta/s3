@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function githubContributor($log, $http) {
-    var apiHost = 'https://api.github.com/repos/Swiip/generator-gulp-angular';
+    var apiHost = 'https://github.com/intellicar/uiplatform.git';
 
     var service = {
       apiHost: apiHost,
