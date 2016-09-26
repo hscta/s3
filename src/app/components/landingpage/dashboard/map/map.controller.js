@@ -13,6 +13,96 @@
         $log.log('MapController');
         var vm = this;
 
+        // var infowindowplacesearch = new google.maps.InfoWindow();
+
+
+        $scope.searchbox =  { 
+          template:'searchbox.tpl.html', 
+          options:{
+            // autocomplete:true
+          },
+          events:{
+            places_changed: function (searchBox) {
+                var place = searchBox.getPlaces();
+                if (!place || place == 'undefined' || place.length == 0) {
+                    console.log('no place data :(');
+                    return;
+                }
+
+                var gfmap = vm.inMap.mapControl.getGMap();
+
+                // $scope.map = {
+                //     "center": {
+                //         "latitude": place[0].geometry.location.lat(),
+                //         "longitude": place[0].geometry.location.lng()
+                //     },
+                //     "zoom": 18
+                // };
+                // $scope.marker = {
+                //     id: 0,
+                //     coords: {
+                //         latitude: place[0].geometry.location.lat(),
+                //         longitude: place[0].geometry.location.lng()
+                //     }
+                // };
+
+                if (!place[0].geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+                }
+
+                // If the place has a geometry, then present it on a map.
+                if (place[0].geometry.viewport) {
+                    gfmap.fitBounds(place[0].geometry.viewport);
+                } else {
+                    gfmap.setCenter(place[0].geometry.location);
+                    gfmap.setZoom(17);  // Why 17? Because it looks good.
+                }
+            }
+          }
+        }
+
+        //gfmap.controls[google.maps.ControlPosition.TOP_LEFT].push(input)
+
+        // console.log(google.maps.places);
+
+        // var autocomplete = new google.maps.places.Autocomplete(input);
+        // autocomplete.bindTo('bounds', gfmap);
+
+        // autocomplete.addListener('place_changed', function() {
+        //     infowindowplacesearch.close();
+        //     //marker.setVisible(false);
+        //     var place = autocomplete.getPlace();
+        //     if (!place.geometry) {
+        //     window.alert("Autocomplete's returned place contains no geometry");
+        //     return;
+        //     }
+
+        //     // If the place has a geometry, then present it on a map.
+        //     if (place.geometry.viewport) {
+        //     gfmap.fitBounds(place.geometry.viewport);
+        //     } else {
+        //     gfmap.setCenter(place.geometry.location);
+        //     gfmap.setZoom(17);  // Why 17? Because it looks good.
+        //     }
+
+        //     var address = '';
+        //     if (place.address_components) {
+        //     address = [
+        //       (place.address_components[0] && place.address_components[0].short_name || ''),
+        //       (place.address_components[1] && place.address_components[1].short_name || ''),
+        //       (place.address_components[2] && place.address_components[2].short_name || '')
+        //     ].join(' ');
+        //     }
+
+        //     infowindowplacesearch.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+        //     infowindowplacesearch.setPosition(place.geometry.location);
+        //     infowindowplacesearch.open(gfmap);
+        //     $timeout(function(){infowindowplacesearch.close()}, 2000);
+        // });
+
+
+
         vm.leftToolbar = function (){
             return MapLeftToolBarService.getToolbarVar();
         }
@@ -56,31 +146,8 @@
             vm.zoomMapZoom = vm.inMap.mapControl.getGMap().zoom;
             mapService.setZoom(vm.zoomMapZoom);
 
-            for(var i=0; i < vm.inMarkers.length; i++){
-                iconColor = 'orange';
-
-                if (!vm.inMarkers[i].mobilistatus) {
-                    iconColor = 'red';
-                    vm.inMarkers.options.animation = 'BOUNCE';
-                } else {
-                    if (vm.inMarkers[i].ignitionstatus) {
-                        iconColor = 'blue';
-                    } else {
-                        iconColor = 'green';
-                    }
-                }
-
-                if(checkZoomLevel(0,6)){
-                    zoomLevelIcon = 'extra_small';
-                }else if(checkZoomLevel(7,8)){
-                    zoomLevelIcon = 'small';
-                }else if(checkZoomLevel(9,9)){
-                    zoomLevelIcon = 'medium';
-                }else{
-                    zoomLevelIcon = 'big';
-                }
-
-                vm.inMarkers[i].icon = 'assets/images/markers/'+zoomLevelIcon+'/' + iconColor + '-dot.png';
+            for(var i=0; i < vm.inMarkers.length; i++){ 
+                vm.inMarkers[i].icon = mapService.setMarkerIcon(vm.inMarkers[i]);
             }
         }
 
@@ -152,7 +219,7 @@
 
             if (isNewVehicle) {
                 vehicleData.options = {};
-                vehicleData.options.animation = google.maps.Animation.BOUNCE;  
+                vehicleData.options.animation = google.maps.Animation.BOUNCE;
                 vm.inMarkers.push(vehicleData);
                 vm.runFilters(vm.filterStr);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);

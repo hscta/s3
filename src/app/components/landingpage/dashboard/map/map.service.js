@@ -128,8 +128,7 @@
 
 
 
-                function checkZoomLevel(min,max){
-                    // console.log(vm.zoom +' <= '+ max +' && '+ vm.zoom +' >= '+ min);
+                function checkZoomLevel(min,max){ 
                     if(vm.zoom <= max && vm.zoom >= min){
                         return true;
                     }
@@ -137,6 +136,7 @@
                 }
 
                 vehicleData.iconColor = iconColor;
+                vehicleData.animation = google.maps.Animation.BOUNCE;
                 return 'assets/images/markers/'+zoomLevelIcon+'/' + iconColor + '-dot.png';
             };
 
@@ -147,6 +147,7 @@
                 var vehicleData = msg[1];
                 vehicleData.id = parseInt(vehicleData.deviceid);
                 vehicleData.title = vehicleNumber;
+                vehicleData.optimized= false;
                 vehicleData.icon = vm.setMarkerIcon(vehicleData);
                 vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
                 vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
@@ -156,8 +157,13 @@
                 vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
                 vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
                 vehicleData.timestamp = new Date(vehicleData.timestamp);
+                vehicleData.animation = google.maps.Animation.BOUNCE;
                 return vehicleData;
             };
+
+            vm.getMarkerIcon = function(){
+
+            }
 
 
             vm.updateMap = function (msgList) {
