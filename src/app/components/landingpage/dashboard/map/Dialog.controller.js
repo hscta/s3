@@ -6,31 +6,33 @@
         .module('uiplatform')
         .controller('DialogController', DialogController);
 
-    function DialogController($scope, $rootScope, $log, mapService,
-                              $timeout, $mdDialog, $document, $interval, $state,
-                              rightNavAlertDashboardService,MapLeftToolBarService, historyService) {
+    function DialogController( $log, dialogService) {
 
         var vm = this;
         $log.log("DialogController");
 
+        vm.getTab = function () {
+            vm.selectedTab = dialogService.getTab();
+            // return dialogService.getTab();
+        }
 
-        $scope.cancel = function () {
-            $mdDialog.cancel();
+        vm.closeTab = function(){
+            dialogService.hide();
+        }
+
+        vm.dialogShow = function () {
+            return dialogService.getDialogShow();
+        }
+
+        vm.setTab = function(tabIndex) {
+            vm.selectedTab = tabIndex;
         };
 
-        $log.log($state);
+        vm.init = function() {
+            dialogService.addSetTabListener(vm.setTab);
+        };
 
-        $scope.$watch('selectedTab', function(current, old) {
-            switch (current) {
-                case 0:
-                    $location.url("/#/history");
-                    break;
-                case 1:
-                    $location.url("/#/geofencing");
-                    break; 
-            }
-        });
-
+        vm.init();
     }
 
 })();

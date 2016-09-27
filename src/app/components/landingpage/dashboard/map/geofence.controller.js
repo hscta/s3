@@ -7,11 +7,11 @@
         .module('uiplatform')
         .controller('GeofenceController', GeofenceController);
 
-    function GeofenceController($scope, $rootScope, $log, mapService,
-                                $timeout, $mdDialog, $document, $interval,
-                                rightNavAlertDashboardService,MapLeftToolBarService, historyService) {
+    function GeofenceController(  $log,dialogService ) {
 
         $log.log("GeofenceController");
+
+        dialogService.setTab(1);
         var vm = this;
 
         vm.reports = [
@@ -113,9 +113,7 @@
 
         vm.getHistory = function (tr) {
             console.log(tr);
-
-            historyService.setData('selectedTab', 0);
-            console.log(historyService.getData('selectedTab'));
+            dialogService.show('home.history');
         }
 
     }

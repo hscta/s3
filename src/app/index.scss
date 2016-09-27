@@ -7,6 +7,7 @@
 
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Roboto:400,700,700italic,400italic);
 
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -18,6 +19,18 @@
        url(../../bower_components/material-design-iconfont/iconfont/MaterialIcons-Regular.woff) format('woff'),
        url(../../bower_components/material-design-iconfont/iconfont/MaterialIcons-Regular.ttf) format('truetype');
 }
+
+
+@mixin border-radius($str){
+    -webkit-border-radius:$str;
+    -moz-border-radius:$str;
+    -o-border-radius:$str;
+    border-radius:$str;
+}
+
+
+
+$themeColor : #d1e934;
 
 .material-icons {
   font-family: 'Material Icons';
@@ -279,13 +292,14 @@ md-toolbar{border-bottom:1px solid #CCC;}
 
 .lefttoolbar{
     position: absolute;
-    width:90px;
+    width:40px;
     z-index:1;
-    left:-90px;
+    left:10px;
     @include transition(0.5s);
+    top:120px;
 }
 #mapCanvas{
-    @include transition(0.5s); 
+    @include transition(0.5s);
     position: relative;
 }
 .lefttoolbar.active{
@@ -297,14 +311,13 @@ md-toolbar{border-bottom:1px solid #CCC;}
 #lefttoolbar_dashboard{
     float:left;
     width:90px;
-    background:#fff;
     height:100%;
     @include shadow(0 0 10px rgba(0,0,0,0.4));
 }
 
 .ltb_item{
     width:100%;
-    height:90px;
+    height:40px;
     position:relative;
     *{
         float:left;
@@ -314,24 +327,36 @@ md-toolbar{border-bottom:1px solid #CCC;}
         height:100%;
         position:relative;
         z-index:10;
+        outline: none!important;
         box-sizing: border-box;
+        @include border-radius(5px 0 0 5px);
         //border-bottom: 1px solid rgba(0,0,0,0.05);
-        background:#fff;
         .ltbi_icon{
             width: 100%;
             text-align: center;
-            line-height: 60px;
-            font-size: 200%;
+            line-height: 40px;
+            font-size: 150%;
             i{
-                color:#666;
+                color:#fff;
                 float:none;
             }
         }
         .ltbi_name{
-            width:100%;
-            text-align:center;
-            font-size:75%;
-            color:#aaa;
+            /* width: 100%; */
+            text-align: center;
+            font-size: 75%;
+            color: #aaa;
+            position: absolute;
+            height: 40px;
+            line-height: 40px;
+            top: 0;
+            left: 40px;
+            background: rgba(0,0,0,0.1);
+            overflow:hidden;
+            color:#fff;
+            width: 0;
+            padding: 0;
+            @include border-radius(0 5px 5px 0px);
         }
     }
     .ltbi_cont{
@@ -356,13 +381,15 @@ md-toolbar{border-bottom:1px solid #CCC;}
 .ltb_item:hover{
     .ltbi_button{
         cursor:pointer;
-        background:#f1f3e9;
-        color:#333;
+        color:#fff;
+        background-color: rgba(0,0,0,0.2);
         i{
-            color:#444;
+            color:#fff;
         }
         .ltbi_name{
-            color:#444;
+            width:auto;
+            padding: 0 10px;
+            //@include transition(0.5s);
         }
     }
     .ltbi_cont{
@@ -392,12 +419,22 @@ body{
     }
 }
 
+.fullHeight{ height: 100%; }
 
+
+.mapDView{
+  width: 100%;
+  top:48px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+}
 
 /* geo fence codes */
 
 .geofence-cont{
-    height:600px;
+    height:100%;
     width:100%;
 }
 .geo-cont,
@@ -515,7 +552,11 @@ body{
 }
 .geoc-body{
     width:100%;
-    height:100%;
+    position: absolute;
+    top:70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     max-height:100%;
     overflow-y:auto;
 }
@@ -583,9 +624,9 @@ body{
 }
 
 
-.ltb_button{ 
+.ltb_button{
     position: absolute;
-    top: 50px; 
+    top: 50px;
     right: -41px;
     width: 30px;
     height: 30px;
@@ -600,7 +641,7 @@ body{
       height: 3px;
       margin:2px 10%;
       border-radius:2px;
-      background: #fff;  
+      background: #fff;
       @include transition(0.3s);
     }
     .ltbb_bar.-bar1{@include transform(translateY(-7px))}
@@ -608,12 +649,12 @@ body{
 }
 .ltb_button:hover{
     cursor: pointer;
-} 
+}
 .ltb_button.active{
     .ltbb_bar.-bar1{@include transform(rotate(45deg))}
     .ltbb_bar.-bar2{@include transform(scale(0,1))}
     .ltbb_bar.-bar3{@include transform(rotate(-45deg))}
-} 
+}
 
 .redBattery,
 .redBattery *{
@@ -645,3 +686,86 @@ body{
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
     width: 300px;
 }
+
+.int-dialog{
+  position: fixed;
+  display: none;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background: rgba(0,0,0,0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  .id-background{
+    position: absolute;
+    top:0;left: 0;right: 0;bottom: 0;
+  }
+  .id-container{
+    width: 80%;
+    height: 90%;
+    top:5%;
+    left: 10%;
+    background: #fff;
+    @include border-radius(6px);
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    .id-header{
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      background: $themeColor;
+      text-align: center;
+    }
+      .id-body{
+          position: absolute;
+          top:40px;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          width: 100%;
+          md-tab-item{
+              padding:0;
+              a{
+                  padding:12px 24px;
+                  display:block;
+                  float: left;
+                  text-decoration: none!important;
+                  color:inherit!important;
+              }
+              a:hover{
+                  color:inherit!important;
+              }
+          }
+      }
+  }
+}
+
+.mapDHeader{
+  width: 100%;
+  height: 50px;
+  position: relative;
+}
+.mapDBody{
+  width: 100%;
+  height: 50px;
+  position: absolute;
+  top:50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+
+.int-dialog .angular-google-map-container{
+    position: absolute;
+    width: 100%;
+    top: 70px;
+    left:0;
+    right:0;
+    bottom: 0;
+    height: auto;
+}
+

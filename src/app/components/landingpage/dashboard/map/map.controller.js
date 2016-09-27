@@ -9,15 +9,15 @@
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
-                           rightNavAlertDashboardService,MapLeftToolBarService,historyService) {
+                           rightNavAlertDashboardService,MapLeftToolBarService,historyService,dialogService) {
         $log.log('MapController');
         var vm = this;
 
         // var infowindowplacesearch = new google.maps.InfoWindow();
 
 
-        $scope.searchbox =  { 
-          template:'searchbox.tpl.html', 
+        $scope.searchbox =  {
+          template:'searchbox.tpl.html',
           options:{
             // autocomplete:true
           },
@@ -146,7 +146,7 @@
             vm.zoomMapZoom = vm.inMap.mapControl.getGMap().zoom;
             mapService.setZoom(vm.zoomMapZoom);
 
-            for(var i=0; i < vm.inMarkers.length; i++){ 
+            for(var i=0; i < vm.inMarkers.length; i++){
                 vm.inMarkers[i].icon = mapService.setMarkerIcon(vm.inMarkers[i]);
             }
         }
@@ -417,19 +417,23 @@
             //$log.log(vm.clickedMarker);
             vm.selectedTab = 0;
             historyService.setData('selectedTab', vm.selectedTab);
-            $mdDialog.show({
-                controller: 'DialogController as vm',
-                templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
-                parent: angular.element(document.body),
-                clickOutsideToClose: true,
-                escapeToClose: false,
-                locals: {
-                    params: {
+            // $mdDialog.show({
+            //     controller: 'DialogController as vm',
+            //     templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
+            //     parent: angular.element(document.body),
+            //     clickOutsideToClose: true,
+            //     escapeToClose: false,
+            //     locals: {
+            //         params: {
+            //             clickedMarker: vm.clickedMarker,
+            //             mainMarkers: vm.inMarkers
+            //         }
+            //     }
+            // });
+            dialogService.show('home.history',{
                         clickedMarker: vm.clickedMarker,
                         mainMarkers: vm.inMarkers
-                    }
-                }
-            });
+                    });
         };
 
         vm.immobalize = function (status) {
@@ -468,33 +472,39 @@
     }
 
 
-    function HistoryController($scope, $log, $mdDialog, mapService,
-                               $interval, params, intellicarAPI, historyService, MapLeftToolBarService) {
+    function HistoryController($scope, $log, $mdDialog, mapService,$state, params,dialogService,
+                               $interval, intellicarAPI, historyService, MapLeftToolBarService) {
         //var vm = this;
         //$log.log($scope);
         var vm = this;
-
-        $scope.selectedTab = historyService.getData('selectedTab');
-
-        $scope.getSelectedTab = function () {
-            return historyService.getData('selectedTab');
-        };
-
+        dialogService.setTab(0);
         $log.log('HistoryController');
+
+        params = dialogService.getData('historyData');
+        console.log(params);
 
         $scope.historyMap = {
             mapOptions: {},
             mapControl: {}
         };
 
+
         var initialZoom = mapService.getZoom();
         $scope.historyMap.zoom = initialZoom;
-        $scope.clickedMarker = angular.copy(params.clickedMarker);
-        $scope.historyMap.center = $scope.clickedMarker;
-        $scope.deviceid = $scope.clickedMarker.deviceid;
-        $scope.vehicleNumber = $scope.clickedMarker.title;
-        $scope.errorMsg = "";
 
+        vm.init = function() {
+            if(params == null){
+                $scope.clickedMarker = {};
+            }else{
+                $scope.clickedMarker = angular.copy(params.clickedMarker);
+                $scope.historyMap.center = $scope.clickedMarker;
+                $scope.deviceid = $scope.clickedMarker.deviceid;
+                $scope.vehicleNumber = $scope.clickedMarker.title;
+                $scope.errorMsg = "";
+            }
+        }
+
+        vm.init();
 
         //$log.log("uiGmapGoogleMapApi loaded");
         $scope.trace = {
@@ -838,6 +848,8 @@
                 map.panBy(panX, panY);
             }
         };
+
+
     }
 
 

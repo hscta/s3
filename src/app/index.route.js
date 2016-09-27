@@ -82,7 +82,17 @@
               views: {
                   'dialogview@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map/dialog/history.html',
-                      controller: 'HistoryController as vm'
+                      controller: 'HistoryController as vm',
+                      resolve: {
+                          params: function($stateParams, $log) {
+                            $log.log($stateParams);
+                            return $stateParams;
+                          }
+                      }
+                      // data: {
+                      //   clickedMarker: {},
+                      //   mainMarker:{}
+                      // }
                   }
               }
           })

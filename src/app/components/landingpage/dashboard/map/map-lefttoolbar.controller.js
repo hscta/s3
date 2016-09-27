@@ -11,12 +11,12 @@
 
     function mapLeftToolBar($scope, $rootScope, $log, mapService,
                               $timeout, $mdDialog, $document, $interval,
-                              rightNavAlertDashboardService,MapLeftToolBarService) {
+                              rightNavAlertDashboardService,MapLeftToolBarService,dialogService) {
 
-        var vm = this; 
+        var vm = this;
 
         vm.leftToolbar = function (){
-            return MapLeftToolBarService.getToolbarVar(); 
+            return MapLeftToolBarService.getToolbarVar();
         }
 
         vm.toggleBar = function(){
@@ -29,7 +29,7 @@
 
 
         vm.leftTB = [
-            {'name':'Geofences', 'icon':'fa-globe', 'tab':1 },
+            {'name':'Geofences', 'icon':'fa-globe', 'state':'home.geofence' },
             {'name':'Cab Service', 'icon':'fa-cab'},
             {'name':'Tasks', 'icon':'fa-tasks' },
             {'name':'Tags', 'icon':'fa-tag' },
@@ -37,22 +37,8 @@
             {'name':'Settings', 'icon':'fa-gears' }
         ];
 
-        vm.buttonClick = function (tab) {
-            // vm.service = MapLeftToolBarService.getService(id);
-            MapLeftToolBarService.dialogTab = tab;
-            $mdDialog.show({
-                controller: 'DialogController',
-                templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
-                parent: angular.element(document.body),
-                clickOutsideToClose: true,
-                escapeToClose: false,
-                locals: {
-                    params: {
-                        clickedMarker: vm.clickedMarker,
-                        mainMarkers: vm.inMarkers
-                    }
-                }
-            });
+        vm.buttonClick = function (state) {
+            dialogService.show(state);
         }
 
 
