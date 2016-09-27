@@ -5,7 +5,7 @@
         .controller('MapController', MapController)
         .controller('HistoryController', HistoryController)
         .controller('ImmobalizeController', ImmobalizeController)
-        .controller('InnerMapController', InnerMapController)
+        .controller('InnerMapController', InnerMapController);
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
@@ -189,29 +189,17 @@
         };
 
 
-        vm.updateZoom = function () {
-            vm.inMap.zoom = mapService.getZoom();
-            $timeout(vm.updateZoom, 4000);
-        };
-
-
         vm.updateMarker = function (vehicleData) {
             //$log.log(msg);
             var isNewVehicle = true;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
-                if (marker.id == vehicleData.id) {
-                    // if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
-                    //     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
-                    //     $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
-                    //         ", " + marker.latitude + ", " + marker.longitude);
-                    //     $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
-                    //         ", " + vehicleData.latitude + ", " + vehicleData.longitude);
-                    // }
-
-                    vehicleData.options = vm.inMarkers[idx].options;
+                if (marker.id === vehicleData.id) {
+                    //vehicleData.options = vm.inMarkers[idx].options;
                     vm.inMarkers[idx] = vehicleData;
+                    vm.inMarkers[idx].options = {visible: false};
                     isNewVehicle = false;
+                    break;
                 }
             }
 
@@ -221,9 +209,10 @@
                 vehicleData.options = {};
                 vehicleData.options.animation = google.maps.Animation.BOUNCE;
                 vm.inMarkers.push(vehicleData);
-                vm.runFilters(vm.filterStr);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
+
+            vm.runFilters(vm.filterStr);
         };
 
 
@@ -332,14 +321,11 @@
         vm.runFilters = function (filterStr) {
             //$log.log("runFilters");
 
-
-            // if (filterStr.length === 0) {
-            //     vm.setMarkersVisible(true);
-            //     return;
-            // }
+            if(vm.filterStr !== filterStr)
+                vm.infoWindowClose();
 
             vm.filterStr = filterStr;
-            vm.infoWindowClose();
+
 
             var filtered = 0;
             var matchedIdx = 0;
@@ -360,9 +346,6 @@
 
             // if at least one marker matched the filter string
             if (matchedIdx) {
-                // if (filtered == vm.inMarkers.length) {
-                //     matchedIdx = Math.floor(filtered / 2);
-                // }
                 vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
 
@@ -469,6 +452,7 @@
 
         vm.loadMap();
         vm.addListener();
+        historyService.setData('inMarkers', vm.inMarkers);
     }
 
 
@@ -490,11 +474,16 @@
 
 
         var initialZoom = mapService.getZoom();
-        $scope.historyMap.zoom = initialZoom;
+
+        $scope.inMarkers = angular.copy(historyService.getData('inMarkers'));
 
         vm.init = function() {
+            $scope.historyMap.zoom = initialZoom;
+            $scope.historyMap.center = mapService.getCenter();
             if(params == null){
                 $scope.clickedMarker = {};
+                $scope.deviceid = 'Select Vehicle';
+                $scope.vehicleNumber = 'Select Vehicle';
             }else{
                 $scope.clickedMarker = angular.copy(params.clickedMarker);
                 $scope.historyMap.center = $scope.clickedMarker;
@@ -680,18 +669,24 @@
             return $scope.clickedMarker;
         };
 
-        $scope.getMyVehicles = function () {
-            intellicarAPI.userService.getMyVehiclesMap({})
-                .then(function (resp) {
-                    $log.log(resp);
-                    $scope.vehicles = resp;
-                }, function (resp) {
-                    $log.log("handleMyVehiclesFailure");
-                    $log.log(resp);
-                });
+        // $scope.getMyVehicles = function () {
+        //     intellicarAPI.userService.getMyVehiclesMap({})
+        //         .then(function (resp) {
+        //             $log.log(resp);
+        //             $scope.vehicles = resp;
+        //         }, function (resp) {
+        //             $log.log("handleMyVehiclesFailure");
+        //             $log.log(resp);
+        //         });
+        // };
+        //
+        // $scope.getMyVehicles();
+
+        var getMyVehicles = function() {
+            $log.log($scope.inMarkers);
         };
 
-        $scope.getMyVehicles();
+        getMyVehicles();
 
         historyService.setData('clickedMarker', $scope.clickedMarker);
         $interval($scope.resizeMap, 500);
@@ -740,7 +735,9 @@
                             historyInfoWindow.data.gpstime = tracePoint.gpstime;
                             historyInfoWindow.data.odometer = tracePoint.odometer;
                             historyInfoWindow.data.speed = tracePoint.speed;
-                            moveMapWithMarker(marker);
+                            if(animationCount % 10 === 0) {
+                                moveMapWithMarker(marker);
+                            }
                             animationCount++;
                         } else {
                             break;
@@ -749,6 +746,7 @@
 
                     if (animationCount >= marker.trace.path.length || !$scope.gotHistory()) {
                         $scope.stopAnimation();
+                        moveMapWithMarker(marker);
                     }
 
                 }, 100);
@@ -783,6 +781,7 @@
                     .hideDelay(3000)
             );
         };
+
 
         $scope.stopAnimation = function () {
             $interval.cancel($scope.animateMarker);
@@ -854,3 +853,13 @@
 
 
 })();
+
+
+// if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
+//     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
+//     $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
+//         ", " + marker.latitude + ", " + marker.longitude);
+//     $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
+//         ", " + vehicleData.latitude + ", " + vehicleData.longitude);
+// }
+

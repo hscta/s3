@@ -768,4 +768,6 @@ body{
     bottom: 0;
     height: auto;
 }
-
+.md-select-menu-container{
+    z-index: 10000!important;
+}
