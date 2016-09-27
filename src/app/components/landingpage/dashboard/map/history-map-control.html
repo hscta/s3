@@ -1,34 +1,49 @@
 <!DOCTYPE html>
 
+<div class='control-panel' ng-show="gotHistory()" layout="row" flex="100">
 
-<div ng-show="gotHistory()">
-    <!--<md-tooltip>Playing {{getAnimationRate()}} secs in 1 sec</md-tooltip>-->
     <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="goSlow()">
         <md-icon class="icon-font" md-font-library="material-icons">fast_rewind</md-icon>
         <md-tooltip>Go Slow</md-tooltip>
     </md-button>
+
     <md-button class="md-fab md-primary md-mini play-pause-btns" ng-show="play" ng-click="playAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">play_arrow</md-icon>
         <md-tooltip>Play</md-tooltip>
     </md-button>
+
     <md-button class="md-fab md-primary md-mini play-pause-btns" ng-hide="play" ng-click="pauseAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">pause</md-icon>
         <md-tooltip>Pause</md-tooltip>
     </md-button>
+
     <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="fastForward()">
         <md-icon class="icon-font" md-font-library="material-icons">fast_forward</md-icon>
         <md-tooltip>Go Fast</md-tooltip>
     </md-button>
+
     <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">stop</md-icon>
         <md-tooltip>Stop</md-tooltip>
     </md-button>
-    <br/><br/><br/>
-    <!--<div layout>-->
-        <!--<md-slider flex class="md-primary" md-discrete ng-model="animationCount"-->
-                   <!--step="1" min="{{initialTracePoint}}"-->
-                   <!--max="{{finalTracePoint}}" aria-label="timeline">-->
-        <!--</md-slider>-->
-        <!--{{finalTracePoint}}-->
-    <!--</div>-->
+
+    <div class="md-padding"></div>
+
+    <md-slider class="md-accent icar-slider" md-discrete ng-model="slider"
+               step="0.1" min="{{initialSliderTime}}" ng-change="onChangeSlider()"
+               max="{{finalSliderTime}}" aria-label="timeline" flex>
+        <md-tooltip>lksajdf</md-tooltip>
+    </md-slider>
+
+    <div class="md-padding"></div>
+
+    <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="moveOneStep('backward')">
+        <md-icon class="icon-font" md-font-library="material-icons">remove</md-icon>
+    </md-button>
+
+    <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="moveOneStep('forward')">
+        <md-icon class="icon-font" md-font-library="material-icons">add</md-icon>
+    </md-button>
+
+    <!--<div>{{sliderTime | date : 'dd MMM yyyy - h:mm:ss a'}}</div>-->
 </div>

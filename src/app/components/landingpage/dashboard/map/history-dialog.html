@@ -34,21 +34,6 @@
 
     .container-margin{margin-bottom: 0; padding:0; height:31px}
 
-    /*.md-dialog-container {*/
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*bottom: 0;*/
-    /*z-index: $z-index-dialog;*/
-    /*}*/
-
-    /*.md-dialog-container{height:100%;}*/
-    /*md-dialog{max-width:100%;}*/
-
     .btn {
         background-color: #d1e934;
         border: none;
@@ -91,6 +76,14 @@
     .icon-font {
         font-size: 19px;
     }
+
+    .control-panel {
+        width:85%;
+    }
+    .icar-slider .md-sign{
+        display:none;
+    }
+
 
 </style>
 
@@ -162,7 +155,7 @@
                 <ui-gmap-map-control
                         template="app/components/landingpage/dashboard/map/history-map-control.html"
                         controller="InnerMapController"
-                        position="top-right"></ui-gmap-map-control>
+                        position="BOTTOM_CENTER"></ui-gmap-map-control>
 
                 </ui-gmap-map-control>
 
