@@ -457,7 +457,7 @@
 
 
     function HistoryController($scope, $log, $mdDialog, mapService,$state, params,dialogService,
-                               $interval, intellicarAPI, historyService, MapLeftToolBarService) {
+                               $interval, intellicarAPI, historyService,$timeout, MapLeftToolBarService) {
         //var vm = this;
         //$log.log($scope);
         var vm = this;
@@ -465,7 +465,9 @@
         $log.log('HistoryController');
 
         params = dialogService.getData('historyData');
-        console.log(params);
+        var selectedVehicle = dialogService.getData('selectedVehicle');
+
+        vm.multiSelect = true;
 
         $scope.historyMap = {
             mapOptions: {},
@@ -480,20 +482,34 @@
         vm.init = function() {
             $scope.historyMap.zoom = initialZoom;
             $scope.historyMap.center = mapService.getCenter();
-            if(params == null){
-                $scope.clickedMarker = {};
-                $scope.deviceid = 'Select Vehicle';
-                $scope.vehicleNumber = 'Select Vehicle';
-            }else{
+            // if(params == null){
+            //     $scope.clickedMarker = {};
+            //     if(angular.isDefined(selectedVehicle)){
+            //         $scope.deviceid = selectedVehicle.deviceid;
+            //         $scope.vehicleNumber = selectedVehicle.vehicleNumber;
+            //         vm.multiSelect = false;
+            //     }else{
+            //         vm.multiSelect = true;
+            //         $scope.deviceid = 'Select Vehicle';
+            //         $scope.vehicleNumber = 'Select Vehicle';
+            //     }
+            // }else{
                 $scope.clickedMarker = angular.copy(params.clickedMarker);
                 $scope.historyMap.center = $scope.clickedMarker;
                 $scope.deviceid = $scope.clickedMarker.deviceid;
-                $scope.vehicleNumber = $scope.clickedMarker.title;
+                $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
-            }
-        }
+                console.log($scope.deviceid + ' <<<');
+            // }
+            $scope.clickedMarker.trace = $scope.trace;
+        };
 
-        vm.init();
+
+
+        $scope.onVehicleSelect = function() {
+            console.log("onVehicleSelect");
+            console.log($scope.deviceid);
+        };
 
         //$log.log("uiGmapGoogleMapApi loaded");
         $scope.trace = {
@@ -514,7 +530,6 @@
             events: {}
         };
 
-        $scope.clickedMarker.trace = $scope.trace;
 
         $scope.historyInfoWindow = {
             show: false,
@@ -668,7 +683,6 @@
         $scope.getClickedMarker = function () {
             return $scope.clickedMarker;
         };
-
         // $scope.getMyVehicles = function () {
         //     intellicarAPI.userService.getMyVehiclesMap({})
         //         .then(function (resp) {
@@ -682,21 +696,23 @@
         //
         // $scope.getMyVehicles();
 
+
         var getMyVehicles = function() {
             $log.log($scope.inMarkers);
         };
-
         getMyVehicles();
 
+
         historyService.setData('clickedMarker', $scope.clickedMarker);
+        vm.init();
         $interval($scope.resizeMap, 500);
     }
 
 
     function ImmobalizeController($scope, $log, $mdDialog) {
+
         //var vm = this;
         $log.log('ImmobalizeController');
-
         $scope.cancelImmobalize = function () {
             $log.log('cancelImmobalize');
             $mdDialog.cancel();
@@ -716,12 +732,16 @@
         var timeIncreaseBy = 120000;
         var initialTime;
         var tracePoint;
+
         var animationCount = 0;
-
         $scope.play = true;
-        $scope.ffrate = 1;
 
+        $scope.ffrate = 1;
         $scope.traceRoute = function () {
+            //$log.log("ffrate " + $scope.ffrate);
+            //$scope.getAnimationRate();
+            //$log.log("ffrate " + $scope.ffrate);
+            //$scope.getAnimationRate();
             if (marker.trace.path.length && $scope.gotHistory()) {
                 initialTime = marker.trace.path[animationCount].gpstime;
                 $scope.animateMarker = $interval(function () {
@@ -758,8 +778,6 @@
             if ($scope.ffrate < 128) {
                 $scope.ffrate *= 2;
             }
-            //$log.log("ffrate " + $scope.ffrate);
-            //$scope.getAnimationRate();
         };
 
 
@@ -767,8 +785,6 @@
             if ($scope.ffrate > (1 / 128)) {
                 $scope.ffrate /= 2;
             }
-            //$log.log("ffrate " + $scope.ffrate);
-            //$scope.getAnimationRate();
         };
 
 
@@ -787,8 +803,8 @@
             $interval.cancel($scope.animateMarker);
             animationCount = 0;
             $scope.play = true;
-            //$scope.sliderPoint = 1;
 
+            //$scope.sliderPoint = 1;
             if (marker.trace.path.length > 0) {
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
@@ -796,11 +812,11 @@
         };
 
 
+
+
         $scope.$on('$destroy', function () {
             $scope.stopAnimation();
         });
-
-
         $scope.playAnimation = function () {
             //$log.log('playAnimation');
             $scope.play = false;
@@ -829,20 +845,20 @@
         var moveMapWithMarker = function (marker) {
             var map = historyMap.mapControl.getGMap();
             var projection = map.getProjection();
-            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
 
+            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
             var scale = Math.pow(2, map.getZoom());
+
             var worldPoint = projection.fromLatLngToPoint(new google.maps.LatLng({
                 lat: marker.latitude,
                 lng: marker.longitude
             }));
-
             var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
+
             var ydiff = Math.abs((worldPoint.y - centerPoint.y) * scale);
-
             var panX = Math.floor((worldPoint.x - centerPoint.x) * scale);
-            var panY = Math.floor((worldPoint.y - centerPoint.y) * scale);
 
+            var panY = Math.floor((worldPoint.y - centerPoint.y) * scale);
             if (xdiff > 500 || ydiff > 200) {
                 map.panBy(panX, panY);
             }

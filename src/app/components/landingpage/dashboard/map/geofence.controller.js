@@ -98,21 +98,21 @@
         };
 
         vm.currTable = [
-            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime(), 'location':'Silk Board'},
-            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1000 , 'location':'Electronic City'},
-            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+20000, 'location':'Agaara Lake'},
-            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+30000, 'location':'Electronic City'},
-            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+50000, 'location':'Silk Board'},
-            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1000000, 'location':'Electronic City'},
-            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+70000, 'location':'Agaara Lake'},
-            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+5000000, 'location':'Electronic City'},
-            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+1400000, 'location':'Silk Board'},
-            {'name':'KN23PQS', 'event':'Exit', 'time': new Date().getTime()+1300000, 'location':'Electronic City'},
-            {'name':'KL123AS', 'event':'Entry', 'time': new Date().getTime()+1200000, 'location':'Agaara Lake'},
-        ]
+            {'vehicleNumber':'MH02EH1224', 'event':'Entry', 'time': new Date().getTime(), 'location':'Silk Board','deviceId':''},
+            {'vehicleNumber':'MH02EH1226', 'event':'Exit', 'time': new Date().getTime()+1000 , 'location':'Electronic City'},
+            {'vehicleNumber':'MH02EH1227', 'event':'Entry', 'time': new Date().getTime()+20000, 'location':'Agaara Lake'},
+            {'vehicleNumber':'MH02EH1229', 'event':'Exit', 'time': new Date().getTime()+30000, 'location':'Electronic City'},
+            {'vehicleNumber':'MH02EH1230', 'event':'Entry', 'time': new Date().getTime()+50000, 'location':'Silk Board'},
+            {'vehicleNumber':'MH02EH1231', 'event':'Exit', 'time': new Date().getTime()+1000000, 'location':'Electronic City'},
+            {'vehicleNumber':'MH02EH1233', 'event':'Entry', 'time': new Date().getTime()+70000, 'location':'Agaara Lake'},
+            {'vehicleNumber':'MH02EH1235', 'event':'Exit', 'time': new Date().getTime()+5000000, 'location':'Electronic City'},
+            {'vehicleNumber':'MH02EH1236', 'event':'Entry', 'time': new Date().getTime()+1400000, 'location':'Silk Board'},
+            {'vehicleNumber':'MH02EH1241', 'event':'Exit', 'time': new Date().getTime()+1300000, 'location':'Electronic City'},
+            {'vehicleNumber':'MH02EH1242', 'event':'Entry', 'time': new Date().getTime()+1200000, 'location':'Agaara Lake'},
+        ];
 
-        vm.getHistory = function (tr) {
-            console.log(tr);
+        vm.getHistory = function (data) {
+            dialogService.setData(data,'selectedVehicle');
             dialogService.show('home.history');
         }
 

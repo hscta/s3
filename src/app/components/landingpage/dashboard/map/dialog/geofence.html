@@ -73,7 +73,7 @@
                         </th>
                     </tr>
                     <tr ng-click="vm.getHistory(tr)" ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">
-                        <td >{{tr.name}}</td>
+                        <td >{{tr.vehicleNumber}}</td>
                         <td >{{tr.event}}</td>
                         <td >{{tr.time | date : 'HH mm ss a'}}</td>
                         <td >{{tr.location}}</td>
