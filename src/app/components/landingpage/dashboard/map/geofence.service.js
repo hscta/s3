@@ -8,8 +8,6 @@
     function GeofenceService($log) {
         $log.log("GeofenceService");
 
-        console.log('calling the geo fence ');
-
     }
 
 

@@ -348,7 +348,7 @@
 
             // if at least one marker matched the filter string
             if (matchedIdx) {
-                vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
+                // vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
 
             // $log.log("Filtered vehicles = " + filtered);
@@ -460,12 +460,12 @@
     }
 
 
-    function HistoryController($scope, $log, $mdDialog, mapService,$state, params,dialogService,
+    function HistoryController($scope, $log, $mdDialog, mapService,$state,dialogService,
                                $interval, intellicarAPI, historyService,$timeout, MapLeftToolBarService) {
         //var vm = this;
         //$log.log($scope);
 
- 
+
 
         var vm = this;
         dialogService.setTab(0);
@@ -704,12 +704,6 @@
         // $scope.getMyVehicles();
 
 
-        var getMyVehicles = function() {
-            $log.log($scope.inMarkers);
-        };
-        getMyVehicles();
-
-
         historyService.setData('clickedMarker', $scope.clickedMarker);
         vm.init();
         $interval($scope.resizeMap, 500);
@@ -812,7 +806,7 @@
             $scope.play = true;
 
             //$scope.sliderPoint = 1;
-            if (marker.trace.path.length > 0) {
+            if (marker && marker.trace.path.length > 0) {
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
             }

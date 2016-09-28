@@ -74,12 +74,10 @@
         vm.currRep = vm.reports[0];
         vm.currFence = vm.currRep.fences[0];
 
-        console.log(vm.currRep.fences[0]);
 
         vm.setReport = function (rep) {
             vm.currRep = rep;
             vm.currFence = vm.currRep.fences[0];
-            console.log(vm.currFence);
         }
 
         vm.tableSort = {'id':1,'str':'name','reverse':false};
@@ -94,7 +92,6 @@
             }else{
                 vm.tableSort = {'id':id,'str':str,'reverse':false};
             }
-            console.log(vm.tableSort);
         };
 
         vm.currTable = [
@@ -118,7 +115,6 @@
 
     }
 
-    console.log(new Date().getTime());
 
 })();
 
