@@ -77,7 +77,7 @@
             //$log.log("handleLoginSuccess");
             $rootScope.showLoginDialog = false;
             $mdDialog.hide();
-            $window.location.reload();
+            //$window.location.reload();
         }
 
         function handleLoginFailure(resp) {

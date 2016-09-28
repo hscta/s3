@@ -91,7 +91,7 @@
               views: {
                   'dialogview@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map/dialog/geofence.html',
-                      controller: 'GeofenceController as vm'
+                      controller: 'GeofenceReportController as vm'
                   }
               }
           })

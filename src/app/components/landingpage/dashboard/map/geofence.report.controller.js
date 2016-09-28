@@ -5,11 +5,11 @@
 
     angular
         .module('uiplatform')
-        .controller('GeofenceController', GeofenceController);
+        .controller('GeofenceReportController', GeofenceReportController);
 
-    function GeofenceController(  $log,dialogService ) {
+    function GeofenceReportController(  $log,dialogService ) {
 
-        $log.log("GeofenceController");
+        $log.log("GeofenceReportController");
 
         dialogService.setTab(1);
         var vm = this;

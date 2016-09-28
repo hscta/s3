@@ -6,7 +6,8 @@
       'ngMessages', 'ngAria', 'ngResource',  'ngMaterial', 'ui.bootstrap',
       'ui.router', 'ui.tree', 'toastr', 'google.places', 'uiGmapgoogle-maps',
         'material.components.expansionPanels', 'ui.tree-filter', 'angular-carousel',
-        'angular-bind-html-compile'
+        'angular-bind-html-compile', 'ct.ui.router.extras'
     ]);
+
 
 })();

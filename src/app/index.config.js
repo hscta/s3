@@ -6,64 +6,6 @@
         //.service('loginModal', loginModal)
         .config(themeConfig);
 
-        // .config(loginModalConfig)
-    // function loginModal($uibModal, $rootScope) {
-    //     console.log("loginModal");
-    //     function assignCurrentUser(user) {
-    //         $rootScope.currentUser = user;
-    //         return user;
-    //     }
-    //
-    //     return function () {
-    //         var instance = $uibModal.open({
-    //             templateUrl: 'app/components/login/loginModalTemplate.html',
-    //             controller: 'LoginModalCtrl',
-    //             controllerAs: 'LoginModalCtrl'
-    //         })
-    //
-    //         return instance.result.then(assignCurrentUser);
-    //     };
-    //
-    // }
-    //
-    //
-    // /** @ngInject */
-    // function loginModalConfig($httpProvider) {
-    //
-    //     $httpProvider.interceptors.push(function ($timeout, $q, $injector) {
-    //         var loginModal, $http, $state;
-    //
-    //         // this trick must be done so that we don't receive
-    //         // `Uncaught Error: [$injector:cdep] Circular dependency found`
-    //         $timeout(function () {
-    //             loginModal = $injector.get('loginModal');
-    //             $http = $injector.get('$http');
-    //             $state = $injector.get('$state');
-    //         });
-    //
-    //         return {
-    //             responseError: function (rejection) {
-    //                 if (rejection.status !== 401) {
-    //                     return rejection;
-    //                 }
-    //
-    //                 var deferred = $q.defer();
-    //
-    //                 loginModal()
-    //                     .then(function () {
-    //                         deferred.resolve($http(rejection.config));
-    //                     })
-    //                     .catch(function () {
-    //                         $state.go('welcome');
-    //                         deferred.reject(rejection);
-    //                     });
-    //
-    //                 return deferred.promise;
-    //             }
-    //         };
-    //     });
-    //
-    // }
 
 
     function themeConfig($mdIconProvider, $mdThemingProvider) {
