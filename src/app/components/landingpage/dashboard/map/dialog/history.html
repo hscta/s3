@@ -34,21 +34,6 @@
 
     .container-margin{margin-bottom: 0; padding:0; height:31px}
 
-    /*.md-dialog-container {*/
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*bottom: 0;*/
-    /*z-index: $z-index-dialog;*/
-    /*}*/
-
-    /*.md-dialog-container{height:100%;}*/
-    /*md-dialog{max-width:100%;}*/
-
     .btn {
         background-color: #d1e934;
         border: none;
@@ -75,7 +60,12 @@
     }
 
     .history-dialog .angular-google-map-container {
-        height: 554px;
+        position: absolute;
+        left:0;
+        bottom:0;
+        top:70px;
+        right:0;
+        width:100%;
     }
 
     .md-button{
@@ -92,8 +82,26 @@
         font-size: 19px;
     }
 
-</style>
+    .control-panel {
+        width:85%;
+    }
+    .icar-slider .md-sign{
+        /*display:none;*/
+    }
 
+    .md-track-ticks:hover{
+
+    }
+
+    .marker-details {
+        background: grey;
+        color: #FFF;
+        position: absolute;
+        top: -50px;
+        left: -78px;
+    }
+
+</style>
 
 <script type="text/ng-template" id="historyInfoWindow.html">
     <div style="width:230px; height:62px; max-width:230px; min-width:230px; overflow:hidden; padding-top:5px;">
@@ -115,86 +123,88 @@
 </script>
 
 <div style="height: 100%;">
-    <span class="error-msg">{{errorMsg}}</span><br/>
 
-    <div layout="row" layout-align="space-around center">
-        <div layout="row" class="input-fields" layout-align="space-around center" flex>
+            <span class="error-msg">{{errorMsg}}</span><br/>
 
-            <md-input-container class="container-margin"  ng-show="vm.multiSelect">
-                <label>Vehicle No</label>
-                <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                <md-select ng-model="deviceid" ng-change="onVehicleSelect()">
+            <div layout="row" layout-align="space-around center">
+                <div layout="row" class="input-fields" layout-align="space-around center" flex>
 
-                    <md-option ng-value="vehicle.deviceid"
-                               ng-repeat="vehicle in inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'">
-                        {{vehicle.vehicleno}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
 
-            <md-input-container class="container-margin"  ng-show="!vm.multiSelect">
-                <label>Vehicle No</label>
-                <input type="text" ng-model="vehicleNumber" ng-readonly="true">
-            </md-input-container>
+                    <md-input-container class="container-margin"  ng-show="vm.multiSelect">
+                        <label>Vehicle No</label>
+                        <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
+                        <md-select ng-model="deviceid" ng-change="onVehicleSelect()">
 
-            <md-input-container class="container-margin">
-                <label>Start Time</label>
-                <input type="text" id="start_time" ng-model="startTime">
-            </md-input-container>
+                            <md-option ng-value="vehicle.deviceid"
+                                       ng-repeat="vehicle in inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'">
+                                {{vehicle.vehicleno}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
 
-            <md-input-container class="container-margin">
-                <label>End Time</label>
-                <input type="text" id="end_time" ng-model="endTime">
-            </md-input-container>
-            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
-        </div>
-        <div layout="row" layout-align="end start">
-        </div>
-    </div>
+                    <md-input-container class="container-margin"  ng-show="!vm.multiSelect">
+                        <label>Vehicle No</label>
+                        <input type="text" ng-model="vehicleNumber" ng-readonly="true">
+                    </md-input-container>
 
-    <md-dialog-content class="map-dialog-content">
-        <div class="md-dialog-content map-dialog history-dialog">
-            <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom' draggable="true"
-                                options="historyMap.mapOptions" bounds="historyMap.bounds"
-                                control="historyMap.mapControl">
+                    <md-input-container class="container-margin">
+                        <label>Start Time</label>
+                        <input type="text" id="start_time" ng-model="startTime">
+                    </md-input-container>
 
-                <ui-gmap-map-control
-                    template="app/components/landingpage/dashboard/map/history-map-control.html"
-                    controller="InnerMapController"
-                    position="top-right"></ui-gmap-map-control>
+                    <md-input-container class="container-margin">
+                        <label>End Time</label>
+                        <input type="text" id="end_time" ng-model="endTime">
+                    </md-input-container>
+                    <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+                </div>
+                <div layout="row" layout-align="end start">
+                </div>
+            </div>
 
-                </ui-gmap-map-control>
+            <md-dialog-content class="map-dialog-content">
+                <div class="md-dialog-content map-dialog history-dialog">
+                    <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom' draggable="true"
+                                        options="historyMap.mapOptions" bounds="historyMap.bounds"
+                                        control="historyMap.mapControl">
 
-                <ui-gmap-marker
-                    idkey="'self'"
-                    coords="clickedMarker"
-                    click="clickedMarker.click"
-                    options="clickedMarker.options"
-                    events="clickedMarker.events"
-                    control="clickedMarker.control">
-                </ui-gmap-marker>
+                        <ui-gmap-map-control
+                            template="app/components/landingpage/dashboard/map/history-map-control.html"
+                            controller="InnerMapController"
+                            position="BOTTOM_CENTER"></ui-gmap-map-control>
 
-                <ui-gmap-polyline
-                    path="trace.path"
-                    stroke="trace.stroke"
-                    clickable="trace.clickable"
-                    geodesic="trace.geodesic"
-                    visible="trace.visible"
-                    fit="trace.fit"
-                    static="trace.static"
-                    events="trace.events"
-                    icons="trace.icons">
-                </ui-gmap-polyline>
+                        </ui-gmap-map-control>
 
-                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
-                                control="historyInfoWindow.control"
-                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
-                                templateUrl="'historyInfoWindow.html'"
-                                templateParameter="historyInfoWindow"
-                                isIconVisibleOnClick="true">
-                </ui-gmap-window>
+                        <ui-gmap-marker
+                            idkey="'self'"
+                            coords="clickedMarker"
+                            click="clickedMarker.click"
+                            options="clickedMarker.options"
+                            events="clickedMarker.events"
+                            control="clickedMarker.control">
+                        </ui-gmap-marker>
 
-            </ui-gmap-google-map>
+                        <ui-gmap-polyline
+                            path="trace.path"
+                            stroke="trace.stroke"
+                            clickable="trace.clickable"
+                            geodesic="trace.geodesic"
+                            visible="trace.visible"
+                            fit="trace.fit"
+                            static="trace.static"
+                            events="trace.events"
+                            icons="trace.icons">
+                        </ui-gmap-polyline>
+
+                        <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
+                                        control="historyInfoWindow.control"
+                                        options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
+                                        templateUrl="'historyInfoWindow.html'"
+                                        templateParameter="historyInfoWindow"
+                                        isIconVisibleOnClick="true">
+                        </ui-gmap-window>
+
+                    </ui-gmap-google-map>
         </div>
         </div>
 <!--</md-tab-body>-->

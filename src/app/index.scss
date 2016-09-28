@@ -543,8 +543,11 @@ body{
         @include shadow(0 2px 7px rgba(0,0,0,0.2));
     }
     tr:hover{
-        cursor:pointer;
+        cursor:default;
         background-color: #f4f4f4;
+    }
+    tr span:hover{
+        cursor:pointer;
     }
     tr:nth-child(1):hover{
         background-color: transparent!important;

@@ -72,8 +72,8 @@
                             <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-down"></i>
                         </th>
                     </tr>
-                    <tr ng-click="vm.getHistory(tr)" ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">
-                        <td >{{tr.vehicleNumber}}</td>
+                    <tr ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">
+                        <td ><span  ng-click="vm.getHistory(tr)" >{{tr.vehicleNumber}}</span></td>
                         <td >{{tr.event}}</td>
                         <td >{{tr.time | date : 'HH mm ss a'}}</td>
                         <td >{{tr.location}}</td>
@@ -83,3 +83,17 @@
         </div>
     </div>
 <!--</md-tab-body>-->
+
+<script>
+    $(document).ready(function () {
+        $('#start_time').datetimepicker({
+            mask: '9999/19/39 29:59',
+            format: 'Y-M-d H:i'
+        });
+
+        $('#end_time').datetimepicker({
+            mask: '9999/19/39 29:59',
+            format: 'Y-M-d H:i'
+        });
+    });
+</script>
