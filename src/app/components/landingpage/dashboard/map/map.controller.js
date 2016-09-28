@@ -661,12 +661,14 @@
                 $scope.historyMap.center = $scope.trace.path[midPoint];
                 $scope.historyMap.zoom = 11;
 
-                $scope.historyInfoWindow.coords = $scope.clickedMarker;
-                $scope.historyInfoWindow.data.gpstime = new Date($scope.trace.path[0].gpstime);
-                $scope.historyInfoWindow.data.odometer = $scope.trace.path[0].odometer;
-                $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
-                $scope.historyInfoWindow.show = true;
+                // $scope.historyInfoWindow.coords = $scope.clickedMarker;
+                // $scope.historyInfoWindow.data.gpstime = new Date($scope.trace.path[0].gpstime);
+                // $scope.historyInfoWindow.data.odometer = $scope.trace.path[0].odometer;
+                // $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
+                // $scope.historyInfoWindow.show = true;
                 $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
+            }else {
+                $scope.errorMsg = "No Data Found";
             }
         };
 
@@ -723,7 +725,6 @@
     }
 
     function InnerMapController($scope, $log, $mdToast, historyService, $interval) {
-
         $log.log('InnerMapController');
         var marker = historyService.getData('clickedMarker');
         var historyMap = historyService.getData('historyMap');
@@ -733,9 +734,7 @@
         var tracePoint;
         var animationCount = 0;
 
-        $scope.tracePointGpsTime = marker.gpstime;
-        $scope.tracePointOdometer = marker.odometer;
-        $scope.tracePointSpeed = marker.speed;
+        $log.log(marker);
 
         $scope.play = true;
         $scope.ffrate = 1;
@@ -928,9 +927,18 @@
 
         $scope.gotHistoryEvent = function () {
             $scope.setSliderTime();
+            if ( marker)
+            $log.log(marker);
+            var initialPoint = marker.trace.path[0];
+            $scope.tracePointGpsTime = initialPoint.gpstime;
+            $scope.tracePointOdometer = initialPoint.odometer;
+            $scope.tracePointSpeed = initialPoint.speed;
+
         };
 
-        $scope.$on('gotHistoryEvent', $scope.gotHistoryEvent);
+        $scope.$on('gotHistoryEvent', function(event, data){
+            $scope.gotHistoryEvent();
+        });
 
 
         var moveMapWithMarker = function (marker) {

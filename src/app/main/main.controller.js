@@ -5,7 +5,7 @@
         .module('uiplatform')
         .controller('MainController', MainController);
 
-    function MainController($scope, $rootScope, $log, intellicarAPI, $interval) {
+    function MainController($scope, $rootScope, $log, intellicarAPI) {
 
         $log.log('MainController');
         var vm = this;

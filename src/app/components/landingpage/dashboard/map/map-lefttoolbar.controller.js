@@ -33,6 +33,7 @@
 
         vm.updateFence = function (resp) {
             $log.log(resp);
+
         };
 
 
