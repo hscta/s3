@@ -122,14 +122,14 @@
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="MapLeftToolBarController as vm">
-        <div class="ltb_item" ng-repeat="item in vm.leftTB">
-            <div class="ltbi_button" ng-click="vm.buttonClick(item.state)">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-class="{'ltb_item-line':item.type == 'line'}">
+            <div class="ltbi_button" ng-click="vm.buttonClick(item.data)" ng-if="item.type == 'button'" ng-class="{'active':item.data.active}">
                 <div class="ltbi_icon">
                     <i class="fa {{item.icon}}" aria-hidden="true"></i>
                 </div>
                 <div class="ltbi_name">{{item.name}}</div>
             </div>
-            <div class="ltbi_cont" ng-if="item.content">
+            <div class="ltbi_cont" ng-if="item.content" ng-if="item.type == 'button'">
                 <md-input-container class="md-input-cont">
                     <label>Color</label>
                     <input type="text" ng-model="color" >
