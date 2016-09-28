@@ -13,6 +13,76 @@
         $log.log('MapController');
         var vm = this;
 
+
+        $scope.circleFence = {
+            "fencetype":"circle",
+            "fencecenter":{"lat":19.196051,"lng":72.961938},
+            "fenceradius":30
+        };
+
+        vm.circles = [
+            {
+                id: 1,
+                center: {
+                    latitude: 19.196051,
+                    longitude: 72.961938
+                },
+                radius: 30,
+                stroke: {
+                    color: '#08B21F',
+                    weight: 2,
+                    opacity: 1
+                },
+                fill: {
+                    color: '#08B21F',
+                    opacity: 0.5
+                },
+                geodesic: true, // optional: defaults to false
+                draggable: false, // optional: defaults to false
+                clickable: true, // optional: defaults to true
+                editable: true, // optional: defaults to false
+                visible: true, // optional: defaults to true
+                control: {}
+            }
+        ];
+
+
+        // var polygons = {
+        //     "fencetype":"polygon",
+        //     "vertex":[{"lat":19.088451,"lng":72.895935},
+        //         {"lat":19.088409,"lng":72.89637},
+        //         {"lat":19.088088,"lng":72.896356},
+        //         {"lat":19.088143,"lng":72.895833},
+        //         {"lat":19.088451,"lng":72.895935}]
+        // }"
+
+        vm.polygons = [
+            {
+                id: 1,
+                path: [
+                    {"latitude":19.088451,"longitude":72.895935},
+                    {"latitude":19.088409,"longitude":72.89637},
+                    {"latitude":19.088088,"longitude":72.896356},
+                    {"latitude":19.088143,"longitude":72.895833},
+                    {"latitude":19.088451,"longitude":72.895935}
+                ],
+                stroke: {
+                    color: '#08B21F',
+                    weight: 3
+                },
+                editable: false,
+                draggable: false,
+                geodesic: false,
+                visible: true,
+                fill: {
+                    color: '#08B21F',
+                    opacity: 0.5
+                }
+            }
+        ];
+
+
+
         // var infowindowplacesearch = new google.maps.InfoWindow();
 
 
@@ -928,7 +998,7 @@
         $scope.gotHistoryEvent = function () {
             $scope.setSliderTime();
             if ( marker)
-            $log.log(marker);
+                $log.log(marker);
             var initialPoint = marker.trace.path[0];
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;

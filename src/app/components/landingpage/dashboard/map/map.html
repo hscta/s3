@@ -170,6 +170,24 @@
             <!--</div>-->
             <!--</ui-gmap-map-control>-->
 
+            <ui-gmap-circle ng-repeat="c in vm.circles track by c.id"
+                            center="c.center"
+                            stroke="c.stroke" fill="c.fill" radius="c.radius"
+                            visible="c.visible" geodesic="c.geodesic"
+                            editable="c.editable" draggable="c.draggable"
+                            clickable="c.clickable" control="c.control">
+            </ui-gmap-circle>
+
+            <ui-gmap-polygon static="true" ng-repeat="p in vm.polygons track by p.id"
+                             path="p.path" stroke="p.stroke" visible="p.visible"
+                             geodesic="p.geodesic"
+                             fill="p.fill" fit="false"
+                             editable="p.editable"
+                             draggable="p.draggable">
+
+            </ui-gmap-polygon>
+
+
         </ui-gmap-google-map>
     </div>
 </div>
