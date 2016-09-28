@@ -30,7 +30,7 @@
 
         vm.leftTB = [
             {'name':'Geofences', 'icon':'fa-globe', 'state':'home.geofence' },
-            // {'name':'Cab Service', 'icon':'fa-cab'},
+            // {'name':'City Limits', 'icon':'fa-cab'},
             // {'name':'Tasks', 'icon':'fa-tasks' },
             // {'name':'Tags', 'icon':'fa-tag' },
             // {'name':'User', 'icon':'fa-user' },
