@@ -3,9 +3,9 @@
 <div class='control-panel' ng-show="gotHistory()" layout="row" flex="100">
 
     <div class="marker-details" flex>
-        <span>Date : {{tracePointGpsTime}}</span><br/>
-        <span>Odometer : {{tracePointOdometer}} </span><br/>
-        <span>Speed : {{tracePointSpeed}}</span>
+        <span>Date : {{tracePointGpsTime | date : 'dd MMM yyyy - h:mm:ss a'}}</span><br/>
+        <span>Odometer : {{tracePointOdometer}} km </span><br/>
+        <span>Speed : {{tracePointSpeed}} kmph</span>
     </div>
 
     <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="goSlow()">

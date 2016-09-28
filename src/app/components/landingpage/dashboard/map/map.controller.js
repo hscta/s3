@@ -589,9 +589,15 @@
         var tracePoint;
         var animationCount = 0;
 
+
+        $log.log('sssssssssssssssssssssssssssss');
+        $log.log(marker);
+        $scope.tracePointGpsTime = marker.gpstime;
+        $scope.tracePointOdometer = marker.odometer;
+        $scope.tracePointSpeed = marker.speed;
+
         $scope.play = true;
         $scope.ffrate = 1;
-
 
         $scope.moveOneStep = function(movementType){
             if(!marker.trace.path.length)
@@ -663,9 +669,9 @@
         var updateTracePoint = function (tracePoint) {
             marker.latitude = tracePoint.latitude;
             marker.longitude = tracePoint.longitude;
-            historyInfoWindow.data.odometer = tracePoint.odometer;
-            historyInfoWindow.data.speed = tracePoint.speed;
-            historyInfoWindow.data.gpstime = tracePoint.gpstime;
+            // historyInfoWindow.data.odometer = tracePoint.odometer;
+            // historyInfoWindow.data.speed = tracePoint.speed;
+            // historyInfoWindow.data.gpstime = tracePoint.gpstime;
             $scope.tracePointGpsTime = tracePoint.gpstime;
             $scope.tracePointOdometer = tracePoint.odometer;
             $scope.tracePointSpeed = tracePoint.speed;
