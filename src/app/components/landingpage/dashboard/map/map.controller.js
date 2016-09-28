@@ -482,25 +482,25 @@
         vm.init = function() {
             $scope.historyMap.zoom = initialZoom;
             $scope.historyMap.center = mapService.getCenter();
-            // if(params == null){
-            //     $scope.clickedMarker = {};
-            //     if(angular.isDefined(selectedVehicle)){
-            //         $scope.deviceid = selectedVehicle.deviceid;
-            //         $scope.vehicleNumber = selectedVehicle.vehicleNumber;
-            //         vm.multiSelect = false;
-            //     }else{
-            //         vm.multiSelect = true;
-            //         $scope.deviceid = 'Select Vehicle';
-            //         $scope.vehicleNumber = 'Select Vehicle';
-            //     }
-            // }else{
+            if(params == null){
+                $scope.clickedMarker = {};
+                if(angular.isDefined(selectedVehicle)){
+                    $scope.deviceid = selectedVehicle.deviceid;
+                    $scope.vehicleNumber = selectedVehicle.vehicleNumber;
+                    vm.multiSelect = false;
+                }else{
+                    vm.multiSelect = true;
+                    $scope.deviceid = 'Select Vehicle';
+                    $scope.vehicleNumber = 'Select Vehicle';
+                }
+            }else{
                 $scope.clickedMarker = angular.copy(params.clickedMarker);
                 $scope.historyMap.center = $scope.clickedMarker;
                 $scope.deviceid = $scope.clickedMarker.deviceid;
                 $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
                 console.log($scope.deviceid + ' <<<');
-            // }
+            }
             $scope.clickedMarker.trace = $scope.trace;
         };
 

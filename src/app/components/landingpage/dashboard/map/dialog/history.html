@@ -120,19 +120,19 @@
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
 
-            <md-input-container class="container-margin"  ng-if="vm.multiSelect">
+            <md-input-container class="container-margin"  ng-show="vm.multiSelect">
                 <label>Vehicle No</label>
                 <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
                 <md-select ng-model="deviceid" ng-change="onVehicleSelect()">
 
                     <md-option ng-value="vehicle.deviceid"
                                ng-repeat="vehicle in inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'">
-                        {{vehicle.vehicleno + ' ' + vehicle.deviceid}}
+                        {{vehicle.vehicleno}}
                     </md-option>
                 </md-select>
             </md-input-container>
 
-            <md-input-container class="container-margin"  ng-if="!vm.multiSelect">
+            <md-input-container class="container-margin"  ng-show="!vm.multiSelect">
                 <label>Vehicle No</label>
                 <input type="text" ng-model="vehicleNumber" ng-readonly="true">
             </md-input-container>
