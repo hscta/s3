@@ -18,7 +18,7 @@
             var lng = 72.83638193466376;
 
             vm.center = {latitude: lat, longitude: lng};
-            vm.zoom = 10;
+            vm.zoom = 11;
             $interval(function () {
                 // vm.zoom--;
             },3000);
@@ -64,9 +64,9 @@
 
                 if(checkZoomLevel(0,6)){
                     zoomLevelIcon = 'extra_small';
-                }else if(checkZoomLevel(7,8)){
+                }else if(checkZoomLevel(7,9)){
                     zoomLevelIcon = 'small';
-                }else if(checkZoomLevel(9,9)){
+                }else if(checkZoomLevel(10,10)){
                     zoomLevelIcon = 'medium';
                 }else{
                     zoomLevelIcon = 'big';
@@ -83,7 +83,7 @@
 
                 vehicleData.iconColor = iconColor;
                 vehicleData.animation = google.maps.Animation.BOUNCE;
-                return 'assets/images/markers/'+zoomLevelIcon+'/' + iconColor + '-dot.png';
+                return 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
             };
 
 
@@ -101,6 +101,8 @@
                 vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
                 vehicleData.ignitionstatusStr = vehicleData.ignitionstatus ? "On" : "Off";
                 vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
+                if(!vehicleData.mobilistatus)
+                    $log.log(msg);
                 vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
                 vehicleData.timestamp = new Date(vehicleData.timestamp);
                 vehicleData.animation = google.maps.Animation.BOUNCE;

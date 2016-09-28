@@ -40,9 +40,6 @@
         };
 
         vm.toggleRightSidebar = function (){
-           // $mdSidenav('right').toggle();
-           //  vm.right_nav_toggle = !vm.right_nav_toggle;
-           //  $rootScope.$broadcast('toggleRightSidebar', {'right_nav_toggle': vm.right_nav_toggle});
             $rootScope.right_nav_toggle = !$rootScope.right_nav_toggle;
         };
 

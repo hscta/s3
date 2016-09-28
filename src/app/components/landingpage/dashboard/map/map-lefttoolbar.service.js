@@ -5,7 +5,7 @@
     angular.module('uiplatform')
         .service('MapLeftToolBarService', MapLeftToolBarService);
 
-    function MapLeftToolBarService($log,GeofenceService) {
+    function MapLeftToolBarService($log,geofenceReportService) {
 
         var vm = this;
         vm.toolbar = true;
@@ -27,7 +27,7 @@
 
         vm.getService = function(id){
             if(id == 'geofences'){
-                return GeofenceService;
+                return geofenceReportService;
             }
         }
 
