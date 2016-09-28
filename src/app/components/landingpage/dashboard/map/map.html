@@ -142,19 +142,22 @@
           <input  id="pac-input" type="text" placeholder="Search">
         </script>
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom'
-                            options="vm.inMap.mapOptions" optimized="false"  bounds="vm.inMap.bounds" events="vm.mapEvents"
+                            options="vm.inMap.mapOptions" optimized="false" bounds="vm.inMap.bounds"
+                            events="vm.mapEvents"
                             control="vm.inMap.mapControl">
 
             <!-- <ui-gmap-search-box template="vm.SearchBox.template" events="vm.SearchBox.events" position="RIGHT_BOTTOM"></ui-gmap-search-box> -->
 
-            <ui-gmap-search-box options="searchbox.options" template="searchbox.template" events="searchbox.events"></ui-gmap-search-box>
+            <ui-gmap-search-box options="searchbox.options" template="searchbox.template"
+                                events="searchbox.events"></ui-gmap-search-box>
 
-            <ui-gmap-markers models="vm.inMarkers"  optimized="false" coords="'self'" icon="'icon'" options="'options'"
-                             events="vm.markersEvents">
+            <ui-gmap-markers models="vm.inMarkers"  optimized="false" coords="'self'" icon="'icon'"
+                             options="'options'" events="vm.markersEvents">
             </ui-gmap-markers>
 
 
-            <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker" control="vm.infoWindow.control"
+            <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
+                            control="vm.infoWindow.control"
                             options="vm.infoWindow.options" closeClick="vm.infoWindowClose()"
                             templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
                             templateParameter="vm.clickedMarkerObj"

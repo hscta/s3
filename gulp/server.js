@@ -38,7 +38,7 @@ function browserSyncInit(baseDir, browser, isRemote) {
 
     if (isRemote) {
         browserSync.instance = browserSync.init({
-            port: 80,
+            port:80,
             startPath: '/',
             server: server,
             browser: browser,
@@ -73,6 +73,8 @@ gulp.task('serve:dist', ['build'], function () {
     browserSyncInit(conf.paths.dist, null, true);
 });
 
+/*
+
 gulp.task('serve:e2e', ['inject'], function () {
     browserSyncInit([conf.paths.tmp + '/serve', conf.paths.src], []);
 });
@@ -80,3 +82,4 @@ gulp.task('serve:e2e', ['inject'], function () {
 gulp.task('serve:e2e-dist', ['build'], function () {
     browserSyncInit(conf.paths.dist, []);
 });
+*/

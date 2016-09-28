@@ -19,12 +19,12 @@
                 {'id':1,'name':'Fence 1', 'vehicles':[
                     {'id':1,'name':'bmw m3'},
                     {'id':1,'name':'Nissan'},
-                    {'id':1,'name':'Ferrari'},
+                    {'id':1,'name':'Ferrari'}
                 ]},
                 {'id':1,'name':'Fence 2', 'vehicles':[
                     {'id':1,'name':'Ford Mustang'},
                     {'id':1,'name':'Porsh Cerrare'},
-                    {'id':1,'name':'Ferrari GT'},
+                    {'id':1,'name':'Ferrari GT'}
                 ]},
             ]},
             {'id':2,'name':'Report 2', 'fences':[
@@ -33,25 +33,25 @@
                     {'id':1,'name':'bmw m3'},
                     {'id':1,'name':'Porsh Cerrare'},
                     {'id':1,'name':'Porsh Cerrare M3'},
-                    {'id':1,'name':'Ferrari'},
+                    {'id':1,'name':'Ferrari'}
                 ]},
                 {'id':1,'name':'Fence 5', 'vehicles':[
                     {'id':1,'name':'bmw m3'},
                     {'id':1,'name':'Ford Mustang'},
                     {'id':1,'name':'Porsh Cerrare'},
-                    {'id':1,'name':'Ferrari GT'},
+                    {'id':1,'name':'Ferrari GT'}
                 ]},
             ]},
             {'id':3,'name':'Report 3', 'fences':[
                 {'id':1,'name':'Fence Al', 'vehicles':[
                     {'id':1,'name':'bmw m3'},
                     {'id':1,'name':'Nissan'},
-                    {'id':1,'name':'Ferrari'},
+                    {'id':1,'name':'Ferrari'}
                 ]},
                 {'id':1,'name':'Fence random', 'vehicles':[
                     {'id':1,'name':'Ford Mustang'},
                     {'id':1,'name':'Porsh Cerrare'},
-                    {'id':1,'name':'Ferrari GT'},
+                    {'id':1,'name':'Ferrari GT'}
                 ]},
             ]},
             {'id':4,'name':'Report 4', 'fences':[
@@ -60,13 +60,13 @@
                     {'id':1,'name':'bmw m3'},
                     {'id':1,'name':'Porsh Cerrare'},
                     {'id':1,'name':'Porsh Cerrare M3'},
-                    {'id':1,'name':'Ferrari'},
+                    {'id':1,'name':'Ferrari'}
                 ]},
                 {'id':1,'name':'new Fence', 'vehicles':[
                     {'id':1,'name':'bmw m3'},
                     {'id':1,'name':'Ford Mustang'},
                     {'id':1,'name':'Porsh Cerrare'},
-                    {'id':1,'name':'Ferrari GT'},
+                    {'id':1,'name':'Ferrari GT'}
                 ]},
             ]},
         ];

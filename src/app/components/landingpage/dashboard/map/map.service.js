@@ -74,7 +74,7 @@
 
 
 
-                function checkZoomLevel(min,max){ 
+                function checkZoomLevel(min,max){
                     if(vm.zoom <= max && vm.zoom >= min){
                         return true;
                     }
