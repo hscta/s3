@@ -1,0 +1,99 @@
+<!--<md-tab-body >-->
+    <div class="geofence-cont" ng-controller="GeofenceController as vm" style="height: 100%;">
+        <div class="geo-leftbar" ng-click="vm.vehicleFilterVar = false">
+            <div class="geo-rep-item-head" >Reports</div>
+            <div class="geo-rep-item" ng-class="{'active':vm.currRep.id == rep.id}" ng-repeat="rep in vm.reports" ng-click="vm.setReport(rep)">{{rep.name}}</div>
+        </div>
+        <div class="geo-cont" >
+            <div class="geoc-head">
+
+                <span class="error-msg">{{errorMsg}}</span><br/>
+
+                <div layout="row" layout-align="space-around center">
+                    <div layout="row" class="input-fields" layout-align="space-around center" flex>
+                        <md-input-container class="container-margin">
+                            <label>Fences</label>
+                            <md-select ng-model="vm.currFence">
+                                <md-option ng-value="opt" ng-repeat="opt in vm.currRep.fences">{{ opt.name }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <div class="geo-mul-back" ng-if="vm.vehicleFilterVar" ng-click="vm.vehicleFilterVar = false"></div>
+                        <md-input-container class="container-margin geo-multiSel">
+                            <label>Vehicle Name</label>
+                            <input type="text" ng-focus="vm.vehicleFilterVar = true" ng-model="vm.vehicleFilter">
+                            <div class="geo-ms-cont" ng-if="vm.vehicleFilterVar">
+                                <md-list>
+                                    <md-list-item class="md-2-line" ng-repeat="item in vm.currFence.vehicles | filter : vm.vehicleFilter">
+                                        <md-checkbox ng-model="item.done"></md-checkbox>
+                                        <div class="md-list-item-text">
+                                            <h3>{{item.name}}</h3>
+                                        </div>
+                                    </md-list-item>
+                                </md-list>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container class="container-margin">
+                            <label>Start Time</label>
+                            <input type="text" id="start_time" ng-model="startTime">
+                        </md-input-container>
+
+                        <md-input-container class="container-margin">
+                            <label>End Time</label>
+                            <input type="text" id="end_time" ng-model="endTime">
+                        </md-input-container>
+                        <md-button class="md-accent">Get Report</md-button>
+                    </div>
+                    <div layout="row" layout-align="end start">
+                    </div>
+                </div>
+            </div>
+            <div class="geoc-body" >
+                <table class="geo-table">
+                    <tr>
+                        <th ng-click="vm.setSort(1,'name')">
+                            Vehicle Number
+                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-up"></i>
+                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-down"></i>
+                        </th>
+                        <th ng-click="vm.setSort(2,'event')">
+                            Event
+                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-up"></i>
+                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-down"></i>
+                        </th>
+                        <th ng-click="vm.setSort(3,'time')">
+                            Time
+                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-up"></i>
+                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-down"></i>
+                        </th>
+                        <th ng-click="vm.setSort(4,'location')">
+                            Location
+                            <i ng-if="vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-up"></i>
+                            <i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-down"></i>
+                        </th>
+                    </tr>
+                    <tr ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">
+                        <td ><span  ng-click="vm.getHistory(tr)" >{{tr.vehicleNumber}}</span></td>
+                        <td >{{tr.event}}</td>
+                        <td >{{tr.time | date : 'HH mm ss a'}}</td>
+                        <td >{{tr.location}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+<!--</md-tab-body>-->
+
+<script>
+    $(document).ready(function () {
+        $('#start_time').datetimepicker({
+            mask: '9999/19/39 29:59',
+            format: 'Y-M-d H:i'
+        });
+
+        $('#end_time').datetimepicker({
+            mask: '9999/19/39 29:59',
+            format: 'Y-M-d H:i'
+        });
+    });
+</script>

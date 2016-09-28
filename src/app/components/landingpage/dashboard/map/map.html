@@ -55,14 +55,26 @@
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
         <div layout="row"  layout-align="center center">
-            <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
-                         aria-label="onroaded" ng-change="vm.onRoadCheck()">
-                On Roaded
-            </md-checkbox>
-            <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
-                         aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>
-                Off Roaded
-            </md-checkbox>
+            <div class="toggleButton"ng-class="{'active':vm.onRoaded}">
+                On Road
+                <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
+                             aria-label="onroaded" ng-change="vm.onRoadCheck()">
+                </md-checkbox>
+            </div>
+            <div class="toggleButton"ng-class="{'active':vm.offRoaded}">
+                Off Road
+                <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
+                             aria-label="onroaded" ng-change="vm.offRoadCheck()">
+                </md-checkbox>
+            </div>
+            <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
+                         <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
+                <!--On Roaded-->
+            <!--</md-checkbox>-->
+            <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"-->
+                         <!--aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>-->
+                <!--Off Roaded-->
+            <!--</md-checkbox>-->
         </div>
 
         <ul id="nav" layout="row" layout-align="end center" flex>
@@ -109,16 +121,15 @@
             </li>
         </ul>
     </div>
-    <div class="lefttoolbar" ng-show="vm.leftToolbar"}>
-
-        <div class="ltb_item" ng-repeat="item in vm.leftTB" >
-            <div class="ltbi_button">
+    <div class="lefttoolbar" ng-controller="MapLeftToolBarController as vm">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB">
+            <div class="ltbi_button" ng-click="vm.buttonClick(item.state)">
                 <div class="ltbi_icon">
                     <i class="fa {{item.icon}}" aria-hidden="true"></i>
                 </div>
                 <div class="ltbi_name">{{item.name}}</div>
             </div>
-            <div class="ltbi_cont">
+            <div class="ltbi_cont" ng-if="item.content">
                 <md-input-container class="md-input-cont">
                     <label>Color</label>
                     <input type="text" ng-model="color" >
@@ -126,14 +137,19 @@
             </div>
         </div>
     </div>
-    <div id="mapCanvas" ng-class="{'active':vm.leftToolbar}">
-        <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom'
-                            options="vm.inMap.mapOptions" bounds="vm.inMap.bounds" events="vm.mapEvents"
+    <div id="mapCanvas">
+        <script id="searchbox.tpl.html" type="text/ng-template">
+          <input  id="pac-input" type="text" placeholder="Search">
+        </script>
+        <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' 
+                            options="vm.inMap.mapOptions" optimized="false"  bounds="vm.inMap.bounds" events="vm.mapEvents"
                             control="vm.inMap.mapControl">
 
-            <!--<ui-gmap-search-box template="vm.searchbox.template" events="vm.searchbox.events" position="LEFT_TOP"></ui-gmap-search-box>-->
+            <!-- <ui-gmap-search-box template="vm.SearchBox.template" events="vm.SearchBox.events" position="RIGHT_BOTTOM"></ui-gmap-search-box> -->
 
-            <ui-gmap-markers models="vm.inMarkers" coords="'self'" icon="'icon'" options="'options'"
+            <ui-gmap-search-box options="searchbox.options" template="searchbox.template" events="searchbox.events"></ui-gmap-search-box>
+
+            <ui-gmap-markers models="vm.inMarkers"  optimized="false" coords="'self'" icon="'icon'" options="'options'"
                              events="vm.markersEvents">
             </ui-gmap-markers>
 
@@ -152,5 +168,34 @@
             <!--</ui-gmap-map-control>-->
 
         </ui-gmap-google-map>
+    </div>
+</div>
+
+
+<div class="int-dialog" ng-controller="DialogController as vm" >
+    <div class="id-background" ng-click="vm.closeTab()"></div>
+    <div class="id-container" ng-if="vm.dialogShow()">
+        <div class="id-header">
+            <div class="map-DHeader1">
+                <span> Dialog Head</span>
+                <button class="md-icon-button md-button md-ink-ripple" type="button" style="float:right" ng-click="vm.closeTab()" aria-label="close">
+                    <md-icon md-font-library="material-icons" class="ng-scope material-icons">close</md-icon>
+                <div class="md-ripple-container"></div></button>
+            </div>
+        </div>
+        <div class="id-body">
+            <md-content class="fullHeight">
+                <md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect md-dynamic-height>
+                    <md-tab ng-click="vm.getTab()">
+                        <a ui-sref="home.history">HISTORY</a>
+                    </md-tab>
+                    <md-tab ng-click="vm.getTab()">
+                        <a ui-sref="home.geofence">Geofence</a>
+                    </md-tab>
+                </md-tabs>
+                <div flex ui-view="dialogview" class="mapDView">
+                </div>
+            </md-content>
+        </div>
     </div>
 </div>

@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function ($log, intellicarAPI, $q, $timeout) {
+        .service('mapService', function ($log, intellicarAPI,$interval, $q, $timeout) {
             $log.log("mapService");
             var vm = this;
             vm.msgListeners = [];
@@ -19,6 +19,9 @@
 
             vm.center = {latitude: lat, longitude: lng};
             vm.zoom = 10;
+            $interval(function () {
+                // vm.zoom--;
+            },3000);
             vm.bounds = {};
 
             vm.getCenter = function () {
@@ -28,6 +31,10 @@
             vm.getZoom = function () {
                 return vm.zoom;
             };
+
+            vm.setZoom = function (zoom) {
+                vm.zoom = zoom;
+            }
 
             vm.getBounds = function () {
                 return vm.bounds;
@@ -40,6 +47,7 @@
                 }
             };
 
+            var zoomLevelIcon = 'big';
 
             vm.setMarkerIcon = function (vehicleData) {
                 var iconColor = 'orange';
@@ -54,8 +62,28 @@
                     }
                 }
 
+                if(checkZoomLevel(0,6)){
+                    zoomLevelIcon = 'extra_small';
+                }else if(checkZoomLevel(7,8)){
+                    zoomLevelIcon = 'small';
+                }else if(checkZoomLevel(9,9)){
+                    zoomLevelIcon = 'medium';
+                }else{
+                    zoomLevelIcon = 'big';
+                }
+
+
+
+                function checkZoomLevel(min,max){ 
+                    if(vm.zoom <= max && vm.zoom >= min){
+                        return true;
+                    }
+                    return false;
+                }
+
                 vehicleData.iconColor = iconColor;
-                return 'http://maps.google.com/mapfiles/ms/icons/' + iconColor + '-dot.png';
+                vehicleData.animation = google.maps.Animation.BOUNCE;
+                return 'assets/images/markers/'+zoomLevelIcon+'/' + iconColor + '-dot.png';
             };
 
 
@@ -65,6 +93,7 @@
                 var vehicleData = msg[1];
                 vehicleData.id = parseInt(vehicleData.deviceid);
                 vehicleData.title = vehicleNumber;
+                vehicleData.optimized= false;
                 vehicleData.icon = vm.setMarkerIcon(vehicleData);
                 vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
                 vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
@@ -74,13 +103,18 @@
                 vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
                 vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
                 vehicleData.timestamp = new Date(vehicleData.timestamp);
+                vehicleData.animation = google.maps.Animation.BOUNCE;
                 return vehicleData;
             };
+
+            vm.getMarkerIcon = function(){
+
+            }
 
 
             vm.updateMap = function (msgList) {
                 if(msgList.length == 2 && msgList[0] != null && msgList[1] != null
-                && msgList[0] != undefined && msgList[1] != undefined) {
+                    && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
                     //$log.log(vehicleData);
                     for (var eachidx in vm.msgListeners) {
@@ -95,6 +129,8 @@
                 intellicarAPI.mqttService.addMsgListener(vm.updateMap);
             };
 
+
             vm.intMap();
+
         });
 })();
