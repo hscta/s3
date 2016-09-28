@@ -130,9 +130,6 @@
         vm.mydata = rightNavAlertDashboardService.reports();
 
 
-        $log.log(vm.mydata);
-        $log.log(typeof(vm.mydata));
-        $log.log(vm.mydata.length);
       //  $log.log((vm.mydata['servicecenterreport'].fences));
     }
 })();

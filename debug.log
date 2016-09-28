@@ -1,0 +1,11 @@
+[0921/182618:ERROR:process_reader_win.cc(173)] ResumeThread: The parameter is incorrect. (0x57)
+[0921/182618:ERROR:process_reader_win.cc(114)] NtOpenThread: An invalid Client ID was specified.  (0xc000000b)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:process_reader_win.cc(142)] SuspendThread: Access is denied. (0x5)
+[0921/182618:ERROR:exception_snapshot_win.cc(87)] thread ID 2644 not found in process
+[0921/182618:WARNING:crash_report_exception_handler.cc(56)] ProcessSnapshotWin::Initialize failed

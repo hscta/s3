@@ -7,24 +7,105 @@
         .controller('ImmobalizeController', ImmobalizeController)
         .controller('InnerMapController', InnerMapController);
 
-    function MapController($scope, $log, mapService,
-                           $mdDialog, $interval, historyService,
-                           rightNavAlertDashboardService) {
+    function MapController($scope, $rootScope, $log, mapService,
+                           $timeout, $mdDialog, $document, $interval,
+                           rightNavAlertDashboardService,MapLeftToolBarService,historyService,dialogService) {
         $log.log('MapController');
         var vm = this;
 
-        vm.leftToolbar = false;
+        // var infowindowplacesearch = new google.maps.InfoWindow();
 
 
-        vm.leftTB = [
-            {'name': 'Dashboard', 'icon': 'fa-desktop'},
-            {'name': 'Cab Service', 'icon': 'fa-cab'},
-            {'name': 'Tasks', 'icon': 'fa-tasks'},
-            {'name': 'Tags', 'icon': 'fa-tag'},
-            {'name': 'User', 'icon': 'fa-user'},
-            {'name': 'Settings', 'icon': 'fa-gears'},
-        ];
+        $scope.searchbox =  {
+          template:'searchbox.tpl.html',
+          options:{
+            // autocomplete:true
+          },
+          events:{
+            places_changed: function (searchBox) {
+                var place = searchBox.getPlaces();
+                if (!place || place == 'undefined' || place.length == 0) {
+                    console.log('no place data :(');
+                    return;
+                }
 
+                var gfmap = vm.inMap.mapControl.getGMap();
+
+                // $scope.map = {
+                //     "center": {
+                //         "latitude": place[0].geometry.location.lat(),
+                //         "longitude": place[0].geometry.location.lng()
+                //     },
+                //     "zoom": 18
+                // };
+                // $scope.marker = {
+                //     id: 0,
+                //     coords: {
+                //         latitude: place[0].geometry.location.lat(),
+                //         longitude: place[0].geometry.location.lng()
+                //     }
+                // };
+
+                if (!place[0].geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+                }
+
+                // If the place has a geometry, then present it on a map.
+                if (place[0].geometry.viewport) {
+                    gfmap.fitBounds(place[0].geometry.viewport);
+                } else {
+                    gfmap.setCenter(place[0].geometry.location);
+                    gfmap.setZoom(17);  // Why 17? Because it looks good.
+                }
+            }
+          }
+        }
+
+        //gfmap.controls[google.maps.ControlPosition.TOP_LEFT].push(input)
+
+        // console.log(google.maps.places);
+
+        // var autocomplete = new google.maps.places.Autocomplete(input);
+        // autocomplete.bindTo('bounds', gfmap);
+
+        // autocomplete.addListener('place_changed', function() {
+        //     infowindowplacesearch.close();
+        //     //marker.setVisible(false);
+        //     var place = autocomplete.getPlace();
+        //     if (!place.geometry) {
+        //     window.alert("Autocomplete's returned place contains no geometry");
+        //     return;
+        //     }
+
+        //     // If the place has a geometry, then present it on a map.
+        //     if (place.geometry.viewport) {
+        //     gfmap.fitBounds(place.geometry.viewport);
+        //     } else {
+        //     gfmap.setCenter(place.geometry.location);
+        //     gfmap.setZoom(17);  // Why 17? Because it looks good.
+        //     }
+
+        //     var address = '';
+        //     if (place.address_components) {
+        //     address = [
+        //       (place.address_components[0] && place.address_components[0].short_name || ''),
+        //       (place.address_components[1] && place.address_components[1].short_name || ''),
+        //       (place.address_components[2] && place.address_components[2].short_name || '')
+        //     ].join(' ');
+        //     }
+
+        //     infowindowplacesearch.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+        //     infowindowplacesearch.setPosition(place.geometry.location);
+        //     infowindowplacesearch.open(gfmap);
+        //     $timeout(function(){infowindowplacesearch.close()}, 2000);
+        // });
+
+
+
+        vm.leftToolbar = function (){
+            return MapLeftToolBarService.getToolbarVar();
+        }
 
         vm.inMap = {
             mapOptions: {},
@@ -50,11 +131,33 @@
             }
         };
 
+
         vm.mapEvents = {
             click: function () {
                 vm.infoWindowClose();
+            },
+            zoom_changed: function () {
+                vm.changeMarkerIcon();
             }
         };
+        var iconColor = 'orange';
+        var zoomLevelIcon;
+        vm.changeMarkerIcon = function() {
+            vm.zoomMapZoom = vm.inMap.mapControl.getGMap().zoom;
+            mapService.setZoom(vm.zoomMapZoom);
+
+            for(var i=0; i < vm.inMarkers.length; i++){
+                vm.inMarkers[i].icon = mapService.setMarkerIcon(vm.inMarkers[i]);
+            }
+        }
+
+        function checkZoomLevel(min,max){
+            if(vm.zoomMapZoom <= max && vm.zoomMapZoom >= min){
+                return true;
+            }
+            return false;
+        }
+
 
         vm.markersEvents = {
             click: function (marker, eventName, model, args) {
@@ -69,6 +172,10 @@
                 vm.infoWindowShow();
             }
         };
+
+        // vm.markerOptions = {
+        //     animation:false;
+        // }
 
 
         vm.onRoaded = true;
@@ -100,6 +207,7 @@
 
             if (isNewVehicle) {
                 vehicleData.options = {};
+                vehicleData.options.animation = google.maps.Animation.BOUNCE;
                 vm.inMarkers.push(vehicleData);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
@@ -118,6 +226,8 @@
             //vm.infoWindow.control.showWindow();
             vm.infoWindow.show = true;
         };
+
+
 
 
         vm.resizeMap = function () {
@@ -238,7 +348,7 @@
 
             // if at least one marker matched the filter string
             if (matchedIdx) {
-                vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
+                // vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
             }
 
             // $log.log("Filtered vehicles = " + filtered);
@@ -290,19 +400,25 @@
 
         vm.showHistory = function () {
             //$log.log(vm.clickedMarker);
-            $mdDialog.show({
-                controller: 'HistoryController',
-                templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
-                parent: angular.element(document.body),
-                clickOutsideToClose: true,
-                escapeToClose: false,
-                locals: {
-                    params: {
+            vm.selectedTab = 0;
+            historyService.setData('selectedTab', vm.selectedTab);
+            // $mdDialog.show({
+            //     controller: 'DialogController as vm',
+            //     templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
+            //     parent: angular.element(document.body),
+            //     clickOutsideToClose: true,
+            //     escapeToClose: false,
+            //     locals: {
+            //         params: {
+            //             clickedMarker: vm.clickedMarker,
+            //             mainMarkers: vm.inMarkers
+            //         }
+            //     }
+            // });
+            dialogService.show('home.history',{
                         clickedMarker: vm.clickedMarker,
                         mainMarkers: vm.inMarkers
-                    }
-                }
-            });
+                    });
         };
 
         vm.immobalize = function (status) {
@@ -339,30 +455,68 @@
         vm.loadMap();
         vm.addListener();
         historyService.setData('inMarkers', vm.inMarkers);
+
+
     }
 
 
-    function HistoryController($scope, $log, $mdDialog, mapService,
-                               $interval, params, intellicarAPI, historyService) {
+    function HistoryController($scope, $log, $mdDialog, mapService,$state,dialogService,
+                               $interval, intellicarAPI, historyService,$timeout, MapLeftToolBarService) {
         //var vm = this;
         //$log.log($scope);
 
+
+
+        var vm = this;
+        dialogService.setTab(0);
         $log.log('HistoryController');
+
+        params = dialogService.getData('historyData');
+        var selectedVehicle = dialogService.getData('selectedVehicle');
+
+        vm.multiSelect = true;
 
         $scope.historyMap = {
             mapOptions: {},
             mapControl: {}
         };
 
-        var initialZoom = mapService.getZoom();
-        $scope.inMarkers = angular.copy(historyService.getData('inMarkers'));
-        $scope.clickedMarker = angular.copy(params.clickedMarker);
-        $scope.historyMap.zoom = initialZoom;
-        $scope.historyMap.center = $scope.clickedMarker;
-        $scope.deviceid = $scope.clickedMarker.deviceid;
-        $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
-        $scope.errorMsg = "";
 
+        var initialZoom = mapService.getZoom();
+
+        $scope.inMarkers = angular.copy(historyService.getData('inMarkers'));
+
+        vm.init = function() {
+            $scope.historyMap.zoom = initialZoom;
+            $scope.historyMap.center = mapService.getCenter();
+            if(params == null){
+                $scope.clickedMarker = {};
+                if(angular.isDefined(selectedVehicle)){
+                    $scope.deviceid = selectedVehicle.deviceid;
+                    $scope.vehicleNumber = selectedVehicle.vehicleNumber;
+                    vm.multiSelect = false;
+                }else{
+                    vm.multiSelect = true;
+                    $scope.deviceid = 'Select Vehicle';
+                    $scope.vehicleNumber = 'Select Vehicle';
+                }
+            }else{
+                $scope.clickedMarker = angular.copy(params.clickedMarker);
+                $scope.historyMap.center = $scope.clickedMarker;
+                $scope.deviceid = $scope.clickedMarker.deviceid;
+                $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
+                $scope.errorMsg = "";
+                console.log($scope.deviceid + ' <<<');
+            }
+            $scope.clickedMarker.trace = $scope.trace;
+        };
+
+
+
+        $scope.onVehicleSelect = function() {
+            console.log("onVehicleSelect");
+            console.log($scope.deviceid);
+        };
 
         //$log.log("uiGmapGoogleMapApi loaded");
         $scope.trace = {
@@ -383,7 +537,6 @@
             events: {}
         };
 
-        $scope.clickedMarker.trace = $scope.trace;
 
         $scope.historyInfoWindow = {
             show: false,
@@ -538,7 +691,6 @@
         $scope.getClickedMarker = function () {
             return $scope.clickedMarker;
         };
-
         // $scope.getMyVehicles = function () {
         //     intellicarAPI.userService.getMyVehiclesMap({})
         //         .then(function (resp) {
@@ -552,21 +704,18 @@
         //
         // $scope.getMyVehicles();
 
-        var getMyVehicles = function() {
-            $log.log($scope.inMarkers);
-        };
 
-        getMyVehicles();
-
+        vm.init();
+        console.log($scope.clickedMarker);
         historyService.setData('clickedMarker', $scope.clickedMarker);
         $interval($scope.resizeMap, 500);
     }
 
 
     function ImmobalizeController($scope, $log, $mdDialog) {
+
         //var vm = this;
         $log.log('ImmobalizeController');
-
         $scope.cancelImmobalize = function () {
             $log.log('cancelImmobalize');
             $mdDialog.cancel();
@@ -588,10 +737,9 @@
         var initialTime;
         var tracePoint;
         var animationCount = 0;
-
+        
         $scope.play = true;
         $scope.ffrate = 1;
-
 
         $scope.moveOneStep = function(movementType){
             if(!marker.trace.path.length)
@@ -615,11 +763,11 @@
         };
 
         $scope.setSliderTime = function() {
-            if(!marker.trace.path.length)
+            if(marker && !marker.trace.path.length)
                 return;
 
             $scope.initialSliderTime = 0;
-            var initialTime = new Date( marker.trace.path[0].gpstime);
+            var initialTime = new Date(marker.trace.path[0].gpstime);
 
             $scope.finalSliderTime = (marker.trace.path[marker.trace.path.length-1].gpstime -
                 marker.trace.path[0].gpstime ) / 1000;
@@ -630,14 +778,14 @@
         };
 
         $scope.getSliderTime = function() {
-            if(marker.trace.path.length) {
+            if(marker && marker.trace.path.length) {
                 return new Date(marker.trace.path[0].gpstime + Math.floor($scope.slider)*1000);
             }
         };
 
 
         $scope.onChangeSlider = function(){
-            if(!marker.trace.path.length)
+            if(marker && !marker.trace.path.length)
                 return;
 
             $scope.sliderTime = $scope.getSliderTime();
@@ -672,7 +820,6 @@
         };
 
         $scope.traceRoute = function () {
-            // $log.log($scope.initialSliderTime);
             if (marker.trace.path.length && $scope.gotHistory()) {
                 initialTime = marker.trace.path[animationCount].gpstime;
                 $scope.animateMarker = $interval(function () {
@@ -710,8 +857,6 @@
             if ($scope.ffrate < 128) {
                 $scope.ffrate *= 2;
             }
-            //$log.log("ffrate " + $scope.ffrate);
-            //$scope.getAnimationRate();
         };
 
 
@@ -719,8 +864,6 @@
             if ($scope.ffrate > (1 / 128)) {
                 $scope.ffrate /= 2;
             }
-            //$log.log("ffrate " + $scope.ffrate);
-            //$scope.getAnimationRate();
         };
 
 
@@ -740,18 +883,18 @@
             $scope.ffrate = 1;
             stopPlay();
             $scope.sliderPoint = 0;
-
-            if (marker.trace.path.length > 0) {
+            //$scope.sliderPoint = 1;
+            if (marker && marker.trace.path.length > 0) {
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
             }
         };
 
-
         var stopPlay = function() {
             $interval.cancel($scope.animateMarker);
             $scope.play = true;
         };
+
 
         $scope.$on('$destroy', function () {
             historyService.setData('getHistory', false);
@@ -794,29 +937,30 @@
         var moveMapWithMarker = function (marker) {
             var map = historyMap.mapControl.getGMap();
             var projection = map.getProjection();
-            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
 
+            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
             var scale = Math.pow(2, map.getZoom());
+
             var worldPoint = projection.fromLatLngToPoint(new google.maps.LatLng({
                 lat: marker.latitude,
                 lng: marker.longitude
             }));
-
             var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
+
             var ydiff = Math.abs((worldPoint.y - centerPoint.y) * scale);
-
             var panX = Math.floor((worldPoint.x - centerPoint.x) * scale);
-            var panY = Math.floor((worldPoint.y - centerPoint.y) * scale);
 
+            var panY = Math.floor((worldPoint.y - centerPoint.y) * scale);
             if (xdiff > 500 || ydiff > 200) {
                 map.panBy(panX, panY);
             }
         };
+
+
     }
 
 
 })();
-
 
 // if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
 //     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
