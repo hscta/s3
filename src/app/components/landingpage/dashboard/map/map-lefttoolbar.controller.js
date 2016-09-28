@@ -32,13 +32,13 @@
 
 
         vm.updateFence = function (resp) {
-            $log.log(resp);
+            $log.log(resp.data.data.info[0]);
         };
 
 
         //$scope.fences = [];
         vm.fetchFences = function(fences) {
-            $log.log(fences);
+            //$log.log(fences);
             for(var idx in fences) {
                 //$log.log(fences[idx]);
                 var body = {geofencepath: fences[idx].assetpath};
