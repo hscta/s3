@@ -663,9 +663,12 @@
         var updateTracePoint = function (tracePoint) {
             marker.latitude = tracePoint.latitude;
             marker.longitude = tracePoint.longitude;
-            historyInfoWindow.data.gpstime = tracePoint.gpstime;
             historyInfoWindow.data.odometer = tracePoint.odometer;
             historyInfoWindow.data.speed = tracePoint.speed;
+            historyInfoWindow.data.gpstime = tracePoint.gpstime;
+            $scope.tracePointGpsTime = tracePoint.gpstime;
+            $scope.tracePointOdometer = tracePoint.odometer;
+            $scope.tracePointSpeed = tracePoint.speed;
         };
 
         $scope.traceRoute = function () {
@@ -675,7 +678,7 @@
                 $scope.animateMarker = $interval(function () {
                     initialTime += (timeIncreaseBy * $scope.ffrate);
                     while (animationCount < marker.trace.path.length) {
-                        $log.log('in loop ' + animationCount);
+                        // $log.log('in loop ' + animationCount);
                         tracePoint = marker.trace.path[animationCount];
                         if (tracePoint.gpstime <= initialTime) {
 
