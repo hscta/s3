@@ -9,8 +9,8 @@
         .service('userService', userService);
 
     function userService($rootScope, $log, $q, requestService, helperService) {
-        var vm = this;
         $log.log("userService");
+        var vm = this;
 
 
         vm.getMyInfo = function(body) {
@@ -56,6 +56,11 @@
 
         vm.createUser = function(body) {
             return requestService.firePost('/user/create', body);
+        };
+
+
+        vm.getMyFences = function(body) {
+            return requestService.firePost('/user/mygeofences', body);
         };
 
 
@@ -127,6 +132,15 @@
         vm.getMyDevicesMap = function (body) {
             // $log.log("getMyDevicesMap");
             return vm.getMyDevices(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.getMyFencesMap = function (body) {
+            // $log.log("getMyFencesMap");
+            return vm.getMyFences(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);

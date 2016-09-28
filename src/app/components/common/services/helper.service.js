@@ -29,7 +29,8 @@
             '4': appConstants.VEHICLE,
             '5': appConstants.VEHICLETYPE,
             '6': appConstants.DEVICE,
-            '7': appConstants.DEVICETYPE
+            '7': appConstants.DEVICETYPE,
+            '15': appConstants.FENCE
         };
 
 

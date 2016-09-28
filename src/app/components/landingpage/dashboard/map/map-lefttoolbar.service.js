@@ -12,15 +12,15 @@
 
         vm.getToolbarVar = function(){
             return vm.toolbar;
-        }
+        };
 
         vm.hide = function(){
             vm.toolbar = false;
-        }
+        };
 
         vm.show = function(){
             vm.toolbar = true;
-        }
+        };
 
         // vm.dialogTab = 0;
 
@@ -29,7 +29,7 @@
             if(id == 'geofences'){
                 return geofenceReportService;
             }
-        }
+        };
 
         //historyService.setData('selectedTab', vm.dialogTab);
     }

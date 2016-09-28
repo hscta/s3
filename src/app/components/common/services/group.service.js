@@ -9,8 +9,9 @@
         .service('groupService', groupService);
 
     function groupService($rootScope, $log, $q, requestService, helperService) {
-        var vm = this;
         $log.log("groupService");
+        var vm = this;
+
 
         vm.getMyGroups = function(body) {
             // $log.log("getMyGroups");

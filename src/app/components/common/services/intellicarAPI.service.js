@@ -14,7 +14,8 @@
                                            userService, groupService,
                                            mqttService, schemaService,
                                            reportService,
-                                           anchorSmoothScrollService
+                                           anchorSmoothScrollService,
+                                           geofenceService
 
                                            ) {
             var vm = this;
@@ -32,7 +33,8 @@
                 appConstants : appConstants,
                 mqttService : mqttService,
                 schemaService : schemaService,
-                reportService : reportService
+                reportService : reportService,
+                geofenceService : geofenceService
             }
         });
 })();

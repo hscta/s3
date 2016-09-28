@@ -101,8 +101,8 @@
                 vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
                 vehicleData.ignitionstatusStr = vehicleData.ignitionstatus ? "On" : "Off";
                 vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
-                if(!vehicleData.mobilistatus)
-                    $log.log(msg);
+                // if(!vehicleData.mobilistatus)
+                //     $log.log(msg);
                 vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
                 vehicleData.timestamp = new Date(vehicleData.timestamp);
                 vehicleData.animation = google.maps.Animation.BOUNCE;
