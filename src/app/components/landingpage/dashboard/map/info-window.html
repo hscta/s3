@@ -2,11 +2,11 @@
     <div class="info-w-header">
     </div>
     <md-table-container style="min-width:300px; min-height: 110px; max-width:300px; position: relative; overflow: hidden; max-height:110px;">
-        <table md-table md-row-select multiple class="trPadding">
+        <table md-table md-row-select multiple class="trPadding" >
             <tbody md-body>
-            <tr md-row md-select-id="carnumber" class="infoWHead" md-auto-select>
+            <tr md-row md-select-id="carnumber" class="infoWHead"   md-auto-select>
                 <td md-cell><strong>Car Number</strong></td>
-                <td md-cell colspan="3">{{parameter.clickedMarker.title}}</td>
+                <td md-cell colspan="3" ng-click="$root.windowClicked(parameter.clickedMarker.title)">{{parameter.clickedMarker.title}}</td>
             </tr>
             <tr md-row md-select-id="timestamp" md-auto-select>
                 <td md-cell><strong>Last seen at</strong></td>
@@ -27,13 +27,13 @@
             </tr>
             <tr md-row md-select-id="carbattery" md-auto-select>
                 <td md-cell>
-                    <strong>Car Battery</strong> 
+                    <strong>Car Battery</strong>
                 </td>
-                <td md-cell class="infoWmiddle" 
+                <td md-cell class="infoWmiddle"
                     ng-class="{'redBattery' : parameter.clickedMarker.carbattery < 9.5 }">{{parameter.clickedMarker.carbattery}}</td>
-                <td md-cell><strong>Device Battery</strong>  
+                <td md-cell><strong>Device Battery</strong>
                 </td>
-                <td md-cell 
+                <td md-cell
                     ng-class="{'redBattery' : parameter.clickedMarker.devbattery < 3.55 }">{{parameter.clickedMarker.devbattery}}</td>
             </tr>
             </tbody>

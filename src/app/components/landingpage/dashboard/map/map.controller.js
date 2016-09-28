@@ -228,6 +228,8 @@
         };
 
 
+
+
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.inMap.mapControl.getGMap(), 'resize');
             return true;
@@ -453,6 +455,8 @@
         vm.loadMap();
         vm.addListener();
         historyService.setData('inMarkers', vm.inMarkers);
+
+
     }
 
 
@@ -460,6 +464,9 @@
                                $interval, intellicarAPI, historyService,$timeout, MapLeftToolBarService) {
         //var vm = this;
         //$log.log($scope);
+
+ 
+
         var vm = this;
         dialogService.setTab(0);
         $log.log('HistoryController');
@@ -869,7 +876,6 @@
 
 
 })();
-
 
 // if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
 //     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {

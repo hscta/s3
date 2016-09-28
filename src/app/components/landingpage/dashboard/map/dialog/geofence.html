@@ -1,7 +1,7 @@
 <!--<md-tab-body >-->
     <div class="geofence-cont" ng-controller="GeofenceController as vm" style="height: 100%;">
         <div class="geo-leftbar" ng-click="vm.vehicleFilterVar = false">
-            <div class="geo-rep-item-head">Reports</div>
+            <div class="geo-rep-item-head" >Reports</div>
             <div class="geo-rep-item" ng-class="{'active':vm.currRep.id == rep.id}" ng-repeat="rep in vm.reports" ng-click="vm.setReport(rep)">{{rep.name}}</div>
         </div>
         <div class="geo-cont" >
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div class="geoc-body">
+            <div class="geoc-body" >
                 <table class="geo-table">
                     <tr>
                         <th ng-click="vm.setSort(1,'name')">
