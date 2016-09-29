@@ -35,7 +35,7 @@
             {'type': 'line'},
             {
                 'id': 'getGeo',
-                'name': 'Get Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'data': {
+                'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'data': {
                 'type': 'function', 'function': function () {
                     geofenceViewService.getMyFences();
                 }
@@ -89,12 +89,12 @@
                     vm.checkGeoFilters.set('lowBattery', active);
                 }
             }
-            },
+            }
         ];
 
         vm.fencesActive = function () {
             return geofenceViewService.getData('geofences');
-        }
+        };
 
 
         vm.init = function () {
@@ -160,7 +160,6 @@
         };
 
         vm.init();
-        //geofenceViewService.getMyFences();
     }
 
 })();
