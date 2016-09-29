@@ -60,46 +60,7 @@
                     }
                 }
             }
-        }
-
-//gfmap.controls[google.maps.ControlPosition.TOP_LEFT].push(input)
-
-// console.log(google.maps.places);
-
-// var autocomplete = new google.maps.places.Autocomplete(input);
-// autocomplete.bindTo('bounds', gfmap);
-
-// autocomplete.addListener('place_changed', function() {
-//     infowindowplacesearch.close();
-//     //marker.setVisible(false);
-//     var place = autocomplete.getPlace();
-//     if (!place.geometry) {
-//     window.alert("Autocomplete's returned place contains no geometry");
-//     return;
-//     }
-
-//     // If the place has a geometry, then present it on a map.
-//     if (place.geometry.viewport) {
-//     gfmap.fitBounds(place.geometry.viewport);
-//     } else {
-//     gfmap.setCenter(place.geometry.location);
-//     gfmap.setZoom(17);  // Why 17? Because it looks good.
-//     }
-
-//     var address = '';
-//     if (place.address_components) {
-//     address = [
-//       (place.address_components[0] && place.address_components[0].short_name || ''),
-//       (place.address_components[1] && place.address_components[1].short_name || ''),
-//       (place.address_components[2] && place.address_components[2].short_name || '')
-//     ].join(' ');
-//     }
-
-//     infowindowplacesearch.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-//     infowindowplacesearch.setPosition(place.geometry.location);
-//     infowindowplacesearch.open(gfmap);
-//     $timeout(function(){infowindowplacesearch.close()}, 2000);
-// });
+        };
 
 
         vm.leftToolbar = function () {
@@ -172,10 +133,6 @@
                 vm.infoWindowShow();
             }
         };
-
-// vm.markerOptions = {
-//     animation:false;
-// }
 
 
         vm.onRoaded = true;
@@ -256,7 +213,6 @@
             };
 
             vm.infoWindowShow();
-            //vm.inMap.center = {latitude: vm.clickedMarker.latitude + 0.05, longitude: vm.clickedMarker.longitude};
             vm.inMap.center = vm.getMarkerCenter(vm.clickedMarker);
         };
 
@@ -445,8 +401,9 @@
 
 
         vm.addListener = function () {
-            mapService.addMsgListener(vm.updateMarker);
-            rightNavAlertDashboardService.addListener(vm.alertClick);
+            mapService.addListener('rtgps', vm.updateMarker);
+            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+            //rightNavAlertDashboardService.addListener(vm.alertClick);
         };
 
 
@@ -458,17 +415,18 @@
         };
 
 
-        vm.loadMap();
-        vm.addListener();
-        historyService.setData('inMarkers', vm.inMarkers);
-        geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-        geofenceViewService.getMyFences();
+        vm.init = function () {
+            vm.loadMap();
+            historyService.setData('inMarkers', vm.inMarkers);
+            vm.addListener();
+            geofenceViewService.getMyFences();
+        };
+
+        vm.init();
     }
 
 
     //#################################################################################################################
-
-
 
 
     function HistoryController($scope, $log, $mdDialog, mapService, $state, dialogService,
@@ -679,7 +637,7 @@
                 // $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
                 // $scope.historyInfoWindow.show = true;
                 $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
-            }else {
+            } else {
                 $scope.errorMsg = "No Data Found";
             }
         };
@@ -717,9 +675,7 @@
     }
 
 
-
     //#################################################################################################################
-
 
 
     function ImmobalizeController($scope, $log, $mdDialog) {
@@ -739,7 +695,6 @@
 
 
     //#################################################################################################################
-
 
 
     function InnerMapController($scope, $log, $mdToast, historyService, $interval) {
@@ -945,7 +900,7 @@
 
         $scope.gotHistoryEvent = function () {
             $scope.setSliderTime();
-            if ( marker)
+            if (marker)
                 $log.log(marker);
             var initialPoint = marker.trace.path[0];
             $scope.tracePointGpsTime = initialPoint.gpstime;
@@ -954,7 +909,7 @@
 
         };
 
-        $scope.$on('gotHistoryEvent', function(event, data){
+        $scope.$on('gotHistoryEvent', function (event, data) {
             $scope.gotHistoryEvent();
         });
 
@@ -982,14 +937,4 @@
         };
     }
 
-
 })();
-
-// if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
-//     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
-//     $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
-//         ", " + marker.latitude + ", " + marker.longitude);
-//     $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
-//         ", " + vehicleData.latitude + ", " + vehicleData.longitude);
-// }
-

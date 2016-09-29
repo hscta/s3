@@ -9,7 +9,7 @@
         .service('mapService', function ($log, intellicarAPI,$interval, $q, $timeout) {
             $log.log("mapService");
             var vm = this;
-            vm.msgListeners = [];
+            vm.listeners = {};
 
 //            var lat = 12.9176383;
 //            var lng = 77.6480335;
@@ -19,9 +19,6 @@
 
             vm.center = {latitude: lat, longitude: lng};
             vm.zoom = 11;
-            $interval(function () {
-                // vm.zoom--;
-            },3000);
             vm.bounds = {};
 
             vm.getCenter = function () {
@@ -34,18 +31,12 @@
 
             vm.setZoom = function (zoom) {
                 vm.zoom = zoom;
-            }
+            };
 
             vm.getBounds = function () {
                 return vm.bounds;
             };
 
-
-            vm.addMsgListener = function (listener) {
-                if (vm.msgListeners.indexOf(listener) == -1){
-                    vm.msgListeners.push(listener);
-                }
-            };
 
             var zoomLevelIcon = 'big';
 
@@ -115,25 +106,43 @@
             };
 
 
-            vm.updateMap = function (msgList) {
+            vm.updateMap = function (msgList, key) {
                 if(msgList.length == 2 && msgList[0] != null && msgList[1] != null
                     && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
                     //$log.log(vehicleData);
-                    for (var eachidx in vm.msgListeners) {
-                        vm.msgListeners[eachidx](vehicleData);
+                    vm.callListeners(vehicleData, key);
+                }
+            };
+
+
+            vm.addListener = function (key, listener) {
+                if (!(key in vm.listeners)) {
+                    vm.listeners[key] = [];
+                }
+
+                if (vm.listeners[key].indexOf(listener) === -1) {
+                    vm.listeners[key].push(listener);
+                }
+            };
+
+
+            vm.callListeners = function (msg, key) {
+                if(key in vm.listeners) {
+                    for(var idx in vm.listeners[key]) {
+                        vm.listeners[key][idx](msg, key);
                     }
                 }
             };
 
 
-            vm.intMap = function () {
-                $log.log('map initMap');
-                intellicarAPI.mqttService.addMsgListener(vm.updateMap);
+            vm.init = function () {
+                //$log.log('map init()');
+                intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
             };
 
 
-            vm.intMap();
+            vm.init();
 
         });
 })();

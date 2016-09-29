@@ -13,9 +13,9 @@
         $log.log("mqttService");
 
         var vm = this;
-        vm.socketiohost = 'http://in3.intellicar.in:10105';
+        vm.socketiohost = 'http://in2.intellicar.in:10105';
         vm.socket = null;
-        vm.msgListeners = [];
+        vm.listeners = {};
         vm.socket = null;
         vm.toggleTestData = false;
         //vm.connected = false;
@@ -75,28 +75,11 @@
         };
 
 
-        vm.onReceiveMsg = function (msg) {
-            //$log.log('mqtt onReceiveMsg');
-            //msg = vm.getVehicleData();
-            //$log.log(msg);
-            for (var eachidx in vm.msgListeners) {
-                vm.msgListeners[eachidx](msg);
-            }
-        };
-
-
         vm.onClose = function () {
             $log.log('mqtt onClose');
             vm.socket.close();
             vm.socket = null;
             //vm.connected = false;
-        };
-
-
-        vm.addMsgListener = function (listener) {
-            if (vm.msgListeners.indexOf(listener) == -1) {
-                vm.msgListeners.push(listener);
-            }
         };
 
 
@@ -120,7 +103,7 @@
         };
 
         vm.subscribeChannel = function (path) {
-            //$log.log("subscribe: " + path);
+            $log.log("subscribe: " + path);
             var msg = {};
             msg.data = [];
             msg.data.push(['gps', [{path: path}]]);
@@ -149,38 +132,58 @@
         };
 
 
-        vm.processVehicleData = function () {
-            vm.toggleTestData = !vm.toggleTestData;
-
-            if (vm.toggleTestData) {
-                return [{
-                    'timebucket': 1473874386000,
-                    'lat': 12.9176383,
-                    'lng': 77.6480335,
-                    'speed': 30,
-                    'direction': 0,
-                    'satellite': 4,
-                    'devicebattery': 2.8,
-                    'carbattery': 5
-                }];
+        vm.getTopicKey = function(msg) {
+            if(msg.length > 0) {
+                var tokens = msg[0].split('/');
+                if (tokens.length > 2)
+                    return tokens[2];
             }
 
-            return [{
-                'timebucket': 1473883275000,
-                'lat': 12.9076383,
-                'lng': 77.6380335,
-                'speed': 70,
-                'direction': 0,
-                'satellite': 6,
-                'devicebattery': 4.2,
-                'carbattery': 12
-            }];
+            return null;
         };
+
+
+
+        vm.onReceiveMsg = function (msg) {
+            //$log.log('mqtt onReceiveMsg');
+            //$log.log(msg);
+
+            var topicKey = vm.getTopicKey(msg);
+            if(topicKey == null) {
+                $log.log("Invalid mqtt msg");
+                $log.log(msg);
+                return;
+            }
+
+            //$log.log(topicKey);
+            vm.callListeners(msg, topicKey);
+        };
+
+
+        vm.addListener = function (key, listener) {
+            if (!(key in vm.listeners)) {
+                vm.listeners[key] = [];
+            }
+
+            if (vm.listeners[key].indexOf(listener) === -1) {
+                vm.listeners[key].push(listener);
+            }
+        };
+
+
+        vm.callListeners = function (msg, key) {
+            if(key in vm.listeners) {
+                for(var idx in vm.listeners[key]) {
+                    vm.listeners[key][idx](msg, key);
+                }
+            }
+        };
+
 
         vm.initSocket();
 
         return {
-            addMsgListener: vm.addMsgListener,
+            addListener: vm.addListener,
             subscribeAsset: vm.subscribeAsset,
             unsubscribeAsset: vm.unsubscribeAsset
         }
