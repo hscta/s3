@@ -520,11 +520,16 @@
             $log.log(fences);
         };
 
+        vm.applyFilters = function (filters) {
+            console.log(filters);
+        };
+
 
         vm.loadMap();
         vm.addListener();
         historyService.setData('inMarkers', vm.inMarkers);
         geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+        geofenceViewService.addListener('applyFilters', vm.applyFilters);
         geofenceViewService.getMyFences();
     }
 

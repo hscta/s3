@@ -141,6 +141,10 @@
             return data;
         };
 
+        vm.applyFilters = function (filters) {
+            vm.callListeners('applyFilters', filters);
+        };
+
 
         vm.fetchFences = function (fences) {
             vm.fences = {};

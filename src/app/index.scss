@@ -420,6 +420,14 @@ md-toolbar{border-bottom:1px solid #CCC;}
     }
 }
 
+.ltb_item:active{
+    .ltbi_button{
+        i{
+            font-size:90%;
+            background:rgba(0,0,0,0.2);
+        }
+    }
+}
 
 .angular-google-map-container,
 .mainHeader{
