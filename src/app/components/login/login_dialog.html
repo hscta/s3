@@ -16,23 +16,23 @@
     <md-dialog-content>
         <img ng-src="assets/logo.png" height="120" class="img-logo md-card-image" alt="Intellicar">
         <div>
-            <md-input-container class="md-block">
+            <md-input-container class="md-block md-accent">
                 <label>Username</label>
-                <input type="text" ng-model="username"/>
-            </md-input-container>
-            <md-input-container class="md-block">
-                <label>Password</label>
-                <input type="password" ng-model="password"/>
+                <input type="text" ng-model="username" icar-keypress="login()"/>
             </md-input-container>
             <div flex layout-align="center center">
-                <span style="color: red;" layout-align="center center" flex>{{message}}</span>
+                <span style="color: red;font-size:13px;" layout-align="center center" flex>{{message}}</span>
             </div>
+            <md-input-container class="md-block md-accent">
+                <label>Password</label>
+                <input type="password" ng-model="password" icar-keypress="login()"/>
+            </md-input-container>
         </div>
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
         <div flex>
-            <md-button class="md-raised md-primary" ng-click="login()">Login</md-button>
+            <md-button class="md-accent" ng-click="login()">Login</md-button>
             <!--<md-button class="md-raised md-primary" ng-show="isAuthed()" ng-click="logout()">Logout</md-button>-->
         </div>
     </md-dialog-actions>

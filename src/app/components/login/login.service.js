@@ -33,6 +33,7 @@
         vm.logout = function() {
             authService.logout && authService.logout()
             $rootScope.showLoginDialog = true;
+            vm.loginDialog = "";
             vm.checkLogin();
         };
 
@@ -44,16 +45,18 @@
         vm.checkLogin = function () {
             if($rootScope.showLoginDialog) {
                 $log.log("Showing login");
-                var loginDialog = $mdDialog.confirm({
-                        controller: loginDialogController,
-                        //controllerAs: loginDialogCtrl,
-                        templateUrl: 'app/components/login/login_dialog.html',
-                        clickOutsideToClose: false,
-                        escapeToClose: false
-                    }
-                );
+                if( !vm.loginDialog ) {
+                    vm.loginDialog = $mdDialog.confirm({
+                            controller: loginDialogController,
+                            //controllerAs: loginDialogCtrl,
+                            templateUrl: 'app/components/login/login_dialog.html',
+                            clickOutsideToClose: false,
+                            escapeToClose: false
+                        }
+                    );
 
-                $mdDialog.show(loginDialog);
+                    $mdDialog.show(vm.loginDialog);
+                }
             }
         };
 
@@ -65,8 +68,8 @@
         var vm = $scope;
         $rootScope.showLoginDialog = false;
         $log.log("loginDialogController");
-        //vm.username = "shunmugakrishnan@intellicar.in";
-        //vm.password = "intellicar123";
+        vm.username = "shunmugakrishnan@intellicar.in";
+        vm.password = "intellicar123";
 
         // vm.username = "anujkumar.k@olacabs.com";
         // vm.password = "ola123";
@@ -77,6 +80,7 @@
             //$log.log("handleLoginSuccess");
             $rootScope.showLoginDialog = false;
             $mdDialog.hide();
+            vm.loginDialog =""
             //$window.location.reload();
         }
 
@@ -87,9 +91,9 @@
         }
 
         vm.login = function () {
-            $log.log("/gettoken")
+            $log.log("/gettoken");
             loginService.login(vm.username, vm.password)
-                .then(handleLoginSuccess, handleLoginFailure)
+                .then(handleLoginSuccess, handleLoginFailure);
         };
 
         vm.logout = function () {

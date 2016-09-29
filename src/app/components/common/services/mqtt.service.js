@@ -35,7 +35,7 @@
 
 
         vm.onConnect = function () {
-            $log.log('Connected to MQTT onConnect');
+            // $log.log('Connected to MQTT onConnect');
             if (vm.socket !== null) {
                 //vm.connected = true;
                 vm.sendToken();
@@ -54,7 +54,7 @@
 
         vm.sendToken = function () {
             if (vm.socket) {
-                $log.log('mqtt sendToken');
+                // $log.log('mqtt sendToken');
                 vm.socket.emit('authtoken', authService.getToken());
             }
         };
