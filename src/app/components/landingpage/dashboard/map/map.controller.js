@@ -530,6 +530,7 @@
             $log.log('polygon clicked');
             $log.log(model);
             $log.log(polygon);
+            $log.log(args);
             //vm.infoWindowShow();
         };
 
@@ -538,6 +539,7 @@
             $log.log('circle clicked');
             $log.log(model);
             $log.log(circle);
+            $log.log(args);
             //vm.infoWindowShow();
         };
 
@@ -678,8 +680,8 @@
         var hrs8 = 28800 * MILLISEC;
         var hrs12 = 43200 * MILLISEC;
         var hrs24 = 86400 * MILLISEC;
-        var hrs48 = (hrs24 + 1) * 2;
-        var week = (hrs24 + 1) * 7;
+        var hrs48 = hrs24 * 2;
+        var week = hrs24 * 7;
         var timeLimit = week;
 
 

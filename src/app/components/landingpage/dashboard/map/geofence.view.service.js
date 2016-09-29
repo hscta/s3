@@ -62,10 +62,14 @@
                     if (infoitem.settingsdata.fencetype === 'polygon') {
                         var gpolygon = vm.getPolygonFromInfo(infoitem.settingsdata);
                         gpolygon.info = fence;
+                        gpolygon.control.info = fence;
+                        //$log.log(gpolygon);
                         vm.polygons.push(gpolygon);
                     } else if (infoitem.settingsdata.fencetype === 'circle') {
                         var gcircle = vm.getCircleFromInfo(infoitem.settingsdata);
                         gcircle.info = fence;
+                        gcircle.control.info = fence;
+                        //$log.log(gcircle);
                         vm.circles.push(gcircle);
                     }
                 }
