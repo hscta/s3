@@ -10,6 +10,9 @@
         vm.toolbar = true;
         vm.listeners = {};
 
+        vm.circleClickListener = null;
+        vm.polygonClickListener = null;
+
         vm.getToolbarVar = function () {
             return vm.toolbar;
         };
@@ -72,32 +75,6 @@
         var spgreenColor = '#08B21F';
         var blueColor = 'blue';
 
-        vm.getDefaultPolygon = function () {
-            return {
-                path: [],
-                stroke: {
-                    color: blueColor,
-                    weight: 3
-                },
-                fill: {
-                    color: blueColor,
-                    opacity: 0.2
-                },
-                clickable: true,
-                visible: true,
-                editable: false,
-                draggable: false,
-                geodesic: false,
-                control: {},
-                events: {
-                    click: function() {
-
-                    }
-                }
-            }
-        };
-
-
         vm.getDefaultCircle = function () {
             return {
                 center: {},
@@ -117,7 +94,32 @@
                 draggable: false, // optional: defaults to false
                 geodesic: false, // optional: defaults to false
                 control: {},
-                events: {}
+                events: {
+                    click: vm.listeners['circleClickListener'][0]
+                }
+            }
+        };
+
+        vm.getDefaultPolygon = function () {
+            return {
+                path: [],
+                stroke: {
+                    color: blueColor,
+                    weight: 3
+                },
+                fill: {
+                    color: blueColor,
+                    opacity: 0.2
+                },
+                clickable: true,
+                visible: true,
+                editable: false,
+                draggable: false,
+                geodesic: false,
+                control: {},
+                events: {
+                    click: vm.listeners['polygonClickListener'][0]
+                }
             }
         };
 

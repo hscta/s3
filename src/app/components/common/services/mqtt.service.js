@@ -9,7 +9,7 @@
         .service('mqttService', mqttService);
 
     function mqttService($log, authService, helperService,
-                         $timeout, $interval) {
+                         $timeout) {
         $log.log("mqttService");
 
         var vm = this;

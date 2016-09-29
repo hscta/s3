@@ -9,7 +9,8 @@
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
-                           rightNavAlertDashboardService, geofenceViewService, historyService, dialogService) {
+                           rightNavAlertDashboardService, geofenceViewService,
+                           historyService, dialogService) {
         $log.log('MapController');
         var vm = this;
         vm.circles = [];
@@ -400,12 +401,6 @@
         };
 
 
-        vm.addListener = function () {
-            mapService.addListener('rtgps', vm.updateMarker);
-            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-            //rightNavAlertDashboardService.addListener(vm.alertClick);
-        };
-
         vm.geoFilters = {
             showAll: true,
             parkingLot: true,
@@ -419,6 +414,7 @@
 
         vm.getMyFencesListener = function (fences) {
             vm.circles = fences.circles;
+            $log.log(vm.circles);
             vm.polygons = fences.polygons;
             vm.applyFilters(vm.geoFilters);
             geofenceViewService.setData('geofences', true);
@@ -530,10 +526,34 @@
         };
 
 
+        vm.polygonClickListener = function(polygon, eventName, model, args){
+            $log.log('polygon clicked');
+            $log.log(model);
+            $log.log(polygon);
+            //vm.infoWindowShow();
+        };
+
+
+        vm.circleClickListener = function(circle, eventName, model, args) {
+            $log.log('circle clicked');
+            $log.log(model);
+            $log.log(circle);
+            //vm.infoWindowShow();
+        };
+
+
+        vm.addListener = function () {
+            mapService.addListener('rtgps', vm.updateMarker);
+            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+            geofenceViewService.addListener('applyFilters', vm.applyFilters);
+            geofenceViewService.addListener('polygonClickListener', vm.polygonClickListener);
+            geofenceViewService.addListener('circleClickListener', vm.circleClickListener);
+        };
+
+
         vm.init = function () {
             vm.loadMap();
             historyService.setData('inMarkers', vm.inMarkers);
-            geofenceViewService.addListener('applyFilters', vm.applyFilters);
             vm.addListener();
             geofenceViewService.getMyFences();
         };

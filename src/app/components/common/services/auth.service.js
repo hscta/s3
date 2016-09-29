@@ -19,7 +19,7 @@
 
 
     function authService($window, $log, TOKEN_KEY) {
-        var vm = this;
+        var  vm = this;
         $log.log("authService");
 
         vm.parseJwt = function (token) {
