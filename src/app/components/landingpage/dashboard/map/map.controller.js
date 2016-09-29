@@ -418,7 +418,7 @@
 
         vm.getMyFencesListener = function (fences) {
             vm.circles = fences.circles;
-            vm.polygons = fences.polygons; 
+            vm.polygons = fences.polygons;
             vm.applyFilters(vm.geoFilters);
             geofenceViewService.setData('geofences',true);
             $log.log(fences);
@@ -429,15 +429,23 @@
             vm.geoFilters = filters;
             if(vm.circles && vm.polygons) {
                 for (var i = 0; i < vm.circles.length; i++) {
-                    if (checkFilterString(filters, vm.circles[i].info.tagdata)) {
+                    var filterStr =  vm.circles[i].info.tagdata;
+                    if (checkFilterString(filters,filterStr)) {
                         vm.circles[i].visible = true;
+                        vm.circles[i].stroke.weight = getStroke(filterStr);
+                        vm.circles[i].stroke.color = getColor(filterStr);
+                        startAnimation(vm.circles[i]);
                     } else {
                         vm.circles[i].visible = false;
                     }
                 }
                 for (var i = 0; i < vm.polygons.length; i++) {
-                    if (checkFilterString(filters, vm.polygons[i].info.tagdata)) {
+                    var filterStr =  vm.polygons[i].info.tagdata;
+                    if (checkFilterString(filters, filterStr)) {
                         vm.polygons[i].visible = true;
+                        vm.polygons[i].stroke.weight = getStroke(filterStr);
+                        vm.polygons[i].stroke.color = getColor(filterStr);
+                        startAnimation(vm.polygons[i]);
                     } else {
                         vm.polygons[i].visible = false;
                     }
@@ -449,6 +457,67 @@
                 }
             }
         };
+
+        var PARKING = 'parking';
+        var SERVICE_STATION = 'service';
+        var COMPETITOR_HUB = 'competitor';
+        var CITY_LIMIT = 'citylimits';
+
+        var DEFAULT_STROKE = 10;
+        var MIN_STROKE = 3;
+
+        function  getColor(str) {
+            var type = getType(str);
+            if(type == PARKING){
+                return '#2ecc71';
+            }else if(type == SERVICE_STATION){
+                return '#f89406';
+            }else if(type == COMPETITOR_HUB){
+                return '#d35400';
+            }else if(type == CITY_LIMIT){
+                return 'blue';
+            }
+        }
+
+        function getStroke(str) {
+            var type = getType(str);
+            if(type == PARKING){
+                return DEFAULT_STROKE;
+            }else if(type == SERVICE_STATION){
+                return DEFAULT_STROKE;
+            }else if(type == COMPETITOR_HUB){
+                return DEFAULT_STROKE;
+            }else if(type == CITY_LIMIT){
+                return MIN_STROKE;
+            }
+        }
+
+        function startAnimation(obj) {
+            var count = 0;
+            if(getType(obj.info.tagdata) != CITY_LIMIT) {
+                $interval(function () {
+                    count++;
+                    console.log(count);
+                    if (count % 2 == 0)
+                        obj.stroke.weight = DEFAULT_STROKE;
+                    else
+                        obj.stroke.weight = MIN_STROKE;
+
+                }, 500, 6);
+            }
+        }
+
+        function getType(str) {
+            if(str.match(/parking/g) && str.match(/parking/g).length > 0){
+                return 'parking';
+            }else if(str.match(/servicestation/g) && str.match(/servicestation/g).length > 0){
+                return 'service';
+            }else if(str.match(/competitor/g) && str.match(/competitor/g).length > 0){
+                return 'competitor';
+            }else if(str.match(/citylimit/g) && str.match(/citylimit/g).length > 0){
+                return 'citylimits';
+            }
+        }
 
         function checkFilterString(filter,str) {
             if(filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||

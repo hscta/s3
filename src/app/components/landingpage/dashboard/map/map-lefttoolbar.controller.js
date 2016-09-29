@@ -50,6 +50,14 @@
                 }
             },
             {
+                'id':'parkingLot',
+                'name': 'Parking Lot','iconType':'md', 'icon': 'local_parking', 'type': 'toggleButton', 'data': {
+                'type': 'function', 'function': function (active) {
+                    vm.checkGeoFilters.set('parkingLot',active);
+                }
+            }
+            },
+            {
                 'id':'serviceStation',
                 'name': 'Service Station', 'iconType':'fa','icon': 'fa-wrench', 'type': 'toggleButton', 'data': {
                     'type': 'function', 'function': function (active) {
@@ -62,14 +70,6 @@
                 'name': 'Competitor Hub', 'iconType':'fa','icon': 'fa-ban', 'type': 'toggleButton', 'data': {
                     'type': 'function', 'function': function (active) {
                         vm.checkGeoFilters.set('competitorHub',active);
-                    }
-                }
-            },
-            {
-                'id':'parkingLot',
-                'name': 'Parking Lot','iconType':'md', 'icon': 'local_parking', 'type': 'toggleButton', 'data': {
-                    'type': 'function', 'function': function (active) {
-                        vm.checkGeoFilters.set('parkingLot',active);
                     }
                 }
             },

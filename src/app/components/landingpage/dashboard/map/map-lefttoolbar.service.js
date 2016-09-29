@@ -86,7 +86,7 @@
                 geodesic: false,
                 fill: {
                     color: blueColor,
-                    opacity: 0.5
+                    opacity: 0.2
                 }
             }
         };
@@ -103,7 +103,7 @@
                 },
                 fill: {
                     color: blueColor,
-                    opacity: 0.5
+                    opacity: 0.2
                 },
                 clickable: true, // optional: defaults to true
                 visible: true, // optional: defaults to true

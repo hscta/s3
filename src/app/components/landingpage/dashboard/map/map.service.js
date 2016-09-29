@@ -63,8 +63,6 @@
                     zoomLevelIcon = 'big';
                 }
 
-
-
                 function checkZoomLevel(min,max){
                     if(vm.zoom <= max && vm.zoom >= min){
                         return true;
