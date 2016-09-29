@@ -497,7 +497,6 @@
             if(getType(obj.info.tagdata) != CITY_LIMIT) {
                 $interval(function () {
                     count++;
-                    console.log(count);
                     if (count % 2 == 0)
                         obj.stroke.weight = DEFAULT_STROKE;
                     else
@@ -659,7 +658,8 @@
         var hrs12 = 43200 * MILLISEC;
         var hrs24 = 86400 * MILLISEC;
         var hrs48 = (hrs24 + 1) * 2;
-        var timeLimit = hrs48;
+        var week = (hrs24 + 1) * 7;
+        var timeLimit = week;
 
 
         $scope.getHistory = function () {

@@ -103,7 +103,7 @@
         };
 
         vm.subscribeChannel = function (path) {
-            $log.log("subscribe: " + path);
+            //$log.log("subscribe: " + path);
             var msg = {};
             msg.data = [];
             msg.data.push(['gps', [{path: path}]]);

@@ -79,15 +79,17 @@
                     color: blueColor,
                     weight: 3
                 },
+                fill: {
+                    color: blueColor,
+                    opacity: 0.2
+                },
                 clickable: true,
                 visible: true,
                 editable: false,
                 draggable: false,
                 geodesic: false,
-                fill: {
-                    color: blueColor,
-                    opacity: 0.2
-                }
+                control: {},
+                events: {}
             }
         };
 
@@ -110,7 +112,8 @@
                 editable: false, // optional: defaults to false
                 draggable: false, // optional: defaults to false
                 geodesic: false, // optional: defaults to false
-                control: {}
+                control: {},
+                events: {}
             }
         };
 
@@ -186,22 +189,21 @@
 
 
         vm.callListeners = function (key, data) {
-            if(key in vm.listeners) {
-                for(var idx in vm.listeners[key]) {
+            if (key in vm.listeners) {
+                for (var idx in vm.listeners[key]) {
                     vm.listeners[key][idx](data);
                 }
             }
         };
-        //historyService.setData('selectedTab', vm.dialogTab);
 
         vm.geoData = {};
 
-        vm.setData = function(key, value) {
+        vm.setData = function (key, value) {
             vm.geoData[key] = value;
         };
 
-        vm.getData = function(key) {
-            if(vm.geoData.hasOwnProperty(key))
+        vm.getData = function (key) {
+            if (vm.geoData.hasOwnProperty(key))
                 return vm.geoData[key];
 
             return null;
