@@ -15,70 +15,6 @@
         vm.circles = [];
         vm.polygons = [];
 
-        // vm.circles = [
-        //     {
-        //         id: 1,
-        //         center: {
-        //             latitude: 19.196051,
-        //             longitude: 72.961938
-        //         },
-        //         radius: 30,
-        //         stroke: {
-        //             color: '#08B21F',
-        //             weight: 2,
-        //             opacity: 1
-        //         },
-        //         fill: {
-        //             color: '#08B21F',
-        //             opacity: 0.5
-        //         },
-        //         clickable: true, // optional: defaults to true
-        //         visible: true, // optional: defaults to true
-        //         geodesic: false, // optional: defaults to false
-        //         draggable: false, // optional: defaults to false
-        //         editable: true, // optional: defaults to false
-        //         control: {}
-        //     }
-        // ];
-
-
-        // var polygons = {
-        //     "fencetype":"polygon",
-        //     "vertex":[{"lat":19.088451,"lng":72.895935},
-        //         {"lat":19.088409,"lng":72.89637},
-        //         {"lat":19.088088,"lng":72.896356},
-        //         {"lat":19.088143,"lng":72.895833},
-        //         {"lat":19.088451,"lng":72.895935}]
-        // }"
-
-        // vm.polygons = [
-        //     {
-        //         id: 1,
-        //         path: [
-        //             {"latitude":19.088451,"longitude":72.895935},
-        //             {"latitude":19.088409,"longitude":72.89637},
-        //             {"latitude":19.088088,"longitude":72.896356},
-        //             {"latitude":19.088143,"longitude":72.895833},
-        //             {"latitude":19.088451,"longitude":72.895935}
-        //         ],
-        //         stroke: {
-        //             color: '#08B21F',
-        //             weight: 3
-        //         },
-        //         editable: false,
-        //         draggable: false,
-        //         geodesic: false,
-        //         visible: true,
-        //         fill: {
-        //             color: '#08B21F',
-        //             opacity: 0.5
-        //         }
-        //     }
-        // ];
-
-
-        // var infowindowplacesearch = new google.maps.InfoWindow();
-
 
         $scope.searchbox = {
             template: 'searchbox.tpl.html',
@@ -168,7 +104,8 @@
 
         vm.leftToolbar = function () {
             return geofenceViewService.getToolbarVar();
-        }
+        };
+
 
         vm.inMap = {
             mapOptions: {},
@@ -536,18 +473,16 @@
 
     function HistoryController($scope, $log, $mdDialog, mapService, $state, dialogService,
                                $interval, intellicarAPI, historyService, $timeout, geofenceViewService) {
-        //var vm = this;
-        //$log.log($scope);
-
+        $log.log('HistoryController');
 
         var vm = this;
         dialogService.setTab(0);
-        $log.log('HistoryController');
-
         params = dialogService.getData('historyData');
         var selectedVehicle = dialogService.getData('selectedVehicle');
 
         vm.multiSelect = true;
+        vm.circles = [];
+        vm.polygons = [];
 
         $scope.historyMap = {
             mapOptions: {},
@@ -765,24 +700,20 @@
         $scope.getClickedMarker = function () {
             return $scope.clickedMarker;
         };
-        // $scope.getMyVehicles = function () {
-        //     intellicarAPI.userService.getMyVehiclesMap({})
-        //         .then(function (resp) {
-        //             $log.log(resp);
-        //             $scope.vehicles = resp;
-        //         }, function (resp) {
-        //             $log.log("handleMyVehiclesFailure");
-        //             $log.log(resp);
-        //         });
-        // };
-        //
-        // $scope.getMyVehicles();
+
+
+        vm.getMyFencesListener = function (fences) {
+            vm.circles = fences.circles;
+            vm.polygons = fences.polygons;
+            //$log.log("In map.controller");
+            $log.log(fences);
+        };
 
 
         vm.init();
-        console.log($scope.clickedMarker);
-        historyService.setData('clickedMarker', $scope.clickedMarker);
         $interval($scope.resizeMap, 500);
+        historyService.setData('clickedMarker', $scope.clickedMarker);
+        geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
     }
 
 

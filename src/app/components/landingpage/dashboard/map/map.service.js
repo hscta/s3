@@ -109,9 +109,10 @@
                 return vehicleData;
             };
 
+
             vm.getMarkerIcon = function(){
 
-            }
+            };
 
 
             vm.updateMap = function (msgList) {

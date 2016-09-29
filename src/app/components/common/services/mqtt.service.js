@@ -178,8 +178,6 @@
         };
 
         vm.initSocket();
-        //$interval(vm.onReceiveMsg, 2000);
-
 
         return {
             addMsgListener: vm.addMsgListener,
@@ -189,50 +187,3 @@
     }
 
 })();
-
-
-// vm.latitude = 12.9176383;
-// vm.longitude = 77.6480335;
-//
-// vm.getLat = function (n) {
-//     vm.latitude += (n * 0.001);
-//     return vm.latitude;
-// };
-//
-// vm.getLng = function (n) {
-//     vm.longitude += (n * 0.001);
-//     return vm.longitude;
-// };
-//
-//
-// vm.pushTestMarkers = function (msg) {
-//     var marker = {
-//         id: 28,
-//         title: '/1/1/1/26/1/27/4/28',
-//         latitude: vm.getLat(1),
-//         longitude: vm.getLng(1)
-//     };
-//
-//     msg.push(marker);
-//
-//     marker = {
-//         id: 17,
-//         title: '/1/1/4/17',
-//         latitude: vm.getLat(16),
-//         longitude: vm.getLng(16)
-//     };
-//
-//     msg.push(marker);
-// };
-//
-// // vm.onReceiveMsg = function (msg) {
-// vm.onReceiveMsgTest = function () {
-//     //  $log.log('mqtt onReceiveMsg');
-//     var msg = [];
-//     vm.pushTestMarkers(msg);
-//     //$log.log(msg);
-//     for (var eachidx in vm.msgListeners) {
-//         vm.msgListeners[eachidx](msg);
-//     }
-//     //$timeout(vm.onReceiveMsg, 2000);
-// };
