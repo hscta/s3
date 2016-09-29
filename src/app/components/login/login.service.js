@@ -80,8 +80,8 @@
             //$log.log("handleLoginSuccess");
             $rootScope.showLoginDialog = false;
             $mdDialog.hide();
-            vm.loginDialog =""
-            //$window.location.reload();
+            vm.loginDialog ="";
+            $window.location.reload();
         }
 
         function handleLoginFailure(resp) {

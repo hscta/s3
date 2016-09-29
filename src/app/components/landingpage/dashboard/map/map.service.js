@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function ($log, intellicarAPI,$interval, $q, $timeout) {
+        .service('mapService', function ($log, intellicarAPI, $interval, $q, $timeout) {
             $log.log("mapService");
             var vm = this;
             vm.listeners = {};
@@ -53,18 +53,18 @@
                     }
                 }
 
-                if(checkZoomLevel(0,6)){
+                if (checkZoomLevel(0, 6)) {
                     zoomLevelIcon = 'extra_small';
-                }else if(checkZoomLevel(7,9)){
+                } else if (checkZoomLevel(7, 9)) {
                     zoomLevelIcon = 'small';
-                }else if(checkZoomLevel(10,10)){
+                } else if (checkZoomLevel(10, 10)) {
                     zoomLevelIcon = 'medium';
-                }else{
+                } else {
                     zoomLevelIcon = 'big';
                 }
 
-                function checkZoomLevel(min,max){
-                    if(vm.zoom <= max && vm.zoom >= min){
+                function checkZoomLevel(min, max) {
+                    if (vm.zoom <= max && vm.zoom >= min) {
                         return true;
                     }
                     return false;
@@ -82,7 +82,7 @@
                 var vehicleData = msg[1];
                 vehicleData.id = parseInt(vehicleData.deviceid);
                 vehicleData.title = vehicleNumber;
-                vehicleData.optimized= false;
+                vehicleData.optimized = false;
                 vehicleData.icon = vm.setMarkerIcon(vehicleData);
                 vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
                 vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
@@ -99,13 +99,13 @@
             };
 
 
-            vm.getMarkerIcon = function(){
+            vm.getMarkerIcon = function () {
 
             };
 
 
             vm.updateMap = function (msgList, key) {
-                if(msgList.length == 2 && msgList[0] != null && msgList[1] != null
+                if (msgList.length == 2 && msgList[0] != null && msgList[1] != null
                     && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
                     //$log.log(vehicleData);
@@ -126,8 +126,8 @@
 
 
             vm.callListeners = function (msg, key) {
-                if(key in vm.listeners) {
-                    for(var idx in vm.listeners[key]) {
+                if (key in vm.listeners) {
+                    for (var idx in vm.listeners[key]) {
                         vm.listeners[key][idx](msg, key);
                     }
                 }

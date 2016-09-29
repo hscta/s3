@@ -89,7 +89,11 @@
                 draggable: false,
                 geodesic: false,
                 control: {},
-                events: {}
+                events: {
+                    click: function() {
+
+                    }
+                }
             }
         };
 

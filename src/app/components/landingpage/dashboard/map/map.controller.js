@@ -110,7 +110,8 @@
             for (var i = 0; i < vm.inMarkers.length; i++) {
                 vm.inMarkers[i].icon = mapService.setMarkerIcon(vm.inMarkers[i]);
             }
-        }
+        };
+
 
         function checkZoomLevel(min, max) {
             if (vm.zoomMapZoom <= max && vm.zoomMapZoom >= min) {
@@ -406,31 +407,31 @@
         };
 
         vm.geoFilters = {
-            showAll:true,
-            parkingLot:true,
-            lowBattery:false,
-            serviceStation:true,
-            competitorHub:true,
-            cityLimits:false,
+            showAll: true,
+            parkingLot: true,
+            lowBattery: false,
+            serviceStation: true,
+            competitorHub: true,
+            cityLimits: false,
         };
 
-        geofenceViewService.setData('geoFilters',vm.geoFilters);
+        geofenceViewService.setData('geoFilters', vm.geoFilters);
 
         vm.getMyFencesListener = function (fences) {
             vm.circles = fences.circles;
             vm.polygons = fences.polygons;
             vm.applyFilters(vm.geoFilters);
-            geofenceViewService.setData('geofences',true);
+            geofenceViewService.setData('geofences', true);
             $log.log(fences);
         };
 
 
         vm.applyFilters = function (filters) {
             vm.geoFilters = filters;
-            if(vm.circles && vm.polygons) {
+            if (vm.circles && vm.polygons) {
                 for (var i = 0; i < vm.circles.length; i++) {
-                    var filterStr =  vm.circles[i].info.tagdata;
-                    if (checkFilterString(filters,filterStr)) {
+                    var filterStr = vm.circles[i].info.tagdata;
+                    if (checkFilterString(filters, filterStr)) {
                         vm.circles[i].visible = true;
                         vm.circles[i].stroke.weight = getStroke(filterStr);
                         vm.circles[i].stroke.color = getColor(filterStr);
@@ -440,7 +441,7 @@
                     }
                 }
                 for (var i = 0; i < vm.polygons.length; i++) {
-                    var filterStr =  vm.polygons[i].info.tagdata;
+                    var filterStr = vm.polygons[i].info.tagdata;
                     if (checkFilterString(filters, filterStr)) {
                         vm.polygons[i].visible = true;
                         vm.polygons[i].stroke.weight = getStroke(filterStr);
@@ -466,35 +467,35 @@
         var DEFAULT_STROKE = 10;
         var MIN_STROKE = 3;
 
-        function  getColor(str) {
+        function getColor(str) {
             var type = getType(str);
-            if(type == PARKING){
+            if (type == PARKING) {
                 return '#2ecc71';
-            }else if(type == SERVICE_STATION){
+            } else if (type == SERVICE_STATION) {
                 return '#f89406';
-            }else if(type == COMPETITOR_HUB){
+            } else if (type == COMPETITOR_HUB) {
                 return '#d35400';
-            }else if(type == CITY_LIMIT){
+            } else if (type == CITY_LIMIT) {
                 return 'blue';
             }
         }
 
         function getStroke(str) {
             var type = getType(str);
-            if(type == PARKING){
+            if (type == PARKING) {
                 return DEFAULT_STROKE;
-            }else if(type == SERVICE_STATION){
+            } else if (type == SERVICE_STATION) {
                 return DEFAULT_STROKE;
-            }else if(type == COMPETITOR_HUB){
+            } else if (type == COMPETITOR_HUB) {
                 return DEFAULT_STROKE;
-            }else if(type == CITY_LIMIT){
+            } else if (type == CITY_LIMIT) {
                 return MIN_STROKE;
             }
         }
 
         function startAnimation(obj) {
             var count = 0;
-            if(getType(obj.info.tagdata) != CITY_LIMIT) {
+            if (getType(obj.info.tagdata) != CITY_LIMIT) {
                 $interval(function () {
                     count++;
                     if (count % 2 == 0)
@@ -507,22 +508,22 @@
         }
 
         function getType(str) {
-            if(str.match(/parking/g) && str.match(/parking/g).length > 0){
+            if (str.match(/parking/g) && str.match(/parking/g).length > 0) {
                 return 'parking';
-            }else if(str.match(/servicestation/g) && str.match(/servicestation/g).length > 0){
+            } else if (str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
                 return 'service';
-            }else if(str.match(/competitor/g) && str.match(/competitor/g).length > 0){
+            } else if (str.match(/competitor/g) && str.match(/competitor/g).length > 0) {
                 return 'competitor';
-            }else if(str.match(/citylimit/g) && str.match(/citylimit/g).length > 0){
+            } else if (str.match(/citylimit/g) && str.match(/citylimit/g).length > 0) {
                 return 'citylimits';
             }
         }
 
-        function checkFilterString(filter,str) {
-            if(filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||
+        function checkFilterString(filter, str) {
+            if (filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||
                 filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0 ||
                 filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0 ||
-                filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0){
+                filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
                 return true;
             }
             return false;
