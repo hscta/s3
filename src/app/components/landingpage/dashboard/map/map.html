@@ -5,56 +5,73 @@
         height: 30px;
         width: 30px;
     }
-
     .infowindow-devbattery-img {
         height: 50px;
     }
-
     .icar-padding {
         padding: 5px;
     }
-    .map-area{padding:0;}
-
-    .container-margin{margin-bottom: 0; padding:0; height:31px}
-    ul{
-        margin:0;
+    .map-area {
+        padding: 0;
     }
-    ul li{
-        width:100%; height:100%; list-style:none;
+    .container-margin {
+        margin-bottom: 0;
+        padding: 0;
+        height: 31px
     }
-    li{ text-align:center;}
-    .icon-font{font-size:25px;}
-
-    li:hover{
-        box-shadow:1px 0px 6px 0px;
-        cursor:pointer;
+    ul {
+        margin: 0;
     }
-    .li-clicked{
+    ul li {
+        width: 100%;
+        height: 100%;
+        list-style: none;
+    }
+    li {
+        text-align: center;
+    }
+    .icon-font {
+        font-size: 25px;
+    }
+    li:hover {
+        box-shadow: 1px 0px 6px 0px;
+        cursor: pointer;
+    }
+    .li-clicked {
         background: #d1e934;
     }
-    .md-light{color:#000;}
+    .md-light {
+        color: #000;
+    }
     /*.icar-checkbox{*/
-        /*transform:scale(0.8);*/
+    /*transform:scale(0.8);*/
     /*}*/
-
-    .icon-visibility{color:#000;}
-    .icon-running{color:#6991FD;}
-    .icon-stopped{color:#0C8;}
-    .icon-active{color:#000;}
-    .icon-immobilized{color: rgba(245, 86, 94, 0.85);}
-
+    .icon-visibility {
+        color: #000;
+    }
+    .icon-running {
+        color: #6991FD;
+    }
+    .icon-stopped {
+        color: #0C8;
+    }
+    .icon-active {
+        color: #000;
+    }
+    .icon-immobilized {
+        color: rgba(245, 86, 94, 0.85);
+    }
 </style>
-
 
 
 <div>
     <!--layout="row" layout-align="center center"-->
-    <div layout="row" flex  >
+    <div layout="row" flex>
         <md-input-container class="container-margin" flex="30">
             <input type="text" placeholder="Apply filters..." size="50"
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
-        <div layout="row"  layout-align="center center">
+        <div layout="row" layout-align="center center">
             <div class="toggleButton" ng-class="{'active':vm.onRoaded}">
                 On Road
                 <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
@@ -68,12 +85,12 @@
                 </md-checkbox>
             </div>
             <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
-                         <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
-                <!--On Roaded-->
+            <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
+            <!--On Roaded-->
             <!--</md-checkbox>-->
             <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"-->
-                         <!--aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>-->
-                <!--Off Roaded-->
+            <!--aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>-->
+            <!--Off Roaded-->
             <!--</md-checkbox>-->
         </div>
 
@@ -81,40 +98,45 @@
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='']"
                 ng-click="vm.runFilters('')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='']"
-                         class="icon-font icon-visibility" md-font-library="material-icons">visibility</md-icon>
+                         class="icon-font icon-visibility" md-font-library="material-icons">visibility
+                </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='']"
                       style="font-size: 13px;">{{vm.vehicleStats.showall}}</span>
                 <md-tooltip>All</md-tooltip>
             </li>
-            <li  ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
-                 ng-click="vm.runFilters('Running')" layout="column" layout-align="center center">
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
+                ng-click="vm.runFilters('Running')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
-                         class="icon-font icon-running" md-font-library="material-icons">time_to_leave</md-icon>
+                         class="icon-font icon-running" md-font-library="material-icons">time_to_leave
+                </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
                       style="font-size: 13px;">{{vm.vehicleStats.running}}</span>
                 <md-tooltip>Ignition On</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Stopped']"
-                ng-click="vm.runFilters('Stopped')" layout="column" >
+                ng-click="vm.runFilters('Stopped')" layout="column">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
                          class="icon-font icon-stopped" md-font-library="material-icons">
-                    radio_button_checked</md-icon>
+                    radio_button_checked
+                </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
                       style="font-size: 13px;">{{vm.vehicleStats.stopped}}</span>
                 <md-tooltip>Ignition Off</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Active']"
-                ng-click="vm.runFilters('Active')" layout="column" >
+                ng-click="vm.runFilters('Active')" layout="column">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
-                         class="icon-font icon-active" md-font-library="material-icons">lock_open</md-icon>
+                         class="icon-font icon-active" md-font-library="material-icons">lock_open
+                </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Active']"
                       style="font-size: 13px;">{{vm.vehicleStats.active}}</span>
                 <md-tooltip>Active</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"
-                ng-click="vm.runFilters('Immobilized')" layout="column" >
+                ng-click="vm.runFilters('Immobilized')" layout="column">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
-                         class="icon-font icon-immobilized" md-font-library="material-icons">lock</md-icon>
+                         class="icon-font icon-immobilized" md-font-library="material-icons">lock
+                </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
                       style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>
                 <md-tooltip>Immoblized</md-tooltip>
@@ -122,24 +144,28 @@
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
-        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-class="{'ltb_item-line':item.type == 'line'}">
-            <div class="ltbi_button" ng-click="vm.buttonClick(item.data)" ng-if="item.type == 'button'" ng-class="{'active':item.data.active}">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB"
+             ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
+            <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
+                 ng-if="item.type == 'button' || item.type == 'toggleButton'"
+                 ng-class="{'active':item.data.active && item.type == 'toggleButton' }">
                 <div class="ltbi_icon">
-                    <i class="fa {{item.icon}}" aria-hidden="true"></i>
+                    <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
+                    <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
                 </div>
                 <div class="ltbi_name">{{item.name}}</div>
             </div>
-            <div class="ltbi_cont" ng-if="item.content" ng-if="item.type == 'button'">
+            <div class="ltbi_cont" ng-if="item.content" ng-if="item.type == 'button' || item.type == 'toggleButton' ">
                 <md-input-container class="md-input-cont">
                     <label>Color</label>
-                    <input type="text" ng-model="color" >
+                    <input type="text" ng-model="color">
                 </md-input-container>
             </div>
         </div>
     </div>
     <div id="mapCanvas">
         <script id="searchbox.tpl.html" type="text/ng-template">
-          <input  id="pac-input" type="text" placeholder="Search">
+            <input id="pac-input" type="text" placeholder="Search">
         </script>
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom'
                             options="vm.inMap.mapOptions" optimized="false" bounds="vm.inMap.bounds"
@@ -151,13 +177,13 @@
             <ui-gmap-search-box options="searchbox.options" template="searchbox.template"
                                 events="searchbox.events"></ui-gmap-search-box>
 
-            <ui-gmap-markers models="vm.inMarkers"  optimized="false" coords="'self'" icon="'icon'"
+            <ui-gmap-markers models="vm.inMarkers" optimized="false" coords="'self'" icon="'icon'"
                              options="'options'" events="vm.markersEvents">
             </ui-gmap-markers>
 
 
             <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
-                            control="vm.infoWindow.control"
+                            control="vm.infoWindow.control" optimized="false"
                             options="vm.infoWindow.options" closeClick="vm.infoWindowClose()"
                             templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
                             templateParameter="vm.clickedMarkerObj"
@@ -171,8 +197,8 @@
             <!--</ui-gmap-map-control>-->
 
             <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.info.assetid"
-                            center="gcircle.center"
-                            stroke="gcircle.stroke" fill="gcircle.fill" radius="gcircle.radius"
+                            center="gcircle.center" radius="gcircle.radius"
+                            stroke="gcircle.stroke" fill="gcircle.fill"
                             visible="gcircle.visible" geodesic="gcircle.geodesic"
                             editable="gcircle.editable" draggable="gcircle.draggable"
                             clickable="gcircle.clickable" control="gcircle.control"
@@ -180,11 +206,12 @@
             </ui-gmap-circle>
 
             <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
-                             path="gpolygon.path" stroke="gpolygon.stroke" visible="gpolygon.visible"
-                             geodesic="gpolygon.geodesic"
-                             fill="gpolygon.fill" fit="false"
-                             editable="gpolygon.editable"
-                             draggable="gpolygon.draggable"  events="gpolygon.events">
+                             path="gpolygon.path"
+                             stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"
+                             visible="gpolygon.visible" geodesic="gpolygon.geodesic"
+                             editable="gpolygon.editable" draggable="gpolygon.draggable"
+                             clickable="gpolygon.clickable" control="gpolygon.control"
+                             events="gpolygon.events">
 
             </ui-gmap-polygon>
 
@@ -194,20 +221,23 @@
 </div>
 
 
-<div class="int-dialog" ng-controller="DialogController as vm" >
+<div class="int-dialog" ng-controller="DialogController as vm">
     <div class="id-background" ng-click="vm.closeTab()"></div>
     <div class="id-container" ng-if="vm.dialogShow()">
         <div class="id-header">
             <div class="map-DHeader1">
                 <span> Vehicle History</span>
-                <button class="md-icon-button md-button md-ink-ripple" type="button" style="float:right" ng-click="vm.closeTab()" aria-label="close">
+                <button class="md-icon-button md-button md-ink-ripple" type="button" style="float:right"
+                        ng-click="vm.closeTab()" aria-label="close">
                     <md-icon md-font-library="material-icons" class="ng-scope material-icons">close</md-icon>
-                <div class="md-ripple-container"></div></button>
+                    <div class="md-ripple-container"></div>
+                </button>
             </div>
         </div>
         <div class="id-body">
             <md-content class="fullHeight">
-                <md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect md-dynamic-height>
+                <md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect
+                         md-dynamic-height>
                     <md-tab ng-click="vm.getTab()">
                         <a ui-sref="home.history">HISTORY</a>
                     </md-tab>
