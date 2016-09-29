@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapLeftToolBarService', mapLeftToolBarService);
+        .service('geofenceViewService', geofenceViewService);
 
-    function mapLeftToolBarService($log, $q, intellicarAPI, geofenceReportService) {
+    function geofenceViewService($log, $q, intellicarAPI, geofenceReportService) {
 
         var vm = this;
         vm.toolbar = true;

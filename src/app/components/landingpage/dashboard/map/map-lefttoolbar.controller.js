@@ -7,22 +7,22 @@
 
     angular
         .module('uiplatform')
-        .controller('MapLeftToolBarController', mapLeftToolBar);
+        .controller('GeofenceViewController', mapLeftToolBar);
 
     function mapLeftToolBar($scope, $log, $timeout, $q,
-                            mapLeftToolBarService, dialogService, intellicarAPI) {
+                            geofenceViewService, dialogService, intellicarAPI) {
 
         var vm = this;
 
         vm.leftToolbar = function () {
-            return mapLeftToolBarService.getToolbarVar();
+            return geofenceViewService.getToolbarVar();
         };
 
         vm.toggleBar = function () {
             if (vm.leftToolbar()) {
-                mapLeftToolBarService.hide();
+                geofenceViewService.hide();
             } else {
-                mapLeftToolBarService.show();
+                geofenceViewService.show();
             }
         };
 
@@ -170,11 +170,7 @@
             {
                 'name': 'Geofences ', 'icon': 'fa-globe', 'type': 'button', 'data': {
                 'type': 'function', 'function': function (active) {
-                    console.log(active);
-                    mapLeftToolBarService.getMyFences()
-                        .then(function(resp) {
-                            //$log.log(resp);
-                        }, function(resp) { $log.log(resp); });
+                    geofenceViewService.getMyFences();
                 }
             }
             },
@@ -223,7 +219,7 @@
             }
         };
 
-        //mapLeftToolBarService.getMyFences();
+        //geofenceViewService.getMyFences();
     }
 
 })();

@@ -121,7 +121,7 @@
             </li>
         </ul>
     </div>
-    <div class="lefttoolbar" ng-controller="MapLeftToolBarController as vm">
+    <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
         <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-class="{'ltb_item-line':item.type == 'line'}">
             <div class="ltbi_button" ng-click="vm.buttonClick(item.data)" ng-if="item.type == 'button'" ng-class="{'active':item.data.active}">
                 <div class="ltbi_icon">

@@ -9,7 +9,7 @@
 
     function MapController($scope, $rootScope, $log, mapService,
                            $timeout, $mdDialog, $document, $interval,
-                           rightNavAlertDashboardService, mapLeftToolBarService, historyService, dialogService) {
+                           rightNavAlertDashboardService, geofenceViewService, historyService, dialogService) {
         $log.log('MapController');
         var vm = this;
         vm.circles = [];
@@ -167,7 +167,7 @@
 
 
         vm.leftToolbar = function () {
-            return mapLeftToolBarService.getToolbarVar();
+            return geofenceViewService.getToolbarVar();
         }
 
         vm.inMap = {
@@ -524,8 +524,8 @@
         vm.loadMap();
         vm.addListener();
         historyService.setData('inMarkers', vm.inMarkers);
-        mapLeftToolBarService.addListener('getMyFences', vm.getMyFencesListener);
-        mapLeftToolBarService.getMyFences();
+        geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+        geofenceViewService.getMyFences();
     }
 
 
@@ -535,7 +535,7 @@
 
 
     function HistoryController($scope, $log, $mdDialog, mapService, $state, dialogService,
-                               $interval, intellicarAPI, historyService, $timeout, mapLeftToolBarService) {
+                               $interval, intellicarAPI, historyService, $timeout, geofenceViewService) {
         //var vm = this;
         //$log.log($scope);
 
