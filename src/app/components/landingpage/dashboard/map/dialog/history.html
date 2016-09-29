@@ -192,6 +192,25 @@
                             icons="trace.icons">
                         </ui-gmap-polyline>
 
+
+                        <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.info.assetid"
+                                        center="gcircle.center"
+                                        stroke="gcircle.stroke" fill="gcircle.fill" radius="gcircle.radius"
+                                        visible="gcircle.visible" geodesic="gcircle.geodesic"
+                                        editable="gcircle.editable" draggable="gcircle.draggable"
+                                        clickable="gcircle.clickable" control="gcircle.control">
+                        </ui-gmap-circle>
+
+                        <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
+                                         path="gpolygon.path" stroke="gpolygon.stroke" visible="gpolygon.visible"
+                                         geodesic="gpolygon.geodesic"
+                                         fill="gpolygon.fill" fit="false"
+                                         editable="gpolygon.editable"
+                                         draggable="gpolygon.draggable">
+
+                        </ui-gmap-polygon>
+
+
                         <!--<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"-->
                                         <!--control="historyInfoWindow.control"-->
                                         <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->

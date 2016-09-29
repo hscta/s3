@@ -192,8 +192,20 @@
                 }
             }
         };
-
         //historyService.setData('selectedTab', vm.dialogTab);
+
+        vm.geoData = {};
+
+        vm.setData = function(key, value) {
+            vm.geoData[key] = value;
+        };
+
+        vm.getData = function(key) {
+            if(vm.geoData.hasOwnProperty(key))
+                return vm.geoData[key];
+
+            return null;
+        }
     }
 
 

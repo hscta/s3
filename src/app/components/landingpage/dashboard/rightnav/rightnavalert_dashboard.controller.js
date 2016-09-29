@@ -93,7 +93,8 @@
 
 
         vm.addListener = function () {
-            mapService.addMsgListener(vm.updateMarker);
+            //mapService.addMsgListener(vm.updateMarker);
+            mapService.addListener('rtgps', vm.updateMarker);
         };
 
 

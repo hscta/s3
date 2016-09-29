@@ -92,8 +92,19 @@
             },
         ];
 
+        vm.fencesActive = function () {
+            return geofenceViewService.getData('geofences');
+        }
 
 
+        vm.init = function () {
+            vm.filters = geofenceViewService.getData('geoFilters');
+            for (var key in vm.filters) {
+                if (vm.filters.hasOwnProperty(key) && vm.filters[key]) {
+                    setActive(key,'true');
+                }
+            }
+        };
 
         vm.checkGeoFilters = {
             all:function() {
@@ -101,7 +112,7 @@
                 if(vm.filters.showAll){
                     allActive = false;
                 }
-                setActive('showAll',allActive); 
+                setActive('showAll',allActive);
                 setActive('competitorHub',allActive);
                 setActive('serviceStation',allActive);
                 setActive('parkingLot',allActive);
@@ -119,15 +130,6 @@
                 vm.checkGeoFilters.check();
                 geofenceViewService.applyFilters(vm.filters);
             }
-        };
-
-        vm.filters = {
-            showAll:false,
-            parkingLot:false,
-            lowBattery:false,
-            serviceCenter:false,
-            noGo:false,
-            cityLimits:false,
         };
 
         function setActive(id,active) {
@@ -150,11 +152,14 @@
             if (data.type == 'stateChange') {
                 dialogService.show(data.state);
             } else if (data.type == 'function') {
-                data.active = !data.active;
-                data.function(data.active);
+                if(vm.fencesActive()) {
+                    data.active = !data.active;
+                    data.function(data.active);
+                }
             }
         };
 
+        vm.init();
         //geofenceViewService.getMyFences();
     }
 

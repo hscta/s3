@@ -15,70 +15,6 @@
         vm.circles = [];
         vm.polygons = [];
 
-        // vm.circles = [
-        //     {
-        //         id: 1,
-        //         center: {
-        //             latitude: 19.196051,
-        //             longitude: 72.961938
-        //         },
-        //         radius: 30,
-        //         stroke: {
-        //             color: '#08B21F',
-        //             weight: 2,
-        //             opacity: 1
-        //         },
-        //         fill: {
-        //             color: '#08B21F',
-        //             opacity: 0.5
-        //         },
-        //         clickable: true, // optional: defaults to true
-        //         visible: true, // optional: defaults to true
-        //         geodesic: false, // optional: defaults to false
-        //         draggable: false, // optional: defaults to false
-        //         editable: true, // optional: defaults to false
-        //         control: {}
-        //     }
-        // ];
-
-
-        // var polygons = {
-        //     "fencetype":"polygon",
-        //     "vertex":[{"lat":19.088451,"lng":72.895935},
-        //         {"lat":19.088409,"lng":72.89637},
-        //         {"lat":19.088088,"lng":72.896356},
-        //         {"lat":19.088143,"lng":72.895833},
-        //         {"lat":19.088451,"lng":72.895935}]
-        // }"
-
-        // vm.polygons = [
-        //     {
-        //         id: 1,
-        //         path: [
-        //             {"latitude":19.088451,"longitude":72.895935},
-        //             {"latitude":19.088409,"longitude":72.89637},
-        //             {"latitude":19.088088,"longitude":72.896356},
-        //             {"latitude":19.088143,"longitude":72.895833},
-        //             {"latitude":19.088451,"longitude":72.895935}
-        //         ],
-        //         stroke: {
-        //             color: '#08B21F',
-        //             weight: 3
-        //         },
-        //         editable: false,
-        //         draggable: false,
-        //         geodesic: false,
-        //         visible: true,
-        //         fill: {
-        //             color: '#08B21F',
-        //             opacity: 0.5
-        //         }
-        //     }
-        // ];
-
-
-        // var infowindowplacesearch = new google.maps.InfoWindow();
-
 
         $scope.searchbox = {
             template: 'searchbox.tpl.html',
@@ -124,51 +60,13 @@
                     }
                 }
             }
-        }
-
-//gfmap.controls[google.maps.ControlPosition.TOP_LEFT].push(input)
-
-// console.log(google.maps.places);
-
-// var autocomplete = new google.maps.places.Autocomplete(input);
-// autocomplete.bindTo('bounds', gfmap);
-
-// autocomplete.addListener('place_changed', function() {
-//     infowindowplacesearch.close();
-//     //marker.setVisible(false);
-//     var place = autocomplete.getPlace();
-//     if (!place.geometry) {
-//     window.alert("Autocomplete's returned place contains no geometry");
-//     return;
-//     }
-
-//     // If the place has a geometry, then present it on a map.
-//     if (place.geometry.viewport) {
-//     gfmap.fitBounds(place.geometry.viewport);
-//     } else {
-//     gfmap.setCenter(place.geometry.location);
-//     gfmap.setZoom(17);  // Why 17? Because it looks good.
-//     }
-
-//     var address = '';
-//     if (place.address_components) {
-//     address = [
-//       (place.address_components[0] && place.address_components[0].short_name || ''),
-//       (place.address_components[1] && place.address_components[1].short_name || ''),
-//       (place.address_components[2] && place.address_components[2].short_name || '')
-//     ].join(' ');
-//     }
-
-//     infowindowplacesearch.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-//     infowindowplacesearch.setPosition(place.geometry.location);
-//     infowindowplacesearch.open(gfmap);
-//     $timeout(function(){infowindowplacesearch.close()}, 2000);
-// });
+        };
 
 
         vm.leftToolbar = function () {
             return geofenceViewService.getToolbarVar();
-        }
+        };
+
 
         vm.inMap = {
             mapOptions: {},
@@ -235,10 +133,6 @@
                 vm.infoWindowShow();
             }
         };
-
-// vm.markerOptions = {
-//     animation:false;
-// }
 
 
         vm.onRoaded = true;
@@ -319,7 +213,6 @@
             };
 
             vm.infoWindowShow();
-            //vm.inMap.center = {latitude: vm.clickedMarker.latitude + 0.05, longitude: vm.clickedMarker.longitude};
             vm.inMap.center = vm.getMarkerCenter(vm.clickedMarker);
         };
 
@@ -502,57 +395,99 @@
 
 
         vm.cancelImmobalize = function () {
-            //$log.log('cancel dialog');
             $mdDialog.cancel();
         };
 
 
         vm.addListener = function () {
-            mapService.addMsgListener(vm.updateMarker);
-            rightNavAlertDashboardService.addListener(vm.alertClick);
+            mapService.addListener('rtgps', vm.updateMarker);
+            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+            //rightNavAlertDashboardService.addListener(vm.alertClick);
         };
 
+        vm.geoFilters = {
+            showAll:true,
+            parkingLot:true,
+            lowBattery:false,
+            serviceStation:true,
+            competitorHub:true,
+            cityLimits:false,
+        };
+
+        geofenceViewService.setData('geoFilters',vm.geoFilters);
 
         vm.getMyFencesListener = function (fences) {
             vm.circles = fences.circles;
-            vm.polygons = fences.polygons;
-            //$log.log("In map.controller");
+            vm.polygons = fences.polygons; 
+            vm.applyFilters(vm.geoFilters);
+            geofenceViewService.setData('geofences',true);
             $log.log(fences);
         };
 
+
         vm.applyFilters = function (filters) {
-            console.log(filters);
+            vm.geoFilters = filters;
+            if(vm.circles && vm.polygons) {
+                for (var i = 0; i < vm.circles.length; i++) {
+                    if (checkFilterString(filters, vm.circles[i].info.tagdata)) {
+                        vm.circles[i].visible = true;
+                    } else {
+                        vm.circles[i].visible = false;
+                    }
+                }
+                for (var i = 0; i < vm.polygons.length; i++) {
+                    if (checkFilterString(filters, vm.polygons[i].info.tagdata)) {
+                        vm.polygons[i].visible = true;
+                    } else {
+                        vm.polygons[i].visible = false;
+                    }
+                }
+                if (filters.lowBattery) {
+                    // do some code to add low battery
+                } else {
+                    // do some code to remove low battery
+                }
+            }
+        };
+
+        function checkFilterString(filter,str) {
+            if(filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||
+                filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0 ||
+                filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0 ||
+                filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0){
+                return true;
+            }
+            return false;
         };
 
 
-        vm.loadMap();
-        vm.addListener();
-        historyService.setData('inMarkers', vm.inMarkers);
-        geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-        geofenceViewService.addListener('applyFilters', vm.applyFilters);
-        geofenceViewService.getMyFences();
+        vm.init = function () {
+            vm.loadMap();
+            historyService.setData('inMarkers', vm.inMarkers);
+            geofenceViewService.addListener('applyFilters', vm.applyFilters);
+            vm.addListener();
+            geofenceViewService.getMyFences();
+        };
+
+        vm.init();
     }
 
 
     //#################################################################################################################
 
 
-
-
     function HistoryController($scope, $log, $mdDialog, mapService, $state, dialogService,
                                $interval, intellicarAPI, historyService, $timeout, geofenceViewService) {
-        //var vm = this;
-        //$log.log($scope);
-
+        $log.log('HistoryController');
 
         var vm = this;
         dialogService.setTab(0);
-        $log.log('HistoryController');
-
         params = dialogService.getData('historyData');
         var selectedVehicle = dialogService.getData('selectedVehicle');
 
         vm.multiSelect = true;
+        vm.circles = [];
+        vm.polygons = [];
 
         $scope.historyMap = {
             mapOptions: {},
@@ -749,7 +684,7 @@
                 // $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
                 // $scope.historyInfoWindow.show = true;
                 $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
-            }else {
+            } else {
                 $scope.errorMsg = "No Data Found";
             }
         };
@@ -770,30 +705,24 @@
         $scope.getClickedMarker = function () {
             return $scope.clickedMarker;
         };
-        // $scope.getMyVehicles = function () {
-        //     intellicarAPI.userService.getMyVehiclesMap({})
-        //         .then(function (resp) {
-        //             $log.log(resp);
-        //             $scope.vehicles = resp;
-        //         }, function (resp) {
-        //             $log.log("handleMyVehiclesFailure");
-        //             $log.log(resp);
-        //         });
-        // };
-        //
-        // $scope.getMyVehicles();
+
+
+        vm.getMyFencesListener = function (fences) {
+            vm.circles = fences.circles;
+            vm.polygons = fences.polygons;
+            //$log.log("In map.controller");
+            $log.log(fences);
+        };
 
 
         vm.init();
-        console.log($scope.clickedMarker);
-        historyService.setData('clickedMarker', $scope.clickedMarker);
         $interval($scope.resizeMap, 500);
+        historyService.setData('clickedMarker', $scope.clickedMarker);
+        geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
     }
 
 
-
     //#################################################################################################################
-
 
 
     function ImmobalizeController($scope, $log, $mdDialog) {
@@ -813,7 +742,6 @@
 
 
     //#################################################################################################################
-
 
 
     function InnerMapController($scope, $log, $mdToast, historyService, $interval) {
@@ -1019,7 +947,7 @@
 
         $scope.gotHistoryEvent = function () {
             $scope.setSliderTime();
-            if ( marker)
+            if (marker)
                 $log.log(marker);
             var initialPoint = marker.trace.path[0];
             $scope.tracePointGpsTime = initialPoint.gpstime;
@@ -1028,7 +956,7 @@
 
         };
 
-        $scope.$on('gotHistoryEvent', function(event, data){
+        $scope.$on('gotHistoryEvent', function (event, data) {
             $scope.gotHistoryEvent();
         });
 
@@ -1056,14 +984,4 @@
         };
     }
 
-
 })();
-
-// if (Math.abs(marker.latitude - vehicleData.latitude) > 0.03 ||
-//     Math.abs(marker.longitude - vehicleData.longitude) > 0.03) {
-//     $log.log(marker.id + ": previous location: " + new Date(marker.timestamp) +
-//         ", " + marker.latitude + ", " + marker.longitude);
-//     $log.log(marker.id + ": current  location: " + new Date(vehicleData.timestamp) +
-//         ", " + vehicleData.latitude + ", " + vehicleData.longitude);
-// }
-

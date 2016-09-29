@@ -55,13 +55,13 @@
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
         <div layout="row"  layout-align="center center">
-            <div class="toggleButton"ng-class="{'active':vm.onRoaded}">
+            <div class="toggleButton" ng-class="{'active':vm.onRoaded}">
                 On Road
                 <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
                              aria-label="onroaded" ng-change="vm.onRoadCheck()">
                 </md-checkbox>
             </div>
-            <div class="toggleButton"ng-class="{'active':vm.offRoaded}">
+            <div class="toggleButton" ng-class="{'active':vm.offRoaded}">
                 Off Road
                 <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
                              aria-label="onroaded" ng-change="vm.offRoadCheck()">
@@ -122,7 +122,7 @@
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
-        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-class="{'ltb_item-line':item.type == 'line'}">
+        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}" >
             <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
                  ng-if="item.type == 'button' || item.type == 'toggleButton'"
                  ng-class="{'active':item.data.active && item.type == 'toggleButton' }">
@@ -160,7 +160,7 @@
 
 
             <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
-                            control="vm.infoWindow.control"
+                            control="vm.infoWindow.control" optimized="false"
                             options="vm.infoWindow.options" closeClick="vm.infoWindowClose()"
                             templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
                             templateParameter="vm.clickedMarkerObj"
