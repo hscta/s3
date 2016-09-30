@@ -397,7 +397,7 @@
             vm.circles = fences.circles;
             $log.log(vm.circles);
             vm.polygons = fences.polygons;
-            vm.applyFilters({filters:vm.geoFilters,updates: vm.geoFilters});
+            vm.applyFilters({filters: vm.geoFilters});
             geofenceViewService.setData('geofences', true);
             $log.log(fences);
         };
@@ -405,7 +405,6 @@
 
         vm.applyFilters = function (filterData) {
             var filters = filterData.filters;
-            var update = filterData.update;
             vm.geoFilters = filters;
             if (vm.circles && vm.polygons) {
                 for (var i = 0; i < vm.circles.length; i++) {
@@ -432,8 +431,17 @@
                 }
                 if (filters.lowBattery) {
                     // do some code to add low battery
+                    for (var idx in vm.inMarkers) {
+                        var marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55 || marker.carbattery < 9.5) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        }
+                    }
                 } else {
                     // do some code to remove low battery
+                    for (var idx in vm.inMarkers) {
+                        vm.inMarkers[idx].options.animation = null;
+                    }
                 }
             }
         };
@@ -866,8 +874,8 @@
             $scope.finalSliderTime = (marker.trace.path[marker.trace.path.length - 1].gpstime -
                 marker.trace.path[0].gpstime ) / 1000;
 
-            $log.log(marker.trace.path[marker.trace.path.length - 1].gpstime);
-            $log.log("slider time = " + $scope.finalSliderTime);
+            // $log.log(marker.trace.path[marker.trace.path.length - 1].gpstime);
+            // $log.log("slider time = " + $scope.finalSliderTime);
 
         };
 
@@ -883,7 +891,7 @@
                 return;
 
             $scope.sliderTime = $scope.getSliderTime();
-            $log.log("jump slider to " + $scope.sliderTime);
+            // $log.log("jump slider to " + $scope.sliderTime);
 
             $scope.slider = Math.floor($scope.slider);
 
