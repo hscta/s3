@@ -15,9 +15,6 @@
         vm.polygons = [];
         vm.fences = {circles: vm.circles, polygons: vm.polygons};
 
-        vm.circleClickListener = null;
-        vm.polygonClickListener = null;
-
         vm.getToolbarVar = function () {
             return vm.toolbar;
         };
@@ -58,6 +55,7 @@
 
 
         vm.createFenceObjects = function (fence) {
+            fence.tagdata = JSON.parse(fence.tagdata);
             for (var idx in fence.info) {
                 var infoitem = fence.info[idx];
                 infoitem.settingsdata = JSON.parse(infoitem.settingsdata);
@@ -100,10 +98,7 @@
                 editable: false, // optional: defaults to false
                 draggable: false, // optional: defaults to false
                 geodesic: false, // optional: defaults to false
-                control: {},
-                events: {
-                    click: vm.listeners['circleClickListener'][0]
-                }
+                control: {}
             }
         };
 
@@ -123,10 +118,7 @@
                 editable: false,
                 draggable: false,
                 geodesic: false,
-                control: {},
-                events: {
-                    click: vm.listeners['polygonClickListener'][0]
-                }
+                control: {}
             }
         };
 

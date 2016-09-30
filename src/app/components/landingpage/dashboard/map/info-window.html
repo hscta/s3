@@ -1,4 +1,4 @@
-<div layout="column" >
+<div layout="column" ng-show="parameter.windowType=='Marker'">
     <div class="info-w-header">
     </div>
     <md-table-container style="min-width:300px; min-height: 110px; max-width:300px; position: relative; overflow: hidden; max-height:110px;">
@@ -50,4 +50,20 @@
             History
         </md-button>
     </div>
+</div>
+
+
+<div layout="column" ng-show="parameter.windowType=='Circle'">
+    <div class="info-w-header">
+    </div>
+    <md-table-container style="min-width:300px; min-height: 110px; max-width:300px; position: relative; overflow: hidden; max-height:110px;">
+        <table md-table md-row-select multiple class="trPadding" >
+            <tbody md-body>
+            <tr md-row md-select-id="carnumber" class="infoWHead"   md-auto-select>
+                <td md-cell><strong>Car Number</strong></td>
+            </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+
 </div>
