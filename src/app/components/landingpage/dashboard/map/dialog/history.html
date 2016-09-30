@@ -118,10 +118,33 @@
     <!--</div>-->
 <!--</script>-->
 
+
+<div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
+    <div class="ltb_item" ng-repeat="item in vm.leftTB"
+         ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
+        <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
+             ng-if="item.type == 'button' || item.type == 'toggleButton'"
+             ng-class="{'active':item.data.active && item.type == 'toggleButton' }">
+            <div class="ltbi_icon">
+                <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
+                <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
+            </div>
+            <div class="ltbi_name">
+                {{item.name}}
+                <span>{{item.description}}</span>
+            </div>
+        </div>
+        <div class="ltbi_cont" ng-if="item.content" ng-if="item.type == 'button' || item.type == 'toggleButton' ">
+            <md-input-container class="md-input-cont">
+                <label>Color</label>
+                <input type="text" ng-model="color">
+            </md-input-container>
+        </div>
+    </div>
+</div>
+
 <div style="height: 100%;">
-
             <span class="error-msg">{{errorMsg}}</span><br/>
-
             <div layout="row" layout-align="space-around center">
                 <div layout="row" class="input-fields" layout-align="space-around center" flex>
 
