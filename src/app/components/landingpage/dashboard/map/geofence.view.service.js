@@ -217,9 +217,7 @@
                 return vm.geoData[key];
 
             return null;
-        }
-
-
+        };
 
 
 

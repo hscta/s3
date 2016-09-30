@@ -18,6 +18,13 @@
             return geofenceViewService.getToolbarVar();
         };
 
+        vm.toggleBar = function () {
+            if (vm.leftToolbar()) {
+                geofenceViewService.hide();
+            } else {
+                geofenceViewService.show();
+            }
+        };
         vm.leftTB = [
             {
                 'id': 'geoReport',
