@@ -32,21 +32,6 @@
 
                     var gfmap = vm.inMap.mapControl.getGMap();
 
-                    // $scope.map = {
-                    //     "center": {
-                    //         "latitude": place[0].geometry.location.lat(),
-                    //         "longitude": place[0].geometry.location.lng()
-                    //     },
-                    //     "zoom": 18
-                    // };
-                    // $scope.marker = {
-                    //     id: 0,
-                    //     coords: {
-                    //         latitude: place[0].geometry.location.lat(),
-                    //         longitude: place[0].geometry.location.lng()
-                    //     }
-                    // };
-
                     if (!place[0].geometry) {
                         window.alert("Autocomplete's returned place contains no geometry");
                         return;
@@ -115,7 +100,7 @@
 
 
         function checkZoomLevel(min, max) {
-            if (vm.zoomMapZoom <= max && vm.zoomMapZoom >= min) {
+            if (vm.zoomMapZoom >= min && vm.zoomMapZoom < max) {
                 return true;
             }
             return false;
@@ -145,33 +130,6 @@
             vm.inMap.zoom = mapService.getZoom();
             vm.inMap.center = mapService.getCenter();
             vm.inMap.bounds = mapService.getBounds();
-        };
-
-
-        vm.updateMarker = function (vehicleData) {
-            //$log.log(msg);
-            var isNewVehicle = true;
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (marker.id === vehicleData.id) {
-                    //vehicleData.options = vm.inMarkers[idx].options;
-                    vm.inMarkers[idx] = vehicleData;
-                    vm.inMarkers[idx].options = {visible: false};
-                    isNewVehicle = false;
-                    break;
-                }
-            }
-
-            //$log.log(vehicleData);
-
-            if (isNewVehicle) {
-                vehicleData.options = {};
-                vehicleData.options.animation = google.maps.Animation.BOUNCE;
-                vm.inMarkers.push(vehicleData);
-                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
-            }
-
-            vm.runFilters(vm.filterStr);
         };
 
 
@@ -227,16 +185,16 @@
         };
 
 
-        vm.matchesAnyMarkerData = function (marker, searchStr) {
+        vm.matchesAnyMarkerData = function (marker, filterStr) {
             for (var eachidx in marker) {
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
-                var lowercaseSearchStr = searchStr.toString().toLowerCase();
+                var lowercasefilterStr = filterStr.toString().toLowerCase();
                 var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
-                //$log.log(lowercaseSearchStr + " = " + lowercaseMarkerStr);
-                if (lowercaseMarkerStr.includes(lowercaseSearchStr)) {
+                //$log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
+                if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
                     return true;
                 }
             }
@@ -276,6 +234,34 @@
         };
 
 
+        vm.updateMarker = function (vehicleData) {
+            //$log.log(msg);
+            var isNewVehicle = true;
+            var idx = 0;
+            for (idx in vm.inMarkers) {
+                var marker = vm.inMarkers[idx];
+                if (marker.id === vehicleData.id) {
+                    vehicleData.options = vm.inMarkers[idx].options;
+                    vm.inMarkers[idx] = vehicleData;
+                    isNewVehicle = false;
+                    break;
+                }
+            }
+
+            //$log.log(vehicleData);
+
+            if (isNewVehicle) {
+                idx = vm.inMarkers.length;
+                vehicleData.options = {};
+                //vehicleData.options.animation = google.maps.Animation.BOUNCE;
+                vm.inMarkers.push(vehicleData);
+                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
+            }
+
+            vm.applyFilterToMarker(vehicleData, vm.filterStr);
+        };
+
+
         vm.runFilters = function (filterStr) {
             //$log.log("runFilters");
 
@@ -284,30 +270,25 @@
 
             vm.filterStr = filterStr;
 
-
-            var filtered = 0;
-            var matchedIdx = 0;
+            //$log.log("applying filters in loop");
             for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (!vm.matchesAnyMarkerData(marker, filterStr)) {
-                    //$log.log(marker);
-                    marker.options.visible = false;
+                vm.applyFilterToMarker(vm.inMarkers[idx], filterStr);
+            }
+        };
 
-                } else {
-                    marker.options.visible = true;
-                    filtered++;
-                    matchedIdx = idx;
-                }
 
-                marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
+        vm.applyFilterToMarker = function (marker, filterStr) {
+            //$log.log("applying filter to marker");
+            if (!vm.matchesAnyMarkerData(marker, filterStr)) {
+                marker.options.visible = false;
+
+            } else {
+                marker.options.visible = true;
             }
 
-            // if at least one marker matched the filter string
-            if (matchedIdx) {
-                // vm.inMap.center = vm.getMarkerCenter(vm.inMarkers[matchedIdx]);
-            }
+            marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
 
-            // $log.log("Filtered vehicles = " + filtered);
+            return marker.options.visible;
         };
 
 
@@ -528,7 +509,7 @@
         };
 
 
-        vm.polygonClickListener = function(polygon, eventName, model, args){
+        vm.polygonClickListener = function (polygon, eventName, model, args) {
             $log.log('polygon clicked');
             $log.log(model);
             $log.log(polygon);
@@ -537,7 +518,7 @@
         };
 
 
-        vm.circleClickListener = function(circle, eventName, model, args) {
+        vm.circleClickListener = function (circle, eventName, model, args) {
             $log.log('circle clicked');
             $log.log(model);
             $log.log(circle);
