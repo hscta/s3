@@ -909,6 +909,7 @@
                 $scope.endMarker.options.label = 'E';
                 $scope.endMarker.longitude = lastBeacon.longitude;
                 $scope.endMarker.options.icon = 'assets/images/markers/big/red.png';
+                $scope.endMarker.options.title = 'End point';
 
 
                 // $scope.historyInfoWindow.coords = $scope.endMarker;
