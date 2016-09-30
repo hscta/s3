@@ -370,6 +370,7 @@ md-toolbar{border-bottom:1px solid #CCC;}
             font-size: 120%;
             box-sizing: border-box;
             padding: 4px;
+            position: relative;
             i{
                 display: block;
                 width: 100%;
@@ -379,6 +380,13 @@ md-toolbar{border-bottom:1px solid #CCC;}
                 @include border-radius(4px);
                 color:#fff;
                 float:none;
+            }
+            img{
+                width: 86%;
+                height: auto;
+                margin: 7%;
+                position:relative;
+                z-index: 10;
             }
         }
         .ltbi_name{

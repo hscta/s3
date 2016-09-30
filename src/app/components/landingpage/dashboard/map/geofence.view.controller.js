@@ -83,10 +83,18 @@
             },
             {'type': 'line'},
             {
-                'id': 'lowBattery',
-                'name': 'lowBattery', 'iconType': 'fa', 'icon': 'fa-battery-quarter', 'type': 'toggleButton', 'data': {
+                'id': 'devBattery',
+                'name': 'Low Device Battery', 'iconType': 'fa', 'icon': 'fa-battery-quarter', 'type': 'toggleButton', 'data': {
                 'type': 'function', 'independent':true,'function': function (active) {
-                    vm.checkGeoFilters.set('lowBattery', active);
+                    vm.checkGeoFilters.set('devBattery', active);
+                }
+            }
+            },
+            {
+                'id': 'carBattery',
+                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png', 'type': 'toggleButton', 'data': {
+                'type': 'function', 'independent':true,'function': function (active) {
+                    vm.checkGeoFilters.set('carBattery', active);
                 }
             }
             }

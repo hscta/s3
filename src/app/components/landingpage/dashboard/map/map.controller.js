@@ -385,7 +385,8 @@
         vm.geoFilters = {
             showAll: true,
             parkingLot: true,
-            lowBattery: false,
+            carBattery: false,
+            devBattery: false,
             serviceStation: true,
             competitorHub: true,
             cityLimits: false,
@@ -429,18 +430,40 @@
                         vm.polygons[i].visible = false;
                     }
                 }
-                if (filters.lowBattery) {
+                if (filters.carBattery) {
                     // do some code to add low battery
                     for (var idx in vm.inMarkers) {
                         var marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55 || marker.carbattery < 9.5) {
+                        if ( marker.carbattery < 9.5) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
                 } else {
                     // do some code to remove low battery
                     for (var idx in vm.inMarkers) {
-                        vm.inMarkers[idx].options.animation = null;
+                        var marker = vm.inMarkers[idx];
+                        if (  marker.carbattery < 9.5) {
+                            marker.options.animation = null;
+                        }
+                    }
+                }
+
+
+                if (filters.devBattery) {
+                    // do some code to add low battery
+                    for (var idx in vm.inMarkers) {
+                        var marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55 ) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        }
+                    }
+                } else {
+                    // do some code to remove low battery
+                    for (var idx in vm.inMarkers) {
+                        var marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55 ) {
+                            marker.options.animation = null;
+                        }
                     }
                 }
             }
