@@ -131,6 +131,8 @@
                     showHistory: vm.showHistory
                 };
 
+                $log.log(vm.clickedMarkerObj);
+
                 vm.infoWindowShow();
             }
         };
@@ -548,7 +550,8 @@
             }
         }
 
-        function getType(str) {
+        function getType(tagdata) {
+            var str = tagdata.olafilter;
             if (str.match(/parking/g) && str.match(/parking/g).length > 0) {
                 return 'parking';
             } else if (str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
@@ -560,7 +563,8 @@
             }
         }
 
-        function checkFilterString(filter, str) {
+        function checkFilterString(filter, tagdata) {
+            var str = tagdata.olafilter;
             if (filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||
                 filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0 ||
                 filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0 ||

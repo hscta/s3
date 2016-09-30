@@ -190,9 +190,9 @@
             <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
                             control="vm.infoWindow.control" optimized="false"
                             options="vm.infoWindow.options" closeClick="vm.infoWindowClose()"
-                            templateUrl="vm.infoWindowTemplate"
+                            templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
                             templateParameter="vm.clickedMarkerObj"
-                            isIconVisibleOnClick="true" ng-show="vm.infoWindowType=='marker'">
+                            isIconVisibleOnClick="true">
             </ui-gmap-window>
 
             <ui-gmap-window show="vm.fenceInfoWindow.show" coords="vm.fenceObj"
