@@ -589,8 +589,8 @@
             for (i = 0; i < polygon.length; i++) {
                 bound.extend( new google.maps.LatLng( polygon[i].latitude, polygon[i].longitude) );
             }
-            $log.log(bound.getCenter().lat());
-            $log.log(bound.getCenter().lng());
+            // $log.log(bound.getCenter().lat());
+            // $log.log(bound.getCenter().lng());
             return bound.getCenter();
         };
 
