@@ -572,7 +572,7 @@
 
         vm.circleEvents = {
             click: function (circle, eventName, model, args) {
-                // $log.log('Circle clicked');
+                $log.log('Circle clicked');
 
                 vm.fenceObj = {
                     'latitude': model.center.latitude,
@@ -590,7 +590,7 @@
 
         vm.polygonEvents = {
             click : function(polygon, eventName, model, args){
-                // $log.log('polygon clicked');
+                $log.log('polygon clicked');
 
                 var polygonCenter = vm.getPolygonMidPoint(model.path);
 
@@ -598,8 +598,6 @@
                     'latitude': polygonCenter.lat(),
                     'longitude': polygonCenter.lng(),
                 };
-
-                $log.log("polygon click");
 
                 vm.fenceDetails = {
                     name: model.control.info.name,
