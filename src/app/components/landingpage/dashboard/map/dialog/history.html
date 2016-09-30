@@ -225,7 +225,7 @@
                                         visible="gcircle.visible" geodesic="gcircle.geodesic"
                                         editable="gcircle.editable" draggable="gcircle.draggable"
                                         clickable="gcircle.clickable" control="gcircle.control"
-                                        events="gcircle.events">
+                                        events="historyCircleEvents">
                         </ui-gmap-circle>
 
                         <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
@@ -234,7 +234,7 @@
                                          visible="gpolygon.visible" geodesic="gpolygon.geodesic"
                                          editable="gpolygon.editable" draggable="gpolygon.draggable"
                                          clickable="gpolygon.clickable" control="gpolygon.control"
-                                         events="gpolygon.events" static="true">
+                                         events="historyPolygonEvents" static="true">
 
                         </ui-gmap-polygon>
 
@@ -245,6 +245,25 @@
                                         <!--templateParameter="historyInfoWindow"-->
                                         <!--isIconVisibleOnClick="true">-->
                         <!--</ui-gmap-window>-->
+
+                        <ui-gmap-window show="historyFenceInfoWindow.show" coords="fenceObj"
+                                        control="historyFenceInfoWindow.control" optimized="false"
+                                        options="historyFenceInfoWindow.options" closeClick="historyFenceInfoWindowClose()"
+                                        isIconVisibleOnClick="true">
+
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <th>Name: </th>
+                                    <td>{{fenceDetails.name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Type:   </th>
+                                    <td>{{fenceDetails.other.olafilter}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </ui-gmap-window>
 
                     </ui-gmap-google-map>
         </div>
