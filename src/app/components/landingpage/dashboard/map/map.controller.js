@@ -761,8 +761,7 @@
             vm.fences = geofenceViewService.getToDrawFences();
             vm.circles = vm.fences.circles;
             vm.polygons = vm.fences.polygons;
-            //$log.log("In map.controller");
-            $log.log(vm.fences);
+            //$log.log(vm.fences);
         };
 
 
