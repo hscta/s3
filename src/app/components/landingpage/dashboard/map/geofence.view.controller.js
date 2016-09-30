@@ -45,7 +45,7 @@
                 'id': 'showAll',
                 'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'data': {
                 'type': 'function', 'function': function (active) {
-                    vm.checkGeoFilters.all();
+                    vm.checkGeoFilters.all('showAll');
                 }
             }
             },
@@ -117,7 +117,7 @@
         };
 
         vm.checkGeoFilters = {
-            all: function () {
+            all: function (showAll) {
                 var allActive = true;
                 if (vm.filters.showAll) {
                     allActive = false;
@@ -126,7 +126,7 @@
                 setActive('competitorHub', allActive);
                 setActive('serviceStation', allActive);
                 setActive('parkingLot', allActive);
-                setFilter();
+                setFilter(showAll);
             },
             check: function () {
                 if (vm.filters.parkingLot && vm.filters.serviceStation && vm.filters.competitorHub) {
@@ -138,7 +138,7 @@
             set: function (id, active) {
                 setActive(id, active);
                 vm.checkGeoFilters.check();
-                setFilter();
+                setFilter(id);
             }
         };
 
@@ -157,7 +157,7 @@
             vm.filters[filter] = active;
         }
 
-        function  setFilter() {
+        function  setFilter(filterType) {
             // for (var key in vm.filters) {
             //     if (vm.filters.hasOwnProperty(key)) {
             //         if ((vm.filters[key] && !vm.oldFilters[key]) || (!vm.filters[key] && vm.oldFilters[key])) {
@@ -167,7 +167,7 @@
             //         }
             //     }
             // }
-            geofenceViewService.applyFilters(vm.filters,{});
+            geofenceViewService.applyFilters(vm.filters, {}, filterType);
             // vm.oldFilters = angular.copy(vm.filters);
         }
 
