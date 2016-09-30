@@ -154,8 +154,8 @@
             return data;
         };
 
-        vm.applyFilters = function (filters) {
-            vm.callListeners('applyFilters', filters);
+        vm.applyFilters = function (filters,update) {
+            vm.callListeners('applyFilters', {'filters':filters, 'update':update});
         };
 
 

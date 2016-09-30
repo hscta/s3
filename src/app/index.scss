@@ -23,10 +23,22 @@
     font-family: 'font awesome';
     font-style: normal;
     font-weight: 400;
-    src: url(../../bower_components/font-awesome/fontawesome-webfont.ttf); /* For IE6-8 */
-    src: url(../../bower_components/font-awesome/fontawesome-webfont.woff),
-    url(../../bower_components/font-awesome/fontawesome-webfont.ttf)
+    src: url(../../bower_components/font-awesome/fonts/fontawesome-webfont.ttf); /* For IE6-8 */
+    src: url(../../bower_components/font-awesome/fonts/fontawesome-webfont.woff),
+    url(../../bower_components/font-awesome/fonts/fontawesome-webfont.ttf)
 
+}
+
+@font-face {
+    font-family: 'gotham';
+    src: url(../assets/fonts/gotham/Gotham-Book.otf);
+}
+
+body{
+    font-family: gotham!important;
+}
+[ng-click]{
+    outline:none!important;
 }
 
 
@@ -376,6 +388,11 @@ md-toolbar{border-bottom:1px solid #CCC;}
             padding: 0;
             white-space: nowrap;
             @include border-radius(0 5px 5px 0px);
+            span{
+                font-size: 70%;
+                margin-top: -28px;
+                opacity: 0.7;
+            }
         }
     }
     .ltbi_cont{

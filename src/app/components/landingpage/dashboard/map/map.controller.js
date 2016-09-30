@@ -416,13 +416,15 @@
             vm.circles = fences.circles;
             $log.log(vm.circles);
             vm.polygons = fences.polygons;
-            vm.applyFilters(vm.geoFilters);
+            vm.applyFilters({filters:vm.geoFilters,updates: vm.geoFilters});
             geofenceViewService.setData('geofences', true);
             $log.log(fences);
         };
 
 
-        vm.applyFilters = function (filters) {
+        vm.applyFilters = function (filterData) {
+            var filters = filterData.filters;
+            var update = filterData.update;
             vm.geoFilters = filters;
             if (vm.circles && vm.polygons) {
                 for (var i = 0; i < vm.circles.length; i++) {

@@ -153,7 +153,10 @@
                     <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                     <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
                 </div>
-                <div class="ltbi_name">{{item.name}}</div>
+                <div class="ltbi_name">
+                    {{item.name}}
+                    <span>{{item.description}}</span>
+                </div>
             </div>
             <div class="ltbi_cont" ng-if="item.content" ng-if="item.type == 'button' || item.type == 'toggleButton' ">
                 <md-input-container class="md-input-cont">
