@@ -28,55 +28,55 @@
         vm.leftTB = [
             {
                 'id': 'geoReport',
-                'name': 'Geofences Reports', 'iconType': 'fa', 'icon': 'fa-bar-chart', 'type': 'button', 'data': {
-                'type': 'stateChange','independent':true, 'state': 'home.geofence'
+                'name': 'Geofences Reports', 'iconType': 'fa', 'icon': 'fa-bar-chart', 'type': 'button', 'historymap': true,
+                'data': {'type': 'stateChange','independent':true, 'state': 'home.geofence'
             }
             },
             {'type': 'line'},
             {
                 'id': 'getGeo', 'description':'Use only when new fences are created',
-                'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'data': {
-                'type': 'function', 'function': function () {
+                'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'historymap': true,
+                'data': {'type': 'function', 'function': function () {
                     geofenceViewService.getMyFences();
                 }
             }
             },
             {
                 'id': 'showAll',
-                'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
+                'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'historymap': true,
+                'data': {'type': 'function', 'function': function (active) {
                     vm.checkGeoFilters.all('showAll');
                 }
             }
             },
             {
                 'id': 'parkingLot',
-                'name': 'Parking Lot', 'iconType': 'md', 'icon': 'local_parking', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
+                'name': 'Parking Lot', 'iconType': 'md', 'icon': 'local_parking', 'type': 'toggleButton', 'historymap': true,
+                'data': {'type': 'function', 'function': function (active) {
                     vm.checkGeoFilters.set('parkingLot', active);
                 }
             }
             },
             {
                 'id': 'serviceStation',
-                'name': 'Service Station', 'iconType': 'fa', 'icon': 'fa-wrench', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
+                'name': 'Service Station', 'iconType': 'fa', 'icon': 'fa-wrench', 'type': 'toggleButton', 'historymap': true,
+                'data': {'type': 'function', 'function': function (active) {
                     vm.checkGeoFilters.set('serviceStation', active);
                 }
             }
             },
             {
                 'id': 'competitorHub',
-                'name': 'Competitor Hub', 'iconType': 'fa', 'icon': 'fa-ban', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
+                'name': 'Competitor Hub', 'iconType': 'fa', 'icon': 'fa-ban', 'type': 'toggleButton', 'historymap': true,
+                'data': {'type': 'function', 'function': function (active) {
                     vm.checkGeoFilters.set('competitorHub', active);
                 }
             }
             },
             {
                 'id': 'cityLimits',
-                'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
+                'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'historymap': true,
+                'data': {'type': 'function', 'function': function (active) {
                     vm.checkGeoFilters.set('cityLimits', active);
                 }
             }
@@ -84,16 +84,17 @@
             {'type': 'line'},
             {
                 'id': 'devBattery',
-                'name': 'Low Device Battery', 'iconType': 'fa', 'icon': 'fa-battery-quarter', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'independent':true,'function': function (active) {
+                'name': 'Low Device Battery', 'iconType': 'fa', 'icon': 'fa-battery-quarter', 'type': 'toggleButton', 'historymap': false,
+                'data': { 'type': 'function', 'independent':true,'function': function (active) {
                     vm.checkGeoFilters.set('devBattery', active);
                 }
             }
             },
             {
                 'id': 'carBattery',
-                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'independent':true,'function': function (active) {
+                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',
+                'type': 'toggleButton',  'historymap': false,
+                'data': {'type': 'function', 'independent':true,'function': function (active) {
                     vm.checkGeoFilters.set('carBattery', active);
                 }
             }
