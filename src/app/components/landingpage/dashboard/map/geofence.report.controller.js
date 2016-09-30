@@ -100,7 +100,7 @@
         vm.setReport = function (rep) {
             vm.currRep = rep;
             vm.currFence = vm.currRep.fences[0];
-        }
+        };
 
         vm.tableSort = {'id': 1, 'str': 'name', 'reverse': false};
 

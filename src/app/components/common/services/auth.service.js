@@ -8,7 +8,7 @@
 
     angular
         .module('uiplatform')
-        .constant('API_HOST', 'http://in3.intellicar.in:10104')
+        .constant('API_HOST', 'http://in2.intellicar.in:10104')
         //.constant('API_HOST', 'http://in2.intellicar.in:10104')
         .constant('TOKEN_KEY', 'JWT_TOKEN_KEY')
         .service('authService', authService)
