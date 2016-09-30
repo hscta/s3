@@ -162,8 +162,8 @@
             return vm.fences;
         };
 
-        vm.applyFilters = function (filters,update) {
-            vm.callListeners('applyFilters', {'filters':filters, 'update':update});
+        vm.applyFilters = function (filters, update, filterType) {
+            vm.callListeners('applyFilters', {'filters': filters, 'update': update, 'filterType': filterType});
         };
 
 

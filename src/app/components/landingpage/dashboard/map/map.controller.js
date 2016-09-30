@@ -389,80 +389,86 @@
             devBattery: false,
             serviceStation: true,
             competitorHub: true,
-            cityLimits: false,
+            cityLimits: false
         };
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
 
         vm.getMyFencesListener = function (fences) {
             vm.circles = fences.circles;
-            $log.log(vm.circles);
+            //$log.log(vm.circles);
             vm.polygons = fences.polygons;
-            vm.applyFilters({filters: vm.geoFilters});
+            vm.applyFilters({filters: vm.geoFilters, filterType: vm.filterType});
             geofenceViewService.setData('geofences', true);
-            $log.log(fences);
+            //$log.log(fences);
         };
 
 
         vm.applyFilters = function (filterData) {
             var filters = filterData.filters;
             vm.geoFilters = filters;
-            if (vm.circles && vm.polygons) {
-                for (var i = 0; i < vm.circles.length; i++) {
-                    var filterStr = vm.circles[i].info.tagdata;
-                    if (checkFilterString(filters, filterStr)) {
-                        vm.circles[i].visible = true;
-                        vm.circles[i].stroke.weight = getStroke(filterStr);
-                        vm.circles[i].stroke.color = getColor(filterStr);
-                        startAnimation(vm.circles[i]);
-                    } else {
-                        vm.circles[i].visible = false;
-                    }
-                }
-                for (var i = 0; i < vm.polygons.length; i++) {
-                    var filterStr = vm.polygons[i].info.tagdata;
-                    if (checkFilterString(filters, filterStr)) {
-                        vm.polygons[i].visible = true;
-                        vm.polygons[i].stroke.weight = getStroke(filterStr);
-                        vm.polygons[i].stroke.color = getColor(filterStr);
-                        startAnimation(vm.polygons[i]);
-                    } else {
-                        vm.polygons[i].visible = false;
-                    }
-                }
+            vm.filterType = filterData.filterType;
+            var idx;
+            var marker;
+
+            if (vm.filterType == 'carBattery') {
                 if (filters.carBattery) {
                     // do some code to add low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if ( marker.carbattery < 9.5) {
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.carbattery < 9.5) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
                 } else {
                     // do some code to remove low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if (  marker.carbattery < 9.5) {
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.carbattery < 9.5) {
                             marker.options.animation = null;
                         }
                     }
                 }
-
-
+            } else if (vm.filterType == 'devBattery') {
                 if (filters.devBattery) {
                     // do some code to add low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55 ) {
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
                 } else {
                     // do some code to remove low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55 ) {
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55) {
                             marker.options.animation = null;
+                        }
+                    }
+                }
+            } else {
+                if (vm.circles && vm.polygons) {
+                    for (idx = 0; idx < vm.circles.length; idx++) {
+                        var filterStr = vm.circles[idx].info.tagdata;
+                        if (checkFilterString(filters, filterStr)) {
+                            vm.circles[idx].visible = true;
+                            vm.circles[idx].stroke.weight = getStroke(filterStr);
+                            vm.circles[idx].stroke.color = getColor(filterStr);
+                            startAnimation(vm.circles[idx]);
+                        } else {
+                            vm.circles[idx].visible = false;
+                        }
+                    }
+                    for (idx = 0; idx < vm.polygons.length; idx++) {
+                        filterStr = vm.polygons[idx].info.tagdata;
+                        if (checkFilterString(filters, filterStr)) {
+                            vm.polygons[idx].visible = true;
+                            vm.polygons[idx].stroke.weight = getStroke(filterStr);
+                            vm.polygons[idx].stroke.color = getColor(filterStr);
+                            startAnimation(vm.polygons[idx]);
+                        } else {
+                            vm.polygons[idx].visible = false;
                         }
                     }
                 }
@@ -513,7 +519,7 @@
                     else
                         obj.stroke.weight = MIN_STROKE;
 
-                }, 500, 6);
+                }, 500, 4);
             }
         }
 
@@ -541,20 +547,10 @@
 
 
         vm.polygonClickListener = function (polygon, eventName, model, args) {
-            $log.log('polygon clicked');
-            $log.log(model);
-            $log.log(polygon);
-            $log.log(args);
-            //vm.infoWindowShow();
         };
 
 
         vm.circleClickListener = function (circle, eventName, model, args) {
-            $log.log('circle clicked');
-            $log.log(model);
-            $log.log(circle);
-            $log.log(args);
-            //vm.infoWindowShow();
         };
 
 
