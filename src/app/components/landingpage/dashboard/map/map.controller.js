@@ -90,19 +90,6 @@
                 }
             }
         };
-        $scope.historyFenceInfoWindow = {
-            show: true,
-            control: {},
-            options: {
-                maxWidth: 300,
-                disableAutoPan: false,
-                pixelOffset: {
-                    width: 0,
-                    height: 0
-                }
-            }
-        };
-
 
         vm.mapEvents = {
             click: function () {
@@ -114,12 +101,6 @@
             }
         };
 
-
-        $scope.historyMapEvents = {
-            click: function () {
-                vm.historyFenceInfoWindowClose();
-            },
-        };
 
         var iconColor = 'orange';
         var zoomLevelIcon;
@@ -630,6 +611,21 @@
             }
         };
 
+
+        $scope.historyFenceInfoWindow = {
+            show: true,
+            control: {},
+            options: {
+                maxWidth: 300,
+                disableAutoPan: false,
+                pixelOffset: {
+                    width: 0,
+                    height: 0
+                }
+            }
+        };
+
+
         $scope.historyPolygonEvents = {
             click : function(polygon, eventName, model, args){
                 $log.log('polygon clicked');
@@ -656,7 +652,7 @@
 
                 $scope.fenceObj = {
                     'latitude': model.center.latitude,
-                    'longitude': model.center.longitude,
+                    'longitude': model.center.longitude
                 };
 
                 $scope.fenceDetails = {
@@ -667,6 +663,14 @@
                 vm.historyFenceInfoWindowShow();
             }
         };
+
+
+        $scope.historyMapEvents = {
+            click: function () {
+                vm.historyFenceInfoWindowClose();
+            }
+        };
+
 
         vm.historyFenceInfoWindowClose = function () {
             //vm.infoWindow.control.hideWindow();
@@ -728,7 +732,6 @@
             mapControl: {}
         };
 
-
         var initialZoom = mapService.getZoom();
 
         $scope.inMarkers = angular.copy(historyService.getData('inMarkers'));
@@ -761,7 +764,7 @@
 
         $scope.historyInfoWindow = {
             show: false,
-            coords: $scope.clickedMarker,
+            coords: $scope.endMarker,
             control: {},
             options: {
                 //maxWidth: 300,
@@ -774,9 +777,21 @@
             data: {}
         };
 
+        $scope.endMarker = {
+            options: {},
+            events: {
+                // click: function (marker, eventName, model, args) {
+                //     $scope.historyInfoWindow.show = true;
+                // }
+            },
+            // click: function (marker, eventName, model, args) {
+            //     $scope.historyInfoWindow.show = true;
+            // }
+        };
+
+
         historyService.setData('historyMap', $scope.historyMap);
         historyService.setData('historyInfoWindow', $scope.historyInfoWindow);
-
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -855,6 +870,7 @@
             //$log.log(resp);
 
             $scope.trace.path = [];
+            var path = $scope.trace.path;
 
             for (var idx in resp.data.data) {
                 var position = resp.data.data[idx];
@@ -881,17 +897,26 @@
                 historyService.setData('getHistory', true);
                 $scope.clickedMarker.latitude = $scope.trace.path[0].latitude;
                 $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
+                $scope.clickedMarker.options.icon = 'assets/images/markers/big/red-dot.png';
 
 
                 var midPoint = Math.floor($scope.trace.path.length / 2);
                 $scope.historyMap.center = $scope.trace.path[midPoint];
                 $scope.historyMap.zoom = 11;
 
-                // $scope.historyInfoWindow.coords = $scope.clickedMarker;
-                // $scope.historyInfoWindow.data.gpstime = new Date($scope.trace.path[0].gpstime);
-                // $scope.historyInfoWindow.data.odometer = $scope.trace.path[0].odometer;
-                // $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
-                // $scope.historyInfoWindow.show = true;
+                var lastBeacon = path[path.length - 1];
+                $scope.endMarker.latitude = lastBeacon.latitude;
+                $scope.endMarker.options.label = 'E';
+                $scope.endMarker.longitude = lastBeacon.longitude;
+                $scope.endMarker.options.icon = 'assets/images/markers/big/red.png';
+
+
+                // $scope.historyInfoWindow.coords = $scope.endMarker;
+                // $scope.historyInfoWindow.data.gpstime = new Date(lastBeacon.gpstime);
+                // $scope.historyInfoWindow.data.odometer = lastBeacon.odometer;
+                // $scope.historyInfoWindow.data.speed = lastBeacon.speed;
+                //$scope.historyInfoWindow.show = true;
+
                 $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
             } else {
                 $scope.errorMsg = "No Data Found";
@@ -1003,14 +1028,17 @@
                 animationCount++;
                 if (path.length - 1 < animationCount)
                     animationCount = path.length - 1;
+
             } else {
                 animationCount--;
                 if (animationCount <= 0)
                     animationCount = 0;
             }
 
-            initialTime = path[animationCount].gpstime;
+            $scope.slider = (path[animationCount].gpstime - path[0].gpstime) / 1000
             updateTracePoint(path[animationCount]);
+
+            initialTime = path[animationCount].gpstime;
         };
 
         $scope.setSliderTime = function () {
@@ -1133,8 +1161,7 @@
             animationCount = 0;
             $scope.ffrate = 1;
             stopPlay();
-            $scope.sliderPoint = 0;
-            //$scope.sliderPoint = 1;
+            $scope.slider = 0;
             if (marker && marker.trace.path.length > 0) {
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
