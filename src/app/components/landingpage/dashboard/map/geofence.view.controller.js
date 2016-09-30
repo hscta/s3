@@ -18,13 +18,6 @@
             return geofenceViewService.getToolbarVar();
         };
 
-        vm.toggleBar = function () {
-            if (vm.leftToolbar()) {
-                geofenceViewService.hide();
-            } else {
-                geofenceViewService.show();
-            }
-        };
         vm.leftTB = [
             {
                 'id': 'geoReport',
@@ -34,7 +27,7 @@
             },
             {'type': 'line'},
             {
-                'id': 'getGeo',
+                'id': 'getGeo', 'description':'Use only when new fences are created',
                 'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'data': {
                 'type': 'function', 'function': function () {
                     geofenceViewService.getMyFences();
@@ -99,6 +92,8 @@
 
         vm.init = function () {
             vm.filters = geofenceViewService.getData('geoFilters');
+            vm.oldFilters = angular.copy(vm.filters);
+            vm.updatedFilters = angular.copy(vm.filters);
             for (var key in vm.filters) {
                 if (vm.filters.hasOwnProperty(key) && vm.filters[key]) {
                     setActive(key, 'true');
@@ -116,7 +111,7 @@
                 setActive('competitorHub', allActive);
                 setActive('serviceStation', allActive);
                 setActive('parkingLot', allActive);
-                geofenceViewService.applyFilters(vm.filters);
+                setFilter();
             },
             check: function () {
                 if (vm.filters.parkingLot && vm.filters.serviceStation && vm.filters.competitorHub) {
@@ -128,7 +123,7 @@
             set: function (id, active) {
                 setActive(id, active);
                 vm.checkGeoFilters.check();
-                geofenceViewService.applyFilters(vm.filters);
+                setFilter();
             }
         };
 
@@ -137,14 +132,28 @@
                 if (vm.leftTB.hasOwnProperty(key)) {
                     if (vm.leftTB[key].id == id) {
                         vm.leftTB[key].data.active = active;
-                        setFilter(vm.leftTB[key].id, active);
+                        addFilter(vm.leftTB[key].id, active);
                     }
                 }
             }
         }
 
-        function setFilter(filter, active) {
+        function addFilter(filter, active) {
             vm.filters[filter] = active;
+        }
+
+        function  setFilter() {
+            for (var key in vm.filters) {
+                if (vm.filters.hasOwnProperty(key)) {
+                    if ((vm.filters[key] && !vm.oldFilters[key]) || (!vm.filters[key] && vm.oldFilters[key])) {
+                        vm.updatedFilters[key] = true;
+                    }else{
+                        vm.updatedFilters[key] = false;
+                    }
+                }
+            }
+            geofenceViewService.applyFilters(vm.filters,vm.updatedFilters);
+            vm.oldFilters = angular.copy(vm.filters);
         }
 
 
