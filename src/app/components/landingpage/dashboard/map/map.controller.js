@@ -131,8 +131,6 @@
                     showHistory: vm.showHistory
                 };
 
-                $log.log(vm.clickedMarkerObj);
-
                 vm.infoWindowShow();
             }
         };
@@ -785,8 +783,7 @@
 
 
         $scope.drawTrace = function (resp) {
-
-            $log.log(resp);
+            //$log.log(resp);
 
             $scope.trace.path = [];
 
@@ -922,8 +919,6 @@
         var initialTime;
         var tracePoint;
         var animationCount = 0;
-
-        $log.log(marker);
 
         $scope.play = true;
         $scope.ffrate = 1;
@@ -1116,13 +1111,10 @@
 
         $scope.gotHistoryEvent = function () {
             $scope.setSliderTime();
-            if (marker)
-                $log.log(marker);
             var initialPoint = marker.trace.path[0];
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;
             $scope.tracePointSpeed = initialPoint.speed;
-
         };
 
         $scope.$on('gotHistoryEvent', function (event, data) {
