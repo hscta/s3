@@ -540,7 +540,7 @@
             vm.loadMap();
             historyService.setData('inMarkers', vm.inMarkers);
             vm.addListener();
-            geofenceViewService.getMyFences();
+            // geofenceViewService.getMyFences();
         };
 
         vm.init();

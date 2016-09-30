@@ -148,7 +148,7 @@
              ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
             <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
                  ng-if="item.type == 'button' || item.type == 'toggleButton'"
-                 ng-class="{'active':item.data.active && item.type == 'toggleButton' }">
+                 ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent }">
                 <div class="ltbi_icon">
                     <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                     <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>

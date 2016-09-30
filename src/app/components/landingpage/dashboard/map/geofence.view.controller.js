@@ -29,7 +29,7 @@
             {
                 'id': 'geoReport',
                 'name': 'Geofences Reports', 'iconType': 'fa', 'icon': 'fa-bar-chart', 'type': 'button', 'data': {
-                'type': 'stateChange', 'state': 'home.geofence'
+                'type': 'stateChange','independent':true, 'state': 'home.geofence'
             }
             },
             {'type': 'line'},
@@ -85,7 +85,7 @@
             {
                 'id': 'lowBattery',
                 'name': 'lowBattery', 'iconType': 'fa', 'icon': 'fa-battery-quarter', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
+                'type': 'function', 'independent':true,'function': function (active) {
                     vm.checkGeoFilters.set('lowBattery', active);
                 }
             }
@@ -150,17 +150,17 @@
         }
 
         function  setFilter() {
-            for (var key in vm.filters) {
-                if (vm.filters.hasOwnProperty(key)) {
-                    if ((vm.filters[key] && !vm.oldFilters[key]) || (!vm.filters[key] && vm.oldFilters[key])) {
-                        vm.updatedFilters[key] = true;
-                    }else{
-                        vm.updatedFilters[key] = false;
-                    }
-                }
-            }
-            geofenceViewService.applyFilters(vm.filters,vm.updatedFilters);
-            vm.oldFilters = angular.copy(vm.filters);
+            // for (var key in vm.filters) {
+            //     if (vm.filters.hasOwnProperty(key)) {
+            //         if ((vm.filters[key] && !vm.oldFilters[key]) || (!vm.filters[key] && vm.oldFilters[key])) {
+            //             vm.updatedFilters[key] = true;
+            //         }else{
+            //             vm.updatedFilters[key] = false;
+            //         }
+            //     }
+            // }
+            geofenceViewService.applyFilters(vm.filters,{});
+            // vm.oldFilters = angular.copy(vm.filters);
         }
 
 
@@ -168,7 +168,7 @@
             if (data.type == 'stateChange') {
                 dialogService.show(data.state);
             } else if (data.type == 'function') {
-                if (vm.fencesActive()) {
+                if (vm.fencesActive() || data.independent) {
                     data.active = !data.active;
                     data.function(data.active);
                 }

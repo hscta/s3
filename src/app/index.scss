@@ -340,11 +340,21 @@ md-toolbar{border-bottom:1px solid #CCC;}
     width:100%;
     height:40px;
     position:relative;
-    opacity: 0.4;
     *{
         float:left;
     }
+    .ltbi_button.independ{
+         opacity: 1;
+    }
+    .ltbi_button.independ.active{
+        opacity:1;
+        i{
+            background-color: rgba(0,0,0,0.4);
+            color:$themeColor!important;
+        }
+    }
     .ltbi_button{
+        opacity: 0.4;
         width:100%;
         height:100%;
         position:relative;
@@ -414,8 +424,8 @@ md-toolbar{border-bottom:1px solid #CCC;}
     }
 }
 .ltb_item.active{
-    opacity:1;
     .ltbi_button.active{
+        opacity:1;
         i{
             background-color: rgba(0,0,0,0.4);
             color:$themeColor!important;
@@ -446,6 +456,24 @@ md-toolbar{border-bottom:1px solid #CCC;}
         }
     }
     .ltbi_cont{
+        left:90px;
+    }
+}
+.ltb_item:hover{
+    .ltbi_button.independ{
+        cursor:pointer;
+        color:#fff;
+        background-color: rgba(0,0,0,0.5);
+        i{
+            color:#fff;
+        }
+        .ltbi_name{
+            width:auto;
+            padding: 0 10px;
+            //@include transition(0.5s);
+        }
+    }
+    .ltbi_cont.independ{
         left:90px;
     }
 }

@@ -49,6 +49,9 @@
         isRendered('.angular-google-map-container', function (el) {
             el.css('height', (wh - header_height) + 'px');
         });
+        isRendered('.alert-md-content', function (el) {
+            el.css('height', (wh - header_height) + 'px');
+        });
     }
 
     $(window).ready(function () {
