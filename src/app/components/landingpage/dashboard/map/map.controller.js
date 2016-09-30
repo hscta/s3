@@ -512,7 +512,7 @@
         function getColor(str) {
             var type = getType(str);
             if (type == PARKING) {
-                return '#2ecc71';
+                return 'black';
             } else if (type == SERVICE_STATION) {
                 return '#f89406';
             } else if (type == COMPETITOR_HUB) {
