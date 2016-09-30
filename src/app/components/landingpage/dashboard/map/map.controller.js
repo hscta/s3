@@ -516,7 +516,7 @@
             } else if (type == SERVICE_STATION) {
                 return '#f89406';
             } else if (type == COMPETITOR_HUB) {
-                return '#d35400';
+                return 'red';
             } else if (type == CITY_LIMIT) {
                 return 'blue';
             }
