@@ -87,7 +87,8 @@
         function handleLoginFailure(resp) {
             $log.log(resp);
             $log.log("handleLoginFailure");
-            vm.message = resp.data.msg;
+            if(resp && resp.data && resp.msg)
+                vm.message = resp.data.msg;
         }
 
         vm.login = function () {
