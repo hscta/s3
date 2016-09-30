@@ -10,6 +10,11 @@
         vm.toolbar = true;
         vm.listeners = {};
 
+
+        vm.circles = [];
+        vm.polygons = [];
+        vm.fences = {circles: vm.circles, polygons: vm.polygons};
+
         vm.circleClickListener = null;
         vm.polygonClickListener = null;
 
@@ -47,9 +52,7 @@
             for (var idx in fenceList) {
                 var fence = fenceList[idx];
                 vm.createFenceObjects(fence);
-                //vm.fences[fence.assetpath] = fence;
             }
-            //$log.log(vm.fences);
             return vm.drawFences();
         };
 
@@ -165,7 +168,6 @@
 
 
         vm.fetchFences = function (fences) {
-            //vm.fences = {};
             vm.circles = [];
             vm.polygons = [];
 
