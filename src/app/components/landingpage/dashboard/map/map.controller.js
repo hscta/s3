@@ -113,6 +113,14 @@
                 vm.changeMarkerIcon();
             }
         };
+
+
+        $scope.historyMapEvents = {
+            click: function () {
+                vm.historyFenceInfoWindowClose();
+            },
+        };
+
         var iconColor = 'orange';
         var zoomLevelIcon;
         vm.changeMarkerIcon = function () {

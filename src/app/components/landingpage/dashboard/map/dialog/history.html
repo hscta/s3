@@ -187,7 +187,9 @@
             <md-dialog-content class="map-dialog-content">
                 <div class="md-dialog-content map-dialog history-dialog">
                     <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom'
-                                        options="historyMap.mapOptions" bounds="historyMap.bounds"
+                                        options="historyMap.mapOptions"
+                                        bounds="historyMap.bounds"
+                                        events="historyMapEvents"
                                         control="historyMap.mapControl">
 
                         <ui-gmap-map-control
