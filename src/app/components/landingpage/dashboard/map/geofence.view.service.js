@@ -47,7 +47,7 @@
             for (var idx in fenceList) {
                 var fence = fenceList[idx];
                 vm.createFenceObjects(fence);
-                vm.fences[fence.assetpath] = fence;
+                //vm.fences[fence.assetpath] = fence;
             }
             //$log.log(vm.fences);
             return vm.drawFences();
@@ -149,9 +149,14 @@
         vm.drawFences = function () {
             //$log.log(vm.circles);
             //$log.log(vm.polygons);
-            var data = {circles: vm.circles, polygons: vm.polygons};
-            vm.callListeners('getMyFences', data);
-            return data;
+            vm.fences = {circles: vm.circles, polygons: vm.polygons};
+            vm.callListeners('getMyFences', vm.fences);
+            return vm.fences;
+        };
+
+
+        vm.getToDrawFences = function () {
+            return vm.fences;
         };
 
         vm.applyFilters = function (filters,update) {
@@ -160,7 +165,7 @@
 
 
         vm.fetchFences = function (fences) {
-            vm.fences = {};
+            //vm.fences = {};
             vm.circles = [];
             vm.polygons = [];
 

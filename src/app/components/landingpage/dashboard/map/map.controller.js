@@ -573,31 +573,6 @@
 
         $scope.inMarkers = angular.copy(historyService.getData('inMarkers'));
 
-        vm.init = function () {
-            $scope.historyMap.zoom = initialZoom;
-            $scope.historyMap.center = mapService.getCenter();
-            if (params == null) {
-                $scope.clickedMarker = {};
-                if (angular.isDefined(selectedVehicle)) {
-                    $scope.deviceid = selectedVehicle.deviceid;
-                    $scope.vehicleNumber = selectedVehicle.vehicleNumber;
-                    vm.multiSelect = false;
-                } else {
-                    vm.multiSelect = true;
-                    $scope.deviceid = 'Select Vehicle';
-                    $scope.vehicleNumber = 'Select Vehicle';
-                }
-            } else {
-                $scope.clickedMarker = angular.copy(params.clickedMarker);
-                $scope.historyMap.center = $scope.clickedMarker;
-                $scope.deviceid = $scope.clickedMarker.deviceid;
-                $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
-                $scope.errorMsg = "";
-                console.log($scope.deviceid + ' <<<');
-            }
-            $scope.clickedMarker.trace = $scope.trace;
-        };
-
 
         $scope.onVehicleSelect = function () {
             console.log("onVehicleSelect");
@@ -782,18 +757,45 @@
         };
 
 
-        vm.getMyFencesListener = function (fences) {
-            vm.circles = fences.circles;
-            vm.polygons = fences.polygons;
+        vm.getMyFencesListener = function () {
+            vm.fences = geofenceViewService.getToDrawFences();
+            vm.circles = vm.fences.circles;
+            vm.polygons = vm.fences.polygons;
             //$log.log("In map.controller");
-            $log.log(fences);
+            $log.log(vm.fences);
         };
 
 
-        vm.init();
-        $interval($scope.resizeMap, 500);
-        historyService.setData('clickedMarker', $scope.clickedMarker);
+        vm.init = function () {
+            $scope.historyMap.zoom = initialZoom;
+            $scope.historyMap.center = mapService.getCenter();
+            if (params == null) {
+                $scope.clickedMarker = {};
+                if (angular.isDefined(selectedVehicle)) {
+                    $scope.deviceid = selectedVehicle.deviceid;
+                    $scope.vehicleNumber = selectedVehicle.vehicleNumber;
+                    vm.multiSelect = false;
+                } else {
+                    vm.multiSelect = true;
+                    $scope.deviceid = 'Select Vehicle';
+                    $scope.vehicleNumber = 'Select Vehicle';
+                }
+            } else {
+                $scope.clickedMarker = angular.copy(params.clickedMarker);
+                $scope.historyMap.center = $scope.clickedMarker;
+                $scope.deviceid = $scope.clickedMarker.deviceid;
+                $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
+                $scope.errorMsg = "";
+            }
+            $scope.clickedMarker.trace = $scope.trace;
+            vm.getMyFencesListener();
+        };
+
+
         geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+        vm.init();
+        historyService.setData('clickedMarker', $scope.clickedMarker);
+        $interval($scope.resizeMap, 500);
     }
 
 
