@@ -205,7 +205,7 @@
                             events="gcircle.events">
             </ui-gmap-circle>
 
-            <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
+            <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
                              path="gpolygon.path"
                              stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"
                              visible="gpolygon.visible" geodesic="gpolygon.geodesic"
