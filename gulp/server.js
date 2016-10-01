@@ -55,8 +55,13 @@ function browserSyncInit(baseDir, browser, isRemote) {
             startPath: '/',
             server: server,
             browser: browser,
-            notify: true,
-            codeSync: true
+            notify: false,
+            codeSync: true,
+            ghostMode: {
+                clicks: false,
+                forms: false,
+                scroll: false
+            }
         });
     }
 }
