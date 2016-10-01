@@ -129,7 +129,6 @@
                     showHistory: vm.showHistory
                 };
 
-                $log.log(model);
                 vm.infoWindowShow();
             }
         };
@@ -283,7 +282,6 @@
                 vm.infoWindowClose();
 
             vm.filterStr = filterStr;
-            $log.log("filterStr " + vm.filterStr);
 
             //$log.log("applying filters in loop");
             for (var idx in vm.inMarkers) {
@@ -497,7 +495,7 @@
                         } else {
                             vm.polygons[idx].visible = false;
                             if(filterData.filterType == 'cityLimits') {
-                                $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
+                                // $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
                             }
                         }
                     }
@@ -764,8 +762,8 @@
 
 
         $scope.onVehicleSelect = function () {
-            console.log("onVehicleSelect");
-            console.log($scope.deviceid);
+            // console.log("onVehicleSelect");
+            // console.log($scope.deviceid);
         };
 
         //$log.log("uiGmapGoogleMapApi loaded");
@@ -998,6 +996,9 @@
                 $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
             }
+
+            if($scope.inMarkers.length)
+                $scope.clickedMarker = $scope.inMarkers[0];
             $scope.clickedMarker.trace = $scope.trace;
             vm.getMyFencesListener();
         };

@@ -232,7 +232,7 @@
                         </ui-gmap-polyline>
 
 
-                        <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.info.assetid"
+                        <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
                                         center="gcircle.center" radius="gcircle.radius"
                                         stroke="gcircle.stroke" fill="gcircle.fill"
                                         visible="gcircle.visible" geodesic="gcircle.geodesic"
@@ -241,7 +241,7 @@
                                         events="historyCircleEvents">
                         </ui-gmap-circle>
 
-                        <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
+                        <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
                                          path="gpolygon.path"
                                          stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"
                                          visible="gpolygon.visible" geodesic="gpolygon.geodesic"
