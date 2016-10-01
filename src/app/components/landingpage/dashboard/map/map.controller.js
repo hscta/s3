@@ -411,12 +411,21 @@
         vm.geoFilters = {
             showAll: true,
             parkingLot: true,
-            carBattery: false,
-            devBattery: false,
             serviceStation: true,
             competitorHub: true,
-            cityLimits: false
+            cityLimits: false,
+            carBattery: false,
+            devBattery: false
         };
+
+        var PARKING = 'parking';
+        var SERVICE_STATION = 'service';
+        var COMPETITOR_HUB = 'competitor';
+        var CITY_LIMIT = 'citylimits';
+
+        var DEFAULT_STROKE = 10;
+        var MIN_STROKE = 3;
+
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
 
@@ -474,7 +483,7 @@
                     }
                 }
             } else {
-                if (vm.circles && vm.polygons) {
+                if (vm.circles) {
                     for (idx = 0; idx < vm.circles.length; idx++) {
                         var filterStr = vm.circles[idx].info.tagdata;
                         if (checkFilterString(filters, filterStr)) {
@@ -486,6 +495,9 @@
                             vm.circles[idx].visible = false;
                         }
                     }
+                }
+
+                if(vm.polygons) {
                     for (idx = 0; idx < vm.polygons.length; idx++) {
                         filterStr = vm.polygons[idx].info.tagdata;
                         if (checkFilterString(filters, filterStr)) {
@@ -495,26 +507,21 @@
                             startAnimation(vm.polygons[idx]);
                         } else {
                             vm.polygons[idx].visible = false;
+                            // $log.log("city limit should come here");
+                            // $log.log(vm.polygons[idx]);
                         }
                     }
                 }
             }
         };
 
-        var PARKING = 'parking';
-        var SERVICE_STATION = 'service';
-        var COMPETITOR_HUB = 'competitor';
-        var CITY_LIMIT = 'citylimits';
-
-        var DEFAULT_STROKE = 10;
-        var MIN_STROKE = 3;
-
         function getColor(str) {
             var type = getType(str);
             if (type == PARKING) {
                 return 'black';
             } else if (type == SERVICE_STATION) {
-                return '#f89406';
+                //return '#f89406';
+                return 'blue';
             } else if (type == COMPETITOR_HUB) {
                 return 'red';
             } else if (type == CITY_LIMIT) {
@@ -551,40 +558,44 @@
 
         function getType(tagdata) {
             var str = tagdata.olafilter;
-            if (str.match(/parking/g) && str.match(/parking/g).length > 0) {
-                return 'parking';
-            } else if (str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
-                return 'service';
-            } else if (str.match(/competitor/g) && str.match(/competitor/g).length > 0) {
-                return 'competitor';
-            } else if (str.match(/citylimit/g) && str.match(/citylimit/g).length > 0) {
-                return 'citylimits';
-            }
+
+            if (str.match(/parking/g) && str.match(/parking/g).length > 0)
+                return PARKING;
+            if (str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
+                return SERVICE_STATION;
+            if (str.match(/competitor/g) && str.match(/competitor/g).length > 0)
+                return COMPETITOR_HUB;
+            if (str.match(/citylimit/g) && str.match(/citylimit/g).length > 0)
+                return CITY_LIMIT;
+
+            return null;
         }
+
 
         function checkFilterString(filter, tagdata) {
             var str = tagdata.olafilter;
-            if (filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||
-                filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0 ||
-                filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0 ||
-                filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
+
+            if (filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0)
                 return true;
-            }
-            return false;
-        };
+            if (filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
+                return true;
+            if (filter.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0)
+                return true;
+            return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
+        }
 
         vm.circleEvents = {
             click: function (circle, eventName, model, args) {
-                $log.log('Circle clicked');
+                //$log.log('Circle clicked');
 
                 vm.fenceObj = {
                     'latitude': model.center.latitude,
-                    'longitude': model.center.longitude,
+                    'longitude': model.center.longitude
                 };
 
                 vm.fenceDetails = {
-                    name : model.control.info.name,
-                    other : model.control.info.tagdata
+                    name: model.control.info.name,
+                    other: model.control.info.tagdata
                 };
 
                 vm.fenceInfoWindowShow();
@@ -592,14 +603,14 @@
         };
 
         vm.polygonEvents = {
-            click : function(polygon, eventName, model, args){
-                $log.log('polygon clicked');
+            click: function (polygon, eventName, model, args) {
+                //$log.log('polygon clicked');
 
                 var polygonCenter = vm.getPolygonMidPoint(model.path);
 
                 vm.fenceObj = {
                     'latitude': polygonCenter.lat(),
-                    'longitude': polygonCenter.lng(),
+                    'longitude': polygonCenter.lng()
                 };
 
                 vm.fenceDetails = {
@@ -627,14 +638,14 @@
 
 
         $scope.historyPolygonEvents = {
-            click : function(polygon, eventName, model, args){
-                $log.log('polygon clicked');
+            click: function (polygon, eventName, model, args) {
+                //$log.log('polygon clicked');
 
                 var polygonCenter = vm.getPolygonMidPoint(model.path);
 
                 $scope.fenceObj = {
                     'latitude': polygonCenter.lat(),
-                    'longitude': polygonCenter.lng(),
+                    'longitude': polygonCenter.lng()
                 };
 
                 $scope.fenceDetails = {
@@ -648,7 +659,7 @@
 
         $scope.historyCircleEvents = {
             click: function (circle, eventName, model, args) {
-                $log.log('history Circle clicked');
+                //$log.log('history Circle clicked');
 
                 $scope.fenceObj = {
                     'latitude': model.center.latitude,
@@ -656,8 +667,8 @@
                 };
 
                 $scope.fenceDetails = {
-                    name : model.control.info.name,
-                    other : model.control.info.tagdata
+                    name: model.control.info.name,
+                    other: model.control.info.tagdata
                 };
 
                 vm.historyFenceInfoWindowShow();
@@ -683,10 +694,10 @@
         };
 
 
-        vm.getPolygonMidPoint = function (polygon){
+        vm.getPolygonMidPoint = function (polygon) {
             var bound = new google.maps.LatLngBounds();
             for (i = 0; i < polygon.length; i++) {
-                bound.extend( new google.maps.LatLng( polygon[i].latitude, polygon[i].longitude) );
+                bound.extend(new google.maps.LatLng(polygon[i].latitude, polygon[i].longitude));
             }
             // $log.log(bound.getCenter().lat());
             // $log.log(bound.getCenter().lng());

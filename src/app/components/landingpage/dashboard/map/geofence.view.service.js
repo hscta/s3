@@ -155,7 +155,7 @@
         };
 
         vm.applyFilters = function (filters, update, filterType) {
-            vm.callListeners('applyFilters', {'filters': filters, 'update': update, 'filterType': filterType});
+            vm.callListeners('applyFilters', {filters: filters, update: update, filterType: filterType});
         };
 
 
