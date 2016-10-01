@@ -187,7 +187,8 @@
                                 events="searchbox.events"></ui-gmap-search-box>
 
             <ui-gmap-markers models="vm.inMarkers" optimized="false" coords="'self'" icon="'icon'"
-                             options="'options'" events="vm.markersEvents">
+                             options="'options'" events="vm.markersEvents"
+                             doRebuildAll="vm.doRebuildAll" modelsbyref="vm.modelsbyref">
             </ui-gmap-markers>
 
 
@@ -218,7 +219,7 @@
                 </table>
             </ui-gmap-window>
 
-            <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.info.assetid"
+            <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
                             center="gcircle.center" radius="gcircle.radius"
                             stroke="gcircle.stroke" fill="gcircle.fill"
                             visible="gcircle.visible" geodesic="gcircle.geodesic"
@@ -227,11 +228,11 @@
                             events="vm.circleEvents">
             </ui-gmap-circle>
 
-            <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
+            <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
                              path="gpolygon.path"
                              stroke="gpolygon.stroke" fill="gpolygon.fill"
                              visible="gpolygon.visible" geodesic="gpolygon.geodesic"
-                             editable="gpolygon.editable" draggable="gpolygon.draggable"
+                             editable="gpolygon.editable" draggable="gcircle.draggable"
                              clickable="gpolygon.clickable" control="gpolygon.control"
                              events="vm.polygonEvents" static="true">
 

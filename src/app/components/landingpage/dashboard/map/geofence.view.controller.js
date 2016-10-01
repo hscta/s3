@@ -140,21 +140,18 @@
         ];
 
         vm.fencesActive = function () {
+            //$log.log("got fences " + geofenceViewService.getData('geofences'));
             return geofenceViewService.getData('geofences');
         };
 
 
         vm.init = function () {
-            vm.filters = geofenceViewService.getData('geoFilters');
-            $log.log(vm.filters);
-            console.log(vm.filters);
-            // vm.oldFilters = angular.copy(vm.filters);
-            // vm.updatedFilters = angular.copy(vm.filters);
-            for (var key in vm.filters) {
-                if (vm.filters[key]) {
+            vm.geoFilters = geofenceViewService.getData('geoFilters');
+            // $log.log(vm.geoFilters);
+            for (var key in vm.geoFilters) {
+                if (vm.geoFilters[key]) {
                     setActive(key, true);
                 } else {
-                    $log.log("check " + key);
                     setActive(key, false);
                 }
             }
@@ -164,7 +161,7 @@
         vm.checkGeoFilters = {
             all: function (showAll) {
                 var allActive = true;
-                if (vm.filters.showAll) {
+                if (vm.geoFilters.showAll) {
                     allActive = false;
                 }
                 setActive('showAll', allActive);
@@ -174,7 +171,7 @@
                 setFilter(showAll);
             },
             check: function () {
-                if (vm.filters.parkingLot && vm.filters.serviceStation && vm.filters.competitorHub) {
+                if (vm.geoFilters.parkingLot && vm.geoFilters.serviceStation && vm.geoFilters.competitorHub) {
                     setActive('showAll', true)
                 } else {
                     setActive('showAll', false);
@@ -199,23 +196,12 @@
         }
 
         function addFilter(filter, active) {
-            vm.filters[filter] = active;
-            $log.log(filter );
-            $log.log(vm.filters[filter]);
+            vm.geoFilters[filter] = active;
         }
 
         function setFilter(filterType) {
-            // for (var key in vm.filters) {
-            //     if (vm.filters.hasOwnProperty(key)) {
-            //         if ((vm.filters[key] && !vm.oldFilters[key]) || (!vm.filters[key] && vm.oldFilters[key])) {
-            //             vm.updatedFilters[key] = true;
-            //         }else{
-            //             vm.updatedFilters[key] = false;
-            //         }
-            //     }
-            // }
-            geofenceViewService.applyFilters(vm.filters, {}, filterType);
-            // vm.oldFilters = angular.copy(vm.filters);
+            // $log.log(filterType + " = " + vm.geoFilters[filterType]);
+            geofenceViewService.applyFilters(filterType);
         }
 
 
