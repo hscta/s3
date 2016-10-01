@@ -78,15 +78,30 @@
             }
         };
 
+        vm.fenceInfoWindow = {
+            show: false,
+            control: {},
+            options: {
+                maxWidth: 300,
+                disableAutoPan: false,
+                pixelOffset: {
+                    width: 0,
+                    height: 0
+                }
+            }
+        };
 
         vm.mapEvents = {
             click: function () {
                 vm.infoWindowClose();
+                vm.fenceInfoWindowClose();
             },
             zoom_changed: function () {
                 vm.changeMarkerIcon();
             }
         };
+
+
         var iconColor = 'orange';
         var zoomLevelIcon;
         vm.changeMarkerIcon = function () {
@@ -142,6 +157,17 @@
         vm.infoWindowShow = function () {
             //vm.infoWindow.control.showWindow();
             vm.infoWindow.show = true;
+        };
+
+        vm.fenceInfoWindowClose = function () {
+            //vm.infoWindow.control.hideWindow();
+            vm.fenceInfoWindow.show = false;
+        };
+
+
+        vm.fenceInfoWindowShow = function () {
+            //vm.infoWindow.control.showWindow();
+            vm.fenceInfoWindow.show = true;
         };
 
 
@@ -385,88 +411,11 @@
         vm.geoFilters = {
             showAll: true,
             parkingLot: true,
-            carBattery: false,
-            devBattery: false,
             serviceStation: true,
             competitorHub: true,
             cityLimits: false,
-        };
-
-        geofenceViewService.setData('geoFilters', vm.geoFilters);
-
-        vm.getMyFencesListener = function (fences) {
-            vm.circles = fences.circles;
-            $log.log(vm.circles);
-            vm.polygons = fences.polygons;
-            vm.applyFilters({filters: vm.geoFilters});
-            geofenceViewService.setData('geofences', true);
-            $log.log(fences);
-        };
-
-
-        vm.applyFilters = function (filterData) {
-            var filters = filterData.filters;
-            vm.geoFilters = filters;
-            if (vm.circles && vm.polygons) {
-                for (var i = 0; i < vm.circles.length; i++) {
-                    var filterStr = vm.circles[i].info.tagdata;
-                    if (checkFilterString(filters, filterStr)) {
-                        vm.circles[i].visible = true;
-                        vm.circles[i].stroke.weight = getStroke(filterStr);
-                        vm.circles[i].stroke.color = getColor(filterStr);
-                        startAnimation(vm.circles[i]);
-                    } else {
-                        vm.circles[i].visible = false;
-                    }
-                }
-                for (var i = 0; i < vm.polygons.length; i++) {
-                    var filterStr = vm.polygons[i].info.tagdata;
-                    if (checkFilterString(filters, filterStr)) {
-                        vm.polygons[i].visible = true;
-                        vm.polygons[i].stroke.weight = getStroke(filterStr);
-                        vm.polygons[i].stroke.color = getColor(filterStr);
-                        startAnimation(vm.polygons[i]);
-                    } else {
-                        vm.polygons[i].visible = false;
-                    }
-                }
-                if (filters.carBattery) {
-                    // do some code to add low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if ( marker.carbattery < 9.5) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
-                        }
-                    }
-                } else {
-                    // do some code to remove low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if (  marker.carbattery < 9.5) {
-                            marker.options.animation = null;
-                        }
-                    }
-                }
-
-
-                if (filters.devBattery) {
-                    // do some code to add low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55 ) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
-                        }
-                    }
-                } else {
-                    // do some code to remove low battery
-                    for (var idx in vm.inMarkers) {
-                        var marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55 ) {
-                            marker.options.animation = null;
-                        }
-                    }
-                }
-            }
+            carBattery: false,
+            devBattery: false
         };
 
         var PARKING = 'parking';
@@ -477,14 +426,104 @@
         var DEFAULT_STROKE = 10;
         var MIN_STROKE = 3;
 
+
+        geofenceViewService.setData('geoFilters', vm.geoFilters);
+
+        vm.getMyFencesListener = function (fences) {
+            vm.circles = fences.circles;
+            //$log.log(vm.circles);
+            vm.polygons = fences.polygons;
+            vm.applyFilters({filters: vm.geoFilters, filterType: vm.filterType});
+            geofenceViewService.setData('geofences', true);
+            //$log.log(fences);
+        };
+
+
+        vm.applyFilters = function (filterData) {
+            var filters = filterData.filters;
+            vm.geoFilters = filters;
+            vm.filterType = filterData.filterType;
+            var idx;
+            var marker;
+
+            if (vm.filterType == 'carBattery') {
+                if (filters.carBattery) {
+                    // do some code to add low battery
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.carbattery < 9.5) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        }
+                    }
+                } else {
+                    // do some code to remove low battery
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.carbattery < 9.5) {
+                            marker.options.animation = null;
+                        }
+                    }
+                }
+            } else if (vm.filterType == 'devBattery') {
+                if (filters.devBattery) {
+                    // do some code to add low battery
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        }
+                    }
+                } else {
+                    // do some code to remove low battery
+                    for (idx in vm.inMarkers) {
+                        marker = vm.inMarkers[idx];
+                        if (marker.devbattery < 3.55) {
+                            marker.options.animation = null;
+                        }
+                    }
+                }
+            } else {
+                if (vm.circles) {
+                    for (idx = 0; idx < vm.circles.length; idx++) {
+                        var filterStr = vm.circles[idx].info.tagdata;
+                        if (checkFilterString(filters, filterStr)) {
+                            vm.circles[idx].visible = true;
+                            vm.circles[idx].stroke.weight = getStroke(filterStr);
+                            vm.circles[idx].stroke.color = getColor(filterStr);
+                            startAnimation(vm.circles[idx]);
+                        } else {
+                            vm.circles[idx].visible = false;
+                        }
+                    }
+                }
+
+                if(vm.polygons) {
+                    for (idx = 0; idx < vm.polygons.length; idx++) {
+                        filterStr = vm.polygons[idx].info.tagdata;
+                        if (checkFilterString(filters, filterStr)) {
+                            vm.polygons[idx].visible = true;
+                            vm.polygons[idx].stroke.weight = getStroke(filterStr);
+                            vm.polygons[idx].stroke.color = getColor(filterStr);
+                            startAnimation(vm.polygons[idx]);
+                        } else {
+                            vm.polygons[idx].visible = false;
+                            // $log.log("city limit should come here");
+                            // $log.log(vm.polygons[idx]);
+                        }
+                    }
+                }
+            }
+        };
+
         function getColor(str) {
             var type = getType(str);
             if (type == PARKING) {
-                return '#2ecc71';
+                return 'black';
             } else if (type == SERVICE_STATION) {
-                return '#f89406';
+                //return '#f89406';
+                return 'blue';
             } else if (type == COMPETITOR_HUB) {
-                return '#d35400';
+                return 'red';
             } else if (type == CITY_LIMIT) {
                 return 'blue';
             }
@@ -513,57 +552,162 @@
                     else
                         obj.stroke.weight = MIN_STROKE;
 
-                }, 500, 6);
+                }, 500, 4);
             }
         }
 
-        function getType(str) {
-            if (str.match(/parking/g) && str.match(/parking/g).length > 0) {
-                return 'parking';
-            } else if (str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
-                return 'service';
-            } else if (str.match(/competitor/g) && str.match(/competitor/g).length > 0) {
-                return 'competitor';
-            } else if (str.match(/citylimit/g) && str.match(/citylimit/g).length > 0) {
-                return 'citylimits';
-            }
+        function getType(tagdata) {
+            var str = tagdata.olafilter;
+
+            if (str.match(/parking/g) && str.match(/parking/g).length > 0)
+                return PARKING;
+            if (str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
+                return SERVICE_STATION;
+            if (str.match(/competitor/g) && str.match(/competitor/g).length > 0)
+                return COMPETITOR_HUB;
+            if (str.match(/citylimit/g) && str.match(/citylimit/g).length > 0)
+                return CITY_LIMIT;
+
+            return null;
         }
 
-        function checkFilterString(filter, str) {
-            if (filter.competitorsHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0 ||
-                filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0 ||
-                filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0 ||
-                filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
+
+        function checkFilterString(filter, tagdata) {
+            var str = tagdata.olafilter;
+
+            if (filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0)
                 return true;
+            if (filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
+                return true;
+            if (filter.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0)
+                return true;
+            return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
+        }
+
+        vm.circleEvents = {
+            click: function (circle, eventName, model, args) {
+                //$log.log('Circle clicked');
+
+                vm.fenceObj = {
+                    'latitude': model.center.latitude,
+                    'longitude': model.center.longitude
+                };
+
+                vm.fenceDetails = {
+                    name: model.control.info.name,
+                    other: model.control.info.tagdata
+                };
+
+                vm.fenceInfoWindowShow();
             }
-            return false;
+        };
+
+        vm.polygonEvents = {
+            click: function (polygon, eventName, model, args) {
+                //$log.log('polygon clicked');
+
+                var polygonCenter = vm.getPolygonMidPoint(model.path);
+
+                vm.fenceObj = {
+                    'latitude': polygonCenter.lat(),
+                    'longitude': polygonCenter.lng()
+                };
+
+                vm.fenceDetails = {
+                    name: model.control.info.name,
+                    other: model.control.info.tagdata
+                };
+
+                vm.fenceInfoWindowShow();
+            }
         };
 
 
-        vm.polygonClickListener = function (polygon, eventName, model, args) {
-            $log.log('polygon clicked');
-            $log.log(model);
-            $log.log(polygon);
-            $log.log(args);
-            //vm.infoWindowShow();
+        $scope.historyFenceInfoWindow = {
+            show: true,
+            control: {},
+            options: {
+                maxWidth: 300,
+                disableAutoPan: false,
+                pixelOffset: {
+                    width: 0,
+                    height: 0
+                }
+            }
         };
 
 
-        vm.circleClickListener = function (circle, eventName, model, args) {
-            $log.log('circle clicked');
-            $log.log(model);
-            $log.log(circle);
-            $log.log(args);
-            //vm.infoWindowShow();
+        $scope.historyPolygonEvents = {
+            click: function (polygon, eventName, model, args) {
+                //$log.log('polygon clicked');
+
+                var polygonCenter = vm.getPolygonMidPoint(model.path);
+
+                $scope.fenceObj = {
+                    'latitude': polygonCenter.lat(),
+                    'longitude': polygonCenter.lng()
+                };
+
+                $scope.fenceDetails = {
+                    name: model.control.info.name,
+                    other: model.control.info.tagdata
+                };
+
+                vm.historyFenceInfoWindowShow();
+            }
         };
 
+        $scope.historyCircleEvents = {
+            click: function (circle, eventName, model, args) {
+                //$log.log('history Circle clicked');
+
+                $scope.fenceObj = {
+                    'latitude': model.center.latitude,
+                    'longitude': model.center.longitude
+                };
+
+                $scope.fenceDetails = {
+                    name: model.control.info.name,
+                    other: model.control.info.tagdata
+                };
+
+                vm.historyFenceInfoWindowShow();
+            }
+        };
+
+
+        $scope.historyMapEvents = {
+            click: function () {
+                vm.historyFenceInfoWindowClose();
+            }
+        };
+
+
+        vm.historyFenceInfoWindowClose = function () {
+            //vm.infoWindow.control.hideWindow();
+            $scope.historyFenceInfoWindow.show = false;
+        };
+
+
+        vm.historyFenceInfoWindowShow = function () {
+            $scope.historyFenceInfoWindow.show = true;
+        };
+
+
+        vm.getPolygonMidPoint = function (polygon) {
+            var bound = new google.maps.LatLngBounds();
+            for (i = 0; i < polygon.length; i++) {
+                bound.extend(new google.maps.LatLng(polygon[i].latitude, polygon[i].longitude));
+            }
+            // $log.log(bound.getCenter().lat());
+            // $log.log(bound.getCenter().lng());
+            return bound.getCenter();
+        };
 
         vm.addListener = function () {
             mapService.addListener('rtgps', vm.updateMarker);
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
-            geofenceViewService.addListener('polygonClickListener', vm.polygonClickListener);
-            geofenceViewService.addListener('circleClickListener', vm.circleClickListener);
         };
 
 
@@ -571,7 +715,7 @@
             vm.loadMap();
             historyService.setData('inMarkers', vm.inMarkers);
             vm.addListener();
-            // geofenceViewService.getMyFences();
+            geofenceViewService.getMyFences();
         };
 
         vm.init();
@@ -598,7 +742,6 @@
             mapOptions: {},
             mapControl: {}
         };
-
 
         var initialZoom = mapService.getZoom();
 
@@ -632,7 +775,7 @@
 
         $scope.historyInfoWindow = {
             show: false,
-            coords: $scope.clickedMarker,
+            coords: $scope.endMarker,
             control: {},
             options: {
                 //maxWidth: 300,
@@ -645,9 +788,21 @@
             data: {}
         };
 
+        $scope.endMarker = {
+            options: {},
+            events: {
+                // click: function (marker, eventName, model, args) {
+                //     $scope.historyInfoWindow.show = true;
+                // }
+            },
+            // click: function (marker, eventName, model, args) {
+            //     $scope.historyInfoWindow.show = true;
+            // }
+        };
+
+
         historyService.setData('historyMap', $scope.historyMap);
         historyService.setData('historyInfoWindow', $scope.historyInfoWindow);
-
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -723,10 +878,10 @@
 
 
         $scope.drawTrace = function (resp) {
-
-            $log.log(resp);
+            //$log.log(resp);
 
             $scope.trace.path = [];
+            var path = $scope.trace.path;
 
             for (var idx in resp.data.data) {
                 var position = resp.data.data[idx];
@@ -753,17 +908,27 @@
                 historyService.setData('getHistory', true);
                 $scope.clickedMarker.latitude = $scope.trace.path[0].latitude;
                 $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
+                $scope.clickedMarker.options.icon = 'assets/images/markers/big/red-dot.png';
 
 
                 var midPoint = Math.floor($scope.trace.path.length / 2);
                 $scope.historyMap.center = $scope.trace.path[midPoint];
                 $scope.historyMap.zoom = 11;
 
-                // $scope.historyInfoWindow.coords = $scope.clickedMarker;
-                // $scope.historyInfoWindow.data.gpstime = new Date($scope.trace.path[0].gpstime);
-                // $scope.historyInfoWindow.data.odometer = $scope.trace.path[0].odometer;
-                // $scope.historyInfoWindow.data.speed = $scope.trace.path[0].speed;
-                // $scope.historyInfoWindow.show = true;
+                var lastBeacon = path[path.length - 1];
+                $scope.endMarker.latitude = lastBeacon.latitude;
+                $scope.endMarker.options.label = 'E';
+                $scope.endMarker.longitude = lastBeacon.longitude;
+                //$scope.endMarker.options.icon = 'assets/images/markers/big/red.png';
+                $scope.endMarker.options.title = 'End point';
+
+
+                // $scope.historyInfoWindow.coords = $scope.endMarker;
+                // $scope.historyInfoWindow.data.gpstime = new Date(lastBeacon.gpstime);
+                // $scope.historyInfoWindow.data.odometer = lastBeacon.odometer;
+                // $scope.historyInfoWindow.data.speed = lastBeacon.speed;
+                //$scope.historyInfoWindow.show = true;
+
                 $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
             } else {
                 $scope.errorMsg = "No Data Found";
@@ -861,8 +1026,6 @@
         var tracePoint;
         var animationCount = 0;
 
-        $log.log(marker);
-
         $scope.play = true;
         $scope.ffrate = 1;
 
@@ -877,14 +1040,17 @@
                 animationCount++;
                 if (path.length - 1 < animationCount)
                     animationCount = path.length - 1;
+
             } else {
                 animationCount--;
                 if (animationCount <= 0)
                     animationCount = 0;
             }
 
-            initialTime = path[animationCount].gpstime;
+            $scope.slider = (path[animationCount].gpstime - path[0].gpstime) / 1000
             updateTracePoint(path[animationCount]);
+
+            initialTime = path[animationCount].gpstime;
         };
 
         $scope.setSliderTime = function () {
@@ -1007,8 +1173,7 @@
             animationCount = 0;
             $scope.ffrate = 1;
             stopPlay();
-            $scope.sliderPoint = 0;
-            //$scope.sliderPoint = 1;
+            $scope.slider = 0;
             if (marker && marker.trace.path.length > 0) {
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
@@ -1054,13 +1219,10 @@
 
         $scope.gotHistoryEvent = function () {
             $scope.setSliderTime();
-            if (marker)
-                $log.log(marker);
             var initialPoint = marker.trace.path[0];
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;
             $scope.tracePointSpeed = initialPoint.speed;
-
         };
 
         $scope.$on('gotHistoryEvent', function (event, data) {

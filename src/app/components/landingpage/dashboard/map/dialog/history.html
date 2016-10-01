@@ -90,33 +90,35 @@
     }
 
     .marker-details {
-        background: rgba(200, 200, 200, 0.7);
+        background: rgba(163, 204, 255, 0.7);
         position: absolute;
         top: -50px;
-        left: -78px;
-        font-size: 15px;
+        font-size: 12px;
+    }
+    .lefttoolbar {
+        background: rgba(163, 204, 255, 0.7) !important;
     }
 
 </style>
 
-<!--<script type="text/ng-template" id="historyInfoWindow.html">-->
-    <!--<div style="width:230px; height:62px; max-width:230px; min-width:230px; overflow:hidden; padding-top:5px;">-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td><strong>Date</strong></td>-->
-                <!--<td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm:ss a'}}</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="padding-right:5px;"><strong>Odometer</strong></td>-->
-                <!--<td>{{parameter.data.odometer}} km</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><strong>Speed</strong></td>-->
-                <!--<td>{{parameter.data.speed}} kmph</td>-->
-            <!--</tr>-->
-        <!--</table>-->
-    <!--</div>-->
-<!--</script>-->
+<script type="text/ng-template" id="historyInfoWindow.html">
+    <div style="width:230px; height:62px; max-width:230px; min-width:230px; overflow:hidden; padding-top:5px;">
+        <table>
+            <tr>
+                <td><strong>End Time: </strong></td>
+                <td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm:ss a'}}</td>
+            </tr>
+            <tr>
+                <td style="padding-right:5px;"><strong>Odometer: </strong></td>
+                <td>{{parameter.data.odometer}} km</td>
+            </tr>
+            <tr>
+                <td><strong>Speed: </strong></td>
+                <td>{{parameter.data.speed}} kmph</td>
+            </tr>
+        </table>
+    </div>
+</script>
 
 
 
@@ -124,13 +126,14 @@
     <div class="ltb_item" ng-repeat="item in vm.leftTB"
          ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
         <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
-             ng-if="item.type == 'button' || item.type == 'toggleButton'"
+             ng-if="item.historymap && (item.type == 'button' || item.type == 'toggleButton')"
              ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent }">
             <div class="ltbi_icon">
                 <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                 <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
                 <img ng-if="item.iconType == 'png'" src="{{item.icon}}">
-                <i ng-if="item.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                <i ng-if="item.iconType == 'png'"
+                   style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"></i>
             </div>
             <div class="ltbi_name">
                 {{item.name}}
@@ -187,14 +190,15 @@
             <md-dialog-content class="map-dialog-content">
                 <div class="md-dialog-content map-dialog history-dialog">
                     <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom'
-                                        options="historyMap.mapOptions" bounds="historyMap.bounds"
+                                        options="historyMap.mapOptions"
+                                        bounds="historyMap.bounds"
+                                        events="historyMapEvents"
                                         control="historyMap.mapControl">
 
                         <ui-gmap-map-control
                             template="app/components/landingpage/dashboard/map/history-map-control.html"
                             controller="InnerMapController"
                             position="BOTTOM_CENTER"></ui-gmap-map-control>
-
                         </ui-gmap-map-control>
 
                         <ui-gmap-marker
@@ -204,6 +208,15 @@
                             options="clickedMarker.options"
                             events="clickedMarker.events"
                             control="clickedMarker.control">
+                        </ui-gmap-marker>
+
+                        <ui-gmap-marker
+                                idkey="'self'"
+                                coords="endMarker"
+                                click="endMarker.click"
+                                options="endMarker.options"
+                                events="endMarker.events"
+                                control="endMarker.control">
                         </ui-gmap-marker>
 
                         <ui-gmap-polyline
@@ -225,7 +238,7 @@
                                         visible="gcircle.visible" geodesic="gcircle.geodesic"
                                         editable="gcircle.editable" draggable="gcircle.draggable"
                                         clickable="gcircle.clickable" control="gcircle.control"
-                                        events="gcircle.events">
+                                        events="historyCircleEvents">
                         </ui-gmap-circle>
 
                         <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.info.assetid"
@@ -234,17 +247,36 @@
                                          visible="gpolygon.visible" geodesic="gpolygon.geodesic"
                                          editable="gpolygon.editable" draggable="gpolygon.draggable"
                                          clickable="gpolygon.clickable" control="gpolygon.control"
-                                         events="gpolygon.events" static="true">
+                                         events="historyPolygonEvents" static="true">
 
                         </ui-gmap-polygon>
 
-                        <!--<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"-->
-                                        <!--control="historyInfoWindow.control"-->
-                                        <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->
-                                        <!--templateUrl="'historyInfoWindow.html'"-->
-                                        <!--templateParameter="historyInfoWindow"-->
-                                        <!--isIconVisibleOnClick="true">-->
-                        <!--</ui-gmap-window>-->
+                        <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
+                                        control="historyInfoWindow.control"
+                                        options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
+                                        templateUrl="'historyInfoWindow.html'"
+                                        templateParameter="historyInfoWindow"
+                                        isIconVisibleOnClick="true">
+                        </ui-gmap-window>
+
+                        <ui-gmap-window show="historyFenceInfoWindow.show" coords="fenceObj"
+                                        control="historyFenceInfoWindow.control" optimized="false"
+                                        options="historyFenceInfoWindow.options" closeClick="historyFenceInfoWindowClose()"
+                                        isIconVisibleOnClick="true">
+
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <th>Name: </th>
+                                    <td>{{fenceDetails.name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Type:   </th>
+                                    <td>{{fenceDetails.other.olafilter}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </ui-gmap-window>
 
                     </ui-gmap-google-map>
         </div>

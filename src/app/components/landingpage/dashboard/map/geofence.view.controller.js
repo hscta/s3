@@ -25,78 +25,117 @@
                 geofenceViewService.show();
             }
         };
+
         vm.leftTB = [
             {
                 'id': 'geoReport',
-                'name': 'Geofences Reports', 'iconType': 'fa', 'icon': 'fa-bar-chart', 'type': 'button', 'data': {
-                'type': 'stateChange','independent':true, 'state': 'home.geofence'
-            }
+                'name': 'Geofences Reports',
+                'iconType': 'fa',
+                'icon': 'fa-bar-chart',
+                'type': 'button',
+                'historymap': true,
+                'data': {
+                    'type': 'stateChange', 'independent': true, 'state': 'home.geofence', active: true
+                }
             },
             {'type': 'line'},
             {
-                'id': 'getGeo', 'description':'Use only when new fences are created',
-                'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'data': {
-                'type': 'function', 'function': function () {
-                    geofenceViewService.getMyFences();
+                'id': 'getGeo', 'description': 'Use only when new fences are created',
+                'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function () {
+                        geofenceViewService.getMyFences();
+                    }
                 }
-            }
             },
             {
                 'id': 'showAll',
-                'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
-                    vm.checkGeoFilters.all();
+                'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.all('showAll');
+                    }
                 }
-            }
             },
             {
                 'id': 'parkingLot',
-                'name': 'Parking Lot', 'iconType': 'md', 'icon': 'local_parking', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
-                    vm.checkGeoFilters.set('parkingLot', active);
+                'name': 'Parking Lot',
+                'iconType': 'md',
+                'icon': 'local_parking',
+                'type': 'toggleButton',
+                'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.set('parkingLot', active);
+                    }
                 }
-            }
             },
             {
                 'id': 'serviceStation',
-                'name': 'Service Station', 'iconType': 'fa', 'icon': 'fa-wrench', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
-                    vm.checkGeoFilters.set('serviceStation', active);
+                'name': 'Service Station',
+                'iconType': 'fa',
+                'icon': 'fa-wrench',
+                'type': 'toggleButton',
+                'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.set('serviceStation', active);
+                    }
                 }
-            }
             },
             {
                 'id': 'competitorHub',
-                'name': 'Competitor Hub', 'iconType': 'fa', 'icon': 'fa-ban', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
-                    vm.checkGeoFilters.set('competitorHub', active);
+                'name': 'Competitor Hub',
+                'iconType': 'fa',
+                'icon': 'fa-ban',
+                'type': 'toggleButton',
+                'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.set('competitorHub', active);
+                    }
                 }
-            }
             },
             {
                 'id': 'cityLimits',
-                'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'function': function (active) {
-                    vm.checkGeoFilters.set('cityLimits', active);
+                'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'historymap': true,
+                'data': {
+                    active: false,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.set('cityLimits', active);
+                    }
                 }
-            }
             },
             {'type': 'line'},
             {
                 'id': 'devBattery',
-                'name': 'Low Device Battery', 'iconType': 'fa', 'icon': 'fa-battery-quarter', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'independent':true,'function': function (active) {
-                    vm.checkGeoFilters.set('devBattery', active);
+                'name': 'Low Device Battery',
+                'iconType': 'fa',
+                'icon': 'fa-battery-quarter',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: true,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('devBattery', active);
+                    }
                 }
-            }
             },
             {
                 'id': 'carBattery',
-                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png', 'type': 'toggleButton', 'data': {
-                'type': 'function', 'independent':true,'function': function (active) {
-                    vm.checkGeoFilters.set('carBattery', active);
+                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',
+                'type': 'toggleButton', 'historymap': false,
+                'data': {
+                    active: true,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('carBattery', active);
+                    }
                 }
-            }
             }
         ];
 
@@ -107,17 +146,23 @@
 
         vm.init = function () {
             vm.filters = geofenceViewService.getData('geoFilters');
-            vm.oldFilters = angular.copy(vm.filters);
-            vm.updatedFilters = angular.copy(vm.filters);
+            $log.log(vm.filters);
+            console.log(vm.filters);
+            // vm.oldFilters = angular.copy(vm.filters);
+            // vm.updatedFilters = angular.copy(vm.filters);
             for (var key in vm.filters) {
-                if (vm.filters.hasOwnProperty(key) && vm.filters[key]) {
-                    setActive(key, 'true');
+                if (vm.filters[key]) {
+                    setActive(key, true);
+                } else {
+                    $log.log("check " + key);
+                    setActive(key, false);
                 }
             }
         };
 
+
         vm.checkGeoFilters = {
-            all: function () {
+            all: function (showAll) {
                 var allActive = true;
                 if (vm.filters.showAll) {
                     allActive = false;
@@ -126,7 +171,7 @@
                 setActive('competitorHub', allActive);
                 setActive('serviceStation', allActive);
                 setActive('parkingLot', allActive);
-                setFilter();
+                setFilter(showAll);
             },
             check: function () {
                 if (vm.filters.parkingLot && vm.filters.serviceStation && vm.filters.competitorHub) {
@@ -138,7 +183,7 @@
             set: function (id, active) {
                 setActive(id, active);
                 vm.checkGeoFilters.check();
-                setFilter();
+                setFilter(id);
             }
         };
 
@@ -155,9 +200,11 @@
 
         function addFilter(filter, active) {
             vm.filters[filter] = active;
+            $log.log(filter );
+            $log.log(vm.filters[filter]);
         }
 
-        function  setFilter() {
+        function setFilter(filterType) {
             // for (var key in vm.filters) {
             //     if (vm.filters.hasOwnProperty(key)) {
             //         if ((vm.filters[key] && !vm.oldFilters[key]) || (!vm.filters[key] && vm.oldFilters[key])) {
@@ -167,7 +214,7 @@
             //         }
             //     }
             // }
-            geofenceViewService.applyFilters(vm.filters,{});
+            geofenceViewService.applyFilters(vm.filters, {}, filterType);
             // vm.oldFilters = angular.copy(vm.filters);
         }
 

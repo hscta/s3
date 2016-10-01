@@ -20,7 +20,7 @@
                 coords: { latitude: lat, longitude: lng },
                 options: { draggable: true },
                 events: {
-                    dragend: function (marker, eventName, args) {
+                    dragend: function (marker) {
                         $log.log('marker dragend');
                         var lat = marker.getPosition().lat();
                         var lon = marker.getPosition().lng();
