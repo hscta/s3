@@ -101,24 +101,24 @@
 
 </style>
 
-<!--<script type="text/ng-template" id="historyInfoWindow.html">-->
-    <!--<div style="width:230px; height:62px; max-width:230px; min-width:230px; overflow:hidden; padding-top:5px;">-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td><strong>Date</strong></td>-->
-                <!--<td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm:ss a'}}</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="padding-right:5px;"><strong>Odometer</strong></td>-->
-                <!--<td>{{parameter.data.odometer}} km</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><strong>Speed</strong></td>-->
-                <!--<td>{{parameter.data.speed}} kmph</td>-->
-            <!--</tr>-->
-        <!--</table>-->
-    <!--</div>-->
-<!--</script>-->
+<script type="text/ng-template" id="historyInfoWindow.html">
+    <div style="width:230px; height:62px; max-width:230px; min-width:230px; overflow:hidden; padding-top:5px;">
+        <table>
+            <tr>
+                <td><strong>End Time: </strong></td>
+                <td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm:ss a'}}</td>
+            </tr>
+            <tr>
+                <td style="padding-right:5px;"><strong>Odometer: </strong></td>
+                <td>{{parameter.data.odometer}} km</td>
+            </tr>
+            <tr>
+                <td><strong>Speed: </strong></td>
+                <td>{{parameter.data.speed}} kmph</td>
+            </tr>
+        </table>
+    </div>
+</script>
 
 
 
@@ -199,7 +199,6 @@
                             template="app/components/landingpage/dashboard/map/history-map-control.html"
                             controller="InnerMapController"
                             position="BOTTOM_CENTER"></ui-gmap-map-control>
-
                         </ui-gmap-map-control>
 
                         <ui-gmap-marker
@@ -209,6 +208,15 @@
                             options="clickedMarker.options"
                             events="clickedMarker.events"
                             control="clickedMarker.control">
+                        </ui-gmap-marker>
+
+                        <ui-gmap-marker
+                                idkey="'self'"
+                                coords="endMarker"
+                                click="endMarker.click"
+                                options="endMarker.options"
+                                events="endMarker.events"
+                                control="endMarker.control">
                         </ui-gmap-marker>
 
                         <ui-gmap-polyline
@@ -243,13 +251,13 @@
 
                         </ui-gmap-polygon>
 
-                        <!--<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"-->
-                                        <!--control="historyInfoWindow.control"-->
-                                        <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->
-                                        <!--templateUrl="'historyInfoWindow.html'"-->
-                                        <!--templateParameter="historyInfoWindow"-->
-                                        <!--isIconVisibleOnClick="true">-->
-                        <!--</ui-gmap-window>-->
+                        <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
+                                        control="historyInfoWindow.control"
+                                        options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
+                                        templateUrl="'historyInfoWindow.html'"
+                                        templateParameter="historyInfoWindow"
+                                        isIconVisibleOnClick="true">
+                        </ui-gmap-window>
 
                         <ui-gmap-window show="historyFenceInfoWindow.show" coords="fenceObj"
                                         control="historyFenceInfoWindow.control" optimized="false"
