@@ -45,7 +45,7 @@
         vm.readFenceInfo = function (fenceList) {
             vm.endTime = new Date().getTime();
             $log.log("fence query time = " + (vm.endTime - vm.startTime));
-            //$log.log(fence);
+            //$log.log(fenceList);
             for (var idx in fenceList) {
                 var fence = fenceList[idx];
                 vm.createFenceObjects(fence);
@@ -62,19 +62,20 @@
                 if (infoitem.settingstag === 'GEOFENCE_BOUNDARY') {
                     if (infoitem.settingsdata.fencetype === 'polygon') {
                         var gpolygon = vm.getPolygonFromInfo(infoitem.settingsdata);
-                        gpolygon.info = fence;
+                        //gpolygon.info = fence;
                         gpolygon.control.info = fence;
                         //$log.log(gpolygon);
                         vm.polygons.push(gpolygon);
                     } else if (infoitem.settingsdata.fencetype === 'circle') {
                         var gcircle = vm.getCircleFromInfo(infoitem.settingsdata);
-                        gcircle.info = fence;
+                        //gcircle.info = fence;
                         gcircle.control.info = fence;
                         //$log.log(gcircle);
                         vm.circles.push(gcircle);
                     }
                 }
             }
+            //$log.log(fence);
         };
 
         var spgreenColor = '#08B21F';
@@ -145,6 +146,7 @@
             //$log.log(vm.circles);
             //$log.log(vm.polygons);
             vm.fences = {circles: vm.circles, polygons: vm.polygons};
+            //$log.log(vm.fences);
             vm.callListeners('getMyFences', vm.fences);
             return vm.fences;
         };
@@ -154,8 +156,8 @@
             return vm.fences;
         };
 
-        vm.applyFilters = function (filters, update, filterType) {
-            vm.callListeners('applyFilters', {filters: filters, update: update, filterType: filterType});
+        vm.applyFilters = function (filterType) {
+            vm.callListeners('applyFilters', {filterType: filterType});
         };
 
 
@@ -209,17 +211,18 @@
 
         vm.setData = function (key, value) {
             vm.geoData[key] = value;
+            // $log.log('vm.setData:' + key);
+            // $log.log(vm.geoData[key]);
         };
 
         vm.getData = function (key) {
-            if (vm.geoData.hasOwnProperty(key))
+            if (vm.geoData.hasOwnProperty(key)) {
+                //$log.log(vm.geoData[key]);
                 return vm.geoData[key];
+            }
 
             return null;
         };
-
-
-
     }
 
 
