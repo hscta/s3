@@ -991,6 +991,7 @@
                 }
             } else {
                 $scope.clickedMarker = angular.copy(params.clickedMarker);
+                $scope.clickedMarker.options.animation = null;
                 $scope.historyMap.center = $scope.clickedMarker;
                 $scope.deviceid = $scope.clickedMarker.deviceid;
                 $scope.vehicleNumber = $scope.clickedMarker.vehicleno;

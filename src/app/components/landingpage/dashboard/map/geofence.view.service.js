@@ -165,13 +165,13 @@
             vm.circles = [];
             vm.polygons = [];
 
-            vm.promiseList = [];
+            var promiseList = [];
             for (var idx in fences) {
                 var body = {geofencepath: fences[idx].assetpath};
-                vm.promiseList.push(intellicarAPI.geofenceService.getFenceInfoMap(body));
+                promiseList.push(intellicarAPI.geofenceService.getFenceInfoMap(body));
             }
 
-            return $q.all(vm.promiseList)
+            return $q.all(promiseList)
                 .then(vm.readFenceInfo, vm.handleFailure);
         };
 

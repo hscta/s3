@@ -122,18 +122,21 @@
                     vehicleData.options.visible = false;
                 }
 
+                vehicleData.latitude = msg[1].latitude;
+                vehicleData.longitude = msg[1].longitude;
+                vehicleData.altitude = msg[1].altitude;
                 vehicleData.title = vehicleNumber;
                 vehicleData.optimized = false;
-                vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
-                vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
-                vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
-                vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
-                vehicleData.ignitionstatusStr = vehicleData.ignitionstatus ? "On" : "Off";
-                vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
+                vehicleData.speed = parseFloat(parseFloat(msg[1].speed).toFixed(2));
+                vehicleData.direction = parseFloat(parseFloat(msg[1].direction).toFixed(2));
+                vehicleData.carbattery = parseFloat(parseFloat(msg[1].carbattery).toFixed(2));
+                vehicleData.devbattery = parseFloat(parseFloat(msg[1].devbattery).toFixed(2));
+                vehicleData.ignitionstatusStr = msg[1].ignitionstatus ? "On" : "Off";
+                vehicleData.ignitionstatusFilter = msg[1].ignitionstatus ? "Running" : "Stopped";
                 // if(!vehicleData.mobilistatus)
                 //     $log.log(msg);
-                vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
-                vehicleData.timestamp = new Date(vehicleData.timestamp);
+                vehicleData.mobilistatusFilter = msg[1].mobilistatus ? "Active" : "Immobilized";
+                vehicleData.timestamp = new Date(msg[1].timestamp);
                 vm.setMarkerIcon(vehicleData);
                 return vehicleData;
             };
@@ -143,7 +146,7 @@
                 if (msgList.length == 2 && msgList[0] != null && msgList[1] != null
                     && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
-                    //$log.log(vehicleData);
+                    //$log.log(JSON.stringify(vehicleData));
                     vm.callListeners(vehicleData, key);
                 } else {
                     $log.log("invalid data");
