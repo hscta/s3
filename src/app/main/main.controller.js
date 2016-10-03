@@ -34,7 +34,7 @@
      *
      * */
 
-    headerAutoHide = false;
+    var headerAutoHide = false;
 
     var wh = $(window).height();
     var header_height = 95;

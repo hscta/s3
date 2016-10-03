@@ -28,7 +28,7 @@
                     {'id': 1, 'name': 'Porsh Cerrare'},
                     {'id': 1, 'name': 'Ferrari GT'}
                 ]
-                },
+                }
             ]
             },
             {
@@ -49,7 +49,7 @@
                     {'id': 1, 'name': 'Porsh Cerrare'},
                     {'id': 1, 'name': 'Ferrari GT'}
                 ]
-                },
+                }
             ]
             },
             {
@@ -67,7 +67,7 @@
                     {'id': 1, 'name': 'Porsh Cerrare'},
                     {'id': 1, 'name': 'Ferrari GT'}
                 ]
-                },
+                }
             ]
             },
             {
@@ -88,7 +88,7 @@
                     {'id': 1, 'name': 'Porsh Cerrare'},
                     {'id': 1, 'name': 'Ferrari GT'}
                 ]
-                },
+                }
             ]
             },
         ];
