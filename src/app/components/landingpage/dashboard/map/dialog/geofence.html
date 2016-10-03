@@ -1,6 +1,6 @@
 <!--<md-tab-body >-->
     <div class="geofence-cont" style="height: 100%;">
-        <div class="geo-leftbar" ng-click="vm.vehicleFilterVar = false">
+        <div class="geo-leftbar" ng-click="vm.currPop = null">
             <div class="geo-rep-item-head" >Reports</div>
             <div class="geo-rep-item" ng-class="{'active':vm.currRep.id == rep.id}"
                  ng-repeat="rep in vm.reports" ng-click="vm.setReport(rep)">{{rep.name}}</div>
@@ -28,7 +28,8 @@
                                     </md-list-item>
                                 </md-list>
                                 <div class="geo-ms-controls">
-                                    <md-checkbox ng-model="vm.selectAllVeh" aria-label="Select All">Select All</md-checkbox>
+                                    <md-checkbox ng-model="vm.selectAllVeh" aria-label="Select All">All</md-checkbox>
+                                    <md-checkbox ng-model="vm.selectAllVeh" aria-label="Select All">None</md-checkbox>
                                 </div>
                             </div>
                         </md-input-container>
