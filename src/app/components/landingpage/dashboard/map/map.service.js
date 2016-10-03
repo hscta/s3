@@ -11,6 +11,24 @@
             var vm = this;
             vm.listeners = {};
 
+            vm.inMap = {
+                mapOptions: {},
+                mapControl: {}
+            };
+
+            vm.inMarkers = [];
+
+
+            vm.getMainMap = function () {
+                return vm.inMap;
+            };
+
+
+            vm.getMainMarkers = function () {
+                return vm.inMarkers;
+            };
+
+
 //            var lat = 12.9176383;
 //            var lng = 77.6480335;
 
@@ -37,6 +55,14 @@
                 return vm.bounds;
             };
 
+            function checkZoomLevel(min, max) {
+                vm.zoom = vm.inMap.mapControl.getGMap().zoom;
+                if (vm.zoom >= min && vm.zoom <= max) {
+                    return true;
+                }
+                return false;
+            }
+
 
             var zoomLevelIcon = 'big';
 
@@ -53,54 +79,66 @@
                     }
                 }
 
-                if (checkZoomLevel(0, 6)) {
+                if (checkZoomLevel(1, 6)) {
                     zoomLevelIcon = 'extra_small';
-                } else if (checkZoomLevel(7, 9)) {
+                } else if (checkZoomLevel(7, 8)) {
                     zoomLevelIcon = 'small';
-                } else if (checkZoomLevel(10, 10)) {
+                } else if (checkZoomLevel(9, 10)) {
                     zoomLevelIcon = 'medium';
                 } else {
                     zoomLevelIcon = 'big';
                 }
 
-                function checkZoomLevel(min, max) {
-                    if (vm.zoom <= max && vm.zoom >= min) {
-                        return true;
-                    }
-                    return false;
-                }
-
                 vehicleData.iconColor = iconColor;
-                vehicleData.animation = google.maps.Animation.BOUNCE;
-                return 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
+                vehicleData.icon = 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
+
+                //$log.log(iconColor + ", zoom = " + vm.zoom + ", " + zoomLevelIcon);
+                //return 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
             };
 
+
+            vm.getMarkerIndex = function (id) {
+                for (var idx in vm.inMarkers) {
+                    if (vm.inMarkers[idx].id === id)
+                        return idx;
+                }
+
+                return -1;
+            };
 
             vm.processVehicleData = function (msg) {
                 var topic = msg[0].split('/');
                 var vehicleNumber = topic[topic.length - 1];
-                var vehicleData = msg[1];
-                vehicleData.id = parseInt(vehicleData.deviceid);
+                var vehicleData;
+
+                var deviceid = parseInt(msg[1].deviceid);
+                var idx = vm.getMarkerIndex(deviceid);
+                if (idx != -1) {
+                    vehicleData = vm.inMarkers[idx];
+                } else {
+                    vehicleData = msg[1];
+                    vehicleData.id = deviceid;
+                    vehicleData.options = {};
+                    vehicleData.options.visible = false;
+                }
+
+                vehicleData.latitude = msg[1].latitude;
+                vehicleData.longitude = msg[1].longitude;
+                vehicleData.altitude = msg[1].altitude;
                 vehicleData.title = vehicleNumber;
                 vehicleData.optimized = false;
-                vehicleData.icon = vm.setMarkerIcon(vehicleData);
-                vehicleData.speed = parseFloat(parseFloat(vehicleData.speed).toFixed(2));
-                vehicleData.direction = parseFloat(parseFloat(vehicleData.direction).toFixed(2));
-                vehicleData.carbattery = parseFloat(parseFloat(vehicleData.carbattery).toFixed(2));
-                vehicleData.devbattery = parseFloat(parseFloat(vehicleData.devbattery).toFixed(2));
-                vehicleData.ignitionstatusStr = vehicleData.ignitionstatus ? "On" : "Off";
-                vehicleData.ignitionstatusFilter = vehicleData.ignitionstatus ? "Running" : "Stopped";
+                vehicleData.speed = parseFloat(parseFloat(msg[1].speed).toFixed(2));
+                vehicleData.direction = parseFloat(parseFloat(msg[1].direction).toFixed(2));
+                vehicleData.carbattery = parseFloat(parseFloat(msg[1].carbattery).toFixed(2));
+                vehicleData.devbattery = parseFloat(parseFloat(msg[1].devbattery).toFixed(2));
+                vehicleData.ignitionstatusStr = msg[1].ignitionstatus ? "On" : "Off";
+                vehicleData.ignitionstatusFilter = msg[1].ignitionstatus ? "Running" : "Stopped";
                 // if(!vehicleData.mobilistatus)
                 //     $log.log(msg);
-                vehicleData.mobilistatusFilter = vehicleData.mobilistatus ? "Active" : "Immobilized";
-                vehicleData.timestamp = new Date(vehicleData.timestamp);
-                vehicleData.animation = google.maps.Animation.BOUNCE;
+                vehicleData.mobilistatusFilter = msg[1].mobilistatus ? "Active" : "Immobilized";
+                vehicleData.timestamp = new Date(msg[1].timestamp);
+                vm.setMarkerIcon(vehicleData);
                 return vehicleData;
-            };
-
-
-            vm.getMarkerIcon = function () {
-
             };
 
 
@@ -108,8 +146,10 @@
                 if (msgList.length == 2 && msgList[0] != null && msgList[1] != null
                     && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
-                    //$log.log(vehicleData);
+                    //$log.log(JSON.stringify(vehicleData));
                     vm.callListeners(vehicleData, key);
+                } else {
+                    $log.log("invalid data");
                 }
             };
 

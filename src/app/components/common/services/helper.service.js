@@ -30,14 +30,15 @@
             '5': appConstants.VEHICLETYPE,
             '6': appConstants.DEVICE,
             '7': appConstants.DEVICETYPE,
-            '15': appConstants.FENCE
+            '15': appConstants.FENCE,
+            '17': appConstants.FENCEREPORT
         };
 
 
         // generating reverse lookup
-        vm.assetTypeToAssetTypeId = function() {
+        vm.assetTypeToAssetTypeId = function () {
             var assetTypeToAssetTypeId = {};
-            for(var idx in vm.assetTypeIdToAssetType) {
+            for (var idx in vm.assetTypeIdToAssetType) {
                 assetTypeToAssetTypeId[vm.assetTypeIdToAssetType[idx]] = idx;
             }
             return assetTypeToAssetTypeId;
@@ -56,7 +57,7 @@
             if (asset == null)
                 return null;
 
-            if(ASSET_ID in asset)
+            if (ASSET_ID in asset)
                 return asset.assetid;
 
             if (!(ASSET_PATH in asset))
@@ -70,7 +71,7 @@
             if (asset == null)
                 return null;
 
-            if(PGROUP_PATH in asset)
+            if (PGROUP_PATH in asset)
                 return asset.pgrouppath;
 
             if (!(ASSET_PATH in asset))
@@ -99,7 +100,7 @@
             if (asset == null)
                 return null;
 
-            if(PGROUP_ID in asset)
+            if (PGROUP_ID in asset)
                 return asset.pgroupid;
 
             return vm.getPathId(vm.getParentPath(asset));
@@ -114,7 +115,7 @@
             if (pgrouppath == null)
                 return null;
 
-            if(pgrouppath === ROOT_GROUP && asset.assetpath == ROOT_GROUP)
+            if (pgrouppath === ROOT_GROUP && asset.assetpath == ROOT_GROUP)
                 return '1';
 
             return asset.assetpath.substring(pgrouppath.length + 1, asset.assetpath.lastIndexOf(SLASH));
@@ -122,10 +123,10 @@
 
 
         vm.getAssetType = function (asset) {
-            if(asset == null)
+            if (asset == null)
                 return null;
 
-            if(UI_ASSET_TYPE in asset)
+            if (UI_ASSET_TYPE in asset)
                 return asset.ui_asset_type;
 
             var assetTypeId = vm.getAssetTypeId(asset);
@@ -147,19 +148,19 @@
         };
 
 
-        vm.getAssetPathLevel = function(path) {
-            if(path == null)
+        vm.getAssetPathLevel = function (path) {
+            if (path == null)
                 return null;
 
-            return (path.split(SLASH).length - 1)/2;
+            return (path.split(SLASH).length - 1) / 2;
         };
 
 
-        vm.getAssetLevel = function(asset) {
-            if(asset == null)
+        vm.getAssetLevel = function (asset) {
+            if (asset == null)
                 return null;
 
-            if(ASSET_PATH in asset) {
+            if (ASSET_PATH in asset) {
                 return vm.getAssetPathLevel(asset.assetpath);
             }
         };
@@ -195,6 +196,19 @@
         };
 
 
+        vm.mergeAssetAssignments = function (resp) {
+            //$log.log(resp);
+            var data = resp.data.data;
+            var asset = data.asset[0];
+            asset.info = data.info;
+            asset.assg = data.assg;
+            asset.assginfo = data.assginfo;
+            asset.permissions = JSON.parse(data.permissions[0].permid);
+            //$log.log(asset);
+            return $q.resolve(asset);
+        };
+
+
         vm.makeAssetMap = function (resp) {
             var data = resp.data.data;
             var assets = {};
@@ -220,9 +234,9 @@
         };
 
 
-        vm.sortOnAssetLevel = function(hashObj) {
+        vm.sortOnAssetLevel = function (hashObj) {
             var arrayObj = [];
-            for(var idx in hashObj) {
+            for (var idx in hashObj) {
                 arrayObj.push(hashObj[idx]);
             }
 
@@ -292,13 +306,14 @@
         };
 
 
-        JSON.flatten = function(data) {
+        JSON.flatten = function (data) {
             var result = {};
-            function recurse (cur, prop) {
+
+            function recurse(cur, prop) {
                 if (Object(cur) !== cur) {
                     result[prop] = cur;
                 } else if (Array.isArray(cur)) {
-                    for(var i=0, l=cur.length; i<l; i++)
+                    for (var i = 0, l = cur.length; i < l; i++)
                         recurse(cur[i], prop + "[" + i + "]");
                     if (l == 0)
                         result[prop] = [];
@@ -306,29 +321,31 @@
                     var isEmpty = true;
                     for (var p in cur) {
                         isEmpty = false;
-                        recurse(cur[p], prop ? prop+"."+p : p);
+                        recurse(cur[p], prop ? prop + "." + p : p);
                     }
                     if (isEmpty && prop)
                         result[prop] = {};
                 }
             }
+
             recurse(data, "");
             return result;
         };
 
 
-        JSON.flatten2 = function(data) {
+        JSON.flatten2 = function (data) {
             var result = {};
-            function recurse (cur, prop) {
+
+            function recurse(cur, prop) {
                 if (Object(cur) !== cur) {
                     result[prop] = cur;
                 } else if (Array.isArray(cur)) {
-                    for(var i=0, l=cur.length; i<l; i++) {
-                        if(typeof cur[i] === 'object') {
+                    for (var i = 0, l = cur.length; i < l; i++) {
+                        if (typeof cur[i] === 'object') {
                             recurse(cur[i], prop + "[" + i + "]");
                         }
                         else {
-                            if(i == 0) {
+                            if (i == 0) {
                                 result[prop] = [];
                             }
                             result[prop].push(cur[i]);
@@ -340,18 +357,19 @@
                     var isEmpty = true;
                     for (var p in cur) {
                         isEmpty = false;
-                        recurse(cur[p], prop ? prop+"."+p : p);
+                        recurse(cur[p], prop ? prop + "." + p : p);
                     }
                     if (isEmpty && prop)
                         result[prop] = {};
                 }
             }
+
             recurse(data, "");
             return result;
         };
 
 
-        JSON.unflatten = function(data) {
+        JSON.unflatten = function (data) {
             "use strict";
             if (Object(data) !== data || Array.isArray(data))
                 return data;

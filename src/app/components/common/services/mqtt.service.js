@@ -146,7 +146,7 @@
 
         vm.onReceiveMsg = function (msg) {
             //$log.log('mqtt onReceiveMsg');
-            //$log.log(msg);
+            //$log.log(JSON.stringify(msg));
 
             var topicKey = vm.getTopicKey(msg);
             if(topicKey == null) {

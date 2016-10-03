@@ -26,7 +26,7 @@
                 places_changed: function (searchBox) {
                     var place = searchBox.getPlaces();
                     if (!place || place == 'undefined' || place.length == 0) {
-                        console.log('no place data :(');
+                        //console.log('no place data :(');
                         return;
                     }
 
@@ -54,12 +54,10 @@
         };
 
 
-        vm.inMap = {
-            mapOptions: {},
-            mapControl: {}
-        };
-
-        vm.inMarkers = [];
+        vm.inMap = mapService.getMainMap();
+        vm.inMarkers = mapService.getMainMarkers();
+        vm.doRebuildAll = false;
+        vm.modelsbyref = false;
         vm.clickedMarker = {};
 
         vm.filterStr = '';
@@ -103,23 +101,22 @@
 
 
         var iconColor = 'orange';
-        var zoomLevelIcon;
         vm.changeMarkerIcon = function () {
             vm.zoomMapZoom = vm.inMap.mapControl.getGMap().zoom;
-            mapService.setZoom(vm.zoomMapZoom);
+            //mapService.setZoom(vm.zoomMapZoom);
 
-            for (var i = 0; i < vm.inMarkers.length; i++) {
-                vm.inMarkers[i].icon = mapService.setMarkerIcon(vm.inMarkers[i]);
+            for (var idx = 0; idx < vm.inMarkers.length; idx++) {
+                mapService.setMarkerIcon(vm.inMarkers[idx]);
             }
         };
 
 
-        function checkZoomLevel(min, max) {
-            if (vm.zoomMapZoom >= min && vm.zoomMapZoom < max) {
-                return true;
-            }
-            return false;
-        }
+        // function checkZoomLevel(min, max) {
+        //     if (vm.zoomMapZoom >= min && vm.zoomMapZoom < max) {
+        //         return true;
+        //     }
+        //     return false;
+        // }
 
 
         vm.markersEvents = {
@@ -203,13 +200,6 @@
         };
 
 
-        vm.setMarkersVisible = function (flag) {
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                marker.options.visible = flag;
-            }
-        };
-
 
         vm.matchesAnyMarkerData = function (marker, filterStr) {
             for (var eachidx in marker) {
@@ -219,8 +209,8 @@
                 var lowercasefilterStr = filterStr.toString().toLowerCase();
                 var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
-                //$log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
                 if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                    //$log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
                     return true;
                 }
             }
@@ -263,11 +253,9 @@
         vm.updateMarker = function (vehicleData) {
             //$log.log(msg);
             var isNewVehicle = true;
-            var idx = 0;
-            for (idx in vm.inMarkers) {
+            for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
                 if (marker.id === vehicleData.id) {
-                    vehicleData.options = vm.inMarkers[idx].options;
                     vm.inMarkers[idx] = vehicleData;
                     isNewVehicle = false;
                     break;
@@ -277,8 +265,7 @@
             //$log.log(vehicleData);
 
             if (isNewVehicle) {
-                idx = vm.inMarkers.length;
-                vehicleData.options = {};
+                //vehicleData.options = {};
                 //vehicleData.options.animation = google.maps.Animation.BOUNCE;
                 vm.inMarkers.push(vehicleData);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
@@ -418,36 +405,34 @@
             devBattery: false
         };
 
+        geofenceViewService.setData('geoFilters', vm.geoFilters);
+
         var PARKING = 'parking';
-        var SERVICE_STATION = 'service';
+        var SERVICE_STATION = 'servicestation';
         var COMPETITOR_HUB = 'competitor';
-        var CITY_LIMIT = 'citylimits';
+        var CITY_LIMIT = 'citylimit';
 
         var DEFAULT_STROKE = 10;
         var MIN_STROKE = 3;
 
 
-        geofenceViewService.setData('geoFilters', vm.geoFilters);
-
         vm.getMyFencesListener = function (fences) {
+            $log.log('mapcontroller');
+            $log.log(fences);
             vm.circles = fences.circles;
-            //$log.log(vm.circles);
             vm.polygons = fences.polygons;
-            vm.applyFilters({filters: vm.geoFilters, filterType: vm.filterType});
+            // $log.log("calling geofenceViewService.setData");
             geofenceViewService.setData('geofences', true);
-            //$log.log(fences);
+            vm.applyFilters({filterType: 'showAll'});
         };
 
 
         vm.applyFilters = function (filterData) {
-            var filters = filterData.filters;
-            vm.geoFilters = filters;
-            vm.filterType = filterData.filterType;
             var idx;
             var marker;
 
-            if (vm.filterType == 'carBattery') {
-                if (filters.carBattery) {
+            if (filterData.filterType == 'carBattery') {
+                if (vm.geoFilters.carBattery) {
                     // do some code to add low battery
                     for (idx in vm.inMarkers) {
                         marker = vm.inMarkers[idx];
@@ -464,8 +449,8 @@
                         }
                     }
                 }
-            } else if (vm.filterType == 'devBattery') {
-                if (filters.devBattery) {
+            } else if (filterData.filterType == 'devBattery') {
+                if (vm.geoFilters.devBattery) {
                     // do some code to add low battery
                     for (idx in vm.inMarkers) {
                         marker = vm.inMarkers[idx];
@@ -485,8 +470,9 @@
             } else {
                 if (vm.circles) {
                     for (idx = 0; idx < vm.circles.length; idx++) {
-                        var filterStr = vm.circles[idx].info.tagdata;
-                        if (checkFilterString(filters, filterStr)) {
+                        var filterStr = vm.circles[idx].control.info.tagdata;
+                        // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
+                        if (checkFilterString(filterStr)) {
                             vm.circles[idx].visible = true;
                             vm.circles[idx].stroke.weight = getStroke(filterStr);
                             vm.circles[idx].stroke.color = getColor(filterStr);
@@ -499,16 +485,18 @@
 
                 if(vm.polygons) {
                     for (idx = 0; idx < vm.polygons.length; idx++) {
-                        filterStr = vm.polygons[idx].info.tagdata;
-                        if (checkFilterString(filters, filterStr)) {
+                        filterStr = vm.polygons[idx].control.info.tagdata;
+                        // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
+                        if (checkFilterString(filterStr)) {
                             vm.polygons[idx].visible = true;
                             vm.polygons[idx].stroke.weight = getStroke(filterStr);
                             vm.polygons[idx].stroke.color = getColor(filterStr);
                             startAnimation(vm.polygons[idx]);
                         } else {
                             vm.polygons[idx].visible = false;
-                            // $log.log("city limit should come here");
-                            // $log.log(vm.polygons[idx]);
+                            if(filterData.filterType == 'cityLimits') {
+                                // $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
+                            }
                         }
                     }
                 }
@@ -544,7 +532,8 @@
 
         function startAnimation(obj) {
             var count = 0;
-            if (getType(obj.info.tagdata) != CITY_LIMIT) {
+            //$log.log(getType(obj.control.info.tagdata));
+            if (getType(obj.control.info.tagdata) !== CITY_LIMIT) {
                 $interval(function () {
                     count++;
                     if (count % 2 == 0)
@@ -572,16 +561,40 @@
         }
 
 
-        function checkFilterString(filter, tagdata) {
+        function checkFilterString(tagdata) {
             var str = tagdata.olafilter;
 
-            if (filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0)
+            //$log.log("olafilter = " + str);
+            if (vm.geoFilters.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0) {
+                // $log.log("vm.geoFilters.parkingLot = " + vm.geoFilters.parkingLot);
                 return true;
-            if (filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
+            }
+
+            if (vm.geoFilters.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0) {
+                // $log.log("vm.geoFilters.serviceStation = " + vm.geoFilters.serviceStation);
                 return true;
-            if (filter.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0)
+            }
+
+            if (vm.geoFilters.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0) {
+                // $log.log("vm.geoFilters.competitorHub = " + vm.geoFilters.competitorHub);
                 return true;
-            return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
+            }
+
+            if (vm.geoFilters.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0) {
+                // $log.log("vm.geoFilters.cityLimits = ");
+                // $log.log(vm.geoFilters.cityLimits);
+                return true;
+            }
+
+            // if (filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0)
+            //     return true;
+            // if (filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
+            //     return true;
+            // if (filter.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0)
+            //     return true;
+            //
+            // return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
+            return false;
         }
 
         vm.circleEvents = {
@@ -696,8 +709,8 @@
 
         vm.getPolygonMidPoint = function (polygon) {
             var bound = new google.maps.LatLngBounds();
-            for (i = 0; i < polygon.length; i++) {
-                bound.extend(new google.maps.LatLng(polygon[i].latitude, polygon[i].longitude));
+            for (var idx in polygon) {
+                bound.extend(new google.maps.LatLng(polygon[idx].latitude, polygon[idx].longitude));
             }
             // $log.log(bound.getCenter().lat());
             // $log.log(bound.getCenter().lng());
@@ -731,7 +744,7 @@
 
         var vm = this;
         dialogService.setTab(0);
-        params = dialogService.getData('historyData');
+        var params = dialogService.getData('historyData');
         var selectedVehicle = dialogService.getData('selectedVehicle');
 
         vm.multiSelect = true;
@@ -749,8 +762,8 @@
 
 
         $scope.onVehicleSelect = function () {
-            console.log("onVehicleSelect");
-            console.log($scope.deviceid);
+            // console.log("onVehicleSelect");
+            // console.log($scope.deviceid);
         };
 
         //$log.log("uiGmapGoogleMapApi loaded");
@@ -773,20 +786,20 @@
         };
 
 
-        $scope.historyInfoWindow = {
-            show: false,
-            coords: $scope.endMarker,
-            control: {},
-            options: {
-                //maxWidth: 300,
-                disableAutoPan: false,
-                pixelOffset: {
-                    width: 0,
-                    height: -25
-                }
-            },
-            data: {}
-        };
+        // $scope.historyInfoWindow = {
+        //     show: false,
+        //     coords: $scope.endMarker,
+        //     control: {},
+        //     options: {
+        //         //maxWidth: 300,
+        //         disableAutoPan: false,
+        //         pixelOffset: {
+        //             width: 0,
+        //             height: -25
+        //         }
+        //     },
+        //     data: {}
+        // };
 
         $scope.endMarker = {
             options: {},
@@ -802,7 +815,7 @@
 
 
         historyService.setData('historyMap', $scope.historyMap);
-        historyService.setData('historyInfoWindow', $scope.historyInfoWindow);
+        //historyService.setData('historyInfoWindow', $scope.historyInfoWindow);
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -819,12 +832,12 @@
         $scope.endTime = moment().format(dateFormat);
 
         var MILLISEC = 1000;
-        var hrs6 = 21600 * MILLISEC;
-        var hrs3 = 10800 * MILLISEC;
-        var hrs8 = 28800 * MILLISEC;
-        var hrs12 = 43200 * MILLISEC;
+        // var hrs6 = 21600 * MILLISEC;
+        // var hrs3 = 10800 * MILLISEC;
+        // var hrs8 = 28800 * MILLISEC;
+        // var hrs12 = 43200 * MILLISEC;
         var hrs24 = 86400 * MILLISEC;
-        var hrs48 = hrs24 * 2;
+        // var hrs48 = hrs24 * 2;
         var week = hrs24 * 7;
         var timeLimit = week;
 
@@ -954,6 +967,7 @@
 
 
         vm.getMyFencesListener = function () {
+            //$log.log("getMyFencesListener");
             vm.fences = geofenceViewService.getToDrawFences();
             vm.circles = vm.fences.circles;
             vm.polygons = vm.fences.polygons;
@@ -977,11 +991,15 @@
                 }
             } else {
                 $scope.clickedMarker = angular.copy(params.clickedMarker);
+                $scope.clickedMarker.options.animation = null;
                 $scope.historyMap.center = $scope.clickedMarker;
                 $scope.deviceid = $scope.clickedMarker.deviceid;
                 $scope.vehicleNumber = $scope.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
             }
+
+            if($scope.inMarkers.length)
+                $scope.clickedMarker = $scope.inMarkers[0];
             $scope.clickedMarker.trace = $scope.trace;
             vm.getMyFencesListener();
         };
@@ -1020,7 +1038,7 @@
         $log.log('InnerMapController');
         var marker = historyService.getData('clickedMarker');
         var historyMap = historyService.getData('historyMap');
-        var historyInfoWindow = historyService.getData('historyInfoWindow');
+        //var historyInfoWindow = historyService.getData('historyInfoWindow');
         var timeIncreaseBy = 120000;
         var initialTime;
         var tracePoint;
@@ -1058,8 +1076,6 @@
                 return;
 
             $scope.initialSliderTime = 0;
-            var initialTime = new Date(marker.trace.path[0].gpstime);
-
             $scope.finalSliderTime = (marker.trace.path[marker.trace.path.length - 1].gpstime -
                 marker.trace.path[0].gpstime ) / 1000;
 

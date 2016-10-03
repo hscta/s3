@@ -13,12 +13,12 @@
         var vm = this;
 
 
-        vm.getMyInfo = function(body) {
+        vm.getMyInfo = function (body) {
             //$log.log("getMyInfo");
             return requestService.firePost('/user/myinfo', body);
         };
 
-        vm.getMyGroups = function(body) {
+        vm.getMyGroups = function (body) {
             // $log.log("getMyGroups");
             return requestService.firePost('/user/mygroups', body);
         };
@@ -54,13 +54,18 @@
         };
 
 
-        vm.createUser = function(body) {
+        vm.createUser = function (body) {
             return requestService.firePost('/user/create', body);
         };
 
 
-        vm.getMyFences = function(body) {
+        vm.getMyFences = function (body) {
             return requestService.firePost('/user/mygeofences', body);
+        };
+
+
+        vm.getMyGeofenceReports = function (body) {
+            return requestService.firePost('/user/mygeofencereports', body);
         };
 
 
@@ -76,14 +81,14 @@
         };
 
 
-        vm.getMyInfoMap = function(body) {
+        vm.getMyInfoMap = function (body) {
             return vm.getMyInfo(body)
                 .then(helperService.makeMapOnAssetPath, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
 
-        vm.getMyGroupsMap = function(body) {
+        vm.getMyGroupsMap = function (body) {
             // $log.log("getMyGroupsMap");
             return vm.getMyGroups(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
@@ -92,7 +97,7 @@
         };
 
 
-        vm.getMyAssetGroupsMap = function(body) {
+        vm.getMyAssetGroupsMap = function (body) {
             //$log.log("getMyAssetGroupsMap");
             return vm.getMyAssetGroups(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
@@ -117,7 +122,6 @@
                 .then(helperService.makeAssetMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
-
 
 
         vm.getMyRolesMap = function (body) {
@@ -147,7 +151,15 @@
         };
 
 
-        vm.handleDirectAssetResponse = function(resp) {
+        vm.getMyGeofenceReportsMap = function (body) {
+            return vm.getMyGeofenceReports(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.handleDirectAssetResponse = function (resp) {
             //$log.log("userService handleDirectAssetResponse");
             $log.log(resp);
             return $q.resolve(resp);

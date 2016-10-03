@@ -17,7 +17,8 @@
             DEVICE: 'device',
             VEHICLETYPE: 'vehicletype',
             DEVICETYPE: 'devicetype',
-            FENCE: 'fence'
+            FENCE: 'fence',
+            FENCEREPORT: 'fencereport'
         }
     }
 
