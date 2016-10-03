@@ -16,11 +16,11 @@
                         <div class="geo-mul-back" ng-show="vm.currPop" ng-click="vm.currPop = null"></div>
 
                         <md-input-container class="container-margin geo-multiSel">
-                            <label>Vehicle Name</label>
+                            <label>Fence Name</label>
                             <input type="text" ng-focus=" vm.currPop = 'fencePop'" ng-model="vm.vehicleFilter">
                             <div class="geo-ms-cont" ng-show="vm.currPop == 'fencePop'">
                                 <md-list>
-                                    <md-list-item class="md-2-line" ng-repeat="item in vm.currFence.vehicles | filter : vm.vehicleFilter">
+                                    <md-list-item class="md-2-line" ng-repeat="item in vm.currRep.fences | filter : vm.vehicleFilter">
                                         <md-checkbox ng-model="item.done"></md-checkbox>
                                         <div class="md-list-item-text">
                                             <h3>{{item.name}}</h3>
@@ -39,7 +39,7 @@
                             <input type="text" ng-focus="vm.currPop = 'vehiclePop'" ng-model="vm.vehicleFilter">
                             <div class="geo-ms-cont" ng-show="vm.currPop == 'vehiclePop'">
                                 <md-list>
-                                    <md-list-item class="md-2-line" ng-repeat="item in vm.currFence.vehicles | filter : vm.vehicleFilter">
+                                    <md-list-item class="md-2-line" ng-repeat="item in vm.currRep.vehicles | filter : vm.vehicleFilter">
                                         <md-checkbox ng-model="item.done"></md-checkbox>
                                         <div class="md-list-item-text">
                                             <h3>{{item.name}}</h3>
