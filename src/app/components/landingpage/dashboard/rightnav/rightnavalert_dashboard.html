@@ -33,105 +33,117 @@
         <!--</md-list-item>-->
         <!--</md-list>-->
 
-        <md-expansion-panel md-component-id="panelOne">
+        <!--<md-expansion-panel md-component-id="panelOne">-->
 
-            <md-expansion-panel-collapsed md-no-sticky="true">
-                <div class="md-title">Hub Report</div>
-                <div class="md-summary">0</div>
-                <md-expansion-panel-icon></md-expansion-panel-icon>
-            </md-expansion-panel-collapsed>
+            <!--<md-expansion-panel-collapsed md-no-sticky="true">-->
+                <!--<div class="md-title">Hub Report</div>-->
+                <!--<div class="md-summary">0</div>-->
+                <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+            <!--</md-expansion-panel-collapsed>-->
 
 
-            <md-expansion-panel-expanded>
+            <!--<md-expansion-panel-expanded>-->
 
-                <md-expansion-panel-header md-no-sticky="true" ng-click="vm.collapseAlertPanel($panel)">
-                    <div class="md-title">Hub Report</div>
-                    <div class="md-summary">0</div>
-                    <md-expansion-panel-icon></md-expansion-panel-icon>
-                </md-expansion-panel-header>
+                <!--<md-expansion-panel-header md-no-sticky="true" ng-click="vm.collapseAlertPanel($panel)">-->
+                    <!--<div class="md-title">Hub Report</div>-->
+                    <!--<div class="md-summary">0</div>-->
+                    <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+                <!--</md-expansion-panel-header>-->
 
-                <md-expansion-panel-content class="panel-content">
-                    <md-expansion-panel-group md-component-id="panelGroup" multiple>
-                        <md-expansion-panel md-component-id="panelOne"  ng-repeat = "report in vm.mydata">
-                            <md-expansion-panel-collapsed>
-                                <div class="md-title">{{report.reportName}}</div>
-                                <div class="md-summary">0</div>
-                                <md-expansion-panel-icon></md-expansion-panel-icon>
-                            </md-expansion-panel-collapsed>
-                            <md-expansion-panel-expanded>
-                                <md-expansion-panel-header ng-click="vm.collapseAlertPanel($panel)">
-                                    <div class="md-title">{{report.reportName}}</div>
-                                    <div class="md-summary">0</div>
-                                    <md-expansion-panel-icon></md-expansion-panel-icon>
-                                </md-expansion-panel-header>
-                                <md-expansion-panel-content  class="panel-content">
+                <!--<md-expansion-panel-content class="panel-content">-->
+                    <!--<md-expansion-panel-group md-component-id="panelGroup" multiple>-->
+                        <!--<md-expansion-panel md-component-id="panelOne"  ng-repeat = "report in vm.mydata">-->
+                            <!--<md-expansion-panel-collapsed>-->
+                                <!--<div class="md-title">{{report.reportName}}</div>-->
+                                <!--<div class="md-summary">0</div>-->
+                                <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+                            <!--</md-expansion-panel-collapsed>-->
+                            <!--<md-expansion-panel-expanded>-->
+                                <!--<md-expansion-panel-header ng-click="vm.collapseAlertPanel($panel)">-->
+                                    <!--<div class="md-title">{{report.reportName}}</div>-->
+                                    <!--<div class="md-summary">0</div>-->
+                                    <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+                                <!--</md-expansion-panel-header>-->
+                                <!--<md-expansion-panel-content  class="panel-content">-->
 
-                                    <md-expansion-panel-group md-component-id="fencePanel" multiple>
-                                        <md-expansion-panel md-component-id="myfence.fenceid"
-                                                            ng-repeat="myfence in report.fences">
-                                            <md-expansion-panel-collapsed>
-                                                <div class="md-title">{{myfence.fenceName}}</div>
-                                                <div class="md-summary">0</div>
-                                                <md-expansion-panel-icon></md-expansion-panel-icon>
-                                            </md-expansion-panel-collapsed>
-                                            <md-expansion-panel-expanded>
-                                                <md-expansion-panel-header
-                                                    ng-click="vm.collapseAlertPanel($panel)">
-                                                    <div class="md-title">{{myfence.fenceName}}</div>
-                                                    <div class="md-summary">0</div>
-                                                    <md-expansion-panel-icon></md-expansion-panel-icon>
-                                                </md-expansion-panel-header>
-                                                <md-expansion-panel-content  class="panel-content">
+                                    <!--<md-expansion-panel-group md-component-id="fencePanel" multiple>-->
+                                        <!--<md-expansion-panel md-component-id="myfence.fenceid"-->
+                                                            <!--ng-repeat="myfence in report.fences">-->
+                                            <!--<md-expansion-panel-collapsed>-->
+                                                <!--<div class="md-title">{{myfence.fenceName}}</div>-->
+                                                <!--<div class="md-summary">0</div>-->
+                                                <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+                                            <!--</md-expansion-panel-collapsed>-->
+                                            <!--<md-expansion-panel-expanded>-->
+                                                <!--<md-expansion-panel-header-->
+                                                    <!--ng-click="vm.collapseAlertPanel($panel)">-->
+                                                    <!--<div class="md-title">{{myfence.fenceName}}</div>-->
+                                                    <!--<div class="md-summary">0</div>-->
+                                                    <!--<md-expansion-panel-icon></md-expansion-panel-icon>-->
+                                                <!--</md-expansion-panel-header>-->
+                                                <!--<md-expansion-panel-content  class="panel-content">-->
 
-                                                    <md-expansion-panel-group
-                                                        md-component-id="vehiclePanel" multiple>
-                                                        <md-expansion-panel md-component-id="panelOne"
-                                                                            ng-repeat="myvehicle in myfence.vehicles">
-                                                            <md-expansion-panel-collapsed>
-                                                                <div class="md-title">
-                                                                    {{myvehicle.vehicleid}}</div>
-                                                                <div class="md-summary">0</div>
-                                                                <md-expansion-panel-icon>
-                                                                </md-expansion-panel-icon>
-                                                            </md-expansion-panel-collapsed>
-                                                            <md-expansion-panel-expanded>
-                                                                <md-expansion-panel-header
-                                                                    ng-click="vm.collapseAlertPanel($panel)">
-                                                                    <div class="md-title">
-                                                                        {{myvehicle.vehicleid}}</div>
-                                                                    <div class="md-summary">0</div>
-                                                                    <md-expansion-panel-icon>
-                                                                    </md-expansion-panel-icon>
+                                                    <!--<md-expansion-panel-group-->
+                                                        <!--md-component-id="vehiclePanel" multiple>-->
+                                                        <!--<md-expansion-panel md-component-id="panelOne"-->
+                                                                            <!--ng-repeat="myvehicle in myfence.vehicles">-->
+                                                            <!--<md-expansion-panel-collapsed>-->
+                                                                <!--<div class="md-title">-->
+                                                                    <!--{{myvehicle.vehicleid}}</div>-->
+                                                                <!--<div class="md-summary">0</div>-->
+                                                                <!--<md-expansion-panel-icon>-->
+                                                                <!--</md-expansion-panel-icon>-->
+                                                            <!--</md-expansion-panel-collapsed>-->
+                                                            <!--<md-expansion-panel-expanded>-->
+                                                                <!--<md-expansion-panel-header-->
+                                                                    <!--ng-click="vm.collapseAlertPanel($panel)">-->
+                                                                    <!--<div class="md-title">-->
+                                                                        <!--{{myvehicle.vehicleid}}</div>-->
+                                                                    <!--<div class="md-summary">0</div>-->
+                                                                    <!--<md-expansion-panel-icon>-->
+                                                                    <!--</md-expansion-panel-icon>-->
 
-                                                                </md-expansion-panel-header>
-                                                                <md-expansion-panel-content
-                                                                    class="panel-content">
-                                                                    <span>Trigger Location:
-                                                                        {{myvehicle.triggerloc}} </span><br/>
-                                                                    <span>Trigger Date :
-                                                                         {{myvehicle.triggerloc}}
-                                                                    </span><br/>
-                                                                    <span>Trigger Type :
-                                                                         {{myvehicle.triggertype}}
-                                                                    </span>
-                                                                </md-expansion-panel-content>
-                                                            </md-expansion-panel-expanded>
-                                                        </md-expansion-panel>
-                                                    </md-expansion-panel-group>
-                                                </md-expansion-panel-content>
-                                            </md-expansion-panel-expanded>
-                                        </md-expansion-panel>
-                                    </md-expansion-panel-group>
+                                                                <!--</md-expansion-panel-header>-->
+                                                                <!--<md-expansion-panel-content-->
+                                                                    <!--class="panel-content">-->
+                                                                    <!--<span>Trigger Location:-->
+                                                                        <!--{{myvehicle.triggerloc}} </span><br/>-->
+                                                                    <!--<span>Trigger Date :-->
+                                                                         <!--{{myvehicle.triggerloc}}-->
+                                                                    <!--</span><br/>-->
+                                                                    <!--<span>Trigger Type :-->
+                                                                         <!--{{myvehicle.triggertype}}-->
+                                                                    <!--</span>-->
+                                                                <!--</md-expansion-panel-content>-->
+                                                            <!--</md-expansion-panel-expanded>-->
+                                                        <!--</md-expansion-panel>-->
+                                                    <!--</md-expansion-panel-group>-->
+                                                <!--</md-expansion-panel-content>-->
+                                            <!--</md-expansion-panel-expanded>-->
+                                        <!--</md-expansion-panel>-->
+                                    <!--</md-expansion-panel-group>-->
 
-                                </md-expansion-panel-content>
-                            </md-expansion-panel-expanded>
-                        </md-expansion-panel>
-                    </md-expansion-panel-group>
+                                <!--</md-expansion-panel-content>-->
+                            <!--</md-expansion-panel-expanded>-->
+                        <!--</md-expansion-panel>-->
+                    <!--</md-expansion-panel-group>-->
 
-                </md-expansion-panel-content>
+                <!--</md-expansion-panel-content>-->
 
-            </md-expansion-panel-expanded>
-        </md-expansion-panel>
+            <!--</md-expansion-panel-expanded>-->
+        <!--</md-expansion-panel>-->
+        <md-tabs md-selected="selectedIndex">
+            <md-tab ng-repeat="tab in tabs | orderBy:predicate:reversed" md-on-select="onTabSelected(tab)" md-on-deselect="announceDeselected(tab)" ng-disabled="tab.disabled">
+                <md-tab-label>
+                    {{tab.title}}
+                    <img src="img/removeTab.png" ng-click="removeTab(tab)" class="delete">
+                </md-tab-label>
+                <md-tab-body>
+                    {{tab.content}}
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
+
     </md-content>
 </md-sidenav>
 
