@@ -5,7 +5,7 @@
         .module('uiplatform')
         .controller('GeofenceReportController', GeofenceReportController);
 
-    function GeofenceReportController($log, $q, dialogService, geofenceReportService) {
+    function GeofenceReportController($log, $q, dialogService, geofenceReportService, $filter) {
 
         $log.log("GeofenceReportController");
 
@@ -102,17 +102,22 @@
 
             var data = {};
             for ( var idx in rep.assg ) {
-                data={};
+                data = {
+                    id:rep.assg[idx].assetpath,
+                    name:rep.assg[idx].name,
+                    checked:false
+                };
                 if ( rep.assg[idx].assgfromassetid == 4 ){
-                    data = {id:rep.assg[idx].assetpath, name:rep.assg[idx].name};
                     vm.currRep.vehicles.push(data);
                 }else if ( rep.assg[idx].assgfromassetid == 15 ) {
-                    data = {id:rep.assg[idx].assetpath, name:rep.assg[idx].name};
+
                     vm.currRep.fences.push(data);
                 }
             }
-        };
 
+            vm.deSelectAllVehicles = true;
+            vm.deSelectAllFences = true;
+        };
 
         vm.setSort = function (id, str) {
             // if (id == vm.tableSort.id) {
@@ -251,6 +256,65 @@
                 .then(vm.getMyGeofenceReports, vm.handleFailure);
         };
 
+        vm.selectAll = function (data){
+            $log.log(data);
+            $log.log(vm.filteredItems);
+            $log.log(data, vm.selectAllVehicles);
+
+
+            var filterData;
+            var checkStatus;
+
+            if ( data == 'vehicle' ) {
+                for ( var idx in vm.filteredItems ) {
+                    filterData = vm.filteredItems;
+                    vm.filteredItems[idx].checked = vm.selectAllVehicles;
+                }
+                vm.deSelectAllVehicles =  !vm.selectAllVehicles;;
+            }else if ( data == 'fence'){
+                filterData = vm.filteredFenceItems;
+
+                for ( var idx in vm.filteredFenceItems ) {
+                    vm.filteredFenceItems[idx].checked = vm.selectAllFences;
+                }
+                vm.deSelectAllFences =  !vm.selectAllFences;;
+            }
+        };
+
+        vm.deSelectAll = function(data){
+            if ( data == 'vehicle' ) {
+                for ( var idx in vm.filteredItems ) {
+                    filterData = vm.filteredItems;
+                    vm.filteredItems[idx].checked = false;
+                }
+                vm.selectAllVehicles = false;
+            }else if ( data == 'fence'){
+                filterData = vm.filteredFenceItems;
+
+                for ( var idx in vm.filteredFenceItems ) {
+                    vm.filteredFenceItems[idx].checked = false;
+                }
+                vm.selectAllFences = false;
+
+            }
+        };
+
+        vm.verifyCheckStatus = function( type ) {
+            $log.log('type', type);
+            if ( type == 'vehicle') {
+                var trues = $filter("filter")( vm.currRep.vehicles , {checked:true} );
+                if ( trues.length ) {
+                    vm.deSelectAllVehicles = false;
+                }
+            }else if ( type == 'fence' ) {
+                var trues = $filter("filter")( vm.currRep.fences , {checked:true} );
+                if ( trues.length ) {
+                    vm.deSelectAllFences = false;
+                }
+            }
+
+        };
+
 
         vm.init = function () {
             vm.getMyGeofenceReportsMap();
@@ -258,11 +322,6 @@
 
 
         vm.init();
-
-        vm.activePop
-
-
-
     }
 
 
