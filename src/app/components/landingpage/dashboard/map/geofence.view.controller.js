@@ -202,7 +202,11 @@
         function setFilter(filterType) {
             // $log.log(filterType + " = " + vm.geoFilters[filterType]);
             geofenceViewService.applyFilters(filterType);
-        }
+        };
+
+        function filterList(searchPattern){
+          $log.log(searchPattern);
+        };
 
 
         vm.buttonClick = function (data) {
