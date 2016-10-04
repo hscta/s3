@@ -130,7 +130,56 @@
 
         vm.mydata = rightNavAlertDashboardService.reports();
 
+        vm.activeTabData = vm.mydata;
 
-      //  $log.log((vm.mydata['servicecenterreport'].fences));
+        vm.activeFilter = 'all';
+        vm.finalTabHeightHalf = 35 + 2;// 2 for margin
+        vm.finalTabHeight = 160 + 2; // 2 for margin
+
+        vm.isOpened = function (car,data) {
+            if(car.active){
+                data.childOpened++;
+            }else{
+                data.childOpened--;
+            }
+        };
+
+        vm.resolve = function (car) {
+            if(car.resolved){
+                car.resolved = false;
+                // Do stuff for un resolving
+            }else{
+                car.resolved = true;
+                //Do stuff for resolving
+            }
+        };
+
+        vm.saveRep = function (rep) {
+            //Do some stuffs to save the report
+        };
+
+
+        vm.historyTabData = [
+            {'reportName':'Service Stations', 'vehicles':[
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+            ]},
+            {'reportName':'City Limit', 'vehicles':[
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+            ]},
+        ]
+
+        console.log(vm.activeTabData);
     }
 })();
+
+

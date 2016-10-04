@@ -19,7 +19,7 @@
         <input type="text" ng-model="vm.searchAlertStr">
     </md-input-container>
 
-    <md-content class="alert-md-content">
+    <md-content class="alert-md-content" style="overflow-y: auto">
         <!--<md-list class="md-dense" flex>-->
         <!--<md-list-item class="md-3-line" ng-repeat="alert in vm.inMarkers | filter:{$: vm.searchAlertStr}">-->
         <!--<div class="md-list-item-text" layout="column" ng-click="vm.alertClick(alert.id)">-->
@@ -132,13 +132,75 @@
 
             <!--</md-expansion-panel-expanded>-->
         <!--</md-expansion-panel>-->
-        <md-tabs md-selected="selectedIndex">
+        <md-tabs md-selected="selectedIndex" class="rightNavTabSet">
             <md-tab md-selected="vm.selectedIndex">
                 <md-tab-label>
                     Active
                 </md-tab-label>
                 <md-tab-body>
-
+                    <div class="expansionNav coolbar" style="top:0;">
+                        <!--first wrapper-->
+                        <div class="en_main"
+                             ng-class="{'active':main.active}"  ng-repeat="main in vm.activeTabData">
+                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="main.active = !main.active">
+                                {{main.reportName}}
+                                <div class="enl_item enl_add">
+                                    <i class="fa fa-plus" ng-if="!main.active"></i>
+                                    <i class="fa fa-minus" ng-if="main.active"></i>
+                                </div>
+                                <div class="enl_item enl_count">22</div>
+                            </div>
+                            <!--middle wrapper-->
+                            <div class="en-wrapper">
+                                <div class="en_mid"  ng-repeat="mid in main.fences" ng-init="mid.childOpened = 0"
+                                     ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active }"
+                                     style="height:{{ ( vm.finalTabHeightHalf * ( mid.vehicles.length + 1 ) ) + ( mid.childOpened * (vm.finalTabHeight - vm.finalTabHeightHalf)) }}px">
+                                    <div class="en_label" ng-click="mid.active = !mid.active">
+                                        {{mid.fenceName}}
+                                        <div class="enl_item enl_add">
+                                            <i class="fa fa-plus" ng-if="!mid.active"></i>
+                                            <i class="fa fa-minus" ng-if="mid.active"></i>
+                                        </div>
+                                        <div class="enl_item enl_count">10</div>
+                                    </div>
+                                    <!--final wrapper-->
+                                    <div class="en-wrapper">
+                                        <div class="en_last" ng-repeat="car in mid.vehicles"
+                                        ng-class="{'active':car.active}">
+                                            <div class="en_head" ng-click="car.active =!car.active; vm.isOpened(car,mid)" ng-class="{'resolvedHeader':car.resolved}">
+                                                {{car.vehicleid}}
+                                                <div class="enl_item enl_add">
+                                                    <i class="fa fa-plus" ng-if="!car.active"></i>
+                                                    <i class="fa fa-minus" ng-if="car.active"></i>
+                                                </div>
+                                                <!--<div class="enl_item enl_entry" ng-class="{'redBG':car.triggertype == 'exit','greenBG':car.triggertype == 'entry' }">-->
+                                                    <!--<i class="fa fa-arrow-down" ng-if="car.triggertype == 'entry'"></i>-->
+                                                    <!--<i class="fa fa-arrow-up" ng-if="car.triggertype == 'exit'"></i>-->
+                                                <!--</div>-->
+                                                <div class="enl_item enl_time blueBG"> 4h 22m </div>
+                                            </div>
+                                            <div class="en_body">
+                                                <div class="enb_full" >
+                                                    <i class="fa fa-arrow-down greenColor"></i> Entry : {{car.triggerdate}}
+                                                </div>
+                                                <div class="enb_full">
+                                                    <i class="fa fa-arrow-up redColor" ></i> Exit : {{car.triggerdate}}
+                                                </div>
+                                                <div class="enb_full">
+                                                    <textarea class="coolbar"placeholder="Put Your Message"></textarea>
+                                                    <div class="enb_button_list">
+                                                        <button class="blueBG" ng-click="vm.saveRep(car)"><i class="fa fa-save"></i></button>
+                                                        <button class="greenBG" ng-if="!car.resolved" ng-click="vm.resolve(car)"><i class="fa fa-check"></i></button>
+                                                        <button class="redBG" ng-if="car.resolved" ng-click="vm.resolve(car)"><i class="fa fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </md-tab-body>
             </md-tab>
             <md-tab md-selected="vm.selectedIndex">
@@ -147,6 +209,70 @@
                 </md-tab-label>
                 <md-tab-body>
 
+                    <md-tab-body>
+                        <div class="rnt_head">
+                            <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'all'}" ng-click="vm.activeFilter = 'all'">
+                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">visibility</md-icon>
+                            </div>
+                            <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'ignitionOn'}" ng-click="vm.activeFilter = 'ignitionOn'">
+                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">time_to_leave</md-icon>
+                            </div>
+                            <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'ignitionOff'}" ng-click="vm.activeFilter = 'ignitionOff'">
+                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">radio_button_checked</md-icon>
+                            </div>
+                            <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'active'}" ng-click="vm.activeFilter = 'active'">
+                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">lock_open</md-icon>
+                            </div>
+                        </div>
+                        <div class="expansionNav coolbar">
+                            <!--first wrapper-->
+                            <div class="en_main"
+                                 ng-class="{'active':main.active}"  ng-repeat="main in vm.historyTabData">
+                                <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="main.active = !main.active">
+                                    {{main.reportName}}
+                                    <div class="enl_item enl_add">
+                                        <i class="fa fa-plus" ng-if="!main.active"></i>
+                                        <i class="fa fa-minus" ng-if="main.active"></i>
+                                    </div>
+                                    <div class="enl_item enl_count">22</div>
+                                </div>
+                                <!--middle wrapper-->
+                                <!--final wrapper-->
+                                <div class="en-wrapper">
+                                    <div class="en_last" ng-repeat="car in main.vehicles"
+                                         ng-class="{'active':car.active,'en-closed':!main.active}">
+                                        <div class="en_head" ng-click="car.active =!car.active; vm.isOpened(car,mid)" ng-class="{'resolvedHeader':car.resolved}">
+                                            {{car.vehicleid}}
+                                            <div class="enl_item enl_add">
+                                                <i class="fa fa-plus" ng-if="!car.active"></i>
+                                                <i class="fa fa-minus" ng-if="car.active"></i>
+                                            </div>
+                                            <!--<div class="enl_item enl_entry" ng-class="{'redBG':car.triggertype == 'exit','greenBG':car.triggertype == 'entry' }">-->
+                                            <!--<i class="fa fa-arrow-down" ng-if="car.triggertype == 'entry'"></i>-->
+                                            <!--<i class="fa fa-arrow-up" ng-if="car.triggertype == 'exit'"></i>-->
+                                            <!--</div>-->
+                                            <div class="enl_item enl_time blueBG"> 4h 22m </div>
+                                        </div>
+                                        <div class="en_body">
+                                            <div class="enb_full" >
+                                                <i class="fa fa-arrow-down greenColor"></i> Entry : {{car.triggerdate}}
+                                            </div>
+                                            <div class="enb_full">
+                                                <i class="fa fa-arrow-up redColor" ></i> Exit : {{car.triggerdate}}
+                                            </div>
+                                            <div class="enb_full">
+                                                <textarea class="coolbar"placeholder="Put Your Message"></textarea>
+                                                <div class="enb_button_list">
+                                                    <button class="blueBG" ng-click="vm.saveRep(car)"><i class="fa fa-save"></i></button>
+                                                    <button class="greenBG" ng-if="!car.resolved" ng-click="vm.resolve(car)"><i class="fa fa-check"></i></button>
+                                                    <button class="redBG" ng-if="car.resolved" ng-click="vm.resolve(car)"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </md-tab-body>
             </md-tab>
         </md-tabs>
