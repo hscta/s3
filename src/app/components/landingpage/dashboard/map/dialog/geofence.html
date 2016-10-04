@@ -21,9 +21,11 @@
                         <div class="geo-ms-cont" ng-show="vm.currPop == 'fencePop'">
                             <md-list>
                                 <md-list-item class="md-2-line"
-                                              ng-repeat="item in (vm.filteredFenceItems = (vm.currRep.fences | filter: vm.fenceFilter))">
+                                              ng-repeat="item in (vm.filteredFenceItems = (vm.currRep.fences |
+                                              filter: vm.fenceFilter))">
 
-                                    <md-checkbox ng-model="item.checked" aria-label="myfences">
+                                    <md-checkbox ng-model="item.checked" aria-label="myfences"
+                                                 ng-change="vm.verifyCheckStatus('fence')">
 
                                     </md-checkbox>
                                     <div class="md-list-item-text">
@@ -48,8 +50,7 @@
                                 <md-list-item class="md-2-line"
                                               ng-repeat="item in (vm.filteredItems = (vm.currRep.vehicles | filter: vm.vehicleFilter))">
                                     <md-checkbox ng-model="item.checked" aria-label="myvehicles"
-                                     ng-change="vm.verifyCheckStatus('vehicle')">
-
+                                                 ng-change="vm.verifyCheckStatus('vehicle')">
                                     </md-checkbox>
                                     <div class="md-list-item-text">
                                         <h3>{{item.name}}</h3>
