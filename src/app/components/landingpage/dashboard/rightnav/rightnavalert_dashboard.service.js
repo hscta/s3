@@ -47,46 +47,46 @@
 
 
             var data = [{
-                vehicleid: 'ka024567',
+                vehicleid: 'MH02EH1318',
                 vehiclepath: '1/1/3/1',
                 deviceid: 4567,
                 fencerep: [
                     {
                         fenceid: 1,
-                        fencename: 'fence1',
+                        fencename: 'SNS Motors - Meera Road',
                         reportid: 1234,
-                        reportname: 'servicecenterreport',
+                        reportname: 'Mumbai North Service centers',
                         triggerdat: 14024332,
                         triggerloc: 'bng',
                         triggertype: 'entry'
                     }, {
                         fenceid: 2,
-                        fencename: 'fence2',
+                        fencename: 'Royce Nissan - Meera Road',
                         reportid: 1234,
-                        reportname: 'servicecenterreport',
+                        reportname: 'Mumbai North Service centers',
                         triggerdat: 14024332,
                         triggerloc: 'bng',
                         triggertype: 'exit'
                     },
                 ]
             }, {
-                vehicleid: 'ka06787',
+                vehicleid: 'MH02EH1233',
                 vehiclepath: '1/1/3/1',
                 deviceid: 4567,
                 fencerep: [
                     {
                         fenceid: 1,
-                        fencename: 'fence1',
+                        fencename: 'Ritu Nissan - Thane',
                         reportid: 234,
-                        reportname: 'servicecenterreport',
+                        reportname: 'Thane Service centers',
                         triggerdat: 14024332,
                         triggerloc: 'bng',
                         triggertype: 'entry'
                     }, {
                         fenceid: 2,
-                        fencename: 'fence2',
+                        fencename: 'Ecotech - Thane',
                         reportid: 1234,
-                        reportname: 'servicecenterreport',
+                        reportname: 'Thane Service centers',
                         triggerdat: 14024332,
                         triggerloc: 'bng',
                         triggertype: 'exit'

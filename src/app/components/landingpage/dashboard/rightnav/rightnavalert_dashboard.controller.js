@@ -201,22 +201,22 @@
 
         vm.historyTabData = [
             {'reportName':'Service Stations', class:'redBG', 'vehicles':[
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka2232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka3232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka4232', triggerdate:'10/11/16' },
-            ]},
-            {'reportName':'City Limit', 'vehicles':[
-                {'vehicleid':'ka5232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka6232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka7232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka8232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka9232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka2232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka3232', triggerdate:'10/11/16' },
-            ]},
-        ]
+            {'vehicleid':'MH04HN1366', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1303', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1304', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1305', triggerdate:'10/11/16' },
+        ]},
+        {'reportName':'City Limit', class:'redBG', 'vehicles':[
+            {'vehicleid':'MH02EH1306', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1307', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1308', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1309', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1310', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1311', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1312', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1313', triggerdate:'10/11/16' },
+        ]}
+    ]
 
         vm.getColorCounter = 0;
 
