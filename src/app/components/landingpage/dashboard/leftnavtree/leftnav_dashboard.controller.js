@@ -7,11 +7,11 @@
         .module('uiplatform')
         .controller('LeftNavDashboardController', LeftNavDashboardController);
 
-        // .filter('trust', function ($sce) {
-        //     return function (val) {
-        //         return $sce.trustAsHtml(val);
-        //     };
-        // });
+    // .filter('trust', function ($sce) {
+    //     return function (val) {
+    //         return $sce.trustAsHtml(val);
+    //     };
+    // });
 
     function LeftNavDashboardController($scope, $rootScope, $log, intellicarAPI,
                                         leftNavDashboardService, $state, $filter) {
@@ -43,16 +43,16 @@
         };
 
 
-        vm.handleMyVehicles = function(resp) {
+        vm.handleMyVehicles = function (resp) {
             //$log.log(resp);
             //subscribe all assets
-            for(var idx in resp) {
+            for (var idx in resp) {
                 vm.subscribe(resp[idx], true);
             }
         };
 
 
-        vm.getMyVehicles = function() {
+        vm.getMyVehicles = function () {
             leftNavDashboardService.getMyVehicles({})
                 .then(vm.handleMyVehicles, vm.handleFailure);
         };
@@ -97,20 +97,26 @@
         };
 
 
-        vm.subscribeCheckStatus = function(item) {
+        vm.subscribeCheckStatus = function (item) {
+            var subscriptionKey = 'gps';
             if (item.checkStatus === "checked") {
-                intellicarAPI.mqttService.subscribeAsset(item.info);
+                intellicarAPI.mqttService.subscribeAsset(item.info, subscriptionKey);
             } else {
-                intellicarAPI.mqttService.unsubscribeAsset(item.info);
+                intellicarAPI.mqttService.unsubscribeAsset(item.info, subscriptionKey);
             }
         };
 
 
-        vm.subscribe = function(asset, flag) {
-            if(flag) {
-                intellicarAPI.mqttService.subscribeAsset(asset);
+        vm.subscribe = function (asset, flag) {
+            var subscriptionKey = 'gps';
+            var vehiclePath = intellicarAPI.helperService.getAssetPath(asset);
+            var subscriptionMsg = [{path: vehiclePath}];
+            if (flag) {
+                //intellicarAPI.mqttService.subscribeAsset(asset, subscriptionKey);
+                intellicarAPI.mqttService.subscribe(subscriptionMsg, subscriptionKey);
             } else {
-                intellicarAPI.mqttService.unsubscribeAsset(asset);
+                //intellicarAPI.mqttService.unsubscribeAsset(asset, subscriptionKey);
+                intellicarAPI.mqttService.unsubscribe(subscriptionMsg, subscriptionKey);
             }
         };
 
@@ -129,13 +135,12 @@
                 }
                 if (retVal != item.checkStatus)
                     return "partlyChecked";
-
             }
             return retVal;
         };
 
         vm.expandAll = function () {
-            if ( vm.tree_search_pattern.length <= 0 ){
+            if (vm.tree_search_pattern.length <= 0) {
                 $scope.$broadcast('angular-ui-tree:expand-all');
             } else {
                 $scope.$broadcast('angular-ui-tree:collapse-all');

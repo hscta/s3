@@ -13,11 +13,13 @@
         $log.log("mqttService");
 
         var vm = this;
-        vm.socketiohost = 'http://in2.intellicar.in:10105';
+        vm.socketiohost = 'http://in3.intellicar.in:10105';
         vm.socket = null;
         vm.listeners = {};
         vm.socket = null;
         vm.toggleTestData = false;
+        vm.subscriptionList = {};
+        vm.authSuccess = false;
         //vm.connected = false;
 
 
@@ -30,7 +32,7 @@
                 vm.socket.on('close', vm.onClose);
             }
 
-            $timeout(vm.initSocket, 5000);
+            //$timeout(vm.initSocket, 5000);
         };
 
 
@@ -62,9 +64,20 @@
 
         vm.onAuthSuccess = function () {
             $log.log('mqtt authSuccess');
+            vm.authSuccess = true;
+            //vm.subscriptionList = {};
             //vm.socket.emit('subscribe', ['gps', [{path: "vehiclepath"}]]);
-            for(var idx in vm.subscriptionList) {
-                vm.subscribeChannel(vm.subscriptionList[idx]);
+
+            for (var key in vm.subscriptionList) {
+                vm.subscribeKey(key);
+            }
+        };
+
+
+        vm.subscribeKey = function (key) {
+            for (var eachitem in vm.subscriptionList[key]) {
+                vm.subscribeChannel(vm.subscriptionList[key][eachitem], key);
+                //vm.subscribe(vm.subscriptionList[idx][eachitem], idx);
             }
         };
 
@@ -83,57 +96,68 @@
         };
 
 
-        vm.subscriptionList = [];
-
-
-        vm.subscribe = function(path) {
-            if(vm.subscriptionList.indexOf(path) == -1) {
-                vm.subscriptionList.push(path);
-                vm.subscribeChannel(path);
+        vm.subscribe = function (path, key) {
+            if (!(key in vm.subscriptionList)) {
+                vm.subscriptionList[key] = [];
             }
+
+            vm.subscriptionList[key].push(path);
+            vm.subscribeChannel(path, key);
         };
 
 
-        vm.unsubscribe = function(path) {
-            var index = vm.subscriptionList.indexOf(path);
-            if(index > -1) {
-                vm.unsubscribeChannel(path);
-                vm.subscriptionList.splice(index, 1);
-            }
+        vm.unsubscribe = function (path, key) {
+            // var index = vm.subscriptionList.indexOf(path);
+            // if (index > -1) {
+            //     vm.unsubscribeChannel(path, key);
+            //     vm.subscriptionList.splice(index, 1);
+            // }
         };
 
-        vm.subscribeChannel = function (path) {
-            //$log.log("subscribe: " + path);
+        vm.subscribeChannel = function (path, key) {
+            $log.log("subscribe: " + key + ", " + JSON.stringify(path));
             var msg = {};
             msg.data = [];
-            msg.data.push(['gps', [{path: path}]]);
+            msg.data.push([key, path]);
             //$log.log(msg);
             vm.socket.emit('subscribe', msg);
         };
 
 
-        vm.unsubscribeChannel = function (path) {
-            $log.log("unsubscribe: " + path);
+        vm.unsubscribeChannel = function (path, key) {
+            //$log.log("unsubscribe: " + key + ", " + path);
             var msg = {};
             msg.data = [];
-            msg.data.push(['gps', [{path: path}]]);
+            msg.data.push([key, path]);
             //$log.log(msg);
             vm.socket.emit('unsubscribe', msg);
         };
 
 
-        vm.subscribeAsset = function (asset) {
-            vm.subscribe(helperService.getAssetPath(asset));
+        vm.subscribeAsset = function (path, key) {
+            //vm.subscribe(helperService.getAssetPath(asset), key);
+            vm.subscribe(path, key);
         };
 
 
-        vm.unsubscribeAsset = function (asset) {
-            vm.unsubscribe(helperService.getAssetPath(asset));
+        vm.unsubscribeAsset = function (path, key) {
+            //vm.unsubscribe(helperService.getAssetPath(asset), key);
+            vm.unsubscribe(path, key);
         };
 
 
-        vm.getTopicKey = function(msg) {
-            if(msg.length > 0) {
+        // vm.getSubscriptionMsg = function (path, key) {
+        //     switch(key) {
+        //         case 'gps':
+        //             return [key, [{path: path}]];
+        //         case 'fencereport':
+        //             return [key, [{fencereport: 'xyz', vehiclelist: ['vehiclepath1', 'vehiclepath2']}]];
+        //     }
+        // };
+
+
+        vm.getTopicKey = function (msg) {
+            if (msg.length > 0) {
                 var tokens = msg[0].split('/');
                 if (tokens.length > 2)
                     return tokens[2];
@@ -143,13 +167,12 @@
         };
 
 
-
         vm.onReceiveMsg = function (msg) {
             //$log.log('mqtt onReceiveMsg');
             //$log.log(JSON.stringify(msg));
 
             var topicKey = vm.getTopicKey(msg);
-            if(topicKey == null) {
+            if (topicKey == null) {
                 $log.log("Invalid mqtt msg");
                 $log.log(msg);
                 return;
@@ -167,14 +190,16 @@
 
             if (vm.listeners[key].indexOf(listener) === -1) {
                 vm.listeners[key].push(listener);
+                //$log.log("mqtt addlistener: " + key + ", " + listener);
             }
         };
 
 
         vm.callListeners = function (msg, key) {
-            if(key in vm.listeners) {
-                for(var idx in vm.listeners[key]) {
+            if (key in vm.listeners) {
+                for (var idx in vm.listeners[key]) {
                     vm.listeners[key][idx](msg, key);
+                    //$log.log("mqtt call listener: " + key + ", " + idx);
                 }
             }
         };
@@ -185,7 +210,9 @@
         return {
             addListener: vm.addListener,
             subscribeAsset: vm.subscribeAsset,
-            unsubscribeAsset: vm.unsubscribeAsset
+            unsubscribeAsset: vm.unsubscribeAsset,
+            subscribe: vm.subscribe,
+            unsubscribe: vm.unsubscribe
         }
     }
 

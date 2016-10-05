@@ -7,11 +7,50 @@
         .module('uiplatform')
         .controller('RightNavDashboardController', RightNavDashboardController);
 
-    function RightNavDashboardController($log, rightNavAlertDashboardService, mapService) {
+    function RightNavDashboardController($log, rightNavAlertDashboardService,
+                                         mapService, geofenceReportService, intellicarAPI) {
+        $log.log("RightNavDashboardController");
         var vm = this;
         vm.alertDetails = [];
         vm.inMarkers = [];
         vm.searchAlertStr = '';
+        vm.reports = {};
+
+        vm.handleFailure = function (resp) {
+            $log.log('handleFailure');
+            $log.log(resp);
+        };
+
+
+        vm.getMyGeofenceReports = function (resp) {
+            //$log.log(resp);
+            vm.reports = geofenceReportService.getMyGeofenceReports();
+            $log.log(vm.reports);
+
+            for(var idx in vm.reports) {
+                var subscriptionMsg = [];
+                subscriptionMsg.push({fencereport: idx, vehicles:[]});
+                for(var eachitem in vm.reports[idx].assg) {
+                    subscriptionMsg[0].vehicles.push(vm.reports[idx].assg[eachitem].assetpath);
+                }
+                intellicarAPI.mqttService.subscribe(subscriptionMsg, 'rtfence');
+
+                $log.log(subscriptionMsg);
+            }
+
+            vm.currRep = vm.reports[0];
+            //vm.currFence = vm.currRep.fences[0];
+            //vm.tableSort = {'id': 1, 'str': 'name', 'reverse': false};
+        };
+
+
+        // vm.getMyGeofenceReportsMap = function () {
+        //     geofenceReportService.getMyGeofenceReportsMap()
+        //         .then(vm.getMyGeofenceReports, vm.handleFailure);
+        // };
+
+
+
         vm.getDashboardAlerts = function (data) {
             $log.log(data);
             vm.formatAlertData(data);
@@ -166,7 +205,7 @@
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
             ]},
-            {'reportName':'City Limit', 'vehicles':[
+            {'reportName':'City Limit', class:'redBG', 'vehicles':[
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
@@ -175,10 +214,28 @@
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-            ]},
-        ]
+            ]}
+        ];
 
         console.log(vm.activeTabData);
+
+        vm.updateFenceReport = function (msg) {
+            $log.log(msg);
+        };
+
+
+        vm.init = function () {
+            intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
+        };
+
+
+
+
+
+
+
+        vm.init();
     }
 })();
 
