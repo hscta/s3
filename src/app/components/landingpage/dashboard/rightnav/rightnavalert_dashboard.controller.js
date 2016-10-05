@@ -137,11 +137,11 @@
         vm.finalTabHeight = 160 + 2; // 2 for margin
 
         vm.isOpened = function (car,data) {
-            if(car.active){
-                data.childOpened++;
-            }else{
-                data.childOpened--;
-            }
+            // if(car.active){
+            //     data.childOpened++;
+            // }else{
+            //     data.childOpened--;
+            // }
         };
 
         vm.resolve = function (car) {
@@ -162,23 +162,141 @@
         vm.historyTabData = [
             {'reportName':'Service Stations', 'vehicles':[
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka2232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka3232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka4232', triggerdate:'10/11/16' },
             ]},
             {'reportName':'City Limit', 'vehicles':[
+                {'vehicleid':'ka5232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka6232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka7232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka8232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka9232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka2232', triggerdate:'10/11/16' },
+                {'vehicleid':'ka3232', triggerdate:'10/11/16' },
             ]},
         ]
 
-        console.log(vm.activeTabData);
+        vm.getColorCounter = 0;
+
+        vm.getColor = 'border-top: 1px solid #f00;';;
+        vm.getColors = function(){
+            vm.getColorCounter++;
+            if(vm.getColorCounter == 1){ return getStyle('#2ecc71'); }else
+            if(vm.getColorCounter == 2){ return getStyle('#34495e'); }else
+            if(vm.getColorCounter == 3){ return getStyle('#3498db'); }else
+            if(vm.getColorCounter == 4){ return getStyle('#9b59b6'); }else
+            if(vm.getColorCounter == 5){ return getStyle('#1abc9c'); }else
+            if(vm.getColorCounter == 6){ return getStyle('#f1c40f'); }else
+            if(vm.getColorCounter == 7){ return getStyle('#e67e22'); }else
+            if(vm.getColorCounter == 8){ return getStyle('#e74c3c'); }else
+            if(vm.getColorCounter == 9){ return getStyle('#d35400'); vm.getColorCounter = 0}
+        };
+
+        function getStyle(color) {
+            return 'border-top: 2px solid '+color+'; ';
+        }
+
+        vm.searching = function (val,e,id,id2,id3) {
+            if(vm.selectedIndex == 0) {
+                for (var idx = 0; idx < vm.activeTabData.length; idx++) {
+                    if (idx == id) {
+                        setActive(vm.activeTabData[idx], val, true, 1, e);
+                    } else {
+                        setActive(vm.activeTabData[idx], val, false, 1, e);
+                    }
+                    for (var jdx = 0; jdx < vm.activeTabData[idx].fences.length; jdx++) {
+                        if (idx == id && jdx == id2) {
+                            setActive(vm.activeTabData[idx].fences[jdx], val, true, 2, e);
+                        } else {
+                            setActive(vm.activeTabData[idx].fences[jdx], val, false, 2, e);
+                        }
+                        for (var kdx = 0; kdx < vm.activeTabData[idx].fences[jdx].vehicles.length; kdx++) {
+                            if (idx == id && jdx == id2 && kdx == id3) {
+                                setActive(vm.activeTabData[idx].fences[jdx].vehicles[kdx], val, true, 3, e);
+                            } else {
+                                setActive(vm.activeTabData[idx].fences[jdx].vehicles[kdx], val, false, 3, e);
+                            }
+                        }
+                    }
+                }
+            }else if(vm.selectedIndex == 1){
+                for (var idx = 0; idx < vm.historyTabData.length; idx++) {
+                    if (idx == id) {
+                        setActive(vm.historyTabData[idx], val, true, 1, e);
+                    } else {
+                        setActive(vm.historyTabData[idx], val, false, 1, e);
+                    }
+                    for (var jdx = 0; jdx < vm.historyTabData[idx].vehicles.length; jdx++) {
+                        if (idx == id && jdx == id2) {
+                            setActive(vm.historyTabData[idx].vehicles[jdx], val, true, 3, e);
+                        } else {
+                            setActive(vm.historyTabData[idx].vehicles[jdx], val, false, 3, e);
+                        }
+                    }
+                }
+            }
+        };
+
+        vm.itemClicked = function (data,id,id2,id3) {
+            if(vm.filterActive){
+                vm.searching(vm.searchAlertStr,'click',id,id2,id3);
+            }else{
+                data.active = !data.active;
+            }
+        };
+
+        function setActive(data,val,active,level,e) {
+            if(e != 'click'){
+                if(angular.isDefined(vm.searchAlertStr) && vm.searchAlertStr != ''){
+                    if(level != 3){
+                        data.active = true;
+                        vm.filterActive = true;
+                    }
+                }else{
+                    if(!active){
+                        data.active = false;
+                        vm.filterActive = false;
+                    }
+                    if(level == 3){
+                        data.active = false;
+                        vm.filterActive = false;
+                    }
+                }
+            }else{
+                if(!active){
+                    data.active = !data.active;
+                    vm.filterActive = false
+                }
+                if(level == 3){
+                    data.active = !data.active;
+                    vm.filterActive = false;
+                }
+            }
+        }
+        //
+        // function checkDataStrFilter(data) {
+        //     if(checkDataStr(data)){
+        //         data.active = true;
+        //     }else{
+        //         data.active = false;
+        //     }
+        // }
+        //
+        // function checkDataStr(data) {
+        //     var found = false;
+        //     for(var key in data){
+        //         if(data.hasOwnProperty(key)){
+        //             if(data[key].toString().indexOf(vm.searchAlertStr)){
+        //                 console.log(data[key].toString());
+        //                 found = true;
+        //             }
+        //         }
+        //     }
+        //     if(found){ return true; }
+        //     else { return false; }
+        // }
     }
 })();
 

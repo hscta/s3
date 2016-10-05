@@ -16,7 +16,7 @@
     <!--The ROot Node-->
     <md-input-container class="container-margin">
         <label>Search alerts</label>
-        <input type="text" ng-model="vm.searchAlertStr">
+        <input type="text" ng-model="vm.searchAlertStr" ng-blur="vm.searchAlertStr =''" ng-keyup="vm.searching(vm.searchAlertStr,'keydown')">
     </md-input-container>
 
     <md-content class="alert-md-content" style="overflow-y: auto">
@@ -132,8 +132,8 @@
 
             <!--</md-expansion-panel-expanded>-->
         <!--</md-expansion-panel>-->
-        <md-tabs md-selected="selectedIndex" class="rightNavTabSet">
-            <md-tab md-selected="vm.selectedIndex">
+        <md-tabs md-selected="vm.selectedIndex" class="rightNavTabSet">
+            <md-tab>
                 <md-tab-label>
                     Active
                 </md-tab-label>
@@ -141,8 +141,8 @@
                     <div class="expansionNav coolbar" style="top:0;">
                         <!--first wrapper-->
                         <div class="en_main"
-                             ng-class="{'active':main.active}"  ng-repeat="main in vm.activeTabData">
-                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="main.active = !main.active">
+                             ng-class="{'active':main.active}"  ng-repeat="main in vm.activeTabData | filter : vm.searchAlertStr">
+                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" ng-init="main.id = $index" >
                                 {{main.reportName}}
                                 <div class="enl_item enl_add">
                                     <i class="fa fa-plus" ng-if="!main.active"></i>
@@ -152,10 +152,9 @@
                             </div>
                             <!--middle wrapper-->
                             <div class="en-wrapper">
-                                <div class="en_mid"  ng-repeat="mid in main.fences" ng-init="mid.childOpened = 0"
-                                     ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active }"
-                                     style="height:{{ ( vm.finalTabHeightHalf * ( mid.vehicles.length + 1 ) ) + ( mid.childOpened * (vm.finalTabHeight - vm.finalTabHeightHalf)) }}px">
-                                    <div class="en_label" ng-click="mid.active = !mid.active">
+                                <div class="en_mid"  ng-repeat="mid in main.fences | filter : vm.searchAlertStr"
+                                     ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active  }">
+                                    <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)" ng-init="mid.id = $index">
                                         {{mid.fenceName}}
                                         <div class="enl_item enl_add">
                                             <i class="fa fa-plus" ng-if="!mid.active"></i>
@@ -165,9 +164,9 @@
                                     </div>
                                     <!--final wrapper-->
                                     <div class="en-wrapper">
-                                        <div class="en_last" ng-repeat="car in mid.vehicles"
-                                        ng-class="{'active':car.active}">
-                                            <div class="en_head" ng-click="car.active =!car.active; vm.isOpened(car,mid)" ng-class="{'resolvedHeader':car.resolved}">
+                                        <div class="en_last" ng-repeat="car in mid.vehicles | filter : vm.searchAlertStr"
+                                        ng-class="{'active':car.active && mid.active,'en-closed':!mid.active}">
+                                            <div class="en_head" ng-click="vm.itemClicked(car,main.id,mid.id,$index); " ng-class="{'resolvedHeader':car.resolved}">
                                                 {{car.vehicleid}}
                                                 <div class="enl_item enl_add">
                                                     <i class="fa fa-plus" ng-if="!car.active"></i>
@@ -212,23 +211,17 @@
                     <md-tab-body>
                         <div class="rnt_head">
                             <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'all'}" ng-click="vm.activeFilter = 'all'">
-                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">visibility</md-icon>
+                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">check_circle</md-icon>
                             </div>
                             <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'ignitionOn'}" ng-click="vm.activeFilter = 'ignitionOn'">
-                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">time_to_leave</md-icon>
-                            </div>
-                            <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'ignitionOff'}" ng-click="vm.activeFilter = 'ignitionOff'">
-                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">radio_button_checked</md-icon>
-                            </div>
-                            <div class="rnth_item" ng-class="{'active':vm.activeFilter == 'active'}" ng-click="vm.activeFilter = 'active'">
-                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">lock_open</md-icon>
+                                <md-icon class="icon-font icon-visibility material-icons md-light" md-font-library="material-icons">cancel</md-icon>
                             </div>
                         </div>
-                        <div class="expansionNav coolbar">
-                            <!--first wrapper-->
+                        <!--first wrapper-->
+                        <div class="expansionNav coolbar" >
                             <div class="en_main"
-                                 ng-class="{'active':main.active}"  ng-repeat="main in vm.historyTabData">
-                                <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="main.active = !main.active">
+                                 ng-class="{'active':main.active}"  ng-repeat="main in vm.historyTabData | filter : vm.searchAlertStr">
+                                <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" ng-init="main.id = $index" >
                                     {{main.reportName}}
                                     <div class="enl_item enl_add">
                                         <i class="fa fa-plus" ng-if="!main.active"></i>
@@ -239,9 +232,9 @@
                                 <!--middle wrapper-->
                                 <!--final wrapper-->
                                 <div class="en-wrapper">
-                                    <div class="en_last" ng-repeat="car in main.vehicles"
-                                         ng-class="{'active':car.active,'en-closed':!main.active}">
-                                        <div class="en_head" ng-click="car.active =!car.active; vm.isOpened(car,mid)" ng-class="{'resolvedHeader':car.resolved}">
+                                    <div class="en_last" ng-repeat="car in main.vehicles | filter : vm.searchAlertStr"
+                                         ng-class="{'active':car.active && main.active,'en-closed':!main.active}">
+                                        <div class="en_head" ng-click="vm.itemClicked(car,main.id,$index); " ng-class="{'resolvedHeader':car.resolved}">
                                             {{car.vehicleid}}
                                             <div class="enl_item enl_add">
                                                 <i class="fa fa-plus" ng-if="!car.active"></i>
