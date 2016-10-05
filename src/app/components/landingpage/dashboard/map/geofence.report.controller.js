@@ -317,7 +317,8 @@
 
 
         vm.init = function () {
-            vm.getMyGeofenceReportsMap();
+            geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
+            vm.getMyGeofenceReports();
         };
 
 
