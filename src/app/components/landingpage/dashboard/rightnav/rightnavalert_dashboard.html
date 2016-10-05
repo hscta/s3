@@ -143,7 +143,7 @@
                         <div class="en_main"
                              ng-class="{'active':main.active}"  ng-repeat="main in vm.activeTabData | filter : vm.searchAlertStr">
                             <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" ng-init="main.id = $index" >
-                                {{main.reportName}}
+                                {{main.reportname}}
                                 <div class="enl_item enl_add">
                                     <i class="fa fa-plus" ng-if="!main.active"></i>
                                     <i class="fa fa-minus" ng-if="main.active"></i>
@@ -155,7 +155,7 @@
                                 <div class="en_mid"  ng-repeat="mid in main.fences | filter : vm.searchAlertStr"
                                      ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active  }">
                                     <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)" ng-init="mid.id = $index">
-                                        {{mid.fenceName}}
+                                        {{mid.fencename}}
                                         <div class="enl_item enl_add">
                                             <i class="fa fa-plus" ng-if="!mid.active"></i>
                                             <i class="fa fa-minus" ng-if="mid.active"></i>

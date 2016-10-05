@@ -167,7 +167,7 @@
         ];
 
 
-        vm.mydata = rightNavAlertDashboardService.reports();
+        vm.mydata = rightNavAlertDashboardService.updateFenceReport();
         $log.log(vm.mydata);
 
         vm.activeTabData = vm.mydata;
@@ -200,7 +200,7 @@
 
 
         vm.historyTabData = [
-            {'reportName':'Service Stations', 'vehicles':[
+            {'reportName':'Service Stations', class:'redBG', 'vehicles':[
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka2232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka3232', triggerdate:'10/11/16' },
@@ -233,7 +233,6 @@
             if(vm.getColorCounter == 8){ return getStyle('#e74c3c'); }else
             if(vm.getColorCounter == 9){ return getStyle('#d35400'); vm.getColorCounter = 0}
         };
-
         function getStyle(color) {
             return 'border-top: 2px solid '+color+'; ';
         }
@@ -337,6 +336,7 @@
         //     if(found){ return true; }
         //     else { return false; }
         // }
+        //console.log(vm.activeTabData);
 
         vm.updateFenceReport = function (msg) {
             $log.log(msg);
@@ -344,7 +344,7 @@
 
 
         vm.init = function () {
-            intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            //intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
         };
 
