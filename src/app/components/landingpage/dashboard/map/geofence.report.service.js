@@ -23,7 +23,7 @@
 
 
         vm.handleGeofenceReportInfoMap = function (reports) {
-            //$log.log('handleGeofenceReportInfoMap');
+            $log.log('geofenceReportService');
             //$log.log(reports);
             for(var idx in reports) {
                 var reportInfo = reports[idx];
@@ -31,7 +31,9 @@
                 vm.reports[reportInfo.assetpath] = reportInfo;
             }
 
-            //$log.log(vm.reports);
+            $log.log(vm.reports);
+            vm.callListeners(vm.reports, 'mygeofencereportsinfo');
+
             return $q.resolve(vm.reports);
         };
 
@@ -55,6 +57,35 @@
         vm.getMyGeofenceReportsMap = function () {
             return intellicarAPI.userService.getMyGeofenceReportsMap({})
                 .then(vm.handleMyGeofenceReportsMap, vm.handleFailure);
-        }
+        };
+
+
+        vm.addListener = function (key, listener) {
+            if (!(key in vm.listeners)) {
+                vm.listeners[key] = [];
+            }
+
+            if (vm.listeners[key].indexOf(listener) === -1) {
+                vm.listeners[key].push(listener);
+            }
+        };
+
+
+        vm.callListeners = function (msg, key) {
+            if(key in vm.listeners) {
+                for(var idx in vm.listeners[key]) {
+                    vm.listeners[key][idx](msg, key);
+                }
+            }
+        };
+
+
+
+        vm.init = function () {
+            vm.getMyGeofenceReportsMap();
+        };
+
+
+        vm.init();
     }
 })();

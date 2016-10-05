@@ -179,5 +179,19 @@
                 });
             };
 
+            vm.updateFenceReport = function (msg) {
+                //$log.log('updateFenceReport');
+                $log.log(msg);
+
+            };
+
+
+            vm.init = function () {
+                //intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            };
+
+
+            vm.init();
+
         });
 })();
