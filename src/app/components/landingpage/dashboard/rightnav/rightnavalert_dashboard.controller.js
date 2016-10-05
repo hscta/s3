@@ -168,6 +168,7 @@
 
 
         vm.mydata = rightNavAlertDashboardService.reports();
+        $log.log(vm.mydata);
 
         vm.activeTabData = vm.mydata;
 
