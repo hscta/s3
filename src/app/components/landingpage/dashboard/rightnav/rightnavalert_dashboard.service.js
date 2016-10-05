@@ -47,7 +47,7 @@
 
 
             var data = [{
-                vehicleid: 'ka024567',
+                vehicleid: 'MH02EH1318',
                 vehiclepath: '1/1/3/1',
                 deviceid: 4567,
                 fencerep: [
@@ -70,7 +70,7 @@
                     },
                 ]
             }, {
-                vehicleid: 'ka06787',
+                vehicleid: 'MH02EH1233',
                 vehiclepath: '1/1/3/1',
                 deviceid: 4567,
                 fencerep: [
