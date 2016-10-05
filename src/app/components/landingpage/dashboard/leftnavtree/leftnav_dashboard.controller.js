@@ -44,7 +44,7 @@
 
 
         vm.handleMyVehicles = function (resp) {
-            //$log.log(resp);
+            $log.log(resp);
             //subscribe all assets
             for (var idx in resp) {
                 vm.subscribe(resp[idx], true);

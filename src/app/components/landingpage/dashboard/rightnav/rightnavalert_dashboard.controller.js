@@ -167,7 +167,7 @@
         ];
 
 
-        vm.mydata = rightNavAlertDashboardService.reports();
+        vm.mydata = rightNavAlertDashboardService.updateFenceReport();
         $log.log(vm.mydata);
 
         vm.activeTabData = vm.mydata;
@@ -200,7 +200,7 @@
 
 
         vm.historyTabData = [
-            {'reportName':'Service Stations', 'vehicles':[
+            {'reportName':'Service Stations', class:'redBG', 'vehicles':[
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
                 {'vehicleid':'ka1232', triggerdate:'10/11/16' },
@@ -218,7 +218,7 @@
             ]}
         ];
 
-        console.log(vm.activeTabData);
+        //console.log(vm.activeTabData);
 
         vm.updateFenceReport = function (msg) {
             $log.log(msg);
@@ -226,7 +226,7 @@
 
 
         vm.init = function () {
-            intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            //intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
         };
 

@@ -143,7 +143,7 @@
                         <div class="en_main"
                              ng-class="{'active':main.active}"  ng-repeat="main in vm.activeTabData">
                             <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="main.active = !main.active">
-                                {{main.reportName}}
+                                {{main.reportname}}
                                 <div class="enl_item enl_add">
                                     <i class="fa fa-plus" ng-if="!main.active"></i>
                                     <i class="fa fa-minus" ng-if="main.active"></i>
@@ -156,7 +156,7 @@
                                      ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active }"
                                      style="height:{{ ( vm.finalTabHeightHalf * ( mid.vehicles.length + 1 ) ) + ( mid.childOpened * (vm.finalTabHeight - vm.finalTabHeightHalf)) }}px">
                                     <div class="en_label" ng-click="mid.active = !mid.active">
-                                        {{mid.fenceName}}
+                                        {{mid.fencename}}
                                         <div class="enl_item enl_add">
                                             <i class="fa fa-plus" ng-if="!mid.active"></i>
                                             <i class="fa fa-minus" ng-if="mid.active"></i>
