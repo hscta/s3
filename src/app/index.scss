@@ -916,7 +916,7 @@ body{
         border-right: 0;
         .rnth_item{
             height:100%;
-            width:50%;
+            width:33.3333%;
             float:left;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
@@ -1071,6 +1071,9 @@ $rnt_label_height : 35px;
         .en_last.active{
             height: 160px;
         }
+        .en_last.active.noExit{
+            height: 135px;
+        }
         .enl_time{
             background: #777;
             padding:0 10px;
@@ -1081,13 +1084,13 @@ $rnt_label_height : 35px;
         float: left;
         position: relative;
         width: 100%;
-        padding-right: 10px;
+        padding-right: 15px;
     }
     .en-wrapper:after{
         content: '';
         display: block;
         float: left;
-        right: 4px;
+        right: 6px;
         position: absolute;
         width: 2px;
         top: 3px;
@@ -1137,6 +1140,7 @@ $rnt_label_height : 35px;
 .greenBG{ background: #2ecc71!important;  color:#fff!important;;}
 .blueBG{ background: #3498db!important;  color:#fff!important;;}
 .yellowBG{ background: #f1c40f!important;  color:#fff!important;;}
+.greyBG{ background:#b3b3b3 !important;  color:#fff!important;;}
 
 .redColor{ color:#e87468!important; }
 .greenColor{color: #2ecc71!important; }
@@ -1150,3 +1154,86 @@ $rnt_label_height : 35px;
 .coolbar::-webkit-scrollbar-thumb{ background: #bbb;}
 .coolbar::-webkit-scrollbar-corner{}
 .coolbar::-webkit-resizer{}
+
+button{
+    position: relative;
+}
+.spinner{
+    display: block;
+    top: 50%;
+    left: 50%;
+    margin-left:-9px;
+    margin-top:-9px;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border:2px solid #fff;
+    border-bottom:0;
+    @include border-radius(100%);
+    animation-name: rotateAnim;
+    -o-animation-name: rotateAnim;
+    -ms-animation-name: rotateAnim;
+    -webkit-animation-name: rotateAnim;
+    -moz-animation-name: rotateAnim;
+    animation-duration: 0.7s;
+    -o-animation-duration: 0.7s;
+    -ms-animation-duration: 0.7s;
+    -webkit-animation-duration: 0.7s;
+    -moz-animation-duration: 0.7s;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    -ms-animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+}
+
+
+@keyframes rotateAnim {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-o-keyframes rotateAnim {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-ms-keyframes rotateAnim {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes rotateAnim {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes rotateAnim {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

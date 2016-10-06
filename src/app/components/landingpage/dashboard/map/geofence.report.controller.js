@@ -93,8 +93,6 @@
         // ];
 
         vm.setReport = function (rep) {
-            vm.currRep = rep;
-            $log.log(rep);
             //vm.currFence = vm.currRep.fences[0];
             vm.currRep = {};
             vm.currRep.vehicles = [];
@@ -114,7 +112,6 @@
                     vm.currRep.fences.push(data);
                 }
             }
-
             vm.deSelectAllVehicles = true;
             vm.deSelectAllFences = true;
         };

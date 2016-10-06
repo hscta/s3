@@ -7,7 +7,7 @@
         .module('uiplatform')
         .controller('RightNavDashboardController', RightNavDashboardController);
 
-    function RightNavDashboardController($log, rightNavAlertDashboardService,
+    function RightNavDashboardController($log, rightNavAlertDashboardService,$timeout,
                                          mapService, geofenceReportService, intellicarAPI) {
         $log.log("RightNavDashboardController");
         var vm = this;
@@ -184,37 +184,27 @@
             // }
         };
 
-        vm.resolve = function (car) {
-            if(car.resolved){
-                car.resolved = false;
-                // Do stuff for un resolving
-            }else{
-                car.resolved = true;
-                //Do stuff for resolving
-            }
-        };
 
-        vm.saveRep = function (rep) {
-            //Do some stuffs to save the report
-        };
+        vm.resolveFilter = true;
+        vm.resolveFilterAll = true;
 
 
         vm.historyTabData = [
             {'reportName':'Service Stations', class:'redBG', 'vehicles':[
-            {'vehicleid':'MH04HN1366', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1303', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1304', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1305', triggerdate:'10/11/16' },
+            {'vehicleid':'MH04HN1366', resolved:false, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1303', resolved:true, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1304', resolved:true, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1305', resolved:false, triggerdate:'10/11/16' },
         ]},
         {'reportName':'City Limit', class:'redBG', 'vehicles':[
-            {'vehicleid':'MH02EH1306', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1307', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1308', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1309', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1310', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1311', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1312', triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1313', triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1306', resolved:true, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1307', resolved:false, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1308', resolved:true, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1309', resolved:false, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1310', resolved:true, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1311', resolved:true, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1312', resolved:false, triggerdate:'10/11/16' },
+            {'vehicleid':'MH02EH1313', resolved:false, triggerdate:'10/11/16' },
         ]}
     ]
 
@@ -236,48 +226,6 @@
         function getStyle(color) {
             return 'border-top: 2px solid '+color+'; ';
         }
-
-        vm.searching = function (val,e,id,id2,id3) {
-            if(vm.selectedIndex == 0) {
-                for (var idx = 0; idx < vm.activeTabData.length; idx++) {
-                    if (idx == id) {
-                        setActive(vm.activeTabData[idx], val, true, 1, e);
-                    } else {
-                        setActive(vm.activeTabData[idx], val, false, 1, e);
-                    }
-                    for (var jdx = 0; jdx < vm.activeTabData[idx].fences.length; jdx++) {
-                        if (idx == id && jdx == id2) {
-                            setActive(vm.activeTabData[idx].fences[jdx], val, true, 2, e);
-                        } else {
-                            setActive(vm.activeTabData[idx].fences[jdx], val, false, 2, e);
-                        }
-                        for (var kdx = 0; kdx < vm.activeTabData[idx].fences[jdx].vehicles.length; kdx++) {
-                            if (idx == id && jdx == id2 && kdx == id3) {
-                                setActive(vm.activeTabData[idx].fences[jdx].vehicles[kdx], val, true, 3, e);
-                            } else {
-                                setActive(vm.activeTabData[idx].fences[jdx].vehicles[kdx], val, false, 3, e);
-                            }
-                        }
-                    }
-                }
-            }else if(vm.selectedIndex == 1){
-                for (var idx = 0; idx < vm.historyTabData.length; idx++) {
-                    if (idx == id) {
-                        setActive(vm.historyTabData[idx], val, true, 1, e);
-                    } else {
-                        setActive(vm.historyTabData[idx], val, false, 1, e);
-                    }
-                    for (var jdx = 0; jdx < vm.historyTabData[idx].vehicles.length; jdx++) {
-                        if (idx == id && jdx == id2) {
-                            setActive(vm.historyTabData[idx].vehicles[jdx], val, true, 3, e);
-                        } else {
-                            setActive(vm.historyTabData[idx].vehicles[jdx], val, false, 3, e);
-                        }
-                    }
-                }
-            }
-        };
-
         vm.itemClicked = function (data,id,id2,id3) {
             if(vm.filterActive){
                 vm.searching(vm.searchAlertStr,'click',id,id2,id3);
@@ -286,65 +234,101 @@
             }
         };
 
-        function setActive(data,val,active,level,e) {
-            if(e != 'click'){
-                if(angular.isDefined(vm.searchAlertStr) && vm.searchAlertStr != ''){
-                    if(level != 3){
-                        data.active = true;
-                        vm.filterActive = true;
-                    }
+        vm.updateFenceReport = function (msg) {
+            // console.log(msg);
+        };
+
+        rightNavAlertDashboardService.pushDataToController = function (data) {
+            vm.activeTabData = data;
+        };
+
+        vm.getTimeDiff = function (data) {
+            var start = data.entry;
+            var end = data.exit;
+            if(start - end <= 0){
+                data.stillActive = true;
+                end = new Date();
+            }
+            start /= 1000;
+            end /= 1000;
+            start = moment.unix(start);
+            end = moment.unix(end);
+            return moment.duration(end.diff(start)).humanize();
+        };
+
+        vm.returnLength = function(data){
+            return Object.keys(data).length -1;
+        };
+
+        vm.navFilter = function (data) {
+            return true;
+        };
+
+        // Functions and variables of Right nav report box
+
+        vm.RESOLVED = 'RESOLVED';
+        vm.UNRESOLVED = 'UNRESOLVED';
+        vm.RESOLVING = 'RESOLVING';
+        vm.SAVING = 'SAVING';
+        vm.SAVED = 'SAVED';
+
+
+
+
+        vm.resolutionKeyEvent = function(e,data){
+            if(e.ctrlKey && (e.which == 83)) {
+                e.preventDefault();
+                vm.saveRep();
+                return false;
+            }
+            if(e.ctrlKey && (e.which == 13)) {
+                e.preventDefault();
+                vm.resolve(data);
+                return false;
+            }
+        };
+
+        vm.resolve = function (car) {
+            if(car.state != vm.RESOLVING){
+                if(car.resolved){
+                    // Do stuff for un resolving
+
+                    car.state = vm.RESOLVING;
+                    $timeout(function () {
+                        car.state = vm.RESOLVED;
+                        car.resolved = false;
+                        car.resolveStr = 'resolved';
+                    },2000);
                 }else{
-                    if(!active){
-                        data.active = false;
-                        vm.filterActive = false;
-                    }
-                    if(level == 3){
-                        data.active = false;
-                        vm.filterActive = false;
-                    }
-                }
-            }else{
-                if(!active){
-                    data.active = !data.active;
-                    vm.filterActive = false
-                }
-                if(level == 3){
-                    data.active = !data.active;
-                    vm.filterActive = false;
+                    //Do stuff for resolving
+
+
+                    car.state = vm.RESOLVING;
+                    $timeout(function () {
+                        car.state = vm.UNRESOLVED;
+                        car.resolved = true;
+                        car.resolveStr = 'unresolved';
+                    },2000);
                 }
             }
-        }
-        //
-        // function checkDataStrFilter(data) {
-        //     if(checkDataStr(data)){
-        //         data.active = true;
-        //     }else{
-        //         data.active = false;
-        //     }
-        // }
-        //
-        // function checkDataStr(data) {
-        //     var found = false;
-        //     for(var key in data){
-        //         if(data.hasOwnProperty(key)){
-        //             if(data[key].toString().indexOf(vm.searchAlertStr)){
-        //                 console.log(data[key].toString());
-        //                 found = true;
-        //             }
-        //         }
-        //     }
-        //     if(found){ return true; }
-        //     else { return false; }
-        // }
-        //console.log(vm.activeTabData);
+        };
 
-        vm.updateFenceReport = function (msg) {
-            $log.log(msg);
+        vm.saveRep = function (rep) {
+            if(rep.state != vm.SAVING){
+                console.log('saving...');
+                rep.state = vm.SAVING;
+
+
+                //Do some stuffs to save the report
+                $timeout(function () {
+                    rep.state = vm.SAVED;
+                },2000);
+            }
         };
 
 
         vm.init = function () {
-            //intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            // intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
         };
 
