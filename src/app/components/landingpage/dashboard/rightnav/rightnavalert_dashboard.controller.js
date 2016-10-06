@@ -189,24 +189,23 @@
         vm.resolveFilterAll = true;
 
 
-        vm.historyTabData = [
-            {'reportName':'Service Stations', class:'redBG', 'vehicles':[
-            {'vehicleid':'MH04HN1366', resolved:false, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1303', resolved:true, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1304', resolved:true, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1305', resolved:false, triggerdate:'10/11/16' },
-        ]},
-        {'reportName':'City Limit', class:'redBG', 'vehicles':[
-            {'vehicleid':'MH02EH1306', resolved:true, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1307', resolved:false, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1308', resolved:true, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1309', resolved:false, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1310', resolved:true, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1311', resolved:true, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1312', resolved:false, triggerdate:'10/11/16' },
-            {'vehicleid':'MH02EH1313', resolved:false, triggerdate:'10/11/16' },
-        ]}
-    ]
+        // vm.historyTabData = [
+        //     {'reportName':'Service Stations', class:'redBG', 'vehicles':[
+        //     {'vehicleid':'MH04HN1366', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1303', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1304', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1305', resolved:false, triggerdate:'10/11/16' },
+        // ]},
+        // {'reportName':'City Limit', class:'redBG', 'vehicles':[
+        //     {'vehicleid':'MH02EH1306', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1307', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1308', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1309', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1310', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1311', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1312', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1313', resolved:false, triggerdate:'10/11/16' },
+        // ]}];
 
         vm.getColorCounter = 0;
 
@@ -278,7 +277,7 @@
         vm.resolutionKeyEvent = function(e,data){
             if(e.ctrlKey && (e.which == 83)) {
                 e.preventDefault();
-                vm.saveRep();
+                vm.saveRep(data);
                 return false;
             }
             if(e.ctrlKey && (e.which == 13)) {

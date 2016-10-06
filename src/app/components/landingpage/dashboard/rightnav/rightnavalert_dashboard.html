@@ -142,7 +142,7 @@
                         <!--first wrapper-->
                         <div class="en_main" ng-if="mainKey != 'active' && vm.navFilter(main)"
                              ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.activeTabData ">
-                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)"  >
+                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" style="background:#fff!important;border:1px solid #3498db" >
                                 {{mainKey}}
                                 <div class="enl_item enl_add">
                                     <i class="fa fa-plus" ng-if="!main.active"></i>
@@ -154,7 +154,7 @@
                             <div class="en-wrapper">
                                 <div class="en_mid"  ng-repeat="(midKey, mid) in main " ng-if="midKey != 'active' && vm.navFilter(mid)"
                                      ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active  }">
-                                    <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)">
+                                    <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)"   >
                                         {{midKey}}
                                         <div class="enl_item enl_add">
                                             <i class="fa fa-plus" ng-if="!mid.active"></i>
