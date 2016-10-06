@@ -49,30 +49,30 @@
                     }
                 }
             },
-            // {
-            //     'id': 'showAll',
-            //     'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'historymap': true,
-            //     'data': {
-            //         active: true,
-            //         'type': 'function', 'function': function (active) {
-            //             vm.checkGeoFilters.all('showAll');
-            //         }
-            //     }
-            // },
-            // {
-            //     'id': 'parkingLot',
-            //     'name': 'Parking Lot',
-            //     'iconType': 'md',
-            //     'icon': 'local_parking',
-            //     'type': 'toggleButton',
-            //     'historymap': true,
-            //     'data': {
-            //         active: true,
-            //         'type': 'function', 'function': function (active) {
-            //             vm.checkGeoFilters.set('parkingLot', active);
-            //         }
-            //     }
-            // },
+            {
+                'id': 'showAll',
+                'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.all('showAll');
+                    }
+                }
+            },
+            {
+                'id': 'parkingLot',
+                'name': 'Parking Lot',
+                'iconType': 'md',
+                'icon': 'local_parking',
+                'type': 'toggleButton',
+                'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.set('parkingLot', active);
+                    }
+                }
+            },
             {
                 'id': 'serviceStation',
                 'name': 'Service Station',
@@ -87,20 +87,20 @@
                     }
                 }
             },
-            // {
-            //     'id': 'competitorHub',
-            //     'name': 'Competitor Hub',
-            //     'iconType': 'fa',
-            //     'icon': 'fa-ban',
-            //     'type': 'toggleButton',
-            //     'historymap': true,
-            //     'data': {
-            //         active: true,
-            //         'type': 'function', 'function': function (active) {
-            //             vm.checkGeoFilters.set('competitorHub', active);
-            //         }
-            //     }
-            // },
+            {
+                'id': 'competitorHub',
+                'name': 'Competitor Hub',
+                'iconType': 'fa',
+                'icon': 'fa-ban',
+                'type': 'toggleButton',
+                'historymap': true,
+                'data': {
+                    active: true,
+                    'type': 'function', 'function': function (active) {
+                        vm.checkGeoFilters.set('competitorHub', active);
+                    }
+                }
+            },
             {
                 'id': 'cityLimits',
                 'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'historymap': true,

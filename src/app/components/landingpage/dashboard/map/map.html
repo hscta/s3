@@ -78,28 +78,16 @@
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
         <div layout="row" layout-align="center center">
-            <!--<div class="toggleButton" ng-class="{'active':vm.onRoaded}">-->
-                <!--On Road-->
-                <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
-                             <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
-                <!--</md-checkbox>-->
-            <!--</div>-->
-            <!--<div class="toggleButton" ng-class="{'active':vm.offRoaded}">-->
-                <!--Off Road-->
-                <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"-->
-                             <!--aria-label="onroaded" ng-change="vm.offRoadCheck()">-->
-                <!--</md-checkbox>-->
-            <!--</div>-->
-            <div class="toggleButton" ng-class="{'active': vm.onRoadedVar}">
+            <div class="toggleButton" ng-class="{'active':vm.onRoaded}">
                 On Road
-                <md-checkbox class='icar-checkbox' ng-model="vm.onRoadedVar"
-                             aria-label="onroaded" ng-change="vm.runFilters2('Running')">
+                <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
+                             aria-label="onroaded" ng-change="vm.onRoadCheck()">
                 </md-checkbox>
             </div>
-            <div class="toggleButton" ng-class="{'active': vm.offRoadedVar}">
+            <div class="toggleButton" ng-class="{'active':vm.offRoaded}">
                 Off Road
-                <md-checkbox class='icar-checkbox' ng-model="vm.offRoadedVar"
-                             aria-label="onroaded" ng-change="vm.runFilters2('Stopped')">
+                <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
+                             aria-label="onroaded" ng-change="vm.offRoadCheck()">
                 </md-checkbox>
             </div>
             <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
@@ -123,7 +111,7 @@
                 <md-tooltip>All</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Running']"
-                ng-click="vm.runFilters('Running'); vm.onRoadedVar = true; vm.offRoadedVar = false;" layout="column" layout-align="center center">
+                ng-click="vm.runFilters('Running')" layout="column" layout-align="center center">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Running']"
                          class="icon-font icon-running" md-font-library="material-icons">time_to_leave
                 </md-icon>
@@ -132,7 +120,7 @@
                 <md-tooltip>Ignition On</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Stopped']"
-                ng-click="vm.runFilters('Stopped');  vm.onRoadedVar = false; vm.offRoadedVar = true;" layout="column">
+                ng-click="vm.runFilters('Stopped')" layout="column">
                 <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Stopped']"
                          class="icon-font icon-stopped" md-font-library="material-icons">
                     radio_button_checked
@@ -292,7 +280,6 @@
                             <li class="tab col s2">
                                 <a  ui-sref="home.geofence">Geofence</a>
                             </li>
-                            <div class="navPointer"></div>
                         </ul>
                     </div>
                     <div flex ui-view="dialogview" class="mapDView"></div>
@@ -307,21 +294,6 @@
 <script>
     $(document).ready(function(){
         $('ul.tabs').tabs('select_tab', 1);
-
-
-
-//
-//        function navPointer() {
-//            var pn = this;
-//            pn.pointer = $('.navPointer');
-//            pn.parent = pn.pointer.parent();
-//
-//            pn.parent.click(function () {
-//                console.log('hell');
-//            })
-//        }
-//
-//        var navP = new navPointer();
 
     })
 </script>
