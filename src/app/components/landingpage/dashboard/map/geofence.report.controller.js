@@ -17,7 +17,6 @@
         vm.startTime = moment().subtract(24, 'hour').format(dateFormat);
         vm.endTime = moment().format(dateFormat);
 
-
         vm.reportId;
         vm.setReport = function (rep) {
             vm.currRep = rep;
@@ -188,22 +187,20 @@
                     }
                 }
 
-                $log.log(vm.selectedVehicles.length);
-
-                // for (var idx in vm.filteredFenceItems) {
-                //     if (vm.filteredFenceItems[idx].checked) {
-                //         vm.selectedFences.push(vm.filteredFenceItems[idx]);
-                //     }
-                // }
+                // $log.log(vm.selectedVehicles.length);
 
                 vm.selectedFences = $filter("filter")( vm.filteredFenceItems, {checked:true} );
-
 
                 var starttime = new Date(vm.startTime).getTime();
                 var endtime = new Date(vm.endTime).getTime();
 
                 if (endtime <= starttime) {
                     vm.errorMsg = "End time should be >= Start time";
+                    return;
+                }
+
+                if (!vm.vehicleids.length) {
+                    vm.errorMsg = "Select atleast one vehicle";
                     return;
                 }
 
@@ -217,7 +214,7 @@
                 };
                 promiseList.push(intellicarAPI.geofenceService.getReportHistory(body));
 
-                $log.log(vm.selectedFences);
+                // $log.log(vm.selectedFences);
 
                 return $q.all(promiseList)
                     .then(vm.readHistoryInfo, vm.handleFailure);

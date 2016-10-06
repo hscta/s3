@@ -154,7 +154,6 @@
             <div layout="row" layout-align="space-around center">
                 <div layout="row" class="input-fields" layout-align="space-around center" flex>
 
-
                     <md-input-container class="container-margin"  ng-show="vm.multiSelect">
                         <label>Vehicle No</label>
                         <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
@@ -181,6 +180,8 @@
                         <label>End Time</label>
                         <input type="text" id="end_time" ng-model="endTime">
                     </md-input-container>
+
+                    <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
                     <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
                 </div>
                 <div layout="row" layout-align="end start">
