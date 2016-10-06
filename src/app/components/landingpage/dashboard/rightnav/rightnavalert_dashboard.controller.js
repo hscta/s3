@@ -7,7 +7,7 @@
         .module('uiplatform')
         .controller('RightNavDashboardController', RightNavDashboardController);
 
-    function RightNavDashboardController($log, rightNavAlertDashboardService,
+    function RightNavDashboardController($log, rightNavAlertDashboardService,$timeout,
                                          mapService, geofenceReportService, intellicarAPI) {
         $log.log("RightNavDashboardController");
         var vm = this;
@@ -167,7 +167,7 @@
         ];
 
 
-        vm.mydata = rightNavAlertDashboardService.reports();
+        vm.mydata = rightNavAlertDashboardService.updateFenceReport();
         $log.log(vm.mydata);
 
         vm.activeTabData = vm.mydata;
@@ -177,64 +177,159 @@
         vm.finalTabHeight = 160 + 2; // 2 for margin
 
         vm.isOpened = function (car,data) {
-            if(car.active){
-                data.childOpened++;
+            // if(car.active){
+            //     data.childOpened++;
+            // }else{
+            //     data.childOpened--;
+            // }
+        };
+
+
+        vm.resolveFilter = true;
+        vm.resolveFilterAll = true;
+
+
+        // vm.historyTabData = [
+        //     {'reportName':'Service Stations', class:'redBG', 'vehicles':[
+        //     {'vehicleid':'MH04HN1366', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1303', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1304', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1305', resolved:false, triggerdate:'10/11/16' },
+        // ]},
+        // {'reportName':'City Limit', class:'redBG', 'vehicles':[
+        //     {'vehicleid':'MH02EH1306', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1307', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1308', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1309', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1310', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1311', resolved:true, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1312', resolved:false, triggerdate:'10/11/16' },
+        //     {'vehicleid':'MH02EH1313', resolved:false, triggerdate:'10/11/16' },
+        // ]}];
+
+        vm.getColorCounter = 0;
+
+        vm.getColor = 'border-top: 1px solid #f00;';;
+        vm.getColors = function(){
+            vm.getColorCounter++;
+            if(vm.getColorCounter == 1){ return getStyle('#2ecc71'); }else
+            if(vm.getColorCounter == 2){ return getStyle('#34495e'); }else
+            if(vm.getColorCounter == 3){ return getStyle('#3498db'); }else
+            if(vm.getColorCounter == 4){ return getStyle('#9b59b6'); }else
+            if(vm.getColorCounter == 5){ return getStyle('#1abc9c'); }else
+            if(vm.getColorCounter == 6){ return getStyle('#f1c40f'); }else
+            if(vm.getColorCounter == 7){ return getStyle('#e67e22'); }else
+            if(vm.getColorCounter == 8){ return getStyle('#e74c3c'); }else
+            if(vm.getColorCounter == 9){ return getStyle('#d35400'); vm.getColorCounter = 0}
+        };
+        function getStyle(color) {
+            return 'border-top: 2px solid '+color+'; ';
+        }
+        vm.itemClicked = function (data,id,id2,id3) {
+            if(vm.filterActive){
+                vm.searching(vm.searchAlertStr,'click',id,id2,id3);
             }else{
-                data.childOpened--;
+                data.active = !data.active;
+            }
+        };
+
+        vm.updateFenceReport = function (msg) {
+            // console.log(msg);
+        };
+
+        rightNavAlertDashboardService.pushDataToController = function (data) {
+            vm.activeTabData = data;
+        };
+
+        vm.getTimeDiff = function (data) {
+            var start = data.entry;
+            var end = data.exit;
+            if(start - end <= 0){
+                data.stillActive = true;
+                end = new Date();
+            }
+            start /= 1000;
+            end /= 1000;
+            start = moment.unix(start);
+            end = moment.unix(end);
+            return moment.duration(end.diff(start)).humanize();
+        };
+
+        vm.returnLength = function(data){
+            return Object.keys(data).length -1;
+        };
+
+        vm.navFilter = function (data) {
+            return true;
+        };
+
+        // Functions and variables of Right nav report box
+
+        vm.RESOLVED = 'RESOLVED';
+        vm.UNRESOLVED = 'UNRESOLVED';
+        vm.RESOLVING = 'RESOLVING';
+        vm.SAVING = 'SAVING';
+        vm.SAVED = 'SAVED';
+
+
+
+
+        vm.resolutionKeyEvent = function(e,data){
+            if(e.ctrlKey && (e.which == 83)) {
+                e.preventDefault();
+                vm.saveRep(data);
+                return false;
+            }
+            if(e.ctrlKey && (e.which == 13)) {
+                e.preventDefault();
+                vm.resolve(data);
+                return false;
             }
         };
 
         vm.resolve = function (car) {
-            if(car.resolved){
-                car.resolved = false;
-                // Do stuff for un resolving
-            }else{
-                car.resolved = true;
-                //Do stuff for resolving
+            if(car.state != vm.RESOLVING){
+                if(car.resolved){
+                    // Do stuff for un resolving
+
+                    car.state = vm.RESOLVING;
+                    $timeout(function () {
+                        car.state = vm.RESOLVED;
+                        car.resolved = false;
+                        car.resolveStr = 'resolved';
+                    },2000);
+                }else{
+                    //Do stuff for resolving
+
+
+                    car.state = vm.RESOLVING;
+                    $timeout(function () {
+                        car.state = vm.UNRESOLVED;
+                        car.resolved = true;
+                        car.resolveStr = 'unresolved';
+                    },2000);
+                }
             }
         };
 
         vm.saveRep = function (rep) {
-            //Do some stuffs to save the report
-        };
+            if(rep.state != vm.SAVING){
+                console.log('saving...');
+                rep.state = vm.SAVING;
 
 
-        vm.historyTabData = [
-            {'reportName':'Service Stations', 'vehicles':[
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-            ]},
-            {'reportName':'City Limit', class:'redBG', 'vehicles':[
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-                {'vehicleid':'ka1232', triggerdate:'10/11/16' },
-            ]}
-        ];
-
-        console.log(vm.activeTabData);
-
-        vm.updateFenceReport = function (msg) {
-//            $log.log(msg);
+                //Do some stuffs to save the report
+                $timeout(function () {
+                    rep.state = vm.SAVED;
+                },2000);
+            }
         };
 
 
         vm.init = function () {
-            intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            // intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
         };
-
-
-
-
-
-
 
         vm.init();
     }

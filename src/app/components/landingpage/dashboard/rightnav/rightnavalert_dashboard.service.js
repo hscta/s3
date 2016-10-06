@@ -46,120 +46,185 @@
             };
 
 
+            var data = [{
+                vehicleid: 'MH02EH1318',
+                vehiclepath: '1/1/3/1',
+                deviceid: 4567,
+                fencerep: [
+                    {
+                        fenceid: 1,
+                        fencename: 'SNS Motors - Meera Road',
+                        reportid: 1234,
+                        reportname: 'Mumbai North Service centers',
+                        triggerdat: 14024332,
+                        triggerloc: 'bng',
+                        triggertype: 'entry'
+                    }, {
+                        fenceid: 2,
+                        fencename: 'Royce Nissan - Meera Road',
+                        reportid: 1234,
+                        reportname: 'Mumbai North Service centers',
+                        triggerdat: 14024332,
+                        triggerloc: 'bng',
+                        triggertype: 'exit'
+                    },
+                ]
+            }, {
+                vehicleid: 'MH02EH1233',
+                vehiclepath: '1/1/3/1',
+                deviceid: 4567,
+                fencerep: [
+                    {
+                        fenceid: 1,
+                        fencename: 'Ritu Nissan - Thane',
+                        reportid: 234,
+                        reportname: 'Thane Service centers',
+                        triggerdat: 14024332,
+                        triggerloc: 'bng',
+                        triggertype: 'entry'
+                    }, {
+                        fenceid: 2,
+                        fencename: 'Ecotech - Thane',
+                        reportid: 1234,
+                        reportname: 'Thane Service centers',
+                        triggerdat: 14024332,
+                        triggerloc: 'bng',
+                        triggertype: 'exit'
+                    }
+                ]
+            }];
+
+
             var mydata = [];
 
-            vm.reports = function ( ) {
-                data = [{
-                    vehicleid:'ka024567',
-                    vehiclepath:'1/1/3/1',
-                    deviceid:4567,
-                    fencerep:[
-                        {
-                            fenceid:1,
-                            fencename:'fence1',
-                            reportid:1234,
-                            reportname:'servicecenterreport',
-                            triggerdat:14024332,
-                            triggerloc:'bng',
-                            triggertype:'entry'
-                        }, {
-                            fenceid:2,
-                            fencename:'fence2',
-                            reportid:1234,
-                            reportname:'servicecenterreport',
-                            triggerdat:14024332,
-                            triggerloc:'bng',
-                            triggertype:'exit'
-                        },
-                    ]
-                },{
-                    vehicleid:'ka06787',
-                    vehiclepath:'1/1/3/1',
-                    deviceid:4567,
-                    fencerep:[
-                        {
-                            fenceid:1,
-                            fencename:'fence1',
-                            reportid:234,
-                            reportname:'servicecenterreport',
-                            triggerdat:14024332,
-                            triggerloc:'bng',
-                            triggertype:'entry'
-                        }, {
-                            fenceid:2,
-                            fencename:'fence2',
-                            reportid:1234,
-                            reportname:'servicecenterreport',
-                            triggerdat:14024332,
-                            triggerloc:'bng',
-                            triggertype:'exit'
-                        },
-                    ]
-                }];
 
-                var vehicleDet, fenceDet;
-                var matchReportId, fenceIdMatch = false;
+            // var data = [msg];
+            // vm.updateFenceReport = function () {
+            //
+            //     var vehicleDet, fenceDet;
+            //     var matchReportId, fenceIdMatch = false;
+            //
+            //     for (var idx in data) {
+            //         vehicleDet = data[idx];
+            //
+            //         for (var rep in vehicleDet.fencerep) {
+            //             fenceDet = vehicleDet.fencerep[rep];
+            //
+            //             if (mydata.length <= 0) {
+            //                 vm.saveReportData(vehicleDet, fenceDet);
+            //             } else {
+            //                 for (var rep in mydata) {
+            //                     if (mydata[rep].reportid == fenceDet.reportid) {
+            //                         matchReportId = true;
+            //
+            //                         for (var fence in mydata[rep].fences) {
+            //                             var myfence = mydata[rep].fences[fence];
+            //                             if (myfence.fenceid == fenceDet.fenceid) {
+            //                                 fenceIdMatch = true;
+            //                                 myfence.vehicles.push({
+            //                                     vehicleid: vehicleDet.vehicleid,
+            //                                     vehiclepath: vehicleDet.vehiclepath,
+            //                                     deviceid: vehicleDet.deviceid,
+            //                                     triggerdat: fenceDet.triggerdat,
+            //                                     triggerloc: fenceDet.triggerloc,
+            //                                     triggertype: fenceDet.triggertype
+            //                                 });
+            //                                 break;
+            //                             } else {
+            //                                 fenceIdMatch = false;
+            //                             }
+            //                         }
+            //
+            //                         if (!fenceIdMatch) {
+            //                             mydata[rep].fences.push({
+            //                                 fenceid: fenceDet.fenceid,
+            //                                 fencename: fenceDet.fencename,
+            //                                 vehicles: [{
+            //                                     vehicleid: vehicleDet.vehicleid,
+            //                                     vehiclepath: vehicleDet.vehiclepath,
+            //                                     deviceid: vehicleDet.deviceid,
+            //                                     triggerdat: fenceDet.triggerdat,
+            //                                     triggerloc: fenceDet.triggerloc,
+            //                                     triggertype: fenceDet.triggertype
+            //                                 }],
+            //                             });
+            //                         }
+            //                         break;
+            //                     } else {
+            //                         matchReportId = false;
+            //                     }
+            //                 }
+            //                 if (!matchReportId) {
+            //                     vm.saveReportData(vehicleDet, fenceDet);
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     return mydata;
+            // };
 
-                for ( var idx in data ){
-                    vehicleDet = data[idx];
 
-                    for(var rep in vehicleDet.fencerep){
-                        fenceDet = vehicleDet.fencerep[rep];
+            var reportData = {};
 
-                        if (mydata.length <= 0){
-                            vm.saveReportData(vehicleDet, fenceDet);
-                        } else {
-                            for(var rep in mydata) {
-                                if(mydata[rep].reportid == fenceDet.reportid){
-                                    matchReportId = true;
+            vm.updateFenceReport = function (msg) {
 
-                                    for (var fence in mydata[rep].fences){
-                                        var myfence = mydata[rep].fences[fence];
-                                        if (myfence.fenceid == fenceDet.fenceid){
-                                            fenceIdMatch = true;
-                                            myfence.vehicles.push({
-                                                vehicleid : vehicleDet.vehicleid,
-                                                vehiclepath : vehicleDet.vehiclepath,
-                                                deviceid : vehicleDet.deviceid,
-                                                triggerdat: fenceDet.triggerdat,
-                                                triggerloc: fenceDet.triggerloc,
-                                                triggertype:fenceDet.triggertype
-                                            });
-                                            break;
-                                        }else {
-                                            fenceIdMatch = false;
-                                        }
-                                    }
+                if (msg == null)
+                    return;
 
-                                    if ( !fenceIdMatch ) {
-                                        mydata[rep].fences.push({
-                                            fenceid: fenceDet.fenceid,
-                                            fencename: fenceDet.fencename,
-                                            vehicles : [{
-                                                vehicleid : vehicleDet.vehicleid,
-                                                vehiclepath : vehicleDet.vehiclepath,
-                                                deviceid : vehicleDet.deviceid,
-                                                triggerdat: fenceDet.triggerdat,
-                                                triggerloc: fenceDet.triggerloc,
-                                                triggertype:fenceDet.triggertype
-                                            }],
-                                        });
-                                    }
-                                    break;
-                                } else {
-                                    matchReportId = false;
-                                }
-                            }
-                            if ( !matchReportId ){
-                                vm.saveReportData(vehicleDet, fenceDet);
+                //$log.log(msg);
+
+                var topic = msg[0];
+                var data = msg[1];
+                var vehicleno = data.vehicleno;
+
+
+                for (var eachReport in reportData) {
+                    var report = reportData[eachReport];
+                    for (var eachFence in report) {
+                        var fence = report[eachFence];
+                        for (var eachVehicle in fence) {
+                            var vehicle = fence[eachVehicle];
+                            //console.log(vehicle);
+                            if (vehicle.vehicleno == vehicleno) {
+                                delete vehicle;
+                                break;
                             }
                         }
                     }
                 }
-                return mydata;
+
+
+                if (data.activeFences && data.activeFences.length) {
+                    //$log.log(msg);
+                    for (var idx in data.activeFences) {
+                        var activeFence = data.activeFences[idx];
+                        var activeinfo = activeFence['activeinfo'];
+                        // console.log(activeinfo);
+                        for(var eachitem in activeinfo) {
+                            var fenceObj = activeinfo[eachitem];
+                            var reportName = activeinfo[eachitem].reportName;
+                            var fenceName = activeinfo[eachitem].fenceName;
+                            //$log.log("reportname = " + reportName);
+                            //$log.log(fenceName);
+                            if (!(reportName in reportData)) {
+                                reportData[reportName] = {};
+                            }
+
+                            if (!(fenceName in reportData[reportName])) {
+                                reportData[reportName][fenceName] = {};
+                            }
+
+                            if (!(vehicleno in reportData[reportName][fenceName])) {
+                                reportData[reportName][fenceName][vehicleno] = fenceObj;
+                            }
+                        }
+                    }
+                }
+                vm.pushDataToController(reportData);
             };
 
-            vm.saveReportData = function( vehicleDet, fenceDet ) {
+
+            vm.saveReportData = function (vehicleDet, fenceDet) {
                 $log.log(fenceDet);
                 mydata.push({
                     reportid: fenceDet.reportid,
@@ -167,27 +232,27 @@
                     fences: [{
                         fenceid: fenceDet.fenceid,
                         fencename: fenceDet.fencename,
-                        vehicles : [{
-                            vehicleid : vehicleDet.vehicleid,
-                            vehiclepath : vehicleDet.vehiclepath,
-                            deviceid : vehicleDet.deviceid,
+                        vehicles: [{
+                            vehicleid: vehicleDet.vehicleid,
+                            vehiclepath: vehicleDet.vehiclepath,
+                            deviceid: vehicleDet.deviceid,
                             triggerdat: fenceDet.triggerdat,
                             triggerloc: fenceDet.triggerloc,
-                            triggertype:fenceDet.triggertype
-                        }],
+                            triggertype: fenceDet.triggertype
+                        }]
                     }]
                 });
             };
 
-            vm.updateFenceReport = function (msg) {
-                //$log.log('updateFenceReport');
-                $log.log(msg);
-
-            };
+            // vm.updateFenceReport = function (msg) {
+            //     //$log.log('updateFenceReport');
+            //     $log.log(msg);
+            //
+            // };
 
 
             vm.init = function () {
-                //intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+                intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
             };
 
 
@@ -195,3 +260,5 @@
 
         });
 })();
+
+
