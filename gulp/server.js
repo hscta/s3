@@ -52,6 +52,7 @@ function browserSyncInit(baseDir, browser, isRemote) {
         });
     } else {
         browserSync.instance = browserSync.init({
+            port:10119,
             startPath: '/',
             server: server,
             browser: browser,
