@@ -221,7 +221,7 @@
         console.log(vm.activeTabData);
 
         vm.updateFenceReport = function (msg) {
-            $log.log(msg);
+//            $log.log(msg);
         };
 
 

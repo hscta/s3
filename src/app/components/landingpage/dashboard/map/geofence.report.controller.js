@@ -5,93 +5,15 @@
         .module('uiplatform')
         .controller('GeofenceReportController', GeofenceReportController);
 
-    function GeofenceReportController($log, $q, dialogService, geofenceReportService, $filter) {
+    function GeofenceReportController($log, $q, dialogService, geofenceReportService, $filter,
+                                      intellicarAPI) {
 
         $log.log("GeofenceReportController");
 
         dialogService.setTab(1);
         var vm = this;
-        // vm.reports = [
-        //     {
-        //         'id': 1, 'name': 'Report 1', 'fences': [
-        //         {
-        //             'id': 1, 'name': 'Fence 1', 'vehicles': [
-        //             {'id': 1, 'name': 'bmw m3'},
-        //             {'id': 1, 'name': 'Nissan'},
-        //             {'id': 1, 'name': 'Ferrari'}
-        //         ]
-        //         },
-        //         {
-        //             'id': 1, 'name': 'Fence 2', 'vehicles': [
-        //             {'id': 1, 'name': 'Ford Mustang'},
-        //             {'id': 1, 'name': 'Porsh Cerrare'},
-        //             {'id': 1, 'name': 'Ferrari GT'}
-        //         ]
-        //         },
-        //     ]
-        //     },
-        //     {
-        //         'id': 2, 'name': 'Report 2', 'fences': [
-        //         {
-        //             'id': 1, 'name': 'Fence 4', 'vehicles': [
-        //             {'id': 1, 'name': 'Nissan'},
-        //             {'id': 1, 'name': 'bmw m3'},
-        //             {'id': 1, 'name': 'Porsh Cerrare'},
-        //             {'id': 1, 'name': 'Porsh Cerrare M3'},
-        //             {'id': 1, 'name': 'Ferrari'}
-        //         ]
-        //         },
-        //         {
-        //             'id': 1, 'name': 'Fence 5', 'vehicles': [
-        //             {'id': 1, 'name': 'bmw m3'},
-        //             {'id': 1, 'name': 'Ford Mustang'},
-        //             {'id': 1, 'name': 'Porsh Cerrare'},
-        //             {'id': 1, 'name': 'Ferrari GT'}
-        //         ]
-        //         },
-        //     ]
-        //     },
-        //     {
-        //         'id': 3, 'name': 'Report 3', 'fences': [
-        //         {
-        //             'id': 1, 'name': 'Fence Al', 'vehicles': [
-        //             {'id': 1, 'name': 'bmw m3'},
-        //             {'id': 1, 'name': 'Nissan'},
-        //             {'id': 1, 'name': 'Ferrari'}
-        //         ]
-        //         },
-        //         {
-        //             'id': 1, 'name': 'Fence random', 'vehicles': [
-        //             {'id': 1, 'name': 'Ford Mustang'},
-        //             {'id': 1, 'name': 'Porsh Cerrare'},
-        //             {'id': 1, 'name': 'Ferrari GT'}
-        //         ]
-        //         },
-        //     ]
-        //     },
-        //     {
-        //         'id': 4, 'name': 'Report 4', 'fences': [
-        //         {
-        //             'id': 1, 'name': 'Fence 24', 'vehicles': [
-        //             {'id': 1, 'name': 'Nissan'},
-        //             {'id': 1, 'name': 'bmw m3'},
-        //             {'id': 1, 'name': 'Porsh Cerrare'},
-        //             {'id': 1, 'name': 'Porsh Cerrare M3'},
-        //             {'id': 1, 'name': 'Ferrari'}
-        //         ]
-        //         },
-        //         {
-        //             'id': 1, 'name': 'new Fence', 'vehicles': [
-        //             {'id': 1, 'name': 'bmw m3'},
-        //             {'id': 1, 'name': 'Ford Mustang'},
-        //             {'id': 1, 'name': 'Porsh Cerrare'},
-        //             {'id': 1, 'name': 'Ferrari GT'}
-        //         ]
-        //         },
-        //     ]
-        //     },
-        // ];
 
+        vm.reportId;
         vm.setReport = function (rep) {
             vm.currRep = rep;
             $log.log(rep);
@@ -99,6 +21,8 @@
             vm.currRep = {};
             vm.currRep.vehicles = [];
             vm.currRep.fences = [];
+
+            vm.reportId = rep.assetpath;
 
             var data = {};
             for ( var idx in rep.assg ) {
@@ -109,14 +33,21 @@
                 };
                 if ( rep.assg[idx].assgfromassetid == 4 ){
                     vm.currRep.vehicles.push(data);
+                    vm.deSelectAllVehicles = true;
+                    vm.SelectAllVehicles = true;
                 }else if ( rep.assg[idx].assgfromassetid == 15 ) {
-
+                    data.checked = true;
                     vm.currRep.fences.push(data);
+                    vm.deSelectAllFences = false;
+                    vm.SelectAllFences = true;
                 }
             }
 
-            vm.deSelectAllVehicles = true;
-            vm.deSelectAllFences = true;
+            vm.deSelectAllFences = false;
+            vm.selectAllFences = true;
+            vm.deSelectAllVehicles = false;
+            vm.selectAllVehicles = false;
+
         };
 
         vm.setSort = function (id, str) {
@@ -131,98 +62,21 @@
             // }
         };
 
-        // vm.currTable = [
-        //     {
-        //         'vehicleNumber': 'MH02EH1224',
-        //         'event': 'Entry',
-        //         'time': new Date().getTime(),
-        //         'location': 'Silk Board',
-        //         'deviceId': ''
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1226',
-        //         'event': 'Exit',
-        //         'time': new Date().getTime() + 1000,
-        //         'location': 'Electronic City'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1227',
-        //         'event': 'Entry',
-        //         'time': new Date().getTime() + 20000,
-        //         'location': 'Agaara Lake'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1229',
-        //         'event': 'Exit',
-        //         'time': new Date().getTime() + 30000,
-        //         'location': 'Electronic City'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1230',
-        //         'event': 'Entry',
-        //         'time': new Date().getTime() + 50000,
-        //         'location': 'Silk Board'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1231',
-        //         'event': 'Exit',
-        //         'time': new Date().getTime() + 1000000,
-        //         'location': 'Electronic City'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1233',
-        //         'event': 'Entry',
-        //         'time': new Date().getTime() + 70000,
-        //         'location': 'Agaara Lake'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1235',
-        //         'event': 'Exit',
-        //         'time': new Date().getTime() + 5000000,
-        //         'location': 'Electronic City'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1236',
-        //         'event': 'Entry',
-        //         'time': new Date().getTime() + 1400000,
-        //         'location': 'Silk Board'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1241',
-        //         'event': 'Exit',
-        //         'time': new Date().getTime() + 1300000,
-        //         'location': 'Electronic City'
-        //     },
-        //     {
-        //         'vehicleNumber': 'MH02EH1242',
-        //         'event': 'Entry',
-        //         'time': new Date().getTime() + 1200000,
-        //         'location': 'Agaara Lake'
-        //     }
-        // ];
-
         google.charts.load('current', {'packages':['table']});
-        google.charts.setOnLoadCallback(drawTable);
 
         function drawTable() {
             var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Name');
-            data.addColumn('string', 'Something');
-            data.addColumn('string', 'Header');
-            data.addColumn('string', 'Another');
-            data.addColumn('string', 'Title');
-            data.addColumn('string', 'Subtitle');
-            data.addColumn('string', 'Time');
-            data.addColumn('string', 'Date');
-            data.addColumn('number', 'Salary');
-            data.addColumn('boolean', 'Employee');
-            data.addRows([
-                ['Mike','this is cool','Awesome','Powerful','Jonny','Distractions','10 : 30 AM','12th Amy 2016',  {v: 10000, f: '$10,000'}, true],
-                ['Mohan','this is cool','Awesome','Powerful','Brad','Distractions','10 : 30 AM','12th Amy 2016',  {v: 10000, f: '$10,000'}, true],
-                ['Raju','this is cool','BAwesome','Powerful','Human','Distractions','10 : 30 AM','12th Amy 2016',  {v: 10000, f: '$10,000'}, true],
-                ['Kunal','this is cool','BAwesome','Powerful','Stephen','Distractions','10 : 30 AM','12th Amy 2016',  {v: 10000, f: '$10,000'}, true],
-                ['Shiva','this is cool','CAwesome','Powerful','Jonny','Distractions','10 : 30 AM','12th Amy 2016',  {v: 10000, f: '$10,000'}, true],
-            ]);
+            data.addColumn('string', 'Vehicles');
+            data.addColumn('string', 'Fence');
+            data.addColumn('datetime', 'Fence Entry');
+            data.addColumn('datetime', 'Fence Exit');
+            data.addRows(
+                vm.myHistoryData
+            );
+
+            var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
+            dateFormatter.format(data, 2);
+            dateFormatter.format(data, 3);
 
             var table = new google.visualization.Table(document.getElementById('geo-table'));
 
@@ -257,11 +111,6 @@
         };
 
         vm.selectAll = function (data){
-            $log.log(data);
-            $log.log(vm.filteredItems);
-            $log.log(data, vm.selectAllVehicles);
-
-
             var filterData;
             var checkStatus;
 
@@ -315,6 +164,99 @@
 
         };
 
+        vm.getHistoryReport = function(){
+            var myEl = angular.element( document.querySelector( '#geo-table' ) );
+            myEl.empty();
+            vm.errorMsg='';
+
+            if (vm.startTime && vm.endTime ) {
+                vm.selectedVehicles = [];
+                vm.selectedFences = [];
+                var promiseList = [];
+
+                vm.vehicleids = [];
+
+                for (var idx in vm.filteredItems) {
+                    if (vm.filteredItems[idx].checked) {
+                        vm.selectedVehicles.push(vm.filteredItems[idx]);
+                        vm.vehicleids.push(vm.filteredItems[idx].id);
+                    }
+                }
+
+                $log.log(vm.selectedVehicles.length);
+
+                // for (var idx in vm.filteredFenceItems) {
+                //     if (vm.filteredFenceItems[idx].checked) {
+                //         vm.selectedFences.push(vm.filteredFenceItems[idx]);
+                //     }
+                // }
+
+                vm.selectedFences = $filter("filter")( vm.filteredFenceItems, {checked:true} );
+
+
+                var starttime = new Date(vm.startTime).getTime();
+                var endtime = new Date(vm.endTime).getTime();
+
+                if (endtime <= starttime) {
+                    vm.errorMsg = "End time should be >= Start time";
+                    return;
+                }
+
+                vm.loadingHistoryData = true;
+
+                var body = {
+                    fencereport: vm.reportId,
+                    vehicles: vm.vehicleids,
+                    starttime: new Date(vm.startTime).getTime() / 1000,
+                    endtime: new Date(vm.endTime).getTime() / 1000
+                };
+                promiseList.push(intellicarAPI.geofenceService.getReportHistory(body));
+
+                $log.log(vm.selectedFences);
+
+                return $q.all(promiseList)
+                    .then(vm.readHistoryInfo, vm.handleFailure);
+            }else {
+                vm.errorMsg = "Enter valid start and end time";
+                return;
+            }
+        };
+
+
+        vm.readHistoryInfo = function(history){
+            vm.myHistoryData = [];
+
+            var data = history[0].data.data;
+
+            var trackHistoryData = [];
+
+            if ( !data.length ) return;
+
+            for ( var idx in data ) {
+                for ( var vehicle in vm.selectedVehicles ) {
+                    if ( data[idx].deviceid == vm.selectedVehicles[vehicle].id){
+                        var vehicleName = vm.selectedVehicles[vehicle].name
+                    }
+                }
+                for ( var fen in vm.selectedFences ) {
+                    var fenceName = vm.selectedFences[fen].name;
+                    if ( data[idx].fencepath == vm.selectedFences[fen].id){
+                        var startTime = parseInt(data[idx].fentry);
+                        var endTime = parseInt(data[idx].fexit);
+                        vm.myHistoryData.push([
+                            vehicleName,
+                            fenceName,
+                            new Date(startTime),
+                            new Date(endTime)
+                        ]);
+                        break;
+                    }
+                }
+            }
+
+            vm.loadingHistoryData=false;
+            google.charts.setOnLoadCallback(drawTable);
+        };
 
         vm.init = function () {
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);

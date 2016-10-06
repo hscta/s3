@@ -65,6 +65,8 @@
     .lefttoolbar{
         background: rgba(163, 204, 255, 0.7) !important;
     }
+
+    .mapDView{top:45px;}
 </style>
 
 
@@ -258,19 +260,40 @@
             </div>
         </div>
         <div class="id-body">
-            <md-content class="fullHeight">
-                <md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect
-                         md-dynamic-height>
-                    <md-tab ng-click="vm.getTab()">
-                        <a ui-sref="home.history">HISTORY</a>
-                    </md-tab>
-                    <md-tab ng-click="vm.getTab()">
-                        <a ui-sref="home.geofence">Geofence</a>
-                    </md-tab>
-                </md-tabs>
-                <div flex ui-view="dialogview" class="mapDView">
+            <!--<md-content class="fullHeight">-->
+                <!--<md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect-->
+                <!--md-dynamic-height>-->
+                <!--<md-tab ng-click="vm.getTab()">-->
+                <!--<a ui-sref="home.history">HISTORY</a>-->
+                <!--</md-tab>-->
+                <!--<md-tab ng-click="vm.getTab()">-->
+                <!--<a ui-sref="home.geofence">Geofence</a>-->
+                <!--</md-tab>-->
+                <!--</md-tabs>-->
+
+                <div class="row">
+                    <div class="col s5">
+                        <ul class="tabs" select_tab="vm.selectedTab">
+                            <li class="tab col s2">
+                                <a  class="active" ui-sref="home.history">HISTORY</a>
+                            </li>
+                            <li class="tab col s2">
+                                <a  ui-sref="home.geofence">Geofence</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div flex ui-view="dialogview" class="mapDView"></div>
                 </div>
-            </md-content>
+
+
+            <!--</md-content>-->
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('ul.tabs').tabs('select_tab', 1);
+
+    })
+</script>
