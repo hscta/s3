@@ -115,7 +115,7 @@
         };
 
         vm.subscribeChannel = function (path, key) {
-            //$log.log("subscribe: " + key + ", " + JSON.stringify(path));
+//            $log.log("subscribe: " + key + ", " + JSON.stringify(path));
             var msg = {};
             msg.data = [];
             msg.data.push([key, path]);

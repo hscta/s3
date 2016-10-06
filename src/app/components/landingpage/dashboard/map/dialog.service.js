@@ -24,7 +24,6 @@
             vm[key] = data;
         };
 
-        var selectedTab = 0;
 
         vm.show = function(state,params){
             vm.setData(params,'historyData');
@@ -45,12 +44,13 @@
 
 
         vm.getTab = function(){
+            var selectedTab;
             // console.log($state.current.name);
-            // if($state.current.name == 'home.history'){
-            //     selectedTab = 0;
-            // }else if($state.current.name == 'home.geofence'){
-            //     selectedTab = 1;
-            // }
+            if($state.current.name == 'home.history'){
+                selectedTab = 0;
+            }else if($state.current.name == 'home.geofence'){
+                selectedTab = 1;
+            }
             return selectedTab;
         };
 

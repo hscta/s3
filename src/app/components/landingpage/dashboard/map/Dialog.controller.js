@@ -26,6 +26,7 @@
 
         vm.setTab = function(tabIndex) {
             vm.selectedTab = tabIndex;
+            $log.log(tabIndex);
         };
 
         vm.init = function() {

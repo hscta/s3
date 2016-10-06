@@ -1,4 +1,16 @@
 <!--<md-tab-body >-->
+<style>
+    .error-msg {
+        color: #f00;
+        font-size: 12px;
+        min-height: 20px;
+    }
+
+    .geo-table thead tr{
+        padding:0;
+        height:35px;
+    }
+</style>
 <div class="geofence-cont" style="height: 100%;">
     <div class="geo-leftbar" ng-click="vm.currPop = null">
         <div class="geo-rep-item-head" >Reports</div>
@@ -8,7 +20,7 @@
     <div class="geo-cont" >
         <div class="geoc-head">
 
-            <span class="error-msg">{{errorMsg}}</span><br/>
+            <span class="error-msg">{{vm.errorMsg}}</span><br/>
 
             <div layout="row" layout-align="space-around center">
                 <div layout="row" class="input-fields" layout-align="space-around center" flex>
@@ -17,7 +29,8 @@
 
                     <md-input-container class="container-margin geo-multiSel">
                         <label>Fence Name</label>
-                        <input type="text" ng-focus=" vm.currPop = 'fencePop'" ng-model="vm.fenceFilter">
+                        <input type="text" ng-focus=" vm.currPop = 'fencePop'"
+                               placeholder="Search Fence" ng-model="vm.fenceFilter">
                         <div class="geo-ms-cont" ng-show="vm.currPop == 'fencePop'">
                             <md-list>
                                 <md-list-item class="md-2-line"
@@ -26,6 +39,8 @@
 
                                     <md-checkbox ng-model="item.checked" aria-label="myfences"
                                                  ng-change="vm.verifyCheckStatus('fence')">
+                                    <!--<input type="checkbox" ng-model="item.checked"-->
+                                           <!--ng-change="vm.verifyCheckStatus('fence')">-->
 
                                     </md-checkbox>
                                     <div class="md-list-item-text">
@@ -36,15 +51,21 @@
                             <div class="geo-ms-controls">
                                 <md-checkbox ng-model="vm.selectAllFences" aria-label="all"
                                              ng-change="vm.selectAll('fence')">All</md-checkbox>
+                                <!--<input type="checkbox" ng-model="vm.selectAllFences"-->
+                                       <!--ng-change="vm.selectAll('fence')">All-->
                                 <md-checkbox ng-model="vm.deSelectAllFences" aria-label="None"
                                              ng-change="vm.deSelectAll('fence')">None</md-checkbox>
+                                <!--<input type="checkbox" ng-model="vm.deSelectAllFences"-->
+                                       <!--ng-change="vm.deSelectAll('fence')">None-->
                             </div>
                         </div>
                     </md-input-container>
 
                     <md-input-container class="container-margin geo-multiSel">
                         <label>Vehicle Name</label>
-                        <input type="text" ng-focus="vm.currPop = 'vehiclePop'" ng-model="vm.vehicleFilter">
+                        <input type="text" ng-focus="vm.currPop = 'vehiclePop'"
+                               placeholder="Search Vehicle"
+                               ng-model="vm.vehicleFilter">
                         <div class="geo-ms-cont" ng-show="vm.currPop == 'vehiclePop'">
                             <md-list>
                                 <md-list-item class="md-2-line"
@@ -52,6 +73,8 @@
                                     <md-checkbox ng-model="item.checked" aria-label="myvehicles"
                                                  ng-change="vm.verifyCheckStatus('vehicle')">
                                     </md-checkbox>
+                                    <!--<input type="checkbox" ng-model="item.checked"-->
+                                           <!--ng-change="vm.verifyCheckStatus('vehicle')">-->
                                     <div class="md-list-item-text">
                                         <h3>{{item.name}}</h3>
                                     </div>
@@ -60,58 +83,37 @@
                             <div class="geo-ms-controls">
                                 <md-checkbox ng-model="vm.selectAllVehicles" aria-label="all"
                                              ng-change="vm.selectAll('vehicle')">All</md-checkbox>
+
+                                <!--<input type="checkbox" ng-model="vm.selectAllVehicles"-->
+                                       <!--ng-change="vm.selectAll('vehicle')">All-->
                                 <md-checkbox ng-model="vm.deSelectAllVehicles" aria-label="None"
                                              ng-change="vm.deSelectAll('vehicle')">None</md-checkbox>
+                                <!--<input type="checkbox" ng-model="vm.deSelectAllVehicles"-->
+                                       <!--ng-change="vm.deSelectAll('vehicle')">None-->
                             </div>
                         </div>
                     </md-input-container>
 
                     <md-input-container class="container-margin">
                         <label>Start Time</label>
-                        <input type="text" id="start_time" ng-model="startTime">
+                        <input type="text" id="start_time" ng-model="vm.startTime">
                     </md-input-container>
 
                     <md-input-container class="container-margin">
                         <label>End Time</label>
-                        <input type="text" id="end_time" ng-model="endTime">
+                        <input type="text" id="end_time" ng-model="vm.endTime">
                     </md-input-container>
-                    <md-button class="md-accent">Get Report</md-button>
+                    <md-button class="md-accent" ng-click="vm.getHistoryReport()">Get Report</md-button>
                 </div>
                 <div layout="row" layout-align="end start">
                 </div>
             </div>
         </div>
-        <div class="geoc-body" >
-            <!--<table class="geo-table">-->
-            <!--<tr>-->
-            <!--<th ng-click="vm.setSort(1,'vehicleNumber')">-->
-            <!--Vehicle Number-->
-            <!--<i ng-if="vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-up"></i>-->
-            <!--<i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 1" class="fa fa-chevron-down"></i>-->
-            <!--</th>-->
-            <!--<th ng-click="vm.setSort(2,'event')">-->
-            <!--Event-->
-            <!--<i ng-if="vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-up"></i>-->
-            <!--<i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 2" class="fa fa-chevron-down"></i>-->
-            <!--</th>-->
-            <!--<th ng-click="vm.setSort(3,'time')">-->
-            <!--Time-->
-            <!--<i ng-if="vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-up"></i>-->
-            <!--<i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 3" class="fa fa-chevron-down"></i>-->
-            <!--</th>-->
-            <!--<th ng-click="vm.setSort(4,'location')">-->
-            <!--Location-->
-            <!--<i ng-if="vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-up"></i>-->
-            <!--<i ng-if="!vm.tableSort.reverse && vm.tableSort.id == 4" class="fa fa-chevron-down"></i>-->
-            <!--</th>-->
-            <!--</tr>-->
-            <!--<tr ng-repeat="tr in vm.currTable | orderBy:vm.tableSort.str">-->
-            <!--<td ><span  ng-click="vm.getHistory(tr)" >{{tr.vehicleNumber}}</span></td>-->
-            <!--<td >{{tr.event}}</td>-->
-            <!--<td >{{tr.time | date : 'HH mm ss a'}}</td>-->
-            <!--<td >{{tr.location}}</td>-->
-            <!--</tr>-->
-            <!--</table>-->
+        <div class="geoc-body">
+
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.loadingHistoryData">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
 
             <div id="geo-table" class="geo-table"></div>
         </div>

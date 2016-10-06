@@ -19,6 +19,11 @@
             return requestService.firePost('/geofence/info', reqbody);
         };
 
+        vm.getReportHistory = function (body) {
+            var reqbody = {fenceinfo: body};
+            return requestService.firePost('/reports/rtfence/trackhistory', reqbody);
+        };
+
 
         // vm.mergeAssetData = function (resp) {
         //     //$log.log(resp);
@@ -38,7 +43,7 @@
 
         vm.getFenceInfoMap = function (body) {
             return vm.getFenceInfo(body)
-                //.then(vm.mergeAssetData, vm.handleFailure);
+            //.then(vm.mergeAssetData, vm.handleFailure);
                 .then(helperService.mergeAssetAssignments, vm.handleFailure);
         };
     }
