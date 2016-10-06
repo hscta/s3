@@ -13,6 +13,11 @@
         dialogService.setTab(1);
         var vm = this;
 
+        var dateFormat = 'YYYY/MM/DD HH:mm';
+        vm.startTime = moment().subtract(24, 'hour').format(dateFormat);
+        vm.endTime = moment().format(dateFormat);
+
+
         vm.reportId;
         vm.setReport = function (rep) {
             vm.currRep = rep;
