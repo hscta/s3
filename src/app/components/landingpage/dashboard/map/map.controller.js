@@ -289,6 +289,14 @@
             }
         };
 
+        vm.runFilters2 = function(data){
+            if(vm.onRoadedVar && vm.offRoadedVar || !vm.onRoadedVar && !vm.offRoadedVar ){
+                vm.runFilters('');
+            }else{
+                vm.runFilters(data);
+            }
+        };
+
 
         vm.applyFilterToMarker = function (marker, filterStr) {
             //$log.log("applying filter to marker");
