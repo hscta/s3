@@ -280,6 +280,7 @@
                             <li class="tab col s2">
                                 <a  ui-sref="home.geofence">Geofence</a>
                             </li>
+                            <!--<div class="navPointer"></div>-->
                         </ul>
                     </div>
                     <div flex ui-view="dialogview" class="mapDView"></div>
@@ -294,6 +295,18 @@
 <script>
     $(document).ready(function(){
         $('ul.tabs').tabs('select_tab', 1);
+
+
+        function navPointer() {
+            var np = this;
+            np.pointer = $('.navPointer');
+            np.parent = np.pointer.parent();
+            np.parent.mousedown(function () {
+                console.log('shit man');
+            });
+        }
+
+        var navP = new navPointer();
 
     })
 </script>

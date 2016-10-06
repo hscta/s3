@@ -533,6 +533,7 @@ body{
     position: relative;
     width:20%;
     height:100%;
+    overflow-y: auto;
 }
 .geo-cont{
     box-sizing:border-box;
@@ -1041,6 +1042,7 @@ $rnt_label_height : 35px;
                     resize:none;
                     border:1px solid #ddd;
                     padding:6px;
+                    background:#fff;
                 }
                 .enb_button_list{
                     width: 15%;
