@@ -8,11 +8,12 @@
         .controller('RightNavDashboardController', RightNavDashboardController);
 
     function RightNavDashboardController($log, rightNavAlertDashboardService,$timeout,
-                                         mapService, geofenceReportService, intellicarAPI) {
+                                         mapService, geofenceReportService,
+                                         intellicarAPI) {
         $log.log("RightNavDashboardController");
         var vm = this;
         vm.alertDetails = [];
-        vm.inMarkers = [];
+        vm.vehicleData = {};
         vm.searchAlertStr = '';
         vm.reports = {};
 
@@ -35,7 +36,7 @@
                 }
                 intellicarAPI.mqttService.subscribe(subscriptionMsg, 'rtfence');
 
-                $log.log(subscriptionMsg);
+                //$log.log(subscriptionMsg);
             }
 
             vm.currRep = vm.reports[0];
@@ -91,49 +92,8 @@
         };
 
 
-        vm.alertResolve = function (alertid) {
-            $log.log(alertid);
-            for (var i = 0; i < vm.inMarkers.length; i++) {
-                if (alertid == vm.inMarkers[i].id) {
-                    $log.log('matched');
-                    vm.inMarkers.splice(i, 1);
-                    return;
-                }
-            }
-        };
-
-
-        vm.updateMarker = function (vehicleData) {
-            //$log.log('alertController updateMarker');
-            var isNewVehicle = true;
-            //var vehicleData = vm.processVehicleData(msg);
-            //$log.log(vehicleData);
-
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (marker.id == vehicleData.id) {
-                    vehicleData.options = vm.inMarkers[idx].options;
-                    vm.inMarkers[idx] = vehicleData;
-                    isNewVehicle = false;
-                }
-            }
-
-            if (isNewVehicle) {
-                vehicleData.options = {};
-                vm.inMarkers.push(vehicleData);
-                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
-            }
-        };
-
-
         vm.alertClick = function (alertid) {
             rightNavAlertDashboardService.alertClick(alertid);
-        };
-
-
-        vm.addListener = function () {
-            //mapService.addMsgListener(vm.updateMarker);
-            mapService.addListener('rtgps', vm.updateMarker);
         };
 
 
@@ -142,9 +102,6 @@
                 .then(vm.getDashboardAlerts, vm.getDashboardAlertsFailure);
         };
 
-
-        //vm.initialize();
-        vm.addListener();
 
         vm.collapseAlertPanel = function(panel){
             panel.collapse();
@@ -188,25 +145,6 @@
         vm.resolveFilter = true;
         vm.resolveFilterAll = true;
 
-
-        // vm.historyTabData = [
-        //     {'reportName':'Service Stations', class:'redBG', 'vehicles':[
-        //     {'vehicleid':'MH04HN1366', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1303', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1304', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1305', resolved:false, triggerdate:'10/11/16' },
-        // ]},
-        // {'reportName':'City Limit', class:'redBG', 'vehicles':[
-        //     {'vehicleid':'MH02EH1306', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1307', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1308', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1309', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1310', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1311', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1312', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1313', resolved:false, triggerdate:'10/11/16' },
-        // ]}];
-
         vm.getColorCounter = 0;
 
         vm.getColor = 'border-top: 1px solid #f00;';;
@@ -239,6 +177,7 @@
 
         rightNavAlertDashboardService.pushDataToController = function (data) {
             vm.activeTabData = data;
+            //console.log(data);
         };
 
         vm.getTimeDiff = function (data) {
@@ -252,11 +191,31 @@
             end /= 1000;
             start = moment.unix(start);
             end = moment.unix(end);
+
+
             return moment.duration(end.diff(start)).humanize();
         };
 
-        vm.returnLength = function(data){
-            return Object.keys(data).length -1;
+
+        vm.returnLength = function(data,level){
+            var length = 0;
+            if(level == 1){
+                for(key in data){
+                    for(key2 in data[key]){
+                        if(key2 != 'active'){
+                            length++;
+                        }
+                    }
+                }
+                return length;
+            }else if(level == 2){
+                for(key in data){
+                    if(key != 'active'){
+                        length++;
+                    }
+                }
+                return length;
+            }
         };
 
         vm.navFilter = function (data) {
@@ -288,12 +247,13 @@
         };
 
         vm.resolve = function (car) {
+            // console.log(car);
             if(car.state != vm.RESOLVING){
                 if(car.resolved){
                     // Do stuff for un resolving
 
                     car.state = vm.RESOLVING;
-                    $timeout(function () {
+                    $timeout(function () { // Run this without $timeout after getting API response
                         car.state = vm.RESOLVED;
                         car.resolved = false;
                         car.resolveStr = 'resolved';
@@ -303,7 +263,7 @@
 
 
                     car.state = vm.RESOLVING;
-                    $timeout(function () {
+                    $timeout(function () {// Run this without $timeout after getting API response
                         car.state = vm.UNRESOLVED;
                         car.resolved = true;
                         car.resolveStr = 'unresolved';
@@ -319,20 +279,30 @@
 
 
                 //Do some stuffs to save the report
-                $timeout(function () {
+                $timeout(function () {// Run this without $timeout after getting API response
                     rep.state = vm.SAVED;
                 },2000);
             }
         };
 
 
+        vm.mapServiceUpdate = function (msg) {
+            //$log.log('mapServiceUpdate');
+            //$log.log(msg);
+            if(!(msg.vehicleno in vm.vehicleData)) {
+                vm.vehicleData[msg.vehicleno] = {}
+            }
+
+            vm.vehicleData[msg.vehicleno].ignitionstatus = msg.ignitionstatus;
+        };
+
+
         vm.init = function () {
-            // intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            mapService.addListener('rtgps', vm.mapServiceUpdate);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
         };
 
         vm.init();
     }
 })();
-
 
