@@ -148,7 +148,7 @@
                     <div class="expansionNav coolbar" style="top:0;">
                         <!--first wrapper-->
                         <div class="en_main" ng-if="mainKey != 'active' && vm.navFilter(main)"
-                             ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.activeTabData ">
+                             ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.activeTabData " ng-init="main.active = true">
                             <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" style="background:#fff!important;border:1px solid #3498db" >
                                 {{mainKey}}
                                 <div class="enl_item enl_add">
@@ -159,7 +159,7 @@
                             </div>
                             <!--middle wrapper-->
                             <div class="en-wrapper">
-                                <div class="en_mid"  ng-repeat="(midKey, mid) in main " ng-if="midKey != 'active' && vm.navFilter(mid)"
+                                <div class="en_mid"  ng-repeat="(midKey, mid) in main " ng-if="midKey != 'active' && vm.navFilter(mid)"  ng-init="mid.active = true"
                                      ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active  }">
                                     <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)"   >
                                         {{midKey}}
