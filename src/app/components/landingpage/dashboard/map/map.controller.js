@@ -903,11 +903,13 @@
         $scope.drawTrace = function (resp) {
             //$log.log(resp);
 
-            $scope.trace.path = [];
+            var traceData = resp.data.data;
             var path = $scope.trace.path;
+            path = [];
 
-            for (var idx in resp.data.data) {
-                var position = resp.data.data[idx];
+
+            for (var idx in traceData) {
+                var position = traceData[idx];
                 if (position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
                     $log.log("Not a number");
                     $log.log(position);
@@ -917,25 +919,25 @@
                 position.gpstime = parseInt(position.gpstime);
                 position.odometer = position.odometer;
                 position.speed = parseInt(position.speed.toFixed(2));
-                $scope.trace.path.push(position);
+                path.push(position);
             }
 
             function compare(a, b) {
                 return a.gpstime - b.gpstime;
             }
 
-            $scope.trace.path.sort(compare);
+            path.sort(compare);
 
 
-            if ($scope.trace.path.length) {
+            if (path.length) {
                 historyService.setData('getHistory', true);
-                $scope.clickedMarker.latitude = $scope.trace.path[0].latitude;
-                $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
+                $scope.clickedMarker.latitude = path[0].latitude;
+                $scope.clickedMarker.longitude = path[0].longitude;
                 $scope.clickedMarker.options.icon = 'assets/images/markers/big/red-dot.png';
 
 
-                var midPoint = Math.floor($scope.trace.path.length / 2);
-                $scope.historyMap.center = $scope.trace.path[midPoint];
+                var midPoint = Math.floor(path.length / 2);
+                $scope.historyMap.center = path[midPoint];
                 $scope.historyMap.zoom = 11;
 
                 var lastBeacon = path[path.length - 1];

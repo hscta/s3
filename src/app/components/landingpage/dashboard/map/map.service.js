@@ -110,7 +110,7 @@
             };
 
             vm.processVehicleData = function (msg) {
-                //$log.log(msg);
+                $log.log(msg);
                 var topic = msg[0].split('/');
                 var vehicleNumber = topic[topic.length - 1];
                 var vehicleData;
