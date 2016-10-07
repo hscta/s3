@@ -76,9 +76,9 @@
                     iconColor = 'red';
                 } else {
                     if (vehicleData.ignitionstatus) {
-                        iconColor = 'blue';
-                    } else {
                         iconColor = 'green';
+                    } else {
+                        iconColor = 'blue';
                     }
                 }
 
