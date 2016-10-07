@@ -154,15 +154,15 @@
                       style="font-size: 13px;">{{vm.vehicleStats.active}}</span>
                 <md-tooltip>Active</md-tooltip>
             </li>
-            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"
-                ng-click="vm.runFilters('Immobilized')" layout="column">
-                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
-                         class="icon-font icon-immobilized" md-font-library="material-icons">lock
-                </md-icon>
-                <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
-                      style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>
-                <md-tooltip>Immoblized</md-tooltip>
-            </li>
+            <!--<li ng-class="{true: 'li-clicked'}[vm.filterStr=='Immobilized']"-->
+                <!--ng-click="vm.runFilters('Immobilized')" layout="column">-->
+                <!--<md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"-->
+                         <!--class="icon-font icon-immobilized" md-font-library="material-icons">lock-->
+                <!--</md-icon>-->
+                <!--<span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"-->
+                      <!--style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>-->
+                <!--<md-tooltip>Immoblized</md-tooltip>-->
+            <!--</li>-->
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
