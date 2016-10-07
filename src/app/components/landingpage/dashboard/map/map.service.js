@@ -116,9 +116,9 @@
                 var vehicleData;
                 //$log.log(msg[1].deviceid);
 
-                var deviceidStr;
+                var deviceidStr = msg[1].deviceid;
                 if(msg[1].deviceid.substring(0, 5) == '213GL') {
-                    deviceidStr = msg[1].deviceid.substring(5);
+                    deviceidStr = deviceidStr.substring(5);
                     //$log.log("deviceid str = " + deviceidStr);
                 }
 
