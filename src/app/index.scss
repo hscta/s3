@@ -993,7 +993,7 @@ $rnt_label_height : 35px;
             margin:1px 0;
             height: $rnt_label_height!important;
             line-height: $rnt_label_height!important;
-            padding:0 0 0 10px;
+            padding:0 2px 0 10px;
             width: 100%;
             font-size: 80%;
             color:#444;
@@ -1017,11 +1017,12 @@ $rnt_label_height : 35px;
                 width: 100%;
                 height: 35px;
                 cursor: pointer;
-                background: #dcdcdc;
+                background: #E1F5FE;
                 font-size:80%;
                 color:#444;
                 line-height:35px;
                 padding-left: 10px;
+                padding-right: 2px;
                 @include transition(0.4s);
             }
             .en_head.resolvedHeader{
@@ -1099,7 +1100,7 @@ $rnt_label_height : 35px;
             color: #fff;
             z-index: 2;
             top: 0px;
-            right: 45px;
+            right: 25px;
         }
     }
     .en-wrapper{
@@ -1135,7 +1136,7 @@ $rnt_label_height : 35px;
 
     .enl_item{
         float: right;
-        margin: 7px 1px;
+        margin: 7px 2px;
         height: 20px;
         min-width: 20px;
         @include border-radius(14px);
@@ -1149,7 +1150,7 @@ $rnt_label_height : 35px;
         i{
             width: 100%;
             height:100%;
-            line-height: 20px;
+            line-height: 22px;
             text-align: center;
         }
     }

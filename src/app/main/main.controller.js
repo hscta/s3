@@ -34,7 +34,7 @@
      *
      * */
 
-    var headerAutoHide = false;
+    var headerAutoHide = true;
 
     var wh = $(window).height();
     var header_height = 95;
@@ -80,7 +80,7 @@
     $(document).mousemove(function(event){
         if(headerAutoHide) {
             if (event.pageY < headerYVal) {
-                showHeader();
+                // showHeader();
                 headerYVal = 150;
             } else {
                 hideHeader();
