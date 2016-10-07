@@ -110,11 +110,20 @@
             };
 
             vm.processVehicleData = function (msg) {
+                //$log.log(msg);
                 var topic = msg[0].split('/');
                 var vehicleNumber = topic[topic.length - 1];
                 var vehicleData;
+                //$log.log(msg[1].deviceid);
 
-                var deviceid = parseInt(msg[1].deviceid);
+                var deviceidStr;
+                if(msg[1].deviceid.substring(0, 5) == '213GL') {
+                    deviceidStr = msg[1].deviceid.substring(5);
+                    //$log.log("deviceid str = " + deviceidStr);
+                }
+
+                var deviceid = parseInt(deviceidStr);
+                //$log.log(deviceid);
                 var idx = vm.getMarkerIndex(deviceid);
                 if (idx != -1) {
                     vehicleData = vm.inMarkers[idx];
@@ -123,6 +132,8 @@
                     vehicleData.id = deviceid;
                     vehicleData.options = {};
                     vehicleData.options.visible = false;
+                    //$log.log(vehicleData.id);
+                    //$log.log(vehicleData.deviceid);
                 }
 
                 vehicleData.latitude = msg[1].latitude;
@@ -149,7 +160,7 @@
                 if (msgList.length == 2 && msgList[0] != null && msgList[1] != null
                     && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
-                    //$log.log(JSON.stringify(vehicleData));
+                    //$log.log(vehicleData);
                     vm.callListeners(vehicleData, key);
                 } else {
                     $log.log("invalid data");

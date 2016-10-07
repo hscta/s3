@@ -82,30 +82,30 @@
                    ng-model="vm.filterStr" ng-change="vm.runFilters(vm.filterStr)"/>
         </md-input-container>
         <div layout="row" layout-align="center center">
-            <!--<div class="toggleButton" ng-class="{'active':vm.onRoaded}">-->
-                <!--On Road-->
-                <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
-                             <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
-                <!--</md-checkbox>-->
-            <!--</div>-->
-            <!--<div class="toggleButton" ng-class="{'active':vm.offRoaded}">-->
-                <!--Off Road-->
-                <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"-->
-                             <!--aria-label="onroaded" ng-change="vm.offRoadCheck()">-->
-                <!--</md-checkbox>-->
-            <!--</div>-->
-            <div class="toggleButton" ng-class="{'active': vm.onRoadedVar}">
+            <div class="toggleButton" ng-class="{'active':vm.onRoaded}">
                 On Road
-                <md-checkbox class='icar-checkbox' ng-model="vm.onRoadedVar"
-                             aria-label="onroaded" ng-change="vm.runFilters2('Running')">
+                <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
+                             aria-label="onroaded" ng-change="vm.onRoadCheck()">
                 </md-checkbox>
             </div>
-            <div class="toggleButton" ng-class="{'active': vm.offRoadedVar}">
+            <div class="toggleButton" ng-class="{'active':vm.offRoaded}">
                 Off Road
-                <md-checkbox class='icar-checkbox' ng-model="vm.offRoadedVar"
-                             aria-label="onroaded" ng-change="vm.runFilters2('Stopped')">
+                <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
+                             aria-label="onroaded" ng-change="vm.offRoadCheck()">
                 </md-checkbox>
             </div>
+            <!--<div class="toggleButton" ng-class="{'active': vm.onRoadedVar}">-->
+                <!--On Road-->
+                <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoadedVar"-->
+                             <!--aria-label="onroaded" ng-change="vm.runFilters2('Running')">-->
+                <!--</md-checkbox>-->
+            <!--</div>-->
+            <!--<div class="toggleButton" ng-class="{'active': vm.offRoadedVar}">-->
+                <!--Off Road-->
+                <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoadedVar"-->
+                             <!--aria-label="onroaded" ng-change="vm.runFilters2('Stopped')">-->
+                <!--</md-checkbox>-->
+            <!--</div>-->
             <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
             <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
             <!--On Roaded-->

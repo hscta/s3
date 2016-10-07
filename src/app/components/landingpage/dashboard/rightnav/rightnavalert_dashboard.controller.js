@@ -35,7 +35,7 @@
                 }
                 intellicarAPI.mqttService.subscribe(subscriptionMsg, 'rtfence');
 
-                $log.log(subscriptionMsg);
+                //$log.log(subscriptionMsg);
             }
 
             vm.currRep = vm.reports[0];

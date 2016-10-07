@@ -251,7 +251,7 @@
 
 
         vm.updateMarker = function (vehicleData) {
-            //$log.log(msg);
+            //$log.log(vehicleData);
             var isNewVehicle = true;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
@@ -267,6 +267,8 @@
             if (isNewVehicle) {
                 //vehicleData.options = {};
                 //vehicleData.options.animation = google.maps.Animation.BOUNCE;
+                //$log.log(vehicleData);
+
                 vm.inMarkers.push(vehicleData);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
@@ -289,13 +291,13 @@
             }
         };
 
-        vm.runFilters2 = function(data){
-            if(vm.onRoadedVar && vm.offRoadedVar || !vm.onRoadedVar && !vm.offRoadedVar ){
-                vm.runFilters('');
-            }else{
-                vm.runFilters(data);
-            }
-        };
+        // vm.runFilters2 = function(data){
+        //     if(vm.onRoadedVar && vm.offRoadedVar || !vm.onRoadedVar && !vm.offRoadedVar ){
+        //         vm.runFilters('');
+        //     }else{
+        //         vm.runFilters(data);
+        //     }
+        // };
 
 
         vm.applyFilterToMarker = function (marker, filterStr) {
