@@ -1081,8 +1081,12 @@ $rnt_label_height : 35px;
         }
         .enl_time{
             background: #777;
-            padding:0 10px;
-            color:#fff;
+            padding: 0 10px;
+            position: absolute;
+            color: #fff;
+            z-index: 2;
+            top: 0px;
+            right: 24px;
         }
     }
     .en-wrapper{
