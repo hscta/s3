@@ -255,8 +255,26 @@
             return moment.duration(end.diff(start)).humanize();
         };
 
-        vm.returnLength = function(data){
-            return Object.keys(data).length -1;
+
+        vm.returnLength = function(data,level){
+            var length = 0;
+            if(level == 1){
+                for(key in data){
+                    for(key2 in data[key]){
+                        if(key2 != 'active'){
+                            length++;
+                        }
+                    }
+                }
+                return length;
+            }else if(level == 2){
+                for(key in data){
+                    if(key != 'active'){
+                        length++;
+                    }
+                }
+                return length;
+            }
         };
 
         vm.navFilter = function (data) {
