@@ -196,7 +196,6 @@
             return moment.duration(end.diff(start)).humanize();
         };
 
-
         vm.returnLength = function(data,level){
             var length = 0;
             if(level == 1){
