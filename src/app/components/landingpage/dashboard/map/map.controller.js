@@ -941,7 +941,7 @@
                 $scope.historyMap.center.longitude = $scope.trace.path[midPoint].longitude;
                 $scope.historyMap.zoom = 11;
 
-                var lastBeacon = path[path.length - 1];
+                var lastBeacon = $scope.trace.path[$scope.trace.path.length - 1];
                 $scope.endMarker.latitude = lastBeacon.latitude;
                 $scope.endMarker.options.label = 'E';
                 $scope.endMarker.longitude = lastBeacon.longitude;
