@@ -92,41 +92,6 @@
         };
 
 
-        // vm.alertResolve = function (alertid) {
-        //     $log.log(alertid);
-        //     for (var i = 0; i < vm.inMarkers.length; i++) {
-        //         if (alertid == vm.inMarkers[i].id) {
-        //             $log.log('matched');
-        //             vm.inMarkers.splice(i, 1);
-        //             return;
-        //         }
-        //     }
-        // };
-
-
-        // vm.updateMarker = function (vehicleData) {
-        //     //$log.log('alertController updateMarker');
-        //     var isNewVehicle = true;
-        //     //var vehicleData = vm.processVehicleData(msg);
-        //     //$log.log(vehicleData);
-        //
-        //     for (var idx in vm.inMarkers) {
-        //         var marker = vm.inMarkers[idx];
-        //         if (marker.id == vehicleData.id) {
-        //             vehicleData.options = vm.inMarkers[idx].options;
-        //             vm.inMarkers[idx] = vehicleData;
-        //             isNewVehicle = false;
-        //         }
-        //     }
-        //
-        //     if (isNewVehicle) {
-        //         vehicleData.options = {};
-        //         vm.inMarkers.push(vehicleData);
-        //         // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
-        //     }
-        // };
-
-
         vm.alertClick = function (alertid) {
             rightNavAlertDashboardService.alertClick(alertid);
         };
@@ -179,25 +144,6 @@
 
         vm.resolveFilter = true;
         vm.resolveFilterAll = true;
-
-
-        // vm.historyTabData = [
-        //     {'reportName':'Service Stations', class:'redBG', 'vehicles':[
-        //     {'vehicleid':'MH04HN1366', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1303', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1304', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1305', resolved:false, triggerdate:'10/11/16' },
-        // ]},
-        // {'reportName':'City Limit', class:'redBG', 'vehicles':[
-        //     {'vehicleid':'MH02EH1306', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1307', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1308', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1309', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1310', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1311', resolved:true, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1312', resolved:false, triggerdate:'10/11/16' },
-        //     {'vehicleid':'MH02EH1313', resolved:false, triggerdate:'10/11/16' },
-        // ]}];
 
         vm.getColorCounter = 0;
 
