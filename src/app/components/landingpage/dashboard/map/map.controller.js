@@ -235,13 +235,15 @@
 
 
         vm.checkRoaded = function (marker) {
-            if (marker.meta.onroad) {
-                if (vm.onRoaded) {
-                    return true;
-                }
-            } else {
-                if (vm.offRoaded) {
-                    return true;
+            if(marker && marker.meta){
+                if (marker.meta.onroad) {
+                    if (vm.onRoaded) {
+                        return true;
+                    }
+                } else {
+                    if (vm.offRoaded) {
+                        return true;
+                    }
                 }
             }
 
@@ -903,11 +905,13 @@
         $scope.drawTrace = function (resp) {
             //$log.log(resp);
 
-            $scope.trace.path = [];
+            var traceData = resp.data.data;
             var path = $scope.trace.path;
+            $scope.trace.path = [];
 
-            for (var idx in resp.data.data) {
-                var position = resp.data.data[idx];
+
+            for (var idx in traceData) {
+                var position = traceData[idx];
                 if (position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
                     $log.log("Not a number");
                     $log.log(position);
@@ -935,10 +939,11 @@
 
 
                 var midPoint = Math.floor($scope.trace.path.length / 2);
-                $scope.historyMap.center = $scope.trace.path[midPoint];
+                $scope.historyMap.center.latitude = $scope.trace.path[midPoint].latitude;
+                $scope.historyMap.center.longitude = $scope.trace.path[midPoint].longitude;
                 $scope.historyMap.zoom = 11;
 
-                var lastBeacon = path[path.length - 1];
+                var lastBeacon = $scope.trace.path[$scope.trace.path.length - 1];
                 $scope.endMarker.latitude = lastBeacon.latitude;
                 $scope.endMarker.options.label = 'E';
                 $scope.endMarker.longitude = lastBeacon.longitude;
