@@ -532,8 +532,16 @@ body{
     float:left;
     position: relative;
     width:20%;
-    overflow-y: auto;
     height:100%;
+    .geo-lb-cont{
+        overflow-y: auto;
+        width: 100%;
+        position: absolute;
+        top:47px;
+        left:0;
+        bottom:0;
+        right:0;
+    }
 }
 .geo-cont{
     box-sizing:border-box;
@@ -553,10 +561,15 @@ body{
 .geo-rep-item-head{
     text-align: center;
     font-size: 120%;
+    position: relative;
+    z-index: 100;
 }
 
+.geo-rep-item.active:hover,
 .geo-rep-item.active{
-    background-color: #eee;
+    cursor:default;
+    background-color: #788fcc;
+    color:#fff;
 }
 .geo-rep-item:hover{
     cursor: pointer;
@@ -951,6 +964,7 @@ $rnt_label_height : 35px;
     float: left;
     overflow-y: scroll;
     position: absolute;
+    background: #fff;
     top: 50px;
     bottom: 0px;
     left: 0;
@@ -1144,16 +1158,22 @@ $rnt_label_height : 35px;
         color:#fff;
     }
 }
-.redBG{ background: #e87468!important; color:#fff!important;;}
-.greenBG{ background: #2ecc71!important;  color:#fff!important;;}
-.blueBG{ background: #3498db!important;  color:#fff!important;;}
-.yellowBG{ background: #f1c40f!important;  color:#fff!important;;}
-.greyBG{ background:#b3b3b3 !important;  color:#fff!important;;}
 
-.redColor{ color:#e87468!important; }
-.greenColor{color: #2ecc71!important; }
-.blueColor{ color: #3498db!important; }
-.yellowColor{ color: #f1c40f!important; }
+$green : #2ecc71;
+$blue : #3498db;
+$red : #e87468;
+$yellow : #f1c40f;
+$grey : #b3b3b3;
+.redBG{ background: $red!important; color:#fff!important;;}
+.greenBG{ background: $green!important;  color:#fff!important;;}
+.blueBG{ background: $blue!important;  color:#fff!important;;}
+.yellowBG{ background: $yellow!important;  color:#fff!important;;}
+.greyBG{ background:$grey !important;  color:#fff!important;;}
+
+.redColor{ color:$red!important; }
+.greenColor{color: $green!important; }
+.blueColor{ color: $blue!important; }
+.yellowColor{ color: $yellow!important; }
 
 .coolbar::-webkit-scrollbar{ width: 10px; }
 .coolbar::-webkit-scrollbar-button{}
@@ -1177,7 +1197,7 @@ button{
     height: 18px;
     border:2px solid #fff;
     border-bottom:0;
-    @include border-radius(100%);
+    @include border-radius(50%);
     animation-name: rotateAnim;
     -o-animation-name: rotateAnim;
     -ms-animation-name: rotateAnim;
@@ -1245,7 +1265,7 @@ button{
         transform: rotate(360deg);
     }
 }
-
+.opacity_0{ opacity:0; }
 
 .navPointer{
     position: absolute;
@@ -1255,4 +1275,18 @@ button{
     width: 100px;
     left: 0;
     margin-top:-2px;
+}
+
+
+.shadow-border{
+    box-shadow: 0 3px 3px rgba(0,0,0,0.1);
+}
+.-sp-blue{
+    border-color:$blue;
+}
+.-sp-big{
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    margin-left:-15px;
 }
