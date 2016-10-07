@@ -12,10 +12,10 @@
     .panel-content{padding:4px 4px;}
 
     .ignition-on-bg {
-        background:rgba(0, 230, 77, 0.5) !important;
+        background:#4bca75 !important;
     }
     .ignition-off-bg {
-        background:rgba(105, 145, 253, 0.5) !important;
+        background:#8a9fd6 !important;
     }
 </style>
 <md-sidenav  class="md-sidenav-right" md-component-id="right"
@@ -184,7 +184,7 @@
                                                     <i class="fa fa-arrow-down" class="" ng-if="car.triggerType"></i>
                                                     <i class="fa fa-arrow-up" ng-if="!car.triggerType"></i>
                                                 </div>
-                                                <div class="enl_item"
+                                                <div class="enl_item enl_time"
                                                      ng-class="{ 'ignition-on-bg': vm.vehicleData[carKey].ignitionstatus==1 ,
                                                  'ignition-off-bg': vm.vehicleData[carKey].ignitionstatus==0  }"
                                                 >{{ vm.getTimeDiff(car) }}</div>
