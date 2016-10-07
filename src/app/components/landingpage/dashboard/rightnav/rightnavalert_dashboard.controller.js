@@ -8,11 +8,12 @@
         .controller('RightNavDashboardController', RightNavDashboardController);
 
     function RightNavDashboardController($log, rightNavAlertDashboardService,$timeout,
-                                         mapService, geofenceReportService, intellicarAPI) {
+                                         mapService, geofenceReportService,
+                                         intellicarAPI) {
         $log.log("RightNavDashboardController");
         var vm = this;
         vm.alertDetails = [];
-        vm.inMarkers = [];
+        vm.vehicleData = {};
         vm.searchAlertStr = '';
         vm.reports = {};
 
@@ -91,49 +92,43 @@
         };
 
 
-        vm.alertResolve = function (alertid) {
-            $log.log(alertid);
-            for (var i = 0; i < vm.inMarkers.length; i++) {
-                if (alertid == vm.inMarkers[i].id) {
-                    $log.log('matched');
-                    vm.inMarkers.splice(i, 1);
-                    return;
-                }
-            }
-        };
+        // vm.alertResolve = function (alertid) {
+        //     $log.log(alertid);
+        //     for (var i = 0; i < vm.inMarkers.length; i++) {
+        //         if (alertid == vm.inMarkers[i].id) {
+        //             $log.log('matched');
+        //             vm.inMarkers.splice(i, 1);
+        //             return;
+        //         }
+        //     }
+        // };
 
 
-        vm.updateMarker = function (vehicleData) {
-            //$log.log('alertController updateMarker');
-            var isNewVehicle = true;
-            //var vehicleData = vm.processVehicleData(msg);
-            //$log.log(vehicleData);
-
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (marker.id == vehicleData.id) {
-                    vehicleData.options = vm.inMarkers[idx].options;
-                    vm.inMarkers[idx] = vehicleData;
-                    isNewVehicle = false;
-                }
-            }
-
-            if (isNewVehicle) {
-                vehicleData.options = {};
-                vm.inMarkers.push(vehicleData);
-                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
-            }
-        };
+        // vm.updateMarker = function (vehicleData) {
+        //     //$log.log('alertController updateMarker');
+        //     var isNewVehicle = true;
+        //     //var vehicleData = vm.processVehicleData(msg);
+        //     //$log.log(vehicleData);
+        //
+        //     for (var idx in vm.inMarkers) {
+        //         var marker = vm.inMarkers[idx];
+        //         if (marker.id == vehicleData.id) {
+        //             vehicleData.options = vm.inMarkers[idx].options;
+        //             vm.inMarkers[idx] = vehicleData;
+        //             isNewVehicle = false;
+        //         }
+        //     }
+        //
+        //     if (isNewVehicle) {
+        //         vehicleData.options = {};
+        //         vm.inMarkers.push(vehicleData);
+        //         // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
+        //     }
+        // };
 
 
         vm.alertClick = function (alertid) {
             rightNavAlertDashboardService.alertClick(alertid);
-        };
-
-
-        vm.addListener = function () {
-            //mapService.addMsgListener(vm.updateMarker);
-            mapService.addListener('rtgps', vm.updateMarker);
         };
 
 
@@ -142,9 +137,6 @@
                 .then(vm.getDashboardAlerts, vm.getDashboardAlertsFailure);
         };
 
-
-        //vm.initialize();
-        vm.addListener();
 
         vm.collapseAlertPanel = function(panel){
             panel.collapse();
@@ -344,8 +336,19 @@
         };
 
 
+        vm.mapServiceUpdate = function (msg) {
+            //$log.log('mapServiceUpdate');
+            //$log.log(msg);
+            if(!(msg.vehicleno in vm.vehicleData)) {
+                vm.vehicleData[msg.vehicleno] = {}
+            }
+
+            vm.vehicleData[msg.vehicleno].ignitionstatus = msg.ignitionstatus;
+        };
+
+
         vm.init = function () {
-            // intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+            mapService.addListener('rtgps', vm.mapServiceUpdate);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
         };
 
