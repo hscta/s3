@@ -239,6 +239,7 @@
 
         rightNavAlertDashboardService.pushDataToController = function (data) {
             vm.activeTabData = data;
+            console.log(data);
         };
 
         vm.getTimeDiff = function (data) {
@@ -252,6 +253,8 @@
             end /= 1000;
             start = moment.unix(start);
             end = moment.unix(end);
+
+
             return moment.duration(end.diff(start)).humanize();
         };
 
@@ -306,12 +309,13 @@
         };
 
         vm.resolve = function (car) {
+            // console.log();
             if(car.state != vm.RESOLVING){
                 if(car.resolved){
                     // Do stuff for un resolving
 
                     car.state = vm.RESOLVING;
-                    $timeout(function () {
+                    $timeout(function () { // Run this without $timeout after getting API response
                         car.state = vm.RESOLVED;
                         car.resolved = false;
                         car.resolveStr = 'resolved';
@@ -321,7 +325,7 @@
 
 
                     car.state = vm.RESOLVING;
-                    $timeout(function () {
+                    $timeout(function () {// Run this without $timeout after getting API response
                         car.state = vm.UNRESOLVED;
                         car.resolved = true;
                         car.resolveStr = 'unresolved';
@@ -337,7 +341,7 @@
 
 
                 //Do some stuffs to save the report
-                $timeout(function () {
+                $timeout(function () {// Run this without $timeout after getting API response
                     rep.state = vm.SAVED;
                 },2000);
             }
