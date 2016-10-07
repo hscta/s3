@@ -12,10 +12,12 @@
     }
 </style>
 <div class="geofence-cont" style="height: 100%;">
-    <div class="geo-leftbar coolbar" ng-click="vm.currPop = null">
-        <div class="geo-rep-item-head" >Reports</div>
-        <div class="geo-rep-item" ng-class="{'active':vm.currRepId == rep.assetpath}"
-             ng-repeat="rep in vm.reports" ng-click="vm.currRepId = rep.assetpath; vm.setReport(rep); ">{{rep.name }}</div>
+    <div class="geo-leftbar " ng-click="vm.currPop = null">
+        <div class="geo-rep-item-head shadow-border" >Reports</div>
+        <div class="geo-lb-cont coolbar">
+            <div class="geo-rep-item" ng-class="{'active':vm.currRepId == rep.assetpath}"
+                 ng-repeat="rep in vm.reports" ng-click="vm.currRepId = rep.assetpath; vm.setReport(rep); ">{{rep.name }}</div>
+        </div>
     </div>
     <div class="geo-cont" >
         <div class="geoc-head">

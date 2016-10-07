@@ -12,10 +12,10 @@
     .panel-content{padding:4px 4px;}
 
     .ignition-on-bg {
-        background:#4bca75 !important;
+        background:#2acc60 !important;
     }
     .ignition-off-bg {
-        background:#8a9fd6 !important;
+        background:#6476a2 !important;
     }
 </style>
 <md-sidenav  class="md-sidenav-right" md-component-id="right"
@@ -145,7 +145,8 @@
                     Active
                 </md-tab-label>
                 <md-tab-body>
-                    <div class="expansionNav coolbar" style="top:0;">
+                    <span class="spinner -sp-blue -sp-big" ng-if="!vm.activeTabData"></span>
+                    <div class="expansionNav coolbar" style="top:0;" ng-if="vm.activeTabData">
                         <!--first wrapper-->
                         <div class="en_main" ng-if="mainKey != 'active' && vm.navFilter(main)"
                              ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.activeTabData " ng-init="main.active = true">
