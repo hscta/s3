@@ -177,7 +177,7 @@
 
         rightNavAlertDashboardService.pushDataToController = function (data) {
             vm.activeTabData = data;
-            console.log(data);
+            //console.log(data);
         };
 
         vm.getTimeDiff = function (data) {

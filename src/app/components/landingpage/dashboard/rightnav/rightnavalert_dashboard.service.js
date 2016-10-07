@@ -106,7 +106,7 @@
 
                 var topic = msg[0];
                 var data = msg[1];
-                $log.log(data);
+                //$log.log(data);
                 var vehicleno = data.vehicleno;
 
 
@@ -116,8 +116,9 @@
                         var fence = report[eachFence];
                         for (var eachVehicle in fence) {
                             var vehicle = fence[eachVehicle];
-                            //console.log(vehicle);
+                            //$log.log(vehicle);
                             if (vehicle.vehicleno == vehicleno) {
+                                $log.log("Removing " + vehicleno + " from " + vehicle.reportName);
                                 delete vehicle;
                                 break;
                             }
@@ -131,7 +132,7 @@
                     for (var idx in data.activeFences) {
                         var activeFence = data.activeFences[idx];
                         var activeinfo = activeFence['activeinfo'];
-                        // console.log(activeinfo);
+                        //$log.log(activeinfo);
                         for(var eachitem in activeinfo) {
                             var fenceObj = activeinfo[eachitem];
                             var reportName = activeinfo[eachitem].reportName;
@@ -152,7 +153,8 @@
                                 }else{
                                     fenceObj.triggerType = false;
                                 }
-                                console.log(fenceObj);
+                                fenceObj.vehicleno = vehicleno;
+                                $log.log("Adding " + vehicleno + " to " + reportName);
                                 reportData[reportName][fenceName][vehicleno] = fenceObj;
                             }
                         }
