@@ -905,7 +905,7 @@
 
             var traceData = resp.data.data;
             var path = $scope.trace.path;
-            path = [];
+            $scope.trace.path = [];
 
 
             for (var idx in traceData) {
@@ -919,25 +919,26 @@
                 position.gpstime = parseInt(position.gpstime);
                 position.odometer = position.odometer;
                 position.speed = parseInt(position.speed.toFixed(2));
-                path.push(position);
+                $scope.trace.path.push(position);
             }
 
             function compare(a, b) {
                 return a.gpstime - b.gpstime;
             }
 
-            path.sort(compare);
+            $scope.trace.path.sort(compare);
 
 
-            if (path.length) {
+            if ($scope.trace.path.length) {
                 historyService.setData('getHistory', true);
-                $scope.clickedMarker.latitude = path[0].latitude;
-                $scope.clickedMarker.longitude = path[0].longitude;
+                $scope.clickedMarker.latitude = $scope.trace.path[0].latitude;
+                $scope.clickedMarker.longitude = $scope.trace.path[0].longitude;
                 $scope.clickedMarker.options.icon = 'assets/images/markers/big/red-dot.png';
 
 
-                var midPoint = Math.floor(path.length / 2);
-                $scope.historyMap.center = path[midPoint];
+                var midPoint = Math.floor($scope.trace.path.length / 2);
+                $scope.historyMap.center.latitude = $scope.trace.path[midPoint].latitude;
+                $scope.historyMap.center.longitude = $scope.trace.path[midPoint].longitude;
                 $scope.historyMap.zoom = 11;
 
                 var lastBeacon = path[path.length - 1];
