@@ -31,7 +31,7 @@
                 vm.reports[reportInfo.assetpath] = reportInfo;
             }
 
-            $log.log(vm.reports);
+            //$log.log(vm.reports);
             vm.callListeners(vm.reports, 'mygeofencereportsinfo');
 
             return $q.resolve(vm.reports);
@@ -39,7 +39,7 @@
 
 
         vm.handleMyGeofenceReportsMap = function (resp) {
-            $log.log(resp);
+            //$log.log(resp);
             vm.reportList = resp;
             var promiseList = [];
 

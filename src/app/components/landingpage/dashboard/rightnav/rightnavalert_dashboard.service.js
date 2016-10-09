@@ -9,7 +9,9 @@
             $log.log("rightNavDashboardAlertService");
 
             var vm = this;
-            vm.msgListeners = [];
+            // vm.msgListeners = [];
+            vm.listeners = {};
+
 
             vm.handleResponse = function (resp) {
                 //$log.log("leftNavDashboardService handleResponse");
@@ -32,18 +34,18 @@
             // };
 
 
-            vm.alertClick = function (alertid) {
-                for (var eachidx in vm.msgListeners) {
-                    vm.msgListeners[eachidx](alertid);
-                }
-            };
-
-
-            vm.addListener = function (listener) {
-                if (vm.msgListeners.indexOf(listener) == -1) {
-                    vm.msgListeners.push(listener);
-                }
-            };
+            // vm.alertClick = function (alertid) {
+            //     for (var eachidx in vm.msgListeners) {
+            //         vm.msgListeners[eachidx](alertid);
+            //     }
+            // };
+            //
+            //
+            // vm.addListener = function (listener) {
+            //     if (vm.msgListeners.indexOf(listener) == -1) {
+            //         vm.msgListeners.push(listener);
+            //     }
+            // };
 
 
             var data = [{
@@ -98,6 +100,12 @@
 
             var reportData = {};
 
+
+            vm.getReportData = function() {
+                return reportData;
+            };
+
+
             vm.updateFenceReport = function (msg) {
                 if (msg == null)
                     return;
@@ -118,7 +126,7 @@
                             var vehicle = fence[eachVehicle];
                             //$log.log(vehicle);
                             if (vehicle.vehicleno == vehicleno) {
-                                $log.log("Removing " + vehicleno + " from " + vehicle.reportName);
+                                //$log.log("Removing " + vehicleno + " from " + vehicle.reportName);
                                 delete vehicle;
                                 break;
                             }
@@ -154,14 +162,36 @@
                                     fenceObj.triggerType = false;
                                 }
                                 fenceObj.vehicleno = vehicleno;
-                                $log.log("Adding " + vehicleno + " to " + reportName);
+                                //$log.log("Adding " + vehicleno + " to " + reportName);
                                 reportData[reportName][fenceName][vehicleno] = fenceObj;
                             }
                         }
                     }
                 }
-                vm.pushDataToController(reportData);
+                //vm.pushDataToController(reportData);
+                //vm.callListeners('updatefencereport', {});
             };
+
+
+            vm.addListener = function (key, listener) {
+                if (!(key in vm.listeners)) {
+                    vm.listeners[key] = [];
+                }
+
+                if (vm.listeners[key].indexOf(listener) === -1) {
+                    vm.listeners[key].push(listener);
+                }
+            };
+
+
+            vm.callListeners = function (msg, key) {
+                if (key in vm.listeners) {
+                    for (var idx in vm.listeners[key]) {
+                        vm.listeners[key][idx](msg, key);
+                    }
+                }
+            };
+
 
 
             vm.init = function () {
