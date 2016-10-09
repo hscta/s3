@@ -124,10 +124,10 @@
         ];
 
 
-        vm.mydata = rightNavAlertDashboardService.updateFenceReport();
-        $log.log(vm.mydata);
-
-        vm.activeTabData = vm.mydata;
+        // vm.mydata = rightNavAlertDashboardService.updateFenceReport();
+        // $log.log(vm.mydata);
+        //
+        // vm.activeTabData = vm.mydata;
 
         vm.activeFilter = 'all';
         vm.finalTabHeightHalf = 35 + 2;// 2 for margin
@@ -158,7 +158,7 @@
             if(vm.getColorCounter == 6){ return getStyle('#f1c40f'); }else
             if(vm.getColorCounter == 7){ return getStyle('#e67e22'); }else
             if(vm.getColorCounter == 8){ return getStyle('#e74c3c'); }else
-            if(vm.getColorCounter == 9){ return getStyle('#d35400'); vm.getColorCounter = 0}
+            if(vm.getColorCounter == 9){ return getStyle('#d35400'); }
         };
         function getStyle(color) {
             return 'border-top: 2px solid '+color+'; ';
@@ -272,7 +272,7 @@
 
         vm.saveRep = function (rep) {
             if(rep.state != vm.SAVING){
-                console.log('saving...');
+                //console.log('saving...');
                 rep.state = vm.SAVING;
 
 

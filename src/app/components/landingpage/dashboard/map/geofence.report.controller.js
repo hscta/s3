@@ -19,9 +19,7 @@
         vm.reportId;
 
         vm.setReport = function (rep) {
-            //vm.currRep = rep;
-            $log.log(rep);
-            //vm.currFence = vm.currRep.fences[0];
+            //$log.log(rep);
             vm.currRep = {};
             vm.currRep.vehicles = [];
             vm.currRep.fences = [];
@@ -104,7 +102,7 @@
         vm.getMyGeofenceReports = function (resp) {
             //$log.log(resp);
             vm.reports = geofenceReportService.getMyGeofenceReports();
-            $log.log(vm.reports);
+            //$log.log(vm.reports);
 
             vm.currRep = vm.reports[0];
             //vm.currFence = vm.currRep.fences[0];

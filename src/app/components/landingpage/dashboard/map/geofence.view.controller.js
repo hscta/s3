@@ -112,20 +112,20 @@
                 }
             },
             {'type': 'line'},
-            // {
-            //     'id': 'devBattery',
-            //     'name': 'Low Device Battery',
-            //     'iconType': 'fa',
-            //     'icon': 'fa-battery-quarter',
-            //     'type': 'toggleButton',
-            //     'historymap': false,
-            //     'data': {
-            //         active: true,
-            //         'type': 'function', 'independent': true, 'function': function (active) {
-            //             vm.checkGeoFilters.set('devBattery', active);
-            //         }
-            //     }
-            // },
+            {
+                'id': 'devBattery',
+                'name': 'Low Device Battery',
+                'iconType': 'fa',
+                'icon': 'fa-battery-quarter',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: true,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('devBattery', active);
+                    }
+                }
+            },
             {
                 'id': 'carBattery',
                 'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',

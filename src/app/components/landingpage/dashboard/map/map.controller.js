@@ -206,12 +206,14 @@
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
-                var lowercasefilterStr = filterStr.toString().toLowerCase();
-                var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
+                if(filterStr && marker[eachidx]) {
+                    var lowercasefilterStr = filterStr.toString().toLowerCase();
+                    var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
-                if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                    //$log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
-                    return true;
+                    if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                        //$log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
+                        return true;
+                    }
                 }
             }
 
@@ -957,6 +959,7 @@
                 // $scope.historyInfoWindow.data.speed = lastBeacon.speed;
                 //$scope.historyInfoWindow.show = true;
 
+                $scope.errorMsg = '';
                 $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
             } else {
                 $scope.errorMsg = "No Data Found";

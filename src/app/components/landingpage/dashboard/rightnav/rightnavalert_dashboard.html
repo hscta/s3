@@ -150,7 +150,7 @@
                         <!--first wrapper-->
                         <div class="en_main" ng-if="mainKey != 'active' && vm.navFilter(main)"
                              ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.activeTabData " ng-init="main.active = true">
-                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" style="background:#81D4FA!important; " >
+                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" style="background:#4FC3F7 !important;">
                                 {{mainKey}}
                                 <div class="enl_item enl_add">
                                     <i class="fa fa-plus" ng-if="!main.active"></i>
