@@ -206,7 +206,7 @@
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
-                if(filterStr && marker[eachidx]) {
+                if(marker[eachidx]) {
                     var lowercasefilterStr = filterStr.toString().toLowerCase();
                     var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
