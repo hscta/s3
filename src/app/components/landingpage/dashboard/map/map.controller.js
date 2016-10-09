@@ -200,28 +200,6 @@
         };
 
 
-
-        vm.matchesAnyMarkerData = function (marker, filterStr) {
-            for (var eachidx in marker) {
-                if (vm.excludeFilters.indexOf(eachidx) != -1)
-                    continue;
-
-                if(marker[eachidx]) {
-                    var lowercasefilterStr = filterStr.toString().toLowerCase();
-                    var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
-
-                    if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                        //$log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
-                        return true;
-                    }
-                }
-            }
-
-            //$log.log("not matching " + marker.id);
-            return false;
-        };
-
-
         vm.onRoadCheck = function () {
             //$log.log("onroad check");
             vm.runFilters(vm.filterStr);
@@ -237,7 +215,7 @@
 
 
         vm.checkRoaded = function (marker) {
-            if(marker && marker.meta){
+            if (marker && marker.meta) {
                 if (marker.meta.onroad) {
                     if (vm.onRoaded) {
                         return true;
@@ -295,14 +273,6 @@
             }
         };
 
-        // vm.runFilters2 = function(data){
-        //     if(vm.onRoadedVar && vm.offRoadedVar || !vm.onRoadedVar && !vm.offRoadedVar ){
-        //         vm.runFilters('');
-        //     }else{
-        //         vm.runFilters(data);
-        //     }
-        // };
-
 
         vm.applyFilterToMarker = function (marker, filterStr) {
             //$log.log("applying filter to marker");
@@ -315,7 +285,34 @@
 
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
 
+            if (marker.options.visible && (!marker.ignitionstatus)) {
+                $log.log(marker);
+            }
+
             return marker.options.visible;
+        };
+
+
+        vm.matchesAnyMarkerData = function (marker, filterStr) {
+            for (var eachidx in marker) {
+                if (vm.excludeFilters.indexOf(eachidx) != -1)
+                    continue;
+
+                if (marker[eachidx]) {
+                    var lowercasefilterStr = filterStr.toString().toLowerCase();
+                    var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
+
+                    if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                        if ((!marker.ignitionstatus && marker.options.visible)) {
+                            $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
+                        }
+                        return true;
+                    }
+                }
+            }
+
+            //$log.log("not matching " + marker.id);
+            return false;
         };
 
 
@@ -497,7 +494,7 @@
                     }
                 }
 
-                if(vm.polygons) {
+                if (vm.polygons) {
                     for (idx = 0; idx < vm.polygons.length; idx++) {
                         filterStr = vm.polygons[idx].control.info.tagdata;
                         // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
@@ -508,7 +505,7 @@
                             startAnimation(vm.polygons[idx]);
                         } else {
                             vm.polygons[idx].visible = false;
-                            if(filterData.filterType == 'cityLimits') {
+                            if (filterData.filterType == 'cityLimits') {
                                 // $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
                             }
                         }
@@ -1016,7 +1013,7 @@
                 $scope.errorMsg = "";
             }
 
-            if($scope.inMarkers.length)
+            if ($scope.inMarkers.length)
                 $scope.clickedMarker = $scope.inMarkers[0];
             $scope.clickedMarker.trace = $scope.trace;
             vm.getMyFencesListener();

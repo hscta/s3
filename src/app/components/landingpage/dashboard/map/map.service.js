@@ -108,6 +108,14 @@
                 return -1;
             };
 
+
+            var VEHICLE_ON = "On";
+            var VEHICLE_OFF = "Off";
+            var VEHICLE_RUNNING = "Running";
+            var VEHICLE_STOPPED = "Stopped";
+            var VEHICLE_ACTIVE = "Active";
+            var VEHICLE_IMMOBILIZED = "Immobilized";
+
             vm.processVehicleData = function (msg) {
                 //$log.log(msg);
                 var topic = msg[0].split('/');
@@ -144,11 +152,27 @@
                 vehicleData.direction = parseFloat(parseFloat(msg[1].direction).toFixed(2));
                 vehicleData.carbattery = parseFloat(parseFloat(msg[1].carbattery).toFixed(2));
                 vehicleData.devbattery = parseFloat(parseFloat(msg[1].devbattery).toFixed(2));
-                vehicleData.ignitionstatusStr = msg[1].ignitionstatus ? "On" : "Off";
-                vehicleData.ignitionstatusFilter = msg[1].ignitionstatus ? "Running" : "Stopped";
-                // if(!vehicleData.mobilistatus)
-                //     $log.log(msg);
-                vehicleData.mobilistatusFilter = msg[1].mobilistatus ? "Active" : "Immobilized";
+
+                //vehicleData.ignitionstatusStr = msg[1].ignitionstatus ? "On" : "Off";
+                //vehicleData.ignitionstatusFilter = msg[1].ignitionstatus ? "Running" : "Stopped";
+                //vehicleData.mobilistatusFilter = msg[1].mobilistatus ? "Active" : "Immobilized";
+
+                if(msg[1].ignitionstatus == 1) {
+                    vehicleData.ignitionstatusStr = VEHICLE_ON;
+                    vehicleData.ignitionstatusFilter = VEHICLE_RUNNING;
+
+                } else {
+                    vehicleData.ignitionstatusStr = VEHICLE_OFF;
+                    vehicleData.ignitionstatusFilter = VEHICLE_STOPPED;
+                }
+
+                if(msg[1].mobilistatus == 1) {
+                    vehicleData.mobilistatusFilter = VEHICLE_ACTIVE;
+                } else {
+                    vehicleData.mobilistatusFilter = VEHICLE_IMMOBILIZED;
+                    vehicleData.ignitionstatusFilter = '';
+                }
+
                 vehicleData.timestamp = new Date(msg[1].timestamp);
                 vm.setMarkerIcon(vehicleData);
                 return vehicleData;
