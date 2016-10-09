@@ -95,6 +95,18 @@
                              aria-label="onroaded" ng-change="vm.offRoadCheck()">
                 </md-checkbox>
             </div>
+            <!--<div class="toggleButton" ng-class="{'active': vm.onRoadedVar}">-->
+                <!--On Road-->
+                <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoadedVar"-->
+                             <!--aria-label="onroaded" ng-change="vm.runFilters2('Running')">-->
+                <!--</md-checkbox>-->
+            <!--</div>-->
+            <!--<div class="toggleButton" ng-class="{'active': vm.offRoadedVar}">-->
+                <!--Off Road-->
+                <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoadedVar"-->
+                             <!--aria-label="onroaded" ng-change="vm.runFilters2('Stopped')">-->
+                <!--</md-checkbox>-->
+            <!--</div>-->
             <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
             <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
             <!--On Roaded-->
@@ -276,20 +288,24 @@
                 <!--</md-tab>-->
                 <!--</md-tabs>-->
 
-            <div class="row icar-tabs">
+                <div class="row icar-tabs">
                     <div class="col s4">
                         <ul class="tabs" select_tab="vm.selectedTab">
                             <li class="tab col s2">
-                                <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]" ui-sref="home.history">HISTORY</a>
+                                <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]"
+                                    ui-sref="home.history">HISTORY</a>
                             </li>
                             <li class="tab col s2">
-                                <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]" ui-sref="home.geofence">Geofence</a>
+                                <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
+                                     ui-sref="home.geofence">Geofence</a>
                             </li>
                             <!--<div class="navPointer"></div>-->
                         </ul>
                     </div>
                     <div flex ui-view="dialogview" class="mapDView"></div>
                 </div>
+
+
             <!--</md-content>-->
         </div>
     </div>
@@ -300,16 +316,19 @@
         $('ul.tabs').tabs('select_tab', 1);
 
 
-        function navPointer() {
-            var np = this;
-            np.pointer = $('.navPointer');
-            np.parent = np.pointer.parent();
-            np.parent.mousedown(function () {
-                console.log('shit man');
-            });
-        }
 
-        var navP = new navPointer();
+//
+//        function navPointer() {
+//            var pn = this;
+//            pn.pointer = $('.navPointer');
+//            pn.parent = pn.pointer.parent();
+//
+//            pn.parent.click(function () {
+//                console.log('hell');
+//            })
+//        }
+//
+//        var navP = new navPointer();
 
     })
 </script>

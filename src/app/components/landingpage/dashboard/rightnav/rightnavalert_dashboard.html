@@ -6,8 +6,11 @@
     }
     .alert-md-content{height:590px;overflow-y:scroll;}
     .container-margin{margin-bottom: 0; padding:0; height:31px}
+
     .md-title {font-size:13px !important;}
+
     .panel-content{padding:4px 4px;}
+
     .ignition-on-bg {
         background:#2acc60 !important;
     }
@@ -175,8 +178,8 @@
                                                  ng-click="vm.itemClicked(car,main.id,mid.id,$index); " ng-class="{'resolvedHeader':car.resolved}">
                                                 {{carKey}}
                                                 <!--<div class="enl_item enl_add">-->
-                                                <!--<i class="fa fa-plus" ng-if="!car.active"></i>-->
-                                                <!--<i class="fa fa-minus" ng-if="car.active"></i>-->
+                                                    <!--<i class="fa fa-plus" ng-if="!car.active"></i>-->
+                                                    <!--<i class="fa fa-minus" ng-if="car.active"></i>-->
                                                 <!--</div>-->
                                                 <div class="enl_item enl_entry" ng-class="{'redBG':!car.triggerType,'greenBG':car.triggerType}">
                                                     <i class="fa fa-arrow-down" class="" ng-if="car.triggerType"></i>
@@ -195,7 +198,7 @@
                                                     <i class="fa fa-arrow-up redColor"></i> Exit : {{car.entry | date : 'd MMM, h:mm a'}}
                                                 </div>
                                                 <!--<div class="enb_full" ng-if="!car.stillActive">-->
-                                                <!--<i class="fa fa-arrow-up redColor" ></i> Exit : {{car.exit | date : 'd MMM, h:mm a'}}-->
+                                                    <!--<i class="fa fa-arrow-up redColor" ></i> Exit : {{car.exit | date : 'd MMM, h:mm a'}}-->
                                                 <!--</div>-->
                                                 <div class="enb_full">
                                                     <textarea class="coolbar"placeholder="Put Your Message" ng-keydown="vm.resolutionKeyEvent($event,car)"></textarea>
@@ -296,3 +299,5 @@
 
     </md-content>
 </md-sidenav>
+
+

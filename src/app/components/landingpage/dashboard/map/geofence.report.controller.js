@@ -16,10 +16,10 @@
         var dateFormat = 'YYYY/MM/DD HH:mm';
         vm.startTime = moment().subtract(24, 'hour').format(dateFormat);
         vm.endTime = moment().format(dateFormat);
-
         vm.reportId;
+
         vm.setReport = function (rep) {
-            vm.currRep = rep;
+            //vm.currRep = rep;
             $log.log(rep);
             //vm.currFence = vm.currRep.fences[0];
             vm.currRep = {};
@@ -28,18 +28,19 @@
 
             vm.reportId = rep.assetpath;
 
-            var data = {};
-            for ( var idx in rep.assg ) {
-                data = {
-                    id:rep.assg[idx].assetpath,
-                    name:rep.assg[idx].name,
-                    checked:false
+            //var data;
+            for (var idx in rep.assg) {
+                var data = {
+                    id: rep.assg[idx].assetpath,
+                    name: rep.assg[idx].name,
+                    checked: true
                 };
-                if ( rep.assg[idx].assgfromassetid == 4 ){
+
+                if (rep.assg[idx].assgfromassetid == 4) {
                     vm.currRep.vehicles.push(data);
-                    vm.deSelectAllVehicles = true;
+                    vm.deSelectAllVehicles = false;
                     vm.SelectAllVehicles = true;
-                }else if ( rep.assg[idx].assgfromassetid == 15 ) {
+                } else if (rep.assg[idx].assgfromassetid == 15) {
                     data.checked = true;
                     vm.currRep.fences.push(data);
                     vm.deSelectAllFences = false;
@@ -50,9 +51,9 @@
             vm.deSelectAllFences = false;
             vm.selectAllFences = true;
             vm.deSelectAllVehicles = false;
-            vm.selectAllVehicles = false;
-
+            vm.selectAllVehicles = true;
         };
+
 
         vm.setSort = function (id, str) {
             // if (id == vm.tableSort.id) {
@@ -66,7 +67,7 @@
             // }
         };
 
-        google.charts.load('current', {'packages':['table']});
+        google.charts.load('current', {'packages': ['table']});
 
         function drawTable() {
             var data = new google.visualization.DataTable();
@@ -96,6 +97,7 @@
         vm.handleFailure = function (resp) {
             $log.log('handleFailure');
             $log.log(resp);
+            vm.loadingHistoryData = false;
         };
 
 
@@ -114,66 +116,80 @@
                 .then(vm.getMyGeofenceReports, vm.handleFailure);
         };
 
-        vm.selectAll = function (data){
+        vm.selectAll = function (data) {
             var filterData;
             var checkStatus;
 
-            if ( data == 'vehicle' ) {
-                for ( var idx in vm.filteredItems ) {
+            if (data == 'vehicle') {
+                for (var idx in vm.filteredItems) {
                     filterData = vm.filteredItems;
                     vm.filteredItems[idx].checked = vm.selectAllVehicles;
                 }
-                vm.deSelectAllVehicles =  !vm.selectAllVehicles;;
-            }else if ( data == 'fence'){
+                vm.deSelectAllVehicles = !vm.selectAllVehicles;
+            } else if (data == 'fence') {
                 filterData = vm.filteredFenceItems;
 
-                for ( var idx in vm.filteredFenceItems ) {
+                for (var idx in vm.filteredFenceItems) {
                     vm.filteredFenceItems[idx].checked = vm.selectAllFences;
                 }
-                vm.deSelectAllFences =  !vm.selectAllFences;;
+                vm.deSelectAllFences = !vm.selectAllFences;
             }
         };
 
-        vm.deSelectAll = function(data){
-            if ( data == 'vehicle' ) {
-                for ( var idx in vm.filteredItems ) {
+        vm.deSelectAll = function (data) {
+            if (data == 'vehicle') {
+                for (var idx in vm.filteredItems) {
                     filterData = vm.filteredItems;
                     vm.filteredItems[idx].checked = false;
                 }
                 vm.selectAllVehicles = false;
-            }else if ( data == 'fence'){
+            } else if (data == 'fence') {
                 filterData = vm.filteredFenceItems;
 
-                for ( var idx in vm.filteredFenceItems ) {
+                for (var idx in vm.filteredFenceItems) {
                     vm.filteredFenceItems[idx].checked = false;
                 }
                 vm.selectAllFences = false;
-
             }
         };
 
-        vm.verifyCheckStatus = function( type ) {
-            $log.log('type', type);
-            if ( type == 'vehicle') {
-                var trues = $filter("filter")( vm.currRep.vehicles , {checked:true} );
-                if ( trues.length ) {
+        vm.verifyCheckStatus = function (type) {
+            //$log.log('type', type);
+            if (type == 'vehicle') {
+                var trues = $filter("filter")(vm.currRep.vehicles, {checked: true});
+                $log.log(trues);
+                if (trues.length) {
                     vm.deSelectAllVehicles = false;
+                } else {
+                    vm.deSelectAllVehicles = true;
                 }
-            }else if ( type == 'fence' ) {
-                var trues = $filter("filter")( vm.currRep.fences , {checked:true} );
-                if ( trues.length ) {
-                    vm.deSelectAllFences = false;
-                }
-            }
 
+                if(trues.length < vm.currRep.vehicles.length)
+                    vm.selectAllVehicles = false;
+                else if(trues.length == vm.currRep.vehicles.length)
+                    vm.selectAllVehicles = true;
+            } else if (type == 'fence') {
+                var trues = $filter("filter")(vm.currRep.fences, {checked: true});
+                if (trues.length) {
+                    vm.deSelectAllFences = false;
+                } else {
+                    vm.deSelectAllFences = true;
+                }
+
+                if(trues.length < vm.currRep.fences.length)
+                    vm.selectAllFences = false;
+                else if(trues.length == vm.currRep.fences.length)
+                    vm.selectAllFences = true;
+            }
         };
 
-        vm.getHistoryReport = function(){
-            var myEl = angular.element( document.querySelector( '#geo-table' ) );
-            myEl.empty();
-            vm.errorMsg='';
 
-            if (vm.startTime && vm.endTime ) {
+        vm.getHistoryReport = function () {
+            var myEl = angular.element(document.querySelector('#geo-table'));
+            myEl.empty();
+            vm.errorMsg = '';
+
+            if (vm.startTime && vm.endTime) {
                 vm.selectedVehicles = [];
                 vm.selectedFences = [];
                 var promiseList = [];
@@ -189,7 +205,7 @@
 
                 // $log.log(vm.selectedVehicles.length);
 
-                vm.selectedFences = $filter("filter")( vm.filteredFenceItems, {checked:true} );
+                vm.selectedFences = $filter("filter")(vm.filteredFenceItems, {checked: true});
 
                 var starttime = new Date(vm.startTime).getTime();
                 var endtime = new Date(vm.endTime).getTime();
@@ -218,31 +234,32 @@
 
                 return $q.all(promiseList)
                     .then(vm.readHistoryInfo, vm.handleFailure);
-            }else {
+            } else {
                 vm.errorMsg = "Enter valid start and end time";
                 return;
             }
         };
 
 
-        vm.readHistoryInfo = function(history){
+        vm.readHistoryInfo = function (history) {
             vm.myHistoryData = [];
 
             var data = history[0].data.data;
-
             var trackHistoryData = [];
 
-            if ( !data.length ) return;
+            vm.loadingHistoryData = false;
 
-            for ( var idx in data ) {
-                for ( var vehicle in vm.selectedVehicles ) {
-                    if ( data[idx].deviceid == vm.selectedVehicles[vehicle].id){
+            if (!data.length) return;
+
+            for (var idx in data) {
+                for (var vehicle in vm.selectedVehicles) {
+                    if (data[idx].deviceid == vm.selectedVehicles[vehicle].id) {
                         var vehicleName = vm.selectedVehicles[vehicle].name
                     }
                 }
-                for ( var fen in vm.selectedFences ) {
+                for (var fen in vm.selectedFences) {
                     var fenceName = vm.selectedFences[fen].name;
-                    if ( data[idx].fencepath == vm.selectedFences[fen].id){
+                    if (data[idx].fencepath == vm.selectedFences[fen].id) {
                         var startTime = parseInt(data[idx].fentry);
                         var endTime = parseInt(data[idx].fexit);
                         vm.myHistoryData.push([
@@ -256,7 +273,6 @@
                 }
             }
 
-            vm.loadingHistoryData=false;
             google.charts.setOnLoadCallback(drawTable);
         };
 

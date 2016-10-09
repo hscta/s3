@@ -7,7 +7,7 @@
         .module('uiplatform')
         .controller('RightNavDashboardController', RightNavDashboardController);
 
-    function RightNavDashboardController($log, rightNavAlertDashboardService,$timeout,
+    function RightNavDashboardController($log, $timeout, rightNavAlertDashboardService,
                                          mapService, geofenceReportService,
                                          intellicarAPI) {
         $log.log("RightNavDashboardController");
@@ -26,7 +26,7 @@
         vm.getMyGeofenceReports = function (resp) {
             //$log.log(resp);
             vm.reports = geofenceReportService.getMyGeofenceReports();
-            $log.log(vm.reports);
+            //$log.log(vm.reports);
 
             for(var idx in vm.reports) {
                 var subscriptionMsg = [];
@@ -191,10 +191,9 @@
             end /= 1000;
             start = moment.unix(start);
             end = moment.unix(end);
-
-
             return moment.duration(end.diff(start)).humanize();
         };
+
 
         vm.returnLength = function(data,level){
             var length = 0;
@@ -296,12 +295,20 @@
         };
 
 
+        vm.updateFenceReport = function(data) {
+            //vm.activeTabData = rightNavAlertDashboardService.getReportData();
+        };
+
+
         vm.init = function () {
             mapService.addListener('rtgps', vm.mapServiceUpdate);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
+            //rightNavAlertDashboardService.addListener('updatefencereport', vm.updateFenceReport);
+            vm.activeTabData = rightNavAlertDashboardService.getReportData();
         };
 
         vm.init();
     }
 })();
+
 

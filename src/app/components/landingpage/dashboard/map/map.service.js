@@ -32,8 +32,11 @@
 //            var lat = 12.9176383;
 //            var lng = 77.6480335;
 
-            var lat = 19.19554947109134;
-            var lng = 72.83638193466376;
+            // var lat = 19.19554947109134;
+            // var lng = 72.83638193466376;
+
+            var lat = 12.9186883;
+            var lng = 77.56419;
 
             vm.center = {latitude: lat, longitude: lng};
             vm.zoom = 11;
@@ -107,11 +110,20 @@
             };
 
             vm.processVehicleData = function (msg) {
+                //$log.log(msg);
                 var topic = msg[0].split('/');
                 var vehicleNumber = topic[topic.length - 1];
                 var vehicleData;
+                //$log.log(msg[1].deviceid);
 
-                var deviceid = parseInt(msg[1].deviceid);
+                var deviceidStr = msg[1].deviceid;
+                if(msg[1].deviceid.substring(0, 5) == '213GL') {
+                    deviceidStr = deviceidStr.substring(5);
+                    //$log.log("deviceid str = " + deviceidStr);
+                }
+
+                var deviceid = parseInt(deviceidStr);
+                //$log.log(deviceid);
                 var idx = vm.getMarkerIndex(deviceid);
                 if (idx != -1) {
                     vehicleData = vm.inMarkers[idx];
@@ -120,6 +132,8 @@
                     vehicleData.id = deviceid;
                     vehicleData.options = {};
                     vehicleData.options.visible = false;
+                    //$log.log(vehicleData.id);
+                    //$log.log(vehicleData.deviceid);
                 }
 
                 vehicleData.latitude = msg[1].latitude;
@@ -146,7 +160,7 @@
                 if (msgList.length == 2 && msgList[0] != null && msgList[1] != null
                     && msgList[0] != undefined && msgList[1] != undefined) {
                     var vehicleData = vm.processVehicleData(msgList);
-                    //$log.log(JSON.stringify(vehicleData));
+                    //$log.log(vehicleData);
                     vm.callListeners(vehicleData, key);
                 } else {
                     $log.log("invalid data");
