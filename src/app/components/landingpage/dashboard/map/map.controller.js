@@ -362,19 +362,6 @@
             //$log.log(vm.clickedMarker);
             vm.selectedTab = 0;
             historyService.setData('selectedTab', vm.selectedTab);
-            // $mdDialog.show({
-            //     controller: 'DialogController as vm',
-            //     templateUrl: 'app/components/landingpage/dashboard/map/history-dialog.html',
-            //     parent: angular.element(document.body),
-            //     clickOutsideToClose: true,
-            //     escapeToClose: false,
-            //     locals: {
-            //         params: {
-            //             clickedMarker: vm.clickedMarker,
-            //             mainMarkers: vm.inMarkers
-            //         }
-            //     }
-            // });
             dialogService.show('home.history', {
                 clickedMarker: vm.clickedMarker,
                 mainMarkers: vm.inMarkers
@@ -385,17 +372,20 @@
             var immobalizeDialog = $mdDialog.confirm({
                 controller: 'ImmobalizeController',
                 templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
-                clickOutsideToClose: false,
-                escapeToClose: false
-            })
-                .ok('Yes')
-                .cancel('No');
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                locals: {
+                    params: {
+                        clickedMarker: vm.clickedMarker
+                    }
+                }
+            }).ok('Yes').cancel('No');
 
             $mdDialog.show(immobalizeDialog)
                 .then(function () {
-                    $log.log("Yes Function");
+                    //$log.log("Yes Function");
                 }, function () {
-                    $log.log("No Function");
+                    //$log.log("No Function");
                 })
         };
 
@@ -748,8 +738,8 @@
     //#################################################################################################################
 
 
-    function HistoryController($scope, $log, $mdDialog, mapService, $state, dialogService,
-                               $interval, intellicarAPI, historyService, $timeout, geofenceViewService) {
+    function HistoryController($scope, $log, $mdDialog, mapService, dialogService,
+                               $interval, intellicarAPI, historyService, geofenceViewService) {
         $log.log('HistoryController');
 
         var vm = this;
@@ -1029,10 +1019,9 @@
     //#################################################################################################################
 
 
-    function ImmobalizeController($scope, $log, $mdDialog) {
-
+    function ImmobalizeController($scope, $log, $mdDialog, params) {
         //var vm = this;
-        $log.log('ImmobalizeController');
+        //$log.log('ImmobalizeController');
         $scope.cancelImmobalize = function () {
             $log.log('cancelImmobalize');
             $mdDialog.cancel();
@@ -1041,7 +1030,10 @@
         $scope.okImmobilize = function () {
             $log.log('okImmobilize');
             $mdDialog.cancel();
-        }
+        };
+
+        $scope.vehicleno = params.clickedMarker.title;
+        $scope.deviceid = params.clickedMarker.deviceid;
     }
 
 

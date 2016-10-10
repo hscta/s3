@@ -2,13 +2,15 @@
 
 <md-dialog aria-label="dialog">
     <md-dialog-content>
-        <div class="div-area">
-            Are you sure ?
+        <div class="div-area" layout="column" layout-align="center center">
+            <br>
+            <span>Immobilize ?</span> <br>
+            <span>&nbsp;&nbsp;   VehicleNo: {{vehicleno}}  &nbsp;&nbsp;  Deviceid: {{deviceid}}   &nbsp;&nbsp;</span> <br>
         </div>
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-        <div flex>
+        <div flex layout="row" layout-align="space-around center">
             <md-button class="md-raised md-primary" ng-click="okImmobilize()">Yes</md-button>
             <md-button class="md-raised md-primary" ng-click="cancelImmobalize()">No</md-button>
         </div>

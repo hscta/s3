@@ -6,8 +6,8 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function ($log, $interval, $q, $timeout, intellicarAPI) {
-                                         //intellicarAPI, vehicleService) {
+        .service('mapService', function ($log, $interval, $q, $timeout, //intellicarAPI) {
+                                         intellicarAPI, vehicleService) {
             $log.log("mapService");
             var vm = this;
             vm.listeners = {};
@@ -142,11 +142,11 @@
                 }
 
                 vehicleData.timestamp = new Date(newData.timestamp);
+                vehicleData.deviceid = newData.deviceid;
                 vehicleData.latitude = newData.latitude;
                 vehicleData.longitude = newData.longitude;
                 vehicleData.altitude = newData.altitude;
                 vehicleData.title = vehicleNumber;
-                vehicleData.optimized = false;
                 vehicleData.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
                 vehicleData.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
                 vehicleData.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
@@ -154,9 +154,10 @@
                 vehicleData.ignitionstatus = newData.ignitionstatus;
                 vehicleData.mobilistatus = newData.mobilistatus;
 
-                //vehicleData.ignitionstatusStr = newData.ignitionstatus ? "On" : "Off";
-                //vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
-                //vehicleData.mobilistatusFilter = newData.mobilistatus ? "Active" : "Immobilized";
+                //vehicleData.optimized = false;
+                // vehicleData.ignitionstatusStr = newData.ignitionstatus ? "On" : "Off";
+                // vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
+                // vehicleData.mobilistatusFilter = newData.mobilistatus ? "Active" : "Immobilized";
 
                 if(vehicleData.ignitionstatus == 1) {
                     vehicleData.ignitionstatusStr = VEHICLE_ON;
