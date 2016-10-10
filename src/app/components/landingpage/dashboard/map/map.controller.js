@@ -7,9 +7,8 @@
         .controller('ImmobalizeController', ImmobalizeController)
         .controller('InnerMapController', InnerMapController);
 
-    function MapController($scope, $rootScope, $log, mapService,
-                           $timeout, $mdDialog, $document, $interval,
-                           rightNavAlertDashboardService, geofenceViewService,
+    function MapController($scope, $log, mapService,
+                           $mdDialog, $interval, geofenceViewService,
                            historyService, dialogService) {
         $log.log('MapController');
         var vm = this;
@@ -285,9 +284,9 @@
 
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
 
-            if (marker.options.visible && (!marker.ignitionstatus)) {
-                $log.log(marker);
-            }
+            // if (marker.options.visible && (!marker.ignitionstatus)) {
+            //     $log.log(marker);
+            // }
 
             return marker.options.visible;
         };
@@ -303,9 +302,9 @@
                     var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
                     if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                        if ((!marker.ignitionstatus && marker.options.visible)) {
-                            $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
-                        }
+                        // if ((!marker.ignitionstatus && marker.options.visible)) {
+                        //     $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
+                        // }
                         return true;
                     }
                 }
