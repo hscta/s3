@@ -106,7 +106,7 @@
 
             vm.init = function () {
                 //$log.log('map init()');
-                intellicarAPI.mqttService.addListener('rtgps', vm.updateVehicle);
+                //intellicarAPI.mqttService.addListener('rtgps', vm.updateVehicle);
             };
 
 
