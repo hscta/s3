@@ -6,7 +6,8 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function ($log, intellicarAPI, $interval, $q, $timeout) {
+        .service('mapService', function ($log, $interval, $q, $timeout, intellicarAPI) {
+                                         //intellicarAPI, vehicleService) {
             $log.log("mapService");
             var vm = this;
             vm.listeners = {};
@@ -120,44 +121,44 @@
                 //$log.log(msg);
                 var topic = msg[0].split('/');
                 var vehicleNumber = topic[topic.length - 1];
-                var vehicleData;
-                //$log.log(msg[1].deviceid);
 
-                var deviceidStr = msg[1].deviceid;
-                if(msg[1].deviceid.substring(0, 5) == '213GL') {
+                var newData = msg[1];
+                //$log.log(newData);
+                var deviceidStr = newData.deviceid;
+                if(newData.deviceid.substring(0, 5) == '213GL') {
                     deviceidStr = deviceidStr.substring(5);
-                    //$log.log("deviceid str = " + deviceidStr);
                 }
 
+                var vehicleData;
                 var deviceid = parseInt(deviceidStr);
-                //$log.log(deviceid);
                 var idx = vm.getMarkerIndex(deviceid);
                 if (idx != -1) {
                     vehicleData = vm.inMarkers[idx];
                 } else {
-                    vehicleData = msg[1];
+                    vehicleData = newData;
                     vehicleData.id = deviceid;
                     vehicleData.options = {};
                     vehicleData.options.visible = false;
-                    //$log.log(vehicleData.id);
-                    //$log.log(vehicleData.deviceid);
                 }
 
-                vehicleData.latitude = msg[1].latitude;
-                vehicleData.longitude = msg[1].longitude;
-                vehicleData.altitude = msg[1].altitude;
+                vehicleData.timestamp = new Date(newData.timestamp);
+                vehicleData.latitude = newData.latitude;
+                vehicleData.longitude = newData.longitude;
+                vehicleData.altitude = newData.altitude;
                 vehicleData.title = vehicleNumber;
                 vehicleData.optimized = false;
-                vehicleData.speed = parseFloat(parseFloat(msg[1].speed).toFixed(2));
-                vehicleData.direction = parseFloat(parseFloat(msg[1].direction).toFixed(2));
-                vehicleData.carbattery = parseFloat(parseFloat(msg[1].carbattery).toFixed(2));
-                vehicleData.devbattery = parseFloat(parseFloat(msg[1].devbattery).toFixed(2));
+                vehicleData.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
+                vehicleData.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
+                vehicleData.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
+                vehicleData.devbattery = parseFloat(parseFloat(newData.devbattery).toFixed(2));
+                vehicleData.ignitionstatus = newData.ignitionstatus;
+                vehicleData.mobilistatus = newData.mobilistatus;
 
-                //vehicleData.ignitionstatusStr = msg[1].ignitionstatus ? "On" : "Off";
-                //vehicleData.ignitionstatusFilter = msg[1].ignitionstatus ? "Running" : "Stopped";
-                //vehicleData.mobilistatusFilter = msg[1].mobilistatus ? "Active" : "Immobilized";
+                //vehicleData.ignitionstatusStr = newData.ignitionstatus ? "On" : "Off";
+                //vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
+                //vehicleData.mobilistatusFilter = newData.mobilistatus ? "Active" : "Immobilized";
 
-                if(msg[1].ignitionstatus == 1) {
+                if(vehicleData.ignitionstatus == 1) {
                     vehicleData.ignitionstatusStr = VEHICLE_ON;
                     vehicleData.ignitionstatusFilter = VEHICLE_RUNNING;
 
@@ -166,14 +167,13 @@
                     vehicleData.ignitionstatusFilter = VEHICLE_STOPPED;
                 }
 
-                if(msg[1].mobilistatus == 1) {
+                if(vehicleData.mobilistatus == 1) {
                     vehicleData.mobilistatusFilter = VEHICLE_ACTIVE;
                 } else {
                     vehicleData.mobilistatusFilter = VEHICLE_IMMOBILIZED;
                     vehicleData.ignitionstatusFilter = '';
                 }
 
-                vehicleData.timestamp = new Date(msg[1].timestamp);
                 vm.setMarkerIcon(vehicleData);
                 return vehicleData;
             };
