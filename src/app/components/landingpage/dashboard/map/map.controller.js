@@ -105,7 +105,8 @@
             //mapService.setZoom(vm.zoomMapZoom);
 
             for (var idx = 0; idx < vm.inMarkers.length; idx++) {
-                mapService.setMarkerIcon(vm.inMarkers[idx]);
+                if(!mapService.setMarkerIcon(vm.inMarkers[idx]))
+                    break;
             }
         };
 

@@ -37,12 +37,6 @@
         };
 
 
-        vm.initialize = function () {
-            leftNavDashboardService.getDashboardTree({})
-                .then(vm.handleDashboardTree, vm.handleFailure);
-        };
-
-
         vm.handleMyVehicles = function (resp) {
             $log.log(resp);
             //subscribe all assets
@@ -139,6 +133,7 @@
             return retVal;
         };
 
+
         vm.expandAll = function () {
             if (vm.tree_search_pattern.length <= 0) {
                 $scope.$broadcast('angular-ui-tree:expand-all');
@@ -147,18 +142,21 @@
             }
         };
 
+
         vm.expand_tree = function () {
             $log.log('expand');
             $scope.$broadcast('angular-ui-tree:collapse-all');
 
         };
 
-        vm.addAllListeners = function () {
 
+        vm.init = function () {
+            // leftNavDashboardService.getDashboardTree({})
+            //     .then(vm.handleDashboardTree, vm.handleFailure);
+            vm.getMyVehicles();
         };
 
-        vm.addAllListeners();
-        //vm.initialize();
-        vm.getMyVehicles();
+
+        vm.init();
     }
 })();

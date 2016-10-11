@@ -7,12 +7,12 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('vehicleService', function ($log, intellicarAPI, $interval, $q, $timeout) {
+        .service('vehicleService', function ($log, intellicarAPI) {
             $log.log("vehicleService");
             var vm = this;
             vm.listeners = {};
-            vm.vehiclePathMap = {};
-            vm.vehicleNumberMap = {};
+            vm.myVehiclesByPath = {};
+            vm.myVehiclesByNumber = {};
 
 
             vm.addListener = function (key, listener) {
@@ -43,14 +43,14 @@
             var VEHICLE_IMMOBILIZED = "Immobilized";
 
             vm.processVehicleData = function (vehicleNumber, msg) {
-                if(!(vehicleNumber in vm.vehicleNumberMap)) {
-                    vm.vehicleNumberMap[vehicleNumber] = msg;
+                if(!(vehicleNumber in vm.myVehiclesByNumber)) {
+                    vm.myVehiclesByNumber[vehicleNumber] = msg;
                     return;
                 }
 
-                var vehicleData = vm.vehicleNumberMap[vehicleNumber];
+                var vehicleData = vm.myVehiclesByNumber[vehicleNumber];
                 var newData = msg[1];
-                //$log.log(newData);
+                $log.log(newData);
 
                 vehicleData.timestamp = new Date(newData.timestamp);
                 vehicleData.deviceid = newData.deviceid;
@@ -100,14 +100,31 @@
             };
 
 
+            vm.handleFailure = function (resp) {
+                $log.log('handleFailure');
+                $log.log(resp);
+            };
+
+
+
+            vm.handleGetMyVehicles = function (resp) {
+                $log.log(resp);
+            };
+
+
+            vm.getMyVehicles = function(body) {
+                return intellicarAPI.userService.getMyVehiclesMap(body);
+            };
+
+
             vm.init = function () {
                 //$log.log('map init()');
                 //intellicarAPI.mqttService.addListener('rtgps', vm.updateVehicle);
+                vm.getMyVehicles()
+                    .then(vm.handleGetMyVehicles, vm.handleFailure);
             };
 
 
             vm.init();
-
-
         });
 })();

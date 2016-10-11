@@ -68,6 +68,7 @@
 
 
             var zoomLevelIcon = 'big';
+            var prevZoomLevelIcon = zoomLevelIcon;
 
             vm.setMarkerIcon = function (vehicleData) {
                 var iconColor = 'orange';
@@ -92,11 +93,14 @@
                     zoomLevelIcon = 'big';
                 }
 
-                vehicleData.iconColor = iconColor;
-                vehicleData.icon = 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
+                if(zoomLevelIcon != prevZoomLevelIcon) {
+                    vehicleData.iconColor = iconColor;
+                    vehicleData.icon = 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
+                    prevZoomLevelIcon = zoomLevelIcon;
+                    return true;
+                }
 
-                //$log.log(iconColor + ", zoom = " + vm.zoom + ", " + zoomLevelIcon);
-                //return 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
+                return false;
             };
 
 
