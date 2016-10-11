@@ -99,25 +99,13 @@
         };
 
 
-        var iconColor = 'orange';
         vm.changeMarkerIcon = function () {
-            vm.zoomMapZoom = vm.inMap.mapControl.getGMap().zoom;
-            //mapService.setZoom(vm.zoomMapZoom);
-
             for (var idx = 0; idx < vm.inMarkers.length; idx++) {
                 // if(!mapService.setMarkerIcon(vm.inMarkers[idx]))
                 //     break;
                 mapService.setMarkerIcon(vm.inMarkers[idx]);
             }
         };
-
-
-        // function checkZoomLevel(min, max) {
-        //     if (vm.zoomMapZoom >= min && vm.zoomMapZoom < max) {
-        //         return true;
-        //     }
-        //     return false;
-        // }
 
 
         vm.markersEvents = {

@@ -59,7 +59,7 @@
             };
 
 
-            var checkZoomLevel = function (min, max) {
+            vm.checkZoomLevel = function (min, max) {
                 vm.zoom = vm.inMap.mapControl.getGMap().zoom;
                 return (vm.zoom >= min && vm.zoom <= max);
             };
@@ -70,12 +70,12 @@
             var MEDIUM = 'medium';
             var BIG = 'big';
 
-            var getZoomLevelIcon = function () {
-                if (checkZoomLevel(1, 6)) {
+            vm.getMarkerSize = function () {
+                if (vm.checkZoomLevel(1, 6)) {
                     return EXTRA_SMALL;
-                } else if (checkZoomLevel(7, 8)) {
+                } else if (vm.checkZoomLevel(7, 8)) {
                     return SMALL;
-                } else if (checkZoomLevel(9, 10)) {
+                } else if (vm.checkZoomLevel(9, 10)) {
                     return MEDIUM;
                 }
 
@@ -88,7 +88,7 @@
             var BLUE_ICON = 'blue';
             var ORANGE_ICON = 'orange';
 
-            var getMarkerIconColor = function (vehicleData) {
+            vm.getMarkerColor = function (vehicleData) {
                 if (!vehicleData.mobilistatus) {
                     return RED_ICON;
                 } else {
@@ -104,7 +104,7 @@
 
 
             vm.setMarkerIcon = function (vehicleData) {
-                var newIcon = 'assets/images/markers/' + getZoomLevelIcon() + '/' + getMarkerIconColor(vehicleData) + '-dot.png';
+                var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
 
                 if (newIcon != vehicleData.icon)
                     vehicleData.icon = newIcon;
