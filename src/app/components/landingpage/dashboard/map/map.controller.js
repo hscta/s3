@@ -426,6 +426,8 @@
             vm.applyFilters({filterType: 'showAll'});
         };
 
+        var DEVBATTERY_THRESHOLD = 3.55;
+        var CARBATTERY_THRESHOLD = 9.5;
 
         vm.applyFilters = function (filterData) {
             var idx;
@@ -436,7 +438,7 @@
                     // do some code to add low battery
                     for (idx in vm.inMarkers) {
                         marker = vm.inMarkers[idx];
-                        if (marker.carbattery < 9.5) {
+                        if (marker.carbattery < CARBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
@@ -444,8 +446,9 @@
                     // do some code to remove low battery
                     for (idx in vm.inMarkers) {
                         marker = vm.inMarkers[idx];
-                        if (marker.carbattery < 9.5) {
-                            marker.options.animation = null;
+                        marker.options.animation = null;
+                        if (vm.geoFilters.devBattery && marker.devbattery < DEVBATTERY_THRESHOLD) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
                 }
@@ -454,7 +457,7 @@
                     // do some code to add low battery
                     for (idx in vm.inMarkers) {
                         marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55) {
+                        if (marker.devbattery < DEVBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
@@ -462,8 +465,9 @@
                     // do some code to remove low battery
                     for (idx in vm.inMarkers) {
                         marker = vm.inMarkers[idx];
-                        if (marker.devbattery < 3.55) {
-                            marker.options.animation = null;
+                        marker.options.animation = null;
+                        if (vm.geoFilters.carBattery && marker.carbattery < CARBATTERY_THRESHOLD) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
                         }
                     }
                 }

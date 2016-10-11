@@ -53,6 +53,7 @@
                 //$log.log(newData);
 
                 vehicleData.timestamp = new Date(newData.timestamp);
+                vehicleData.deviceid = newData.deviceid;
                 vehicleData.latitude = newData.latitude;
                 vehicleData.longitude = newData.longitude;
                 vehicleData.altitude = newData.altitude;
@@ -63,10 +64,6 @@
                 vehicleData.devbattery = parseFloat(parseFloat(newData.devbattery).toFixed(2));
                 vehicleData.ignitionstatus = newData.ignitionstatus;
                 vehicleData.mobilistatus = newData.mobilistatus;
-
-                //vehicleData.ignitionstatusStr = newData.ignitionstatus ? "On" : "Off";
-                //vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
-                //vehicleData.mobilistatusFilter = newData.mobilistatus ? "Active" : "Immobilized";
 
                 if(newData.ignitionstatus == 1) {
                     vehicleData.ignitionstatusStr = VEHICLE_ON;
@@ -87,7 +84,6 @@
                 //vm.setMarkerIcon(vehicleData);
                 return vehicleData;
             };
-
 
 
             vm.updateVehicle = function (msg, key) {
