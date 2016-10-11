@@ -120,7 +120,7 @@
             vm.init = function () {
                 //$log.log('map init()');
                 //intellicarAPI.mqttService.addListener('rtgps', vm.updateVehicle);
-                vm.getMyVehicles()
+                vm.getMyVehicles({})
                     .then(vm.handleGetMyVehicles, vm.handleFailure);
             };
 

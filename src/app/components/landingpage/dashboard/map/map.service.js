@@ -58,49 +58,56 @@
                 return vm.bounds;
             };
 
-            function checkZoomLevel(min, max) {
+
+            var checkZoomLevel = function (min, max) {
                 vm.zoom = vm.inMap.mapControl.getGMap().zoom;
-                if (vm.zoom >= min && vm.zoom <= max) {
-                    return true;
+                return (vm.zoom >= min && vm.zoom <= max);
+            };
+
+
+            var EXTRA_SMALL = 'extra_small';
+            var SMALL = 'small';
+            var MEDIUM = 'medium';
+            var BIG = 'big';
+
+            var getZoomLevelIcon = function () {
+                if (checkZoomLevel(1, 6)) {
+                    return EXTRA_SMALL;
+                } else if (checkZoomLevel(7, 8)) {
+                    return SMALL;
+                } else if (checkZoomLevel(9, 10)) {
+                    return MEDIUM;
                 }
-                return false;
-            }
+
+                return BIG;
+            };
 
 
-            var zoomLevelIcon = 'big';
-            var prevZoomLevelIcon = zoomLevelIcon;
+            var RED_ICON = 'red';
+            var GREEN_ICON = 'green';
+            var BLUE_ICON = 'blue';
+            var ORANGE_ICON = 'orange';
 
-            vm.setMarkerIcon = function (vehicleData) {
-                var iconColor = 'orange';
-
+            var getMarkerIconColor = function (vehicleData) {
                 if (!vehicleData.mobilistatus) {
-                    iconColor = 'red';
+                    return RED_ICON;
                 } else {
                     if (vehicleData.ignitionstatus) {
-                        iconColor = 'green';
+                        return GREEN_ICON;
                     } else {
-                        iconColor = 'blue';
+                        return BLUE_ICON;
                     }
                 }
 
-                if (checkZoomLevel(1, 6)) {
-                    zoomLevelIcon = 'extra_small';
-                } else if (checkZoomLevel(7, 8)) {
-                    zoomLevelIcon = 'small';
-                } else if (checkZoomLevel(9, 10)) {
-                    zoomLevelIcon = 'medium';
-                } else {
-                    zoomLevelIcon = 'big';
-                }
+                return ORANGE_ICON;
+            };
 
-                if(zoomLevelIcon != prevZoomLevelIcon) {
-                    vehicleData.iconColor = iconColor;
-                    vehicleData.icon = 'assets/images/markers/' + zoomLevelIcon + '/' + iconColor + '-dot.png';
-                    prevZoomLevelIcon = zoomLevelIcon;
-                    return true;
-                }
 
-                return false;
+            vm.setMarkerIcon = function (vehicleData) {
+                var newIcon = 'assets/images/markers/' + getZoomLevelIcon() + '/' + getMarkerIconColor(vehicleData) + '-dot.png';
+
+                if (newIcon != vehicleData.icon)
+                    vehicleData.icon = newIcon;
             };
 
 
@@ -129,7 +136,7 @@
                 var newData = msg[1];
                 //$log.log(newData);
                 var deviceidStr = newData.deviceid;
-                if(newData.deviceid.substring(0, 5) == '213GL') {
+                if (newData.deviceid.substring(0, 5) == '213GL') {
                     deviceidStr = deviceidStr.substring(5);
                 }
 
@@ -163,7 +170,7 @@
                 // vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
                 // vehicleData.mobilistatusFilter = newData.mobilistatus ? "Active" : "Immobilized";
 
-                if(vehicleData.ignitionstatus == 1) {
+                if (vehicleData.ignitionstatus == 1) {
                     vehicleData.ignitionstatusStr = VEHICLE_ON;
                     vehicleData.ignitionstatusFilter = VEHICLE_RUNNING;
 
@@ -172,7 +179,7 @@
                     vehicleData.ignitionstatusFilter = VEHICLE_STOPPED;
                 }
 
-                if(vehicleData.mobilistatus == 1) {
+                if (vehicleData.mobilistatus == 1) {
                     vehicleData.mobilistatusFilter = VEHICLE_ACTIVE;
                 } else {
                     vehicleData.mobilistatusFilter = VEHICLE_IMMOBILIZED;
