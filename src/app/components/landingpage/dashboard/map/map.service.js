@@ -164,6 +164,11 @@
                 vehicleData.ignitionstatus = newData.ignitionstatus;
                 vehicleData.mobilistatus = newData.mobilistatus;
 
+                var currentTime = new Date().getTime();
+
+                if(currentTime - vehicleData.timestamp.getTime() > 8 * 3600 * 1000) {
+                    vehicleData.noComm = 'no communication';
+                }
                 //vehicleData.optimized = false;
                 // vehicleData.ignitionstatusStr = newData.ignitionstatus ? "On" : "Off";
                 // vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
