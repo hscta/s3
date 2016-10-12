@@ -4,8 +4,6 @@
 
 
 (function () {
-
-
     angular
         .module('uiplatform')
         .controller('GeofenceReportController', GeofenceReportController);
@@ -53,6 +51,8 @@
         };
 
         vm.getSelectedFences = function (rep ) {
+            $log.log(rep);
+            $log.log(typeof(rep));
             vm.reportId = rep.assetpath;
             vm.setReport(rep);
             vm.getHistoryReport();
@@ -60,7 +60,6 @@
 
 
         vm.setReport = function (rep) {
-            //$log.log(rep);
             vm.currRep = {};
             vm.currRep.vehicles = [];
             vm.currRep.fences = [];
@@ -90,19 +89,6 @@
 
             vm.setSelectedCount('fence');
             vm.setSelectedCount('vehicle');
-        };
-
-
-        vm.setSort = function (id, str) {
-            // if (id == vm.tableSort.id) {
-            //     if (vm.tableSort.reverse) {
-            //         vm.tableSort = {'id': id, 'str': str, 'reverse': false};
-            //     } else {
-            //         vm.tableSort = {'id': id, 'str': '-' + str, 'reverse': true};
-            //     }
-            // } else {
-            //     vm.tableSort = {'id': id, 'str': str, 'reverse': false};
-            // }
         };
 
 
@@ -141,7 +127,13 @@
 
         vm.getMyGeofenceReports = function (resp) {
             vm.reports = geofenceReportService.getMyGeofenceReports();
-            vm.currRep = vm.reports[0];
+
+            if ( vm.initialSelect ) {
+                vm.initialSelect = false;
+                for (var idx in vm.reports) {
+                    return  vm.getSelectedFences(vm.reports[idx]);
+                }
+            }
         };
 
         vm.getMyGeofenceReportsMap = function () {
@@ -316,7 +308,6 @@
                 }
             }
 
-
             vm.loadingHistoryData = false;
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
@@ -325,11 +316,11 @@
         vm.init = function () {
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             vm.getMyGeofenceReports();
-        };
 
+            vm.initialSelect = true;
+        };
 
         vm.init();
     }
-
 
 })();
