@@ -1,3 +1,8 @@
+/**
+ * Created by User on 22-09-2016.
+ */
+
+
 (function () {
 
 
@@ -18,15 +23,49 @@
         vm.endTime = moment().format(dateFormat);
         vm.reportId;
 
+        vm.selectedVehiclesCount = 0;
+        vm.selectedFencesCount = 0;
+
+        vm.filteredItems = [];
+        vm.filteredFenceItems = [];
+
+        vm.dataFound = false;
+
+        vm.setSelectedCount = function(type) {
+            if ( type == 'vehicle') {
+                if ( vm.filteredItems.length )
+                    vm.selectedVehiclesCount =  ($filter("filter")(vm.filteredItems, {checked: true})).length;
+            }   else {
+                if ( vm.filteredFenceItems.length)
+                    vm.selectedFencesCount = ($filter("filter")(vm.filteredFenceItems, {checked: true})).length;
+            }
+        };
+
+        vm.filterVehicles = function(){
+            vm.filteredItems = $filter("filter")(vm.currRep.vehicles, vm.vehicleFilter);
+            $log.log(vm.filteredItems);
+        };
+
+        vm.filterFences = function(){
+            vm.filteredFenceItems =  $filter("filter")(vm.currRep.fences, vm.fenceFilter);
+            $log.log(vm.filteredFenceItems);
+
+        };
+
+        vm.getSelectedFences = function (rep ) {
+            vm.reportId = rep.assetpath;
+            vm.setReport(rep);
+            vm.getHistoryReport();
+        };
+
+
         vm.setReport = function (rep) {
             //$log.log(rep);
             vm.currRep = {};
             vm.currRep.vehicles = [];
             vm.currRep.fences = [];
 
-            vm.reportId = rep.assetpath;
 
-            //var data;
             for (var idx in rep.assg) {
                 var data = {
                     id: rep.assg[idx].assetpath,
@@ -36,20 +75,21 @@
 
                 if (rep.assg[idx].assgfromassetid == 4) {
                     vm.currRep.vehicles.push(data);
-                    vm.deSelectAllVehicles = false;
-                    vm.SelectAllVehicles = true;
                 } else if (rep.assg[idx].assgfromassetid == 15) {
-                    data.checked = true;
                     vm.currRep.fences.push(data);
-                    vm.deSelectAllFences = false;
-                    vm.SelectAllFences = true;
                 }
             }
 
-            vm.deSelectAllFences = false;
-            vm.selectAllFences = true;
-            vm.deSelectAllVehicles = false;
+            vm.filteredItems = vm.currRep.vehicles;
+            vm.filteredFenceItems = vm.currRep.fences;
+
+            vm.SelectAllFences = true;
             vm.selectAllVehicles = true;
+            vm.deSelectAllFences = false;
+            vm.deSelectAllVehicles = false;
+
+            vm.setSelectedCount('fence');
+            vm.setSelectedCount('vehicle');
         };
 
 
@@ -65,7 +105,7 @@
             // }
         };
 
-        google.charts.load('current', {'packages': ['table']});
+
 
         function drawTable() {
             var data = new google.visualization.DataTable();
@@ -100,13 +140,8 @@
 
 
         vm.getMyGeofenceReports = function (resp) {
-            //$log.log(resp);
             vm.reports = geofenceReportService.getMyGeofenceReports();
-            //$log.log(vm.reports);
-
             vm.currRep = vm.reports[0];
-            //vm.currFence = vm.currRep.fences[0];
-            //vm.tableSort = {'id': 1, 'str': 'name', 'reverse': false};
         };
 
         vm.getMyGeofenceReportsMap = function () {
@@ -124,13 +159,16 @@
                     vm.filteredItems[idx].checked = vm.selectAllVehicles;
                 }
                 vm.deSelectAllVehicles = !vm.selectAllVehicles;
+                vm.setSelectedCount('vehicle');
             } else if (data == 'fence') {
                 filterData = vm.filteredFenceItems;
 
                 for (var idx in vm.filteredFenceItems) {
                     vm.filteredFenceItems[idx].checked = vm.selectAllFences;
                 }
+                vm.selectedFencesCount = vm.filteredFenceItems.length;
                 vm.deSelectAllFences = !vm.selectAllFences;
+                vm.setSelectedCount('fence');
             }
         };
 
@@ -141,6 +179,7 @@
                     vm.filteredItems[idx].checked = false;
                 }
                 vm.selectAllVehicles = false;
+                vm.setSelectedCount('vehicle');
             } else if (data == 'fence') {
                 filterData = vm.filteredFenceItems;
 
@@ -148,14 +187,14 @@
                     vm.filteredFenceItems[idx].checked = false;
                 }
                 vm.selectAllFences = false;
+                vm.setSelectedCount('fence');
             }
+
         };
 
         vm.verifyCheckStatus = function (type) {
-            //$log.log('type', type);
             if (type == 'vehicle') {
                 var trues = $filter("filter")(vm.currRep.vehicles, {checked: true});
-                $log.log(trues);
                 if (trues.length) {
                     vm.deSelectAllVehicles = false;
                 } else {
@@ -179,10 +218,12 @@
                 else if(trues.length == vm.currRep.fences.length)
                     vm.selectAllFences = true;
             }
+
+            vm.setSelectedCount(type);
         };
 
-
         vm.getHistoryReport = function () {
+            vm.dataFound = false;
             var myEl = angular.element(document.querySelector('#geo-table'));
             myEl.empty();
             vm.errorMsg = '';
@@ -201,8 +242,6 @@
                     }
                 }
 
-                // $log.log(vm.selectedVehicles.length);
-
                 vm.selectedFences = $filter("filter")(vm.filteredFenceItems, {checked: true});
 
                 var starttime = new Date(vm.startTime).getTime();
@@ -220,6 +259,9 @@
 
                 vm.loadingHistoryData = true;
 
+
+                // $log.log(vm.filteredFenceItems);
+
                 var body = {
                     fencereport: vm.reportId,
                     vehicles: vm.vehicleids,
@@ -227,8 +269,6 @@
                     endtime: new Date(vm.endTime).getTime() / 1000
                 };
                 promiseList.push(intellicarAPI.geofenceService.getReportHistory(body));
-
-                // $log.log(vm.selectedFences);
 
                 return $q.all(promiseList)
                     .then(vm.readHistoryInfo, vm.handleFailure);
@@ -245,9 +285,14 @@
             var data = history[0].data.data;
             var trackHistoryData = [];
 
-            vm.loadingHistoryData = false;
+            if (!data.length) {
+                vm.loadingHistoryData = false;
+                vm.dataFound = true;
+                return;
+            }
 
-            if (!data.length) return;
+
+            vm.dataFound = false;
 
             for (var idx in data) {
                 for (var vehicle in vm.selectedVehicles) {
@@ -271,6 +316,9 @@
                 }
             }
 
+
+            vm.loadingHistoryData = false;
+            google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
         };
 
@@ -285,7 +333,3 @@
 
 
 })();
-/**
- * Created by User on 22-09-2016.
- */
-
