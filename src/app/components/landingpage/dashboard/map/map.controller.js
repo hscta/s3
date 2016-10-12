@@ -1044,7 +1044,7 @@
             $mdDialog.cancel();
         };
 
-        $scope.vehicleno = params.clickedMarker.title;
+        $scope.vehicleno = params.clickedMarker.vehicleno;
         $scope.deviceid = params.clickedMarker.deviceid;
     }
 

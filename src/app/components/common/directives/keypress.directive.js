@@ -12,7 +12,6 @@
         return function (scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
                 if(event.which === 13) {
-                    $log.log('sssssssssssssssssss');
                     scope.$apply(function (){
                         scope.$eval(attrs.icarKeypress);
                     });

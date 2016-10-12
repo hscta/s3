@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function ($log, $interval, $q, $timeout, //intellicarAPI) {
+        .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
                                          intellicarAPI, vehicleService) {
             $log.log("mapService");
             var vm = this;
@@ -121,92 +121,6 @@
             };
 
 
-            var VEHICLE_ON = "On";
-            var VEHICLE_OFF = "Off";
-            var VEHICLE_RUNNING = "Running";
-            var VEHICLE_STOPPED = "Stopped";
-            var VEHICLE_ACTIVE = "Active";
-            var VEHICLE_IMMOBILIZED = "Immobilized";
-
-            vm.processVehicleData = function (msg) {
-                var topic = msg[0].split('/');
-                var vehicleNumber = topic[topic.length - 1];
-                var newData = msg[1];
-                //$log.log(newData);
-
-                var deviceidStr = newData.deviceid;
-                if (newData.deviceid.substring(0, 5) == '213GL') {
-                    deviceidStr = deviceidStr.substring(5);
-                }
-
-                var vehicleData;
-                var deviceid = parseInt(deviceidStr);
-                var idx = vm.getMarkerIndex(deviceid);
-                if (idx != -1) {
-                    vehicleData = vm.inMarkers[idx];
-                } else {
-                    vehicleData = newData;
-                    vehicleData.id = deviceid;
-                    vehicleData.options = {};
-                    vehicleData.options.visible = false;
-                }
-
-                vehicleData.timestamp = new Date(newData.timestamp);
-                vehicleData.deviceid = newData.deviceid;
-                vehicleData.latitude = newData.latitude;
-                vehicleData.longitude = newData.longitude;
-                vehicleData.altitude = newData.altitude;
-                vehicleData.title = vehicleNumber;
-                vehicleData.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
-                vehicleData.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
-                vehicleData.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
-                vehicleData.devbattery = parseFloat(parseFloat(newData.devbattery).toFixed(2));
-                vehicleData.ignitionstatus = newData.ignitionstatus;
-                vehicleData.mobilistatus = newData.mobilistatus;
-
-                var currentTime = new Date().getTime();
-
-                if(currentTime - vehicleData.timestamp.getTime() > 8 * 3600 * 1000) {
-                    vehicleData.noComm = 'no communication';
-                }
-                //vehicleData.optimized = false;
-                // vehicleData.ignitionstatusStr = newData.ignitionstatus ? "On" : "Off";
-                // vehicleData.ignitionstatusFilter = newData.ignitionstatus ? "Running" : "Stopped";
-                // vehicleData.mobilistatusFilter = newData.mobilistatus ? "Active" : "Immobilized";
-
-                if (vehicleData.ignitionstatus == 1) {
-                    vehicleData.ignitionstatusStr = VEHICLE_ON;
-                    vehicleData.ignitionstatusFilter = VEHICLE_RUNNING;
-
-                } else {
-                    vehicleData.ignitionstatusStr = VEHICLE_OFF;
-                    vehicleData.ignitionstatusFilter = VEHICLE_STOPPED;
-                }
-
-                if (vehicleData.mobilistatus == 1) {
-                    vehicleData.mobilistatusFilter = VEHICLE_ACTIVE;
-                } else {
-                    vehicleData.mobilistatusFilter = VEHICLE_IMMOBILIZED;
-                    vehicleData.ignitionstatusFilter = '';
-                }
-
-                vm.setMarkerIcon(vehicleData);
-                return vehicleData;
-            };
-
-
-            vm.updateMap = function (msgList, key) {
-                if (msgList.length == 2 && msgList[0] != null && msgList[1] != null
-                    && msgList[0] != undefined && msgList[1] != undefined) {
-                    var vehicleData = vm.processVehicleData(msgList);
-                    //$log.log(vehicleData);
-                    vm.callListeners(vehicleData, key);
-                } else {
-                    $log.log("invalid data");
-                }
-            };
-
-
             vm.addListener = function (key, listener) {
                 if (!(key in vm.listeners)) {
                     vm.listeners[key] = [];
@@ -227,9 +141,27 @@
             };
 
 
+            vm.updateMarker = function (vehicleObj, key) {
+                var vehicleData = vehicleObj.rtgps;
+                if(!('id' in vehicleData)) {
+                    var deviceidStr = vehicleData.deviceid;
+                    if (deviceidStr.substring(0, 5) == '213GL') {
+                        deviceidStr = deviceidStr.substring(5);
+                    }
+                    vehicleData.id = parseInt(deviceidStr);
+                    vehicleData.options = {};
+                    vehicleData.options.visible = false;
+                }
+
+                vm.setMarkerIcon(vehicleData);
+                vm.callListeners(vehicleData, key);
+            };
+
+
             vm.init = function () {
                 //$log.log('map init()');
-                intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
+                //intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
+                vehicleService.addListener('rtgps', vm.updateMarker);
             };
 
 

@@ -2,7 +2,7 @@
  * Created by smiddela on 10/08/16.
  */
 
-(function() {
+(function () {
 
     angular
         .module('uiplatform')
@@ -13,6 +13,30 @@
     function loginService($rootScope, $log, $mdDialog, authService, requestService) {
         $log.log("loginService");
         var vm = this;
+        vm.username = '';
+        vm.password = '';
+        vm.listeners = {};
+
+
+        vm.addListener = function (key, listener) {
+            if (!(key in vm.listeners)) {
+                vm.listeners[key] = [];
+            }
+
+            if (vm.listeners[key].indexOf(listener) === -1) {
+                vm.listeners[key].push(listener);
+            }
+        };
+
+
+        vm.callListeners = function (msg, key) {
+            if (key in vm.listeners) {
+                for (var idx in vm.listeners[key]) {
+                    vm.listeners[key][idx](msg, key);
+                }
+            }
+        };
+
 
         vm.login = function (username, password) {
             return requestService.firePost('/gettoken', {
@@ -21,31 +45,31 @@
                     username: username,
                     password: password
                 }
-            }).then(function (response) {
-                //$log.log("he he he ho ho ho");
-                $log.log(response);
-                //$rootScope.$on('getData', vm.getData);
-                //return response;
-                //authService.saveToken(response.data.token);
+            }).then(function (resp) {
+                // $log.log(resp);
+                vm.username = username;
+                vm.password = password;
+                vm.callListeners(resp, 'loginSuccess');
+                return resp;
             });
         };
 
-        vm.logout = function() {
-            authService.logout && authService.logout()
+        vm.logout = function () {
+            authService.logout && authService.logout();
             $rootScope.showLoginDialog = true;
             vm.loginDialog = "";
             vm.checkLogin();
         };
 
-        vm.isAuthed = function() {
+        vm.isAuthed = function () {
             //$log.log(authService.isAuthed());
             return authService.isAuthed ? authService.isAuthed() : false;
         };
 
         vm.checkLogin = function () {
-            if($rootScope.showLoginDialog) {
+            if ($rootScope.showLoginDialog) {
                 $log.log("Showing login");
-                if( !vm.loginDialog ) {
+                if (!vm.loginDialog) {
                     vm.loginDialog = $mdDialog.confirm({
                             controller: loginDialogController,
                             //controllerAs: loginDialogCtrl,
@@ -76,18 +100,18 @@
 
 
         function handleLoginSuccess(resp) {
-            //$log.log(resp);
-            //$log.log("handleLoginSuccess");
+            // $log.log(resp);
+            $log.log("handleLoginSuccess");
             $rootScope.showLoginDialog = false;
             $mdDialog.hide();
-            vm.loginDialog ="";
+            vm.loginDialog = "";
             $window.location.reload();
         }
 
         function handleLoginFailure(resp) {
             $log.log(resp);
             $log.log("handleLoginFailure");
-            if(resp && resp.data && resp.msg)
+            if (resp && resp.data && resp.msg)
                 vm.message = resp.data.msg;
         }
 
