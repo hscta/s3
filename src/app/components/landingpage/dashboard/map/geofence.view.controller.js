@@ -136,6 +136,21 @@
                         vm.checkGeoFilters.set('carBattery', active);
                     }
                 }
+            },
+            {'type': 'line'},
+            {
+                'id': 'noComm',
+                'name': 'Vehicles not communicating',
+                'iconType': 'fa',
+                'icon': 'fa-bug',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: true,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('noComm', active);
+                    }
+                }
             }
         ];
 
@@ -202,11 +217,11 @@
         function setFilter(filterType) {
             // $log.log(filterType + " = " + vm.geoFilters[filterType]);
             geofenceViewService.applyFilters(filterType);
-        };
+        }
 
         function filterList(searchPattern){
           $log.log(searchPattern);
-        };
+        }
 
 
         vm.buttonClick = function (data) {

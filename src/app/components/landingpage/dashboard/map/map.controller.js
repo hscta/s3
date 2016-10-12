@@ -392,7 +392,8 @@
             competitorHub: true,
             cityLimits: false,
             carBattery: false,
-            devBattery: false
+            devBattery: false,
+            noComm: false,
         };
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
@@ -459,6 +460,23 @@
                         if (vm.geoFilters.carBattery && marker.carbattery < CARBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
+                    }
+                }
+            } else if (filterData.filterType == 'noComm') {
+                for (idx in vm.inMarkers) {
+                    marker = vm.inMarkers[idx];
+                    if (vm.geoFilters.noComm) {
+                        var currentTime = new Date().getTime();
+                        var lastSeenAt = marker.timestamp.getTime();
+                        var noCommThreshold = 8 * 3600 * 1000;
+                        //$log.log("currentTime: " + currentTime);
+                        //$log.log("lastSeenAt: " + lastSeenAt);
+                        if (currentTime - lastSeenAt > noCommThreshold) {
+                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        }
+                    }
+                    else {
+                        marker.options.animation = null;
                     }
                 }
             } else {

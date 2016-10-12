@@ -129,12 +129,11 @@
             var VEHICLE_IMMOBILIZED = "Immobilized";
 
             vm.processVehicleData = function (msg) {
-                //$log.log(msg);
                 var topic = msg[0].split('/');
                 var vehicleNumber = topic[topic.length - 1];
-
                 var newData = msg[1];
                 //$log.log(newData);
+
                 var deviceidStr = newData.deviceid;
                 if (newData.deviceid.substring(0, 5) == '213GL') {
                     deviceidStr = deviceidStr.substring(5);

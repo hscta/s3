@@ -1,3 +1,7 @@
+/**
+ * Created by User on 22-09-2016.
+ */
+
 (function () {
     'use strict';
 
@@ -227,6 +231,3 @@
 
 
 })();
-/**
- * Created by User on 22-09-2016.
- */
