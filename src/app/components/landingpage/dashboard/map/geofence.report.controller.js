@@ -46,13 +46,10 @@
 
         vm.filterFences = function(){
             vm.filteredFenceItems =  $filter("filter")(vm.currRep.fences, vm.fenceFilter);
-            $log.log(vm.filteredFenceItems);
-
+            // $log.log(vm.filteredFenceItems);
         };
 
         vm.getSelectedFences = function (rep ) {
-            $log.log(rep);
-            $log.log(typeof(rep));
             vm.reportId = rep.assetpath;
             vm.setReport(rep);
             vm.getHistoryReport();
@@ -314,10 +311,10 @@
         };
 
         vm.init = function () {
+            vm.initialSelect = true;
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             vm.getMyGeofenceReports();
 
-            vm.initialSelect = true;
         };
 
         vm.init();

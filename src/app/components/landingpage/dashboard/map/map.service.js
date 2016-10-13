@@ -7,27 +7,187 @@
 
     angular.module('uiplatform')
         .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
-                                         intellicarAPI, vehicleService) {
+                                         intellicarAPI, vehicleService, $mdDialog, historyService,
+                                         dialogService) {
             $log.log("mapService");
             var vm = this;
             vm.listeners = {};
 
             vm.inMap = {
                 mapOptions: {},
-                mapControl: {}
+                mapControl: {},
+                mapEvents : {
+                    click: function () {
+                        vm.mapClickEvent();
+                    },
+                    zoom_changed: function () {
+                        vm.changeMarkerIcon();
+                    }
+                },
+                infoWindow : {
+                    show: false,
+                    control: {},
+                    options: {
+                        maxWidth: 300,
+                        disableAutoPan: false,
+                        pixelOffset: {
+                            width: 0,
+                            height: -20
+                        }
+                    }
+                },
+                fenceInfoWindow:{
+                    show: false,
+                    control: {},
+                    options: {
+                        maxWidth: 300,
+                        disableAutoPan: false,
+                        pixelOffset: {
+                            width: 0,
+                            height: 0
+                        }
+                    }
+                },
+                markers : {
+                    inMarkers: [],
+                    clickedMarker : {},
+                    markersEvents: {
+                        click: function (marker, eventName, model, args) {
+                            vm.setClickedMarker(model);
+                        }
+                    },
+                    clickedMarkerObj : {},
+                },
+                circles:[],
+                polygons: [],
+
+                circleEvents : {
+                    click: function (circle, eventName, model, args) {
+                        //$log.log('Circle clicked');
+                        vm.circleEvents(model);
+                    }
+                },
+
+                polygonEvents : {
+                    click: function (polygon, eventName, model, args) {
+                        vm.polygonEvents(model);
+                    }
+                },
+
+                selectedFenceObj : {
+                    latitude : '',
+                    longitude:'',
+                    name: '',
+                    other: ''
+                }
             };
 
-            vm.inMarkers = [];
 
+            vm.getPolygonMidPoint = function (polygon) {
+                var bound = new google.maps.LatLngBounds();
+                for (var idx in polygon) {
+                    bound.extend(new google.maps.LatLng(polygon[idx].latitude, polygon[idx].longitude));
+                }
+                return bound.getCenter();
+            };
+
+            vm.polygonEvents = function(model){
+                var polygonCenter = vm.getPolygonMidPoint(model.path);
+                vm.inMap.selectedFenceObj.latitude =  polygonCenter.lat();
+                vm.inMap.selectedFenceObj.longitude =  polygonCenter.lng();
+                vm.inMap.selectedFenceObj.name =  model.control.info.name;
+                vm.inMap.selectedFenceObj.other =  model.control.info.tagdata;
+                vm.fenceInfoWindowShow();
+            };
+
+            vm.circleEvents = function(model){
+                vm.inMap.selectedFenceObj.latitude =  model.center.latitude;
+                vm.inMap.selectedFenceObj.longitude =  model.center.longitude;
+                vm.inMap.selectedFenceObj.name =  model.control.info.name;
+                vm.inMap.selectedFenceObj.other =  model.control.info.tagdata;
+                vm.fenceInfoWindowShow();
+            };
+
+
+            vm.infoWindowShow = function() {
+                vm.inMap.infoWindow.show = true;
+
+            };
+
+            vm.infoWindowClose = function() {
+                vm.inMap.infoWindow.show = false;
+            };
+
+
+            vm.fenceInfoWindowClose = function () {
+                vm.inMap.fenceInfoWindow.show = false;
+            };
+
+
+            vm.fenceInfoWindowShow = function () {
+                vm.inMap.fenceInfoWindow.show = true;
+            };
+
+
+            vm.setClickedMarker = function(model) {
+                vm.inMap.markers.clickedMarker = model;
+                vm.inMap.markers.clickedMarkerObj.clickedMarker = vm.inMap.markers.clickedMarker;
+                vm.inMap.markers.clickedMarkerObj.immoblize = vm.immobalize;
+                vm.inMap.markers.clickedMarkerObj.showHistory = vm.showHistory;
+                vm.infoWindowShow();
+            };
+
+            vm.showHistory = function () {
+                //$log.log(vm.clickedMarker);
+                vm.selectedTab = 0;
+                historyService.setData('selectedTab', vm.selectedTab);
+                // dialogService.show('home.history', {
+                //     clickedMarker: vm.inMap.markers.clickedMarker,
+                //     mainMarkers: vm.inMap.markers.inMarkers
+                // });
+                dialogService.show('home.history');
+            };
+
+            vm.immobalize = function (status) {
+                var immobalizeDialog = $mdDialog.confirm({
+                    controller: 'ImmobalizeController',
+                    templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    locals: {
+                        params: {
+                            clickedMarker: vm.inMap.markers.clickedMarker
+                        }
+                    }
+                }).ok('Yes').cancel('No');
+
+                $mdDialog.show(immobalizeDialog)
+                    .then(function () {
+                        //$log.log("Yes Function");
+                    }, function () {
+                        //$log.log("No Function");
+                    })
+            };
+
+            vm.mapClickEvent = function(){
+                vm.fenceInfoWindowClose();
+                vm.infoWindowClose();
+            };
+
+            vm.changeMarkerIcon = function () {
+                var inMapMarkers = vm.inMap.markers.inMarkers;
+                for (var idx = 0; idx < inMapMarkers.length; idx++) {
+                    vm.setMarkerIcon(inMapMarkers[idx]);
+                }
+            };
 
             vm.getMainMap = function () {
                 return vm.inMap;
             };
 
-
-            vm.getMainMarkers = function () {
-                return vm.inMarkers;
-            };
+            // vm.getMainMarkers = function () {
+            //     return vm.inMarkers;
+            // };
 
 
             // Bangalore
@@ -112,8 +272,8 @@
 
 
             vm.getMarkerIndex = function (id) {
-                for (var idx in vm.inMarkers) {
-                    if (vm.inMarkers[idx].id === id)
+                for (var idx in vm.inMap.markers.inMarkers) {
+                    if (vm.inMap.markers.inMarkers[idx].id === id)
                         return idx;
                 }
 
@@ -163,7 +323,6 @@
                 //intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
                 vehicleService.addListener('rtgps', vm.updateMarker);
             };
-
 
             vm.init();
 
