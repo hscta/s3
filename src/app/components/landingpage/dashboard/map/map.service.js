@@ -162,9 +162,9 @@
 
                 $mdDialog.show(immobalizeDialog)
                     .then(function () {
-                        //$log.log("Yes Function");
+                        $log.log("Yes Function");
                     }, function () {
-                        //$log.log("No Function");
+                        $log.log("No Function");
                     })
             };
 
