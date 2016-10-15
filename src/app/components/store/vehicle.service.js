@@ -56,6 +56,7 @@
             var vehicleObj = vm.vehiclesByPath[newData.vehiclepath];
             if (!('rtgps' in vehicleObj)) {
                 vehicleObj.rtgps = newData;
+                vm.callListeners(vehicleObj.rtgps, 'rtgps2');
             }
 
             var vehicleData = vehicleObj.rtgps;

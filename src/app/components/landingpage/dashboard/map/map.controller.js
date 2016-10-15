@@ -9,12 +9,11 @@
 
     function MapController($scope, $log, mapService,
                            $mdDialog, $interval, geofenceViewService,
-                           historyService, dialogService) {
+                           historyService, dialogService, vehicleService) {
         $log.log('MapController');
         var vm = this;
         vm.circles = [];
         vm.polygons = [];
-
 
         $scope.searchbox = {
             template: 'searchbox.tpl.html',
@@ -221,29 +220,36 @@
         };
 
 
+        vm.updateMarker2 = function (vehicleData) {
+            //$log.log('updateMarker2');
+            vm.inMarkers.push(vehicleData);
+        };
+
+
         vm.updateMarker = function (vehicleData) {
-            //$log.log(vehicleData);
-            var isNewVehicle = true;
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (marker.id === vehicleData.id) {
-                    vm.inMarkers[idx] = vehicleData;
-                    isNewVehicle = false;
-                    break;
-                }
-            }
+            // //$log.log(vehicleData);
+            // var isNewVehicle = true;
+            // for (var idx in vm.inMarkers) {
+            //     var marker = vm.inMarkers[idx];
+            //     if (marker.id === vehicleData.id) {
+            //         vm.inMarkers[idx] = vehicleData;
+            //         isNewVehicle = false;
+            //         break;
+            //     }
+            // }
+            //
+            // //$log.log(vehicleData);
+            //
+            // if (isNewVehicle) {
+            //     //vehicleData.options = {};
+            //     //vehicleData.options.animation = google.maps.Animation.BOUNCE;
+            //     //$log.log(vehicleData);
+            //
+            //     vm.inMarkers.push(vehicleData);
+            //     // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
+            // }
 
-            //$log.log(vehicleData);
-
-            if (isNewVehicle) {
-                //vehicleData.options = {};
-                //vehicleData.options.animation = google.maps.Animation.BOUNCE;
-                //$log.log(vehicleData);
-
-                vm.inMarkers.push(vehicleData);
-                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
-            }
-
+            //$log.log('updateMarker1');
             vm.applyFilterToMarker(vehicleData, vm.filterStr);
         };
 
@@ -731,6 +737,7 @@
         };
 
         vm.addListener = function () {
+            vehicleService.addListener('rtgps2', vm.updateMarker2);
             mapService.addListener('rtgps', vm.updateMarker);
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);

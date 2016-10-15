@@ -328,7 +328,7 @@
 
 
         vm.init = function () {
-            mapService.addListener('rtgps', vm.mapServiceUpdate);
+            //mapService.addListener('rtgps', vm.mapServiceUpdate);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             //rightNavAlertDashboardService.addListener('updatefencereport', vm.updateFenceReport);
             vm.activeTabData = rightNavAlertDashboardService.getReportData();
