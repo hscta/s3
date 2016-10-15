@@ -22,7 +22,8 @@
 
         vm.handleGetMyInfo = function (resp) {
             //$log.log(resp);
-            vm.userpref = resp;
+            vm.userpref = resp.data.data[0];
+            $log.log(vm.userpref);
             latlngService.geocodeAddress('bhopal');
         };
 
