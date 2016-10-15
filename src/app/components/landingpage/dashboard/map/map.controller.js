@@ -1039,7 +1039,7 @@
     //#################################################################################################################
 
 
-    function ImmobalizeController($scope, $log, $mdDialog, params) {
+    function ImmobalizeController($scope, $log, $mdDialog, params, vehicleAPIService) {
         //var vm = this;
         //$log.log('ImmobalizeController');
         $scope.cancelImmobalize = function () {
@@ -1048,10 +1048,12 @@
         };
 
         $scope.okImmobilize = function () {
+            // var data = {'vehiclepath':params.clickedMarker.vehiclepath};
+            var data = {'vehiclepath':''}
             if(params.clickedMarker.mobilistatus){
-                console.log('call immobilize API');
+                vehicleAPIService.immobalize(data);
             }else{
-                console.log('call mobilize API');
+                vehicleAPIService.mobilize(data);
             }
             $mdDialog.cancel();
         };

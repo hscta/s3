@@ -237,9 +237,9 @@
                         }
                     }
                 }
-                return ((vehicleClosed * 36) + (vehicleOpened * 137) + 36 ) + 'px';
+                return ((vehicleClosed * 37) + (vehicleOpened * 137) + 37 ) + 'px';
             }else{
-                return '36px';
+                return '37px';
             }
         };
 
