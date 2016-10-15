@@ -1039,27 +1039,62 @@
     //#################################################################################################################
 
 
-    function ImmobalizeController($scope, $log, $mdDialog, params, vehicleAPIService) {
+    function ImmobalizeController($scope, $log, $timeout, $mdDialog, params, intellicarAPI) {
         //var vm = this;
         //$log.log('ImmobalizeController');
+
+        $scope.msg = '';
+        $scope.vehicleno = params.clickedMarker.vehicleno;
+        $scope.deviceid = params.clickedMarker.deviceid;
+
+
         $scope.cancelImmobalize = function () {
             $log.log('cancelImmobalize');
             $mdDialog.cancel();
         };
 
-        $scope.okImmobilize = function () {
-            // var data = {'vehiclepath':params.clickedMarker.vehiclepath};
-            var data = {'vehiclepath':''}
-            if(params.clickedMarker.mobilistatus){
-                vehicleAPIService.immobalize(data);
-            }else{
-                vehicleAPIService.mobilize(data);
-            }
-            $mdDialog.cancel();
+
+        $scope.success = function (resp) {
+            // $log.log("success");
+            // $log.log(resp);
+            $scope.msg = params.clickedMarker.mobilistatus ? "Vehicle Mobilized" : "Vehicle Immobilized";
+            $scope.closeDialog();
         };
 
-        $scope.vehicleno = params.clickedMarker.vehicleno;
-        $scope.deviceid = params.clickedMarker.deviceid;
+
+        $scope.failure = function (resp) {
+            //$log.log("failure");
+            //$log.log(resp);
+            if (resp.status == 403) {
+                $scope.msg = "You are unauthorized to perform this operation";
+                $scope.closeDialog();
+            }
+        };
+
+
+        $scope.closeDialog = function () {
+            $timeout($mdDialog.cancel, 3000);
+        };
+
+
+        $scope.okImmobilize = function () {
+            var data = {'vehiclepath': params.clickedMarker.vehiclepath};
+            if (params.clickedMarker.mobilistatus) {
+                intellicarAPI.vehicleAPIService.immobilize(data)
+                    .then($scope.success, $scope.failure);
+            } else {
+                intellicarAPI.vehicleAPIService.mobilize(data)
+                    .then($scope.success, $scope.failure);
+            }
+        };
+
+
+        $scope.init = function () {
+            $scope.msg = params.clickedMarker.mobilistatus ? "Immobilize ?" : "Mobilize ?";
+        };
+
+
+        $scope.init();
     }
 
 
