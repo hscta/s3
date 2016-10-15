@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('HeaderController', HeaderController);
 
-    function HeaderController($rootScope, $scope, navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
+    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet, $log, $q, $state,
                             $mdToast, $document, loginService, userprefService) {
 
         $log.log('HeaderController');
@@ -102,7 +102,9 @@
         }
 
         vm.closeMdMenu = function(e){
-            // console.log();
+            if(e.keyCode == 27){
+                $mdMenu.hide()
+            }
         }
     }
 
