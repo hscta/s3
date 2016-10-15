@@ -180,6 +180,9 @@
             //console.log(data);
         };
 
+        var mapObj = {hours:'h',hour:'h',minutes:'min',minute:'min',days:'d',day:'d',an:'1', 'a few seconds':'1 min',a:'1'};
+        var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+
         vm.getTimeDiff = function (data) {
             var start = data.entry;
             var end = data.exit;
@@ -190,8 +193,11 @@
             start /= 1000;
             end /= 1000;
             start = moment.unix(start);
+
             end = moment.unix(end);
-            return moment.duration(end.diff(start)).humanize();
+            return moment.duration(end.diff(start)).humanize().replace(re, function(matched){
+                return mapObj[matched];
+            });
         };
 
 
