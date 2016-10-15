@@ -216,6 +216,27 @@
             }
         };
 
+        var vehicleClosed = 0;
+        var vehicleOpened = 0;
+
+        vm.returnHeight = function (data) {
+            if(data.active){
+                vehicleClosed = vehicleOpened = 0;
+                for(veh in data){
+                    if(veh != 'active'){
+                        if(data[veh].active){
+                            vehicleOpened++;
+                        }else{
+                            vehicleClosed++;
+                        }
+                    }
+                }
+                return ((vehicleClosed * 36) + (vehicleOpened * 137) + 36 ) + 'px';
+            }else{
+                return '36px';
+            }
+        };
+
         vm.navFilter = function (data) {
             return true;
         };

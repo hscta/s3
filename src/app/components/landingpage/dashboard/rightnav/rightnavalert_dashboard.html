@@ -161,7 +161,7 @@
                             <!--middle wrapper-->
                             <div class="en-wrapper">
                                 <div class="en_mid"  ng-repeat="(midKey, mid) in main " ng-if="midKey != 'active' && vm.navFilter(mid)"  ng-init="mid.active = true"
-                                     ng-class="{'en-closed':!main.active,'en-semi-closed':main.active && !mid.active  }">
+                                     ng-class="{'en-closed':!main.active}" style="height:{{vm.returnHeight(mid);}}">
                                     <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)" style="background:#B3E5FC!important; "  >
                                         {{midKey}}
                                         <div class="enl_item enl_add">

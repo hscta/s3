@@ -374,6 +374,7 @@
             $mdDialog.show(immobalizeDialog)
                 .then(function () {
                     //$log.log("Yes Function");
+                    // console.log(immobalizeDialog);
                 }, function () {
                     //$log.log("No Function");
                 })
@@ -1040,7 +1041,11 @@
         };
 
         $scope.okImmobilize = function () {
-            $log.log('okImmobilize');
+            if(params.clickedMarker.mobilistatus){
+                console.log('call immobilize API');
+            }else{
+                console.log('call mobilize API');
+            }
             $mdDialog.cancel();
         };
 
