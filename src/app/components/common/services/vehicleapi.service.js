@@ -13,14 +13,19 @@
         $log.log("vehicleAPIService");
         var vm = this;
 
+        vm.encloseBody = function (data) {
+            return {vehicle:data};
+        };
 
-        vm.mobilize = function (body) {
-            
+        vm.mobilize = function (data) {
+            var body = vm.encloseBody(data);
+            requestService.firePost('/vehicle/mobilize', body);
         };
 
 
-        vm.immobilize = function (body) {
-
+        vm.immobilize = function (data) {
+            var body = vm.encloseBody(data);
+            requestService.firePost('/vehicle/immobilize', body);
         };
     }
 })();
