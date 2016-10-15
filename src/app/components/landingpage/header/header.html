@@ -43,16 +43,21 @@
                     <md-tooltip>User</md-tooltip>
                     <md-icon md-font-library="material-icons">face</md-icon>
                 </md-button>
-                <md-menu-content width="3">
-                    <!--<md-menu-item><md-button ng-click="$mdCloseMenu()">Profile</md-button></md-menu-item>-->
-                    <!--{{vm.userpref().name}}-->
-                    <!--<div class="userPopp">-->
-                        <!--<div class="up-name"></div>-->
-                        <!--<div class="up-sub"></div>-->
-                        <!--<div class=""-->
-                    <!--</div>-->
-                    <md-menu-item><md-button ng-click="vm.logout();$mdCloseMenu()">Log out</md-button></md-menu-item>
-                    <!--<md-menu-item><md-button ng-click="vm.changePassword();$mdCloseMenu()">Change Password</md-button></md-menu-item>-->
+                <md-menu-content width="3" class="userPop-cont">
+                    <div class="userPopp">
+                        <div class="up-header">
+                            User Settings
+                            <div class="up-h-close"><i class="fa fa-times"></i></div>
+                        </div>
+                        <div class="up-cont">
+                            <div class="up-name">{{vm.userpref().name}}</div>
+                            <div class="up-sub">{{vm.userpref().pname}}</div>
+                        </div>
+                        <div class="up-footer">
+                            <!--<div class="up-btn" ng-click="vm.changePassword();$mdCloseMenu()">Change Password</div>-->
+                            <div class="up-btn -logoutBtn" ng-click="vm.logout();$mdCloseMenu()">Logout</div>
+                        </div>
+                    </div>
                 </md-menu-content>
             </md-menu>
 

@@ -23,6 +23,10 @@
     font-family: 'gotham';
     src: url(../assets/fonts/gotham/Gotham-Book.otf);
 }
+@font-face {
+    font-family: 'gotham-b';
+    src: url(../assets/fonts/gotham/Gotham-Bold.otf);
+}
 
 body{
     font-family: gotham!important;
@@ -70,6 +74,12 @@ $themeColor : #d1e934;
 
 html {
     font-family: 'Roboto Slab', serif;
+}
+
+@mixin borderBox(){
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 [layout=row] {
@@ -1290,4 +1300,78 @@ button{
     height: 30px;
     margin-top: -15px;
     margin-left:-15px;
+}
+.userPop-cont{
+    padding:0;
+    @include border-radius(3px);
+    *{
+        float: left;
+    }
+}
+
+.userPopp{
+    width: 300px;
+    @include borderBox();
+    font-size:80%;
+    .up-header{
+        width:100%;
+        padding:0 0 0 10px;
+        font-family: 'gotham-b';
+        line-height:36px;
+        background-color: $blue;
+        color:#fff;
+        font-size: 110%;
+        .up-h-close{
+            float:right;
+            width: 22px;
+            height: 22px;
+            background-color: rgba(0,0,0,0.1);
+            margin:7px;
+            @include border-radius(3px);
+            i{
+                line-height: 22px;
+                text-align: center;
+                width: 100%;
+                font-size: 80%;
+            }
+        }
+        .up-h-close:hover{
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.3);
+        }
+    }
+    .up-cont{
+        width:100%;
+        padding:10px;
+        .up-name{
+            width: 100%;
+        }
+        .up-sub{
+            width:100%;
+            font-size: 130%;
+            color:$blue;
+            font-family: gotham-b;
+        }
+    }
+    .up-footer{
+        width:100%;
+        padding:10px 10px;
+        border-top:1px solid #ddd;
+    }
+    .up-btn{
+        cursor: pointer;
+        float: left;
+        margin: 0 3px;
+        background: #fefefe;
+        border: 1px solid #ddd;
+        @include border-radius(3px);
+        line-height:30px;
+        padding:0 8px;
+    }
+    .up-btn:hover{
+        border-color: #bbb;
+    }
+    .up-btn.-logoutBtn{
+        float: right;
+    }
 }
