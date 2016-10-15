@@ -1059,7 +1059,13 @@
             // $log.log("success");
             // $log.log(resp);
             $scope.mobilistatus = params.clickedMarker.mobilistatus;
-            $scope.msg = params.clickedMarker.mobilistatus ? "Vehicle immobilized" : "Vehicle mobilized";
+            if(!params.clickedMarker.ignitionstatus) {
+                $scope.msg = params.clickedMarker.mobilistatus ? "Vehicle immobilized" : "Vehicle mobilized";
+            } else {
+                var state = params.clickedMarker.mobilistatus ? "immobilized" : "mobilized";
+                $scope.msg = 'Command received.';
+                $scope.notify = 'Vehicle in sleep state. Vehicle will be ' + state + ' when it wakes up.';
+            }
             $scope.closeDialog();
         };
 
