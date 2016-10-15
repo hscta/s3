@@ -192,11 +192,11 @@
             </ui-gmap-markers>
 
 
-            <ui-gmap-window show="vm.inMap.infoWindow.show" coords="vm.inMap.markers.clickedMarker"
+            <ui-gmap-window show="vm.inMap.infoWindow.show" coords="vm.inMap.markers.clickedMarkerObj.clickedMarker"
                             control="vm.inMap.infoWindow.control" optimized="false"
                             options="vm.inMap.infoWindow.options"
                             templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
-                            templateParameter="vm.clickedMarkerObj"
+                            templateParameter="vm.inMap.markers.clickedMarkerObj"
                             controller="MainMapWindowController"
                             isIconVisibleOnClick="true">
             </ui-gmap-window>

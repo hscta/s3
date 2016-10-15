@@ -15,7 +15,7 @@
     }
 
     /*.input-fields {*/
-        /*margin-top: -5px;*/
+    /*margin-top: -5px;*/
     /*}*/
 
     .error-msg {
@@ -150,144 +150,146 @@
 </div>
 
 <div style="height: 100%;">
-            <span class="error-msg">{{errorMsg}}</span><br/>
-            <div layout="row" layout-align="space-around center">
-                <div layout="row" class="input-fields" layout-align="space-around center" flex>
+    <span class="error-msg">{{errorMsg}}</span><br/>
+    <div layout="row" layout-align="space-around center">
+        <div layout="row" class="input-fields" layout-align="space-around center" flex>
 
-                    <md-input-container class="container-margin"  ng-show="vm.multiSelect">
-                        <label>Vehicle No</label>
-                        <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                        <md-select ng-model="deviceid" ng-change="onVehicleSelect()">
+            <md-input-container class="container-margin"  ng-show="vm.multiSelect">
+                <label>Vehicle No</label>
+                <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
+                <md-select ng-model="vm.historyObj.deviceid" ng-change="onVehicleSelect()">
 
-                            <md-option ng-value="vehicle.deviceid"
-                                       ng-repeat="vehicle in inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'">
-                                {{vehicle.vehicleno}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
+                    <md-option
+                        ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"
+                        ng-value="vehicle.deviceid">
+                        {{vehicle.vehicleno}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
 
-                    <md-input-container class="container-margin"  ng-show="!vm.multiSelect">
-                        <label>Vehicle No</label>
-                        <input type="text" ng-model="vehicleNumber" ng-readonly="true">
-                    </md-input-container>
+            <md-input-container class="container-margin"  ng-show="!vm.multiSelect">
+                <label>Vehicle No</label>
+                <input type="text" ng-model="vm.historyObj.vehicleNumber">
+            </md-input-container>
 
-                    <md-input-container class="container-margin">
-                        <label>Start Time</label>
-                        <input type="text" id="start_time" ng-model="startTime">
-                    </md-input-container>
+            <md-input-container class="container-margin">
+                <label>Start Time</label>
+                <input type="text" id="start_time" ng-model="vm.historyObj.startTime">
+            </md-input-container>
 
-                    <md-input-container class="container-margin">
-                        <label>End Time</label>
-                        <input type="text" id="end_time" ng-model="endTime">
-                    </md-input-container>
+            <md-input-container class="container-margin">
+                <label>End Time</label>
+                <input type="text" id="end_time" ng-model="vm.historyObj.endTime">
+            </md-input-container>
 
-                    <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
-                    <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
-                </div>
-                <div layout="row" layout-align="end start">
-                </div>
-            </div>
-
-            <md-dialog-content class="map-dialog-content">
-                <div class="md-dialog-content map-dialog history-dialog">
-                    <ui-gmap-google-map center='historyMap.center' zoom='historyMap.zoom'
-                                        options="historyMap.mapOptions"
-                                        bounds="historyMap.bounds"
-                                        events="historyMapEvents"
-                                        control="historyMap.mapControl">
-
-                        <ui-gmap-map-control
-                            template="app/components/landingpage/dashboard/map/history-map-control.html"
-                            controller="InnerMapController"
-                            position="BOTTOM_CENTER"></ui-gmap-map-control>
-                        </ui-gmap-map-control>
-
-                        <ui-gmap-marker
-                            idkey="'self'"
-                            coords="clickedMarker"
-                            click="clickedMarker.click"
-                            options="clickedMarker.options"
-                            events="clickedMarker.events"
-                            control="clickedMarker.control">
-                        </ui-gmap-marker>
-
-                        <ui-gmap-marker
-                                idkey="'self'"
-                                coords="endMarker"
-                                click="endMarker.click"
-                                options="endMarker.options"
-                                events="endMarker.events"
-                                control="endMarker.control">
-                        </ui-gmap-marker>
-
-                        <ui-gmap-polyline
-                            path="trace.path"
-                            stroke="trace.stroke"
-                            clickable="trace.clickable"
-                            geodesic="trace.geodesic"
-                            visible="trace.visible"
-                            fit="trace.fit"
-                            static="trace.static"
-                            events="trace.events"
-                            icons="trace.icons">
-                        </ui-gmap-polyline>
-
-
-                        <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
-                                        center="gcircle.center" radius="gcircle.radius"
-                                        stroke="gcircle.stroke" fill="gcircle.fill"
-                                        visible="gcircle.visible" geodesic="gcircle.geodesic"
-                                        editable="gcircle.editable" draggable="gcircle.draggable"
-                                        clickable="gcircle.clickable" control="gcircle.control"
-                                        events="historyCircleEvents">
-                        </ui-gmap-circle>
-
-                        <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
-                                         path="gpolygon.path"
-                                         stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"
-                                         visible="gpolygon.visible" geodesic="gpolygon.geodesic"
-                                         editable="gpolygon.editable" draggable="gpolygon.draggable"
-                                         clickable="gpolygon.clickable" control="gpolygon.control"
-                                         events="historyPolygonEvents" static="true">
-
-                        </ui-gmap-polygon>
-
-                        <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
-                                        control="historyInfoWindow.control"
-                                        options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
-                                        templateUrl="'historyInfoWindow.html'"
-                                        templateParameter="historyInfoWindow"
-                                        isIconVisibleOnClick="true">
-                        </ui-gmap-window>
-
-                        <ui-gmap-window show="historyFenceInfoWindow.show" coords="fenceObj"
-                                        control="historyFenceInfoWindow.control" optimized="false"
-                                        options="historyFenceInfoWindow.options" closeClick="historyFenceInfoWindowClose()"
-                                        isIconVisibleOnClick="true">
-
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <th>Name: </th>
-                                    <td>{{fenceDetails.name}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Type:   </th>
-                                    <td>{{fenceDetails.other.olafilter}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </ui-gmap-window>
-
-                    </ui-gmap-google-map>
+            <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
+            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
         </div>
+        <div layout="row" layout-align="end start">
         </div>
+    </div>
+
+    <md-dialog-content class="map-dialog-content">
+        <div class="md-dialog-content map-dialog history-dialog">
+            <ui-gmap-google-map center='vm.historyObj.historyMap.center'
+                                zoom='vm.historyObj.historyMap.zoom'
+                                options="vm.historyObj.historyMap.mapOptions"
+                                bounds="vm.historyObj.historyMap.bounds"
+                                events="vm.historyObj.historyMapEvents"
+                                control="vm.historyObj.historyMap.mapControl">
+
+                <ui-gmap-map-control
+                    template="app/components/landingpage/dashboard/map/history-map-control.html"
+                    controller="InnerMapController"
+                    position="BOTTOM_CENTER"></ui-gmap-map-control>
+                </ui-gmap-map-control>
+
+                <ui-gmap-marker
+                    idkey="'self'"
+                    coords="vm.historyObj.dashboardMapObj.clickedMarker"
+                    click="vm.historyObj.dashboardMapObj.clickedMarker.click"
+                    options="vm.historyObj.dashboardMapObj.clickedMarker.options"
+                    events="vm.historyObj.dashboardMapObj.clickedMarker.events"
+                    control="vm.historyObj.dashboardMapObj.clickedMarker.control">
+                </ui-gmap-marker>
+
+                <ui-gmap-marker
+                    idkey="'self'"
+                    coords="vm.historyObj.endMarker"
+                    click="vm.historyObj.endMarker.click"
+                    options="vm.historyObj.endMarker.options"
+                    events="vm.historyObj.endMarker.events"
+                    control="vm.historyObj.endMarker.control">
+                </ui-gmap-marker>
+
+                <ui-gmap-polyline
+                    path="vm.historyObj.trace.path"
+                    stroke="vm.historyObj.trace.stroke"
+                    clickable="vm.historyObj.trace.clickable"
+                    geodesic="vm.historyObj.trace.geodesic"
+                    visible="vm.historyObj.trace.visible"
+                    fit="vm.historyObj.trace.fit"
+                    static="vm.historyObj.trace.static"
+                    events="vm.historyObj.trace.events"
+                    icons="vm.historyObj.trace.icons">
+                </ui-gmap-polyline>
+
+
+                <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
+                                center="gcircle.center" radius="gcircle.radius"
+                                stroke="gcircle.stroke" fill="gcircle.fill"
+                                visible="gcircle.visible" geodesic="gcircle.geodesic"
+                                editable="gcircle.editable" draggable="gcircle.draggable"
+                                clickable="gcircle.clickable" control="gcircle.control"
+                                events="historyCircleEvents">
+                </ui-gmap-circle>
+
+                <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
+                                 path="gpolygon.path"
+                                 stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"
+                                 visible="gpolygon.visible" geodesic="gpolygon.geodesic"
+                                 editable="gpolygon.editable" draggable="gpolygon.draggable"
+                                 clickable="gpolygon.clickable" control="gpolygon.control"
+                                 events="historyPolygonEvents" static="true">
+
+                </ui-gmap-polygon>
+
+                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
+                                control="historyInfoWindow.control"
+                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
+                                templateUrl="'historyInfoWindow.html'"
+                                templateParameter="historyInfoWindow"
+                                isIconVisibleOnClick="true">
+                </ui-gmap-window>
+
+                <ui-gmap-window show="historyFenceInfoWindow.show" coords="fenceObj"
+                                control="historyFenceInfoWindow.control" optimized="false"
+                                options="historyFenceInfoWindow.options" closeClick="historyFenceInfoWindowClose()"
+                                isIconVisibleOnClick="true">
+
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>Name: </th>
+                            <td>{{fenceDetails.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Type:   </th>
+                            <td>{{fenceDetails.other.olafilter}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ui-gmap-window>
+
+            </ui-gmap-google-map>
+        </div>
+</div>
 <!--</md-tab-body>-->
 
 <script>
     $(document).ready(function () {
         $('#start_time').datetimepicker({
-            mask: '9999/19/39 29:59',
+            mask: '9999-19-39 29:59',
             format: 'Y-M-d H:i'
         });
 

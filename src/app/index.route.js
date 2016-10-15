@@ -79,6 +79,9 @@
           })
           .state('home.history', {
               url: 'history',
+              params: {
+                  mapObj: null
+              },
               views: {
                   'dialogview@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map/dialog/history.html',

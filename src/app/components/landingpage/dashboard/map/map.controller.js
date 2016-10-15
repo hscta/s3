@@ -3,16 +3,12 @@
     angular
         .module('uiplatform')
         .controller('MapController', MapController)
-        .controller('ImmobalizeController', ImmobalizeController)
-        .controller('InnerMapController', InnerMapController);
+        .controller('ImmobalizeController', ImmobalizeController);
 
     function MapController($scope, $log, mapService,
-                           $mdDialog, $interval, geofenceViewService,
-                           historyService, dialogService) {
+                           $mdDialog, $interval, geofenceViewService) {
         $log.log('MapController');
         var vm = this;
-        // vm.circles = [];
-        // vm.polygons = [];
 
         $scope.searchbox = {
             template: 'searchbox.tpl.html',
@@ -52,9 +48,7 @@
 
 
         vm.inMap = mapService.getMainMap();
-        // vm.inMarkers = mapService.getMainMarkers();
         vm.inMarkers = vm.inMap.markers.inMarkers;
-        vm.clickedMarker = vm.inMap.markers.clickedMarker;
         vm.clickedMarkerObj = vm.inMap.markers.clickedMarkerObj ;
 
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
@@ -84,25 +78,6 @@
 
         vm.getMarkerCenter = function (marker) {
             return {latitude: marker.latitude, longitude: marker.longitude};
-        };
-
-        vm.alertClick = function (alertid) {
-            for (var idx in vm.inMarkers) {
-                if (vm.inMarkers[idx].id == alertid) {
-                    vm.clickedMarker = vm.inMarkers[idx];
-                    break;
-                }
-            }
-            //$log.log(vm.clickedMarker);
-
-            vm.clickedMarkerObj = {
-                clickedMarker: vm.clickedMarker,
-                immoblize: vm.immobalize,
-                showHistory: vm.showHistory
-            };
-
-            vm.infoWindowShow();
-            vm.inMap.center = vm.getMarkerCenter(vm.clickedMarker);
         };
 
         vm.onRoadCheck = function () {
@@ -152,10 +127,6 @@
             //$log.log(vehicleData);
 
             if (isNewVehicle) {
-                //vehicleData.options = {};
-                //vehicleData.options.animation = google.maps.Animation.BOUNCE;
-                //$log.log(vehicleData);
-
                 vm.inMarkers.push(vehicleData);
                 // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
             }
@@ -165,10 +136,10 @@
 
 
         vm.runFilters = function (filterStr) {
-            //$log.log("runFilters");
+            $log.log("runFilters");
 
             if (vm.filterStr !== filterStr)
-                vm.infoWindowClose();
+                mapService.infoWindowClose();
 
             vm.filterStr = filterStr;
 
@@ -621,236 +592,5 @@
 
 
 //#################################################################################################################
-
-
-    function InnerMapController($scope, $log, $mdToast, historyService, $interval) {
-        $log.log('InnerMapController');
-        var marker = historyService.getData('clickedMarker');
-        var historyMap = historyService.getData('historyMap');
-        var timeIncreaseBy = 120000;
-        var initialTime;
-        var tracePoint;
-        var animationCount = 0;
-
-        $scope.play = true;
-        $scope.ffrate = 1;
-
-        $scope.moveOneStep = function (movementType) {
-            if (!marker.trace.path.length)
-                return;
-
-
-            var path = marker.trace.path;
-
-            if (movementType == 'forward') {
-                animationCount++;
-                if (path.length - 1 < animationCount)
-                    animationCount = path.length - 1;
-
-            } else {
-                animationCount--;
-                if (animationCount <= 0)
-                    animationCount = 0;
-            }
-
-            $scope.slider = (path[animationCount].gpstime - path[0].gpstime) / 1000
-            updateTracePoint(path[animationCount]);
-
-            initialTime = path[animationCount].gpstime;
-        };
-
-        $scope.setSliderTime = function () {
-            if (marker && !marker.trace.path.length)
-                return;
-
-            $scope.initialSliderTime = 0;
-            $scope.finalSliderTime = (marker.trace.path[marker.trace.path.length - 1].gpstime -
-                marker.trace.path[0].gpstime ) / 1000;
-
-            // $log.log(marker.trace.path[marker.trace.path.length - 1].gpstime);
-            // $log.log("slider time = " + $scope.finalSliderTime);
-
-        };
-
-        $scope.getSliderTime = function () {
-            if (marker && marker.trace.path.length) {
-                return new Date(marker.trace.path[0].gpstime + Math.floor($scope.slider) * 1000);
-            }
-        };
-
-
-        $scope.onChangeSlider = function () {
-            if (marker && !marker.trace.path.length)
-                return;
-
-            $scope.sliderTime = $scope.getSliderTime();
-            // $log.log("jump slider to " + $scope.sliderTime);
-
-            $scope.slider = Math.floor($scope.slider);
-
-            var len = marker.trace.path.length;
-            var path = marker.trace.path;
-            var initialSliderTime = path[0].gpstime;
-            var clickedSliderTimeLimit = initialSliderTime + $scope.slider * 1000;
-
-            for (var idx = 0; idx < len; idx++) {
-                if (path[idx].gpstime > clickedSliderTimeLimit)
-                    break;
-            }
-
-            animationCount = idx - 1;
-            initialTime = path[animationCount].gpstime;
-            updateTracePoint(path[animationCount]);
-        };
-
-        var updateTracePoint = function (tracePoint) {
-            marker.latitude = tracePoint.latitude;
-            marker.longitude = tracePoint.longitude;
-
-            $scope.tracePointGpsTime = tracePoint.gpstime;
-            $scope.tracePointOdometer = tracePoint.odometer;
-            $scope.tracePointSpeed = tracePoint.speed;
-        };
-
-        $scope.traceRoute = function () {
-            if (marker.trace.path.length && $scope.gotHistory()) {
-                initialTime = marker.trace.path[animationCount].gpstime;
-                $scope.animateMarker = $interval(function () {
-                    initialTime += (timeIncreaseBy * $scope.ffrate);
-                    while (animationCount < marker.trace.path.length) {
-                        // $log.log('in loop ' + animationCount);
-                        tracePoint = marker.trace.path[animationCount];
-                        if (tracePoint.gpstime <= initialTime) {
-
-                            updateTracePoint(tracePoint);
-
-                            $scope.slider = (tracePoint.gpstime - marker.trace.path[0].gpstime) / 1000;
-                            $scope.sliderTime = $scope.getSliderTime();
-
-                            if (animationCount % 10 === 0) {
-                                moveMapWithMarker(marker);
-                            }
-                            animationCount++;
-                        } else {
-                            break;
-                        }
-                    }
-
-                    if (animationCount >= marker.trace.path.length || !$scope.gotHistory()) {
-                        $scope.stopAnimation();
-                        moveMapWithMarker(marker);
-                    }
-
-                }, 100);
-            }
-        };
-
-
-        $scope.fastForward = function () {
-            if ($scope.ffrate < 128) {
-                $scope.ffrate *= 2;
-            }
-        };
-
-
-        $scope.goSlow = function () {
-            if ($scope.ffrate > (1 / 128)) {
-                $scope.ffrate /= 2;
-            }
-        };
-
-
-        $scope.getAnimationRate = function () {
-            var animationRate = Math.floor((timeIncreaseBy / 1000) * $scope.ffrate);
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent('Playing ' + animationRate + ' secs in 1 sec')
-                    .position(100, 100)
-                    .hideDelay(3000)
-            );
-        };
-
-
-        $scope.stopAnimation = function () {
-            animationCount = 0;
-            $scope.ffrate = 1;
-            stopPlay();
-            $scope.slider = 0;
-            if (marker && marker.trace.path.length > 0) {
-                marker.latitude = marker.trace.path[animationCount].latitude;
-                marker.longitude = marker.trace.path[animationCount].longitude;
-            }
-        };
-
-        var stopPlay = function () {
-            $interval.cancel($scope.animateMarker);
-            $scope.play = true;
-        };
-
-
-        $scope.$on('$destroy', function () {
-            historyService.setData('getHistory', false);
-            $scope.stopAnimation();
-        });
-
-
-        $scope.playAnimation = function () {
-            //$log.log('playAnimation');
-            $scope.play = false;
-            $scope.traceRoute();
-        };
-
-
-        $scope.pauseAnimation = function () {
-            //$log.log('pauseAnimation');
-            $scope.play = true;
-            $scope.pauseInterval();
-        };
-
-        $scope.pauseInterval = function () {
-            $interval.cancel($scope.animateMarker);
-            $scope.animateMarker = undefined;
-        };
-
-        $scope.gotHistory = function () {
-            return historyService.getData('getHistory');
-        };
-
-
-        $scope.gotHistoryEvent = function () {
-            $scope.setSliderTime();
-            var initialPoint = marker.trace.path[0];
-            $scope.tracePointGpsTime = initialPoint.gpstime;
-            $scope.tracePointOdometer = initialPoint.odometer;
-            $scope.tracePointSpeed = initialPoint.speed;
-        };
-
-        $scope.$on('gotHistoryEvent', function (event, data) {
-            $scope.gotHistoryEvent();
-        });
-
-
-        var moveMapWithMarker = function (marker) {
-            var map = historyMap.mapControl.getGMap();
-            var projection = map.getProjection();
-
-            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
-            var scale = Math.pow(2, map.getZoom());
-
-            var worldPoint = projection.fromLatLngToPoint(new google.maps.LatLng({
-                lat: marker.latitude,
-                lng: marker.longitude
-            }));
-            var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
-
-            var ydiff = Math.abs((worldPoint.y - centerPoint.y) * scale);
-            var panX = Math.floor((worldPoint.x - centerPoint.x) * scale);
-
-            var panY = Math.floor((worldPoint.y - centerPoint.y) * scale);
-            if (xdiff > 500 || ydiff > 200) {
-                map.panBy(panX, panY);
-            }
-        };
-    }
 
 })();

@@ -7,7 +7,7 @@
 
     angular.module('uiplatform')
         .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
-                                         intellicarAPI, vehicleService, $mdDialog, historyService,
+                                         intellicarAPI, vehicleService, $mdDialog,
                                          dialogService) {
             $log.log("mapService");
             var vm = this;
@@ -130,8 +130,7 @@
 
 
             vm.setClickedMarker = function(model) {
-                vm.inMap.markers.clickedMarker = model;
-                vm.inMap.markers.clickedMarkerObj.clickedMarker = vm.inMap.markers.clickedMarker;
+                vm.inMap.markers.clickedMarkerObj.clickedMarker = model;
                 vm.inMap.markers.clickedMarkerObj.immoblize = vm.immobalize;
                 vm.inMap.markers.clickedMarkerObj.showHistory = vm.showHistory;
                 vm.infoWindowShow();
@@ -139,13 +138,13 @@
 
             vm.showHistory = function () {
                 //$log.log(vm.clickedMarker);
-                vm.selectedTab = 0;
-                historyService.setData('selectedTab', vm.selectedTab);
-                // dialogService.show('home.history', {
-                //     clickedMarker: vm.inMap.markers.clickedMarker,
-                //     mainMarkers: vm.inMap.markers.inMarkers
-                // });
-                dialogService.show('home.history');
+                // vm.selectedTab = 0;
+                // historyService.setData('selectedTab', vm.selectedTab);
+                dialogService.show('home.history', {
+                    clickedMarker: vm.inMap.markers.clickedMarkerObj.clickedMarker,
+                    mainMarkers: vm.inMap.markers.inMarkers
+                });
+                // dialogService.show('home.history');
             };
 
             vm.immobalize = function (status) {
@@ -156,7 +155,7 @@
                     escapeToClose: true,
                     locals: {
                         params: {
-                            clickedMarker: vm.inMap.markers.clickedMarker
+                            clickedMarker: vm.inMap.markers.clickedMarkerObj.clickedMarker
                         }
                     }
                 }).ok('Yes').cancel('No');
