@@ -13,7 +13,7 @@
 
         $log.log("GeofenceReportController");
 
-        $log.log(historyService.playerControls);
+        // $log.log(historyService.playerControls);
         dialogService.setTab(1);
         var vm = this;
 
@@ -39,7 +39,7 @@
         vm.filterVehicles = function(){
             vm.fenceReportObj.filteredItems = $filter("filter")
                 (vm.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
-            $log.log(vm.fenceReportObj.filteredItems);
+            // $log.log(vm.fenceReportObj.filteredItems);
         };
 
         vm.filterFences = function(){
@@ -108,7 +108,7 @@
                 showRowNumber: true,
                 width: '100%',
                 page: 'enable',
-                pageSize: '100%',
+                pageSize: 300,
             });
         }
 
@@ -238,6 +238,8 @@
                 var starttime = new Date(vm.fenceReportObj.startTime).getTime();
                 var endtime = new Date(vm.fenceReportObj.endTime).getTime();
 
+
+
                 $log.log(starttime, endtime);
                 if (endtime <= starttime) {
                     vm.errorMsg = "End time should be >= Start time";
@@ -257,8 +259,8 @@
                 var body = {
                     fencereport: vm.fenceReportObj.reportId,
                     vehicles: vm.vehicleids,
-                    starttime: new Date(vm.startTime).getTime() / 1000,
-                    endtime: new Date(vm.endTime).getTime() / 1000
+                    starttime: new Date(starttime).getTime() / 1000,
+                    endtime: new Date(endtime).getTime() / 1000
                 };
                 promiseList.push(intellicarAPI.geofenceService.getReportHistory(body));
 

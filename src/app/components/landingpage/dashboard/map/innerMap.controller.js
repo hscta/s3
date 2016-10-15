@@ -13,7 +13,7 @@
         var vm = this;
         var marker = historyService.historyMapObj.dashboardMapObj.clickedMarker;
 
-        $log.log(marker);
+        // $log.log(marker);
         var historyMap = historyService.historyMapObj.historyMap;
         var timeIncreaseBy = 120000;
         var initialTime;
@@ -115,7 +115,9 @@
             //if (marker.trace.path.length && $scope.gotHistory()) {
             if (marker.trace.path.length && $scope.gotHistory()) {
                 initialTime = marker.trace.path[animationCount].gpstime;
+
                 $scope.animateMarker = $interval(function () {
+                    // $log.log(marker, animationCount);
                     initialTime += (timeIncreaseBy * $scope.ffrate);
                     while (animationCount < marker.trace.path.length) {
                         // $log.log('in loop ' + animationCount);
@@ -172,11 +174,11 @@
 
 
         $scope.stopAnimation = function () {
-            //animationCount = 0;
-            // $scope.ffrate = 1;
+           // animationCount = 0;
             stopPlay();
             //$scope.slider = 0;
-            if (marker && marker.trace.path.length > 0) {
+            if (marker && marker.trace.path.length > 0 && animationCount) {
+                animationCount=0;
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
             }
@@ -189,11 +191,11 @@
 
 
         $scope.$on('$destroy', function () {
-            //  historyService.setData('getHistory', false);
-            $scope.stopAnimation();
             historyService.playerControls.slider = $scope.slider;
             historyService.playerControls.animationCount = animationCount;
             historyService.playerControls.ffRate = $scope.ffrate;
+            //  historyService.setData('getHistory', false);
+            $scope.stopAnimation();
         });
 
 

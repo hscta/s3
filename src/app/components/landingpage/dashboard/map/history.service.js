@@ -107,7 +107,7 @@
         vm.resetPlayerControls = function(){
             vm.playerControls.slider = 0;
             vm.playerControls.animationCount = 0;
-            vm.playerControls.ffRate = 1;
+           // vm.playerControls.ffRate = 1;
         };
 
         vm.getDefaultTime = function(){

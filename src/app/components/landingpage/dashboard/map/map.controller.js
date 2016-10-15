@@ -142,7 +142,9 @@
             // }
 
             //$log.log('updateMarker1');
+            vm.applyFilterToMarker(vehicleData, vm.filterStr);
 
+        }
 
         vm.runFilters = function (filterStr) {
             $log.log("runFilters");
@@ -583,7 +585,8 @@
 //#################################################################################################################
 
 
-    function ImmobalizeController($scope, $log, $mdDialog, params) {
+    function ImmobalizeController($scope, $log, $mdDialog, params, intellicarAPI,
+                                  $timeout) {
         //var vm = this;
         //$log.log('ImmobalizeController');
 
