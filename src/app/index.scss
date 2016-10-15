@@ -1375,3 +1375,24 @@ button{
         float: right;
     }
 }
+
+
+.immobDialog{
+    padding:20px;
+    width: 100%;
+    .imd-head{
+        font-family: gotham-b;
+    }
+    table{
+        margin-top:15px;
+        padding:0 10px;
+        td{
+            padding:0;
+            font-size:80%;
+            line-height:22px;
+        }
+        td:nth-child(1){
+            width:100px;
+        }
+    }
+}

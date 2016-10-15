@@ -2,16 +2,26 @@
 
 <md-dialog aria-label="dialog">
     <md-dialog-content>
-        <div class="div-area" layout="column" layout-align="center center">
-            <br>
-            <span style="color:red">{{msg}}</span> <br>
-            <span>&nbsp;&nbsp;   VehicleNo: {{vehicleno}}  &nbsp;&nbsp;  Deviceid: {{deviceid}}   &nbsp;&nbsp;</span> <br>
+        <div class="div-area immobDialog" layout="column" layout-align="center center">
+            <div class="imd-head">
+                <span ng-class="{'redColor':mobilistatus,'greenColor':!mobilistatus}">{{msg}}</span>
+            </div>
+            <table>
+                <tr>
+                    <td> Vehicle No </td>
+                    <td>{{vehicleno}}</td>
+                </tr>
+                <tr>
+                    <td> Device ID </td>
+                    <td>{{deviceid}}</td>
+                </tr>
+            </table>
         </div>
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
         <div flex layout="row" layout-align="space-around center">
-            <md-button class="md-raised md-primary" ng-click="okImmobilize()">Yes</md-button>
+            <md-button class="md-raised md-primary" ng-click="okImmobilize()" style="margin-left:-8px;">Yes</md-button>
             <md-button class="md-raised md-primary" ng-click="cancelImmobalize()">No</md-button>
         </div>
     </md-dialog-actions>
