@@ -110,6 +110,11 @@
                 page: 'enable',
                 pageSize: 300,
             });
+
+            google.visualization.events.addListener(table, 'select', function(evt) {
+                $log.log(table.getSelection());
+                $log.log(data.getValue(table.getSelection()[0].row, 0));
+            });
         }
 
         vm.getHistory = function (data) {
