@@ -1057,7 +1057,7 @@
         $scope.success = function (resp) {
             // $log.log("success");
             // $log.log(resp);
-            $scope.msg = params.clickedMarker.mobilistatus ? "Vehicle Mobilized" : "Vehicle Immobilized";
+            $scope.msg = params.clickedMarker.mobilistatus ? "Vehicle immobilized" : "Vehicle mobilized";
             $scope.closeDialog();
         };
 
