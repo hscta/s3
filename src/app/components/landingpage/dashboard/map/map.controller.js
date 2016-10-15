@@ -6,7 +6,7 @@
         .controller('ImmobalizeController', ImmobalizeController);
 
     function MapController($scope, $log, mapService,
-                           $mdDialog, $interval, geofenceViewService) {
+                           $mdDialog, $interval, geofenceViewService,vehicleService) {
         $log.log('MapController');
         var vm = this;
 
@@ -112,27 +112,36 @@
         };
 
 
-        vm.updateMarker = function (vehicleData) {
-            //$log.log(vehicleData);
-            var isNewVehicle = true;
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (marker.id === vehicleData.id) {
-                    vm.inMarkers[idx] = vehicleData;
-                    isNewVehicle = false;
-                    break;
-                }
-            }
 
-            //$log.log(vehicleData);
-
-            if (isNewVehicle) {
-                vm.inMarkers.push(vehicleData);
-                // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
-            }
-
-            vm.applyFilterToMarker(vehicleData, vm.filterStr);
+        vm.updateMarker2 = function (vehicleData) {
+            //$log.log('updateMarker2');
+            vm.inMarkers.push(vehicleData);
         };
+
+        vm.updateMarker = function (vehicleData) {
+            // //$log.log(vehicleData);
+            // var isNewVehicle = true;
+            // for (var idx in vm.inMarkers) {
+            //     var marker = vm.inMarkers[idx];
+            //     if (marker.id === vehicleData.id) {
+            //         vm.inMarkers[idx] = vehicleData;
+            //         isNewVehicle = false;
+            //         break;
+            //     }
+            // }
+            //
+            // //$log.log(vehicleData);
+            //
+            // if (isNewVehicle) {
+            //     //vehicleData.options = {};
+            //     //vehicleData.options.animation = google.maps.Animation.BOUNCE;
+            //     //$log.log(vehicleData);
+            //
+            //     vm.inMarkers.push(vehicleData);
+            //     // $log.log("Total number of vehicles seen since page load = " + vm.inMarkers.length);
+            // }
+
+            //$log.log('updateMarker1');
 
 
         vm.runFilters = function (filterStr) {
@@ -555,6 +564,7 @@
         };
 
         vm.addListener = function () {
+            vehicleService.addListener('rtgps2', vm.updateMarker2);
             mapService.addListener('rtgps', vm.updateMarker);
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
@@ -576,18 +586,67 @@
     function ImmobalizeController($scope, $log, $mdDialog, params) {
         //var vm = this;
         //$log.log('ImmobalizeController');
+
+        $scope.msg = '';
+        $scope.vehicleno = params.clickedMarker.vehicleno;
+        $scope.deviceid = params.clickedMarker.deviceid;
+        $scope.mobilistatus = params.clickedMarker.mobilistatus;
+
+
         $scope.cancelImmobalize = function () {
             $log.log('cancelImmobalize');
             $mdDialog.cancel();
         };
 
-        $scope.okImmobilize = function () {
-            $log.log('okImmobilize');
-            $mdDialog.cancel();
+
+        $scope.success = function (resp) {
+            // $log.log("success");
+            // $log.log(resp);
+            $scope.mobilistatus = params.clickedMarker.mobilistatus;
+            if(!params.clickedMarker.ignitionstatus) {
+                $scope.msg = params.clickedMarker.mobilistatus ? "Vehicle immobilized" : "Vehicle mobilized";
+            } else {
+                var state = params.clickedMarker.mobilistatus ? "immobilized" : "mobilized";
+                $scope.msg = 'Command received.';
+                $scope.notify = 'Vehicle in sleep state. Vehicle will be ' + state + ' when it wakes up.';
+            }
+            $scope.closeDialog();
         };
 
-        $scope.vehicleno = params.clickedMarker.vehicleno;
-        $scope.deviceid = params.clickedMarker.deviceid;
+
+        $scope.failure = function (resp) {
+            //$log.log("failure");
+            //$log.log(resp);
+            if (resp.status == 403) {
+                $scope.msg = "You are unauthorized to perform this operation";
+                $scope.closeDialog();
+            }
+        };
+
+
+        $scope.closeDialog = function () {
+            $timeout($mdDialog.cancel, 3000);
+        };
+
+
+        $scope.okImmobilize = function () {
+            var data = {'vehiclepath': params.clickedMarker.vehiclepath};
+            if (params.clickedMarker.mobilistatus) {
+                intellicarAPI.vehicleAPIService.immobilize(data)
+                    .then($scope.success, $scope.failure);
+            } else {
+                intellicarAPI.vehicleAPIService.mobilize(data)
+                    .then($scope.success, $scope.failure);
+            }
+        };
+
+
+        $scope.init = function () {
+            $scope.msg = params.clickedMarker.mobilistatus ? "Immobilize ?" : "Mobilize ?";
+        };
+
+
+        $scope.init();
     }
 
 

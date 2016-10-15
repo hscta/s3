@@ -16,7 +16,8 @@
                                            reportService,
                                            anchorSmoothScrollService,
                                            geofenceService,
-                                           fenceReportService
+                                           fenceReportService,
+                                           vehicleAPIService
 
                                            ) {
             var vm = this;
@@ -36,7 +37,8 @@
                 schemaService : schemaService,
                 reportService : reportService,
                 geofenceService : geofenceService,
-                fenceReportService: fenceReportService
+                fenceReportService: fenceReportService,
+                vehicleAPIService: vehicleAPIService
             }
         });
 })();

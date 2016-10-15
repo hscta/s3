@@ -17,10 +17,7 @@
         vm.socket = null;
         vm.listeners = {};
         vm.socket = null;
-        vm.toggleTestData = false;
         vm.subscriptionList = {};
-        vm.authSuccess = false;
-        //vm.connected = false;
 
 
         vm.initSocket = function () {
@@ -32,14 +29,13 @@
                 vm.socket.on('close', vm.onClose);
             }
 
-            //$timeout(vm.initSocket, 5000);
+            $timeout(vm.initSocket, 5000);
         };
 
 
         vm.onConnect = function () {
             // $log.log('Connected to MQTT onConnect');
             if (vm.socket !== null) {
-                //vm.connected = true;
                 vm.sendToken();
                 vm.socket.on('authsuccess', vm.onAuthSuccess);
                 vm.socket.on('authfailure', vm.onAuthFailure);
@@ -49,7 +45,7 @@
 
 
         vm.connect = function () {
-            $log.log('mqtt connect');
+            //$log.log('mqtt connect');
             vm.socket = io.connect(vm.socketiohost);
         };
 
@@ -64,35 +60,12 @@
 
         vm.onAuthSuccess = function () {
             $log.log('mqtt authSuccess');
-            vm.authSuccess = true;
-            //vm.subscriptionList = {};
-            //vm.socket.emit('subscribe', ['gps', [{path: "vehiclepath"}]]);
 
             for (var key in vm.subscriptionList) {
-                vm.subscribeKey(key);
+                for (var eachitem in vm.subscriptionList[key]) {
+                    vm.subscribeChannel(vm.subscriptionList[key][eachitem], key);
+                }
             }
-        };
-
-
-        vm.subscribeKey = function (key) {
-            for (var eachitem in vm.subscriptionList[key]) {
-                vm.subscribeChannel(vm.subscriptionList[key][eachitem], key);
-                //vm.subscribe(vm.subscriptionList[idx][eachitem], idx);
-            }
-        };
-
-
-        vm.onAuthFailure = function () {
-            $log.log('mqtt authFailure');
-            vm.onClose();
-        };
-
-
-        vm.onClose = function () {
-            $log.log('mqtt onClose');
-            vm.socket.close();
-            vm.socket = null;
-            //vm.connected = false;
         };
 
 
@@ -107,12 +80,13 @@
 
 
         vm.unsubscribe = function (path, key) {
-            // var index = vm.subscriptionList.indexOf(path);
-            // if (index > -1) {
-            //     vm.unsubscribeChannel(path, key);
-            //     vm.subscriptionList.splice(index, 1);
-            // }
+            var index = vm.subscriptionList.indexOf(path);
+            if (index > -1) {
+                vm.subscriptionList.splice(index, 1);
+                vm.unsubscribeChannel(path, key);
+            }
         };
+
 
         vm.subscribeChannel = function (path, key) {
            //$log.log("subscribe: " + key + ", " + JSON.stringify(path));
@@ -135,25 +109,14 @@
 
 
         vm.subscribeAsset = function (path, key) {
-            //vm.subscribe(helperService.getAssetPath(asset), key);
             vm.subscribe(path, key);
         };
 
 
         vm.unsubscribeAsset = function (path, key) {
-            //vm.unsubscribe(helperService.getAssetPath(asset), key);
             vm.unsubscribe(path, key);
         };
 
-
-        // vm.getSubscriptionMsg = function (path, key) {
-        //     switch(key) {
-        //         case 'gps':
-        //             return [key, [{path: path}]];
-        //         case 'fencereport':
-        //             return [key, [{fencereport: 'xyz', vehiclelist: ['vehiclepath1', 'vehiclepath2']}]];
-        //     }
-        // };
 
 
         vm.getTopicKey = function (msg) {
@@ -183,6 +146,19 @@
         };
 
 
+        vm.onAuthFailure = function () {
+            $log.log('mqtt authFailure');
+            vm.onClose();
+        };
+
+
+        vm.onClose = function () {
+            $log.log('mqtt onClose');
+            vm.socket.close();
+            vm.socket = null;
+        };
+
+
         vm.addListener = function (key, listener) {
             if (!(key in vm.listeners)) {
                 vm.listeners[key] = [];
@@ -206,6 +182,7 @@
 
 
         vm.initSocket();
+
 
         return {
             addListener: vm.addListener,

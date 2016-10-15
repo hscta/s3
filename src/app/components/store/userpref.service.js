@@ -9,9 +9,10 @@
     angular.module('uiplatform')
         .service('userprefService', userprefService);
 
-    function userprefService($log, loginService, intellicarAPI) {
+    function userprefService($log, loginService, intellicarAPI, latlngService) {
         $log.log("userprefService");
         var vm = this;
+        vm.userpref = {};
 
         vm.loginSuccess = function (data) {
             $log.log("loginSuccess");
@@ -20,7 +21,10 @@
 
 
         vm.handleGetMyInfo = function (resp) {
-            $log.log(resp);
+            //$log.log(resp);
+            vm.userpref = resp.data.data[0];
+            $log.log(vm.userpref);
+            latlngService.geocodeAddress('bhopal');
         };
 
 

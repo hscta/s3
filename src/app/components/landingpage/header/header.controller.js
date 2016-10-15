@@ -9,8 +9,8 @@
         .module('uiplatform')
         .controller('HeaderController', HeaderController);
 
-    function HeaderController($rootScope, $scope, navService, $mdSidenav, $mdBottomSheet, $log, $q, $state,
-                            $mdToast, $document, loginService) {
+    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet, $log, $q, $state,
+                            $mdToast, $document, loginService, userprefService) {
 
         $log.log('HeaderController');
         var vm = this;
@@ -24,6 +24,10 @@
         $rootScope.left_nav_toggle = false;
         $rootScope.right_nav_toggle = true;
         vm.right_nav_toggle = true;
+
+        vm.userpref = function() {
+            return userprefService.userpref;
+        };
 
         navService
             .loadAllItems()
@@ -95,6 +99,12 @@
                     .hideDelay(2000)
                     .position('bottom right')
             );
+        }
+
+        vm.closeMdMenu = function(e){
+            if(e.keyCode == 27){
+                $mdMenu.hide()
+            }
         }
     }
 

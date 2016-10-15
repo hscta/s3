@@ -68,10 +68,10 @@
 
 
         vm.handleFailure = function(resp) {
-            $log.log("API returned error");
-            $log.log(resp);
+            //$log.log("API returned error");
+            //$log.log(resp);
             if(errorStatusCodes.indexOf(resp.status) != -1) {
-                $log.log("failure status code");
+                //$log.log("failure status code");
                 //vm.checkLogin(true);
             }
 

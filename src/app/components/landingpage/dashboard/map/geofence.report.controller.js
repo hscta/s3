@@ -104,7 +104,12 @@
 
             var table = new google.visualization.Table(document.getElementById('geo-table'));
 
-            table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+            table.draw(data, {
+                showRowNumber: true,
+                width: '100%',
+                page: 'enable',
+                pageSize: '100%',
+            });
         }
 
         vm.getHistory = function (data) {
@@ -292,12 +297,15 @@
                     if (data[idx].fencepath == vm.selectedFences[fen].id) {
                         var startTime = parseInt(data[idx].fentry);
                         var endTime = parseInt(data[idx].fexit);
-                        historyService.geoFenceReports.myHistoryData.push([
-                            vehicleName,
-                            fenceName,
-                            new Date(startTime),
-                            new Date(endTime)
-                        ]);
+
+                        if((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 ) ){
+                            historyService.geoFenceReports.myHistoryData.push([
+                                vehicleName,
+                                fenceName,
+                                new Date(startTime),
+                                new Date(endTime)
+                            ]);
+                        }
                         break;
                     }
                 }
