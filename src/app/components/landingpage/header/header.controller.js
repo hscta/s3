@@ -100,6 +100,10 @@
                     .position('bottom right')
             );
         }
+
+        vm.closeMdMenu = function(e){
+            // console.log();
+        }
     }
 
 })();

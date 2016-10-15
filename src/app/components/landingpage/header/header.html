@@ -32,7 +32,7 @@
 
 
         <!--<span flex></span>-->
-        <div layout="row" layout-align="end center"  flex="30">
+        <div layout="row" layout-align="end center"  flex="30" ng-keydown="vm.closeMdMenu($event)">
             <md-button class="md-icon-button" aria-label="notifications" ng-click="vm.toggleRightSidebar()">
                 <md-tooltip>Alerts</md-tooltip>
                 <md-icon md-font-library="material-icons">notifications</md-icon>
@@ -47,7 +47,7 @@
                     <div class="userPopp">
                         <div class="up-header">
                             User Settings
-                            <div class="up-h-close"><i class="fa fa-times"></i></div>
+                            <div class="up-h-close" ng-click="$mdCloseMenu()"><i class="fa fa-times" ></i></div>
                         </div>
                         <div class="up-cont">
                             <div class="up-name">{{vm.userpref().name}}</div>
