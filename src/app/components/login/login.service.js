@@ -92,6 +92,9 @@
         var vm = $scope;
         $rootScope.showLoginDialog = false;
         $log.log("loginDialogController");
+
+        vm.emailFormat = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+
         //vm.username = "shunmugakrishnan@intellicar.in";
         //vm.password = "intellicar123";
 
@@ -112,10 +115,26 @@
             $log.log(resp);
             $log.log("handleLoginFailure");
             if (resp && resp.data && resp.msg)
-                vm.message = resp.data.msg;
+                $log.log(resp);
+                vm.errorMsg = resp.data.msg;
         }
 
+        vm.onChangeCredentials = function(){
+            if (!(vm.username && vm.password)){
+                vm.errorMsg = "Please enter valid Username and Password";
+                return;
+            }
+            else
+                vm.errorMsg = '';
+
+            // if ( !vm.username.match(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)) {
+            //     vm.errorMsg = "Please Enter valid username";
+            //     return;
+            // }
+        };
+
         vm.login = function () {
+            if ( vm.errorMsg ) return;
             $log.log("/gettoken");
             loginService.login(vm.username, vm.password)
                 .then(handleLoginSuccess, handleLoginFailure);

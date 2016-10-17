@@ -107,7 +107,10 @@
 
             for (var idx in traceData) {
                 var position = traceData[idx];
-                if (position.latitude.constructor !== Number || position.longitude.constructor !== Number) {
+
+                if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
+                        position.latitude == 0 || position.longitude == 0
+                ) {
                     $log.log("Not a number");
                     $log.log(position);
                     continue;
@@ -187,7 +190,7 @@
 
 
         vm.init = function () {
-            $log.log(vm.historyObj.dashboardMapObj.clickedMarker);
+            // $log.log(vm.historyObj.dashboardMapObj.clickedMarker);
             if (params == null ) {
                 // $log.log(selectedVehicle);
                 // vm.historyObj.dashboardMapObj.clickedMarker = {};

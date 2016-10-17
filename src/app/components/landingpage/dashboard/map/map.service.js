@@ -56,7 +56,7 @@
                             vm.setClickedMarker(model);
                         }
                     },
-                    clickedMarkerObj : {},
+                    clickedMarkerObj : {}
                 },
                 circles:[],
                 polygons: [],

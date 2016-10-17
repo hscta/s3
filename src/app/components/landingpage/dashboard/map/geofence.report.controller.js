@@ -108,7 +108,7 @@
                 showRowNumber: true,
                 width: '100%',
                 page: 'enable',
-                pageSize: 300,
+                pageSize: 300
             });
 
             google.visualization.events.addListener(table, 'select', function(evt) {
@@ -171,13 +171,13 @@
         vm.deSelectAll = function (data) {
             if (data == 'vehicle') {
                 for (var idx in vm.fenceReportObj.filteredItems) {
-                    filterData = vm.fenceReportObj.filteredItems;
+                    // var filterData = vm.fenceReportObj.filteredItems;
                     vm.fenceReportObj.filteredItems[idx].checked = false;
                 }
                 vm.selectAllVehicles = false;
                 vm.setSelectedCount('vehicle');
             } else if (data == 'fence') {
-                filterData = vm.fenceReportObj.filteredFenceItems;
+                // var filterData = vm.fenceReportObj.filteredFenceItems;
 
                 for (var idx in vm.fenceReportObj.filteredFenceItems) {
                     vm.fenceReportObj.filteredFenceItems[idx].checked = false;

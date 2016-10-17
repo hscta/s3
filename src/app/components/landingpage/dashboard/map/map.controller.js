@@ -56,7 +56,7 @@
         vm.modelsbyref = false;
 
         vm.filterStr = '';
-        vm.excludeFilters = ['icon'];
+        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team'];
         vm.mapEvents = vm.inMap.mapEvents;
 
         vm.onRoaded = true;
@@ -114,6 +114,9 @@
 
         vm.updateMarker2 = function (vehicleData) {
             //$log.log('updateMarker2');
+
+            // $log.log(vehicleData);
+
             vm.inMarkers.push(vehicleData);
         };
 
@@ -181,6 +184,9 @@
 
         vm.matchesAnyMarkerData = function (marker, filterStr) {
             for (var eachidx in marker) {
+                //$log.log(eachidx);
+                // $log.log(marker);
+
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
@@ -193,6 +199,31 @@
                         //     $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
                         // }
                         return true;
+                    }
+
+                   // lowercaseMarkerStr = marker[eachidx].meta.toString().toLowerCase();
+                    if (lowercaseMarkerStr.includes(lowercasefilterStr)){
+
+                    }
+                }
+
+
+                if ( eachidx == 'meta' ){
+                    for ( var myMeta in marker[eachidx]){
+                        if (vm.excludeFilters.indexOf(eachidx) != -1)
+                            continue;
+
+                        var lowercasefilterStr = filterStr.toString().toLowerCase();
+                        var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
+                        //$log.log(lowercaseMarkerStr);
+
+                        if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                            // if ((!marker.ignitionstatus && marker.options.visible)) {
+                            //     $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
+                            // }
+                            return true;
+                        }
+                        // $log.log(marker[eachidx]);
                     }
                 }
             }
@@ -251,7 +282,7 @@
             cityLimits: false,
             carBattery: false,
             devBattery: false,
-            noComm: false,
+            noComm: false
         };
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
@@ -352,8 +383,8 @@
                             startAnimation(vm.inMap.circles[idx]);
                         } else {
                             vm.inMap.circles[idx].visible = false;
-                            console.log(mapService.inMap.circles[idx]);
-                            console.log(idx);
+                            // console.log(mapService.inMap.circles[idx]);
+                            // console.log(idx);
                         }
                     }
                 }
@@ -551,8 +582,6 @@
             for (var idx in polygon) {
                 bound.extend(new google.maps.LatLng(polygon[idx].latitude, polygon[idx].longitude));
             }
-            // $log.log(bound.getCenter().lat());
-            // $log.log(bound.getCenter().lng());
             return bound.getCenter();
         };
 
