@@ -191,6 +191,10 @@
             </div>
         </div>
     </div>
+
+
+
+
     <div id="mapCanvas">
         <script id="searchbox.tpl.html" type="text/ng-template">
             <input id="pac-input" type="text" placeholder="Search">
@@ -219,11 +223,18 @@
                             isIconVisibleOnClick="true">
             </ui-gmap-window>
 
+
+            <!--<ui-gmap-window show="vm.carNumber.show" coords="carNumber" ng-repeat="carNumber in vm.inMarkers"-->
+                            <!--control="vm.carNumber.control" optimized="false"-->
+                            <!--options="vm.carNumber.options" closeClick="vm.infoWindowClose()"-->
+                            <!--templateParameter="carNumber"-->
+                            <!--isIconVisibleOnClick="true">{{carNumber.vehicleno}}-->
+            <!--</ui-gmap-window>-->
+
             <ui-gmap-window show="vm.fenceInfoWindow.show" coords="vm.fenceObj"
                             control="vm.fenceInfoWindow.control" optimized="false"
                             options="vm.fenceInfoWindow.options" closeClick="vm.fenceInfoWindowClose()"
                             isIconVisibleOnClick="true">
-
                 <table>
                     <tbody>
                     <tr>
@@ -237,6 +248,8 @@
                     </tbody>
                 </table>
             </ui-gmap-window>
+
+            <!--<div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>-->
 
             <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
                             center="gcircle.center" radius="gcircle.radius"

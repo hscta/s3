@@ -8,7 +8,7 @@
         .controller('InnerMapController', InnerMapController);
 
     function MapController($scope, $log, mapService,
-                           $mdDialog, $interval, geofenceViewService,
+                           $mdDialog, $interval, geofenceViewService,$timeout,customMapOverlay,
                            historyService, dialogService, vehicleService) {
         $log.log('MapController');
         var vm = this;
@@ -86,6 +86,8 @@
                 }
             }
         };
+
+
 
         vm.mapEvents = {
             click: function () {
@@ -273,12 +275,24 @@
             //$log.log("applying filter to marker");
             if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                 marker.options.visible = false;
-
+                if(vm.inCustomMaker[marker.vehiclepath]){
+                    vm.inCustomMaker[marker.vehiclepath].hide();
+                }
             } else {
                 marker.options.visible = true;
+                if(vm.inCustomMaker[marker.vehiclepath]){
+                    vm.inCustomMaker[marker.vehiclepath].show();
+                }
             }
 
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
+            if(vm.inCustomMaker[marker.vehiclepath]){
+                if(vm.checkRoaded(marker) && marker.options.visible){
+                    vm.inCustomMaker[marker.vehiclepath].show();
+                }else{
+                    vm.inCustomMaker[marker.vehiclepath].hide();
+                }
+            }
 
             // if (marker.options.visible && (!marker.ignitionstatus)) {
             //     $log.log(marker);
@@ -743,7 +757,6 @@
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
         };
 
-
         vm.init = function () {
             vm.loadMap();
             historyService.setData('inMarkers', vm.inMarkers);
@@ -752,6 +765,43 @@
         };
 
         vm.init();
+
+
+        // Google Map Custom HTML Marker
+
+        var firstLoad = true;
+        var inGmap;
+        vm.inCustomMaker = {};
+
+        vm.customOverlay = function(marker){
+            if(!vm.inCustomMaker[marker.vehiclepath]) {
+                if (firstLoad) {
+                    $timeout(function () {
+                        inGmap = vm.inMap.mapControl.getGMap();
+                        vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, inGmap, {marker:marker});
+                        firstLoad = false;
+                    }, 2000);
+                } else {
+                    vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, inGmap, {marker:marker});
+                }
+            }
+        };
+
+        vm.showVehicleNumber = false;
+
+        vm.showVehicleNumber = function (vn) {
+            vm.vehicleNumber = vn;
+            if(vm.vehicleNumber){
+                for(idx in vm.inCustomMaker){
+                   vm.inCustomMaker[idx].showVehicleNumber();
+                }
+            }else{
+                for(idx in vm.inCustomMaker){
+                    vm.inCustomMaker[idx].hideVehicleNumber();
+                }
+            }
+        };
+
     }
 
 
