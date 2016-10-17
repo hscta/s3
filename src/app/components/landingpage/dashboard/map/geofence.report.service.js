@@ -79,12 +79,22 @@
             }
         };
 
-
-
         vm.init = function () {
             vm.getMyGeofenceReportsMap();
         };
 
+
+        vm.reportDetails = {
+            reportId:1233
+        };
+
+        vm.setReportPath = function(reportPath){
+            vm.reportDetails.reportId = reportPath;
+        }
+
+        vm.getReportDetails = function(){
+            return vm.reportDetails;
+        }
 
         vm.init();
     }

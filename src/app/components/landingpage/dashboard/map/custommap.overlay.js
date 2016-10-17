@@ -10,12 +10,12 @@
         var innerHtml;
 
         vm.CustomMarker = function(lat, lng, map, args) {
-            this.latlng = new google.maps.LatLng(lat,lng);;
+            this.latlng = new google.maps.LatLng(lat,lng);
             this.args = args;
             this.setMap(map);
 
-            this.setPosition = function(lat2,lng2){
-                this.latlng = new google.maps.LatLng(lat2,lng2);
+            this.setPosition = function(obj){
+                this.latlng = new google.maps.LatLng(obj.latitude,obj.longitude);
                 this.point = this.getProjection().fromLatLngToDivPixel(this.latlng);
                 if (this.point) {
                     this.div.style.left = (this.point.x - 10) + 'px';

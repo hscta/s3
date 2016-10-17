@@ -95,26 +95,6 @@
                              aria-label="onroaded" ng-change="vm.offRoadCheck()">
                 </md-checkbox>
             </div>
-            <!--<div class="toggleButton" ng-class="{'active': vm.onRoadedVar}">-->
-                <!--On Road-->
-                <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoadedVar"-->
-                             <!--aria-label="onroaded" ng-change="vm.runFilters2('Running')">-->
-                <!--</md-checkbox>-->
-            <!--</div>-->
-            <!--<div class="toggleButton" ng-class="{'active': vm.offRoadedVar}">-->
-                <!--Off Road-->
-                <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoadedVar"-->
-                             <!--aria-label="onroaded" ng-change="vm.runFilters2('Stopped')">-->
-                <!--</md-checkbox>-->
-            <!--</div>-->
-            <!--<md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"-->
-            <!--aria-label="onroaded" ng-change="vm.onRoadCheck()">-->
-            <!--On Roaded-->
-            <!--</md-checkbox>-->
-            <!--<md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"-->
-            <!--aria-label="offroaded" ng-change="vm.offRoadCheck()" flex>-->
-            <!--Off Roaded-->
-            <!--</md-checkbox>-->
         </div>
 
         <ul id="nav" layout="row" layout-align="end center" flex>
@@ -199,9 +179,10 @@
         <script id="searchbox.tpl.html" type="text/ng-template">
             <input id="pac-input" type="text" placeholder="Search">
         </script>
+
         <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom'
                             options="vm.inMap.mapOptions" optimized="false" bounds="vm.inMap.bounds"
-                            events="vm.mapEvents"
+                            events="vm.inMap.mapEvents"
                             control="vm.inMap.mapControl">
 
             <!-- <ui-gmap-search-box template="vm.SearchBox.template" events="vm.SearchBox.events" position="RIGHT_BOTTOM"></ui-gmap-search-box> -->
@@ -210,46 +191,37 @@
                                 events="searchbox.events"></ui-gmap-search-box>
 
             <ui-gmap-markers models="vm.inMarkers" optimized="false" coords="'self'" icon="'icon'"
-                             options="'options'" events="vm.markersEvents"
+                             options="'options'" events="vm.inMap.markers.markersEvents"
                              doRebuildAll="vm.doRebuildAll" modelsbyref="vm.modelsbyref">
             </ui-gmap-markers>
 
 
-            <ui-gmap-window show="vm.infoWindow.show" coords="vm.clickedMarker"
-                            control="vm.infoWindow.control" optimized="false"
-                            options="vm.infoWindow.options" closeClick="vm.infoWindowClose()"
+            <ui-gmap-window show="vm.inMap.infoWindow.show" coords="vm.inMap.markers.clickedMarkerObj.clickedMarker"
+                            control="vm.inMap.infoWindow.control" optimized="false"
+                            options="vm.inMap.infoWindow.options"
                             templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
-                            templateParameter="vm.clickedMarkerObj"
+                            templateParameter="vm.inMap.markers.clickedMarkerObj"
+                            controller="MainMapWindowController"
                             isIconVisibleOnClick="true">
             </ui-gmap-window>
-
-
-            <!--<ui-gmap-window show="vm.carNumber.show" coords="carNumber" ng-repeat="carNumber in vm.inMarkers"-->
-                            <!--control="vm.carNumber.control" optimized="false"-->
-                            <!--options="vm.carNumber.options" closeClick="vm.infoWindowClose()"-->
-                            <!--templateParameter="carNumber"-->
-                            <!--isIconVisibleOnClick="true">{{carNumber.vehicleno}}-->
-            <!--</ui-gmap-window>-->
-
-            <ui-gmap-window show="vm.fenceInfoWindow.show" coords="vm.fenceObj"
+            <ui-gmap-window show="vm.fenceInfoWindow.show" coords="vm.selectedFenceObj"
                             control="vm.fenceInfoWindow.control" optimized="false"
-                            options="vm.fenceInfoWindow.options" closeClick="vm.fenceInfoWindowClose()"
+                            options="vm.fenceInfoWindow.options"
                             isIconVisibleOnClick="true">
                 <table>
                     <tbody>
                     <tr>
                         <th>Name: </th>
-                        <td>{{vm.fenceDetails.name}}</td>
+                        <td>{{vm.selectedFenceObj.name}}</td>
                     </tr>
                     <tr>
                         <th>Type:   </th>
-                        <td>{{vm.fenceDetails.other.olafilter}}</td>
+                        <td>{{vm.selectedFenceObj.other.olafilter}}</td>
                     </tr>
                     </tbody>
                 </table>
             </ui-gmap-window>
-
-            <!--<div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>-->
+            <div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>
 
             <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
                             center="gcircle.center" radius="gcircle.radius"
@@ -257,20 +229,17 @@
                             visible="gcircle.visible" geodesic="gcircle.geodesic"
                             editable="gcircle.editable" draggable="gcircle.draggable"
                             clickable="gcircle.clickable" control="gcircle.control"
-                            events="vm.circleEvents">
+                            events="vm.inMap.circleEvents">
             </ui-gmap-circle>
 
-            <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
+            <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.inMap.polygons track by gpolygon.control.info.assetid"
                              path="gpolygon.path"
                              stroke="gpolygon.stroke" fill="gpolygon.fill"
                              visible="gpolygon.visible" geodesic="gpolygon.geodesic"
                              editable="gpolygon.editable" draggable="gcircle.draggable"
                              clickable="gpolygon.clickable" control="gpolygon.control"
-                             events="vm.polygonEvents" static="true">
-
+                             events="vm.inMap.polygonEvents" static="true">
             </ui-gmap-polygon>
-
-
         </ui-gmap-google-map>
     </div>
 </div>
@@ -290,58 +259,21 @@
             </div>
         </div>
         <div class="id-body">
-            <!--<md-content class="fullHeight">-->
-                <!--<md-tabs class="" md-selected="vm.selectedTab" md-align-tabs="top" md-border-bottom md-autoselect-->
-                <!--md-dynamic-height>-->
-                <!--<md-tab ng-click="vm.getTab()">-->
-                <!--<a ui-sref="home.history">HISTORY</a>-->
-                <!--</md-tab>-->
-                <!--<md-tab ng-click="vm.getTab()">-->
-                <!--<a ui-sref="home.geofence">Geofence</a>-->
-                <!--</md-tab>-->
-                <!--</md-tabs>-->
-
-                <div class="row icar-tabs">
-                    <div class="col s4">
-                        <ul class="tabs" select_tab="vm.selectedTab">
-                            <li class="tab col s2">
-                                <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]"
-                                    ui-sref="home.history">HISTORY</a>
-                            </li>
-                            <li class="tab col s2">
-                                <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
-                                     ui-sref="home.geofence">Geofence</a>
-                            </li>
-                            <!--<div class="navPointer"></div>-->
-                        </ul>
-                    </div>
-                    <div flex ui-view="dialogview" class="mapDView"></div>
+            <div class="row icar-tabs">
+                <div class="col s4">
+                    <ul class="tabs" select_tab="vm.selectedTab">
+                        <li class="tab col s2">
+                            <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]"
+                                ui-sref="home.history">HISTORY</a>
+                        </li>
+                        <li class="tab col s2">
+                            <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
+                                ui-sref="home.geofence">Geofence</a>
+                        </li>
+                    </ul>
                 </div>
-
-
-            <!--</md-content>-->
+                <div flex ui-view="dialogview" class="mapDView"></div>
+            </div>
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function(){
-        $('ul.tabs').tabs('select_tab', 1);
-
-
-
-//
-//        function navPointer() {
-//            var pn = this;
-//            pn.pointer = $('.navPointer');
-//            pn.parent = pn.pointer.parent();
-//
-//            pn.parent.click(function () {
-//                console.log('hell');
-//            })
-//        }
-//
-//        var navP = new navPointer();
-
-    })
-</script>

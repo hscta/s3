@@ -151,6 +151,22 @@
                         vm.checkGeoFilters.set('noComm', active);
                     }
                 }
+            },
+            {'type': 'line'},
+            {
+                'id': 'showVehicleNo',
+                'name': 'Show Vehicle Number',
+                'iconType': 'fa',
+                'icon': 'fa-car',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: false,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('showVehicleNo', active);
+                        geofenceViewService.showVehicleNumber(active);
+                    }
+                }
             }
         ];
 

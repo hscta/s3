@@ -11,7 +11,7 @@
         vm.dialogShow = false;
 
         var dialogStates = ['home.geofence','home.history'];
-        var testObject = {'myName':{'yo1':'yoyo'}};
+        // var testObject = {'myName':{'yo1':'yoyo'}};
         // $cookies.put('hell',JSON.stringify(testObject));
 
         // console.log(JSON.parse($cookies.get('hell')));
@@ -26,10 +26,16 @@
 
 
         vm.show = function(state,params){
-            vm.setData(params,'historyData');
-            $state.go(state,params);
+            // vm.setData(params,'historyData');
+            $state.go(state,{"mapObj":params});
             fadeInDialog();
         };
+
+        // vm.show = function(state){
+        //     //vm.setData(params,'historyData');
+        //     $state.go(state);
+        //     fadeInDialog();
+        // };
 
         vm.hide = function(){
             $state.go('home');

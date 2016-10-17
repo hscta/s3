@@ -15,8 +15,8 @@
     <div class="geo-leftbar " ng-click="vm.currPop = null">
         <div class="geo-rep-item-head shadow-border" >Reports</div>
         <div class="geo-lb-cont coolbar">
-            <div class="geo-rep-item" ng-class="{'active':vm.reportId == rep.assetpath}"
-                 ng-repeat="rep in vm.reports" ng-click="vm.getSelectedFences(rep)">{{rep.name}}</div>
+            <div class="geo-rep-item" ng-class="{'active':vm.fenceReportObj.reportId == rep.assetpath}"
+                 ng-repeat="rep in vm.fenceReportObj.reports" ng-click="vm.getSelectedFences(rep)">{{rep.name}}</div>
         </div>
     </div>
     <div class="geo-cont" >
@@ -29,15 +29,15 @@
 
                     <div class="geo-mul-back" ng-show="vm.currPop" ng-click="vm.currPop = null"></div>
                     <md-input-container class="container-margin geo-multiSel">
-                        <label>Fence Name ({{vm.selectedFencesCount}})</label>
+                        <label>Fence Name ({{vm.fenceReportObj.selectedFencesCount}})</label>
                         <input type="text" ng-focus=" vm.currPop = 'fencePop'"
-                               placeholder="Search Fences" ng-model="vm.fenceFilter"
+                               placeholder="Search Fences" ng-model="vm.fenceReportObj.fenceFilter"
                                ng-change="vm.filterFences()"
                         >
                         <div class="geo-ms-cont" ng-show="vm.currPop == 'fencePop'">
                             <md-list>
                                 <md-list-item class="md-2-line"
-                                              ng-repeat="item in vm.filteredFenceItems ">
+                                              ng-repeat="item in vm.fenceReportObj.filteredFenceItems ">
 
                                     <md-checkbox ng-model="item.checked" aria-label="myfences"
                                                  ng-change="vm.verifyCheckStatus('fence')">
@@ -57,16 +57,16 @@
                     </md-input-container>
 
                     <md-input-container class="container-margin geo-multiSel">
-                        <label>Vehicle Name ({{vm.selectedVehiclesCount}})</label>
+                        <label>Vehicle Name ({{vm.fenceReportObj.selectedVehiclesCount}})</label>
                         <input type="text" ng-focus="vm.currPop = 'vehiclePop'"
                                placeholder="Search Vehicle"
-                               ng-model="vm.vehicleFilter"
+                               ng-model="vm.fenceReportObj.vehicleFilter"
                                ng-change="vm.filterVehicles()"
                         >
                         <div class="geo-ms-cont" ng-show="vm.currPop == 'vehiclePop'">
                             <md-list>
                                 <md-list-item class="md-2-line"
-                                              ng-repeat="item in vm.filteredItems">
+                                              ng-repeat="item in vm.fenceReportObj.filteredItems">
                                     <md-checkbox ng-model="item.checked" aria-label="myvehicles"
                                                  ng-change="vm.verifyCheckStatus('vehicle')">
                                     </md-checkbox>
@@ -86,12 +86,12 @@
 
                     <md-input-container class="container-margin">
                         <label>Start Time</label>
-                        <input type="text" id="start_time" ng-model="vm.startTime">
+                        <input type="text" id="start_time" ng-model="vm.fenceReportObj.startTime">
                     </md-input-container>
 
                     <md-input-container class="container-margin">
                         <label>End Time</label>
-                        <input type="text" id="end_time" ng-model="vm.endTime">
+                        <input type="text" id="end_time" ng-model="vm.fenceReportObj.endTime">
                     </md-input-container>
                     <md-button class="md-accent" ng-click="vm.getHistoryReport()">Get Report</md-button>
                 </div>
