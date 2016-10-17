@@ -70,6 +70,7 @@
             vehicleData.longitude = newData.longitude;
             vehicleData.altitude = newData.altitude;
             vehicleData.vehicleno = newData.vehicleno;
+            vehicleData.odometer = newData.odometer;
             vehicleData.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
             vehicleData.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
             vehicleData.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
