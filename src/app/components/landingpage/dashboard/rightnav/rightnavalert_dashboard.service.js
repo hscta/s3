@@ -162,6 +162,8 @@
                                     fenceObj.triggerType = false;
                                 }
                                 fenceObj.vehicleno = vehicleno;
+                                // fenceObj.vehiclepath = reportData[reportName][fenceName];
+                                // console.log(reportData[reportName][fenceName]);
                                 //$log.log("Adding " + vehicleno + " to " + reportName);
                                 reportData[reportName][fenceName][vehicleno] = fenceObj;
                             }

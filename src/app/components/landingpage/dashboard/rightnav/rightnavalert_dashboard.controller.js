@@ -8,7 +8,7 @@
         .controller('RightNavDashboardController', RightNavDashboardController);
 
     function RightNavDashboardController($log, $timeout, rightNavAlertDashboardService,
-                                         mapService, geofenceReportService,
+                                         mapService, geofenceReportService,vehicleService,
                                          intellicarAPI) {
         $log.log("RightNavDashboardController");
         var vm = this;
@@ -163,11 +163,10 @@
         function getStyle(color) {
             return 'border-top: 2px solid '+color+'; ';
         }
-        vm.itemClicked = function (data,id,id2,id3) {
-            if(vm.filterActive){
-                vm.searching(vm.searchAlertStr,'click',id,id2,id3);
-            }else{
-                data.active = !data.active;
+        vm.itemClicked = function (data,level) {
+            data.active = !data.active;
+            if(level == 3){
+                mapService.highlightMarker(vehicleService.vehiclesByNumber[data.vehicleno].assetpath);
             }
         };
 

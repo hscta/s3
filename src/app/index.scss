@@ -42,6 +42,14 @@ body{
     -o-border-radius:$str;
     border-radius:$str;
 }
+@mixin animation($str){
+    -webkit-animation: $str; /* Safari 4+ */
+    -moz-animation:    $str; /* Fx 5+ */
+    -o-animation:      $str; /* Opera 12+ */
+    animation:         $str; /* IE 10+, Fx 29+ */
+}
+
+
 
 
 
@@ -1405,7 +1413,7 @@ button{
 // Custom Marker
 
 .customMarker{
-    //background:rgba(50,0,200,0.4);
+    //background:rgba(50,0,200,0.8);
     width:12px;
     height:12px;
     //border:2px solid #333;
@@ -1414,7 +1422,70 @@ button{
     *{
         float: left;
     }
+    .overlayNotifier{
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height:100%;
+        background: red;
+        opacity: 0;
+        @include border-radius(100%);
+    }
+    .overlayNotifier:after{
+        content: '';
+        display: block;
+        float: left;
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 80%;
+        height:80%;
+        margin:10%;
+        background: blue;
+        opacity: 0;
+        @include border-radius(100%);
+        @include animation(notiDrop2 1s infinite);
+    }
+    .overlayNotifier.animate{
+        @include animation(notiDrop 1s infinite);
+    }
 }
+
+@-webkit-keyframes notiDrop {
+    0% { opacity: 0.5;@include transform(scale(0)); }
+    100%   { opacity: 0; @include transform(scale(20));}
+}
+@-moz-keyframes notiDrop {
+    0% { opacity: 0.5;@include transform(scale(0)); }
+    100%   { opacity: 0; @include transform(scale(20));}
+}
+@-o-keyframes notiDrop {
+    0% { opacity: 0.5;@include transform(scale(0)); }
+    100%   { opacity: 0; @include transform(scale(20));}
+}
+@keyframes notiDrop {
+    0% { opacity: 0.5;@include transform(scale(0)); }
+    100%   { opacity: 0; @include transform(scale(20));}
+}
+
+@-webkit-keyframes notiDrop2 {
+    0% { opacity: 0.5;@include transform(scale(0.5)); }
+    100%   { opacity: 0; @include transform(scale(1));}
+}
+@-moz-keyframes notiDrop2 {
+    0% { opacity: 0.5;@include transform(scale(0.5)); }
+    100%   { opacity: 0; @include transform(scale(1));}
+}
+@-o-keyframes notiDrop2 {
+    0% { opacity: 0.5;@include transform(scale(0.5)); }
+    100%   { opacity: 0; @include transform(scale(1));}
+}
+@keyframes notiDrop2 {
+    0% { opacity: 0.5;@include transform(scale(0.5)); }
+    100%   { opacity: 0; @include transform(scale(1));}
+}
+
 .customMarker:hover {
     z-index: 3;
 }
