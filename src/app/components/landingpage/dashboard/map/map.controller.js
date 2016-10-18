@@ -50,76 +50,13 @@
 
         vm.inMap = mapService.getMainMap();
         vm.inMarkers = vm.inMap.markers.inMarkers;
-        vm.clickedMarkerObj = vm.inMap.markers.clickedMarkerObj;
-
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
         vm.doRebuildAll = false;
         vm.modelsbyref = false;
 
         vm.filterStr = '';
-        vm.excludeFilters = ['icon'];
-        vm.infoWindow = {
-            show: false,
-            control: {},
-            options: {
-                maxWidth: 300,
-                disableAutoPan: false,
-                pixelOffset: {
-                    width: 0,
-                    height: -20
-                }
-            }
-        };
-
-        vm.fenceInfoWindow = {
-            show: false,
-            control: {},
-            options: {
-                maxWidth: 300,
-                disableAutoPan: false,
-                pixelOffset: {
-                    width: 0,
-                    height: 0
-                }
-            }
-        };
-
-
-        vm.mapEvents = {
-            click: function () {
-                vm.infoWindowClose();
-                vm.fenceInfoWindowClose();
-            },
-            zoom_changed: function () {
-                vm.changeMarkerIcon();
-            }
-        };
-
-
-        vm.changeMarkerIcon = function () {
-            for (var idx = 0; idx < vm.inMarkers.length; idx++) {
-                // if(!mapService.setMarkerIcon(vm.inMarkers[idx]))
-                //     break;
-                mapService.setMarkerIcon(vm.inMarkers[idx]);
-            }
-        };
-
-
-        vm.markersEvents = {
-            click: function (marker, eventName, model, args) {
-                vm.clickedMarker = model;
-
-                vm.clickedMarkerObj = {
-                    clickedMarker: vm.clickedMarker,
-                    showHistory: vm.showHistory
-                };
-
-                $log.log(vm.clickedMarkerObj);
-                vm.infoWindowShow();
-            }
-        };
-        vm.mapEvents = vm.inMap.mapEvents;
+        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
 
         vm.onRoaded = true;
         vm.offRoaded = false;
@@ -175,6 +112,9 @@
 
         vm.updateMarker2 = function (vehicleData) {
             //$log.log('updateMarker2');
+
+            // $log.log(vehicleData);
+
             vm.inMarkers.push(vehicleData);
             vm.customOverlay(vehicleData);
         };
@@ -250,6 +190,24 @@
                         return true;
                     }
                 }
+
+                if ( marker[eachidx].constructor == Object ){
+                     // $log.log(marker[eachidx]);
+                    for ( var myMeta in marker[eachidx]){
+                        if (vm.excludeFilters.indexOf(eachidx) != -1)
+                            continue;
+
+                        if(marker[eachidx][myMeta]) {
+                            var lowercasefilterStr = filterStr.toString().toLowerCase();
+                            // $log.log(marker[eachidx][myMeta]);
+                            var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
+
+                            if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
 
             //$log.log("not matching " + marker.id);
@@ -307,7 +265,7 @@
             carBattery: false,
             devBattery: false,
             noComm: false,
-            showVehicleNo: false,
+            showVehicleNo: false
         };
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
@@ -410,8 +368,8 @@
                             startAnimation(vm.inMap.circles[idx]);
                         } else {
                             vm.inMap.circles[idx].visible = false;
-                            console.log(mapService.inMap.circles[idx]);
-                            console.log(idx);
+                            // console.log(mapService.inMap.circles[idx]);
+                            // console.log(idx);
                         }
                     }
                 }
@@ -609,8 +567,6 @@
             for (var idx in polygon) {
                 bound.extend(new google.maps.LatLng(polygon[idx].latitude, polygon[idx].longitude));
             }
-            // $log.log(bound.getCenter().lat());
-            // $log.log(bound.getCenter().lng());
             return bound.getCenter();
         };
 

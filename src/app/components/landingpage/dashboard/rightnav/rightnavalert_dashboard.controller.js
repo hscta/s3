@@ -147,7 +147,7 @@
 
         vm.getColorCounter = 0;
 
-        vm.getColor = 'border-top: 1px solid #f00;';;
+        vm.getColor = 'border-top: 1px solid #f00;';
         vm.getColors = function(){
             vm.getColorCounter++;
             if(vm.getColorCounter == 1){ return getStyle('#2ecc71'); }else

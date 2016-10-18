@@ -139,8 +139,7 @@
                     //$log.log(msg);
                     for (var idx in data.activeFences) {
                         var activeFence = data.activeFences[idx];
-                        var activeinfo = activeFence['activeinfo'];
-                        console.log(activeinfo);
+                        var activeinfo = activeFence['activeinfo']; 
                         //$log.log(activeinfo);
                         for(var eachitem in activeinfo) {
                             var fenceObj = activeinfo[eachitem];
