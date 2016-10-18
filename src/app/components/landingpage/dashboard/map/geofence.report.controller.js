@@ -304,7 +304,6 @@
                     if (data[idx].fencepath == vm.selectedFences[fen].id) {
                         var startTime = parseInt(data[idx].fentry);
                         var endTime = parseInt(data[idx].fexit);
-
                         if((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 ) ){
                             historyService.geoFenceReports.myHistoryData.push([
                                 vehicleName,

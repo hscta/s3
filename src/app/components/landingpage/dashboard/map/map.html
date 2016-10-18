@@ -171,6 +171,10 @@
             </div>
         </div>
     </div>
+
+
+
+
     <div id="mapCanvas">
         <script id="searchbox.tpl.html" type="text/ng-template">
             <input id="pac-input" type="text" placeholder="Search">
@@ -200,12 +204,10 @@
                             controller="MainMapWindowController"
                             isIconVisibleOnClick="true">
             </ui-gmap-window>
-
             <ui-gmap-window show="vm.fenceInfoWindow.show" coords="vm.selectedFenceObj"
                             control="vm.fenceInfoWindow.control" optimized="false"
                             options="vm.fenceInfoWindow.options"
                             isIconVisibleOnClick="true">
-
                 <table>
                     <tbody>
                     <tr>
@@ -219,8 +221,9 @@
                     </tbody>
                 </table>
             </ui-gmap-window>
+            <div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>
 
-            <ui-gmap-circle ng-repeat="gcircle in vm.inMap.circles track by gcircle.control.info.assetid"
+            <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
                             center="gcircle.center" radius="gcircle.radius"
                             stroke="gcircle.stroke" fill="gcircle.fill"
                             visible="gcircle.visible" geodesic="gcircle.geodesic"
@@ -236,7 +239,6 @@
                              editable="gpolygon.editable" draggable="gcircle.draggable"
                              clickable="gpolygon.clickable" control="gpolygon.control"
                              events="vm.inMap.polygonEvents" static="true">
-
             </ui-gmap-polygon>
         </ui-gmap-google-map>
     </div>

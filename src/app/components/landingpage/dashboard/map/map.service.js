@@ -131,10 +131,13 @@
 
             vm.setClickedMarker = function(model) {
                 vm.inMap.markers.clickedMarkerObj.clickedMarker = model;
-                vm.inMap.markers.clickedMarkerObj.immoblize = vm.immobalize;
+                vm.inMap.markers.clickedMarkerObj.mobilize = vm.mobilize;
                 vm.inMap.markers.clickedMarkerObj.showHistory = vm.showHistory;
+                vm.inMap.markers.clickedMarkerObj.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
+
                 vm.infoWindowShow();
             };
+
 
             vm.showHistory = function () {
                 //$log.log(vm.clickedMarker);
@@ -147,7 +150,9 @@
                 // dialogService.show('home.history');
             };
 
-            vm.immobalize = function (status) {
+            vm.mobilize = function (mobilityRequest) {
+                vm.inMap.markers.clickedMarkerObj.clickedMarker.mobilityRequest = mobilityRequest;
+
                 var immobalizeDialog = $mdDialog.confirm({
                     controller: 'ImmobalizeController',
                     templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
@@ -162,9 +167,9 @@
 
                 $mdDialog.show(immobalizeDialog)
                     .then(function () {
-                        $log.log("Yes Function");
+                        //$log.log("Yes Function");
                     }, function () {
-                        $log.log("No Function");
+                        //$log.log("No Function");
                     })
             };
 
@@ -219,7 +224,7 @@
 
 
             vm.checkZoomLevel = function (min, max) {
-                vm.zoom = vm.inMap.mapControl.getGMap().zoom;
+                //vm.zoom = vm.inMap.mapControl.getGMap().zoom;
                 return (vm.zoom >= min && vm.zoom <= max);
             };
 

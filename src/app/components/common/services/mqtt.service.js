@@ -15,6 +15,7 @@
         var vm = this;
         vm.socketiohost = 'http://in2.intellicar.in:10105';
         vm.socket = null;
+        vm.toConnect = true;
         vm.listeners = {};
         vm.socket = null;
         vm.subscriptionList = {};
@@ -22,11 +23,12 @@
 
         vm.initSocket = function () {
             //$log.log('mqtt initSocket');
-            if (vm.socket === null) {
+            if (vm.socket === null && vm.toConnect) {
                 $log.log("Trying to connect to MQTT");
                 vm.connect();
                 vm.socket.on('connect', vm.onConnect);
                 vm.socket.on('close', vm.onClose);
+                vm.toConnect = false;
             }
 
             $timeout(vm.initSocket, 5000);
@@ -36,10 +38,13 @@
         vm.onConnect = function () {
             // $log.log('Connected to MQTT onConnect');
             if (vm.socket !== null) {
+                vm.toConnect = true;
                 vm.sendToken();
                 vm.socket.on('authsuccess', vm.onAuthSuccess);
                 vm.socket.on('authfailure', vm.onAuthFailure);
                 vm.socket.on('mqtt', vm.onReceiveMsg);
+            } else {
+                $log.log("mqtt connect error");
             }
         };
 
@@ -156,6 +161,7 @@
             $log.log('mqtt onClose');
             vm.socket.close();
             vm.socket = null;
+            vm.toConnect = true;
         };
 
 
