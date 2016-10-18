@@ -38,7 +38,7 @@
                     'type': 'stateChange', 'independent': true, 'state': 'home.geofence', active: true
                 }
             },
-            {'type': 'line'},
+            {'type': 'line', 'historymap': true},
             {
                 'id': 'getGeo', 'description': 'Use only when new fences are created',
                 'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'historymap': true,
@@ -111,7 +111,7 @@
                     }
                 }
             },
-            {'type': 'line'},
+            {'type': 'line', 'historymap': true},
             {
                 'id': 'devBattery',
                 'name': 'Low Device Battery',
@@ -137,7 +137,7 @@
                     }
                 }
             },
-            {'type': 'line'},
+            {'type': 'line', 'historymap': false},
             {
                 'id': 'noComm',
                 'name': 'Vehicles not communicating',
@@ -152,7 +152,7 @@
                     }
                 }
             },
-            {'type': 'line'},
+            {'type': 'line', 'historymap': false},
             {
                 'id': 'showVehicleNo',
                 'name': 'Show Vehicle Number',
