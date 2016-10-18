@@ -223,7 +223,7 @@
             </ui-gmap-window>
             <!--<div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>-->
 
-            <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
+            <ui-gmap-circle ng-repeat="gcircle in vm.inMap.circles track by gcircle.control.info.assetid"
                             center="gcircle.center" radius="gcircle.radius"
                             stroke="gcircle.stroke" fill="gcircle.fill"
                             visible="gcircle.visible" geodesic="gcircle.geodesic"
