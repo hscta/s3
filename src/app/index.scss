@@ -1442,8 +1442,8 @@ button{
         width: 80%;
         height:80%;
         margin:10%;
-        background: blue;
         opacity: 0;
+        border:1px solid blue;
         @include border-radius(100%);
         @include animation(notiDrop2 1s infinite);
     }
@@ -1470,20 +1470,20 @@ button{
 }
 
 @-webkit-keyframes notiDrop2 {
-    0% { opacity: 0.5;@include transform(scale(0.5)); }
-    100%   { opacity: 0; @include transform(scale(1));}
+    0% { opacity: 1;@include transform(scale(0.5)); }
+    100%   { opacity: 1; @include transform(scale(1));}
 }
 @-moz-keyframes notiDrop2 {
-    0% { opacity: 0.5;@include transform(scale(0.5)); }
-    100%   { opacity: 0; @include transform(scale(1));}
+    0% { opacity: 1;@include transform(scale(0.5)); }
+    100%   { opacity: 1; @include transform(scale(1));}
 }
 @-o-keyframes notiDrop2 {
-    0% { opacity: 0.5;@include transform(scale(0.5)); }
-    100%   { opacity: 0; @include transform(scale(1));}
+    0% { opacity: 1;@include transform(scale(0.5)); }
+    100%   { opacity: 1; @include transform(scale(1));}
 }
 @keyframes notiDrop2 {
-    0% { opacity: 0.5;@include transform(scale(0.5)); }
-    100%   { opacity: 0; @include transform(scale(1));}
+    0% { opacity: 0.8;@include transform(scale(0.5)); }
+    100%   { opacity: 0.4; @include transform(scale(1));}
 }
 
 .customMarker:hover {
@@ -1496,19 +1496,19 @@ button{
     top:-25px;
     @include shadow(0 1px 4px rgba(0,0,0,0.4));
     background-color: #fff;
-    font-size:125%;
-    padding:0 30px 0 8px;
-    height:30px;
-    line-height:30px;
+    font-size:100%;
+    padding:0 20px 0 8px;
+    height:24px;
+    line-height:24px;
     @include border-radius(2px);
     z-index: 2;
     .vnw-close{
         width: 14px;
         height: 14px;
-        top:8px;
-        font-size: 120%;
+        top:4px;
+        font-size: 150%;
         color:#ccc;
-        right:8px;
+        right:5px;
         position: absolute;
         line-height: 14px;
         text-align: center;
@@ -1523,11 +1523,11 @@ button{
     display: block;
     float: left;
     position: absolute;
-    left:-5px;
-    top:10px;
+    left:-4px;
+    top:8px;
     background: #fff;
-    width:10px;
-    height: 10px;
+    width:8px;
+    height: 8px;
     @include shadow(-2px 2px 3px rgba(0,0,0,0.5));
     @include transform(rotate(45deg));
 }
