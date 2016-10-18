@@ -140,6 +140,7 @@
             vm.vehiclesByPath = resp;
             for (var idx in resp) {
                 vm.subscribe(resp[idx].assetpath, true);
+                vm.vehiclesByNumber[resp[idx].name] = resp[idx];
             }
         };
 

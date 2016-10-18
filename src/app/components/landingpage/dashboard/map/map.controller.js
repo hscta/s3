@@ -6,7 +6,7 @@
         .controller('ImmobalizeController', ImmobalizeController);
 
     function MapController($scope, $log, mapService,
-                           $interval, geofenceViewService, $timeout, customMapOverlay,
+                           $interval, geofenceViewService, $timeout, customMapOverlay,uiGmapIsReady,
                            historyService, dialogService, vehicleService) {
         $log.log('MapController');
         var vm = this;
@@ -176,10 +176,11 @@
         vm.updateMarker2 = function (vehicleData) {
             //$log.log('updateMarker2');
             vm.inMarkers.push(vehicleData);
+            vm.customOverlay(vehicleData);
         };
 
         vm.updateMarker = function (vehicleData) {
-            if (vm.inCustomMaker[vehicleData.vehiclepath]) {
+            if (vehicleData.vehiclepath in vm.inCustomMaker) {
                 vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
             }
 
@@ -206,19 +207,19 @@
             //$log.log("applying filter to marker");
             if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                 marker.options.visible = false;
-                if (vm.inCustomMaker[marker.vehiclepath]) {
+                if (marker.vehiclepath in vm.inCustomMaker) {
                     vm.inCustomMaker[marker.vehiclepath].hide();
                 }
             } else {
-                marker.options.visible = true;
-                if (vm.inCustomMaker[marker.vehiclepath]) {
+                 marker.options.visible = true;
+                if (marker.vehiclepath in vm.inCustomMaker) {
                     vm.inCustomMaker[marker.vehiclepath].show();
                 }
             }
 
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
-            if (vm.inCustomMaker[marker.vehiclepath]) {
-                if (vm.checkRoaded(marker) && marker.options.visible) {
+            if (marker.vehiclepath in vm.inCustomMaker) {
+                if (marker.options.visible) {
                     vm.inCustomMaker[marker.vehiclepath].show();
                 } else {
                     vm.inCustomMaker[marker.vehiclepath].hide();
@@ -620,28 +621,30 @@
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
         };
 
-        // Google Map Custom HTML Marker
+        // Google Map Custom HTML Marker ================================================================================================================
 
-        var firstLoad = true;
-        var inGmap;
         vm.inCustomMaker = {};
 
-        vm.customOverlay = function (marker) {
-            if (!vm.inCustomMaker[marker.vehiclepath]) {
-                if (firstLoad) {
-                    $timeout(function () {
-                        inGmap = vm.inMap.mapControl.getGMap();
-                        vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, inGmap, {marker: marker});
-                        firstLoad = false;
-                    }, 2000);
-                } else {
-                    vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, inGmap, {marker: marker});
-                }
+        mapService.highlightMarker = function (vehiclePath) {
+            vm.highlightMarker(vehiclePath);
+        };
+
+        vm.highlightMarker = function (vehiclePath) {
+            if(vehiclePath in vm.inCustomMaker){
+                vm.inCustomMaker[vehiclePath].highlightMe();
+            }else {
+                console.log('[MAP CONTROLLER] no marker found!');
             }
         };
 
-        vm.showVehicleNumber = false;
+        vm.customOverlay = function (marker) {
+            if (!(marker.vehiclepath in vm.inCustomMaker)) {
+                vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, vm.inMap.mapControl.getGMap(), {marker: marker});
+            }
+        };
 
+
+        vm.showVehicleNumber = false;
         vm.showVehicleNumber = function (vn) {
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {

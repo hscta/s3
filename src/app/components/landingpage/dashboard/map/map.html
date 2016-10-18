@@ -221,7 +221,7 @@
                     </tbody>
                 </table>
             </ui-gmap-window>
-            <div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>
+            <!--<div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>-->
 
             <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
                             center="gcircle.center" radius="gcircle.radius"

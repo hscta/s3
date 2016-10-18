@@ -140,6 +140,7 @@
                     for (var idx in data.activeFences) {
                         var activeFence = data.activeFences[idx];
                         var activeinfo = activeFence['activeinfo'];
+                        console.log(activeinfo);
                         //$log.log(activeinfo);
                         for(var eachitem in activeinfo) {
                             var fenceObj = activeinfo[eachitem];
@@ -162,6 +163,8 @@
                                     fenceObj.triggerType = false;
                                 }
                                 fenceObj.vehicleno = vehicleno;
+                                // fenceObj.vehiclepath = reportData[reportName][fenceName];
+                                // console.log(reportData[reportName][fenceName]);
                                 //$log.log("Adding " + vehicleno + " to " + reportName);
                                 reportData[reportName][fenceName][vehicleno] = fenceObj;
                             }

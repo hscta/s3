@@ -38,7 +38,7 @@
                         <!--first wrapper-->
                         <div class="en_main" ng-if="mainKey != 'active' && vm.navFilter(main)"
                              ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.activeTabData " ng-init="main.active = true">
-                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,main.id)" style="background:#4FC3F7 !important;">
+                            <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,1)" style="background:#4FC3F7 !important;">
                                 {{mainKey}}
                                 <div class="enl_item enl_add">
                                     <i class="fa fa-plus" ng-if="!main.active"></i>
@@ -50,7 +50,7 @@
                             <div class="en-wrapper">
                                 <div class="en_mid"  ng-repeat="(midKey, mid) in main " ng-if="midKey != 'active' && vm.navFilter(mid)"  ng-init="mid.active = true"
                                      ng-class="{'en-closed':!main.active}" style="height:{{vm.returnHeight(mid);}}">
-                                    <div class="en_label"  ng-click="vm.itemClicked(mid,main.id,mid.id)" style="background:#B3E5FC!important; "  >
+                                    <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important; "  >
                                         {{midKey}}
                                         <div class="enl_item enl_add">
                                             <i class="fa fa-plus" ng-if="!mid.active"></i>
@@ -63,7 +63,7 @@
                                         <div class="en_last" ng-repeat="(carKey, car) in mid" ng-if="carKey != 'active' && vm.navFilter(car)"
                                              ng-class="{'active':car.active && mid.active,'en-closed':!mid.active, 'noExit':car.stillActive}">
                                             <div class="en_head"
-                                                 ng-click="vm.itemClicked(car,main.id,mid.id,$index); " ng-class="{'resolvedHeader':car.resolved}">
+                                                 ng-click="vm.itemClicked(car,3); " ng-class="{'resolvedHeader':car.resolved}">
                                                 {{carKey}}
                                                 <!--<div class="enl_item enl_add">-->
                                                     <!--<i class="fa fa-plus" ng-if="!car.active"></i>-->

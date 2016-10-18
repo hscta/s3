@@ -4,42 +4,71 @@
     angular.module('uiplatform')
         .service('customMapOverlay', customMapOverlay);
 
-    function customMapOverlay($log) {
+
+    function customMapOverlay($log,$timeout) {
         var vm = this;
+
+        vm.markerHeight = 12;
+        vm.markerWidth = 12;
 
         var innerHtml;
 
         vm.CustomMarker = function(lat, lng, map, args) {
-            this.latlng = new google.maps.LatLng(lat,lng);
-            this.args = args;
-            this.setMap(map);
+            var self = this;
+            self.latlng = new google.maps.LatLng(lat,lng);
+            self.args = args;
+            self.setMap(map);
 
-            this.setPosition = function(obj){
-                this.latlng = new google.maps.LatLng(obj.latitude,obj.longitude);
-                this.point = this.getProjection().fromLatLngToDivPixel(this.latlng);
-                if (this.point) {
-                    this.div.style.left = (this.point.x - 10) + 'px';
-                    this.div.style.top = (this.point.y - 20) + 'px';
+            self.dropAnimation = false;
+
+
+            self.hide = function () {
+                if(self.div){
+                    self.div.style.display = 'none';
+                }
+            };
+            self.show = function () {
+                if(self.div){
+                    self.div.style.display = 'block';
                 }
             };
 
-            this.hide = function () {
-                this.div.style.display = 'none';
+            self.hideVehicleNumber = function () {
+                self.vehicleNumberWindow.style.display = 'none';
             };
-            this.show = function () {
-                this.div.style.display = 'block';
-            };
-
-            this.hideVehicleNumber = function () {
-                this.vehicleNumberWindow.style.display = 'none';
-            };
-            this.showVehicleNumber = function () {
-                this.vehicleNumberWindow.style.display = 'block';
+            self.showVehicleNumber = function () {
+                self.vehicleNumberWindow.style.display = 'block';
             }
         };
 
         vm.CustomMarker.prototype = new google.maps.OverlayView();
 
+
+
+        vm.CustomMarker.prototype.setPosition = function(obj){
+            var self = this;
+            self.latlng = new google.maps.LatLng(obj.latitude,obj.longitude);
+            if(self.getProjection()){
+                self.point = self.getProjection().fromLatLngToDivPixel(self.latlng);
+                if (self.point && self.div) {
+                    self.div.style.left = (self.point.x - (vm.markerWidth/2)) + 'px';
+                    self.div.style.top = (self.point.y - (vm.markerHeight/2)) + 'px';
+                }
+            }
+        };
+
+        vm.CustomMarker.prototype.highlightMe = function() {
+            var self = this;
+            if(self.notifier){
+                if(!self.dropAnimation){
+                    self.notifier.className = 'overlayNotifier animate';
+                    self.dropAnimation = true;
+                }else{
+                    self.notifier.className = 'overlayNotifier';
+                    self.dropAnimation = false;
+                }
+            }
+        };
         vm.CustomMarker.prototype.draw = function() {
 
             var self = this;
@@ -48,10 +77,11 @@
                 // initializing DOM Elemets
                 self.div = document.createElement('div');
                 self.vehicleNumberWindow = document.createElement('div');
-
+                self.notifier = document.createElement('span');
                 // Setting propeties
                 self.div.className = 'customMarker';
                 self.div.style.position = 'absolute';
+                self.div.style.display = 'none';
                 self.div.style.cursor = 'pointer';
 
                 self.vehicleNumberWindow.className = 'vehicleNumberWindow';
@@ -59,7 +89,12 @@
                 self.vehicleNumberWindow.innerHTML = innerHtml;
                 self.vehicleNumberWindow.style.display = 'none';
 
+
+                self.notifier.className = 'overlayNotifier';
+
+                // Appending Elements
                 self.div.appendChild(self.vehicleNumberWindow);
+                self.div.appendChild(self.notifier);
 
                 //
                 // if (typeof(self.args.marker_id) !== 'undefined') {
@@ -69,16 +104,15 @@
                 google.maps.event.addDomListener(self.div.querySelector('.vnw-close'), "click", function(event) {
                     self.hideVehicleNumber();
                 });
-
                 var panes = this.getPanes();
                 panes.overlayImage.appendChild(self.div);
             }
 
-            this.point = this.getProjection().fromLatLngToDivPixel(this.latlng);
 
+            this.point = this.getProjection().fromLatLngToDivPixel(this.latlng);
             if (this.point) {
-                self.div.style.left = (this.point.x - 6) + 'px';
-                self.div.style.top = (this.point.y - 6) + 'px';
+                self.div.style.left = (this.point.x - (vm.markerWidth/2)) + 'px';
+                self.div.style.top = (this.point.y - (vm.markerHeight/2)) + 'px';
             }
         };
 
@@ -92,5 +126,7 @@
         vm.CustomMarker.prototype.getPosition = function() {
             return this.latlng;
         };
+        // console.log(new vm.CustomMarker());
+
     }
 })();
