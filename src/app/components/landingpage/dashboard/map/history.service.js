@@ -76,7 +76,7 @@
             vm.historyMapObj.endMarker = {
                 options:{},
                 events:{}
-            }
+            };
             vm.setData('getHistory', false);
         };
 
