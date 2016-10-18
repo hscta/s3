@@ -208,7 +208,9 @@
                 }
 
 
-                if ( eachidx == 'meta' ){
+
+                if ( marker[eachidx].constructor == Object ){
+                     // $log.log(marker[eachidx]);
                     for ( var myMeta in marker[eachidx]){
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
