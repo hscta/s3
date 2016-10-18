@@ -119,7 +119,6 @@
                 vm.infoWindowShow();
             }
         };
->>>>>>> e8d532efe606d752e5acfaf2a242865ac531f682
         vm.mapEvents = vm.inMap.mapEvents;
 
         vm.onRoaded = true;
@@ -339,12 +338,8 @@
             cityLimits: false,
             carBattery: false,
             devBattery: false,
-<<<<<<< HEAD
-            noComm: false
-=======
             noComm: false,
-            showVehicleNo: false,
->>>>>>> e8d532efe606d752e5acfaf2a242865ac531f682
+            showVehicleNo: false
         };
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
