@@ -9,7 +9,7 @@
         .controller('GeofenceReportController', GeofenceReportController);
 
     function GeofenceReportController($log, $q, dialogService, geofenceReportService, $filter, $timeout,
-                                      intellicarAPI, historyService) {
+                                      intellicarAPI, historyService, mapService, $state) {
 
         $log.log("GeofenceReportController");
 
@@ -114,6 +114,29 @@
             google.visualization.events.addListener(table, 'select', function(evt) {
                 $log.log(table.getSelection());
                 $log.log(data.getValue(table.getSelection()[0].row, 0));
+
+                var selectedVehicle = data.getValue(table.getSelection()[0].row, 0);
+
+                if ( selectedVehicle ){
+                    var vehicleDetail = $filter("filter")(mapService.inMap.markers.inMarkers, selectedVehicle);
+
+                    var dateFormat = 'YYYY-MM-DD HH:mm';
+                    var startTime = moment(data.getValue(table.getSelection()[0].row, 2)).
+                        subtract(1, 'hour').format(dateFormat);
+
+                    var endTime = moment(data.getValue(table.getSelection()[0].row, 3)).
+                        add(1, 'hour').format(dateFormat);
+
+                    historyService.historyMapObj.startTime = startTime;
+                    historyService.historyMapObj.endTime = endTime;
+
+                    var params = {
+                      clickedMarker :  vehicleDetail[0]
+                    };
+
+                    $state.go('home.history',{"mapObj":params});
+
+                }
             });
         }
 

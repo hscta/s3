@@ -33,6 +33,11 @@
                 zoom:'',
                 center:''
             },
+            historyMapEvents : {
+                click: function () {
+                    vm.historyMapClickEvent();
+                },
+            },
             trace:{
                 path: [],
                 stroke: {color: "blue", weight: 2, opacity: 1},
@@ -68,7 +73,38 @@
                 clickedMarker:{},
                 inMarkers:[]
             },
-            getHistory :false
+            getHistory :false,
+            historyFenceObj : {
+                latitude : '',
+                longitude:'',
+                name: '',
+                other: ''
+            },
+            historyFenceInfoWindow : {
+                show: false,
+                control: {},
+                options: {
+                    maxWidth: 300,
+                    disableAutoPan: false,
+                    pixelOffset: {
+                        width: 0,
+                        height: 0
+                    }
+                }
+            },
+            historyCircleEvents : {
+                click: function (circle, eventName, model, args) {
+                    vm.historyCircleEvents (model, vm.historyMapObj.historyFenceObj);
+                    vm.historyFenceInfoWindowShow();
+                }
+            },
+            historyPolygonEvents : {
+                click: function (polygon, eventName, model, args) {
+                    $log.log('pppppppppppppppppp', model);
+                    vm.polygonEvents(model, vm.historyMapObj.historyFenceObj);
+                    vm.historyFenceInfoWindowShow();
+                }
+            },
         };
 
         vm.resetHistoryData = function(){
@@ -101,13 +137,47 @@
             myHistoryData:[],
             reports:[],
             fenceFilter:''
+        };
 
+        vm.historyCircleEvents = function(model, dest){
+            $log.log('clickedhistorycircle', model);
+            dest.latitude =  model.center.latitude;
+            dest.longitude =  model.center.longitude;
+            dest.name =  model.control.info.tagdata.company;
+            dest.other =  model.control.info.tagdata.olafilter;
+        };
+
+        vm.polygonEvents = function(model, dest){
+            var polygonCenter = vm.getPolygonMidPoint(model.control.info.info[0].settingsdata.vertex);
+            $log.log(model.control.info.info[0].settingsdata.vertex);
+            $log.log(polygonCenter);
+            dest.latitude =  polygonCenter.lat();
+            dest.longitude =  polygonCenter.lng();
+            dest.name =  model.control.info.name;
+            dest.other =  model.control.info.tagdata.olafilter;
+        };
+
+        vm.getPolygonMidPoint = function (polygon) {
+            var bound = new google.maps.LatLngBounds();
+            for (var idx in polygon) {
+                bound.extend(new google.maps.LatLng(polygon[idx].lat, polygon[idx].lng));
+            }
+            return bound.getCenter();
+        };
+
+
+        vm.historyFenceInfoWindowShow = function () {
+            vm.historyMapObj.historyFenceInfoWindow.show = true;
+        };
+
+        vm.historyFenceInfoWindowClose = function () {
+            vm.historyMapObj.historyFenceInfoWindow.show = false;
         };
 
         vm.resetPlayerControls = function(){
             vm.playerControls.slider = 0;
             vm.playerControls.animationCount = 0;
-           // vm.playerControls.ffRate = 1;
+            // vm.playerControls.ffRate = 1;
         };
 
         vm.getDefaultTime = function(){
@@ -122,6 +192,9 @@
             }
         };
 
+        vm.historyMapClickEvent = function(){
+            vm.historyFenceInfoWindowClose();
+        };
         vm.init = function(){
 
             var defaultTime = vm.getDefaultTime ();

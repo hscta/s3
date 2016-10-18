@@ -23,25 +23,30 @@
         $scope.slider = historyService.playerControls.slider;
         var animationCount = historyService.playerControls.animationCount;
 
-
+$log.log(animationCount, $scope.slider);
         $scope.setSliderTime = function () {
-            if (marker && !marker.trace.path.length)
+            if (!(marker && marker.trace.path.length))
                 return;
 
             $scope.initialSliderTime = 0;
             $scope.finalSliderTime = (marker.trace.path[marker.trace.path.length - 1].gpstime -
                 marker.trace.path[0].gpstime ) / 1000;
+
+            $log.log($scope.initialSliderTime, $scope.finalSliderTime);
+
         };
 
 
-        if ( $scope.slider > 0 && animationCount > 0 ) {
+        //if ( $scope.slider > 0 && animationCount > 0 ) {
             $scope.setSliderTime();
 
             var initialPoint = marker.trace.path[animationCount];
-            $scope.tracePointGpsTime = initialPoint.gpstime;
-            $scope.tracePointOdometer = initialPoint.odometer;
-            $scope.tracePointSpeed = initialPoint.speed;
-        }
+            if (initialPoint){
+                $scope.tracePointGpsTime = initialPoint.gpstime;
+                $scope.tracePointOdometer = initialPoint.odometer;
+                $scope.tracePointSpeed = initialPoint.speed;
+            }
+       // }
 
         $log.log($scope.slider);
         $scope.play = true;
@@ -179,6 +184,7 @@
             //$scope.slider = 0;
             if (marker && marker.trace.path.length > 0 && animationCount) {
                 animationCount=0;
+                $scope.slider = 0;
                 marker.latitude = marker.trace.path[animationCount].latitude;
                 marker.longitude = marker.trace.path[animationCount].longitude;
             }
@@ -188,7 +194,6 @@
             $interval.cancel($scope.animateMarker);
             $scope.play = true;
         };
-
 
         $scope.$on('$destroy', function () {
             historyService.playerControls.slider = $scope.slider;

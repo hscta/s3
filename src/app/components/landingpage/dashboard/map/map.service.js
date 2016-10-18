@@ -64,13 +64,16 @@
                 circleEvents : {
                     click: function (circle, eventName, model, args) {
                         //$log.log('Circle clicked');
-                        vm.circleEvents(model);
+                        vm.circleEvents(model, vm.inMap.selectedFenceObj);
+                        vm.fenceInfoWindowShow();
                     }
                 },
 
                 polygonEvents : {
                     click: function (polygon, eventName, model, args) {
-                        vm.polygonEvents(model);
+                        vm.polygonEvents(model, vm.inMap.selectedFenceObj);
+                        vm.fenceInfoWindowShow();
+
                     }
                 },
 
@@ -82,7 +85,6 @@
                 }
             };
 
-
             vm.getPolygonMidPoint = function (polygon) {
                 var bound = new google.maps.LatLngBounds();
                 for (var idx in polygon) {
@@ -91,21 +93,19 @@
                 return bound.getCenter();
             };
 
-            vm.polygonEvents = function(model){
+            vm.polygonEvents = function(model, dest){
                 var polygonCenter = vm.getPolygonMidPoint(model.path);
-                vm.inMap.selectedFenceObj.latitude =  polygonCenter.lat();
-                vm.inMap.selectedFenceObj.longitude =  polygonCenter.lng();
-                vm.inMap.selectedFenceObj.name =  model.control.info.name;
-                vm.inMap.selectedFenceObj.other =  model.control.info.tagdata;
-                vm.fenceInfoWindowShow();
+                dest.latitude =  polygonCenter.lat();
+                dest.longitude =  polygonCenter.lng();
+                dest.name =  model.control.info.name;
+                dest.other =  model.control.info.tagdata;
             };
 
-            vm.circleEvents = function(model){
-                vm.inMap.selectedFenceObj.latitude =  model.center.latitude;
-                vm.inMap.selectedFenceObj.longitude =  model.center.longitude;
-                vm.inMap.selectedFenceObj.name =  model.control.info.name;
-                vm.inMap.selectedFenceObj.other =  model.control.info.tagdata;
-                vm.fenceInfoWindowShow();
+            vm.circleEvents = function(model, dest){
+                dest.latitude =  model.center.latitude;
+                dest.longitude =  model.center.longitude;
+                dest.name =  model.control.info.name;
+                dest.other =  model.control.info.tagdata;
             };
 
 
@@ -128,7 +128,6 @@
                 vm.inMap.fenceInfoWindow.show = true;
             };
 
-
             vm.setClickedMarker = function(model) {
                 vm.inMap.markers.clickedMarkerObj.clickedMarker = model;
                 vm.inMap.markers.clickedMarkerObj.mobilize = vm.mobilize;
@@ -138,15 +137,14 @@
                 vm.infoWindowShow();
             };
 
-
             vm.showHistory = function () {
                 //$log.log(vm.clickedMarker);
                 // vm.selectedTab = 0;
                 // historyService.setData('selectedTab', vm.selectedTab);
                 dialogService.show('home.history', {
                     clickedMarker: vm.inMap.markers.clickedMarkerObj.clickedMarker,
-                    mainMarkers: vm.inMap.markers.inMarkers
                 });
+
                 // dialogService.show('home.history');
             };
 

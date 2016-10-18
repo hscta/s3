@@ -16,45 +16,8 @@
         var vm = this;
         dialogService.setTab(0);
 
-        var params;
-        if ( $state.params.mapObj){
-            params = $state.params.mapObj;
-            historyService.resetHistoryData();
-            historyService.historyMapObj.dashboardMapObj.clickedMarker = $state.params.mapObj.clickedMarker;
-            historyService.historyMapObj.dashboardMapObj.inMarkers = $state.params.mapObj.mainMarkers;
-        }else{
-
-        }
         vm.historyObj = historyService.historyMapObj;
-
-        $log.log(vm.historyObj);
-        $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
-        $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
-
-        var selectedVehicle = dialogService.getData('selectedVehicle');
-        vm.multiSelect = vm.historyObj.multiSelect;
-        vm.circles = vm.historyObj.circles;
-        vm.polygons = vm.historyObj.polygons;
-
-        $scope.cancel = function () {
-            $mdDialog.cancel();
-        };
-
-        $scope.resizeMap = function () {
-            google.maps.event.trigger(vm.historyObj.historyMap.mapControl.getGMap(), 'resize');
-            return true;
-        };
-
-        var MILLISEC = 1000;
-        // var hrs6 = 21600 * MILLISEC;
-        // var hrs3 = 10800 * MILLISEC;
-        // var hrs8 = 28800 * MILLISEC;
-        // var hrs12 = 43200 * MILLISEC;
-        var hrs24 = 86400 * MILLISEC;
-        // var hrs48 = hrs24 * 2;
-        var week = hrs24 * 7;
-        var timeLimit = week;
-
+        var params;
 
         $scope.getHistory = function () {
             // vm.historyObj.getHistory = false;
@@ -111,10 +74,43 @@
         //     }
         // }
 
+        if ( $state.params.mapObj){
+            params = $state.params.mapObj;
+            historyService.resetHistoryData();
+            historyService.historyMapObj.dashboardMapObj.clickedMarker = $state.params.mapObj.clickedMarker;
+            // historyService.historyMapObj.dashboardMapObj.inMarkers = $state.params.mapObj.mainMarkers;
 
+        }else{
 
+        }
 
+        $log.log(vm.historyObj);
+        $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
+        $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
 
+        var selectedVehicle = dialogService.getData('selectedVehicle');
+        vm.multiSelect = vm.historyObj.multiSelect;
+        vm.circles = vm.historyObj.circles;
+        vm.polygons = vm.historyObj.polygons;
+
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+
+        $scope.resizeMap = function () {
+            google.maps.event.trigger(vm.historyObj.historyMap.mapControl.getGMap(), 'resize');
+            return true;
+        };
+
+        var MILLISEC = 1000;
+        // var hrs6 = 21600 * MILLISEC;
+        // var hrs3 = 10800 * MILLISEC;
+        // var hrs8 = 28800 * MILLISEC;
+        // var hrs12 = 43200 * MILLISEC;
+        var hrs24 = 86400 * MILLISEC;
+        // var hrs48 = hrs24 * 2;
+        var week = hrs24 * 7;
+        var timeLimit = week;
 
         $scope.drawTrace = function (resp) {
             //$log.log(resp);
@@ -237,6 +233,8 @@
             vm.historyObj.dashboardMapObj.clickedMarker.trace = vm.historyObj.trace;
             vm.getMyFencesListener();
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+
+            // $scope.getHistory();
         };
 
 

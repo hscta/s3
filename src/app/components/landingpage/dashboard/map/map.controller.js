@@ -534,6 +534,73 @@
             vm.showVehicleNumber(vn);
         };
 
+        // $scope.historyFenceInfoWindow = {
+        //     show: true,
+        //     control: {},
+        //     options: {
+        //         maxWidth: 300,
+        //         disableAutoPan: false,
+        //         pixelOffset: {
+        //             width: 0,
+        //             height: 0
+        //         }
+        //     }
+        // };
+        //
+        // $scope.historyPolygonEvents = {
+        //     click: function (polygon, eventName, model, args) {
+        //         //$log.log('polygon clicked');
+        //
+        //         var polygonCenter = vm.getPolygonMidPoint(model.path);
+        //
+        //         $scope.fenceObj = {
+        //             'latitude': polygonCenter.lat(),
+        //             'longitude': polygonCenter.lng()
+        //         };
+        //
+        //         $scope.fenceDetails = {
+        //             name: model.control.info.name,
+        //             other: model.control.info.tagdata
+        //         };
+        //
+        //         vm.historyFenceInfoWindowShow();
+        //     }
+        // };
+        //
+        // $scope.historyCircleEvents = {
+        //     click: function (circle, eventName, model, args) {
+        //         //$log.log('history Circle clicked');
+        //
+        //         $scope.fenceObj = {
+        //             'latitude': model.center.latitude,
+        //             'longitude': model.center.longitude
+        //         };
+        //
+        //         $scope.fenceDetails = {
+        //             name: model.control.info.name,
+        //             other: model.control.info.tagdata
+        //         };
+        //
+        //         vm.historyFenceInfoWindowShow();
+        //     }
+        // };
+        //
+        // vm.historyFenceInfoWindowClose = function () {
+        //     //vm.infoWindow.control.hideWindow();
+        //     $scope.historyFenceInfoWindow.show = false;
+        // };
+        //
+        // vm.historyFenceInfoWindowShow = function () {
+        //     $scope.historyFenceInfoWindow.show = true;
+        // };
+        //
+        // vm.getPolygonMidPoint = function (polygon) {
+        //     var bound = new google.maps.LatLngBounds();
+        //     for (var idx in polygon) {
+        //         bound.extend(new google.maps.LatLng(polygon[idx].latitude, polygon[idx].longitude));
+        //     }
+        //     return bound.getCenter();
+        // };
 
         vm.init = function () {
             vm.loadMap();

@@ -239,7 +239,7 @@
                                 visible="gcircle.visible" geodesic="gcircle.geodesic"
                                 editable="gcircle.editable" draggable="gcircle.draggable"
                                 clickable="gcircle.clickable" control="gcircle.control"
-                                events="historyCircleEvents">
+                                events="vm.historyObj.historyCircleEvents">
                 </ui-gmap-circle>
 
                 <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
@@ -248,32 +248,32 @@
                                  visible="gpolygon.visible" geodesic="gpolygon.geodesic"
                                  editable="gpolygon.editable" draggable="gpolygon.draggable"
                                  clickable="gpolygon.clickable" control="gpolygon.control"
-                                 events="historyPolygonEvents" static="true">
+                                 events="vm.historyObj.historyPolygonEvents" static="true">
 
                 </ui-gmap-polygon>
 
-                <ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"
-                                control="historyInfoWindow.control"
-                                options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"
-                                templateUrl="'historyInfoWindow.html'"
-                                templateParameter="historyInfoWindow"
-                                isIconVisibleOnClick="true">
-                </ui-gmap-window>
+                <!--<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"-->
+                                <!--control="historyInfoWindow.control"-->
+                                <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->
+                                <!--templateUrl="'historyInfoWindow.html'"-->
+                                <!--templateParameter="historyInfoWindow"-->
+                                <!--isIconVisibleOnClick="true">-->
+                <!--</ui-gmap-window>-->
 
-                <ui-gmap-window show="historyFenceInfoWindow.show" coords="fenceObj"
+                <ui-gmap-window show="vm.historyObj.historyFenceInfoWindow.show" coords="vm.historyObj.historyFenceObj"
                                 control="historyFenceInfoWindow.control" optimized="false"
-                                options="historyFenceInfoWindow.options" closeClick="historyFenceInfoWindowClose()"
+                                options="historyFenceInfoWindow.options"
                                 isIconVisibleOnClick="true">
 
                     <table>
                         <tbody>
                         <tr>
                             <th>Name: </th>
-                            <td>{{fenceDetails.name}}</td>
+                            <td>{{vm.historyObj.historyFenceObj.name}}</td>
                         </tr>
                         <tr>
                             <th>Type:   </th>
-                            <td>{{fenceDetails.other.olafilter}}</td>
+                            <td>{{vm.historyObj.historyFenceObj.other}}</td>
                         </tr>
                         </tbody>
                     </table>
