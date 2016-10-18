@@ -487,7 +487,7 @@
             // return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
             return false;
         }
-        
+
         vm.addListener = function () {
             vehicleService.addListener('rtgps2', vm.updateMarker2);
             mapService.addListener('rtgps', vm.updateMarker);
@@ -516,9 +516,6 @@
                 vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, vm.inMap.mapControl.getGMap(), {marker: marker});
             }
         };
-
-
-        vm.showVehicleNumber = false;
         vm.showVehicleNumber = function (vn) {
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {

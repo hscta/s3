@@ -1502,6 +1502,12 @@ button{
     line-height:24px;
     @include border-radius(2px);
     z-index: 2;
+    input{
+        width: 75px;
+        height: 24px;
+        margin: 0;
+        font-size:100%;
+    }
     .vnw-close{
         width: 14px;
         height: 14px;

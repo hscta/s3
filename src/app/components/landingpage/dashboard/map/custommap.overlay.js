@@ -17,6 +17,7 @@
             var self = this;
             self.latlng = new google.maps.LatLng(lat,lng);
             self.args = args;
+            self.map = map;
             self.setMap(map);
 
             self.dropAnimation = false;
@@ -85,7 +86,7 @@
                 self.div.style.cursor = 'pointer';
 
                 self.vehicleNumberWindow.className = 'vehicleNumberWindow';
-                innerHtml = '<div>'+self.args.marker.vehicleno+'</div> <div class="vnw-close">x</div>';
+                innerHtml = '<input type="text" value="'+self.args.marker.vehicleno+'" readonly/> <div class="vnw-close">x</div>';
                 self.vehicleNumberWindow.innerHTML = innerHtml;
                 self.vehicleNumberWindow.style.display = 'none';
 
@@ -103,6 +104,11 @@
 
                 google.maps.event.addDomListener(self.div.querySelector('.vnw-close'), "click", function(event) {
                     self.hideVehicleNumber();
+                });
+
+                google.maps.event.addDomListener(self.div.querySelector('input'), "click", function(e) {
+                    this.select();
+                    console.log('clicked!');
                 });
                 var panes = this.getPanes();
                 panes.overlayImage.appendChild(self.div);
