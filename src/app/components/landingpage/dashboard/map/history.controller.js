@@ -95,6 +95,25 @@
                 return;
             }
         };
+        //
+        // function processGraphdata(obj) {
+        //     // Loop through objects
+        //     var ob_length = Object.keys(obj).length;
+        //     var graphData = {};
+        //
+        //     graphData.ignition = scrapData(obj,'ignition');
+        // };
+        //
+        // function scrapData(obj) {
+        //     var tempArray = [];
+        //     for(idx in obj){
+        //
+        //     }
+        // }
+
+
+
+
 
 
         $scope.drawTrace = function (resp) {
@@ -104,6 +123,7 @@
             var path = vm.historyObj.trace.path;
             vm.historyObj.trace.path = [];
 
+            console.log(traceData);
 
             for (var idx in traceData) {
                 var position = traceData[idx];
