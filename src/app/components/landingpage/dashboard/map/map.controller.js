@@ -306,6 +306,7 @@
             carBattery: false,
             devBattery: false,
             noComm: false,
+            showVehicleNo: false,
         };
 
         geofenceViewService.setData('geoFilters', vm.geoFilters);
@@ -393,6 +394,8 @@
                         marker.options.animation = null;
                     }
                 }
+            } else if(filterData.filterType == 'showVehicleNo'){
+                // Do something to notify showVehicleNo filter is On
             } else {
                 if (vm.inMap.circles) {
                     //$log.log(vm.inMap.circles);
