@@ -48,7 +48,7 @@
 
         vm.readFenceInfo = function (fenceList) {
             vm.endTime = new Date().getTime();
-            $log.log("fence query time = " + (vm.endTime - vm.startTime));
+            // $log.log("fence query time = " + (vm.endTime - vm.startTime));
             //$log.log(fenceList);
             for (var idx in fenceList) {
                 var fence = fenceList[idx];

@@ -50,8 +50,6 @@
 
         vm.inMap = mapService.getMainMap();
         vm.inMarkers = vm.inMap.markers.inMarkers;
-        vm.clickedMarkerObj = vm.inMap.markers.clickedMarkerObj;
-
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
         vm.doRebuildAll = false;
@@ -59,67 +57,6 @@
 
         vm.filterStr = '';
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team'];
-        vm.infoWindow = {
-            show: false,
-            control: {},
-            options: {
-                maxWidth: 300,
-                disableAutoPan: false,
-                pixelOffset: {
-                    width: 0,
-                    height: -20
-                }
-            }
-        };
-
-        vm.fenceInfoWindow = {
-            show: false,
-            control: {},
-            options: {
-                maxWidth: 300,
-                disableAutoPan: false,
-                pixelOffset: {
-                    width: 0,
-                    height: 0
-                }
-            }
-        };
-
-
-        vm.mapEvents = {
-            click: function () {
-                vm.infoWindowClose();
-                vm.fenceInfoWindowClose();
-            },
-            zoom_changed: function () {
-                vm.changeMarkerIcon();
-            }
-        };
-
-
-        vm.changeMarkerIcon = function () {
-            for (var idx = 0; idx < vm.inMarkers.length; idx++) {
-                // if(!mapService.setMarkerIcon(vm.inMarkers[idx]))
-                //     break;
-                mapService.setMarkerIcon(vm.inMarkers[idx]);
-            }
-        };
-
-
-        vm.markersEvents = {
-            click: function (marker, eventName, model, args) {
-                vm.clickedMarker = model;
-
-                vm.clickedMarkerObj = {
-                    clickedMarker: vm.clickedMarker,
-                    showHistory: vm.showHistory
-                };
-
-                $log.log(vm.clickedMarkerObj);
-                vm.infoWindowShow();
-            }
-        };
-        vm.mapEvents = vm.inMap.mapEvents;
 
         vm.onRoaded = true;
         vm.offRoaded = false;
@@ -238,9 +175,6 @@
 
         vm.matchesAnyMarkerData = function (marker, filterStr) {
             for (var eachidx in marker) {
-                //$log.log(eachidx);
-                // $log.log(marker);
-
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
@@ -254,14 +188,7 @@
                         // }
                         return true;
                     }
-
-                   // lowercaseMarkerStr = marker[eachidx].meta.toString().toLowerCase();
-                    if (lowercaseMarkerStr.includes(lowercasefilterStr)){
-
-                    }
                 }
-
-
 
                 if ( marker[eachidx].constructor == Object ){
                      // $log.log(marker[eachidx]);
@@ -269,17 +196,15 @@
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
 
-                        var lowercasefilterStr = filterStr.toString().toLowerCase();
-                        var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
-                        //$log.log(lowercaseMarkerStr);
+                        if(marker[eachidx][myMeta]) {
+                            var lowercasefilterStr = filterStr.toString().toLowerCase();
+                            // $log.log(marker[eachidx][myMeta]);
+                            var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
 
-                        if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                            // if ((!marker.ignitionstatus && marker.options.visible)) {
-                            //     $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
-                            // }
-                            return true;
+                            if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                                return true;
+                            }
                         }
-                        // $log.log(marker[eachidx]);
                     }
                 }
             }
