@@ -119,7 +119,7 @@
             var path = vm.historyObj.trace.path;
             vm.historyObj.trace.path = [];
 
-            console.log(traceData);
+            // console.log(traceData);
 
             for (var idx in traceData) {
                 var position = traceData[idx];
