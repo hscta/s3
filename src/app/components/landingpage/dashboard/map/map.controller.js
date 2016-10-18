@@ -56,7 +56,7 @@
         vm.modelsbyref = false;
 
         vm.filterStr = '';
-        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team'];
+        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
 
         vm.onRoaded = true;
         vm.offRoaded = false;
