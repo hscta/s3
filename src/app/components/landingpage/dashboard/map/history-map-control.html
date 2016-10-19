@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 
-<div class='control-panel' ng-show="gotHistory()" layout="row" flex="100">
+<div class='control-panel' ng-show="gotHistory()" layout="row" flex="100" >
 <!--<div class='control-panel'  layout="row" flex="100">-->
 
+    <div class="md-padding"></div>
     <div class="marker-details" flex>
         <span>Date : {{tracePointGpsTime | date : 'dd MMM yyyy - h:mm:ss a'}}</span><br/>
         <span>Odometer : {{tracePointOdometer}} km </span><br/>
@@ -50,6 +51,14 @@
     <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="moveOneStep('forward')">
         <md-icon class="icon-font" md-font-library="material-icons">add</md-icon>
     </md-button>
+    <div class="md-padding"></div>
 
     <br/><br/>
+
+
+    <div class="historGraphContainer">
+        <div class="dataLine" ng-repeat="data in sampleData" ng-if="data.ignition"
+             style="width:{{graphWRatio}}%; left:{{($index * graphWRatio)}}%">
+        </div>
+    </div>
 </div>

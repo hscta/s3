@@ -1537,3 +1537,69 @@ button{
     @include shadow(-2px 2px 3px rgba(0,0,0,0.5));
     @include transform(rotate(45deg));
 }
+
+.historyMap .gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom{
+    bottom:150px!important;
+}
+//.gmnoprint div[draggable="false"],
+div[draggable="false"] a[title="Report errors in the road map or imagery to Google"],
+div[draggable="false"] a[title="Click to see this area on Google Maps"],
+div[style="z-index: 1000001; position: absolute; right: 24px; bottom: 0px; width: 121px;"].gmnoprint,
+div[draggable="false"] div[style="background-color: rgb(245, 245, 245); width: auto; height: 100%; margin-left: 1px;"],
+div.gmnoprint div[draggable] div span,
+.gm-style a[target="_blank"]{
+    display: none!important;
+}
+
+
+
+.control-panel {
+    width:100%;
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(255,255,255,0.6);
+    @include shadow(0 -2px 1px rgba(0,0,0,0.2));
+}
+.icar-slider .md-sign{
+    display:none;
+}
+
+.marker-details {
+    background: rgba(163, 204, 255, 0.7);
+    position: absolute;
+    top: -55px;
+    left:30px;
+    font-size: 12px;
+}
+.lefttoolbar {
+    background: rgba(163, 204, 255, 0.7) !important;
+}
+
+
+.historGraphContainer{
+    width: auto;
+    height: 20px;
+    position: absolute;
+    left: 212px;
+    bottom: 0;
+    pointer-events: none;
+    right: 139px;
+    .dataLine{
+        height: 6px;
+        width: 1%;
+        position: absolute;
+        top:7px;
+        left: 0;
+        @include transition(0.1s);
+        background: rgb(2, 217, 69);
+    }
+    .dataLine:hover{
+        height: 10px;
+        cursor: pointer;
+        background: rgba(6, 209, 75, 1);
+    }
+}
+
+

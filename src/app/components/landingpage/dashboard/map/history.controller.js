@@ -58,21 +58,6 @@
                 return;
             }
         };
-        //
-        // function processGraphdata(obj) {
-        //     // Loop through objects
-        //     var ob_length = Object.keys(obj).length;
-        //     var graphData = {};
-        //
-        //     graphData.ignition = scrapData(obj,'ignition');
-        // };
-        //
-        // function scrapData(obj) {
-        //     var tempArray = [];
-        //     for(idx in obj){
-        //
-        //     }
-        // }
 
         if ( $state.params.mapObj){
             params = $state.params.mapObj;

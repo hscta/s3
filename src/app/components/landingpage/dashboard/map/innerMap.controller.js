@@ -9,7 +9,6 @@
 
     function InnerMapController($scope, $log, $mdToast, historyService, $interval) {
         $log.log('InnerMapController');
-
         var vm = this;
         var marker = historyService.historyMapObj.dashboardMapObj.clickedMarker;
 
@@ -265,6 +264,49 @@ $log.log(animationCount, $scope.slider);
                 map.panBy(panX, panY);
             }
         };
+
+
+        $scope.sampleData = {
+            1:{ignition:true},
+            2:{ignition:true},
+            3:{ignition:true},
+            4:{ignition:true},
+            5:{ignition:true},
+            6:{ignition:true},
+            7:{ignition:true},
+
+            8:{ignition:false},
+            9:{ignition:false},
+            10:{ignition:false},
+
+            11:{ignition:true},
+
+            12:{ignition:false},
+            13:{ignition:false},
+            14:{ignition:false},
+
+            15:{ignition:true},
+            16:{ignition:true},
+            17:{ignition:true},
+            18:{ignition:true},
+            19:{ignition:true},
+
+            20:{ignition:false},
+            21:{ignition:false},
+            22:{ignition:false},
+            23:{ignition:false},
+            24:{ignition:false},
+            25:{ignition:false},
+            26:{ignition:false},
+
+            27:{ignition:true},
+            28:{ignition:true},
+            29:{ignition:true},
+            30:{ignition:true},
+        };
+
+        $scope.graphWRatio = 100 / Object.keys($scope.sampleData).length;
+
     }
 
 })();

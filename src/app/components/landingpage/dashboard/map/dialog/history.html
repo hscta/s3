@@ -63,6 +63,7 @@
         position: absolute;
         left:0;
         bottom:0;
+        height: auto!important;
         top:72px;
         right:0;
         width:100%;
@@ -82,22 +83,6 @@
         font-size: 19px;
     }
 
-    .control-panel {
-        width:85%;
-    }
-    .icar-slider .md-sign{
-        display:none;
-    }
-
-    .marker-details {
-        background: rgba(163, 204, 255, 0.7);
-        position: absolute;
-        top: -50px;
-        font-size: 12px;
-    }
-    .lefttoolbar {
-        background: rgba(163, 204, 255, 0.7) !important;
-    }
 
 </style>
 
@@ -188,7 +173,7 @@
     </div>
 
     <md-dialog-content class="map-dialog-content">
-        <div class="md-dialog-content map-dialog history-dialog">
+        <div class="md-dialog-content historyMap map-dialog history-dialog">
             <ui-gmap-google-map center='vm.historyObj.historyMap.center'
                                 zoom='vm.historyObj.historyMap.zoom'
                                 options="vm.historyObj.historyMap.mapOptions"
