@@ -6,8 +6,7 @@
         .controller('ImmobalizeController', ImmobalizeController);
 
     function MapController($scope, $log, mapService,
-                           $interval, geofenceViewService, $timeout, customMapOverlay, uiGmapIsReady,
-                           historyService, dialogService, vehicleService) {
+                           $interval, geofenceViewService, $timeout, customMapOverlay, vehicleService) {
         $log.log('MapController');
         var vm = this;
 
@@ -531,7 +530,6 @@
 
         vm.init = function () {
             vm.loadMap();
-            // historyService.setData('inMarkers', vm.inMarkers);
             vm.addListener();
             geofenceViewService.getMyFences();
             $interval(vm.runStats, 3000);

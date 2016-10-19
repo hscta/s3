@@ -1,16 +1,15 @@
-
 (function () {
     'use strict';
 
     angular.module('uiplatform')
         .service('dialogService', dialogService);
 
-    function dialogService($log,$state,$cookies) {
+    function dialogService($log, $state, $cookies) {
         $log.log("dialogService");
         var vm = this;
         vm.dialogShow = false;
 
-        var dialogStates = ['home.geofence','home.history'];
+        var dialogStates = ['home.geofence', 'home.history'];
         // var testObject = {'myName':{'yo1':'yoyo'}};
         // $cookies.put('hell',JSON.stringify(testObject));
 
@@ -25,23 +24,19 @@
         };
 
 
-        vm.show = function(state,params){
+        vm.show = function (state, params) {
             // vm.setData(params,'historyData');
-            $state.go(state,{"mapObj":params});
+            $state.go(state, {"mapObj": params});
             fadeInDialog();
         };
 
-        // vm.show = function(state){
-        //     //vm.setData(params,'historyData');
-        //     $state.go(state);
-        //     fadeInDialog();
-        // };
 
-        vm.hide = function(){
+        vm.hide = function () {
             $state.go('home');
             vm.dialogShow = false;
             $('.int-dialog').fadeOut(300);
         };
+
 
         function fadeInDialog() {
             $('.int-dialog').fadeIn(300);
@@ -49,12 +44,12 @@
         };
 
 
-        vm.getTab = function(){
+        vm.getTab = function () {
             var selectedTab;
             // console.log($state.current.name);
-            if($state.current.name == 'home.history'){
+            if ($state.current.name == 'home.history') {
                 selectedTab = 0;
-            }else if($state.current.name == 'home.geofence'){
+            } else if ($state.current.name == 'home.geofence') {
                 selectedTab = 1;
             }
             return selectedTab;
@@ -69,19 +64,18 @@
         };
 
 
-
-        vm.setTab = function(state) {
+        vm.setTab = function (state) {
             vm.setTabListener(state);
         };
 
-        vm.addSetTabListener = function(listener) {
+        vm.addSetTabListener = function (listener) {
             vm.setTabListener = listener;
         };
 
         vm.init = function () {
 
-            for(var i=0; i < dialogStates.length; i++){
-                if($state.current.name == dialogStates[i]) {
+            for (var i = 0; i < dialogStates.length; i++) {
+                if ($state.current.name == dialogStates[i]) {
                     fadeInDialog();
                 }
             }

@@ -2,7 +2,7 @@
  * Created by harshas on 13/10/16.
  */
 
-(function(){
+(function () {
     angular
         .module('uiplatform')
         .controller('HistoryController', HistoryController);
@@ -17,7 +17,7 @@
         dialogService.setTab(0);
 
         vm.historyObj = historyService.historyMapObj;
-        var params;
+        var mapObj;
 
         $scope.getHistory = function () {
             // vm.historyObj.getHistory = false;
@@ -74,25 +74,6 @@
         //     }
         // }
 
-        if ( $state.params.mapObj){
-            params = $state.params.mapObj;
-            historyService.resetHistoryData();
-            historyService.historyMapObj.dashboardMapObj.clickedMarker = $state.params.mapObj.clickedMarker;
-            // historyService.historyMapObj.dashboardMapObj.inMarkers = $state.params.mapObj.mainMarkers;
-
-        }else{
-
-        }
-
-        $log.log(vm.historyObj);
-        $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
-        $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
-
-        var selectedVehicle = dialogService.getData('selectedVehicle');
-        vm.multiSelect = vm.historyObj.multiSelect;
-        vm.circles = vm.historyObj.circles;
-        vm.polygons = vm.historyObj.polygons;
-
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
@@ -125,7 +106,7 @@
                 var position = traceData[idx];
 
                 if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
-                        position.latitude == 0 || position.longitude == 0
+                    position.latitude == 0 || position.longitude == 0
                 ) {
                     $log.log("Not a number");
                     $log.log(position);
@@ -147,17 +128,15 @@
 
             if (vm.historyObj.trace.path.length) {
                 historyService.setData('getHistory', true);
-                $log.log(vm.historyObj.dashboardMapObj.clickedMarker);
+                //$log.log(vm.historyObj.dashboardMapObj.clickedMarker);
                 vm.historyObj.dashboardMapObj.clickedMarker.latitude = vm.historyObj.trace.path[0].latitude;
                 vm.historyObj.dashboardMapObj.clickedMarker.longitude = vm.historyObj.trace.path[0].longitude;
 
-                if( !vm.historyObj.dashboardMapObj.clickedMarker.hasOwnProperty('options')){
+                if (!vm.historyObj.dashboardMapObj.clickedMarker.hasOwnProperty('options')) {
                     vm.historyObj.dashboardMapObj.clickedMarker.options = {};
-                    vm.historyObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
-                }else {
-                    vm.historyObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
                 }
 
+                vm.historyObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
                 var midPoint = Math.floor(vm.historyObj.trace.path.length / 2);
                 vm.historyObj.historyMap.center.latitude = vm.historyObj.trace.path[midPoint].latitude;
                 vm.historyObj.historyMap.center.longitude = vm.historyObj.trace.path[midPoint].longitude;
@@ -167,7 +146,6 @@
                 vm.historyObj.endMarker.latitude = lastBeacon.latitude;
                 vm.historyObj.endMarker.options.label = 'E';
                 vm.historyObj.endMarker.longitude = lastBeacon.longitude;
-                //$scope.endMarker.options.icon = 'assets/images/markers/big/red.png';
                 vm.historyObj.endMarker.options.title = 'End point';
 
 
@@ -191,11 +169,6 @@
         };
 
 
-        // $scope.getClickedMarker = function () {
-        //     return $scope.clickedMarker;
-        // };
-
-
         vm.getMyFencesListener = function () {
             //$log.log("getMyFencesListener");
             vm.fences = geofenceViewService.getToDrawFences();
@@ -207,41 +180,43 @@
 
         vm.init = function () {
             // $log.log(vm.historyObj.dashboardMapObj.clickedMarker);
-            if (params == null ) {
-                // $log.log(selectedVehicle);
-                // vm.historyObj.dashboardMapObj.clickedMarker = {};
-                // if (angular.isDefined(selectedVehicle)) {
-                //     vm.historyObj.deviceid = selectedVehicle.deviceid;
-                //     vm.historyObj.vehicleNumber = selectedVehicle.vehicleNumber;
-                //     vm.historyObj.multiSelect = false;
-                // } else {
-                //     vm.historyObj.multiSelect = true;
-                //     vm.historyObj.deviceid = 'Select Vehicle';
-                //     vm.historyObj.vehicleNumber = 'Select Vehicle';
-                // }
-            } else {
+
+            if (vm.historyObj.dashboardMapObj.inMarkers.length) {
+                vm.historyObj.dashboardMapObj.clickedMarker = vm.historyObj.dashboardMapObj.inMarkers[0];
+            }
+
+            if ($state.params.mapObj) {
+                mapObj = $state.params.mapObj;
+                historyService.resetHistoryData();
+                historyService.historyMapObj.dashboardMapObj.clickedMarker = mapObj.clickedMarker;
+                $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
+                $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
+
                 $log.log($scope.clickedMarker);
-                vm.historyObj.dashboardMapObj.clickedMarker.options.animation = null;
                 vm.historyObj.historyMap.center = vm.historyObj.dashboardMapObj.clickedMarker;
                 vm.historyObj.deviceid = vm.historyObj.dashboardMapObj.clickedMarker.deviceid;
                 vm.historyObj.vehicleNumber = vm.historyObj.dashboardMapObj.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
             }
 
-            if (vm.historyObj.dashboardMapObj.inMarkers.length)
-                vm.historyObj.dashboardMapObj.clickedMarker = vm.historyObj.dashboardMapObj.inMarkers[0];
+            if (vm.historyObj.dashboardMapObj.clickedMarker.options) {
+                vm.historyObj.dashboardMapObj.clickedMarker.options.animation = null;
+            }
+
             vm.historyObj.dashboardMapObj.clickedMarker.trace = vm.historyObj.trace;
+            var selectedVehicle = dialogService.getData('selectedVehicle');
+            vm.multiSelect = vm.historyObj.multiSelect;
+            vm.circles = vm.historyObj.circles;
+            vm.polygons = vm.historyObj.polygons;
+
+
             vm.getMyFencesListener();
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-
-            // $scope.getHistory();
         };
 
 
         vm.init();
-        // historyService.setData('clickedMarker', $scope.clickedMarker);
-         $interval($scope.resizeMap, 500);
-        // $timeout(vm.init, 1000);
+        $interval($scope.resizeMap, 500);
     }
 
 })();
