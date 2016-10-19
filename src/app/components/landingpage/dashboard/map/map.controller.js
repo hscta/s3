@@ -288,46 +288,43 @@
         var DEVBATTERY_THRESHOLD = 3.55;
         var CARBATTERY_THRESHOLD = 9.5;
 
-        vm.applyFilters = function (filterData) {
+        vm.applyFilters = function (filterData, recall) {
             var idx;
             var marker;
 
+            if(recall == null) {
+                recall = 1;
+            }
+
             if (filterData.filterType == 'carBattery') {
-                if (vm.geoFilters.carBattery) {
-                    // do some code to add low battery
-                    for (idx in vm.inMarkers) {
-                        marker = vm.inMarkers[idx];
+                for (idx in vm.inMarkers) {
+                    marker = vm.inMarkers[idx];
+                    if (vm.geoFilters.carBattery) {
                         if (marker.carbattery < CARBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
-                    }
-                } else {
-                    // do some code to remove low battery
-                    for (idx in vm.inMarkers) {
-                        marker = vm.inMarkers[idx];
-                        marker.options.animation = null;
-                        if (vm.geoFilters.devBattery && marker.devbattery < DEVBATTERY_THRESHOLD) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
+                    } else {
+                        if(recall == 1) {
+                            marker.options.animation = null;
+                            vm.applyFilters({filterType: 'devBattery'}, recall - 1);
+                            vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
                     }
                 }
             } else if (filterData.filterType == 'devBattery') {
-                if (vm.geoFilters.devBattery) {
-                    // do some code to add low battery
-                    for (idx in vm.inMarkers) {
-                        marker = vm.inMarkers[idx];
+                for (idx in vm.inMarkers) {
+                    marker = vm.inMarkers[idx];
+                    if (vm.geoFilters.devBattery) {
                         if (marker.devbattery < DEVBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
                         }
-                    }
-                } else {
-                    // do some code to remove low battery
-                    for (idx in vm.inMarkers) {
-                        marker = vm.inMarkers[idx];
-                        marker.options.animation = null;
-                        if (vm.geoFilters.carBattery && marker.carbattery < CARBATTERY_THRESHOLD) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
+                    } else {
+                        if(recall == 1) {
+                            marker.options.animation = null;
+                            vm.applyFilters({filterType: 'carBattery'}, recall - 1);
+                            vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
+
                     }
                 }
             } else if (filterData.filterType == 'noComm') {
@@ -344,7 +341,11 @@
                         }
                     }
                     else {
-                        marker.options.animation = null;
+                        if(recall == 1) {
+                            marker.options.animation = null;
+                            vm.applyFilters({filterType: 'devBattery'}, recall - 1);
+                            vm.applyFilters({filterType: 'carBattery'}, recall - 1);
+                        }
                     }
                 }
             } else if (filterData.filterType == 'showVehicleNo') {
