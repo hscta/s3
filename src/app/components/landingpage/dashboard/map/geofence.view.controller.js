@@ -114,7 +114,7 @@
             {'type': 'line', 'historymap': true},
             {
                 'id': 'devBattery',
-                'name': 'Low Device Battery',
+                'name': 'Low Device battery',
                 'iconType': 'fa',
                 'icon': 'fa-battery-quarter',
                 'type': 'toggleButton',
@@ -128,12 +128,27 @@
             },
             {
                 'id': 'carBattery',
-                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',
+                'name': 'Low Vehicle battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',
                 'type': 'toggleButton', 'historymap': false,
                 'data': {
                     active: true,
                     'type': 'function', 'independent': true, 'function': function (active) {
                         vm.checkGeoFilters.set('carBattery', active);
+                    }
+                }
+            },
+            {
+                'id': 'showVehicleNo',
+                'name': 'Vehicle number',
+                'iconType': 'fa',
+                'icon': 'fa-car',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: false,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('showVehicleNo', active);
+                        geofenceViewService.showVehicleNumber(active);
                     }
                 }
             },
@@ -152,22 +167,7 @@
                     }
                 }
             },
-            {'type': 'line', 'historymap': false},
-            {
-                'id': 'showVehicleNo',
-                'name': 'Show Vehicle Number',
-                'iconType': 'fa',
-                'icon': 'fa-car',
-                'type': 'toggleButton',
-                'historymap': false,
-                'data': {
-                    active: false,
-                    'type': 'function', 'independent': true, 'function': function (active) {
-                        vm.checkGeoFilters.set('showVehicleNo', active);
-                        geofenceViewService.showVehicleNumber(active);
-                    }
-                }
-            }
+            // {'type': 'line', 'historymap': false},
         ];
 
         vm.fencesActive = function () {
