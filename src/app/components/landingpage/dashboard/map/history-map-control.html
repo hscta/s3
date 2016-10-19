@@ -57,8 +57,11 @@
 
 
     <div class="historGraphContainer">
-        <div class="dataLine" ng-repeat="data in sampleData" ng-if="data.ignition"
-             style="width:{{graphWRatio}}%; left:{{($index * graphWRatio)}}%">
-        </div>
+        <!--<div class="dataLine" ng-repeat="data in sampleData" ng-if="data.ignition"-->
+             <!--style="width:{{graphWRatio}}%; left:{{($index * graphWRatio)}}%">-->
+        <!--</div>-->
+        <!---->
+
+        <canvas id="historyGraphCanvas" style="height:100%; width: 100%; background:#d3d3d3;">
     </div>
 </div>

@@ -6,8 +6,7 @@
         .controller('ImmobalizeController', ImmobalizeController);
 
     function MapController($scope, $log, mapService,
-                           $interval, geofenceViewService, $timeout, customMapOverlay,uiGmapIsReady,
-                           historyService, dialogService, vehicleService) {
+                           $interval, geofenceViewService, $timeout, customMapOverlay, vehicleService) {
         $log.log('MapController');
         var vm = this;
 
@@ -129,14 +128,9 @@
 
 
         vm.runFilters = function (filterStr) {
-            $log.log("runFilters");
+            // $log.log("runFilters");
+            mapService.infoWindowClose();
 
-            if (vm.filterStr !== filterStr)
-                mapService.infoWindowClose();
-
-            vm.filterStr = filterStr;
-
-            //$log.log("applying filters in loop");
             for (var idx in vm.inMarkers) {
                 vm.applyFilterToMarker(vm.inMarkers[idx], filterStr);
             }
@@ -151,7 +145,7 @@
                     vm.inCustomMaker[marker.vehiclepath].hide();
                 }
             } else {
-                 marker.options.visible = true;
+                marker.options.visible = true;
                 if (marker.vehiclepath in vm.inCustomMaker) {
                     vm.inCustomMaker[marker.vehiclepath].show();
                 }
@@ -191,13 +185,13 @@
                     }
                 }
 
-                if ( marker[eachidx].constructor == Object ){
-                     // $log.log(marker[eachidx]);
-                    for ( var myMeta in marker[eachidx]){
+                if (marker[eachidx].constructor == Object) {
+                    // $log.log(marker[eachidx]);
+                    for (var myMeta in marker[eachidx]) {
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
 
-                        if(marker[eachidx][myMeta]) {
+                        if (marker[eachidx][myMeta]) {
                             var lowercasefilterStr = filterStr.toString().toLowerCase();
                             // $log.log(marker[eachidx][myMeta]);
                             var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
@@ -353,7 +347,7 @@
                         marker.options.animation = null;
                     }
                 }
-            } else if(filterData.filterType == 'showVehicleNo'){
+            } else if (filterData.filterType == 'showVehicleNo') {
                 // Do something to notify showVehicleNo filter is On
             } else {
                 if (vm.inMap.circles) {
@@ -504,9 +498,9 @@
         };
 
         vm.highlightMarker = function (vehiclePath) {
-            if(vehiclePath in vm.inCustomMaker){
+            if (vehiclePath in vm.inCustomMaker) {
                 vm.inCustomMaker[vehiclePath].highlightMe();
-            }else {
+            } else {
                 console.log('[MAP CONTROLLER] no marker found!');
             }
         };
@@ -536,7 +530,6 @@
 
         vm.init = function () {
             vm.loadMap();
-            // historyService.setData('inMarkers', vm.inMarkers);
             vm.addListener();
             geofenceViewService.getMyFences();
             $interval(vm.runStats, 3000);

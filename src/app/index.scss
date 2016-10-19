@@ -1586,20 +1586,20 @@ div.gmnoprint div[draggable] div span,
     bottom: 0;
     pointer-events: none;
     right: 139px;
-    .dataLine{
-        height: 6px;
-        width: 1%;
-        position: absolute;
-        top:7px;
-        left: 0;
-        @include transition(0.1s);
-        background: rgb(2, 217, 69);
-    }
-    .dataLine:hover{
-        height: 10px;
-        cursor: pointer;
-        background: rgba(6, 209, 75, 1);
-    }
+    //.dataLine{
+    //    height: 6px;
+    //    width: 1%;
+    //    position: absolute;
+    //    top:7px;
+    //    left: 0;
+    //    @include transition(0.1s);
+    //    background: rgb(2, 217, 69);
+    //}
+    //.dataLine:hover{
+    //    height: 10px;
+    //    cursor: pointer;
+    //    background: rgba(6, 209, 75, 1);
+    //}
 }
 
 

@@ -1,11 +1,12 @@
 <div layout="column">
     <div class="info-w-header">
     </div>
-    <md-table-container style="min-width:300px; min-height: 110px; max-width:300px; position: relative; overflow: hidden; max-height:110px;">
+    <md-table-container style="min-height: 130px; max-height:130px; min-width:300px; max-width:300px;
+                                position: relative; overflow: hidden;">
         <table md-table md-row-select multiple class="trPadding" >
             <tbody md-body>
             <tr md-row md-select-id="carnumber" class="infoWHead"   md-auto-select>
-                <td md-cell><strong>Car Number</strong></td>
+                <td md-cell><strong>Reg.No</strong></td>
                 <td md-cell colspan="3" >{{parameter.clickedMarker.vehicleno}}</td>
             </tr>
             <tr md-row md-select-id="timestamp" md-auto-select>
@@ -27,14 +28,20 @@
             </tr>
             <tr md-row md-select-id="carbattery" md-auto-select>
                 <td md-cell>
-                    <strong>Car Battery</strong>
+                    <strong>Vehicle batt</strong>
                 </td>
                 <td md-cell class="infoWmiddle"
                     ng-class="{'redBattery' : parameter.clickedMarker.carbattery < 9.5 }">{{parameter.clickedMarker.carbattery}}</td>
-                <td md-cell><strong>Device Battery</strong>
+                <td md-cell><strong>Device batt</strong>
                 </td>
                 <td md-cell
                     ng-class="{'redBattery' : parameter.clickedMarker.devbattery < 3.55 }">{{parameter.clickedMarker.devbattery}}</td>
+            </tr>
+            <tr md-row md-select-id="deviceid" md-auto-select>
+                <td md-cell><strong>Device ID</strong></td>
+                <td md-cell class="infoWmiddle">{{parameter.clickedMarker.deviceid}}</td>
+                <td md-cell><strong>Make</strong></td>
+                <td md-cell>{{parameter.clickedMarker.meta.cartype}}</td>
             </tr>
             </tbody>
         </table>

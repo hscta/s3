@@ -114,7 +114,7 @@
             {'type': 'line', 'historymap': true},
             {
                 'id': 'devBattery',
-                'name': 'Low Device Battery',
+                'name': 'Low Device battery',
                 'iconType': 'fa',
                 'icon': 'fa-battery-quarter',
                 'type': 'toggleButton',
@@ -128,7 +128,7 @@
             },
             {
                 'id': 'carBattery',
-                'name': 'Low Car Battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',
+                'name': 'Low Vehicle battery', 'iconType': 'png', 'icon': 'assets/images/icon/carBattery.png',
                 'type': 'toggleButton', 'historymap': false,
                 'data': {
                     active: true,
@@ -137,7 +137,6 @@
                     }
                 }
             },
-            {'type': 'line', 'historymap': false},
             {
                 'id': 'noComm',
                 'name': 'Vehicles not communicating',
@@ -155,7 +154,7 @@
             {'type': 'line', 'historymap': false},
             {
                 'id': 'showVehicleNo',
-                'name': 'Show Vehicle Number',
+                'name': 'Vehicle number',
                 'iconType': 'fa',
                 'icon': 'fa-car',
                 'type': 'toggleButton',
@@ -168,6 +167,7 @@
                     }
                 }
             }
+            // {'type': 'line', 'historymap': false},
         ];
 
         vm.fencesActive = function () {

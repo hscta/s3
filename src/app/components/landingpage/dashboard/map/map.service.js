@@ -16,7 +16,7 @@
             vm.inMap = {
                 mapOptions: {},
                 mapControl: {},
-                mapEvents : {
+                mapEvents: {
                     click: function () {
                         vm.mapClickEvent();
                     },
@@ -24,7 +24,7 @@
                         vm.changeMarkerIcon();
                     }
                 },
-                infoWindow : {
+                infoWindow: {
                     show: false,
                     control: {},
                     options: {
@@ -36,7 +36,7 @@
                         }
                     }
                 },
-                fenceInfoWindow:{
+                fenceInfoWindow: {
                     show: false,
                     control: {},
                     options: {
@@ -48,20 +48,20 @@
                         }
                     }
                 },
-                markers : {
+                markers: {
                     inMarkers: [],
-                    clickedMarker : {},
+                    clickedMarker: {},
                     markersEvents: {
                         click: function (marker, eventName, model, args) {
                             vm.setClickedMarker(model);
                         }
                     },
-                    clickedMarkerObj : {}
+                    clickedMarkerObj: {}
                 },
-                circles:[],
+                circles: [],
                 polygons: [],
 
-                circleEvents : {
+                circleEvents: {
                     click: function (circle, eventName, model, args) {
                         //$log.log('Circle clicked');
                         vm.circleEvents(model, vm.inMap.selectedFenceObj);
@@ -69,7 +69,7 @@
                     }
                 },
 
-                polygonEvents : {
+                polygonEvents: {
                     click: function (polygon, eventName, model, args) {
                         vm.polygonEvents(model, vm.inMap.selectedFenceObj);
                         vm.fenceInfoWindowShow();
@@ -77,9 +77,9 @@
                     }
                 },
 
-                selectedFenceObj : {
-                    latitude : '',
-                    longitude:'',
+                selectedFenceObj: {
+                    latitude: '',
+                    longitude: '',
                     name: '',
                     other: ''
                 }
@@ -93,28 +93,28 @@
                 return bound.getCenter();
             };
 
-            vm.polygonEvents = function(model, dest){
+            vm.polygonEvents = function (model, dest) {
                 var polygonCenter = vm.getPolygonMidPoint(model.path);
-                dest.latitude =  polygonCenter.lat();
-                dest.longitude =  polygonCenter.lng();
-                dest.name =  model.control.info.name;
-                dest.other =  model.control.info.tagdata;
+                dest.latitude = polygonCenter.lat();
+                dest.longitude = polygonCenter.lng();
+                dest.name = model.control.info.name;
+                dest.other = model.control.info.tagdata;
             };
 
-            vm.circleEvents = function(model, dest){
-                dest.latitude =  model.center.latitude;
-                dest.longitude =  model.center.longitude;
-                dest.name =  model.control.info.name;
-                dest.other =  model.control.info.tagdata;
+            vm.circleEvents = function (model, dest) {
+                dest.latitude = model.center.latitude;
+                dest.longitude = model.center.longitude;
+                dest.name = model.control.info.name;
+                dest.other = model.control.info.tagdata;
             };
 
 
-            vm.infoWindowShow = function() {
+            vm.infoWindowShow = function () {
                 vm.inMap.infoWindow.show = true;
 
             };
 
-            vm.infoWindowClose = function() {
+            vm.infoWindowClose = function () {
                 vm.inMap.infoWindow.show = false;
             };
 
@@ -128,7 +128,7 @@
                 vm.inMap.fenceInfoWindow.show = true;
             };
 
-            vm.setClickedMarker = function(model) {
+            vm.setClickedMarker = function (model) {
                 vm.inMap.markers.clickedMarkerObj.clickedMarker = model;
                 vm.inMap.markers.clickedMarkerObj.mobilize = vm.mobilize;
                 vm.inMap.markers.clickedMarkerObj.showHistory = vm.showHistory;
@@ -138,14 +138,10 @@
             };
 
             vm.showHistory = function () {
-                //$log.log(vm.clickedMarker);
-                // vm.selectedTab = 0;
-                // historyService.setData('selectedTab', vm.selectedTab);
+                //$log.log(vm.inMap.markers.clickedMarkerObj.clickedMarker);
                 dialogService.show('home.history', {
-                    clickedMarker: vm.inMap.markers.clickedMarkerObj.clickedMarker,
+                    clickedMarker: angular.copy(vm.inMap.markers.clickedMarkerObj.clickedMarker)
                 });
-
-                // dialogService.show('home.history');
             };
 
             vm.mobilize = function (mobilityRequest) {
@@ -171,7 +167,7 @@
                     })
             };
 
-            vm.mapClickEvent = function(){
+            vm.mapClickEvent = function () {
                 vm.fenceInfoWindowClose();
                 vm.infoWindowClose();
             };
@@ -305,7 +301,7 @@
 
             vm.updateMarker = function (vehicleObj, key) {
                 var vehicleData = vehicleObj.rtgps;
-                if(!('id' in vehicleData)) {
+                if (!('id' in vehicleData)) {
                     var deviceidStr = vehicleData.deviceid;
                     if (deviceidStr.substring(0, 5) == '213GL') {
                         deviceidStr = deviceidStr.substring(5);

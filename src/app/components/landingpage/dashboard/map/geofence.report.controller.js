@@ -266,9 +266,6 @@
                 var starttime = new Date(vm.fenceReportObj.startTime).getTime();
                 var endtime = new Date(vm.fenceReportObj.endTime).getTime();
 
-
-
-                $log.log(starttime, endtime);
                 if (endtime <= starttime) {
                     vm.errorMsg = "End time should be >= Start time";
                     return;
