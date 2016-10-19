@@ -42,6 +42,7 @@
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;
             $scope.tracePointSpeed = initialPoint.speed;
+            $scope.ignStatus = initialPoint.ignstatus;
         }
         // }
 
@@ -234,6 +235,8 @@
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;
             $scope.tracePointSpeed = initialPoint.speed;
+
+            drawGraph();
         };
 
         $scope.$on('gotHistoryEvent', function (event, data) {
@@ -262,58 +265,57 @@
                 map.panBy(panX, panY);
             }
         };
+        
+        function drawGraph() {
+            var pathArray = marker.trace.path;
+            var length = pathArray.length;
+            var width = parseInt($('#historyGraphCanvas').width());
+            var ratio = 1 / (width / length );
+            if((parseInt(ratio) - ratio) > 0.5){
+                ratio = parseInt(ratio) + 1;
+            }else{
+                ratio = parseInt(ratio);
+            }
+            if(ratio == 0){
+                ratio = 1;
+            }
+            var counter = ratio;
+            var counter2 = 0;
+            context.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
 
+            for(path in pathArray){
+                counter++;
+                counter2++;
+                if(counter>= ratio){
+                    counter=0;
+                    renderRectangle(counter2,pathArray[path]);
+                }
+            }
+        }
 
-        $scope.sampleData = {
-            1:{ignition:true},
-            2:{ignition:true},
-            3:{ignition:true},
-            4:{ignition:true},
-            5:{ignition:true},
-            6:{ignition:true},
-            7:{ignition:true},
+        function renderRectangle(point,path) {
+            if(path.ignstatus){
+                context.fillStyle = "orange";
+                context.fillRect(point, 20, 1, 100);
+            }
+            if(parseInt(path.speed) > 0){
+                context.fillStyle = "green";
+                context.fillRect(point, 70, 1, 50);
+            }
+        }
 
-            8:{ignition:false},
-            9:{ignition:false},
-            10:{ignition:false},
-
-            11:{ignition:true},
-
-            12:{ignition:false},
-            13:{ignition:false},
-            14:{ignition:false},
-
-            15:{ignition:true},
-            16:{ignition:true},
-            17:{ignition:true},
-            18:{ignition:true},
-            19:{ignition:true},
-
-            20:{ignition:false},
-            21:{ignition:false},
-            22:{ignition:false},
-            23:{ignition:false},
-            24:{ignition:false},
-            25:{ignition:false},
-            26:{ignition:false},
-
-            27:{ignition:true},
-            28:{ignition:true},
-            29:{ignition:true},
-            30:{ignition:true},
-        };
-
-        $scope.graphWRatio = 100 / Object.keys($scope.sampleData).length;
         var graphCanvas;
-        isRendered('#historyGraphCanvas', function (el) {
+        var context;
+        isRendered('historyGraphCanvas', function (el) {
             graphCanvas = el;
+            context=graphCanvas.getContext("2d");
         });
 
         function isRendered(id,callback) {
             var inter = $interval(function () {
-                if(document.querySelector(id)){
+                if(document.getElementById(id)){
                     $interval.cancel(inter);
-                    callback(document.querySelector(id));
+                    callback(document.getElementById(id));
                 }
             },200);
 

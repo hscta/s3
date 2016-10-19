@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<div class='control-panel' ng-show="gotHistory()" layout="row" flex="100" >
+<div class='control-panel' ng-class="{'active':gotHistory()}" layout="row" flex="100" >
 <!--<div class='control-panel'  layout="row" flex="100">-->
 
     <div class="md-padding"></div>
@@ -62,6 +62,6 @@
         <!--</div>-->
         <!---->
 
-        <canvas id="historyGraphCanvas" style="height:100%; width: 100%; background:#d3d3d3;">
+        <canvas id="historyGraphCanvas" style="height:100%; width: 100%;">
     </div>
 </div>
