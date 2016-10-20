@@ -194,7 +194,7 @@
 
             // Mumbai
             var lat = 19.19554947109134;
-            var lng = 72.83638193466376;
+            var lng = 72.93638193466376;
 
             vm.center = {latitude: lat, longitude: lng};
             vm.zoom = 11;

@@ -81,7 +81,7 @@
                     }, {
                         id: vm.loc.MUMBAI,
                         notation: 'MUM',
-                        latlng: {latitude: 19.074334, longitude: 72.870894}
+                        latlng: {latitude: 19.195549, longitude: 72.936381}
                     }
                 ]
             },
