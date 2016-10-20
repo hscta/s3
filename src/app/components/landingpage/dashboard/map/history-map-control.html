@@ -8,6 +8,7 @@
         <span>Date : {{tracePointGpsTime | date : 'dd MMM yyyy - h:mm:ss a'}}</span><br/>
         <span>Odometer : {{tracePointOdometer}} km </span><br/>
         <span>Speed : {{tracePointSpeed}} kmph</span>
+        <span>Ignition : <span ng-show="ignStatus">ON</span>  <span ng-show="!ignStatus">OFF</span> </span>
     </div>
 
     <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="goSlow()">

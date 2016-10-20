@@ -7,7 +7,7 @@
         .module('uiplatform')
         .controller('InnerMapController', InnerMapController);
 
-    function InnerMapController($scope, $log, $mdToast, historyService, $interval, $timeout) {
+    function InnerMapController($scope, $log, $mdToast, historyService, $interval, $filter) {
         $log.log('InnerMapController');
         var vm = this;
         var marker = historyService.historyMapObj.dashboardMapObj.clickedMarker;
@@ -112,6 +112,7 @@
             $scope.tracePointGpsTime = tracePoint.gpstime;
             $scope.tracePointOdometer = tracePoint.odometer;
             $scope.tracePointSpeed = tracePoint.speed;
+            $scope.ignStatus = tracePoint.ignstatus;
         };
 
         $scope.traceRoute = function () {
@@ -265,12 +266,60 @@
                 map.panBy(panX, panY);
             }
         };
-        
+
+        function returnLoopCount(arr, idx) {
+            if(arr[idx + 1]){
+                return parseInt((arr[idx + 1].gpstime - arr[idx].gpstime) / 1000 / topDiff );
+            }
+        }
+
+        var topDiff;
+
         function drawGraph() {
             var pathArray = marker.trace.path;
+            var dummyEl;
+            var tempPathArray = [];
+            var diff = 0;
+            var diffMap = {};
+
+            // creating diff map
+            for(var idx=0; idx < pathArray.length; idx++){
+                if(pathArray[idx+1]){
+                    diff = (pathArray[idx+1].gpstime - pathArray[idx].gpstime) / 1000;
+                    if(!(diff in diffMap)){
+                        diffMap[diff] = 1;
+                    }else{
+                        diffMap[diff] = diffMap[diff] + 1;
+                    }
+                }
+            }
+
+            topDiff = 0;
+            for(key in diffMap){
+                if(diffMap[key] > topDiff){
+                    topDiff = key;
+                }
+            }
+
+            // creating new array by adding dummy
+            for(var i=0; i<pathArray.length;i++){
+                returnLoopCount(pathArray,i);
+                if(pathArray[i].ignstatus){
+                    tempPathArray.push(pathArray[i]);
+                }else{
+                    dummyEl = angular.copy(!pathArray[i+1]);
+                    for(var j=0; j < returnLoopCount(pathArray,i); j++){
+                        tempPathArray.push(dummyEl);
+                    }
+                }
+            }
+
+            pathArray = tempPathArray;
+
             var length = pathArray.length;
             var width = parseInt($('#historyGraphCanvas').width());
             var ratio = 1 / (width / length );
+            var ratio2 = width / length;
             if((parseInt(ratio) - ratio) > 0.5){
                 ratio = parseInt(ratio) + 1;
             }else{
@@ -281,6 +330,7 @@
             }
             var counter = ratio;
             var counter2 = 0;
+            graphCanvas.width = width;
             context.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
 
             for(path in pathArray){
@@ -288,12 +338,14 @@
                 counter2++;
                 if(counter>= ratio){
                     counter=0;
-                    renderRectangle(counter2,pathArray[path]);
+                    renderRectangle(counter2,pathArray[path],ratio2);
                 }
             }
         }
 
-        function renderRectangle(point,path) {
+        function renderRectangle(point,path,ratio) {
+            point = parseInt(point * ratio);
+            // point /= 10;
             if(path.ignstatus){
                 context.fillStyle = "orange";
                 context.fillRect(point, 20, 1, 100);
