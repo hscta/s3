@@ -345,14 +345,14 @@
 
         function renderRectangle(point,path,ratio) {
             point = parseInt(point * ratio);
-            // point /= 10;
+            var width = parseInt(ratio)+1; 
             if(path.ignstatus){
                 context.fillStyle = "orange";
-                context.fillRect(point, 20, 1, 100);
+                context.fillRect(point, 20, width, 100);
             }
             if(parseInt(path.speed) > 0){
                 context.fillStyle = "green";
-                context.fillRect(point, 70, 1, 50);
+                context.fillRect(point, 70, width, 50);
             }
         }
 

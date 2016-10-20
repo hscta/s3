@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('GeofenceViewController', mapLeftToolBar);
 
-    function mapLeftToolBar($scope, $log, $timeout, $q,
+    function mapLeftToolBar($scope, $log, $timeout, $q, mapService,
                             geofenceViewService, dialogService, intellicarAPI) {
 
         var vm = this;
@@ -26,7 +26,38 @@
             }
         };
 
+        vm.loc = {
+            MUMBAI:'MUMBAI',
+            BANGALORE:'BANGALORE',
+            HYDERABAD:'HYDERABAD',
+            DELHI:'DELHI'
+        };
+
+        vm.currentLocation = vm.loc.MUMBAI; // Have to set it Dynamically
+
+        vm.setInMarkerLocation = function(data) {
+            vm.currentLocation = data.id;
+            mapService.setInMapLocation(data.latlng);
+        };
+
         vm.leftTB = [
+            {
+                'id': 'setLocation',
+                'name': false,
+                'iconType': 'fa',
+                'icon': 'fa-map-marker',
+                'type': 'button',
+                'historymap': true,
+                'data': {
+                    'type': 'function', 'independent': true, 'function': function (active) {
+
+                    }
+                },
+                'location':[{id:vm.loc.MUMBAI,notation:'MUM',latlng:{latitude:19.074334,longitude: 72.870894}},
+                            {id:vm.loc.BANGALORE,notation:'BLR',latlng:{latitude:12.967995,longitude: 77.597953}},
+                            {id:vm.loc.DELHI,notation:'DEL',latlng:{latitude:28.614132,longitude: 77.215449}},
+                            {id:vm.loc.HYDERABAD,notation:'HYD',latlng:{latitude:17.384125,longitude:78.479447}}]
+            },
             {
                 'id': 'geoReport',
                 'name': 'Geofences Reports',
@@ -240,13 +271,14 @@
         }
 
 
-        vm.buttonClick = function (data) {
+        vm.buttonClick = function (item) {
+            var data = item.data;
             if (data.type == 'stateChange') {
                 dialogService.show(data.state);
             } else if (data.type == 'function') {
                 if (vm.fencesActive() || data.independent) {
                     data.active = !data.active;
-                    data.function(data.active);
+                    data.function(data.active,item.location);
                 }
             }
         };

@@ -531,6 +531,10 @@
             vm.showVehicleNumber(vn);
         };
 
+        mapService.setInMapLocation = function (loc) { 
+            vm.inMap.center = loc;
+        };
+
         vm.init = function () {
             vm.loadMap();
             vm.addListener();

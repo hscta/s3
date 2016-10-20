@@ -147,9 +147,9 @@
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
-        <div class="ltb_item" ng-repeat="item in vm.leftTB"
+        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-mouseenter="item.activeInt = 1" ng-mouseleave="item.activeInt = 0"
              ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
-            <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
+            <div class="ltbi_button" ng-click="vm.buttonClick(item)"
                  ng-if="item.type == 'button' || item.type == 'toggleButton'"
                  ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent }">
                 <div class="ltbi_icon" ng-if="item.hasOwnProperty('icon')">
@@ -158,7 +158,7 @@
                     <img ng-if="item.iconType == 'png'" src="{{item.icon}}">
                     <i ng-if="item.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
                 </div>
-                <div class="ltbi_name">
+                <div class="ltbi_name" ng-if="item.name">
                     {{item.name}}
                     <span>{{item.description}}</span>
                 </div>
@@ -168,6 +168,10 @@
                     <label>Color</label>
                     <input type="text" ng-model="color">
                 </md-input-container>
+            </div>
+            <!--Only for location-->
+            <div class="ltbi_loc" ng-init="item.activeInt = 0" ng-if="item.location" style="width: {{((item.location.length * 50) + 40 ) * item.activeInt }}px">
+                <div ng-repeat="loc in item.location" class="ltbil_item" ng-click="vm.setInMarkerLocation(loc)" ng-class="{'active':loc.id == vm.currentLocation}">{{loc.notation}}</div>
             </div>
         </div>
     </div>
