@@ -131,6 +131,8 @@
             // $log.log("runFilters");
             mapService.infoWindowClose();
 
+            vm.filterStr = filterStr;
+
             for (var idx in vm.inMarkers) {
                 vm.applyFilterToMarker(vm.inMarkers[idx], filterStr);
             }
