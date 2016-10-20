@@ -25,13 +25,13 @@
         vm.handleGeofenceReportInfoMap = function (reports) {
             $log.log('geofenceReportService');
             //$log.log(reports);
-            for(var idx in reports) {
+            for (var idx in reports) {
                 var reportInfo = reports[idx];
                 //$log.log(reportInfo);
                 vm.reports[reportInfo.assetpath] = reportInfo;
             }
 
-            //$log.log(vm.reports);
+            $log.log(vm.reports);
             vm.callListeners(vm.reports, 'mygeofencereportsinfo');
 
             return $q.resolve(vm.reports);
@@ -72,8 +72,8 @@
 
 
         vm.callListeners = function (msg, key) {
-            if(key in vm.listeners) {
-                for(var idx in vm.listeners[key]) {
+            if (key in vm.listeners) {
+                for (var idx in vm.listeners[key]) {
                     vm.listeners[key][idx](msg, key);
                 }
             }
@@ -85,14 +85,14 @@
 
 
         vm.reportDetails = {
-            reportId:1233
+            reportId: 1233
         };
 
-        vm.setReportPath = function(reportPath){
+        vm.setReportPath = function (reportPath) {
             vm.reportDetails.reportId = reportPath;
         }
 
-        vm.getReportDetails = function(){
+        vm.getReportDetails = function () {
             return vm.reportDetails;
         }
 

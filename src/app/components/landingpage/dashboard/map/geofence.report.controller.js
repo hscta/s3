@@ -24,30 +24,30 @@
 
         vm.dataFound = false;
 
-        vm.setSelectedCount = function(type) {
-            if ( type == 'vehicle') {
-                if ( vm.fenceReportObj.filteredItems.length )
-                    vm.fenceReportObj.selectedVehiclesCount =  ($filter("filter")
+        vm.setSelectedCount = function (type) {
+            if (type == 'vehicle') {
+                if (vm.fenceReportObj.filteredItems.length)
+                    vm.fenceReportObj.selectedVehiclesCount = ($filter("filter")
                     (vm.fenceReportObj.filteredItems, {checked: true})).length;
-            }   else {
-                if ( vm.fenceReportObj.filteredFenceItems.length)
+            } else {
+                if (vm.fenceReportObj.filteredFenceItems.length)
                     vm.fenceReportObj.selectedFencesCount = ($filter("filter")
                     (vm.fenceReportObj.filteredFenceItems, {checked: true})).length;
             }
         };
 
-        vm.filterVehicles = function(){
+        vm.filterVehicles = function () {
             vm.fenceReportObj.filteredItems = $filter("filter")
-                (vm.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
+            (vm.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
             // $log.log(vm.fenceReportObj.filteredItems);
         };
 
-        vm.filterFences = function(){
-            vm.fenceReportObj.filteredFenceItems =  $filter("filter")(vm.currRep.fences,  vm.fenceReportObj.fenceFilter);
+        vm.filterFences = function () {
+            vm.fenceReportObj.filteredFenceItems = $filter("filter")(vm.currRep.fences, vm.fenceReportObj.fenceFilter);
             // $log.log(vm.fenceReportObj.filteredFenceItems);
         };
 
-        vm.getSelectedFences = function (rep ) {
+        vm.getSelectedFences = function (rep) {
             vm.fenceReportObj.reportId = rep.assetpath;
             vm.setReport(rep);
             vm.getHistoryReport();
@@ -87,7 +87,6 @@
         };
 
 
-
         function drawTable() {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Vehicles');
@@ -111,30 +110,28 @@
                 pageSize: 300
             });
 
-            google.visualization.events.addListener(table, 'select', function(evt) {
+            google.visualization.events.addListener(table, 'select', function (evt) {
                 $log.log(table.getSelection());
                 $log.log(data.getValue(table.getSelection()[0].row, 0));
 
                 var selectedVehicle = data.getValue(table.getSelection()[0].row, 0);
 
-                if ( selectedVehicle ){
+                if (selectedVehicle) {
                     var vehicleDetail = $filter("filter")(mapService.inMap.markers.inMarkers, selectedVehicle);
 
                     var dateFormat = 'YYYY-MM-DD HH:mm';
-                    var startTime = moment(data.getValue(table.getSelection()[0].row, 2)).
-                        subtract(1, 'hour').format(dateFormat);
+                    var startTime = moment(data.getValue(table.getSelection()[0].row, 2)).subtract(1, 'hour').format(dateFormat);
 
-                    var endTime = moment(data.getValue(table.getSelection()[0].row, 3)).
-                        add(1, 'hour').format(dateFormat);
+                    var endTime = moment(data.getValue(table.getSelection()[0].row, 3)).add(1, 'hour').format(dateFormat);
 
                     historyService.historyMapObj.startTime = startTime;
                     historyService.historyMapObj.endTime = endTime;
 
                     var params = {
-                      clickedMarker :  vehicleDetail[0]
+                        clickedMarker: vehicleDetail[0]
                     };
 
-                    $state.go('home.history',{"mapObj":params});
+                    $state.go('home.history', {"mapObj": params});
 
                 }
             });
@@ -154,19 +151,21 @@
 
 
         vm.getMyGeofenceReports = function (resp) {
-            if ( vm.initialSelect ) {
+            if (vm.initialSelect) {
                 vm.initialSelect = false;
                 vm.fenceReportObj.reports = geofenceReportService.getMyGeofenceReports();
                 for (var idx in vm.fenceReportObj.reports) {
-                    return  vm.getSelectedFences(vm.fenceReportObj.reports[idx]);
+                    return vm.getSelectedFences(vm.fenceReportObj.reports[idx]);
                 }
             }
         };
+
 
         vm.getMyGeofenceReportsMap = function () {
             geofenceReportService.getMyGeofenceReportsMap()
                 .then(vm.getMyGeofenceReports, vm.handleFailure);
         };
+
 
         vm.selectAll = function (data) {
             var filterData;
@@ -220,9 +219,9 @@
                     vm.deSelectAllVehicles = true;
                 }
 
-                if(trues.length < vm.currRep.vehicles.length)
+                if (trues.length < vm.currRep.vehicles.length)
                     vm.selectAllVehicles = false;
-                else if(trues.length == vm.currRep.vehicles.length)
+                else if (trues.length == vm.currRep.vehicles.length)
                     vm.selectAllVehicles = true;
             } else if (type == 'fence') {
                 var trues = $filter("filter")(vm.currRep.fences, {checked: true});
@@ -232,9 +231,9 @@
                     vm.deSelectAllFences = true;
                 }
 
-                if(trues.length < vm.currRep.fences.length)
+                if (trues.length < vm.currRep.fences.length)
                     vm.selectAllFences = false;
-                else if(trues.length == vm.currRep.fences.length)
+                else if (trues.length == vm.currRep.fences.length)
                     vm.selectAllFences = true;
             }
 
@@ -324,7 +323,7 @@
                     if (data[idx].fencepath == vm.selectedFences[fen].id) {
                         var startTime = parseInt(data[idx].fentry);
                         var endTime = parseInt(data[idx].fexit);
-                        if((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 ) ){
+                        if ((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 )) {
                             historyService.geoFenceReports.myHistoryData.push([
                                 vehicleName,
                                 fenceName,
@@ -341,16 +340,16 @@
             vm.showTableData();
         };
 
-        vm.showTableData = function(){
+        vm.showTableData = function () {
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
         };
 
         vm.init = function () {
-            if (historyService.geoFenceReports.myHistoryData.length){
+            if (historyService.geoFenceReports.myHistoryData.length) {
                 vm.initialSelect = false;
                 vm.showTableData();
-            }else {
+            } else {
                 vm.initialSelect = true;
             }
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);

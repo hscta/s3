@@ -5,72 +5,93 @@
         height: 30px;
         width: 30px;
     }
+
     .infowindow-devbattery-img {
         height: 50px;
     }
+
     .icar-padding {
         padding: 5px;
     }
+
     .map-area {
         padding: 0;
     }
+
     .container-margin {
         margin-bottom: 0;
         padding: 0;
         height: 31px
     }
+
     ul {
         margin: 0;
     }
+
     ul li {
         width: 100%;
         height: 100%;
         list-style: none;
     }
+
     li {
         text-align: center;
     }
+
     .icon-font {
         font-size: 25px;
     }
+
     li:hover {
         box-shadow: 1px 0px 6px 0px;
         cursor: pointer;
     }
+
     .li-clicked {
         background: #d1e934;
     }
+
     .md-light {
         color: #000;
     }
+
     /*.icar-checkbox{*/
     /*transform:scale(0.8);*/
     /*}*/
     .icon-visibility {
         color: #000;
     }
+
     .icon-running {
         color: #0C8;
     }
+
     .icon-stopped {
         color: #6991FD;
     }
+
     .icon-active {
         color: #000;
     }
+
     .icon-immobilized {
         color: rgba(245, 86, 94, 0.85);
     }
 
-    .lefttoolbar{
+    .lefttoolbar {
         background: rgba(163, 204, 255, 0.7) !important;
     }
 
-    .mapDView{top:52px;}
-    .icar-tabs{border-bottom:1px solid #ccc;}
+    .mapDView {
+        top: 52px;
+    }
+
+    .icar-tabs {
+        border-bottom: 1px solid #ccc;
+    }
 
     .anchor-line {
-        border-bottom:1px solid #F00;
+        border-bottom: 1px solid #F00;
     }
 </style>
 
@@ -147,7 +168,8 @@
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
-        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-mouseenter="item.activeInt = 1" ng-mouseleave="item.activeInt = 0"
+        <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-mouseenter="item.activeInt = 1"
+             ng-mouseleave="item.activeInt = 0"
              ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
             <div class="ltbi_button" ng-click="vm.buttonClick(item)"
                  ng-if="item.type == 'button' || item.type == 'toggleButton'"
@@ -156,7 +178,8 @@
                     <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                     <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
                     <img ng-if="item.iconType == 'png'" src="{{item.icon}}">
-                    <i ng-if="item.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                    <i ng-if="item.iconType == 'png'"
+                       style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
                 </div>
                 <div class="ltbi_name" ng-if="item.name">
                     {{item.name}}
@@ -170,13 +193,14 @@
                 </md-input-container>
             </div>
             <!--Only for location-->
-            <div class="ltbi_loc" ng-init="item.activeInt = 0" ng-if="item.location" style="width: {{((item.location.length * 50) + 40 ) * item.activeInt }}px">
-                <div ng-repeat="loc in item.location" class="ltbil_item" ng-click="vm.setInMarkerLocation(loc)" ng-class="{'active':loc.id == vm.currentLocation}">{{loc.notation}}</div>
+            <div class="ltbi_loc" ng-init="item.activeInt = 0" ng-if="item.location"
+                 style="width: {{((item.location.length * 50) + 40 ) * item.activeInt }}px">
+                <div ng-repeat="loc in item.location" class="ltbil_item" ng-click="vm.setInMarkerLocation(loc)"
+                     ng-class="{'active':loc.id == vm.currentLocation}">{{loc.notation}}
+                </div>
             </div>
         </div>
     </div>
-
-
 
 
     <div id="mapCanvas">
@@ -215,11 +239,11 @@
                 <table>
                     <tbody>
                     <tr>
-                        <th>Name: </th>
+                        <th>Name:</th>
                         <td>{{vm.selectedFenceObj.name}}</td>
                     </tr>
                     <tr>
-                        <th>Type:   </th>
+                        <th>Type:</th>
                         <td>{{vm.selectedFenceObj.other.olafilter}}</td>
                     </tr>
                     </tbody>
@@ -236,7 +260,8 @@
                             events="vm.inMap.circleEvents">
             </ui-gmap-circle>
 
-            <ui-gmap-polygon static="true" ng-repeat="gpolygon in vm.inMap.polygons track by gpolygon.control.info.assetid"
+            <ui-gmap-polygon static="true"
+                             ng-repeat="gpolygon in vm.inMap.polygons track by gpolygon.control.info.assetid"
                              path="gpolygon.path"
                              stroke="gpolygon.stroke" fill="gpolygon.fill"
                              visible="gpolygon.visible" geodesic="gpolygon.geodesic"
@@ -267,12 +292,12 @@
                 <div class="col s4">
                     <ul class="tabs" select_tab="vm.selectedTab">
                         <li class="tab col s2">
-                            <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]"
-                                ui-sref="home.history">HISTORY</a>
+                            <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]"
+                               ui-sref="home.history">HISTORY</a>
                         </li>
                         <li class="tab col s2">
-                            <a  ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
-                                ui-sref="home.geofence">Geofence</a>
+                            <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
+                               ui-sref="home.geofence">Geofence</a>
                         </li>
                     </ul>
                 </div>

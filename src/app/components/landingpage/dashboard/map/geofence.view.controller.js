@@ -27,37 +27,20 @@
         };
 
         vm.loc = {
-            MUMBAI:'MUMBAI',
-            BANGALORE:'BANGALORE',
-            HYDERABAD:'HYDERABAD',
-            DELHI:'DELHI'
+            MUMBAI: 'MUMBAI',
+            BANGALORE: 'BANGALORE',
+            HYDERABAD: 'HYDERABAD',
+            DELHI: 'DELHI'
         };
 
         vm.currentLocation = vm.loc.MUMBAI; // Have to set it Dynamically
 
-        vm.setInMarkerLocation = function(data) {
+        vm.setInMarkerLocation = function (data) {
             vm.currentLocation = data.id;
             mapService.setInMapLocation(data.latlng);
         };
 
         vm.leftTB = [
-            {
-                'id': 'setLocation',
-                'name': false,
-                'iconType': 'fa',
-                'icon': 'fa-map-marker',
-                'type': 'button',
-                'historymap': true,
-                'data': {
-                    'type': 'function', 'independent': true, 'function': function (active) {
-
-                    }
-                },
-                'location':[{id:vm.loc.MUMBAI,notation:'MUM',latlng:{latitude:19.074334,longitude: 72.870894}},
-                            {id:vm.loc.BANGALORE,notation:'BLR',latlng:{latitude:12.967995,longitude: 77.597953}},
-                            {id:vm.loc.DELHI,notation:'DEL',latlng:{latitude:28.614132,longitude: 77.215449}},
-                            {id:vm.loc.HYDERABAD,notation:'HYD',latlng:{latitude:17.384125,longitude:78.479447}}]
-            },
             {
                 'id': 'geoReport',
                 'name': 'Geofences Reports',
@@ -70,6 +53,39 @@
                 }
             },
             {'type': 'line', 'historymap': true},
+            {
+                'id': 'setLocation',
+                'name': false,
+                'iconType': 'fa',
+                'icon': 'fa-map-marker',
+                'type': 'button',
+                'historymap': false,
+                'data': {
+                    'type': 'function', 'independent': true, 'function': function (active) {
+
+                    }
+                },
+                'location': [
+                    {
+                        id: vm.loc.BANGALORE,
+                        notation: 'BLR',
+                        latlng: {latitude: 12.967995, longitude: 77.597953}
+                    }, {
+                        id: vm.loc.HYDERABAD,
+                        notation: 'HYD',
+                        latlng: {latitude: 17.384125, longitude: 78.479447}
+                    }, {
+                        id: vm.loc.DELHI,
+                        notation: 'DEL',
+                        latlng: {latitude: 28.614132, longitude: 77.215449}
+                    }, {
+                        id: vm.loc.MUMBAI,
+                        notation: 'MUM',
+                        latlng: {latitude: 19.074334, longitude: 72.870894}
+                    }
+                ]
+            },
+            {'type': 'line', 'historymap': false},
             {
                 'id': 'getGeo', 'description': 'Use only when new fences are created',
                 'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'historymap': true,
@@ -266,8 +282,8 @@
             geofenceViewService.applyFilters(filterType);
         }
 
-        function filterList(searchPattern){
-          $log.log(searchPattern);
+        function filterList(searchPattern) {
+            $log.log(searchPattern);
         }
 
 
@@ -278,7 +294,7 @@
             } else if (data.type == 'function') {
                 if (vm.fencesActive() || data.independent) {
                     data.active = !data.active;
-                    data.function(data.active,item.location);
+                    data.function(data.active, item.location);
                 }
             }
         };

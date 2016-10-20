@@ -14,9 +14,12 @@
 
         // $log.log(marker);
         var historyMap = historyService.historyMapObj.historyMap;
-        var timeIncreaseBy = 120000;
+        //var timeIncreaseBy = 120000;
+        var timeIncreaseBy = 240000;
         var initialTime;
         var tracePoint;
+        var graphCanvas;
+        var context;
 
 
         $scope.slider = historyService.playerControls.slider;
@@ -74,6 +77,7 @@
             initialTime = path[animationCount].gpstime;
         };
 
+
         $scope.getSliderTime = function () {
             if (marker && marker.trace.path.length) {
                 return new Date(marker.trace.path[0].gpstime + Math.floor($scope.slider) * 1000);
@@ -105,6 +109,7 @@
             updateTracePoint(path[animationCount]);
         };
 
+
         var updateTracePoint = function (tracePoint) {
             marker.latitude = tracePoint.latitude;
             marker.longitude = tracePoint.longitude;
@@ -114,6 +119,7 @@
             $scope.tracePointSpeed = tracePoint.speed;
             $scope.ignStatus = tracePoint.ignstatus;
         };
+
 
         $scope.traceRoute = function () {
             //if (marker.trace.path.length && $scope.gotHistory()) {
@@ -147,7 +153,7 @@
                         moveMapWithMarker(marker);
                     }
 
-                }, 100);
+                }, 200);
             }
         };
 
@@ -189,10 +195,12 @@
             }
         };
 
+
         var stopPlay = function () {
             $interval.cancel($scope.animateMarker);
             $scope.play = true;
         };
+
 
         $scope.$on('$destroy', function () {
             historyService.playerControls.slider = $scope.slider;
@@ -216,14 +224,17 @@
             $scope.pauseInterval();
         };
 
+
         $scope.pauseInterval = function () {
             $interval.cancel($scope.animateMarker);
             $scope.animateMarker = undefined;
         };
 
+
         $scope.gotHistory = function () {
             return historyService.getData('getHistory');
         };
+
 
         $scope.gotHistoryEvent = function () {
             animationCount = 0;
@@ -239,6 +250,7 @@
 
             drawGraph();
         };
+
 
         $scope.$on('gotHistoryEvent', function (event, data) {
             $scope.gotHistoryEvent();
@@ -268,8 +280,8 @@
         };
 
         function returnLoopCount(arr, idx) {
-            if(arr[idx + 1]){
-                return parseInt((arr[idx + 1].gpstime - arr[idx].gpstime) / 1000 / topDiff );
+            if (arr[idx + 1]) {
+                return parseInt((arr[idx + 1].gpstime - arr[idx].gpstime) / 1000 / topDiff);
             }
         }
 
@@ -283,33 +295,37 @@
             var diffMap = {};
 
             // creating diff map
-            for(var idx=0; idx < pathArray.length; idx++){
-                if(pathArray[idx+1]){
-                    diff = (pathArray[idx+1].gpstime - pathArray[idx].gpstime) / 1000;
-                    if(!(diff in diffMap)){
+            for (var idx = 0; idx < pathArray.length; idx++) {
+                if (pathArray[idx + 1]) {
+                    diff = (pathArray[idx + 1].gpstime - pathArray[idx].gpstime) / 1000;
+                    if (!(diff in diffMap)) {
                         diffMap[diff] = 1;
-                    }else{
+                    } else {
                         diffMap[diff] = diffMap[diff] + 1;
                     }
                 }
             }
 
             topDiff = 0;
-            for(key in diffMap){
-                if(diffMap[key] > topDiff){
+            for (key in diffMap) {
+                if (diffMap[key] > topDiff) {
                     topDiff = key;
                 }
             }
 
             // creating new array by adding dummy
-            for(var i=0; i<pathArray.length;i++){
-                returnLoopCount(pathArray,i);
-                if(pathArray[i].ignstatus){
+            for (var i = 0; i < pathArray.length; i++) {
+                returnLoopCount(pathArray, i);
+                if (pathArray[i].ignstatus) {
                     tempPathArray.push(pathArray[i]);
-                }else{
-                    dummyEl = angular.copy(!pathArray[i+1]);
-                    for(var j=0; j < returnLoopCount(pathArray,i); j++){
-                        tempPathArray.push(dummyEl);
+                } else {
+                    if (i > 0) {
+                        dummyEl = angular.copy(!pathArray[i - 1]);
+                        for (var j = 0; j < returnLoopCount(pathArray, i); j++) {
+                            tempPathArray.push(dummyEl);
+                        }
+                    } else {
+                        tempPathArray.push(!pathArray[0]);
                     }
                 }
             }
@@ -320,12 +336,12 @@
             var width = parseInt($('#historyGraphCanvas').width());
             var ratio = 1 / (width / length );
             var ratio2 = width / length;
-            if((parseInt(ratio) - ratio) > 0.5){
+            if ((parseInt(ratio) - ratio) > 0.5) {
                 ratio = parseInt(ratio) + 1;
-            }else{
+            } else {
                 ratio = parseInt(ratio);
             }
-            if(ratio == 0){
+            if (ratio == 0) {
                 ratio = 1;
             }
             var counter = ratio;
@@ -333,46 +349,95 @@
             graphCanvas.width = width;
             context.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
 
-            for(path in pathArray){
+            for (path in pathArray) {
                 counter++;
                 counter2++;
-                if(counter>= ratio){
-                    counter=0;
-                    renderRectangle(counter2,pathArray[path],ratio2);
+                if (counter >= ratio) {
+                    counter = 0;
+                    renderRectangle(counter2, pathArray[path], ratio2);
                 }
             }
         }
 
-        function renderRectangle(point,path,ratio) {
+
+        function drawGraphOld() {
+            var pathArray = marker.trace.path;
+            var numPoints = pathArray.length;
+            var timeDiff = (pathArray[numPoints - 1].gpstime - pathArray[0].gpstime) / 1000;
+            var sliderWidth = parseInt($('#historyGraphCanvas').width());
+            var secsPerPx = Math.ceil(timeDiff / sliderWidth);
+            graphCanvas.width = sliderWidth;
+
+            $log.log('numPoints   : ' + numPoints);
+            $log.log('timeDiff    : ' + timeDiff);
+            $log.log('sliderWidth : ' + sliderWidth);
+            $log.log('secsPerPx : ' + secsPerPx);
+
+            for (var idx = 0; idx < pathArray.length; idx++) {
+                // var eachitem = idx;
+                // if(eachitem < pathArray.length)
+                //     $log.log((pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000);
+                // for(var eachitem = idx; eachitem > idx && eachitem < pathArray.length &&
+                //     (pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000 < secsPerPx; eachitem++) {
+                for (var eachitem = idx + 1; eachitem < pathArray.length &&
+                (pathArray[eachitem].gpstime - pathArray[idx].gpstime) / 1000 < secsPerPx; eachitem++) {
+                    // $log.log((pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000);
+                    // if ((pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000)
+                    //     break;
+                }
+
+                if (eachitem < pathArray.length) {
+                    var diff = (pathArray[eachitem].gpstime - pathArray[idx].gpstime) / 1000;
+
+                    //$log.log("diff = " + diff);
+                    if (diff >= secsPerPx * 2) {
+                        var count = 1;
+                        while (secsPerPx * count < diff) {
+                            renderRectangle(eachitem, pathArray[eachitem]);
+                            //renderRectangle(eachitem, {ignstatus:0, speed:0});
+                            count++;
+                            $log.log("Off = " + pathArray[eachitem].ignstatus);
+                        }
+                    } else {
+                        renderRectangle(eachitem, pathArray[eachitem]);
+                        //renderRectangle(eachitem, {ignstatus:1, speed:1});
+                        $log.log("On = " + pathArray[eachitem].ignstatus);
+                    }
+                }
+
+                idx = eachitem;
+            }
+        }
+
+
+        function renderRectangle(point, path, ratio) {
             point = parseInt(point * ratio);
-            var width = parseInt(ratio)+1; 
-            if(path.ignstatus){
+            var width = parseInt(ratio) + 1;
+            if (path.ignstatus) {
                 context.fillStyle = "orange";
                 context.fillRect(point, 20, width, 100);
             }
-            if(parseInt(path.speed) > 0){
+            if (parseInt(path.speed) > 0) {
                 context.fillStyle = "green";
                 context.fillRect(point, 70, width, 50);
             }
         }
 
-        var graphCanvas;
-        var context;
+
         isRendered('historyGraphCanvas', function (el) {
             graphCanvas = el;
-            context=graphCanvas.getContext("2d");
+            context = graphCanvas.getContext("2d");
         });
 
-        function isRendered(id,callback) {
+
+        function isRendered(id, callback) {
             var inter = $interval(function () {
-                if(document.getElementById(id)){
+                if (document.getElementById(id)) {
                     $interval.cancel(inter);
                     callback(document.getElementById(id));
                 }
-            },200);
-
+            }, 200);
         }
-
     }
 
 })();
