@@ -9,7 +9,7 @@
 
     function RightNavDashboardController($log, $timeout, rightNavAlertDashboardService,
                                          mapService, geofenceReportService,vehicleService,
-                                         intellicarAPI) {
+                                         intellicarAPI, $q) {
         $log.log("RightNavDashboardController");
         var vm = this;
         vm.alertDetails = [];
@@ -325,12 +325,94 @@
             //vm.activeTabData = rightNavAlertDashboardService.getReportData();
         };
 
+        vm.historyGeofenceReports = function(data){
+            $log.log(data);
+            var date = new Date();
+            var startTime = date.setHours(date.getHours() - 24);//1 day before
+            var endTime = new Date().getTime();
+
+            var promiseList=[];
+            vm.reports =[];
+            for ( var idx in data){
+                var rep = {};
+                rep.reportName = data[idx].name;
+                rep.reportId = idx;
+                rep.vehiclesAssetPath = [];
+                rep.vehicles=[];
+                rep.fences=[];
+
+                for ( var vehicle in data[idx].assg){
+                    var detail = {
+                        id: data[idx].assg[vehicle].assetpath,
+                        name: data[idx].assg[vehicle].name,
+                    };
+                    if (data[idx].assg[vehicle].assgfromassetid == 4) {
+                        rep.vehiclesAssetPath.push(data[idx].assg[vehicle].assetpath);
+                        rep.vehicles.push(detail);
+                    }else if ( data[idx].assg[vehicle].assgfromassetid == 15 ){
+                        rep.fences.push(detail);
+                    }
+                }
+                vm.reports.push(rep);
+
+                var body = {
+                    fencereport: idx,
+                    vehicles: rep.vehiclesAssetPath,
+                    starttime: startTime / 1000,
+                    endtime: endTime / 1000
+                };
+                promiseList.push(intellicarAPI.geofenceService.getReportHistory(body));
+            }
+
+            return $q.all(promiseList)
+                .then(vm.readHistoryInfo, vm.handleFailure);
+        };
+
+        vm.readHistoryInfo = function (history) {
+            var data = history[0].data.data;
+            $log.log(vm.reports);
+
+            $log.log(data);
+            if (!data.length) {
+                return;
+            }
+
+            for ( var details in data ) {
+                for ( var idx in vm.reports) {
+                    if ( !(vm.reports[idx].hasOwnProperty('reportDetails')))
+                        vm.reports[idx].reportDetails = [];
+
+                    var rep = {};
+                    if ( vm.reports[idx].reportId == data[details].reportpath){
+                        for ( var fence in vm.reports[idx].fences){
+                            if ( vm.reports[idx].fences[fence].id == data[details].fencepath)
+                                rep.fenceName = vm.reports[idx].fences[fence].name;
+                        }
+                        for ( var vehicle in vm.reports[idx].vehicles){
+                            if ( vm.reports[idx].vehicles[vehicle].id == data[details].deviceid)
+                                rep.vehicleName = vm.reports[idx].vehicles[vehicle].name;
+
+                        }
+
+                        rep.fentry = data[details].fentry;
+                        rep.fexit = data[details].fexit;
+                        vm.reports[idx].reportDetails.push(rep);
+                        break;
+                    }
+                }
+            }
+
+            $log.log(vm.reports);
+        }
 
         vm.init = function () {
             //mapService.addListener('rtgps', vm.mapServiceUpdate);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             //rightNavAlertDashboardService.addListener('updatefencereport', vm.updateFenceReport);
             vm.activeTabData = rightNavAlertDashboardService.getReportData();
+
+            geofenceReportService.addListener('mygeofencereportsinfo', vm.historyGeofenceReports);
+
         };
 
         vm.init();
