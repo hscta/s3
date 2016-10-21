@@ -127,6 +127,8 @@
                     historyService.historyMapObj.startTime = startTime;
                     historyService.historyMapObj.endTime = endTime;
 
+                    historyService.resetPlayerControls();
+
                     var params = {
                         clickedMarker: vehicleDetail[0]
                     };

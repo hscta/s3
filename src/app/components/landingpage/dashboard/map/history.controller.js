@@ -197,6 +197,8 @@
 
             vm.getMyFencesListener();
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+
+            $scope.getHistory();
         };
 
 
