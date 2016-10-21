@@ -377,6 +377,10 @@ md-toolbar{border-bottom:1px solid #CCC;}
             color:$themeColor!important;
         }
     }
+    .ltbi_button.hasChildren{
+        @include border-radius(5px);
+    }
+    .childButton,
     .ltbi_button{
         opacity: 0.4;
         width:100%;
@@ -437,6 +441,45 @@ md-toolbar{border-bottom:1px solid #CCC;}
             }
         }
     }
+    .childButton{
+        opacity: 1;
+        .ltbi_icon{
+            width: 100%;
+            text-align: center;
+            line-height: 36px;
+            font-size: 120%;
+            box-sizing: border-box;
+            padding: 3px;
+            position: relative;
+            i{
+                display: block;
+                width: 30px;
+                height:30px;
+                line-height: 30px;
+                font-size:120%;
+                float:left;
+            }
+        }
+        .ltbi_name{
+            width: auto;
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 40px;
+            height: 30px;
+            line-height: 30px;
+            @include border-radius(5px);
+            padding:0 10px;
+            font-size: 100%;
+            font-family: gotham;
+        }
+    }
+    .childButton:hover{
+        .ltbi_name{
+            width: auto;
+            display: block;
+        }
+    }
     .ltbi_cont{
         width:300px;
         height:100%;
@@ -462,21 +505,21 @@ md-toolbar{border-bottom:1px solid #CCC;}
         position: absolute;
         left: 100%;
         transform-origin: left;
-        opacity: 1;
+        opacity: 1!important;
         //@include transform(scale(0,1));
         .ltbil_item{
             display: inline-block;
             float: left;
-            width: 40px;
-            height: 40px;
-            margin:5px;
-            margin-left: -80px;
-            opacity: 0;
-            @include border-radius(100%);
+            width: 36px;
+            height: 36px;
+            margin:5px 2px;
+            margin-left: -90px;
+            opacity: 0!important;
+            @include border-radius(5px);
             background: rgba(0,0,0,0.6);
             font-size: 70%;
             font-family: gotham-b;
-            line-height: 40px;
+            line-height: 36px;
             text-align: center;
             color: rgba(255,255,255,0.7);
         }
@@ -493,6 +536,7 @@ md-toolbar{border-bottom:1px solid #CCC;}
     }
 }
 .ltb_item.active{
+    .childButton.active,
     .ltbi_button.active{
         opacity:1;
         i{
@@ -500,11 +544,15 @@ md-toolbar{border-bottom:1px solid #CCC;}
             color:$themeColor!important;
         }
     }
+    .childButton.active{
+        i{
+            background-color: transparent;
+        }
+    }
     .ltbi_button{
         opacity:1;
     }
 }
-
 .ltb_item-line{
     height: 2px;
     margin: 5px 10%;
@@ -531,12 +579,12 @@ md-toolbar{border-bottom:1px solid #CCC;}
         left:90px;
     }
     .ltbi_loc{
-        padding:15px 20px 20px 10px;
+        padding:17px 20px 20px 3px;
         @include transition(margin 0.5s);
         .ltbil_item{
-            opacity: 1;
+            opacity: 1!important;
             margin-left: 5px;
-            @include transition2(margin 0.5s, opacity 0.1s);
+            @include transition2(margin 0.5s,opacity 1s);
         }
     }
 }
