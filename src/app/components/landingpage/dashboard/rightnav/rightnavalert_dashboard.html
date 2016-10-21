@@ -124,8 +124,8 @@
                     <md-tab-body>
                         <div class="expansionNav coolbar" style="top:0;" ng-if="vm.activeTabData">
                             <!--first wrapper-->
-                            <div class="en_main" ng-if="mainKey != 'active' && vm.navFilter(main)"
-                                 ng-class="{'active':main.active}"  ng-repeat="(mainKey, main) in vm.reports " ng-init="main.active = true">
+                            <div class="en_main" ng-if="vm.navFilter(main)"
+                                 ng-class="{'active':main.active}"  ng-repeat="main in vm.reports " ng-init="main.active = true">
                                 <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,1)" style="background:#4FC3F7 !important;">
                                     {{main.reportName}}
                                     <div class="enl_item enl_add">
@@ -134,15 +134,17 @@
                                     </div>
                                 </div>
                                 <div class="en-wrapper">
-                                    <div class="en_mid"  ng-repeat="(midKey, mid) in main.reportDetails " ng-if="midKey != 'active' && vm.navFilter(mid)"  ng-init="mid.active = true"
-                                         ng-class="{'en-closed':!main.active}" style="height:{{vm.returnHeight(mid);}}">
-                                        <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important; "  >
-                                            {{midKey}}
-                                            <div class="enl_item enl_add">
-                                                <i class="fa fa-plus" ng-if="!mid.active"></i>
-                                                <i class="fa fa-minus" ng-if="mid.active"></i>
+                                    <div ng-repeat="fence in main.fences">
+                                        <div class="en_mid"  ng-repeat="mid in fence.reportDetails " && vm.navFilter(mid)"  ng-init="mid.active = true"
+                                             ng-class="{'en-closed':!main.active}" style="s:{{vm.returnHeight(mid);}}">
+                                            <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important; "  >
+                                                {{midKey}}
+                                                <div class="enl_item enl_add">
+                                                    <i class="fa fa-plus" ng-if="!mid.active"></i>
+                                                    <i class="fa fa-minus" ng-if="mid.active"></i>
+                                                </div>
+                                                <div class="enl_item enl_count">{{vm.returnLength(mid,2)}}</div>
                                             </div>
-                                            <div class="enl_item enl_count">{{vm.returnLength(mid,2)}}</div>
                                         </div>
                                     </div>
                                 </div>
