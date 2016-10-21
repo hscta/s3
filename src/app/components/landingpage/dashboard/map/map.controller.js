@@ -672,7 +672,6 @@
             $scope.msg = params.clickedMarker.mobilityRequest ? "Mobilize ?" : "Immobilize ?";
         };
 
-
         $scope.init();
     }
 })();

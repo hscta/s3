@@ -153,9 +153,9 @@
 
 
         vm.getMyGeofenceReports = function (resp) {
+            vm.fenceReportObj.reports = geofenceReportService.getMyGeofenceReports();
             if (vm.initialSelect) {
                 vm.initialSelect = false;
-                vm.fenceReportObj.reports = geofenceReportService.getMyGeofenceReports();
                 for (var idx in vm.fenceReportObj.reports) {
                     return vm.getSelectedFences(vm.fenceReportObj.reports[idx]);
                 }

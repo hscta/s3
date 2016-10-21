@@ -384,30 +384,19 @@
                     if ( vm.reports[idx].reportId == data[details].reportpath){
                         for ( var fence in vm.reports[idx].fences){
                             if ( vm.reports[idx].fences[fence].id == data[details].fencepath){
-                                // if ( !( vm.reports[idx].fences[fence].hasOwnProperty('vehiclesDetails')))
-                                //     vm.reports[idx].fences[fence].vehiclesDetails = [];
-
                                 for ( var vehicle in vm.reports[idx].vehicles){
-                                    if ( vm.reports[idx].vehicles[vehicle].id == data[details].deviceid){
-                                        if ( !(vm.reports[idx].fences[fence].hasOwnProperty('myvehicles'))){
-                                            vm.reports[idx].fences[fence].myvehicles={};
-                                            vm.reports[idx].fences[fence].myvehicles.name = vm.reports[idx].vehicles[vehicle].name;
-                                            vm.reports[idx].fences[fence].myvehicles.entryExitPoints = [];
-                                        }
-
-
+                                    var myVehicle = vm.reports[idx].vehicles[vehicle];
+                                    if ( myVehicle.id == data[details].deviceid){
+                                        if ( !(vm.reports[idx].fences[fence][myVehicle.name]))
+                                            vm.reports[idx].fences[fence][myVehicle.name]=[];
                                         var startTime = parseInt(data[details].fentry);
                                         var endTime = parseInt(data[details].fexit);
-                                        $log.log(startTime, endTime);
-                                        $log.log((endTime - startTime));
                                         if ((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 )) {
-
-                                            vm.reports[idx].fences[fence].myvehicles.entryExitPoints.push({
+                                            vm.reports[idx].fences[fence][myVehicle.name].push({
                                                 fentry:data[details].fentry,
                                                 fexit:data[details].fexit
                                             })
                                         }
-
                                     }
                                 }
                             }
