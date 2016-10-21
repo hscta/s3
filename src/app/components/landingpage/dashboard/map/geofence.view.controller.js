@@ -220,8 +220,8 @@
                     {
                         'id': 'batteryFilter.noComm',
                         'name': 'Vehicles not communicating',
-                        'iconType': 'fa',
-                        'icon': 'fa-bug',
+                        'iconType': 'png',
+                        'icon': 'assets/images/icon/signal',
                         'type': 'toggleButton',
                         'historymap': false,
                         'data': {
