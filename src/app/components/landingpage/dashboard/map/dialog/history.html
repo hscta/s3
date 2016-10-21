@@ -83,6 +83,12 @@
         font-size: 19px;
     }
 
+    .errorMsg {
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.8);
+        color: red;
+        padding: 10px;
+    }
 
 </style>
 
@@ -137,7 +143,7 @@
 </div>
 
 <div style="height: 100%;">
-    <span class="error-msg">{{errorMsg}}</span><br/>
+    <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
 
@@ -154,10 +160,10 @@
                 </md-select>
             </md-input-container>
 
-            <md-input-container class="container-margin"  ng-show="!vm.multiSelect">
-                <label>Vehicle No</label>
-                <input type="text" ng-model="vm.historyObj.vehicleNumber">
-            </md-input-container>
+            <!--<md-input-container class="container-margin"  ng-show="!vm.multiSelect">-->
+            <!--<label>Vehicle No</label>-->
+            <!--<input type="text" ng-model="vm.historyObj.vehicleNumber">-->
+            <!--</md-input-container>-->
 
             <md-input-container class="container-margin">
                 <label>Start Time</label>
@@ -189,6 +195,10 @@
                     template="app/components/landingpage/dashboard/map/history-map-control.html"
                     controller="InnerMapController"
                     position="BOTTOM_CENTER"></ui-gmap-map-control>
+                </ui-gmap-map-control>
+
+                <ui-gmap-map-control
+                    position="CENTER"><span ng-if="errorMsg" class="errorMsg">{{errorMsg}}</span></ui-gmap-map-control>
                 </ui-gmap-map-control>
 
                 <ui-gmap-marker
@@ -242,11 +252,11 @@
                 </ui-gmap-polygon>
 
                 <!--<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"-->
-                                <!--control="historyInfoWindow.control"-->
-                                <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->
-                                <!--templateUrl="'historyInfoWindow.html'"-->
-                                <!--templateParameter="historyInfoWindow"-->
-                                <!--isIconVisibleOnClick="true">-->
+                <!--control="historyInfoWindow.control"-->
+                <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->
+                <!--templateUrl="'historyInfoWindow.html'"-->
+                <!--templateParameter="historyInfoWindow"-->
+                <!--isIconVisibleOnClick="true">-->
                 <!--</ui-gmap-window>-->
 
                 <ui-gmap-window show="vm.historyObj.historyFenceInfoWindow.show" coords="vm.historyObj.historyFenceObj"

@@ -201,7 +201,6 @@
             $scope.getHistory();
         };
 
-
         vm.init();
         $interval($scope.resizeMap, 500);
     }

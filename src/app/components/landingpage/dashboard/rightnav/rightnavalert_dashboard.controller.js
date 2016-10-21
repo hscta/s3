@@ -53,10 +53,10 @@
 
 
         vm.getDashboardAlerts = function (data) {
-            $log.log(data);
+            // $log.log(data);
             vm.formatAlertData(data);
 
-            $log.log(vm.alertDetails);
+            // $log.log(vm.alertDetails);
         };
 
         var count = 0;
@@ -355,6 +355,8 @@
                 }
                 vm.reports.push(rep);
 
+
+                $log.log(new Date(startTime), new Date(endTime));
                 var body = {
                     fencereport: idx,
                     vehicles: rep.vehiclesAssetPath,
@@ -379,29 +381,41 @@
 
             for ( var details in data ) {
                 for ( var idx in vm.reports) {
-                    if ( !(vm.reports[idx].hasOwnProperty('reportDetails')))
-                        vm.reports[idx].reportDetails = [];
-
-                    var rep = {};
                     if ( vm.reports[idx].reportId == data[details].reportpath){
                         for ( var fence in vm.reports[idx].fences){
-                            if ( vm.reports[idx].fences[fence].id == data[details].fencepath)
-                                rep.fenceName = vm.reports[idx].fences[fence].name;
-                        }
-                        for ( var vehicle in vm.reports[idx].vehicles){
-                            if ( vm.reports[idx].vehicles[vehicle].id == data[details].deviceid)
-                                rep.vehicleName = vm.reports[idx].vehicles[vehicle].name;
+                            if ( vm.reports[idx].fences[fence].id == data[details].fencepath){
+                                // if ( !( vm.reports[idx].fences[fence].hasOwnProperty('vehiclesDetails')))
+                                //     vm.reports[idx].fences[fence].vehiclesDetails = [];
 
-                        }
+                                for ( var vehicle in vm.reports[idx].vehicles){
+                                    if ( vm.reports[idx].vehicles[vehicle].id == data[details].deviceid){
+                                        if ( !(vm.reports[idx].fences[fence].hasOwnProperty('myvehicles'))){
+                                            vm.reports[idx].fences[fence].myvehicles={};
+                                            vm.reports[idx].fences[fence].myvehicles.name = vm.reports[idx].vehicles[vehicle].name;
+                                            vm.reports[idx].fences[fence].myvehicles.entryExitPoints = [];
+                                        }
 
-                        rep.fentry = data[details].fentry;
-                        rep.fexit = data[details].fexit;
-                        vm.reports[idx].reportDetails.push(rep);
+
+                                        var startTime = parseInt(data[details].fentry);
+                                        var endTime = parseInt(data[details].fexit);
+                                        $log.log(startTime, endTime);
+                                        $log.log((endTime - startTime));
+                                        if ((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 )) {
+
+                                            vm.reports[idx].fences[fence].myvehicles.entryExitPoints.push({
+                                                fentry:data[details].fentry,
+                                                fexit:data[details].fexit
+                                            })
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
                         break;
                     }
                 }
             }
-
             $log.log(vm.reports);
         }
 
