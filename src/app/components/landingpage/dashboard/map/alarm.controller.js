@@ -16,12 +16,6 @@
         var vm = this;
         dialogService.setTab(2);
 
-        $timeout(function () {
-            console.log(vm.alarms);
-        },4000);
-
-
-
         vm.selectAll = function (data) {
             var filterData;
             var checkStatus;
@@ -86,12 +80,17 @@
                     vm.alarms.vehicles[idx].checked = true;
             }
 
-            alarmService.getAlarmsHistory();
+            vm.getHistory();
 
             if (vm.alarms.filteredVehicles.length)
                 vm.alarms.selectedVehiclesCount = ($filter("filter")
                 (vm.alarms.filteredVehicles, {checked: true})).length;
 
+        };
+
+
+        vm.getHistory = function(){
+            alarmService.getAlarmsHistory();
         };
 
         vm.init();

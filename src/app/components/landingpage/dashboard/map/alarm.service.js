@@ -26,8 +26,6 @@
 
 
         vm.getAlarmsHistory = function(){
-            $log.log(vm.alarmsObj.vehicles);
-
             var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
 
             var vehiclesids = [];
@@ -59,6 +57,14 @@
                 return;
             }
 
+
+            for ( var idx in data ) {
+                for ( var veh in vm.alarmsObj.vehicles){
+                    if ( data[idx].deviceid == vm.alarmsObj.vehicles[veh].deviceid){
+                        data[idx].vehicleno = vm.alarmsObj.vehicles[veh].vehicleno
+                    }
+                }
+            }
             vm.alarmsObj.alarmResponseData = data;
             $log.log(data);
         };
