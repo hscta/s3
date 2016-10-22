@@ -8,12 +8,16 @@
         .controller('AlarmController', AlarmController);
 
 
-    function AlarmController($scope, $log, dialogService, alarmService,
+    function AlarmController($scope, $log, dialogService, alarmService,$timeout,
                              mapService, $filter) {
         $log.log('AlarmController');
 
         var vm = this;
         dialogService.setTab(2);
+
+        $timeout(function () {
+            console.log(vm.alarms);
+        },4000);
 
 
 

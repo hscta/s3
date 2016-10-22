@@ -69,6 +69,7 @@
         </div>
     </div>
     <div class="geoc-body">
+        <div>Length = {{vm.alarms.alarmResponseData.length}}</div>
 
         <div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.loadingHistoryData">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -77,22 +78,18 @@
         <table id="example" class="display" cellspacing="0" width="100%">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
+                <th>Vehicle No</th>
+                <th>Time</th>
+                <th>Reason</th>
+                <th>Opperation Mode</th>
             </tr>
-            </thead> 
+            </thead>
             <tbody>
-            <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td>$320,800</td>
+            <tr ng-repeat="report in vm.alarms.alarmResponseData">
+                <td>{{report.vehicleno}}</td>
+                <td>{{report.gpstime}}</td>
+                <td>{{report.alarmreason}}</td>
+                <td>{{report.opermode}}</td>
             </tr>
             </tbody>
         </table>
