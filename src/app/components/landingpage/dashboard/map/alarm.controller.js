@@ -14,8 +14,9 @@
 
 
         var vm = this;
+
         vm.dtOptions = DTOptionsBuilder.newOptions();
-        vm.dtOptions.withOption('paging', false).withOption('scrollY', "430px").withOption('scrollCollapse', true);
+        vm.dtOptions.withOption('paging', false).withOption('scrollY', "63vh").withOption('scrollCollapse', true);
 
         var tempTimeout = $timeout(function () {
             if($('.geoc-body').length > 0){
