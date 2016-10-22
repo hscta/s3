@@ -62,7 +62,7 @@
                     <label>End Time</label>
                     <input type="text" id="end_time" ng-model="vm.alarms.endTime">
                 </md-input-container>
-                <md-button class="md-accent" ng-click="vm.getHistoryReport()">Get Report</md-button>
+                <md-button class="md-accent" ng-click="vm.getHistory()">Get Report</md-button>
             </div>
             <div layout="row" layout-align="end start">
             </div>
@@ -85,7 +85,7 @@
             <tbody>
             <tr ng-repeat="report in vm.alarms.alarmResponseData">
                 <td>{{report.vehicleno}}</td>
-                <td>{{report.gpstime : date : 'H m '}}</td>
+                <td>{{report.gpstime | date : 'd MMM, h:mm a'}}</td>
                 <td>{{report.alarmreason}}</td>
                 <td>{{report.opermode}}</td>
             </tr>
