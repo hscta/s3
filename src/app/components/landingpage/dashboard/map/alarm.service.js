@@ -59,7 +59,7 @@
                 return;
             }
 
-            vm.alarmResponseData = data;
+            vm.alarmsObj.alarmResponseData = data;
             $log.log(data);
         };
 
