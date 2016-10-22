@@ -20,7 +20,8 @@
             endTime:'',
             vehicleFilterPattern:'',
             selectedVehiclesCount:0,
-            filteredVehicles:[]
+            filteredVehicles:[],
+            alarmResponseData:[]
         };
 
 
@@ -54,6 +55,11 @@
             var data = history[0].data.data;
 
 
+            if (!data.length) {
+                return;
+            }
+
+            vm.alarmResponseData = data;
             $log.log(data);
         };
 
