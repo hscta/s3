@@ -17,8 +17,9 @@
         vm.alarmsObj = {
             vehicles:[],
             startTime:'',
-            endTime:''
-        }
+            endTime:'',
+            selectedVehiclesCount:0
+        };
 
 
         function init(){

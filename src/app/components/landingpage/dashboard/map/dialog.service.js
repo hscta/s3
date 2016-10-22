@@ -9,7 +9,7 @@
         var vm = this;
         vm.dialogShow = false;
 
-        var dialogStates = ['home.geofence', 'home.history'];
+        var dialogStates = ['home.geofence', 'home.history', 'home.alarm'];
         // var testObject = {'myName':{'yo1':'yoyo'}};
         // $cookies.put('hell',JSON.stringify(testObject));
 

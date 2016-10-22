@@ -1752,3 +1752,10 @@ div.gmnoprint div[draggable] div span,
 }
 
 
+
+
+.alarm-cont{
+    width: 100%;
+    height: 100%;
+    @include borderBox();
+}
