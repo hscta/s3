@@ -83,6 +83,7 @@
                     <th>Time</th>
                     <th>Reason</th>
                     <th>Opperation Mode</th>
+                    <th>Location</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -91,6 +92,7 @@
                     <td>{{report.gpstime | date : 'd MMM, h:mm a'}}</td>
                     <td>{{report.alarmreason}}</td>
                     <td>{{report.opermode}}</td>
+                    <td>{{report.lat }},{{report.lng }}</td>
                 </tr>
                 </tbody>
             </table>
