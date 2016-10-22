@@ -21,11 +21,13 @@
             vehicleFilterPattern:'',
             selectedVehiclesCount:0,
             filteredVehicles:[],
-            alarmResponseData:[]
+            alarmResponseData:[],
+            loadingHistoryData : false
         };
 
 
         vm.getAlarmsHistory = function(){
+            vm.alarmsObj.loadingHistoryData = true;
             var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
 
             var vehiclesids = [];
@@ -51,7 +53,7 @@
 
         vm.readHistoryInfo = function(history){
             var data = history[0].data.data;
-
+            vm.alarmsObj.loadingHistoryData = false;
 
             if (!data.length) {
                 return;

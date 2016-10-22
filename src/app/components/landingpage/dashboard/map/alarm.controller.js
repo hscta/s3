@@ -97,10 +97,14 @@
                 vm.alarms.selectedVehiclesCount = ($filter("filter")
                 (vm.alarms.filteredVehicles, {checked: true})).length;
 
+
+            vm.verifyCheckStatus('vehicle');
+
         };
 
 
         vm.getHistory = function(){
+            vm.alarms.alarmResponseData=[];
             alarmService.getAlarmsHistory();
         };
 

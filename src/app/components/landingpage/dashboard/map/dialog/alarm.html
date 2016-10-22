@@ -69,10 +69,11 @@
         </div>
     </div>
     <div class="geoc-body">
-        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.loadingHistoryData">
+
+        <div layout="row" layout-sm="column" layout-align="space-around"
+             ng-show="vm.alarms.loadingHistoryData">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
-
         <table datatable="ng"  dt-options="vm.dtOptions"  class="row-border hover"width="100%" ng-cloak>
             <thead>
             <tr>
@@ -106,14 +107,5 @@
             mask: '9999/19/39 29:59',
             format: 'Y-M-d H:i'
         });
-
-        $(document).ready(function() {
-            $('#example').DataTable({
-                dom: 'lBfrtip',
-                "scrollY":        "430px",
-                "scrollCollapse": true,
-                "paging":         false
-            });
-        } );
     });
 </script>
