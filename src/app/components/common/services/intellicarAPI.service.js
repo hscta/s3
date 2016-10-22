@@ -17,7 +17,8 @@
                                            anchorSmoothScrollService,
                                            geofenceService,
                                            fenceReportService,
-                                           vehicleAPIService
+                                           vehicleAPIService,
+                                           myAlarmService
 
                                            ) {
             var vm = this;
@@ -38,7 +39,8 @@
                 reportService : reportService,
                 geofenceService : geofenceService,
                 fenceReportService: fenceReportService,
-                vehicleAPIService: vehicleAPIService
+                vehicleAPIService: vehicleAPIService,
+                myAlarmService: myAlarmService
             }
         });
 })();

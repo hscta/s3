@@ -9,60 +9,88 @@
 
 
     function AlarmController($scope, $log, dialogService, alarmService,
-                             mapService) {
+                             mapService, $filter) {
         $log.log('AlarmController');
 
         var vm = this;
         dialogService.setTab(2);
-        vm.alarms = alarmService.alarmsObj;
+
+
 
         vm.selectAll = function (data) {
             var filterData;
             var checkStatus;
 
             if (data == 'vehicle') {
-                for (var idx in vm.alarms.vehicles) {
-                    filterData = vm.alarms.vehicles;
-                    vm.alarms.vehicles[idx].checked = vm.selectAllVehicles;
+                for (var idx in vm.alarms.filteredVehicles) {
+                    filterData = vm.alarms.filteredVehicles;
+                    vm.alarms.filteredVehicles[idx].checked = vm.selectAllVehicles;
                 }
                 vm.deSelectAllVehicles = !vm.selectAllVehicles;
                 vm.setSelectedCount('vehicle');
-            } else if (data == 'fence') {
-                filterData = vm.fenceReportObj.filteredFenceItems;
-
-                for (var idx in vm.fenceReportObj.filteredFenceItems) {
-                    vm.fenceReportObj.filteredFenceItems[idx].checked = vm.selectAllFences;
-                }
-                vm.fenceReportObj.selectedFencesCount = vm.fenceReportObj.filteredFenceItems.length;
-                vm.deSelectAllFences = !vm.selectAllFences;
-                vm.setSelectedCount('fence');
             }
         };
 
         vm.deSelectAll = function (data) {
             if (data == 'vehicle') {
-                for (var idx in vm.alarms.vehicles) {
-                    // var filterData = vm.alarms.vehicles;
-                    vm.alarms.vehicles[idx].checked = false;
+                for (var idx in vm.alarms.filteredVehicles) {
+                    // var filterData = vm.fenceReportObj.filteredItems;
+                    vm.alarms.filteredVehicles[idx].checked = false;
                 }
                 vm.selectAllVehicles = false;
                 vm.setSelectedCount('vehicle');
-            } else if (data == 'fence') {
-                // var filterData = vm.fenceReportObj.filteredFenceItems;
-
-                for (var idx in vm.fenceReportObj.filteredFenceItems) {
-                    vm.fenceReportObj.filteredFenceItems[idx].checked = false;
-                }
-                vm.selectAllFences = false;
-                vm.setSelectedCount('fence');
             }
+        };
+
+        vm.verifyCheckStatus = function (type) {
+            if (type == 'vehicle') {
+                var trues = $filter("filter")(vm.alarms.vehicles, {checked: true});
+                if (trues.length) {
+                    vm.deSelectAllVehicles = false;
+                } else {
+                    vm.deSelectAllVehicles = true;
+                }
+
+                if (trues.length < vm.alarms.vehicles.length)
+                    vm.selectAllVehicles = false;
+                else if (trues.length == vm.alarms.vehicles.length)
+                    vm.selectAllVehicles = true;
+            }
+            vm.setSelectedCount(type);
+        };
+
+        vm.filterVehicles = function () {
+            vm.alarms.filteredVehicles = $filter("filter")
+            (vm.alarms.vehicles, vm.alarms.vehicleFilterPattern);
+            // $log.log(vm.fenceReportObj.filteredItems);
+        };
+
+        vm.setSelectedCount = function (type) {
+            if (type == 'vehicle') {
+                if (vm.alarms.filteredVehicles.length)
+                    vm.alarms.selectedVehiclesCount = ($filter("filter")
+                    (vm.alarms.filteredVehicles, {checked: true})).length;
+            }
+        };
+
+        vm.init = function(){
+            vm.alarms = alarmService.alarmsObj;
+
+            for ( var idx in vm.alarms.vehicles ){
+                if ( !vm.alarms.vehicles[idx].hasOwnProperty('checked'))
+                    vm.alarms.vehicles[idx].checked = true;
+            }
+
+            alarmService.getAlarmsHistory();
+
+            if (vm.alarms.filteredVehicles.length)
+                vm.alarms.selectedVehiclesCount = ($filter("filter")
+                (vm.alarms.filteredVehicles, {checked: true})).length;
 
         };
 
+        vm.init();
 
-
-
-        $log.log(vm.alarms.vehicles);
     }
 
 })();

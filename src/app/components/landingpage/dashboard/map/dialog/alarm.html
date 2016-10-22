@@ -1,5 +1,4 @@
 <!--<md-tab-body >-->
-<script src="../map.controller.js"></script>
 <style>
     .error-msg {
         color: #f00;
@@ -30,13 +29,13 @@
                     <label>Vehicle Name ({{vm.alarms.selectedVehiclesCount}})</label>
                     <input type="text" ng-focus="vm.currPop = 'vehiclePop'"
                            placeholder="Search Vehicle"
-                           ng-model="vm.alarms.vehicleFilter"
+                           ng-model="vm.alarms.vehicleFilterPattern"
                            ng-change="vm.filterVehicles()"
                     >
                     <div class="geo-ms-cont" ng-show="vm.currPop == 'vehiclePop'">
                         <md-list>
-                            <md-list-item class="md-2-line" ng-init="item.checked = true; vm.alarms.selectedVehiclesCount = vm.alarms.selectedVehiclesCount + 1"
-                                          ng-repeat="item in vm.alarms.vehicles ">
+                            <md-list-item class="md-2-line"
+                                          ng-repeat="item in vm.alarms.filteredVehicles ">
                                 <md-checkbox ng-model="item.checked" aria-label="myvehicles"
                                              ng-change="vm.verifyCheckStatus('vehicle')">
                                 </md-checkbox>

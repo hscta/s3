@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('alarmService', alarmService);
 
-    function alarmService($log, mapService) {
+    function alarmService($log, mapService, intellicarAPI, $filter, $q) {
         $log.log("alarmService");
         var vm = this;
 
@@ -18,8 +18,48 @@
             vehicles:[],
             startTime:'',
             endTime:'',
-            selectedVehiclesCount:0
+            vehicleFilterPattern:'',
+            selectedVehiclesCount:0,
+            filteredVehicles:[]
         };
+
+
+        vm.getAlarmsHistory = function(){
+            $log.log(vm.alarmsObj.vehicles);
+
+            var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
+
+            var vehiclesids = [];
+
+            $log.log(vm.alarmsObj.filteredVehicles);
+            for (var idx in vm.alarmsObj.filteredVehicles) {
+                if (vm.alarmsObj.filteredVehicles[idx].checked) {
+                    vehiclesids.push(vm.alarmsObj.filteredVehicles[idx].deviceid);
+                }
+            }
+
+            var promiseList = [];
+            var body = {
+                vehiclepath : vehiclesids,
+                starttime: new Date(vm.alarmsObj.startTime).getTime(),
+                endtime: new Date(vm.alarmsObj.endTime).getTime()
+            };
+            promiseList.push(intellicarAPI.myAlarmService.getAlarmInfo(body));
+            return $q.all(promiseList)
+                .then(vm.readHistoryInfo, vm.handleFailure);
+
+        };
+
+        vm.readHistoryInfo = function(history){
+            var data = history[0].data.data;
+
+
+            $log.log(data);
+        };
+
+        vm.handleFailure = function(){
+            $log.log('fails');
+        }
 
 
         function init(){
@@ -27,11 +67,9 @@
 
             vm.alarmsObj.startTime = defaultTime.startTime;
             vm.alarmsObj.endTime = defaultTime.endTime;
-
-
             vm.alarmsObj.vehicles = mapService.inMap.markers.inMarkers;
+            vm.alarmsObj.filteredVehicles = vm.alarmsObj.vehicles;
         };
-
 
         vm.getDefaultTime = function(){
             var dateFormat = 'YYYY-MM-DD HH:mm';
