@@ -355,7 +355,7 @@
                 vm.initialSelect = true;
             }
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
-            vm.getMyGeofenceReports();
+            // vm.getMyGeofenceReports();
         };
 
         //vm.init();
