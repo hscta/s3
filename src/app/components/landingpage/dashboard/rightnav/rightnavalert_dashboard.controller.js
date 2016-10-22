@@ -356,8 +356,7 @@
                 }
                 vm.reports.push(rep);
 
-
-                $log.log(new Date(startTime), new Date(endTime));
+                // $log.log(new Date(startTime), new Date(endTime));
                 var body = {
                     fencereport: idx,
                     vehicles: rep.vehiclesAssetPath,

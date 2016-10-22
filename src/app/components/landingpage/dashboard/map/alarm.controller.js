@@ -8,14 +8,17 @@
         .controller('AlarmController', AlarmController);
 
 
-    function AlarmController($scope, $log, $mdDialog, dialogService,
-                               $interval, $timeout, intellicarAPI, historyService,
-                               geofenceViewService, $state) {
+    function AlarmController($scope, $log, dialogService, alarmService,
+                             mapService) {
         $log.log('AlarmController');
 
         var vm = this;
-        dialogService.setTab(0);
+        dialogService.setTab(2);
 
+
+        vm.alarms = alarmService.alarmsObj;
+
+        $log.log(vm.alarms.vehicles);
     }
 
 })();

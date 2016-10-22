@@ -318,6 +318,10 @@
                             <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
                                ui-sref="home.geofence">Geofence</a>
                         </li>
+                        <li class="tab col s2">
+                            <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 2]"
+                               ui-sref="home.alarm">Alarms</a>
+                        </li>
                     </ul>
                 </div>
                 <div flex ui-view="dialogview" class="mapDView"></div>

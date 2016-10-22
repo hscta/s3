@@ -91,9 +91,6 @@
           })
           .state('home.alarm', {
               url: 'alarm',
-              params: {
-                  mapObj: null
-              },
               views: {
                   'dialogview@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map/dialog/alarm.html',

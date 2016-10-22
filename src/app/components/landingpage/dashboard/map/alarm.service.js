@@ -14,8 +14,37 @@
         var vm = this;
 
 
+        vm.alarmsObj = {
+            vehicles:[],
+            startTime:'',
+            endTime:''
+        }
 
 
+        function init(){
+            var defaultTime = vm.getDefaultTime();
+
+            vm.alarmsObj.startTime = defaultTime.startTime;
+            vm.alarmsObj.endTime = defaultTime.endTime;
+
+
+            vm.alarmsObj.vehicles = mapService.inMap.markers.inMarkers;
+        };
+
+
+        vm.getDefaultTime = function(){
+            var dateFormat = 'YYYY-MM-DD HH:mm';
+
+            var startTime = moment().subtract(24, 'hour').format(dateFormat);
+            var endTime = moment().format(dateFormat);
+
+            return {
+                startTime: startTime,
+                endTime: endTime
+            }
+        };
+
+        init();
 
     }
 })();
