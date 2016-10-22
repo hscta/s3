@@ -97,7 +97,7 @@
               views: {
                   'dialogview@home': {
                       templateUrl: 'app/components/landingpage/dashboard/map/dialog/alarm.html',
-                      controller: 'alarmController as vm'
+                      controller: 'AlarmController as vm'
                   }
               }
           })
