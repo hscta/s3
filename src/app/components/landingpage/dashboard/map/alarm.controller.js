@@ -8,12 +8,23 @@
         .controller('AlarmController', AlarmController);
 
 
-    function AlarmController($scope, $log, dialogService, alarmService,$timeout,
+    function AlarmController($scope, $log, dialogService, alarmService,DTOptionsBuilder,$timeout,
                              mapService, $filter) {
         $log.log('AlarmController');
 
 
         var vm = this;
+        vm.dtOptions = DTOptionsBuilder.newOptions();
+        vm.dtOptions.withOption('paging', false).withOption('scrollY', "430px").withOption('scrollCollapse', true);
+
+        var tempTimeout = $timeout(function () {
+            if($('.geoc-body').length > 0){
+                var td_heightconsole = ($('.geoc-body').height() - 100) + 'px';
+                $timeout.cancel(tempTimeout);
+                // vm.dtOptions.withOption('paging', false).withOption('scrollY',td_heightconsole ).withOption('scrollCollapse', true);
+            }
+        },200)
+
         dialogService.setTab(2);
 
         vm.selectAll = function (data) {
