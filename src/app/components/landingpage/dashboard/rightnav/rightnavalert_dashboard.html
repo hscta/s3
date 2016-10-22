@@ -135,8 +135,9 @@
                                 </div>
                                 <div class="en-wrapper">
                                     <div ng-repeat="fence in main.fences" style="width: 100%;float:left">
-                                        <div class="en_mid"  ng-repeat="(midKey, mid) in fence" ng-if="midKey != 'id' && midKey != 'name' && mid.length > 0"
-                                             style="s:{{vm.returnHeight(mid);}}">
+                                        <div class="en_mid"  ng-repeat="(midKey, mid) in fence" ng-if="midKey != 'id' && midKey != 'name' && midKey != 'active' && mid.length > 0"
+                                             ng-class="{'en-closed':!main.active,'en-semi-closed':!mid.active}" style="height:{{(mid.length * 30) + 67}}px"
+                                            ng-init="mid.active = true;">
                                             <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important;">
                                                 {{ midKey}}
                                                 <div class="enl_item enl_add">
@@ -146,9 +147,16 @@
                                                 <div class="enl_item enl_count">{{vm.returnLength(mid,2)}}</div>
                                             </div>
                                             <div class="en-wrapper">
-                                                <div ng-repeat="vehicle in mid" class="en_mid">
-                                                    {{vehicle.fentry}} ==
-                                                </div>
+                                                <table class="en_entryexit">
+                                                    <tr>
+                                                        <th><i class="fa fa-chevron-down greenColor"></i> Entry Time</th>
+                                                        <th><i class="fa fa-chevron-up redColor"></i> Exit Time</th>
+                                                    </tr>
+                                                    <tr ng-repeat="vehicle in mid">
+                                                        <td>{{vehicle.fentry | date : 'd MMM, h:mm a'}}</td>
+                                                        <td>{{vehicle.fexit | date : 'd MMM, h:mm a'}}</td>
+                                                    </tr>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>

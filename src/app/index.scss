@@ -56,6 +56,16 @@ body{
     transform:$str;
 }
 
+@mixin no-select(){
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
 
 
 
@@ -1282,6 +1292,31 @@ $rnt_label_height : 35px;
     .enl_count{
         background: #3498db;
         color:#fff;
+    }
+    .en_entryexit{
+        width: 100%;
+        tr{
+            height: 30px;
+            font-size:75%;
+            width: 100%;
+            td,th{
+                width: 50%;
+                height: 30px;
+                padding:0 0 0 15px;
+                line-height: 30px;
+                @include borderBox();
+                border-bottom: 1px solid #eee;
+                cursor: default;
+                @include no-select();
+                i{
+                    height: 30px;
+                    width: 30px;
+                    text-align: center;
+                    line-height: 30px;
+                    color:#aaa;
+                }
+            }
+        }
     }
 }
 

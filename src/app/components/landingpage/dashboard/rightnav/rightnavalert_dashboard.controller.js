@@ -242,6 +242,7 @@
             }
         };
 
+
         vm.navFilter = function (data) {
             return true;
         };
