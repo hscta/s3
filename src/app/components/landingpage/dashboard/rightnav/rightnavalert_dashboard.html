@@ -135,10 +135,10 @@
                                 </div>
                                 <div class="en-wrapper">
                                     <div ng-repeat="fence in main.fences" style="width: 100%;float:left">
-                                        <div class="en_mid"  ng-repeat="(midKey, mid) in fence" ng-if="Array.isArray(mid)"
-                                             ng-class="{'en-closed':!main.active}" style="s:{{vm.returnHeight(mid);}}">
+                                        <div class="en_mid"  ng-repeat="(midKey, mid) in fence" ng-if="midKey != 'id' && midKey != 'name' && mid.length > 0"
+                                             style="s:{{vm.returnHeight(mid);}}">
                                             <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important;">
-                                                {{midKey}}
+                                                {{ midKey}}
                                                 <div class="enl_item enl_add">
                                                     <i class="fa fa-plus" ng-if="!mid.active"></i>
                                                     <i class="fa fa-minus" ng-if="mid.active"></i>
@@ -146,7 +146,9 @@
                                                 <div class="enl_item enl_count">{{vm.returnLength(mid,2)}}</div>
                                             </div>
                                             <div class="en-wrapper">
-
+                                                <div ng-repeat="vehicle in mid" class="en_mid">
+                                                    {{vehicle.fentry}} ==
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
