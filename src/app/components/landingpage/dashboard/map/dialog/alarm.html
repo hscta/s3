@@ -1,0 +1,132 @@
+<!--<md-tab-body >-->
+<style>
+    .error-msg {
+        color: #f00;
+        font-size: 12px;
+        min-height: 20px;
+    }
+
+    table.geo-table thead tr{
+        padding:0;
+        height:35px;
+    }
+
+    .google-visualization-table-tr-sel{
+        background: red !important;
+    }
+</style>
+<div class="geofence-cont" style="height: 100%;">
+    <div class="geo-leftbar " ng-click="vm.currPop = null">
+        <div class="geo-rep-item-head shadow-border" >Reports</div>
+        <div class="geo-lb-cont coolbar">
+            <div class="geo-rep-item" ng-class="{'active':vm.fenceReportObj.reportId == rep.assetpath}"
+                 ng-repeat="rep in vm.fenceReportObj.reports" ng-click="vm.getSelectedFences(rep)">{{rep.name}}</div>
+        </div>
+    </div>
+    <div class="geo-cont" >
+        <div class="geoc-head">
+
+            <span class="error-msg">{{vm.errorMsg}}</span><br/>
+
+            <div layout="row" layout-align="space-around center">
+                <div layout="row" class="input-fields" layout-align="space-around center" flex>
+
+                    <div class="geo-mul-back" ng-show="vm.currPop" ng-click="vm.currPop = null"></div>
+                    <md-input-container class="container-margin geo-multiSel">
+                        <label>Fence Name ({{vm.fenceReportObj.selectedFencesCount}})</label>
+                        <input type="text" ng-focus=" vm.currPop = 'fencePop'"
+                               placeholder="Search Fences" ng-model="vm.fenceReportObj.fenceFilter"
+                               ng-change="vm.filterFences()"
+                        >
+                        <div class="geo-ms-cont" ng-show="vm.currPop == 'fencePop'">
+                            <md-list>
+                                <md-list-item class="md-2-line"
+                                              ng-repeat="item in vm.fenceReportObj.filteredFenceItems ">
+
+                                    <md-checkbox ng-model="item.checked" aria-label="myfences"
+                                                 ng-change="vm.verifyCheckStatus('fence')">
+                                    </md-checkbox>
+                                    <div class="md-list-item-text">
+                                        <h3>{{item.name}}</h3>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                            <div class="geo-ms-controls">
+                                <md-checkbox ng-model="vm.selectAllFences" aria-label="all"
+                                             ng-change="vm.selectAll('fence')">All</md-checkbox>
+                                <md-checkbox ng-model="vm.deSelectAllFences" aria-label="None"
+                                             ng-change="vm.deSelectAll('fence')">None</md-checkbox>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="container-margin geo-multiSel">
+                        <label>Vehicle Name ({{vm.fenceReportObj.selectedVehiclesCount}})</label>
+                        <input type="text" ng-focus="vm.currPop = 'vehiclePop'"
+                               placeholder="Search Vehicle"
+                               ng-model="vm.fenceReportObj.vehicleFilter"
+                               ng-change="vm.filterVehicles()"
+                        >
+                        <div class="geo-ms-cont" ng-show="vm.currPop == 'vehiclePop'">
+                            <md-list>
+                                <md-list-item class="md-2-line"
+                                              ng-repeat="item in vm.fenceReportObj.filteredItems">
+                                    <md-checkbox ng-model="item.checked" aria-label="myvehicles"
+                                                 ng-change="vm.verifyCheckStatus('vehicle')">
+                                    </md-checkbox>
+                                    <div class="md-list-item-text">
+                                        <h3>{{item.name}}</h3>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                            <div class="geo-ms-controls">
+                                <md-checkbox ng-model="vm.selectAllVehicles" aria-label="all"
+                                             ng-change="vm.selectAll('vehicle')">All</md-checkbox>
+                                <md-checkbox ng-model="vm.deSelectAllVehicles" aria-label="None"
+                                             ng-change="vm.deSelectAll('vehicle')">None</md-checkbox>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="container-margin">
+                        <label>Start Time</label>
+                        <input type="text" id="start_time" ng-model="vm.fenceReportObj.startTime">
+                    </md-input-container>
+
+                    <md-input-container class="container-margin">
+                        <label>End Time</label>
+                        <input type="text" id="end_time" ng-model="vm.fenceReportObj.endTime">
+                    </md-input-container>
+                    <md-button class="md-accent" ng-click="vm.getHistoryReport()">Get Report</md-button>
+                </div>
+                <div layout="row" layout-align="end start">
+                </div>
+            </div>
+        </div>
+        <div class="geoc-body">
+
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.loadingHistoryData">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+
+            <div id="geo-table" class="geo-table"></div>
+
+            <span ng-show="vm.dataFound">No Data Found</span>
+        </div>
+    </div>
+</div>
+<!--</md-tab-body>-->
+
+<script>
+    $(document).ready(function () {
+        $('#start_time').datetimepicker({
+            mask: '9999/19/39 29:59',
+            format: 'Y-M-d H:i'
+        });
+
+        $('#end_time').datetimepicker({
+            mask: '9999/19/39 29:59',
+            format: 'Y-M-d H:i'
+        });
+    });
+</script>
