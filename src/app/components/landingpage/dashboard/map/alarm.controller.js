@@ -16,15 +16,7 @@
         var vm = this;
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
-        vm.dtOptions.withOption('paging', false).withOption('scrollY', "63vh").withOption('scrollCollapse', true);
-
-        var tempTimeout = $timeout(function () {
-            if($('.geoc-body').length > 0){
-                var td_heightconsole = ($('.geoc-body').height() - 100) + 'px';
-                $timeout.cancel(tempTimeout);
-                // vm.dtOptions.withOption('paging', false).withOption('scrollY',td_heightconsole ).withOption('scrollCollapse', true);
-            }
-        },200)
+        vm.dtOptions.withOption('paging', false).withOption('scrollY', "62vh").withOption('scrollCollapse', true);
 
         dialogService.setTab(2);
 

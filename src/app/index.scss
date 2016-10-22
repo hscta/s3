@@ -1779,10 +1779,10 @@ div.gmnoprint div[draggable] div span,
         padding-top: 4px;
         padding-bottom: 4px;
         padding-left: 30px;
+        font-size:85%;
     }
     th{
         border-bottom: 1px solid #ddd;
-        @include shadow(0 2px 3px rgba(0,0,0,0.3));
     }
     div.dataTables_wrapper div.dataTables_filter input {
         margin-right: 2.5em;
