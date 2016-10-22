@@ -371,6 +371,8 @@
         };
 
         vm.readHistoryInfo = function (history) {
+            if ( !history[0])
+                return;
             var data = history[0].data.data;
             $log.log(vm.reports);
 
