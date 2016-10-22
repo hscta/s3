@@ -1759,14 +1759,14 @@ div.gmnoprint div[draggable] div span,
     height: 100%;
     @include borderBox();
     .geoc-head{
-        width: 80%;
+        width: 100%;
         position: relative;
         z-index: 100;
         background: #fff;
     }
     .geoc-body{
         padding-top:10px;
-        //top:0;
+        top:90px;
         overflow-y: visible;
     }
     .dataTables_length{
@@ -1778,6 +1778,11 @@ div.gmnoprint div[draggable] div span,
     th,td{
         padding-top: 4px;
         padding-bottom: 4px;
+        padding-left: 30px;
+    }
+    th{
+        border-bottom: 1px solid #ddd;
+        @include shadow(0 2px 3px rgba(0,0,0,0.3));
     }
     div.dataTables_wrapper div.dataTables_filter input {
         margin-right: 2.5em;
@@ -1790,6 +1795,13 @@ div.gmnoprint div[draggable] div span,
 .dataTables_filter {
     position: absolute!important;
     right: 10px!important;
-    top: -70px!important;
+    top: -30px!important;
+    color:#fff;
+    label{
+
+    }
+    input{
+        color:#333;
+    }
     //display: none!important;
 }
