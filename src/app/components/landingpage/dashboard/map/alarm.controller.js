@@ -12,6 +12,7 @@
                              mapService, $filter) {
         $log.log('AlarmController');
 
+
         var vm = this;
         dialogService.setTab(2);
 

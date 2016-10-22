@@ -34,7 +34,7 @@
     "datetimepickerjs": "./src/assets/datetimepicker/jquery.datetimepicker.min.js",
     "font-awesome": "^4.6.3",
     "ui-router-extras": "^0.1.2",
-    "datatables.net": "^1.10.12",
+    "angular-datatables": "^0.5.5",
     "datatables.net-bs": "^1.10.12"
   },
   "devDependencies": {
