@@ -33,12 +33,14 @@
             DELHI: 'DELHI'
         };
 
-        vm.currentLocation = vm.loc.MUMBAI; // Have to set it Dynamically
+        vm.currentLocation = vm.loc.BANGALORE; // Have to set it Dynamically
 
         vm.setInMarkerLocation = function (data) {
             vm.currentLocation = data.id;
             mapService.setInMapLocation(data.latlng);
         };
+
+        // mapService.setInMapLocation(latlng: {latitude: 12.967995, longitude: 77.597953}); // banglore
 
         vm.leftTB = [
             {
