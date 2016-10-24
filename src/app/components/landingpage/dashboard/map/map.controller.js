@@ -115,7 +115,7 @@
             // $log.log(vehicleData);
 
             vm.inMarkers.push(vehicleData);
-            vm.customOverlay(vehicleData);
+            // vm.customOverlay(vehicleData);
         };
 
         vm.updateMarker = function (vehicleData) {
