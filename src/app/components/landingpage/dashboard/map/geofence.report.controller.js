@@ -127,8 +127,6 @@
                     historyService.historyMapObj.startTime = startTime;
                     historyService.historyMapObj.endTime = endTime;
 
-                    historyService.resetPlayerControls();
-
                     var params = {
                         clickedMarker: vehicleDetail[0]
                     };
@@ -154,8 +152,8 @@
 
         vm.getMyGeofenceReports = function (resp) {
             if (vm.initialSelect) {
-                vm.fenceReportObj.reports = geofenceReportService.getMyGeofenceReports();
                 vm.initialSelect = false;
+                vm.fenceReportObj.reports = geofenceReportService.getMyGeofenceReports();
                 for (var idx in vm.fenceReportObj.reports) {
                     return vm.getSelectedFences(vm.fenceReportObj.reports[idx]);
                 }
@@ -355,7 +353,7 @@
                 vm.initialSelect = true;
             }
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
-            // vm.getMyGeofenceReports();
+            vm.getMyGeofenceReports();
         };
 
         //vm.init();
