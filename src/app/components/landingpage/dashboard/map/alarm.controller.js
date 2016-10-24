@@ -16,7 +16,7 @@
         var vm = this;
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
-        vm.dtOptions.withOption('paging', false).withOption('scrollY', "62vh").withOption('scrollCollapse', true);
+        vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
 
         dialogService.setTab(2);
 
