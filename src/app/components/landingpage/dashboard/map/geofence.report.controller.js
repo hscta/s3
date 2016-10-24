@@ -262,8 +262,8 @@
 
                 vm.selectedFences = $filter("filter")(vm.fenceReportObj.filteredFenceItems, {checked: true});
 
-                var starttime = new Date(vm.fenceReportObj.startTime).getTime();
-                var endtime = new Date(vm.fenceReportObj.endTime).getTime();
+                var starttime = new Date(moment(vm.fenceReportObj.startTime).unix() * 1000).getTime();
+                var endtime = new Date(moment(vm.fenceReportObj.endTime).unix() * 1000).getTime();
 
                 if (endtime <= starttime) {
                     vm.errorMsg = "End time should be >= Start time";

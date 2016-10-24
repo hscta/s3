@@ -42,8 +42,8 @@
             var promiseList = [];
             var body = {
                 vehiclepath : vehiclesids,
-                starttime: new Date(vm.alarmsObj.startTime).getTime(),
-                endtime: new Date(vm.alarmsObj.endTime).getTime()
+                starttime: new Date(moment(vm.alarmsObj.startTime).unix() * 1000).getTime(),
+                endtime: new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime()
             };
             promiseList.push(intellicarAPI.myAlarmService.getAlarmInfo(body));
             return $q.all(promiseList)

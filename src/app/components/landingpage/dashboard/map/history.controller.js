@@ -21,13 +21,19 @@
 
         $scope.getHistory = function () {
             // vm.historyObj.getHistory = false;
+            $log.log(vm.historyObj);
+            // vm.historyObj.startTime = $('#start_time').val();
+            // vm.historyObj.endTime = $('#end_time').val();
+
+            $log.log(vm.historyObj);
+
             historyService.setData('getHistory', false);
 
             if (vm.historyObj.startTime && vm.historyObj.endTime) {
                 if (vm.historyObj.startTime.length && vm.historyObj.endTime.length) {
 
-                    var starttime = new Date(vm.historyObj.startTime).getTime();
-                    var endtime = new Date(vm.historyObj.endTime).getTime();
+                    var starttime = new Date(moment(vm.historyObj.startTime).unix()*1000).getTime();
+                    var endtime = new Date(moment(vm.historyObj.endTime).unix()*1000).getTime();
 
                     if (endtime - starttime > timeLimit)
                         endtime = starttime + timeLimit;
