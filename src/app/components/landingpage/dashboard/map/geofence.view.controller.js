@@ -33,7 +33,7 @@
             DELHI: 'DELHI'
         };
 
-        vm.currentLocation = vm.loc.BANGALORE; // Have to set it Dynamically
+        vm.currentLocation = vm.loc.MUMBAI; // Have to set it Dynamically
 
         vm.setInMarkerLocation = function (data) {
             vm.currentLocation = data.id;
