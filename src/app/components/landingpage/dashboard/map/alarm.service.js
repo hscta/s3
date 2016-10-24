@@ -88,7 +88,7 @@
         vm.getDefaultTime = function(){
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
-            var startTime = moment().subtract(24, 'hour').format(dateFormat);
+            var startTime = moment().subtract(1, 'hour').format(dateFormat);
             var endTime = moment().format(dateFormat);
 
             return {

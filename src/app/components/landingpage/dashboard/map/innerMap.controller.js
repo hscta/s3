@@ -287,7 +287,7 @@
 
         var topDiff;
 
-        function drawGraph() {
+   function drawGraph() {
             var pathArray = marker.trace.path;
             var dummyEl;
             var tempPathArray = [];
