@@ -84,7 +84,10 @@
                     vm.alarms.vehicles[idx].checked = true;
             }
 
-            vm.getHistory();
+            $log.log('ssssssssssssssssssssssssss');
+            $log.log(vm.alarms.alarmResponseData.length);
+            if(!vm.alarms.alarmResponseData.length)
+                vm.getHistory();
 
             if (vm.alarms.filteredVehicles.length)
                 vm.alarms.selectedVehiclesCount = ($filter("filter")
