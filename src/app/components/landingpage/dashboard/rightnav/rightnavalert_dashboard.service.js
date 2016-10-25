@@ -221,6 +221,12 @@
                 }
 
                 liveAlarmData[reasonType][vehicleno]={};
+                liveAlarmData[reasonType][vehicleno].timestamp = data.timestamp;
+                liveAlarmData[reasonType][vehicleno].latitude = data.latitude;
+                liveAlarmData[reasonType][vehicleno].longitude = data.longitude;
+                liveAlarmData[reasonType][vehicleno].opermode = data.opermode;
+                liveAlarmData[reasonType][vehicleno].vehiclepath = data.vehiclepath;
+                liveAlarmData[reasonType][vehicleno].deviceid = data.deviceid;
 
                 $log.log(liveAlarmData);
             }
