@@ -184,23 +184,19 @@
                                 </div>
                                 <div class="en-wrapper">
                                     <div class="en_mid"  ng-repeat="(midKey, mid) in main" ng-if="midKey != 'id' && midKey != 'name' && midKey != 'active'"
-                                         ng-class="{'en-closed':!main.active,'en-semi-closed':!mid.active}" style="height:{{(Object.keys(mid).length * 30) + 67}}px"
-                                         ng-init="mid.active = true;">
+                                         ng-class="{'en-closed':!main.active,'en-semi-closed':!mid.active}" style="height:110px">
                                         <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important;">
-                                            {{ Object.keys(mid)}}
+                                            {{ midKey }}
                                             <div class="enl_item enl_add">
                                                 <i class="fa fa-plus" ng-if="!mid.active"></i>
                                                 <i class="fa fa-minus" ng-if="mid.active"></i>
                                             </div>
-                                            <div class="enl_item enl_count">{{vm.returnLength(mid,2)}}</div>
+                                            <!--<div class="enl_item enl_count">{{vm.returnLength(mid,2)}}</div>-->
                                         </div>
-                                        <div class="en-wrapper">
-                                            <table class="en_entryexit">
-                                                <tr ng-repeat="vehicle in mid">
-                                                    <td>{{vehicle.fentry | date : 'd MMM, h:mm a'}}</td>
-                                                    <td>{{vehicle.fexit | date : 'd MMM, h:mm a'}}</td>
-                                                </tr>
-                                            </table>
+                                        <div class="en-alarm-final">
+                                            <div class="en-af-item">Time : {{mid.timestamp | date : 'd MMM, h:mm a'}}</div>
+                                            <div class="en-af-item">Mode : {{mid.opermode }}</div>
+                                            <div class="en-af-item">Loc : {{mid.latitude }},{{mid.longitude }}</div>
                                         </div>
                                     </div>
                                 </div>
