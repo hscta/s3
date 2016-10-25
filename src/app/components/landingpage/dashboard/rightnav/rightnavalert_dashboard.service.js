@@ -202,13 +202,25 @@
                 if (msg == null ) return;
 
                 var data = msg[1];
-
                 var reasonType = data.alarmreason;
-                $log.log(reasonType);
 
-                if (!(reasonType in reportData)) {
+                var vehicleno = data.vehicleno;
+
+                for ( var type in liveAlarmData ) {
+                    for ( var myvehicle in liveAlarmData[type]){
+                        if (vehicleno == myvehicle) {
+                            //$log.log("Removing " + vehicleno + " from " + vehicle.reportName);
+                            delete myvehicle;
+                            break;
+                        }
+                    }
+                }
+
+                if (!(reasonType in liveAlarmData)) {
                     liveAlarmData[reasonType] = {};
                 }
+
+                liveAlarmData[reasonType][vehicleno]={};
 
                 $log.log(liveAlarmData);
             }
