@@ -8,7 +8,7 @@
         .controller('AlarmController', AlarmController);
 
 
-    function AlarmController($scope, $log, dialogService, alarmService,DTOptionsBuilder,$timeout,
+    function AlarmController($scope, $log, dialogService, alarmService,DTOptionsBuilder,$timeout,$interval,
                              mapService, $filter) {
         $log.log('AlarmController');
 
@@ -17,6 +17,33 @@
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
         vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
+        // $timeout(function () {
+        //     vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
+        //     console.log('first setting');
+        // },2000);
+        //
+        // $timeout(function () {
+        //     vm.dtOptions.withOption('paging', false).withOption('scrollY', "100px").withOption('scrollCollapse', true);
+        //     console.log('second setting');
+        // },12000);
+        //
+        // var tempInter = $interval(function () {
+        //     if($('.geoc-body').length > 0){
+        //         // vm.dtOptions.withOption('paging', false).withOption('scrollY', "100px").withOption('scrollCollapse', true);
+        //         $interval.cancel(tempInter);
+        //         console.log('re initializtion');
+        //     }
+        // },200);
+
+        var tempInter = setInterval(function () {
+            if($('.geoc-body').length > 0){
+                $timeout(function () {
+                    var tableHeight = ( $('.geoc-body').height() - 100 ) + 'px';
+                    vm.dtOptions.withOption('paging', false).withOption('scrollY', tableHeight).withOption('scrollCollapse', true);
+                },200);
+                clearInterval(tempInter);
+            }
+        },200);
 
         dialogService.setTab(2);
 
@@ -84,8 +111,8 @@
                     vm.alarms.vehicles[idx].checked = true;
             }
 
-            $log.log('ssssssssssssssssssssssssss');
-            $log.log(vm.alarms.alarmResponseData.length);
+            // $log.log('ssssssssssssssssssssssssss');
+            // $log.log(vm.alarms.alarmResponseData.length);
             if(!vm.alarms.alarmResponseData.length)
                 vm.getHistory();
 

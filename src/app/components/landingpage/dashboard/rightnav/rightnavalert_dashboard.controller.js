@@ -176,7 +176,7 @@
 
         rightNavAlertDashboardService.pushDataToController = function (data) {
             vm.activeTabData = data;
-            //console.log(data);
+            // console.log(data);
         };
 
         var mapObj = {hours:'h',hour:'h',minutes:'min',minute:'min',days:'d',day:'d',an:'1', 'a few seconds':'1 min',a:'1'};
@@ -415,6 +415,10 @@
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             //rightNavAlertDashboardService.addListener('updatefencereport', vm.updateFenceReport);
             vm.activeTabData = rightNavAlertDashboardService.getReportData();
+            $timeout(function () {
+                console.log(vm.activeTabData);
+
+            },4000);
 
             geofenceReportService.addListener('mygeofencereportsinfo', vm.historyGeofenceReports);
 

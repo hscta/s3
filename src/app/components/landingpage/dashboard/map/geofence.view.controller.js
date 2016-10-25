@@ -26,14 +26,9 @@
             }
         };
 
-        vm.loc = {
-            MUMBAI: 'MUMBAI',
-            BANGALORE: 'BANGALORE',
-            HYDERABAD: 'HYDERABAD',
-            DELHI: 'DELHI'
-        };
+        vm.loc = mapService.loc;
 
-        vm.currentLocation = vm.loc.MUMBAI; // Have to set it Dynamically
+        vm.currentLocation = mapService.getCurrentLocation().id; // Have to set it Dynamically
 
         vm.setInMarkerLocation = function (data) {
             vm.currentLocation = data.id;
