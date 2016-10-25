@@ -38,12 +38,18 @@
         var tempInter = setInterval(function () {
             if($('.geoc-body').length > 0){
                 $timeout(function () {
-                    var tableHeight = ( $('.geoc-body').height() - 100 ) + 'px';
+                    var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
                     vm.dtOptions.withOption('paging', false).withOption('scrollY', tableHeight).withOption('scrollCollapse', true);
                 },200);
                 clearInterval(tempInter);
             }
         },200);
+        $(window).resize(function () {
+            $timeout(function () {
+                var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
+                vm.dtOptions.withOption('paging', false).withOption('scrollY', tableHeight).withOption('scrollCollapse', true);
+            },200);
+        });
 
         dialogService.setTab(2);
 

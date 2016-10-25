@@ -1817,3 +1817,11 @@ div.gmnoprint div[draggable] div span,
     }
     //display: none!important;
 }
+
+div.dataTables_info {
+    padding-top: 0!important;
+    padding-left: 18px;
+    margin-top: -11px;
+    font-size: 90%;
+    color: #279eb3;
+}
