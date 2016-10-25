@@ -196,7 +196,44 @@
             var lat = 19.19554947109134;
             var lng = 72.93638193466376;
 
-            vm.center = {latitude: lat, longitude: lng};
+
+            vm.loc = {
+                MUMBAI: 'MUMBAI',
+                BANGALORE: 'BANGALORE',
+                HYDERABAD: 'HYDERABAD',
+                DELHI: 'DELHI'
+            };
+
+            vm.locations = {
+                BANGALORE:{
+                    id: vm.loc.BANGALORE,
+                        notation: 'BLR',
+                    latlng: {latitude: 12.967995, longitude: 77.597953}
+                },
+                HYDERABAD:{
+                    id: vm.loc.HYDERABAD,
+                        notation: 'HYD',
+                        latlng: {latitude: 17.384125, longitude: 78.479447}
+                },
+                DELHI:{
+                    id: vm.loc.DELHI,
+                        notation: 'DEL',
+                        latlng: {latitude: 28.614132, longitude: 77.215449}
+                },
+                MUMBAI:{
+                    id: vm.loc.MUMBAI,
+                        notation: 'MUM',
+                        latlng: {latitude: 19.195549, longitude: 72.936381}
+                }
+            };
+
+            vm.currentLocation = vm.locations.BANGALORE;
+
+            vm.getCurrentLocation = function () {
+              return vm.currentLocation;
+            };
+
+            vm.center = vm.currentLocation.latlng;
             vm.zoom = 11;
             vm.bounds = {};
 
