@@ -38,12 +38,8 @@
 
                 //$log.log(subscriptionMsg);
             }
-
             vm.currRep = vm.reports[0];
-            //vm.currFence = vm.currRep.fences[0];
-            //vm.tableSort = {'id': 1, 'str': 'name', 'reverse': false};
         };
-
 
         // vm.getMyGeofenceReportsMap = function () {
         //     geofenceReportService.getMyGeofenceReportsMap()
@@ -408,20 +404,13 @@
                 }
             }
             $log.log(vm.reports);
-        }
+        };
 
         vm.init = function () {
-            //mapService.addListener('rtgps', vm.mapServiceUpdate);
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
-            //rightNavAlertDashboardService.addListener('updatefencereport', vm.updateFenceReport);
             vm.activeTabData = rightNavAlertDashboardService.getReportData();
-            $timeout(function () {
-                console.log(vm.activeTabData);
-
-            },4000);
-
+            vm.activeAlarmData = rightNavAlertDashboardService.getAlarmData();
             geofenceReportService.addListener('mygeofencereportsinfo', vm.historyGeofenceReports);
-
         };
 
         vm.init();

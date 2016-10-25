@@ -18,6 +18,19 @@
             var reqbody = {vehicle: body};
             return requestService.firePost('/reports/rtalarm/trackhistorym', reqbody);
         };
+
+        vm.subscribe = function (assetpath, flag) {
+            var subscriptionKey = 'gps';
+            var subscriptionMsg = [{path: assetpath}];
+            if (flag) {
+                //intellicarAPI.mqttService.subscribeAsset(asset, subscriptionKey);
+                intellicarAPI.mqttService.subscribe(subscriptionMsg, subscriptionKey);
+            } else {
+                //intellicarAPI.mqttService.unsubscribeAsset(asset, subscriptionKey);
+                intellicarAPI.mqttService.unsubscribe(subscriptionMsg, subscriptionKey);
+            }
+        };
+
     }
 
 })();

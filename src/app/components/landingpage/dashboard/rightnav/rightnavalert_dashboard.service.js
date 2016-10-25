@@ -99,10 +99,14 @@
 
 
             var reportData = {};
-
+            var liveAlarmData = {};
 
             vm.getReportData = function() {
                 return reportData;
+            };
+
+            vm.getAlarmData = function() {
+                return liveAlarmData;
             };
 
 
@@ -194,10 +198,25 @@
                 }
             };
 
+            vm.updateAlarms = function(msg, key){
+                if (msg == null ) return;
+
+                var data = msg[1];
+
+                var reasonType = data.alarmreason;
+                $log.log(reasonType);
+
+                if (!(reasonType in reportData)) {
+                    liveAlarmData[reasonType] = {};
+                }
+
+                $log.log(liveAlarmData);
+            }
 
 
             vm.init = function () {
                 intellicarAPI.mqttService.addListener('rtfence', vm.updateFenceReport);
+                intellicarAPI.mqttService.addListener('rtalarm', vm.updateAlarms);
             };
 
 

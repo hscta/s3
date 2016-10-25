@@ -171,12 +171,12 @@
                 <md-tab-body>
 
                     <md-tab-body>
-                        <div class="expansionNav coolbar" style="top:0;" ng-if="vm.activeTabData">
+                        <div class="expansionNav coolbar" style="top:0;" ng-if="vm.activeAlarmData">
                             <!--first wrapper-->
                             <div class="en_main" ng-if="vm.navFilter(main)"
-                                 ng-class="{'active':main.active}"  ng-repeat="main in vm.reports " ng-init="main.active = true">
+                                 ng-class="{'active':main.active}"  ng-repeat="main in vm.activeAlarmData " ng-init="main.active = true">
                                 <div class="en_label " ng-class="{'{{main.class}}':true}"  ng-click="vm.itemClicked(main,1)" style="background:#4FC3F7 !important;">
-                                    {{main.reportName}}
+                                    {{main}}
                                     <div class="enl_item enl_add">
                                         <i class="fa fa-plus" ng-if="!main.active"></i>
                                         <i class="fa fa-minus" ng-if="main.active"></i>

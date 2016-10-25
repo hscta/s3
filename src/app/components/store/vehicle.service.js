@@ -105,6 +105,7 @@
 
 
         vm.updateVehicle = function (msg, key) {
+            // $log.log('vehicleeeeeeeeeee', msg, key);
             if (msg.length == 2 && msg[0] != null && msg[1] != null
                 && msg[0] != undefined && msg[1] != undefined) {
                 var vehicleObj = vm.processVehicleData(msg);
@@ -115,6 +116,23 @@
             }
         };
 
+        // vm.updateAlarms = function(msg, key){
+        //     // $log.log('alarmssssssssssssssss');
+        //     // $log.log(msg);
+        //     // $log.log(key);
+        //     return;
+        //     if (msg.length == 2 && msg[0] != null && msg[1] != null
+        //         && msg[0] != undefined && msg[1] != undefined) {
+        //         var alarmObj = vm.processVehicleData(msg);
+        //         $log.log(alarmObj);
+        //         vm.callListeners(alarmObj, key);
+        //     } else {
+        //         $log.log("invalid rtgps data");
+        //     }
+        // }
+
+
+
 
         vm.handleFailure = function (resp) {
             $log.log('handleFailure');
@@ -122,8 +140,7 @@
         };
 
 
-        vm.subscribe = function (assetpath, flag) {
-            var subscriptionKey = 'gps';
+        vm.subscribe = function (assetpath, flag, subscriptionKey) {
             var subscriptionMsg = [{path: assetpath}];
             if (flag) {
                 //intellicarAPI.mqttService.subscribeAsset(asset, subscriptionKey);
@@ -139,7 +156,8 @@
             $log.log(resp);
             vm.vehiclesByPath = resp;
             for (var idx in resp) {
-                vm.subscribe(resp[idx].assetpath, true);
+                vm.subscribe(resp[idx].assetpath, true, 'gps');
+                vm.subscribe(resp[idx].assetpath, true, 'rtalarm');
                 vm.vehiclesByNumber[resp[idx].name] = resp[idx];
             }
         };
@@ -148,7 +166,6 @@
         vm.getMyVehicles = function (body) {
             return intellicarAPI.userService.getMyVehiclesMap(body);
         };
-
 
         vm.init = function () {
             intellicarAPI.mqttService.addListener('rtgps', vm.updateVehicle);
