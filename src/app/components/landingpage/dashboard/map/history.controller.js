@@ -5,7 +5,8 @@
 (function () {
     angular
         .module('uiplatform')
-        .controller('HistoryController', HistoryController);
+        .controller('HistoryController', HistoryController)
+        .controller('HistoryTableController', HistoryTableController);
 
 
     function HistoryController($scope, $log, $mdDialog, dialogService,
@@ -21,11 +22,11 @@
 
         $scope.getHistory = function () {
             // vm.historyObj.getHistory = false;
-            $log.log(vm.historyObj);
+            // $log.log(vm.historyObj);
             // vm.historyObj.startTime = $('#start_time').val();
             // vm.historyObj.endTime = $('#end_time').val();
 
-            $log.log(vm.historyObj);
+            // $log.log(vm.historyObj);
 
             historyService.setData('getHistory', false);
 
@@ -209,6 +210,194 @@
 
         vm.init();
         $interval($scope.resizeMap, 500);
+    }
+
+    function HistoryTableController($scope, $log, $mdDialog, dialogService,
+                               $interval, $timeout, intellicarAPI, historyService,
+                               geofenceViewService, $state) {
+
+
+        $log.log('HistoryController');
+
+        var vm = this;
+        dialogService.setTab(1);
+
+        var historyData =[];
+
+        vm.historyObj = historyService.historyMapObj;
+
+        vm.multiSelect = vm.historyObj.multiSelect;
+
+        var MILLISEC = 1000;
+
+        var hrs24 = 86400 * MILLISEC;
+
+        var week = hrs24 * 7;
+        var timeLimit = week;
+
+        $scope.drawTrace = function (resp) {
+            var traceData = resp.data.data;
+            var path = vm.historyObj.trace.path;
+            vm.historyObj.trace.path = [];
+
+            // console.log(traceData);
+
+            for (var idx in traceData) {
+                var position = traceData[idx];
+
+                if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
+                    position.latitude == 0 || position.longitude == 0
+                ) {
+                    $log.log("Not a number");
+                    $log.log(position);
+                    continue;
+                }
+                position.id = $scope.deviceid;
+                position.gpstime = parseInt(position.gpstime);
+                position.odometer = position.odometer;
+                position.speed = parseInt(position.speed.toFixed(2));
+                vm.historyObj.trace.path.push(position);
+            }
+
+            function compare(a, b) {
+                return a.gpstime - b.gpstime;
+            }
+
+            vm.historyObj.trace.path.sort(compare);
+
+
+            if (vm.historyObj.trace.path.length) {
+                historyService.setData('getHistory', true);
+                //$log.log(vm.historyObj.dashboardMapObj.clickedMarker);
+                vm.historyObj.dashboardMapObj.clickedMarker.latitude = vm.historyObj.trace.path[0].latitude;
+                vm.historyObj.dashboardMapObj.clickedMarker.longitude = vm.historyObj.trace.path[0].longitude;
+
+                if (!vm.historyObj.dashboardMapObj.clickedMarker.hasOwnProperty('options')) {
+                    vm.historyObj.dashboardMapObj.clickedMarker.options = {};
+                }
+
+                vm.historyObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
+                var midPoint = Math.floor(vm.historyObj.trace.path.length / 2);
+                vm.historyObj.historyMap.center.latitude = vm.historyObj.trace.path[midPoint].latitude;
+                vm.historyObj.historyMap.center.longitude = vm.historyObj.trace.path[midPoint].longitude;
+                vm.historyObj.historyMap.zoom = 11;
+
+                var lastBeacon = vm.historyObj.trace.path[vm.historyObj.trace.path.length - 1];
+                vm.historyObj.endMarker.latitude = lastBeacon.latitude;
+                vm.historyObj.endMarker.options.label = 'E';
+                vm.historyObj.endMarker.longitude = lastBeacon.longitude;
+                vm.historyObj.endMarker.options.title = 'End point';
+
+
+                $scope.errorMsg = '';
+                $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
+
+                $log.log(vm.historyObj.trace.path);
+
+                vm.showTableData();
+
+            } else {
+                $scope.errorMsg = "No Data Found";
+            }
+        };
+
+
+        $scope.getHistory = function () {
+            $log.log('ssssssssssssssssss');
+            historyService.setData('getHistory', false);
+
+            if (vm.historyObj.startTime && vm.historyObj.endTime) {
+                if (vm.historyObj.startTime.length && vm.historyObj.endTime.length) {
+
+                    var starttime = new Date(moment(vm.historyObj.startTime).unix()*1000).getTime();
+                    var endtime = new Date(moment(vm.historyObj.endTime).unix()*1000).getTime();
+
+                    if (endtime - starttime > timeLimit)
+                        endtime = starttime + timeLimit;
+
+                    if (endtime <= starttime) {
+                        $scope.errorMsg = "End time should be >= Start time";
+                        return;
+                    }
+
+                    var body = {
+                        vehicle: {
+                            vehiclepath: vm.historyObj.deviceid.toString(),
+                            starttime: starttime,
+                            endtime: endtime
+                        }
+                    };
+
+                    intellicarAPI.reportService.getDeviceLocation(body)
+                        .then($scope.drawTrace, $scope.handleGetLocationFailure);
+
+                } else {
+                    $scope.errorMsg = "Enter valid start and end time";
+                    return;
+                }
+            } else {
+                $log.log(vm.historyObj.startTime, vm.historyObj.endTime);
+                $scope.errorMsg = "Enter valid start and end time.";
+                return;
+            }
+        };
+
+
+
+
+
+        vm.showTableData = function () {
+
+
+
+            var marker = vm.historyObj.trace.path;
+            $log.log('mmmmmmmmmmmmmmmm');
+            $log.log(marker);
+
+            for ( var idx in marker){
+                var loc =  marker[idx].latitude + ', '+ marker[idx].longitude;
+                    var time = marker[idx].gpstime;
+                var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
+                historyData.push([
+                   loc,
+                    new Date(time),
+                    marker[idx].odometer.toString(),
+                    marker[idx].speed.toString(),
+                    ignitionStatus
+
+                ]);
+            }
+            //
+            google.charts.load('current', {'packages': ['table']});
+            google.charts.setOnLoadCallback(drawTable);
+        };
+
+        function drawTable() {
+            $log.log('dddddddddddddddd')
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Location');
+            data.addColumn('datetime', 'Time');
+            data.addColumn('string', 'Odometer');
+            data.addColumn('string', 'Speed');
+            data.addColumn('string', 'IgnitionStatus');
+            data.addRows(
+                historyData
+            );
+
+            var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
+            dateFormatter.format(data, 1);
+            // dateFormatter.format(data, 3);
+
+            var table = new google.visualization.Table(document.getElementById('geo-table'));
+
+            table.draw(data, {
+                showRowNumber: true,
+                width: '100%',
+                page: 'enable',
+                pageSize: 300
+            });
+        }
+
     }
 
 })();

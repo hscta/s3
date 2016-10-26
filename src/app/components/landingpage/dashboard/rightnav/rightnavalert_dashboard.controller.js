@@ -370,9 +370,9 @@
             if ( !history[0])
                 return;
             var data = history[0].data.data;
-            $log.log(vm.reports);
+            // $log.log(vm.reports);
 
-            $log.log(data);
+            // $log.log(data);
             if (!data.length) {
                 return;
             }
@@ -403,7 +403,7 @@
                     }
                 }
             }
-            $log.log(vm.reports);
+            // $log.log(vm.reports);
         };
 
         vm.init = function () {

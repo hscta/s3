@@ -89,6 +89,18 @@
                   }
               }
           })
+          .state('home.historyData', {
+              url: 'historyData',
+              params: {
+                  mapObj: null
+              },
+              views: {
+                  'dialogview@home': {
+                      templateUrl: 'app/components/landingpage/dashboard/map/dialog/historyTable.html',
+                      controller: 'HistoryTableController as vm'
+                  }
+              }
+          })
           .state('home.alarm', {
               url: 'alarm',
               views: {

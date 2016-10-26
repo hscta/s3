@@ -132,7 +132,6 @@
                     };
 
                     $state.go('home.history', {"mapObj": params});
-
                 }
             });
         }
