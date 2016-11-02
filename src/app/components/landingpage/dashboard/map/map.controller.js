@@ -139,7 +139,7 @@
 
 
         vm.applyFilterToMarker = function (marker, filterStr) {
-            //$log.log("applying filter to marker");
+            // $log.log("applying filter to marker");
             if(filterStr == 'noComm'){
                 marker.options.visible = false;
                 checkNoComm(marker, function (marker) {
@@ -148,7 +148,7 @@
             } else
             if(filterStr == 'devPull'){
                 marker.options.visible = false;
-                if(marker.devbattery < 2){
+                if(marker.carbattery < 2){
                     marker.options.visible = true;
                 }
             } else
@@ -226,6 +226,8 @@
             running: 0,
             stopped: 0,
             active: 0,
+            noComm: 0,
+            devPullout: 0,
             immobilized: 0
         };
 
@@ -251,9 +253,11 @@
                 var marker = vm.inMarkers[idx];
                 checkNoComm(marker, function (marker) {
                     vm.noCommCount++;
+                    vm.vehicleStats.noComm++;
                 });
-                if(marker.devbattery < 2){
+                if(marker.carbattery < 2){
                     vm.devicePulloutCount++;
+                    vm.vehicleStats.devPullout++;
                 }
                 if (vm.checkRoaded(marker)) {
                     if (vm.matchesAnyMarkerData(marker, filterStr)) {
@@ -264,6 +268,7 @@
                         }
                     }
                 }
+
             }
 
             //$log.log("Filtered vehicles = " + count);

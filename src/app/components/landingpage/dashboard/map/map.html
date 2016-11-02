@@ -172,7 +172,7 @@
                          class="icon-font icon-immobilized" md-font-library="material-icons">signal_cellular_off
                 </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
-                      style="font-size: 13px;">{{vm.noCommCount}}</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.noComm}}</span>
                 <md-tooltip>Vehicle Not Communicating</md-tooltip>
             </li>
             <li ng-class="{true: 'li-clicked'}[vm.filterStr=='devPull']"
@@ -181,7 +181,7 @@
                          class="icon-font icon-immobilized" md-font-library="material-icons">sim_card_alert
                 </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='devPull']"
-                      style="font-size: 13px;">{{vm.devicePulloutCount}}</span>
+                      style="font-size: 13px;">{{vm.vehicleStats.devPullout}}</span>
                 <md-tooltip>Device Pullout</md-tooltip>
             </li>
         </ul>
@@ -189,7 +189,7 @@
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
         <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-mouseenter="item.activeInt = 1"
              ng-mouseleave="item.activeInt = 0"
-             ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
+             ng-class="{'ltb_item-line':item.type == 'line', 'active': vm.fencesActive()}">
             <div class="ltbi_button" ng-click="vm.buttonClick(item)"
                  ng-if="item.type == 'button' || item.type == 'toggleButton'"
                  ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent,'hasChildren':item.children }">
