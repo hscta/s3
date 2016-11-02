@@ -303,7 +303,7 @@
 
 
         $scope.getHistory = function () {
-            $log.log('ssssssssssssssssss');
+            // $log.log('ssssssssssssssssss');
             historyService.setData('getHistory', false);
 
             if (vm.historyObj.startTime && vm.historyObj.endTime) {
@@ -348,11 +348,10 @@
 
         vm.showTableData = function () {
 
-
-
             var marker = vm.historyObj.trace.path;
-            $log.log('mmmmmmmmmmmmmmmm');
-            $log.log(marker);
+            // $log.log('mmmmmmmmmmmmmmmm');
+            // $log.log(marker);
+            historyData=[];
 
             for ( var idx in marker){
                 var loc =  marker[idx].latitude + ', '+ marker[idx].longitude;
@@ -373,7 +372,7 @@
         };
 
         function drawTable() {
-            $log.log('dddddddddddddddd')
+            // $log.log('dddddddddddddddd')
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Location');
             data.addColumn('datetime', 'Time');

@@ -17,7 +17,7 @@
 
         vm.handleFailure = function (resp) {
             $log.log('handleFailure');
-            $log.log(resp);
+            // $log.log(resp);
             return $q.reject(resp);
         };
 
@@ -31,7 +31,7 @@
                 vm.reports[reportInfo.assetpath] = reportInfo;
             }
 
-            $log.log(vm.reports);
+            // $log.log(vm.reports);
             vm.callListeners(vm.reports, 'mygeofencereportsinfo');
 
             return $q.resolve(vm.reports);

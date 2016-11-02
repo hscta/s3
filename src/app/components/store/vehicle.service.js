@@ -116,24 +116,6 @@
             }
         };
 
-        // vm.updateAlarms = function(msg, key){
-        //     // $log.log('alarmssssssssssssssss');
-        //     // $log.log(msg);
-        //     // $log.log(key);
-        //     return;
-        //     if (msg.length == 2 && msg[0] != null && msg[1] != null
-        //         && msg[0] != undefined && msg[1] != undefined) {
-        //         var alarmObj = vm.processVehicleData(msg);
-        //         $log.log(alarmObj);
-        //         vm.callListeners(alarmObj, key);
-        //     } else {
-        //         $log.log("invalid rtgps data");
-        //     }
-        // }
-
-
-
-
         vm.handleFailure = function (resp) {
             $log.log('handleFailure');
             $log.log(resp);
@@ -153,7 +135,7 @@
 
 
         vm.handleGetMyVehicles = function (resp) {
-            $log.log(resp);
+            // $log.log(resp);
             vm.vehiclesByPath = resp;
             for (var idx in resp) {
                 vm.subscribe(resp[idx].assetpath, true, 'gps');
@@ -172,7 +154,6 @@
             vm.getMyVehicles({})
                 .then(vm.handleGetMyVehicles, vm.handleFailure);
         };
-
 
         vm.init();
     }

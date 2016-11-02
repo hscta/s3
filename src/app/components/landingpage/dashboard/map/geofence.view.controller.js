@@ -231,23 +231,23 @@
                 ]
             },
 
-            // {'type': 'line', 'historymap': false},
-            // {
-            //     'id': 'showVehicleNo',
-            //     'name': 'Vehicle number',
-            //     'iconType': 'fa',
-            //     'icon': 'fa-car',
-            //     'type': 'toggleButton',
-            //     'historymap': false,
-            //     'data': {
-            //         active: false,
-            //         'type': 'function', 'independent': true, 'function': function (active) {
-            //             vm.checkGeoFilters.set('showVehicleNo', active);
-            //             geofenceViewService.showVehicleNumber(active);
-            //         }
-            //     }
-            // }
-            // {'type': 'line', 'historymap': false},
+            {'type': 'line', 'historymap': false},
+            {
+                'id': 'showVehicleNo',
+                'name': 'Vehicle number',
+                'iconType': 'fa',
+                'icon': 'fa-car',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: false,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('showVehicleNo', active);
+                        geofenceViewService.showVehicleNumber(active);
+                    }
+                }
+            },
+            {'type': 'line', 'historymap': false},
         ];
 
         vm.fencesActive = function () {
@@ -339,7 +339,7 @@
             filter = filter.split('.')
             filter = filter[filter.length - 1];
             vm.geoFilters[filter] = active;
-            console.log(filter +' : '+vm.geoFilters[filter]);
+            // console.log(filter +' : '+vm.geoFilters[filter]);
         }
 
         function setFilter(filterType) {
