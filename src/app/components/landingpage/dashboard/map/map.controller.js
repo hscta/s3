@@ -110,8 +110,8 @@
 
 
         vm.updateMarker2 = function (vehicleData) {
-            //$log.log('updateMarker2');
-
+            // $log.log('updateMarker2');
+            //
             // $log.log(vehicleData);
 
             vm.inMarkers.push(vehicleData);
@@ -130,7 +130,6 @@
         vm.runFilters = function (filterStr) {
             // $log.log("runFilters");
             mapService.infoWindowClose();
-
             vm.filterStr = filterStr;
 
             for (var idx in vm.inMarkers) {
@@ -141,26 +140,37 @@
 
         vm.applyFilterToMarker = function (marker, filterStr) {
             //$log.log("applying filter to marker");
+            if(filterStr == 'noComm'){
+                marker.options.visible = false;
+                checkNoComm(marker, function (marker) {
+                    marker.options.visible = true;
+                });
+            } else
+            if(filterStr == 'devPull'){
+                marker.options.visible = false;
+                if(marker.devbattery < 2){
+                    marker.options.visible = true;
+                }
+            } else
             if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                 marker.options.visible = false;
-                if (marker.vehiclepath in vm.inCustomMaker) {
-                    vm.inCustomMaker[marker.vehiclepath].hide();
-                }
+                // if (marker.vehiclepath in vm.inCustomMaker) {
+                //     vm.inCustomMaker[marker.vehiclepath].hide();
+                // }
             } else {
                 marker.options.visible = true;
-                if (marker.vehiclepath in vm.inCustomMaker) {
-                    vm.inCustomMaker[marker.vehiclepath].show();
-                }
+                // if (marker.vehiclepath in vm.inCustomMaker) {
+                //     vm.inCustomMaker[marker.vehiclepath].show();
+                // }
             }
-
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
-            if (marker.vehiclepath in vm.inCustomMaker) {
-                if (marker.options.visible) {
-                    vm.inCustomMaker[marker.vehiclepath].show();
-                } else {
-                    vm.inCustomMaker[marker.vehiclepath].hide();
-                }
-            }
+            // if (marker.vehiclepath in vm.inCustomMaker) {
+            //     if (marker.options.visible) {
+            //         vm.inCustomMaker[marker.vehiclepath].show();
+            //     } else {
+            //         vm.inCustomMaker[marker.vehiclepath].hide();
+            //     }
+            // }
 
             // if (marker.options.visible && (!marker.ignitionstatus)) {
             //     $log.log(marker);
@@ -232,10 +242,19 @@
             // $log.log(vm.vehicleStats);
         };
 
+
         vm.getStats = function (filterStr) {
             var count = 0;
+            vm.noCommCount = 0;
+            vm.devicePulloutCount = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
+                checkNoComm(marker, function (marker) {
+                    vm.noCommCount++;
+                });
+                if(marker.devbattery < 2){
+                    vm.devicePulloutCount++;
+                }
                 if (vm.checkRoaded(marker)) {
                     if (vm.matchesAnyMarkerData(marker, filterStr)) {
                         count++;
@@ -293,7 +312,6 @@
         vm.applyFilters = function (filterData, recall) {
             var idx;
             var marker;
-
             if(recall == null) {
                 recall = 1;
             }
@@ -333,14 +351,9 @@
                 for (idx in vm.inMarkers) {
                     marker = vm.inMarkers[idx];
                     if (vm.geoFilters.noComm) {
-                        var currentTime = new Date().getTime();
-                        var lastSeenAt = marker.timestamp.getTime();
-                        var noCommThreshold = 8 * 3600 * 1000;
-                        //$log.log("currentTime: " + currentTime);
-                        //$log.log("lastSeenAt: " + lastSeenAt);
-                        if (currentTime - lastSeenAt > noCommThreshold) {
+                        checkNoComm(marker, function (marker) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
-                        }
+                        });
                     }
                     else {
                         if(recall == 1) {
@@ -390,6 +403,19 @@
                 }
             }
         };
+
+        function checkNoComm(marker, callback) {
+            var currentTime = new Date().getTime();
+            var lastSeenAt = marker.timestamp.getTime();
+            var noCommThreshold = 8 * 3600 * 1000;
+            //$log.log("currentTime: " + currentTime);
+            //$log.log("lastSeenAt: " + lastSeenAt);
+            if (currentTime - lastSeenAt > noCommThreshold) {
+                if(callback){
+                    callback(marker);
+                }
+            }
+        }
 
         function getColor(str) {
             var type = getType(str);
@@ -532,7 +558,7 @@
         };
 
         mapService.setInMapLocation = function (loc) {
-            vm.inMap.center = loc;
+            vm.inMap.center = angular.copy(loc);
         };
 
         vm.init = function () {

@@ -165,6 +165,25 @@
                       style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>
                 <md-tooltip>Immoblized</md-tooltip>
             </li>
+
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='noComm']"
+                ng-click="vm.runFilters('noComm')" layout="column">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='noComm']"
+                         class="icon-font icon-immobilized" md-font-library="material-icons">signal_cellular_off
+                </md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
+                      style="font-size: 13px;">{{vm.noCommCount}}</span>
+                <md-tooltip>Vehicle Not Communicating</md-tooltip>
+            </li>
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='devPull']"
+                ng-click="vm.runFilters('devPull')" layout="column">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='devPull']"
+                         class="icon-font icon-immobilized" md-font-library="material-icons">sim_card_alert
+                </md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='devPull']"
+                      style="font-size: 13px;">{{vm.devicePulloutCount}}</span>
+                <md-tooltip>Device Pullout</md-tooltip>
+            </li>
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">

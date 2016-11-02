@@ -111,7 +111,6 @@
 
             vm.infoWindowShow = function () {
                 vm.inMap.infoWindow.show = true;
-
             };
 
             vm.infoWindowClose = function () {
@@ -311,7 +310,6 @@
                     if (vm.inMap.markers.inMarkers[idx].id === id)
                         return idx;
                 }
-
                 return -1;
             };
 
