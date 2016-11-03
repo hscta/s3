@@ -226,7 +226,7 @@
                 }
             };
 
-            vm.currentLocation = vm.locations.BANGALORE;
+            vm.currentLocation = vm.locations.MUMBAI;
 
             vm.getCurrentLocation = function () {
               return vm.currentLocation;

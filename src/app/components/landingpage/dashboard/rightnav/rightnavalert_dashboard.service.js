@@ -228,7 +228,7 @@
                 liveAlarmData[reasonType][vehicleno].vehiclepath = data.vehiclepath;
                 liveAlarmData[reasonType][vehicleno].deviceid = data.deviceid;
 
-                $log.log(liveAlarmData);
+                // $log.log(liveAlarmData);
             }
 
 

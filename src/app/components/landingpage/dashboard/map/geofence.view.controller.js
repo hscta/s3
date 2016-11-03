@@ -339,7 +339,7 @@
             filter = filter.split('.')
             filter = filter[filter.length - 1];
             vm.geoFilters[filter] = active;
-            console.log(filter +' : '+vm.geoFilters[filter]);
+            // console.log(filter +' : '+vm.geoFilters[filter]);
         }
 
         function setFilter(filterType) {

@@ -70,6 +70,7 @@
                 }
             }
         };
+        
         vm.CustomMarker.prototype.draw = function() {
 
             var self = this;
