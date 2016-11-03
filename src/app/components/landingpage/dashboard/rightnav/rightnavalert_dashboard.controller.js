@@ -7,7 +7,7 @@
         .module('uiplatform')
         .controller('RightNavDashboardController', RightNavDashboardController);
 
-    function RightNavDashboardController($log, $timeout, rightNavAlertDashboardService,
+    function RightNavDashboardController($log,$scope, $timeout, rightNavAlertDashboardService,
                                          mapService, geofenceReportService,vehicleService,
                                          intellicarAPI, $q) {
         $log.log("RightNavDashboardController");
@@ -323,7 +323,7 @@
         };
 
         vm.historyGeofenceReports = function(data){
-            $log.log(data);
+            // $log.log(data);
             var date = new Date();
             var startTime = date.setHours(date.getHours() - 24);//1 day before
             var endTime = new Date().getTime();
@@ -370,9 +370,9 @@
             if ( !history[0])
                 return;
             var data = history[0].data.data;
-            $log.log(vm.reports);
+            // $log.log(vm.reports);
 
-            $log.log(data);
+            // $log.log(data);
             if (!data.length) {
                 return;
             }
@@ -403,14 +403,30 @@
                     }
                 }
             }
-            $log.log(vm.reports);
+            // $log.log(vm.reports);
         };
+
+        vm.toggleRightSidebar = function(event, data) {
+            $log.log('dashboard right nav ')
+            if ( data.right_nav_toggle) {
+                document.getElementById("mySidenav").style.width = "320px";
+                document.getElementById("main").style.marginRight = "320px";
+            } else{
+                document.getElementById("mySidenav").style.width = "0";
+                document.getElementById("main").style.marginRight= "0";
+            }
+        }
+
+        $scope.$on('toggleRightSidebar', vm.toggleRightSidebar);
 
         vm.init = function () {
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             vm.activeTabData = rightNavAlertDashboardService.getReportData();
             vm.activeAlarmData = rightNavAlertDashboardService.getAlarmData();
             geofenceReportService.addListener('mygeofencereportsinfo', vm.historyGeofenceReports);
+
+            document.getElementById("mySidenav").style.width = "320px";
+            document.getElementById("main").style.marginRight = "320px";
         };
 
         vm.init();

@@ -14,6 +14,8 @@
 
 
         var vm = this;
+        dialogService.setTab(3);
+
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
         vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
@@ -51,7 +53,6 @@
             },200);
         });
 
-        dialogService.setTab(2);
 
         vm.selectAll = function (data) {
             var filterData;

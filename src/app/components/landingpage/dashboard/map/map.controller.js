@@ -268,7 +268,6 @@
                         }
                     }
                 }
-
             }
 
             //$log.log("Filtered vehicles = " + count);
@@ -570,7 +569,7 @@
             vm.loadMap();
             vm.addListener();
             geofenceViewService.getMyFences();
-            $interval(vm.runStats, 3000);
+            $interval(vm.runStats, 10000);
         };
 
         vm.init();

@@ -9,16 +9,22 @@
 
 <div class="mainHeader" ui-view="header"></div>
 
-<md-content layout="row" flex class="altered">
-    <div ui-view="leftnavtree" class="left-nav"></div>
+<div>
 
-    <div layout="column" flex id="content">
-        <md-content layout="column">
-            <div ui-view="center"></div>
-        </md-content>
-    </div>
+</div>
+<div id="main">
+    <md-content layout="row" flex class="altered">
+        <div ui-view="leftnavtree" class="left-nav"></div>
 
-    <div   class="right-nav" ui-view="rightnav"></div>
-</md-content>
+        <div layout="column" flex id="content">
+            <md-content layout="column">
+                <div ui-view="center"></div>
+            </md-content>
+        </div>
+
+    </md-content>
+</div>
+
+<div class="right-nav" ui-view="rightnav"></div>
 
 <div ui-view="footer"></div>

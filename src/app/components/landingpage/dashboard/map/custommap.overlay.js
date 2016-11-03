@@ -5,7 +5,7 @@
         .service('customMapOverlay', customMapOverlay);
 
 
-    function customMapOverlay($log,$timeout) {
+    function customMapOverlay($log) {
         var vm = this;
 
         vm.markerHeight = 12;

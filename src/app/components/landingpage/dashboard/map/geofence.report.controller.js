@@ -14,7 +14,7 @@
         $log.log("GeofenceReportController");
 
         // $log.log(historyService.playerControls);
-        dialogService.setTab(1);
+        dialogService.setTab(2);
         var vm = this;
 
         vm.fenceReportObj = historyService.geoFenceReports;
@@ -132,7 +132,6 @@
                     };
 
                     $state.go('home.history', {"mapObj": params});
-
                 }
             });
         }

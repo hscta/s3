@@ -22,7 +22,7 @@
         vm.showSimpleToast = showSimpleToast;
             vm.toggleLeftnav = toggleLeftnav;
         $rootScope.left_nav_toggle = false;
-        $rootScope.right_nav_toggle = true;
+        // $rootScope.right_nav_toggle = true;
         vm.right_nav_toggle = true;
 
         vm.userpref = function() {
@@ -44,8 +44,12 @@
         };
 
         vm.toggleRightSidebar = function (){
-            $rootScope.right_nav_toggle = !$rootScope.right_nav_toggle;
+            // $rootScope.right_nav_toggle = !$rootScope.right_nav_toggle;
+
+            vm.right_nav_toggle = !vm.right_nav_toggle;
+            $rootScope.$broadcast('toggleRightSidebar', {'right_nav_toggle': vm.right_nav_toggle});
         };
+
 
         function toggleLeftnav() {
             //$rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
@@ -106,6 +110,7 @@
                 $mdMenu.hide()
             }
         }
+
     }
 
 })();

@@ -9,7 +9,7 @@
         var vm = this;
         vm.dialogShow = false;
 
-        var dialogStates = ['home.geofence', 'home.history', 'home.alarm'];
+        var dialogStates = ['home.geofence', 'home.historyData', 'home.history', 'home.alarm'];
         // var testObject = {'myName':{'yo1':'yoyo'}};
         // $cookies.put('hell',JSON.stringify(testObject));
 
@@ -44,16 +44,16 @@
         };
 
 
-        vm.getTab = function () {
-            var selectedTab;
-            // console.log($state.current.name);
-            if ($state.current.name == 'home.history') {
-                selectedTab = 0;
-            } else if ($state.current.name == 'home.geofence') {
-                selectedTab = 1;
-            }
-            return selectedTab;
-        };
+        // vm.getTab = function () {
+        //     var selectedTab;
+        //     // console.log($state.current.name);
+        //     if ($state.current.name == 'home.history') {
+        //         selectedTab = 0;
+        //     } else if ($state.current.name == 'home.geofence') {
+        //         selectedTab = 2;
+        //     }
+        //     return selectedTab;
+        // };
 
         vm.getDialogShow = function () {
             return vm.dialogShow;
