@@ -7,10 +7,17 @@
         .run(runBlock);
 
     /** @ngInject */
-    function runBlock($rootScope, $state, $log) {
+    function runBlock($rootScope, $state, $log,  $location, $window) {
         $log.log("runBlock");
         $rootScope.showLoginDialog = true;
         //$rootScope.$emit('getData', {'login': true});
+
+        $window.ga('create', 'UA-86820286-2', 'auto');;
+ 
+        // track pageview on state change
+        $rootScope.$on('$stateChangeSuccess', function (event) {
+            $window.ga('send', 'pageview', $location.path());
+        });
     }
 
 

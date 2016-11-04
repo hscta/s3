@@ -8,7 +8,7 @@
 
 
 
-    function themeConfig($mdIconProvider, $mdThemingProvider) {
+    function themeConfig($mdIconProvider, $mdThemingProvider ) {
         $mdThemingProvider
             .theme('default')
             .primaryPalette('defaultPrimary', {
@@ -49,8 +49,7 @@
         });
 
 
-        $mdIconProvider.icon('user', 'assets/images/user.svg', 64);
-
+        $mdIconProvider.icon('user', 'assets/images/user.svg', 64); 
     }
 
 })();

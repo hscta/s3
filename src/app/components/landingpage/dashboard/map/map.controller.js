@@ -5,7 +5,7 @@
         .controller('MapController', MapController)
         .controller('ImmobalizeController', ImmobalizeController);
 
-    function MapController($scope, $log, mapService,
+    function MapController($scope, $log, mapService,cpuService,
                            $interval, geofenceViewService, $timeout, customMapOverlay, vehicleService) {
         $log.log('MapController');
         var vm = this;
@@ -183,6 +183,7 @@
 
 
         vm.matchesAnyMarkerData = function (marker, filterStr) {
+            cpuService.track('new_one');
             for (var eachidx in marker) {
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
@@ -204,7 +205,6 @@
                     for (var myMeta in marker[eachidx]) {
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
-
                         if (marker[eachidx][myMeta]) {
                             var lowercasefilterStr = filterStr.toString().toLowerCase();
                             // $log.log(marker[eachidx][myMeta]);
@@ -217,6 +217,7 @@
                     }
                 }
             }
+            cpuService.track('new_one');
 
             //$log.log("not matching " + marker.id);
             return false;
