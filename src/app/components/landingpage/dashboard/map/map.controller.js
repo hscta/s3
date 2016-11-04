@@ -78,7 +78,7 @@
         };
 
         vm.onRoadCheck = function () {
-            //$log.log("onroad check");
+            // $log.log("onroad check");
             vm.runFilters(vm.filterStr);
             vm.runStats();
         };
@@ -115,11 +115,13 @@
             // $log.log(vehicleData);
 
             vm.inMarkers.push(vehicleData);
-            // vm.customOverlay(vehicleData);
+            vm.customOverlay(vehicleData);
         };
 
         vm.updateMarker = function (vehicleData) {
-            if (vehicleData.vehiclepath in vm.inCustomMaker) {
+
+            // if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
+            if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
                 vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
             }
 
@@ -151,26 +153,26 @@
                 if(marker.carbattery < 2){
                     marker.options.visible = true;
                 }
-            } else
+            }
             if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                 marker.options.visible = false;
-                // if (marker.vehiclepath in vm.inCustomMaker) {
-                //     vm.inCustomMaker[marker.vehiclepath].hide();
-                // }
+                if (marker.vehiclepath in vm.inCustomMaker) {
+                    vm.inCustomMaker[marker.vehiclepath].hide();
+                }
             } else {
                 marker.options.visible = true;
-                // if (marker.vehiclepath in vm.inCustomMaker) {
-                //     vm.inCustomMaker[marker.vehiclepath].show();
-                // }
+                if (marker.vehiclepath in vm.inCustomMaker) {
+                    vm.inCustomMaker[marker.vehiclepath].show();
+                }
             }
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
-            // if (marker.vehiclepath in vm.inCustomMaker) {
-            //     if (marker.options.visible) {
-            //         vm.inCustomMaker[marker.vehiclepath].show();
-            //     } else {
-            //         vm.inCustomMaker[marker.vehiclepath].hide();
-            //     }
-            // }
+            if (marker.vehiclepath in vm.inCustomMaker) {
+                if (marker.options.visible) {
+                    vm.inCustomMaker[marker.vehiclepath].show();
+                } else {
+                    vm.inCustomMaker[marker.vehiclepath].hide();
+                }
+            }
 
             // if (marker.options.visible && (!marker.ignitionstatus)) {
             //     $log.log(marker);
@@ -268,6 +270,7 @@
                         }
                     }
                 }
+
             }
 
             //$log.log("Filtered vehicles = " + count);
@@ -532,6 +535,7 @@
 
         vm.highlightMarker = function (vehiclePath) {
             if (vehiclePath in vm.inCustomMaker) {
+                console.log('ehll');
                 vm.inCustomMaker[vehiclePath].highlightMe();
             } else {
                 console.log('[MAP CONTROLLER] no marker found!');
@@ -544,6 +548,7 @@
             }
         };
         vm.showVehicleNumber = function (vn) {
+            vm.runFilters(vm.filterStr);
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {
                 for (idx in vm.inCustomMaker) {
@@ -569,7 +574,8 @@
             vm.loadMap();
             vm.addListener();
             geofenceViewService.getMyFences();
-            $interval(vm.runStats, 10000);
+            vm.runStats();
+            $interval(vm.runStats, 3000);
         };
 
         vm.init();

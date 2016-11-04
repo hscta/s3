@@ -32,7 +32,7 @@
 
             var vehiclesids = [];
 
-            $log.log(vm.alarmsObj.filteredVehicles);
+            // $log.log(vm.alarmsObj.filteredVehicles);
             for (var idx in vm.alarmsObj.filteredVehicles) {
                 if (vm.alarmsObj.filteredVehicles[idx].checked) {
                     vehiclesids.push(vm.alarmsObj.filteredVehicles[idx].deviceid);
