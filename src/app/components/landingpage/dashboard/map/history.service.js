@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('historyService', historyService);
 
-    function historyService($log, mapService) {
+    function historyService($log, mapService, $rootScope, intellicarAPI, $interval) {
         $log.log("historyService");
         var vm = this;
 
@@ -27,6 +27,7 @@
         };
 
         vm.historyMapObj = {
+            errorMsg : '',
             historyMap : {
                 mapOptions: {},
                 mapControl: {},
@@ -100,7 +101,6 @@
             },
             historyPolygonEvents : {
                 click: function (polygon, eventName, model, args) {
-                    $log.log('pppppppppppppppppp', model);
                     vm.polygonEvents(model, vm.historyMapObj.historyFenceObj);
                     vm.historyFenceInfoWindowShow();
                 }
@@ -189,6 +189,126 @@
             return {
                 startTime: startTime,
                 endTime: endTime
+            }
+        };
+
+        var MILLISEC = 1000;
+        // var hrs6 = 21600 * MILLISEC;
+        // var hrs3 = 10800 * MILLISEC;
+        // var hrs8 = 28800 * MILLISEC;
+        // var hrs12 = 43200 * MILLISEC;
+        var hrs24 = 86400 * MILLISEC;
+        // var hrs48 = hrs24 * 2;
+        var week = hrs24 * 7;
+        var timeLimit = week;
+
+        vm.getHistoryData = function(){
+            if (!vm.historyMapObj.deviceid){
+                vm.historyMapObj.errorMsg = "Please Select Vehicle";
+                return;
+            }
+
+            if (vm.historyMapObj.startTime && vm.historyMapObj.endTime) {
+                if (vm.historyMapObj.startTime.length && vm.historyMapObj.endTime.length) {
+
+                    var starttime = new Date(moment(vm.historyMapObj.startTime).unix()*1000).getTime();
+                    var endtime = new Date(moment(vm.historyMapObj.endTime).unix()*1000).getTime();
+
+                    if (endtime - starttime > timeLimit)
+                        endtime = starttime + timeLimit;
+
+                    if (endtime <= starttime) {
+                        vm.historyMapObj.errorMsg = "End time should be >= Start time";
+                        return;
+                    }
+
+                    var body = {
+                        vehicle: {
+                            vehiclepath: vm.historyMapObj.deviceid.toString(),
+                            starttime: starttime,
+                            endtime: endtime
+                        }
+                    };
+
+                    intellicarAPI.reportService.getDeviceLocation(body)
+                        .then(vm.drawTrace, vm.handleGetLocationFailure);
+
+                } else {
+                    vm.historyMapObj.errorMsg = "Enter valid start and end time";
+                    return;
+                }
+            } else {
+                // $log.log(vm.historyMapObj.startTime, vm.historyMapObj.endTime);
+                vm.historyMapObj.errorMsg = "Enter valid start and end time.";
+                return;
+            }
+        };
+
+        vm.handleGetLocationFailure = function (resp) {
+            $log.log("handleGetLocationFailure");
+            $log.log(resp);
+            vm.historyMapObj.trace.path = [];
+        };
+
+
+        vm.drawTrace = function(resp) {
+            var traceData = resp.data.data;
+            var path = vm.historyMapObj.trace.path;
+            vm.historyMapObj.trace.path = [];
+
+            // console.log(traceData);
+
+            for (var idx in traceData) {
+                var position = traceData[idx];
+
+                if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
+                    position.latitude == 0 || position.longitude == 0
+                ) {
+                    $log.log("Not a number");
+                    // $log.log(position);
+                    continue;
+                }
+                position.id = vm.historyMapObj.deviceid;
+                position.gpstime = parseInt(position.gpstime);
+                position.odometer = position.odometer;
+                position.speed = parseInt(position.speed.toFixed(2));
+                vm.historyMapObj.trace.path.push(position);
+            }
+
+            function compare(a, b) {
+                return a.gpstime - b.gpstime;
+            }
+
+            vm.historyMapObj.trace.path.sort(compare);
+
+
+            if (vm.historyMapObj.trace.path.length) {
+                vm.setData('getHistory', true);
+                //$log.log(vm.historyObj.dashboardMapObj.clickedMarker);
+                vm.historyMapObj.dashboardMapObj.clickedMarker.latitude = vm.historyMapObj.trace.path[0].latitude;
+                vm.historyMapObj.dashboardMapObj.clickedMarker.longitude = vm.historyMapObj.trace.path[0].longitude;
+
+                if (!vm.historyMapObj.dashboardMapObj.clickedMarker.hasOwnProperty('options')) {
+                    vm.historyMapObj.dashboardMapObj.clickedMarker.options = {};
+                }
+
+                vm.historyMapObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
+                var midPoint = Math.floor(vm.historyMapObj.trace.path.length / 2);
+                vm.historyMapObj.historyMap.center.latitude = vm.historyMapObj.trace.path[midPoint].latitude;
+                vm.historyMapObj.historyMap.center.longitude = vm.historyMapObj.trace.path[midPoint].longitude;
+                vm.historyMapObj.historyMap.zoom = 11;
+
+                var lastBeacon = vm.historyMapObj.trace.path[vm.historyMapObj.trace.path.length - 1];
+                vm.historyMapObj.endMarker.latitude = lastBeacon.latitude;
+                vm.historyMapObj.endMarker.options.label = 'E';
+                vm.historyMapObj.endMarker.longitude = lastBeacon.longitude;
+                vm.historyMapObj.endMarker.options.title = 'End point';
+
+                vm.historyMapObj.errorMsg = '';
+
+                $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
+            } else {
+                vm.historyMapObj.errorMsg = "No Data Found";
             }
         };
 

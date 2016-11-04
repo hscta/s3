@@ -415,6 +415,39 @@
                 document.getElementById("mySidenav").style.width = "0";
                 document.getElementById("main").style.marginRight= "0";
             }
+        };
+
+        vm.getAddress = function(midKey, index, lat, lng){
+            // vm.vehicleAddress='Loading';
+            // WebuiPopovers.updateContentAsync( '.'+vm.popoverIndex,'') //Update the Popover content after the popover is created.
+
+            var body = {
+                data: [ [lat, lng]]
+            };
+            var promise = (intellicarAPI.userService.getAddress(body));
+
+            vm.popoverIndex = 'pops'+midKey+index;
+            return $q.resolve(promise)
+                .then(vm.gotAddress, vm.handleFailure);
+        };
+
+        vm.gotAddress = function(data){
+            // $log.log(data.data.data);
+
+            if ( !data.data.data.length ) return;
+
+            var addr = data.data.data;
+
+            for ( var idx in addr)
+                addr = addr[idx];
+
+            var vehicleAddress = addr[1]
+
+            $log.log(vm.popoverIndex);
+
+            // $('.'+vm.popoverIndex).attr('data-content', vm.vehicleAddress);
+            $log.log(vehicleAddress);
+             WebuiPopovers.updateContent( '.'+vm.popoverIndex,vehicleAddress) //Update the Popover content after the popover is created.
         }
 
         $scope.$on('toggleRightSidebar', vm.toggleRightSidebar);
@@ -427,6 +460,13 @@
 
             document.getElementById("mySidenav").style.width = "320px";
             document.getElementById("main").style.marginRight = "320px";
+
+
+            $timeout(function(){
+                $('.eye-icon').webuiPopover({trigger:'hover',width:300});
+            }, 3000);
+
+
         };
 
         vm.init();

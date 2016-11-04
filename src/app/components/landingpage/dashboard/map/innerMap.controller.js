@@ -7,25 +7,22 @@
         .module('uiplatform')
         .controller('InnerMapController', InnerMapController);
 
-    function InnerMapController($scope, $log, $mdToast, historyService, $interval, $filter) {
+    function InnerMapController($rootScope, $scope, $log, $mdToast, historyService, $interval, $filter) {
         $log.log('InnerMapController');
         var vm = this;
         var marker = historyService.historyMapObj.dashboardMapObj.clickedMarker;
 
-        // $log.log(marker);
+        $log.log(marker);
         var historyMap = historyService.historyMapObj.historyMap;
-        //var timeIncreaseBy = 120000;
         var timeIncreaseBy = 240000;
         var initialTime;
         var tracePoint;
         var graphCanvas;
         var context;
 
-
         $scope.slider = historyService.playerControls.slider;
         var animationCount = historyService.playerControls.animationCount;
 
-        // $log.log(animationCount, $scope.slider);
         $scope.setSliderTime = function () {
             if (!(marker && marker.trace.path.length))
                 return;
@@ -33,11 +30,8 @@
             $scope.initialSliderTime = 0;
             $scope.finalSliderTime = (marker.trace.path[marker.trace.path.length - 1].gpstime -
                 marker.trace.path[0].gpstime ) / 1000;
-            //$log.log($scope.initialSliderTime, $scope.finalSliderTime);
         };
 
-
-        //if ( $scope.slider > 0 && animationCount > 0 ) {
         $scope.setSliderTime();
 
         var initialPoint = marker.trace.path[animationCount];
@@ -47,9 +41,7 @@
             $scope.tracePointSpeed = initialPoint.speed;
             $scope.ignStatus = initialPoint.ignstatus;
         }
-        // }
 
-        // $log.log($scope.slider);
         $scope.play = true;
         $scope.ffrate = historyService.playerControls.ffRate;
 
@@ -201,7 +193,6 @@
             $scope.play = true;
         };
 
-
         $scope.$on('$destroy', function () {
             historyService.playerControls.slider = $scope.slider;
             historyService.playerControls.animationCount = animationCount;
@@ -244,18 +235,24 @@
 
             $scope.setSliderTime();
             var initialPoint = marker.trace.path[0];
+            $log.log(marker);
+
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;
             $scope.tracePointSpeed = initialPoint.speed;
 
+            marker.latitude = marker.trace.path[0].latitude;
+            marker.longitude = marker.trace.path[0].longitude;
+
+            historyService.historyMapObj.latitude = marker.trace.path[marker.trace.path.length-1].latitude;
+            historyService.historyMapObj.longitude = marker.trace.path[marker.trace.path.length-1].longitude;
             drawGraph();
         };
 
 
-        $scope.$on('gotHistoryEvent', function (event, data) {
+        $rootScope.$on('gotHistoryEvent', function (event, data) {
             $scope.gotHistoryEvent();
         });
-
 
         var moveMapWithMarker = function (marker) {
             var map = historyMap.mapControl.getGMap();
@@ -287,7 +284,7 @@
 
         var topDiff;
 
-   function drawGraph() {
+        function drawGraph() {
             var pathArray = marker.trace.path;
             var dummyEl;
             var tempPathArray = [];
@@ -358,7 +355,6 @@
                 }
             }
         }
-
 
         function drawGraphOld() {
             var pathArray = marker.trace.path;
@@ -438,6 +434,13 @@
                 }
             }, 200);
         }
+
+
+        vm.init = function(){
+
+        };
+
+        vm.init();
     }
 
 })();

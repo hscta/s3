@@ -179,5 +179,9 @@
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };
+
+        vm.getAddress = function(body){
+            return requestService.fireGeoCode('/geocodeint', body);
+        }
     }
 })();

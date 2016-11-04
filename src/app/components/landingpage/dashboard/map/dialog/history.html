@@ -14,10 +14,6 @@
         overflow: hidden;
     }
 
-    /*.input-fields {*/
-    /*margin-top: -5px;*/
-    /*}*/
-
     .error-msg {
         color: #f00;
         font-size: 12px;
@@ -44,7 +40,6 @@
         display: inline-block;
         font-size: 16px;
         margin: 4px 2px;
-        /* border-radius: 100%; */
         width: 10px;
         box-shadow: 1px 1px 8px 0px #FFF;
         height: 10px;
@@ -143,10 +138,9 @@
 </div>
 
 <div style="height: 100%;">
-    <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
+   <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
-
             <md-input-container class="container-margin"  ng-show="vm.multiSelect">
                 <label>Vehicle No</label>
                 <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
@@ -160,11 +154,6 @@
                 </md-select>
             </md-input-container>
 
-            <!--<md-input-container class="container-margin"  ng-show="!vm.multiSelect">-->
-            <!--<label>Vehicle No</label>-->
-            <!--<input type="text" ng-model="vm.historyObj.vehicleNumber">-->
-            <!--</md-input-container>-->
-
             <md-input-container class="container-margin">
                 <label>Start Time</label>
                 <input type="text" id="start_time" ng-model="vm.historyObj.startTime">
@@ -174,6 +163,7 @@
                 <label>End Time</label>
                 <input type="text" id="end_time" ng-model="vm.historyObj.endTime">
             </md-input-container>
+
 
             <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
             <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
@@ -198,7 +188,7 @@
                 </ui-gmap-map-control>
 
                 <ui-gmap-map-control
-                    position="CENTER"><span ng-if="errorMsg" class="errorMsg">{{errorMsg}}</span></ui-gmap-map-control>
+                    position="CENTER"><span ng-if="vm.historyObj.errorMsg" class="errorMsg">{{vm.historyObj.errorMsg}}</span></ui-gmap-map-control>
                 </ui-gmap-map-control>
 
                 <ui-gmap-marker

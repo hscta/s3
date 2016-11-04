@@ -355,8 +355,8 @@
             vm.getMyGeofenceReports();
         };
 
-        //vm.init();
-        $timeout(vm.init, 1000);
+        vm.init();
+        // $timeout(vm.init, 2000);
 
     }
 

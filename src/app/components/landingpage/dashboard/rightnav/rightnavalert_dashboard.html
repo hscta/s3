@@ -42,10 +42,15 @@
 
 
     .sidenav .id-body {
-        width:250px;
+        width:320px;
         /*transition: 0.3s*/
     }
 
+    .eye-icon{
+        position: absolute;
+        right: 3px;
+        top: 68px;
+    }
 </style>
 
 <div id="mySidenav" class="sidenav">
@@ -57,6 +62,7 @@
                     <li class="tab col s3"><a  href="#history">History</a></li>
                     <li class="tab col s3"><a href="#alarms">Alarms</a></li>
                 </ul>
+                {{vm.vehicleAddress}}
             </div>
             <div id="active" class="col s12">
                 <span class="spinner -sp-blue -sp-big" ng-if="!vm.activeTabData"></span>
@@ -196,7 +202,7 @@
                             </div>
                         </div>
                         <div class="en-wrapper">
-                            <div class="en_mid"  ng-repeat="(midKey, mid) in main" ng-if="midKey != 'id' && midKey != 'name' && midKey != 'active'"
+                            <div class="en_mid"  ng-repeat="(midKey, mid) in main track by $index" ng-if="midKey != 'id' && midKey != 'name' && midKey != 'active'"
                                  ng-class="{'en-closed':!main.active,'en-semi-closed':!mid.active}" style="height:110px">
                                 <div class="en_label"  ng-click="vm.itemClicked(mid,2)" style="background:#B3E5FC!important;">
                                     {{ midKey }}
@@ -209,7 +215,14 @@
                                 <div class="en-alarm-final">
                                     <div class="en-af-item">Time : {{mid.timestamp | date : 'd MMM, h:mm a'}}</div>
                                     <div class="en-af-item">Mode : {{mid.opermode }}</div>
-                                    <div class="en-af-item">Loc : {{mid.latitude }},{{mid.longitude }}</div>
+                                    <div class="en-af-item">
+                                        Loc : {{mid.latitude }},{{mid.longitude }}
+                                        <a href="#" class="eye-icon pops{{midKey}}{{$index}}" data-content="{{vm.vehicleAddress}}"
+                                            ng-mouseover="vm.getAddress(midKey, $index, mid.latitude, mid.longitude)">
+                                            <i class="material-icons" tiny>visibility</i>
+                                        </a>
+                                        <!--<div class="pops{{$index}}"></div>-->
+                                    </div>
                                 </div>
                             </div>
                         </div>

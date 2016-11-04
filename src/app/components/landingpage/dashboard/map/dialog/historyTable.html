@@ -17,11 +17,6 @@
                 </md-select>
             </md-input-container>
 
-            <!--<md-input-container class="container-margin"  ng-show="!vm.multiSelect">-->
-            <!--<label>Vehicle No</label>-->
-            <!--<input type="text" ng-model="vm.historyObj.vehicleNumber">-->
-            <!--</md-input-container>-->
-
             <md-input-container class="container-margin">
                 <label>Start Time</label>
                 <input type="text" id="start_time" ng-model="vm.historyObj.startTime">
@@ -32,13 +27,16 @@
                 <input type="text" id="end_time" ng-model="vm.historyObj.endTime">
             </md-input-container>
 
-            <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
-            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+            <a class="waves-effect waves-light" ng-click="getHistory()">Get History</a>
+            <!--<md-button class="md-accent" ng-click="getHistory()">Get History</md-button>-->
         </div>
         <div layout="row" layout-align="end start">
         </div>
     </div>
 
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.historyObj.trace.path">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
 
     <div id="geo-table" class="geo-table"></div>
 

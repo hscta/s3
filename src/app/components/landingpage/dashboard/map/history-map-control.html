@@ -33,7 +33,6 @@
 
     <md-button class="md-fab md-primary md-mini play-pause-btns" ng-click="stopAnimation()">
         <md-icon class="icon-font" md-font-library="material-icons">stop</md-icon>
-        <md-tooltip md-direction="bottom">Stop</md-tooltip>
     </md-button>
 
     <div class="md-padding"></div>
@@ -49,7 +48,9 @@
         <md-icon class="icon-font" md-font-library="material-icons">remove</md-icon>
     </md-button>
 
-    <md-button class="md-fab md-primary md-mini play-pause-btns"  ng-click="moveOneStep('forward')">
+    <md-button class="md-fab md-primary md-mini play-pause-btns popover"
+               data-content="Move 1 step"
+               ng-click="moveOneStep('forward')">
         <md-icon class="icon-font" md-font-library="material-icons">add</md-icon>
     </md-button>
     <div class="md-padding"></div>
@@ -66,3 +67,4 @@
         <canvas id="historyGraphCanvas" style="height:100%; width: 100%;">
     </div>
 </div>
+

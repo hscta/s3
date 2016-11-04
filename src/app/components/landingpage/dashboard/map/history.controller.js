@@ -10,7 +10,7 @@
 
 
     function HistoryController($scope, $log, $mdDialog, dialogService,
-                               $interval, $timeout, intellicarAPI, historyService,
+                               $interval, intellicarAPI, historyService,
                                geofenceViewService, $state) {
         $log.log('HistoryController');
 
@@ -18,52 +18,14 @@
         dialogService.setTab(0);
 
         vm.historyObj = historyService.historyMapObj;
+
+
         var mapObj;
 
         $scope.getHistory = function () {
-            // vm.historyObj.getHistory = false;
-            // $log.log(vm.historyObj);
-            // vm.historyObj.startTime = $('#start_time').val();
-            // vm.historyObj.endTime = $('#end_time').val();
-
-            // $log.log(vm.historyObj);
-
             historyService.setData('getHistory', false);
 
-            if (vm.historyObj.startTime && vm.historyObj.endTime) {
-                if (vm.historyObj.startTime.length && vm.historyObj.endTime.length) {
-
-                    var starttime = new Date(moment(vm.historyObj.startTime).unix()*1000).getTime();
-                    var endtime = new Date(moment(vm.historyObj.endTime).unix()*1000).getTime();
-
-                    if (endtime - starttime > timeLimit)
-                        endtime = starttime + timeLimit;
-
-                    if (endtime <= starttime) {
-                        $scope.errorMsg = "End time should be >= Start time";
-                        return;
-                    }
-
-                    var body = {
-                        vehicle: {
-                            vehiclepath: vm.historyObj.deviceid.toString(),
-                            starttime: starttime,
-                            endtime: endtime
-                        }
-                    };
-
-                    intellicarAPI.reportService.getDeviceLocation(body)
-                        .then($scope.drawTrace, $scope.handleGetLocationFailure);
-
-                } else {
-                    $scope.errorMsg = "Enter valid start and end time";
-                    return;
-                }
-            } else {
-                $log.log(vm.historyObj.startTime, vm.historyObj.endTime);
-                $scope.errorMsg = "Enter valid start and end time.";
-                return;
-            }
+            historyService.getHistoryData();
         };
 
         $scope.cancel = function () {
@@ -75,91 +37,10 @@
             return true;
         };
 
-        var MILLISEC = 1000;
-        // var hrs6 = 21600 * MILLISEC;
-        // var hrs3 = 10800 * MILLISEC;
-        // var hrs8 = 28800 * MILLISEC;
-        // var hrs12 = 43200 * MILLISEC;
-        var hrs24 = 86400 * MILLISEC;
-        // var hrs48 = hrs24 * 2;
-        var week = hrs24 * 7;
-        var timeLimit = week;
-
-        $scope.drawTrace = function (resp) {
-            //$log.log(resp);
-
-            var traceData = resp.data.data;
-            var path = vm.historyObj.trace.path;
-            vm.historyObj.trace.path = [];
-
-            // console.log(traceData);
-
-            for (var idx in traceData) {
-                var position = traceData[idx];
-
-                if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
-                    position.latitude == 0 || position.longitude == 0
-                ) {
-                    $log.log("Not a number");
-                    $log.log(position);
-                    continue;
-                }
-                position.id = $scope.deviceid;
-                position.gpstime = parseInt(position.gpstime);
-                position.odometer = position.odometer;
-                position.speed = parseInt(position.speed.toFixed(2));
-                vm.historyObj.trace.path.push(position);
-            }
-
-            function compare(a, b) {
-                return a.gpstime - b.gpstime;
-            }
-
-            vm.historyObj.trace.path.sort(compare);
-
-
-            if (vm.historyObj.trace.path.length) {
-                historyService.setData('getHistory', true);
-                //$log.log(vm.historyObj.dashboardMapObj.clickedMarker);
-                vm.historyObj.dashboardMapObj.clickedMarker.latitude = vm.historyObj.trace.path[0].latitude;
-                vm.historyObj.dashboardMapObj.clickedMarker.longitude = vm.historyObj.trace.path[0].longitude;
-
-                if (!vm.historyObj.dashboardMapObj.clickedMarker.hasOwnProperty('options')) {
-                    vm.historyObj.dashboardMapObj.clickedMarker.options = {};
-                }
-
-                vm.historyObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
-                var midPoint = Math.floor(vm.historyObj.trace.path.length / 2);
-                vm.historyObj.historyMap.center.latitude = vm.historyObj.trace.path[midPoint].latitude;
-                vm.historyObj.historyMap.center.longitude = vm.historyObj.trace.path[midPoint].longitude;
-                vm.historyObj.historyMap.zoom = 11;
-
-                var lastBeacon = vm.historyObj.trace.path[vm.historyObj.trace.path.length - 1];
-                vm.historyObj.endMarker.latitude = lastBeacon.latitude;
-                vm.historyObj.endMarker.options.label = 'E';
-                vm.historyObj.endMarker.longitude = lastBeacon.longitude;
-                vm.historyObj.endMarker.options.title = 'End point';
-
-
-                $scope.errorMsg = '';
-                $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
-            } else {
-                $scope.errorMsg = "No Data Found";
-            }
-        };
-
 
         $scope.fitBounds = function () {
             vm.historyObj.trace.fit = true;
         };
-
-
-        $scope.handleGetLocationFailure = function (resp) {
-            $log.log("handleGetLocationFailure");
-            $log.log(resp);
-            vm.historyObj.trace.path = [];
-        };
-
 
         vm.getMyFencesListener = function () {
             //$log.log("getMyFencesListener");
@@ -204,20 +85,17 @@
 
             vm.getMyFencesListener();
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-
-            $scope.getHistory();
         };
+        $interval($scope.resizeMap, 700);
 
         vm.init();
-        $interval($scope.resizeMap, 500);
     }
 
-    function HistoryTableController($scope, $log, $mdDialog, dialogService,
-                               $interval, $timeout, intellicarAPI, historyService,
-                               geofenceViewService, $state) {
+    function HistoryTableController($rootScope,$scope, $log, dialogService, intellicarAPI, historyService,
+                               geofenceViewService) {
 
 
-        $log.log('HistoryController');
+        $log.log('HistoryTableController');
 
         var vm = this;
         dialogService.setTab(1);
@@ -235,121 +113,18 @@
         var week = hrs24 * 7;
         var timeLimit = week;
 
-        $scope.drawTrace = function (resp) {
-            var traceData = resp.data.data;
-            var path = vm.historyObj.trace.path;
-            vm.historyObj.trace.path = [];
-
-            // console.log(traceData);
-
-            for (var idx in traceData) {
-                var position = traceData[idx];
-
-                if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
-                    position.latitude == 0 || position.longitude == 0
-                ) {
-                    $log.log("Not a number");
-                    $log.log(position);
-                    continue;
-                }
-                position.id = $scope.deviceid;
-                position.gpstime = parseInt(position.gpstime);
-                position.odometer = position.odometer;
-                position.speed = parseInt(position.speed.toFixed(2));
-                vm.historyObj.trace.path.push(position);
-            }
-
-            function compare(a, b) {
-                return a.gpstime - b.gpstime;
-            }
-
-            vm.historyObj.trace.path.sort(compare);
-
-
-            if (vm.historyObj.trace.path.length) {
-                historyService.setData('getHistory', true);
-                //$log.log(vm.historyObj.dashboardMapObj.clickedMarker);
-                vm.historyObj.dashboardMapObj.clickedMarker.latitude = vm.historyObj.trace.path[0].latitude;
-                vm.historyObj.dashboardMapObj.clickedMarker.longitude = vm.historyObj.trace.path[0].longitude;
-
-                if (!vm.historyObj.dashboardMapObj.clickedMarker.hasOwnProperty('options')) {
-                    vm.historyObj.dashboardMapObj.clickedMarker.options = {};
-                }
-
-                vm.historyObj.dashboardMapObj.clickedMarker.options.icons = 'assets/images/markers/big/red-dot.png';
-                var midPoint = Math.floor(vm.historyObj.trace.path.length / 2);
-                vm.historyObj.historyMap.center.latitude = vm.historyObj.trace.path[midPoint].latitude;
-                vm.historyObj.historyMap.center.longitude = vm.historyObj.trace.path[midPoint].longitude;
-                vm.historyObj.historyMap.zoom = 11;
-
-                var lastBeacon = vm.historyObj.trace.path[vm.historyObj.trace.path.length - 1];
-                vm.historyObj.endMarker.latitude = lastBeacon.latitude;
-                vm.historyObj.endMarker.options.label = 'E';
-                vm.historyObj.endMarker.longitude = lastBeacon.longitude;
-                vm.historyObj.endMarker.options.title = 'End point';
-
-
-                $scope.errorMsg = '';
-                $scope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
-
-                $log.log(vm.historyObj.trace.path);
-
-                vm.showTableData();
-
-            } else {
-                $scope.errorMsg = "No Data Found";
-            }
-        };
-
-
         $scope.getHistory = function () {
-            // $log.log('ssssssssssssssssss');
             historyService.setData('getHistory', false);
 
-            if (vm.historyObj.startTime && vm.historyObj.endTime) {
-                if (vm.historyObj.startTime.length && vm.historyObj.endTime.length) {
-
-                    var starttime = new Date(moment(vm.historyObj.startTime).unix()*1000).getTime();
-                    var endtime = new Date(moment(vm.historyObj.endTime).unix()*1000).getTime();
-
-                    if (endtime - starttime > timeLimit)
-                        endtime = starttime + timeLimit;
-
-                    if (endtime <= starttime) {
-                        $scope.errorMsg = "End time should be >= Start time";
-                        return;
-                    }
-
-                    var body = {
-                        vehicle: {
-                            vehiclepath: vm.historyObj.deviceid.toString(),
-                            starttime: starttime,
-                            endtime: endtime
-                        }
-                    };
-
-                    intellicarAPI.reportService.getDeviceLocation(body)
-                        .then($scope.drawTrace, $scope.handleGetLocationFailure);
-
-                } else {
-                    $scope.errorMsg = "Enter valid start and end time";
-                    return;
-                }
-            } else {
-                $log.log(vm.historyObj.startTime, vm.historyObj.endTime);
-                $scope.errorMsg = "Enter valid start and end time.";
-                return;
-            }
+            historyService.getHistoryData();
         };
 
-
-
-
+        $rootScope.$on('gotHistoryEvent', function (event, data) {
+            vm.showTableData();
+        });
 
         vm.showTableData = function () {
-
             var marker = vm.historyObj.trace.path;
-            // $log.log('mmmmmmmmmmmmmmmm');
             // $log.log(marker);
             historyData=[];
 
@@ -363,16 +138,13 @@
                     marker[idx].odometer.toString(),
                     marker[idx].speed.toString(),
                     ignitionStatus
-
                 ]);
             }
-            //
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
         };
 
         function drawTable() {
-            // $log.log('dddddddddddddddd')
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Location');
             data.addColumn('datetime', 'Time');
@@ -385,7 +157,6 @@
 
             var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
             dateFormatter.format(data, 1);
-            // dateFormatter.format(data, 3);
 
             var table = new google.visualization.Table(document.getElementById('geo-table'));
 
@@ -396,6 +167,15 @@
                 pageSize: 300
             });
         }
+
+        vm.init = function(){
+            if (vm.historyObj.trace.path.length) {
+                vm.showTableData();
+            }
+        };
+
+
+        vm.init();
 
     }
 
