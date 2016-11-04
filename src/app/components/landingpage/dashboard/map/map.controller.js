@@ -181,7 +181,7 @@
             return marker.options.visible;
         };
 
-
+ 
         vm.matchesAnyMarkerData = function (marker, filterStr) {
             for (var eachidx in marker) {
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
