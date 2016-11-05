@@ -229,7 +229,7 @@
                 liveAlarmData[reasonType][vehicleno].deviceid = data.deviceid;
 
                 // $log.log(liveAlarmData);
-            }
+            };
 
 
             vm.init = function () {

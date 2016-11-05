@@ -109,6 +109,10 @@
                           }
                       },
                       controller: 'VehicleMgmtController as vm'
+                  },
+                  'rightnav@home': {
+                      templateUrl: 'app/components/landingpage/management/rightnav/rightnav_mgmt.html',
+                      controller: 'RightNavMgmtController as vm'
                   }
               }
           })
@@ -170,7 +174,7 @@
                       controller: 'ReportsController as vm'
                   }
               }
-          })
+          });
 
 
       $urlRouterProvider.otherwise('/');
