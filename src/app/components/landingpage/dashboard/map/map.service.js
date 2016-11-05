@@ -200,7 +200,8 @@
                 MUMBAI: 'MUMBAI',
                 BANGALORE: 'BANGALORE',
                 HYDERABAD: 'HYDERABAD',
-                DELHI: 'DELHI'
+                PUNE: 'PUNE',
+                CHENNAI: 'CHENNAI'
             };
 
             vm.locations = {

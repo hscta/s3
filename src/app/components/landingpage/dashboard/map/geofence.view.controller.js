@@ -73,9 +73,13 @@
                         notation: 'HYD',
                         latlng: {latitude: 17.384125, longitude: 78.479447}
                     }, {
-                        id: vm.loc.DELHI,
-                        notation: 'DEL',
-                        latlng: {latitude: 28.614132, longitude: 77.215449}
+                        id: vm.loc.PUNE,
+                        notation: 'PUN',
+                        latlng: {latitude: 18.521445, longitude: 73.866031}
+                    }, {
+                        id: vm.loc.CHENNAI,
+                        notation: 'CHE',
+                        latlng: {latitude: 13.075837, longitude: 80.206900}
                     }, {
                         id: vm.loc.MUMBAI,
                         notation: 'MUM',
