@@ -68,7 +68,8 @@
                 }
             }
             vm.alarmsObj.alarmResponseData = data;
-            // $log.log(data);
+            $log.log('alarmmmmmmmmmmm');
+             $log.log(vm.alarmsObj.alarmResponseData );
         };
 
         vm.handleFailure = function(){

@@ -18,7 +18,9 @@
 
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
-        vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
+        vm.dtOptions.withOption('paging', false)
+            .withOption( 'scrollY', "58vh")
+            .withOption( 'scrollCollapse', true);
         // $timeout(function () {
         //     vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
         //     console.log('first setting');
@@ -37,22 +39,22 @@
         //     }
         // },200);
 
-        var tempInter = setInterval(function () {
-            if($('.geoc-body').length > 0){
-                $timeout(function () {
-                    var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
-                    vm.dtOptions.withOption('paging', false).withOption('scrollY', tableHeight).withOption('scrollCollapse', true);
-                },200);
-                clearInterval(tempInter);
-            }
-        },200);
-        $(window).resize(function () {
-            $timeout(function () {
-                var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
-                vm.dtOptions.withOption('paging', false).withOption('scrollY', tableHeight).withOption('scrollCollapse', true);
-            },200);
-        });
-
+        // var tempInter = setInterval(function () {
+        //     if($('.geoc-body').length > 0){
+        //         $timeout(function () {
+        //             var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
+        //             //vm.dtOptions.withOption('scrollY', tableHeight);
+        //         },200);
+        //         clearInterval(tempInter);
+        //     }
+        // },200);
+        // $(window).resize(function () {
+        //     $timeout(function () {
+        //         var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
+        //        // vm.dtOptions.withOption('scrollY', tableHeight);
+        //     },200);
+        // });
+        //
 
         vm.selectAll = function (data) {
             var filterData;
@@ -115,13 +117,13 @@
 
             for ( var idx in vm.alarms.vehicles ){
                 if ( !vm.alarms.vehicles[idx].hasOwnProperty('checked'))
-                    vm.alarms.vehicles[idx].checked = true;
+                    vm.alarms.vehicles[idx].checked = false;
             }
 
             // $log.log('ssssssssssssssssssssssssss');
             // $log.log(vm.alarms.alarmResponseData.length);
-            if(!vm.alarms.alarmResponseData.length)
-                vm.getHistory();
+            // if(!vm.alarms.alarmResponseData.length)
+            //     vm.getHistory();
 
             if (vm.alarms.filteredVehicles.length)
                 vm.alarms.selectedVehiclesCount = ($filter("filter")
