@@ -254,8 +254,15 @@
 
 
             vm.checkZoomLevel = function (min, max) {
-                vm.zoom = vm.inMap.mapControl.getGMap().zoom;
-                return (vm.zoom >= min && vm.zoom <= max);
+                // $log.log(vm.inMap.mapControl);
+
+                for(var prop in vm.inMap.mapControl) {
+                    if(vm.inMap.mapControl.hasOwnProperty(prop)){
+                        // $log.log('ssssssssssssss');
+                        vm.zoom = vm.inMap.mapControl.getGMap().zoom;
+                        return (vm.zoom >= min && vm.zoom <= max);
+                    }
+                }
             };
 
 

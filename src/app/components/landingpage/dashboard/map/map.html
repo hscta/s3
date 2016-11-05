@@ -105,14 +105,14 @@
         </md-input-container>
         <div layout="row" layout-align="center center">
             <div class="toggleButton" ng-class="{'active':vm.onRoaded}">
-                On Road 
+                On Road
                 <input type="checkbox" class='icar-checkbox' ng-model="vm.onRoaded"
                              aria-label="onroaded" ng-change="vm.onRoadCheck()"/>
             </div>
             <div class="toggleButton" ng-class="{'active':vm.offRoaded}">
                 Off Road
                 <input type="checkbox" class='icar-checkbox' ng-model="vm.offRoaded"
-                             aria-label="onroaded" ng-change="vm.offRoadCheck()"/> 
+                             aria-label="onroaded" ng-change="vm.offRoadCheck()"/>
             </div>
         </div>
 
@@ -244,7 +244,7 @@
             <input id="pac-input" type="text" placeholder="Search">
         </script>
 
-        <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom' 
+        <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom'
                             options="vm.inMap.mapOptions" optimized="false" bounds="vm.inMap.bounds"
                             events="vm.inMap.mapEvents"
                             control="vm.inMap.mapControl">

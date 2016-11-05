@@ -461,12 +461,9 @@
             document.getElementById("mySidenav").style.width = "320px";
             document.getElementById("main").style.marginRight = "320px";
 
-
             $timeout(function(){
                 $('.eye-icon').webuiPopover({trigger:'hover',width:300});
             }, 3000);
-
-
         };
 
         vm.init();

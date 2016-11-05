@@ -77,6 +77,41 @@
                   }
               }
           })
+          .state('home.management', {
+              url: 'home/management',
+              views: {
+                  'leftnavtree@home': {
+                      templateUrl: 'app/components/landingpage/management/leftnav/leftnav_mgmt.html',
+                      // resolve: {
+                      //     startupData : function($stateParams, $log, $q, $state) {
+                      //         $log.log($stateParams);
+                      //         $log.log($state);
+                      //
+                      //         // $log.log('in management left nav');
+                      //         // return $q.resolve({startupData: 'my startup data'});
+                      //     }
+                      // },
+                      controller: 'LeftNavManagementController as vm'
+                  },
+                  'lefttoolbar@home': {
+                      templateUrl: 'app/components/common/views/emptydiv.html',
+                      controller: 'LeftToolbarDashboardController as vm'
+                  },
+                  'centermain@home': {
+                      templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
+                      controller: 'SettingsController as vm'
+                  },
+                  'mgmttab@home.management': {
+                      templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
+                      resolve: {
+                          startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
+                              return vehicleMgmtService.getData(settingsService.getCurrentGroup());
+                          }
+                      },
+                      controller: 'VehicleMgmtController as vm'
+                  }
+              }
+          })
           .state('home.history', {
               url: 'history',
               params: {
@@ -119,37 +154,11 @@
                   }
               }
           })
-          .state('home.management', {
-              url: 'home/management',
-              views: {
-                  'leftnav@home': {
-                      templateUrl: 'app/components/landingpage/management/leftnav/leftnav_mgmt.html',
-                      controller: 'LeftNavManagementController as vm'
-                  },
-                  'lefttoolbar@home': {
-                      templateUrl: 'app/components/common/views/emptydiv.html',
-                      controller: 'LeftToolbarDashboardController as vm'
-                  },
-                  'centermain@home': {
-                      templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
-                      controller: 'SettingsController as vm'
-                  },
-                  'mgmttab@home.management': {
-                      templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
-                      resolve: {
-                          startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
-                              return vehicleMgmtService.getData(settingsService.getCurrentGroup());
-                          }
-                      },
-                      controller: 'VehicleMgmtController as vm'
-                  }
-              }
-          })
           .state('home.reports', {
               url: 'home/reports',
               views: {
                   'leftnavtree@home': {
-                      templateUrl: 'app/components/landingpage/dashboard/leftnavtree/leftnav_dashboard.html',
+                      templateUrl: 'app/components/landingpage/management/leftnav/leftnav_mgmt.html',
                       controller: 'LeftNavDashboardController as vm'
                   },
                   'lefttoolbar@home': {

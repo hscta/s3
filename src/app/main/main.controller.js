@@ -15,7 +15,7 @@
             vm.dummy = data.dummy;
         }
 
-        $scope.$on('toggleLeftnav', vm.toggleLeftnav);
+        $scope.$on('toggleLeftSidebar', vm.toggleLeftSidebar);
 
 
         //To periodically check if the token is valid
