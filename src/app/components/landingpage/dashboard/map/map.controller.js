@@ -142,18 +142,19 @@
 
         vm.applyFilterToMarker = function (marker, filterStr) {
             // $log.log("applying filter to marker");
-            if(filterStr == 'noComm'){
-                marker.options.visible = false;
-                checkNoComm(marker, function (marker) {
-                    marker.options.visible = true;
-                });
-            } else
-            if(filterStr == 'devPull'){
-                marker.options.visible = false;
-                if(marker.carbattery < 2){
-                    marker.options.visible = true;
-                }
-            }
+            // if(filterStr == 'noComm'){
+            //     marker.options.visible = false;
+            //     checkNoComm(marker, function (marker) {
+            //         marker.options.visible = true;
+            //     });
+            // } else
+            // if(filterStr == 'devPull'){
+            //     marker.options.visible = false;
+            //     if(marker.carbattery < 2){
+            //         marker.options.visible = true;
+            //     }
+            // }
+
             if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                 marker.options.visible = false;
                 if (marker.vehiclepath in vm.inCustomMaker) {
@@ -237,7 +238,7 @@
 
         vm.runStats = function () {
             for (var filter in vm.vehicleStats) {
-                if (filter === 'showall') {
+                if (filter === 'showall') { // <---- Why we put condition ?
                     vm.vehicleStats[filter] = vm.getStats(filter);
                 } else {
                     vm.vehicleStats[filter] = vm.getStats(filter);
@@ -254,18 +255,18 @@
             vm.devicePulloutCount = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
-                checkNoComm(marker, function (marker) {
-                    vm.noCommCount++;
-                    vm.vehicleStats.noComm++;
-                });
-                if(marker.carbattery < 2){
-                    vm.devicePulloutCount++;
-                    vm.vehicleStats.devPullout++;
-                }
                 if (vm.checkRoaded(marker)) {
+                    checkNoComm(marker, function (marker) {
+                        vm.noCommCount++;
+                        vm.vehicleStats.noComm++;
+                    });
+                    if(marker.carbattery < 2){
+                        vm.devicePulloutCount++;
+                        vm.vehicleStats.devPullout++;
+                    }
                     if (vm.matchesAnyMarkerData(marker, filterStr)) {
                         count++;
-                    } else {
+                    } else { // <--- Can we use else if instead of this ?
                         if (filterStr === "showall") {
                             count++;
                         }
@@ -415,9 +416,7 @@
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
-            var noCommThreshold = 8 * 3600 * 1000;
-            //$log.log("currentTime: " + currentTime);
-            //$log.log("lastSeenAt: " + lastSeenAt);
+            var noCommThreshold = 8 * 3600 * 1000; 
             if (currentTime - lastSeenAt > noCommThreshold) {
                 if(callback){
                     callback(marker);
