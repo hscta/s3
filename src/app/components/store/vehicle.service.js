@@ -43,6 +43,8 @@
         var VEHICLE_STOPPED = "Stopped";
         var VEHICLE_ACTIVE = "Active";
         var VEHICLE_IMMOBILIZED = "Immobilized";
+        var VEHICLE_NOT_COMMUNICATING = "Not Communicating";
+        var VEHICLE_DEVICE_PULLOUT = "Device Pullout";
 
         vm.processVehicleData = function (msg) {
             var newData = msg[1];
@@ -100,9 +102,27 @@
                 vehicleData.ignitionstatusFilter = '';
             }
 
+            if(vehicleData.carbattery < 2){
+                vehicleData.devicepulloutFilter = VEHICLE_DEVICE_PULLOUT;    
+            }
+
+            checkNoComm(vehicleData, function(){
+                vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
+            })
             return vehicleObj;
         };
 
+
+        function checkNoComm(marker, callback) {
+            var currentTime = new Date().getTime();
+            var lastSeenAt = marker.timestamp.getTime();
+            var noCommThreshold = 8 * 3600 * 1000; 
+            if (currentTime - lastSeenAt > noCommThreshold) {
+                if(callback){
+                    callback(marker);
+                }
+            }
+        }
 
         vm.updateVehicle = function (msg, key) {
             // $log.log('vehicleeeeeeeeeee', msg, key);

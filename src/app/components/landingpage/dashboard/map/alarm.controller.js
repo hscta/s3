@@ -8,7 +8,7 @@
         .controller('AlarmController', AlarmController);
 
 
-    function AlarmController($scope, $log, dialogService, alarmService,DTOptionsBuilder,$timeout,$interval,
+    function AlarmController($scope, $log, dialogService, alarmService, DTOptionsBuilder, $timeout, $interval,
                              mapService, $filter) {
         $log.log('AlarmController');
 
@@ -18,9 +18,7 @@
 
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
-        vm.dtOptions.withOption('paging', false)
-            .withOption( 'scrollY', "58vh")
-            .withOption( 'scrollCollapse', true);
+        vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
         // $timeout(function () {
         //     vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
         //     console.log('first setting');
@@ -43,18 +41,10 @@
         //     if($('.geoc-body').length > 0){
         //         $timeout(function () {
         //             var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
-        //             //vm.dtOptions.withOption('scrollY', tableHeight);
         //         },200);
         //         clearInterval(tempInter);
         //     }
         // },200);
-        // $(window).resize(function () {
-        //     $timeout(function () {
-        //         var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
-        //        // vm.dtOptions.withOption('scrollY', tableHeight);
-        //     },200);
-        // });
-        //
 
         vm.selectAll = function (data) {
             var filterData;
@@ -120,8 +110,6 @@
                     vm.alarms.vehicles[idx].checked = false;
             }
 
-            // $log.log('ssssssssssssssssssssssssss');
-            // $log.log(vm.alarms.alarmResponseData.length);
             // if(!vm.alarms.alarmResponseData.length)
             //     vm.getHistory();
 
@@ -130,7 +118,6 @@
                 (vm.alarms.filteredVehicles, {checked: true})).length;
 
             vm.verifyCheckStatus('vehicle');
-
         };
 
 
