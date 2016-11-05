@@ -9,7 +9,7 @@
 
     function RightNavDashboardController($log,$scope, $timeout, rightNavAlertDashboardService,
                                          mapService, geofenceReportService,vehicleService,
-                                         intellicarAPI, $q) {
+                                         intellicarAPI, $q, $interval) {
         $log.log("RightNavDashboardController");
         var vm = this;
         vm.alertDetails = [];
@@ -458,14 +458,9 @@
             vm.activeAlarmData = rightNavAlertDashboardService.getAlarmData();
             geofenceReportService.addListener('mygeofencereportsinfo', vm.historyGeofenceReports);
 
-            document.getElementById("mySidenav").style.width = "320px";
-            document.getElementById("main").style.marginRight = "320px";
-
-
-            $timeout(function(){
-                $('.eye-icon').webuiPopover({trigger:'hover',width:300});
+            $interval(function(){
+                $('.eye-icon').webuiPopover({trigger:'hover',width:300, animation:'pop'});
             }, 3000);
-
 
         };
 

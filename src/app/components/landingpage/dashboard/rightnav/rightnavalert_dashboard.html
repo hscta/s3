@@ -22,7 +22,7 @@
 <style>
     .sidenav {
         height: 100%;
-        width: 0;
+        width: 320px;
         position: fixed;
         z-index: 1;
         top: 0;
@@ -33,6 +33,7 @@
     }
 
     #main {
+        margin-right:320px;
         transition: margin-right .5s;
     }
 
@@ -46,11 +47,15 @@
         /*transition: 0.3s*/
     }
 
-    .eye-icon{
-        position: absolute;
-        right: 3px;
-        top: 68px;
+    .webui-popover-content{
+        word-wrap:break-word;
     }
+
+    /*.eye-icon{*/
+        /*position: absolute;*/
+        /*right: 3px;*/
+        /*top: 68px;*/
+    /*}*/
 </style>
 
 <div id="mySidenav" class="sidenav">
@@ -216,10 +221,10 @@
                                     <div class="en-af-item">Time : {{mid.timestamp | date : 'd MMM, h:mm a'}}</div>
                                     <div class="en-af-item">Mode : {{mid.opermode }}</div>
                                     <div class="en-af-item">
-                                        Loc : {{mid.latitude }},{{mid.longitude }}
+
                                         <a href="#" class="eye-icon pops{{midKey}}{{$index}}" data-content="{{vm.vehicleAddress}}"
                                             ng-mouseover="vm.getAddress(midKey, $index, mid.latitude, mid.longitude)">
-                                            <i class="material-icons" tiny>visibility</i>
+                                            Loc : {{mid.latitude }},{{mid.longitude }}
                                         </a>
                                         <!--<div class="pops{{$index}}"></div>-->
                                     </div>
