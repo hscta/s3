@@ -10,6 +10,47 @@
         $log.log('MapController');
         var vm = this;
 
+        var wh = $(window).height();
+        var header_height = 95;
+        // if(headerAutoHide){
+        //     $('.mainHeader').css({'margin-top':'-45px'});
+        //     header_height = 50;
+        // }
+
+
+        function setMapHeight() {
+            console.log('hel man');
+            wh = $(window).height();
+            isRendered('.angular-google-map-container', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
+            isRendered('.alert-md-content', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
+        }
+
+        $(window).ready(function () {
+            setMapHeight();
+        });
+
+
+        $(window).resize(function () {
+            setMapHeight();
+        });
+
+        function isRendered(el, callback) {
+            var isr_interval = setInterval(function () {
+                if ($(el).length > 0) {
+                    callback($(el));
+                    clearInterval(isr_interval);
+                }
+            }, 200)
+        }
+
+
+
+
+
         $scope.searchbox = {
             template: 'searchbox.tpl.html',
             options: {
