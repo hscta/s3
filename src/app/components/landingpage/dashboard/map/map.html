@@ -164,21 +164,21 @@
                 <md-tooltip>Immoblized</md-tooltip>
             </li>
 
-            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='noComm']"
-                ng-click="vm.runFilters('noComm')" layout="column">
-                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='noComm']"
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Not Communicating']"
+                ng-click="vm.runFilters('Not Communicating')" layout="column">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Not Communicating']"
                          class="icon-font icon-immobilized" md-font-library="material-icons">signal_cellular_off
                 </md-icon>
                 <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
                       style="font-size: 13px;">{{vm.vehicleStats.noComm}}</span>
                 <md-tooltip>Vehicle Not Communicating</md-tooltip>
             </li>
-            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='devPull']"
-                ng-click="vm.runFilters('devPull')" layout="column">
-                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='devPull']"
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Device pullout']"
+                ng-click="vm.runFilters('Device pullout')" layout="column">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Device pullout']"
                          class="icon-font icon-immobilized" md-font-library="material-icons">sim_card_alert
                 </md-icon>
-                <span ng-class="{true: 'md-light'}[vm.filterStr=='devPull']"
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Device pullout']"
                       style="font-size: 13px;">{{vm.vehicleStats.devPullout}}</span>
                 <md-tooltip>Device Pullout</md-tooltip>
             </li>

@@ -19,7 +19,6 @@
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
         vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
-
         // $timeout(function () {
         //     vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
         //     console.log('first setting');
@@ -42,20 +41,10 @@
         //     if($('.geoc-body').length > 0){
         //         $timeout(function () {
         //             var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
-        //             vm.dtOptions.withOption('scrollY', tableHeight);
         //         },200);
         //         clearInterval(tempInter);
         //     }
         // },200);
-
-
-        // $(window).resize(function () {
-        //     $timeout(function () {
-        //         var tableHeight = ( $('.geoc-body').height() - 110 ) + 'px';
-        //         vm.dtOptions.withOption('scrollY', tableHeight);
-        //     },200);
-        // });
-
 
         vm.selectAll = function (data) {
             var filterData;
@@ -118,7 +107,7 @@
 
             for ( var idx in vm.alarms.vehicles ){
                 if ( !vm.alarms.vehicles[idx].hasOwnProperty('checked'))
-                    vm.alarms.vehicles[idx].checked = true;
+                    vm.alarms.vehicles[idx].checked = false;
             }
 
             // if(!vm.alarms.alarmResponseData.length)
