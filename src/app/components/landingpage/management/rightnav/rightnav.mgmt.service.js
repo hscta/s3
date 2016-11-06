@@ -8,14 +8,13 @@
         .module('uiplatform')
         .service('rightNavMgmtService', rightNavMgmtService);
 
-    function rightNavMgmtService($log, $scope, $timeout, intellicarAPI, $q) {
+    function rightNavMgmtService($log, $timeout, intellicarAPI, $q) {
         $log.log("rightNavMgmtService");
         var vm = this;
 
         vm.init = function () {
 
         };
-
 
         vm.init();
     }
