@@ -12,7 +12,7 @@
         var vm = this;
         var marker = historyService.historyMapObj.dashboardMapObj.clickedMarker;
 
-        $log.log(marker);
+        //$log.log(marker);
         var historyMap = historyService.historyMapObj.historyMap;
         var timeIncreaseBy = 240000;
         var initialTime;
@@ -132,6 +132,7 @@
                             $scope.sliderTime = $scope.getSliderTime();
 
                             if (animationCount % 10 === 0) {
+                                //$log.log(animationCount);
                                 moveMapWithMarker(marker);
                             }
                             animationCount++;
@@ -235,7 +236,7 @@
 
             $scope.setSliderTime();
             var initialPoint = marker.trace.path[0];
-            $log.log(marker);
+            //$log.log(marker);
 
             $scope.tracePointGpsTime = initialPoint.gpstime;
             $scope.tracePointOdometer = initialPoint.odometer;
@@ -265,6 +266,7 @@
                 lat: marker.latitude,
                 lng: marker.longitude
             }));
+
             var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
 
             var ydiff = Math.abs((worldPoint.y - centerPoint.y) * scale);
@@ -353,55 +355,6 @@
                     counter = 0;
                     renderRectangle(counter2, pathArray[path], ratio2);
                 }
-            }
-        }
-
-        function drawGraphOld() {
-            var pathArray = marker.trace.path;
-            var numPoints = pathArray.length;
-            var timeDiff = (pathArray[numPoints - 1].gpstime - pathArray[0].gpstime) / 1000;
-            var sliderWidth = parseInt($('#historyGraphCanvas').width());
-            var secsPerPx = Math.ceil(timeDiff / sliderWidth);
-            graphCanvas.width = sliderWidth;
-
-            $log.log('numPoints   : ' + numPoints);
-            $log.log('timeDiff    : ' + timeDiff);
-            $log.log('sliderWidth : ' + sliderWidth);
-            $log.log('secsPerPx : ' + secsPerPx);
-
-            for (var idx = 0; idx < pathArray.length; idx++) {
-                // var eachitem = idx;
-                // if(eachitem < pathArray.length)
-                //     $log.log((pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000);
-                // for(var eachitem = idx; eachitem > idx && eachitem < pathArray.length &&
-                //     (pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000 < secsPerPx; eachitem++) {
-                for (var eachitem = idx + 1; eachitem < pathArray.length &&
-                (pathArray[eachitem].gpstime - pathArray[idx].gpstime) / 1000 < secsPerPx; eachitem++) {
-                    // $log.log((pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000);
-                    // if ((pathArray[eachitem].gpstime - pathArray[idx].gpstime)/1000)
-                    //     break;
-                }
-
-                if (eachitem < pathArray.length) {
-                    var diff = (pathArray[eachitem].gpstime - pathArray[idx].gpstime) / 1000;
-
-                    //$log.log("diff = " + diff);
-                    if (diff >= secsPerPx * 2) {
-                        var count = 1;
-                        while (secsPerPx * count < diff) {
-                            renderRectangle(eachitem, pathArray[eachitem]);
-                            //renderRectangle(eachitem, {ignstatus:0, speed:0});
-                            count++;
-                            $log.log("Off = " + pathArray[eachitem].ignstatus);
-                        }
-                    } else {
-                        renderRectangle(eachitem, pathArray[eachitem]);
-                        //renderRectangle(eachitem, {ignstatus:1, speed:1});
-                        $log.log("On = " + pathArray[eachitem].ignstatus);
-                    }
-                }
-
-                idx = eachitem;
             }
         }
 

@@ -65,8 +65,9 @@
                 $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
                 $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
 
-                $log.log($scope.clickedMarker);
-                vm.historyObj.historyMap.center = vm.historyObj.dashboardMapObj.clickedMarker;
+                //$log.log($scope.clickedMarker);
+                vm.historyObj.historyMap.center.latitude = vm.historyObj.dashboardMapObj.clickedMarker.latitude;
+                vm.historyObj.historyMap.center.longitude = vm.historyObj.dashboardMapObj.clickedMarker.longitude;
                 vm.historyObj.deviceid = vm.historyObj.dashboardMapObj.clickedMarker.deviceid;
                 vm.historyObj.vehicleNumber = vm.historyObj.dashboardMapObj.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
