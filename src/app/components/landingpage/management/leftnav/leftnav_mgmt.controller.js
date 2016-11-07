@@ -6,11 +6,11 @@
 
     angular
         .module('uiplatform')
-        .controller('LeftNavManagementController', LeftNavManagementController)
+        .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($scope, $log, intellicarAPI,
+    function LeftNavManagementController($rootScope,$scope, $log,
                                          leftNavManagementService, $state, $filter,
-                                         settingsService, treeDataService) {
+                                         settingsService) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
@@ -75,6 +75,17 @@
             }
         };
 
+
+        vm.toggleLeftSidebar = function(event, data) {
+            if ( data.left_nav_toggle) {
+                document.getElementById("myLeftSidenav").style.width = "320px";
+                document.getElementById("main").style.marginLeft = "320px";
+            } else{
+                document.getElementById("myLeftSidenav").style.width = "0";
+                document.getElementById("main").style.marginLeft= "0";
+            }
+        };
+
         // vm.expandAll = function () {
         //     if ( vm.tree_search_pattern.length <= 0 ){
         //         $scope.$broadcast('angular-ui-tree:expand-all');
@@ -87,6 +98,8 @@
         // };
 
         vm.initialize();
+        $scope.$on('toggleLeftSidebar', vm.toggleLeftSidebar);
+
         $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);
     }
 

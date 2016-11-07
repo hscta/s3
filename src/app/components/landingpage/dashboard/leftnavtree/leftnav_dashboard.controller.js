@@ -156,7 +156,6 @@
             vm.getMyVehicles();
         };
 
-
         vm.init();
     }
 })();

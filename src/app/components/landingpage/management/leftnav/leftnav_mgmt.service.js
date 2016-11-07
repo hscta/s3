@@ -15,14 +15,14 @@
             vm.handleResponse = function (resp) {
                 //$log.log("leftNavManagementService handleResponse");
                 //$log.log(resp);
-                return resp;
+                return $q.resolve(resp);
             };
 
 
             vm.handleFailure = function (resp) {
                 $log.log("leftNavManagementService handleFailure ");
                 $log.log(resp);
-                return resp;
+                return $q.reject(resp);
             };
 
 

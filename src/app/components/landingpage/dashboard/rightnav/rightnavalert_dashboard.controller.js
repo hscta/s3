@@ -461,7 +461,6 @@
             $interval(function(){
                 $('.eye-icon').webuiPopover({trigger:'hover',width:300, animation:'pop'});
             }, 3000);
-
         };
 
         vm.init();
