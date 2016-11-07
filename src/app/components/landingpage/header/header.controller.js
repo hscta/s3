@@ -9,11 +9,18 @@
         .module('uiplatform')
         .controller('HeaderController', HeaderController);
 
-    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet, $log, $q, $state,
+    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet,
+                              $log, $q, $state, $stateParams,
                             $mdToast, $document, loginService, userprefService) {
 
         $log.log('HeaderController');
         var vm = this;
+
+        $log.log($state.current);
+
+        vm.currState = $state.current.name;
+
+        vm.isManagementTab = vm.currState.indexOf('home.management');
         vm.menuItems = [ ];
         vm.selectItem = selectItem;
         vm.toggleItemsList = toggleItemsList;
