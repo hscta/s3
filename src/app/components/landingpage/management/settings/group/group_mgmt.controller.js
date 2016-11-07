@@ -28,7 +28,7 @@
 
         vm.onLoad = function () {
             $log.log(startupData);
-            vm.panelData ( startupData);
+            vm.panelData(startupData);
 
 
             //
@@ -47,7 +47,7 @@
                 vm.assets.push(data[key]);
             }
 
-            if ( settingsService.getCurrentGroupPath() )
+            if (settingsService.getCurrentGroupPath())
                 vm.showBtn = true;
         };
 
@@ -59,9 +59,9 @@
                         vm.newGroup = {};
                         $rootScope.$broadcast('EVENT_MGMT_TREE_CHANGE', {});
                         vm.groupBtnStatus = false;
-                        vm.msg = "Group created Successfully."
+                        vm.msg = "Group created Successfully.";
                         groupMgmtService.getData($stateParams).then(
-                            function(resp) {
+                            function (resp) {
                                 vm.panelData(resp);
                             }
                         );

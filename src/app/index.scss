@@ -171,12 +171,11 @@ section.jumbotron {
 //.main-div{height:93%;}
 
 md-backdrop {
-    top:0!important;
+    top:0;
 }
 md-sidenav {
     top:44px !important;
-}
-
+} 
 md-toolbar{border-bottom:1px solid #CCC;}
 
 #vericalToolBar {
@@ -1133,9 +1132,9 @@ $rnt_label_height : 35px;
         @include transition(0.4s);
         position: relative;
         overflow: hidden;
-        @include border-radius(4px);
+        @include border-radius(2px);
         .en_label{
-            @include border-radius(4px);
+            @include border-radius(2px);
             border:1px solid #eee;
             margin:1px 0;
             height: $rnt_label_height!important;
@@ -1215,7 +1214,7 @@ $rnt_label_height : 35px;
                         height: 28px;
                         font-size:90%;
                         margin:0px 0 2px 12%;
-                        @include border-radius(4px);
+                        @include border-radius(2px);
                         text-align: center;
                         padding:0;
                         i{
