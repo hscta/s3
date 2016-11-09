@@ -3,16 +3,10 @@
 <style>
     .icar-new-group {
         border: 1px solid #ccc;
-        /*margin: 0 !important;*/
-        /*z-index: 9999;*/
-        /*-webkit-transition: height .3s ease-in-out;*/
-        /*transition: all .3s ease-in-out;*/
-        /*opacity: 0;*/
         display:none;
     }
     .icar-new-group.active {
         display:block;
-        /*opacity: 1;*/
     }
 </style>
 
@@ -44,9 +38,12 @@
     <!-- <div class="md-title">{{myAsset.name}}</div> -->
     <!--<icar-expanel ng-repeat="item in vm.vehicleinfo track by $index"-->
     <!--details="item" schema="item.schema" layout></icar-expanel>-->
-    <div class="waves-effect waves-light btn ng-isolate-scope"  ng-click="vm.addUsers(myAsset)">Add Users</div>
-    <a class="waves-effect waves-light btn ng-isolate-scope"  ng-click="vm.addRoles(myAsset)">Add Role</a> 
-</script> 
+    <div class="waves-effect waves-light btn ng-isolate-scope" ng-if="myAsset.assignUser"
+         ng-click="vm.addUsers(myAsset)">
+        Add Users
+    </div>
+    <a class="waves-effect waves-light btn ng-isolate-scope"  ng-click="vm.addRoles(myAsset)">Add Role</a>
+</script>
 
 <multi-list data="groupData"></multi-list>
 
@@ -54,7 +51,7 @@
     <li ng-repeat="myAsset in vm.assets track by $index">
         <div class="collapsible-header"><i class="{{single.icon}}"></i>
             {{myAsset.name}}
-        </div>
+        </div>sers
         <div class="collapsible-body">
             <div ng-include="'outside-panel-content.html'"></div>
         </div>

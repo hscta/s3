@@ -195,6 +195,28 @@
             return $q.resolve(resp);
         };
 
+        vm.mergeUserPermissions = function (resp){
+            // $log.log(resp);
+            var usersList = [];
+            var data = resp[0].data.data;
+            for ( var idx in data.assets){
+                var asset = data.assets[idx];
+                for ( var perm in data.permissions){
+                    var permission = data.permissions[perm];
+                    if ( asset.assetpath == permission.assetpath){
+                        usersList.push({
+                            assetpath:asset.assetpath,
+                            name:asset.name,
+                            pname:asset.pname,
+                            assetid:permission.assetid,
+                            permid:permission.permid
+                        });
+                    }
+                }
+            }
+            return $q.resolve(usersList);
+        };
+
 
         vm.mergeAssetAssignments = function (resp) {
             //$log.log(resp);
