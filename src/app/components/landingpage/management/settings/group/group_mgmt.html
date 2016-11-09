@@ -41,11 +41,25 @@
 
 
 <script type="text/ng-template" id="outside-panel-content.html">
-    <div class="md-title">{{myAsset.name}}</div>
+    <!-- <div class="md-title">{{myAsset.name}}</div> -->
     <!--<icar-expanel ng-repeat="item in vm.vehicleinfo track by $index"-->
     <!--details="item" schema="item.schema" layout></icar-expanel>-->
-</script>
+    <div class="waves-effect waves-light btn ng-isolate-scope"  ng-click="vm.addUsers(myAsset)">Add Users</div>
+    <a class="waves-effect waves-light btn ng-isolate-scope"  ng-click="vm.addRoles(myAsset)">Add Role</a> 
+</script> 
 
+<multi-list data="groupData"></multi-list>
+
+<!-- <ul class="collapsible popout" data-collapsible="accordion" watch>
+    <li ng-repeat="myAsset in vm.assets track by $index">
+        <div class="collapsible-header"><i class="{{single.icon}}"></i>
+            {{myAsset.name}}
+        </div>
+        <div class="collapsible-body">
+            <div ng-include="'outside-panel-content.html'"></div>
+        </div>
+    </li>
+</ul> -->
 
 <md-expansion-panel-group md-component-id="vehicleGroup" flex>
 
@@ -63,8 +77,8 @@
                 <div ng-include="'outside-panel-content.html'"></div>
             </md-expansion-panel-content>
 
-            <md-expansion-panel-footer  md-no-sticky="true">
-            </md-expansion-panel-footer>
+            <!-- <md-expansion-panel-footer  md-no-sticky="true">
+            </md-expansion-panel-footer> -->
         </md-expansion-panel-expanded>
 
     </md-expansion-panel>

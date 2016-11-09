@@ -84,6 +84,7 @@
 
             if (currentTime - vehicleData.timestamp.getTime() > 8 * 3600 * 1000) {
                 vehicleData.noComm = 'no communication';
+                vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING; 
             }
 
             if (vehicleData.ignitionstatus == 1) {
@@ -106,9 +107,10 @@
                 vehicleData.devicepulloutFilter = VEHICLE_DEVICE_PULLOUT;    
             }
 
-            checkNoComm(vehicleData, function(){
-                vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
-            })
+            // checkNoComm(vehicleData, function(){
+            //     vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
+            //     console.log(vehicleData.vehicleno);
+            // })
             return vehicleObj;
         };
 

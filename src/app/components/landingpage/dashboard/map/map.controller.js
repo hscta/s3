@@ -291,18 +291,16 @@
 
 
         vm.getStats = function (filterStr) {
-            var count = 0;
-            vm.noCommCount = 0;
-            vm.devicePulloutCount = 0;
+            var count = 0; 
+            vm.vehicleStats.noComm = 0;
+            vm.vehicleStats.devPullout = 0;
             for (var idx in vm.inMarkers) {
                 var marker = vm.inMarkers[idx];
                 if (vm.checkRoaded(marker)) {
                     checkNoComm(marker, function (marker) {
-                        vm.noCommCount++;
                         vm.vehicleStats.noComm++;
                     });
                     if(marker.carbattery < 2){
-                        vm.devicePulloutCount++;
                         vm.vehicleStats.devPullout++;
                     }
                     if (vm.matchesAnyMarkerData(marker, filterStr)) {
@@ -313,9 +311,7 @@
                         }
                     }
                 }
-
             }
-
             //$log.log("Filtered vehicles = " + count);
             return count;
         };
