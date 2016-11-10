@@ -38,7 +38,7 @@
 
         vm.initialize = function (data) {
             $log.log("vm.initialize");
-            console.log(startupData);
+            vm.lastgrouppath = startupData;
             leftNavManagementService.getManagementTree({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
@@ -48,6 +48,11 @@
             if (!collapsed) {
                 toggle(obj);
             }
+            if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group' && vm.lastgrouppath != asset.info.assetpath){
+                vm.lastgrouppath = asset.info.assetpath;
+                console.log(vm.lastgrouppath);
+            }
+
             settingsService.handleAssetClick(asset);
         };
 
