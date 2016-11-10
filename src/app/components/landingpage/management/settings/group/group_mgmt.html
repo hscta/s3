@@ -10,8 +10,22 @@
     }
 </style>
 
-<md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewGroupField()">
+<span ng-if="vm.selectedTreeGroup">Group Name : {{vm.selectedTreeGroup.name}}</span>
+<br/>
+
+<md-button class="md-accent" ng-show="vm.showBtn"
+           ng-click="vm.showNewGroupField()">
     Create Group
+</md-button>
+
+<md-button class="md-accent" ng-if="vm.selectedTreeGroup.assignUser"
+           ng-click="vm.assignUsers(vm.selectedTreeGroup)">
+    Assign User
+</md-button>
+
+<md-button class="md-accent" ng-if="vm.selectedTreeGroup.assignRole"
+           ng-click="vm.assignRoles(vm.selectedTreeGroup)">
+    Assign Role
 </md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">

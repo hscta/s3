@@ -30,6 +30,8 @@
             $log.log("GroupMgmtController handleMyVehiclesFailure");
         };
 
+        vm.selectedTreeGroup = null;
+
         vm.onLoad = function () {
             $log.log(startupData);
 
@@ -46,7 +48,6 @@
             }
             vm.panelData(startupData);
 
-
             //
             // window.setTimeout(function(){
             //     var newData = groupMgmtService.getData((settingsService.getCurrentGroup()));
@@ -54,6 +55,20 @@
             //     $log.log(newData);
             //     $log.log($q.resolve(newData));
             // }, 5000);
+
+            $log.log($stateParams);
+
+            vm.selectedTreeGroup= $stateParams.info;
+
+            if ( vm.selectedTreeGroup){
+                if (vm.selectedTreeGroup.permissions.indexOf(vm.ASSIGN_USER_PERM) >= 0)
+                    vm.selectedTreeGroup.assignUser = true;
+
+                if (vm.selectedTreeGroup.permissions.indexOf(vm.ASSIGN_ROLE_PERM) >= 0)
+                    vm.selectedTreeGroup.assignRole = true;
+
+            }
+
 
         };
 
@@ -108,7 +123,7 @@
             heading: 'Add User to the Group',
             options:{
                 width: 70, // in  percentage
-                height: 70, // in percentage
+                height: 70 // in percentage
             },
             datas:[
                 {
@@ -170,7 +185,7 @@
 
             var body ={
                 group:{
-                    grouppath:data.pgrouppath
+                    grouppath:data.assetpath
                 }
             };
             vm.getUsers(body);
@@ -183,7 +198,7 @@
 
             var body ={
                 group:{
-                    grouppath:data.pgrouppath
+                    grouppath:data.assetpath
                 }
             };
 
