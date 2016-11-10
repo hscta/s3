@@ -37,9 +37,7 @@
 
 
         vm.initialize = function (data) {
-            $log.log("vm.initialize");
-            vm.lastgrouppath = startupData;
-            leftNavManagementService.getManagementTree({grouppath:startupData})
+            leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
 

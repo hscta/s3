@@ -346,11 +346,19 @@
         };
 
 
+        vm.getManagementTreeWithUser = function (body) {
+            return groupService.getMyDirectAssetsMapWithUser(body)
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createManagementTree, vm.handleFailure);
+        };
+
+
         vm.getManagementTree = function (body) {
             return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createManagementTree, vm.handleFailure);
         };
+
     }
 
 })();
