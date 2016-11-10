@@ -39,10 +39,12 @@
     <!--<icar-expanel ng-repeat="item in vm.vehicleinfo track by $index"-->
     <!--details="item" schema="item.schema" layout></icar-expanel>-->
     <div class="waves-effect waves-light btn ng-isolate-scope" ng-if="myAsset.assignUser"
-         ng-click="vm.addUsers(myAsset)">
-        Add Users
+         ng-click="vm.assignUsers(myAsset)">
+        Assign Users
     </div>
-    <a class="waves-effect waves-light btn ng-isolate-scope"  ng-click="vm.addRoles(myAsset)">Add Role</a>
+    <a class="waves-effect waves-light btn ng-isolate-scope"
+       ng-if="myAsset.assignRole"
+       ng-click="vm.assignRoles(myAsset)">Assign Role</a>
 </script>
 
 <multi-list data="groupData"></multi-list>

@@ -242,6 +242,18 @@
         };
 
 
+        vm.makeAssetList = function (resp) {
+            var data = resp.data.data;
+            var assets = [];
+            for (var idx in data.assets) {
+                var asset = data.assets[idx];
+                asset.id = data.assets[idx].assetid;
+                assets.push(asset);
+            }
+            return $q.resolve(assets);
+        };
+
+
         vm.makeMapOnAssetPath = function (resp) {
             // diff with makeAssetMap is that this function
             // is directly reading from the array
