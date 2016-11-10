@@ -31,6 +31,11 @@
                     .then(vm.handleResponse, vm.handleFailure);
             };
 
+            vm.getManagementTree = function (body) {
+                return intellicarAPI.treeDataService.getManagementTree(body)
+                    .then(vm.handleResponse, vm.handleFailure);
+            };
+
 
             vm.addListener = function (key, listener) {
                 vm.listeners[key] = listener;

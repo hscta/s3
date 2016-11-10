@@ -37,6 +37,7 @@
 
 
         vm.initialize = function (data) {
+            vm.lastgrouppath = startupData;
             leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
@@ -48,7 +49,8 @@
             }
             if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group' && vm.lastgrouppath != asset.info.assetpath){
                 vm.lastgrouppath = asset.info.assetpath;
-                console.log(vm.lastgrouppath);
+                leftNavManagementService.getManagementTree({grouppath:vm.lastgrouppath})
+                    .then(vm.handleResponse, vm.handleResponseFailure);
             }
 
             settingsService.handleAssetClick(asset);

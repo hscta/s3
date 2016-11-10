@@ -240,8 +240,28 @@
                     uiTree.push(resultNode);
                 }
             }
+            $log.log(uiTree);
+            if(vm.globalGenericTree == null){
+                vm.globalGenericTree  = angular.copy(uiTree);
+                vm.globalGenericTree = unsetVisited(vm.globalGenericTree);
+            }
             return $q.resolve(uiTree);
         };
+
+
+        function unsetVisited(tree) {
+            for(var idx=0; idx < tree.length; idx++){
+                tree[idx].visited = false;
+                console.log('making it false');
+                if(tree[idx].items && tree[idx].items.length > 0){
+                    for(var jdx=0; jdx < tree[idx].items.length; jdx++){
+                        if(tree[idx].items[jdx].id == 'group'){
+                            searchGroup(tree[idx]);
+                        }
+                    }
+                }
+            }
+        }
 
 
         // His group will not come in mygroups or myassetgroups API. So we need to handle him explicitly
@@ -278,6 +298,8 @@
                 }
             }
         };
+
+        vm.globalGenericTree = null;
 
 
         vm.createGenericTree = function (resp) {
@@ -329,9 +351,9 @@
                 }
             }
 
-            //$log.log(assetTree);
+            console.log(assetTree);
             var assetArray = helperService.sortOnAssetLevel(assetTree);
-            //$log.log(assetArray);
+            // $log.log(assetArray);
             return $q.resolve(assetArray);
         };
 
@@ -346,8 +368,39 @@
         };
 
 
+        vm.mergeChildTree = function (childTree) {
+            // console.log(childTree);
+            var pgrouppath = childTree[Object.keys(childTree)[0]].info.pgrouppath;
+            searchGroup(vm.globalGenericTree, pgrouppath, childTree);
+            return $q.resolve(vm.globalGenericTree);
+        };
+
+
+        function searchGroup(tree, path, children) {
+            for(var idx=0; idx < tree.length; idx++){
+                if(tree[idx].info.assetpath == path){
+                    tree[idx].items = children;
+                }else if(path.indexOf(tree[idx].info.assetpath) !== -1){
+                    for(var jdx=0; jdx < tree[idx].items.length; jdx++){
+                        if(tree[idx].items[jdx].id == 'group'){
+                            searchGroup(tree[idx].items[jdx].items, path, children);
+                        }
+                    }
+                }
+            }
+        }
+
+
         vm.getManagementTreeWithUser = function (body) {
             return groupService.getMyDirectAssetsMapWithUser(body)
+            //return userService.getMyDirectAssetsMap(body)
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.createManagementTree, vm.handleFailure);
+        };
+
+
+        vm.getManagementTreeNoUser = function (body) {
+            return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createManagementTree, vm.handleFailure);
         };
@@ -356,9 +409,9 @@
         vm.getManagementTree = function (body) {
             return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
-                .then(vm.createManagementTree, vm.handleFailure);
+                .then(vm.createManagementTree, vm.handleFailure)
+                .then(vm.mergeChildTree, vm.handleFailure);
         };
-
     }
 
 })();
