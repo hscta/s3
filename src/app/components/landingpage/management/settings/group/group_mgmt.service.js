@@ -22,10 +22,10 @@
 
 
         vm.createGroup = function (newGroup) {
-            var body = {group: {
+            var body =  {
                 pgrouppath: settingsService.getCurrentGroupPath(),
                 name: newGroup.name
-            }};
+            };
 
             return intellicarAPI.groupService.createGroup(body);
         };

@@ -8,53 +8,66 @@
     angular.module('uiplatform')
         .service('groupService', groupService);
 
-    function groupService($rootScope, $log, $q, requestService, helperService) {
+    function groupService($rootScope, $log, $q, requestService, helperService, userService) {
         $log.log("groupService");
         var vm = this;
+
+        vm.encloseBody = function (data) {
+            // return data;
+            return {group:data};
+        };
 
 
         vm.getMyGroups = function(body) {
             // $log.log("getMyGroups");
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/mygroups', body);
         };
 
 
         vm.getMyAssetGroups = function (body) {
             // $log.log("getMyAssetGroups");
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/myassetgroups', body);
         };
 
 
         vm.getMyVehicles = function (body) {
             // $log.log("getMyVehicles");
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/myvehicles', body);
         };
 
 
         vm.getMyUsers = function (body) {
             // $log.log("getMyUsers");
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/myusers', body);
         };
 
 
         vm.getMyRoles = function (body) {
             // $log.log("getMyRoles");
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/myroles', body);
         };
 
 
         vm.getMyDevices = function (body) {
             // $log.log("getMyDevices");
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/mydevices', body);
         };
 
 
         vm.createGroup = function(body) {
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/create', body);
         };
 
 
         vm.assignRole = function(body) {
+            var body = vm.encloseBody(body);
             return requestService.firePost('/group/assignrole', body);
         };
 
@@ -140,8 +153,9 @@
             var uPromise = vm.getMyUsersMap(body);
             var rPromise = vm.getMyRolesMap(body);
             var dPromise = vm.getMyDevicesMap(body);
+            var myPromise = userService.getMyInfoMap(body);
 
-            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise])
+            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise, myPromise])
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };

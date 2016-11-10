@@ -95,6 +95,24 @@
             return assetpath.substring(0, idx);
         };
 
+        vm.getParentFromPath = function (assetpath) {
+
+            if (assetpath == null)
+                return null;
+
+            if (assetpath === ROOT_GROUP)
+                return ROOT_GROUP;
+
+            var count = 0;
+            for (var idx = assetpath.length - 1; idx > 0; idx--) {
+                if (assetpath.charAt(idx) === SLASH) {
+                    if (++count === 2)
+                        break;
+                }
+            }
+            return assetpath.substring(0, idx);
+        }
+
 
         vm.getParentId = function (asset) {
             if (asset == null)

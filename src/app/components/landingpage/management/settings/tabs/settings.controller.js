@@ -62,8 +62,8 @@
             $log.log(currentGroup);
             var stateParams = {
                 info: {
-                    pgrouppath: currentGroup.group.grouppath,
-                    assetpath: currentGroup.group.grouppath,
+                    pgrouppath: currentGroup.grouppath,
+                    assetpath: currentGroup.grouppath,
                     ui_asset_type: assetType,
                     tabClick: true
                 }

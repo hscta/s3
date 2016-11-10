@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('userprefService', userprefService);
 
-    function userprefService($log, loginService, intellicarAPI, latlngService) {
+    function userprefService($log, loginService, intellicarAPI, latlngService, helperService, settingsService ) {
         $log.log("userprefService");
         var vm = this;
         vm.userpref = {};
@@ -23,7 +23,11 @@
         vm.handleGetMyInfo = function (resp) {
             //$log.log(resp);
             vm.userpref = resp.data.data[0];
+            // console.log();
+            vm.pgrouppath = helperService.getParentFromPath(vm.userpref.assetpath);
+            settingsService.setCurrentGroupPath(vm.pgrouppath);
             // $log.log(vm.userpref);
+            console.log(settingsService.getCurrentGroup());
             latlngService.geocodeAddress('bhopal');
         };
 
