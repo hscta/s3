@@ -238,7 +238,7 @@
             $scope.groupData.heading = 'Add Roles to the group';
         }
 
-        vm.onLoad(); 
+        vm.onLoad();
     }
 })();
 

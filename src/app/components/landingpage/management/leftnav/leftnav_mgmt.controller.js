@@ -29,6 +29,12 @@
             vm.tree_data = data;
         };
 
+        vm.handleSubGroupResponse = function (data) {
+            //$log.log("handleResponse");
+            // $log.log(data);
+            vm.tree_data = data;
+        };
+
 
         vm.handleResponseFailure = function (data) {
             $log.log("handleResponseFailure");
@@ -37,8 +43,7 @@
 
 
         vm.initialize = function (data) {
-            $log.log("vm.initialize");
-            console.log(startupData);
+            // $log.log("vm.initialize");
             leftNavManagementService.getManagementTree({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
@@ -48,6 +53,13 @@
             if (!collapsed) {
                 toggle(obj);
             }
+
+            console.log(asset);
+
+            // fire api for next level
+            leftNavManagementService.getManagementTree({grouppath:asset.info.assetpath})
+                .then(vm.handleSubGroupResponse, vm.handleResponseFailure);
+
             settingsService.handleAssetClick(asset);
         };
 
