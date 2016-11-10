@@ -424,7 +424,7 @@
             var body = {
                 data: [ [lat, lng]]
             };
-            var promise = (intellicarAPI.userService.getAddress(body));
+            var promise = (intellicarAPI.geocodeService.getAddress(body));
 
             vm.popoverIndex = 'pops'+midKey+index;
             return $q.resolve(promise)

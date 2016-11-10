@@ -25,7 +25,7 @@
 
         vm.handleResponse = function (data) {
             //$log.log("handleResponse");
-            $log.log(data);
+            // $log.log(data);
             vm.tree_data = data;
         };
 

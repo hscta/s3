@@ -18,6 +18,7 @@
             return requestService.firePost('/user/myinfo', body);
         };
 
+
         vm.getMyGroups = function (body) {
             // $log.log("getMyGroups");
             return requestService.firePost('/user/mygroups', body);
@@ -37,8 +38,12 @@
 
 
         vm.getMyUsers = function (body) {
-            // $log.log("getMyUsers");
             return requestService.firePost('/user/myusers', body);
+        };
+
+
+        vm.getUserPermissions = function (body) {
+            return requestService.firePost('/permission/map', body);
         };
 
 
@@ -68,6 +73,10 @@
             return requestService.firePost('/user/mygeofencereports', body);
         };
 
+        vm.assignUser = function (body) {
+            return requestService.firePost('/user/assigngroup', body);
+        };
+
 
         vm.handleResponse = function (resp) {
             //$log.log("handleResponse");
@@ -95,7 +104,6 @@
                 .then(helperService.makeAssetMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
-
 
         vm.getMyAssetGroupsMap = function (body) {
             //$log.log("getMyAssetGroupsMap");
@@ -132,7 +140,6 @@
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
-
         vm.getMyDevicesMap = function (body) {
             // $log.log("getMyDevicesMap");
             return vm.getMyDevices(body)
@@ -161,9 +168,21 @@
 
         vm.handleDirectAssetResponse = function (resp) {
             //$log.log("userService handleDirectAssetResponse");
-            $log.log(resp);
+            // $log.log(resp);
             return $q.resolve(resp);
         };
+
+
+        // vm.getUsersWithPermissions = function(body){
+        //     var users = vm.getMyUsers(body);
+        //     var permissions = vm.getUserPermissions(body);
+        //
+        //
+        //     return $q.all([users, permissions])
+        //         .then(vm.handleDirectAssetResponse, vm.handleFailure)
+        //         .then(helperService.mergeUserPermissions,  vm.handleFailure)
+        //         .then(vm.handleResponse, vm.handleFailure);
+        // };
 
 
         vm.getMyDirectAssetsMap = function (body) {
@@ -179,9 +198,5 @@
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };
-
-        vm.getAddress = function(body){
-            return requestService.fireGeoCode('/geocodeint', body);
-        }
     }
 })();
