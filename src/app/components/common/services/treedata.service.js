@@ -240,6 +240,7 @@
                     uiTree.push(resultNode);
                 }
             }
+            $log.log(uiTree);
             return $q.resolve(uiTree);
         };
 
@@ -353,12 +354,19 @@
         };
 
 
-        vm.getManagementTree = function (body) {
+        vm.getManagementTreeNoUser = function (body) {
             return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createManagementTree, vm.handleFailure);
         };
 
+
+        vm.getManagementTree = function (body) {
+            return groupService.getMyDirectAssetsMap(body)
+                .then(vm.createGenericTree, vm.handleFailure)
+                .then(vm.mergeChildTree, vm.handleFailure)
+                .then(vm.createManagementTree, vm.handleFailure);
+        };
     }
 
 })();

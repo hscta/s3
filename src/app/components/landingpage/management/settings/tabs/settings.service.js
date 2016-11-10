@@ -83,12 +83,6 @@
 
 
         vm.getCurrentGroupPath = function() {
-            console.log(vm.currentGroup);
-            $timeout(function () {
-                console.log(vm.currentGroup);
-
-            },3000);
-
             if(vm.currentGroup && 'grouppath' in vm.currentGroup)
                 return vm.currentGroup.grouppath;
 
