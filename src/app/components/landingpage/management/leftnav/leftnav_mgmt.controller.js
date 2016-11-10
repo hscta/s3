@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($rootScope,$scope, $log,
+    function LeftNavManagementController($rootScope,$scope, $log, startupData,
                                          leftNavManagementService, $state, $filter,
                                          settingsService) {
 
@@ -38,7 +38,8 @@
 
         vm.initialize = function (data) {
             $log.log("vm.initialize");
-            leftNavManagementService.getManagementTree({})
+            console.log(startupData);
+            leftNavManagementService.getManagementTree({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
 

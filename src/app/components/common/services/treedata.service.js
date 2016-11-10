@@ -9,7 +9,7 @@
         .module('uiplatform')
         .service('treeDataService', treeDataService);
 
-    function treeDataService($log, $q, userService, helperService) {
+    function treeDataService($log, $q, userService, helperService, groupService) {
         var vm = this;
         $log.log("treeDataService");
 
@@ -17,7 +17,7 @@
 
 
         vm.management_tree_data = function (data) {
-            console.log(data.data.data);
+            // console.log(data.data.data);
             var nodes = data.data.data;
             var map = {}, node, roots = [];
             for (var i = 0; i < nodes.length; i += 1) {
@@ -58,46 +58,46 @@
             }
         };
 
-
-        vm.buildDashboardTree = function (genericTree, key) {
-            //$log.log("buildTree " + key);
-
-            if (genericTree === null)
-                return null;
-
-            if (genericTree[key].visited == true) {
-                //$log.log("Already visited: " + key);
-                return null;
-            }
-
-            var gtNode = genericTree[key];
-            gtNode.visited = true;
-
-            //$log.log(gtNode);
-            var utNode = {};
-            utNode.id = key;
-            utNode.title = gtNode.info.name;
-            utNode.info = gtNode.info;
-            utNode.items = [];
-            utNode.checkStatus = false;
-            utNode.collapsed = vm.collapsedStatus;
-
-            var resultNode = null;
-            var child = null;
-            if (gtNode.children !== null) {
-                for (var idx in gtNode.children) {
-                    child = gtNode.children[idx];
-                    //$log.log("parent: " + key + ", child = " + idx);
-                    resultNode = vm.buildDashboardTree(genericTree, helperService.getAssetPath(child));
-
-                    if (resultNode !== null) {
-                        utNode.items.push(resultNode);
-                    }
-                }
-            }
-
-            return utNode;
-        };
+        //
+        // vm.buildDashboardTree = function (genericTree, key) {
+        //     //$log.log("buildTree " + key);
+        //
+        //     if (genericTree === null)
+        //         return null;
+        //
+        //     if (genericTree[key].visited == true) {
+        //         //$log.log("Already visited: " + key);
+        //         return null;
+        //     }
+        //
+        //     var gtNode = genericTree[key];
+        //     gtNode.visited = true;
+        //
+        //     //$log.log(gtNode);
+        //     var utNode = {};
+        //     utNode.id = key;
+        //     utNode.title = gtNode.info.name;
+        //     utNode.info = gtNode.info;
+        //     utNode.items = [];
+        //     utNode.checkStatus = false;
+        //     utNode.collapsed = vm.collapsedStatus;
+        //
+        //     var resultNode = null;
+        //     var child = null;
+        //     if (gtNode.children !== null) {
+        //         for (var idx in gtNode.children) {
+        //             child = gtNode.children[idx];
+        //             //$log.log("parent: " + key + ", child = " + idx);
+        //             resultNode = vm.buildDashboardTree(genericTree, helperService.getAssetPath(child));
+        //
+        //             if (resultNode !== null) {
+        //                 utNode.items.push(resultNode);
+        //             }
+        //         }
+        //     }
+        //
+        //     return utNode;
+        // };
 
 
         vm.buildDashboardTree = function (genericTree, key) {
@@ -347,7 +347,7 @@
 
 
         vm.getManagementTree = function (body) {
-            return userService.getMyDirectAssetsMap(body)
+            return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createManagementTree, vm.handleFailure);
         };

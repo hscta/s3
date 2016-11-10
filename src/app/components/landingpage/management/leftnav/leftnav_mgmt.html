@@ -85,7 +85,6 @@
     </div>
     <ol ui-tree-nodes ng-model="item.items" ng-show="item.collapsed">
         <li ng-repeat="item in item.items" ui-tree-node
-            ng-hide="!treeFilter(item, vm.tree_search_pattern, supportedFields)"
             ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'">  </li>
     </ol>
 </script>
@@ -113,7 +112,7 @@
     <div ui-tree id="tree-root" callbacks="treeOptions" class="tree-str">
         <ol ui-tree-nodes ng-model="vm.tree_data" ng-class="{hidden: collapsed}">
             <li ng-repeat="item in vm.tree_data" ui-tree-node data-nodrag data-collapsed="item.collapsed"
-                ng-hide="vm.search_results = !treeFilter(item, vm.tree_search_pattern, supportedFields)"
+
                 ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></li>
         </ol>
     </div>

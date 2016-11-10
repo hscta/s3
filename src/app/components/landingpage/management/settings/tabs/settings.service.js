@@ -5,7 +5,8 @@
     angular.module('uiplatform')
         .service('settingsService', settingsService);
 
-    function settingsService($log, $state, intellicarAPI) {
+    function settingsService($log, $state, intellicarAPI, $timeout) {
+        $log.log('settingsService');
         var vm = this;
         vm.setTabListener = null;
         vm.currentGroup = null;
@@ -37,11 +38,11 @@
         };
 
 
-        // vm.setCurrentGroup = function(stateParams) {
-        //     $log.log("setCurrentGroup grouppath: " + grouppath);
-        //     vm.currentGroup = {group: {grouppath: vm.getRequestedGroupPath(stateParams)}};
-        //     $log.log(vm.currentGroup);
-        // };
+        vm.setCurrentGroupPath = function(grouppath) {
+
+            vm.currentGroup = {grouppath: grouppath};
+            console.log(vm.currentGroup);
+        };
 
         vm.setCurrentGroup = function(stateParams) {
             var grouppath = null;
@@ -54,7 +55,9 @@
                 }
             }
 
-            vm.currentGroup = {group: {grouppath: grouppath}};
+            // vm.currentGroup =  grouppath;
+            vm.currentGroup = {grouppath: grouppath};
+            // console.log(vm.currentGroup);
             //return grouppath;
         };
 
@@ -80,8 +83,14 @@
 
 
         vm.getCurrentGroupPath = function() {
-            if('group' in vm.currentGroup && 'grouppath' in vm.currentGroup.group)
-                return vm.currentGroup.group.grouppath;
+            console.log(vm.currentGroup);
+            $timeout(function () {
+                console.log(vm.currentGroup);
+
+            },3000);
+
+            if(vm.currentGroup && 'grouppath' in vm.currentGroup)
+                return vm.currentGroup.grouppath;
 
             return null;
         };
