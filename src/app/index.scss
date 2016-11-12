@@ -175,7 +175,7 @@ md-backdrop {
 }
 md-sidenav {
     top:44px !important;
-} 
+}
 md-toolbar{border-bottom:1px solid #CCC;}
 
 #vericalToolBar {
@@ -848,7 +848,7 @@ body{
     position:relative;
     // padding-left:30px;
     overflow:hidden;
-    // @include transition(0.2s); 
+    // @include transition(0.2s);
     font-family: gotham-b;
     color: #585757;
     text-transform: uppercase;
@@ -897,7 +897,7 @@ body{
 .toggleButton.active:after {
     opacity: 1;
     background: #d1e934;
-    bottom:4px; 
+    bottom:4px;
     box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -1402,18 +1402,27 @@ button{
     -moz-animation-timing-function: linear;
 }
 
-.spinner.-blue{ 
+.spinner.-blue{
     border:2px solid #3498db;
     border-bottom:0;
 }
-.spinner.-big{ 
+.spinner.-big{
     margin-left:-20px;
-    margin-top:-20px; 
+    margin-top:-20px;
     width: 40px;
     height: 40px;
 }
+.spinner.-relative{
+    position: relative;
+    top:0;
+    left:0;
+    margin:0;
+    float: left;
+    display: block;
+}
 
-@keyframes rotateAnim {
+
+    @keyframes rotateAnim {
     from {
         transform: rotate(0deg);
     }
@@ -1846,7 +1855,7 @@ div.dataTables_info {
 }
 
 
-/* 
+/*
  * popup for management [ group ]
  */
 
@@ -1858,7 +1867,7 @@ div.dataTables_info {
     top:0;
     left:0;
     right:0;
-    bottom:0; 
+    bottom:0;
     z-index:999999;
     @include borderBox();
     *{
@@ -1872,7 +1881,7 @@ div.dataTables_info {
         right:0;
         width:100%;
         height:100%;
-        background:rgba(0,0,0,0.5);    
+        background:rgba(0,0,0,0.5);
     }
     .grp-popup-inner{
         background:#fff;
@@ -1933,7 +1942,7 @@ div.dataTables_info {
                 left:20px;
                 top:40px;
                 width:30px;
-                height:30px; 
+                height:30px;
                 font-size:130%;
                 color:#aaa;
                 line-height:27px;
@@ -1941,7 +1950,7 @@ div.dataTables_info {
         }
         .gp-content{
             top:50px;
-            bottom:0; 
+            bottom:0;
             padding:5px;
             .gpc-noitem{
                 width:100%;
@@ -1961,7 +1970,7 @@ div.dataTables_info {
                 line-height:30px;
                 width:30px;
                 float:right;
-                margin:4px 6px; 
+                margin:4px 6px;
                 @include border-radius(3px);
                 color:#fff;
                 text-align:center;
@@ -1979,7 +1988,7 @@ div.dataTables_info {
                 margin: 0;
                 height:100%;
                 position:relative;
-                float:left; 
+                float:left;
                 .gp-head{
                     height:80px;
                     line-height:40px;
@@ -1987,13 +1996,13 @@ div.dataTables_info {
                     font-family:gotham;
                     font-size:110%;
                     border:1px solid #ddd;
-                    border-bottom:0; 
+                    border-bottom:0;
                     @include border-radius(5px 5px 0 0);
                 }
                 .gp-content{
                     top:80px;
                     border:1px solid #ddd;
-                    border-top:0; 
+                    border-top:0;
                     @include border-radius(0 0 5px 5px);
                     bottom:3%;
                     overflow-y:auto;
@@ -2043,4 +2052,69 @@ div.dataTables_info {
 
  .opacity_0{
     opacity: 0;
+ }
+
+ .ln-main{
+     display: block;
+     float: left;
+     width: 100%;
+     height:26px;
+     line-height:26px;
+     position: relative;
+     color:#666;
+     .spinner{
+         margin:7px 7px;
+         width: 12px;
+         height:12px;
+     }
+ }
+ .ln-main.active{
+     background-color: #eee;
+ }
+.ln-child-cont{
+    @include borderBox;
+    display: block;
+    float: left;
+    padding-left:20px;
+    width: 100%;
+}
+.ln-child{
+    @include borderBox;
+    display: block;
+    float: left;
+    width: 100%;
+}
+.ln-heading{
+    display: block;
+    float: left;
+    height:26px;
+    line-height: 26px;
+}
+.ln-heading.no-arrow{
+    padding-left: 30px;
+}
+.ln-heading.active{
+    font-family: gotham-b;
+    color: $blue;
+}
+ .ln-arrow{
+     display: block;
+     float: left;
+     height:26px;
+     width: 25px;
+     text-align: center;
+     margin-left: 5px;
+     color:#888;
+     i{
+         @include transition(0.5s);
+         width:100%;
+         height:100%;
+         line-height:26px;
+         text-align: center;
+     }
+ }
+ .ln-arrow.active{
+     i{
+         @include transform(rotate(90deg))
+     }
  }
