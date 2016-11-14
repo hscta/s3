@@ -119,6 +119,14 @@
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
+        vm.getMyUsersMapList = function (body) {
+            //$log.log("getMyUsersMap");
+            return vm.getMyUsers(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetList, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
 
 
         vm.getMyRolesMap = function (body) {
@@ -126,6 +134,14 @@
             return vm.getMyRoles(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+        vm.getMyRolesList = function (body) {
+            // $log.log("getMyRolesMap");
+            return vm.getMyRoles(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetList, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 

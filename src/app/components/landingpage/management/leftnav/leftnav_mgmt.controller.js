@@ -67,14 +67,12 @@
         vm.expand_tree = function () {
             $log.log('expand');
            // $scope.$broadcast('angular-ui-tree:collapse-all');
-            var duplicateTree;
-
             // if ( vm.tree_search_pattern === '' )
             //     angular.copy(duplicateTree, vm.tree_data);
             // else {
             //     angular.copy(vm.tree_data, duplicateTree);
             // }
-            vm.filterTree(vm.tree_data);
+           // vm.filterTree(vm.tree_data);
 
         };
 
