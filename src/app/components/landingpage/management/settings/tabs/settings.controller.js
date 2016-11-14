@@ -65,7 +65,8 @@
                     pgrouppath: currentGroup.grouppath,
                     assetpath: currentGroup.grouppath,
                     ui_asset_type: assetType,
-                    tabClick: true
+                    tabClick: true,
+                    permissions:[]
                 }
             };
             // $log.log(stateParams);

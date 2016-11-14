@@ -25,7 +25,7 @@
 
         vm.handleResponse = function (data) {
             //$log.log("handleResponse");
-            // $log.log(data);
+            $log.log(data);
             vm.tree_data = data;
         };
 
@@ -44,18 +44,22 @@
         };
 
         vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
+            $log.log('handle asset click', collapsed);
             if (!collapsed) {
                 toggle(obj);
             }
-            if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group'){
+
+            if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group') {
                 vm.selectedAsset = asset.id;
                 asset.loading = true;
                 groupService.lastGroupPath = asset.info.assetpath;
-                if(asset.info.assetpath == '/1/1') {
-                    leftNavManagementService.getManagementTreeWithUser({grouppath:asset.info.assetpath})
+                settingsService.lastGroup = asset.info;
+
+                if (asset.info.assetpath == '/1/1') {
+                    leftNavManagementService.getManagementTreeWithUser({grouppath: asset.info.assetpath})
                         .then(vm.handleResponse, vm.handleResponseFailure);
-                }else{
-                    leftNavManagementService.getManagementTree({grouppath:asset.info.assetpath})
+                } else {
+                    leftNavManagementService.getManagementTree({grouppath: asset.info.assetpath})
                         .then(vm.handleResponse, vm.handleResponseFailure);
                 }
             }
@@ -66,13 +70,15 @@
 
         vm.expand_tree = function () {
             $log.log('expand');
-           // $scope.$broadcast('angular-ui-tree:collapse-all');
+            // $scope.$broadcast('angular-ui-tree:collapse-all');
+            var duplicateTree;
+
             // if ( vm.tree_search_pattern === '' )
             //     angular.copy(duplicateTree, vm.tree_data);
             // else {
             //     angular.copy(vm.tree_data, duplicateTree);
             // }
-           // vm.filterTree(vm.tree_data);
+            vm.filterTree(vm.tree_data);
 
         };
 
