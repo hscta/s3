@@ -184,9 +184,7 @@
             vm.selectedGrouppath = data.assetpath;
 
             var body ={
-                group:{
-                    grouppath:data.assetpath
-                }
+                grouppath:data.assetpath
             };
             vm.getUsers(body);
         };
@@ -197,9 +195,7 @@
             vm.selectedGrouppath = data.assetpath;
 
             var body ={
-                group:{
-                    grouppath:data.assetpath
-                }
+                grouppath:data.assetpath
             };
 
             $scope.groupData.datas[1].buttons = [
