@@ -183,8 +183,9 @@
         vm.getDefaultTime = function(){
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
-            var startTime = moment().subtract(24, 'hour').format(dateFormat);
-            var endTime = moment().format(dateFormat);
+            // setting time from 6:00 AM to 7:00 PM
+            var startTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
+            var endTime = moment().hours(19).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
 
             return {
                 startTime: startTime,
@@ -211,8 +212,8 @@
             if (vm.historyMapObj.startTime && vm.historyMapObj.endTime) {
                 if (vm.historyMapObj.startTime.length && vm.historyMapObj.endTime.length) {
 
-                    var starttime = new Date(moment(vm.historyMapObj.startTime).unix()*1000).getTime();
-                    var endtime = new Date(moment(vm.historyMapObj.endTime).unix()*1000).getTime();
+                    var starttime = moment(vm.historyMapObj.startTime).unix() * 1000;
+                    var endtime = moment(vm.historyMapObj.endTime).unix() * 1000;
 
                     if (endtime - starttime > timeLimit)
                         endtime = starttime + timeLimit;
@@ -312,9 +313,12 @@
             }
         };
 
+
         vm.historyMapClickEvent = function(){
             vm.historyFenceInfoWindowClose();
         };
+
+
         vm.init = function(){
 
             var defaultTime = vm.getDefaultTime ();
