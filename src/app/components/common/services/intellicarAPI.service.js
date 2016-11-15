@@ -18,7 +18,8 @@
                                            geofenceService,
                                            fenceReportService,
                                            vehicleAPIService,
-                                           myAlarmService, geocodeService
+                                           myAlarmService, geocodeService,
+                                           permissionService, roleService
 
                                            ) {
             var vm = this;
@@ -41,7 +42,9 @@
                 fenceReportService: fenceReportService,
                 vehicleAPIService: vehicleAPIService,
                 myAlarmService: myAlarmService,
-                geocodeService:geocodeService
+                geocodeService:geocodeService,
+                permissionService:permissionService,
+                roleService:roleService
             }
         });
 })();

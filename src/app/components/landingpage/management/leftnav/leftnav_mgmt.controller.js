@@ -25,8 +25,8 @@
 
         vm.handleResponse = function (data) {
             //$log.log("handleResponse");
-            $log.log(data);
             vm.tree_data = data;
+            return vm.tree_data;
         };
 
 
@@ -40,7 +40,13 @@
         vm.initialize = function (data) {
             vm.firedgrouppaths.push(startupData);
             leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
-                .then(vm.handleResponse, vm.handleResponseFailure);
+                .then(vm.handleResponse, vm.handleResponseFailure)
+                .then(vm.setFirstGroup, vm.handleResponseFailure);
+        };
+
+        vm.setFirstGroup = function(resp){
+            groupService.lastGroupPath = resp[0].info.assetpath;
+            settingsService.lastGroup = resp[0].info;
         };
 
         vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
@@ -115,6 +121,7 @@
         // };
 
         vm.initialize();
+
         $scope.$on('toggleLeftSidebar', vm.toggleLeftSidebar);
 
         $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);

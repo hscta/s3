@@ -20,54 +20,54 @@
 
         vm.getMyGroups = function(body) {
             // $log.log("getMyGroups");
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/mygroups', body);
         };
 
 
         vm.getMyAssetGroups = function (body) {
             // $log.log("getMyAssetGroups");
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/myassetgroups', body);
         };
 
 
         vm.getMyVehicles = function (body) {
             // $log.log("getMyVehicles");
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/myvehicles', body);
         };
 
 
         vm.getMyUsers = function (body) {
             // $log.log("getMyUsers");
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/myusers', body);
         };
 
 
         vm.getMyRoles = function (body) {
             // $log.log("getMyRoles");
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/myroles', body);
         };
 
 
         vm.getMyDevices = function (body) {
             // $log.log("getMyDevices");
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/mydevices', body);
         };
 
 
         vm.createGroup = function(body) {
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/create', body);
         };
 
 
         vm.assignRole = function(body) {
-            var body = vm.encloseBody(body);
+            body = vm.encloseBody(body);
             return requestService.firePost('/group/assignrole', body);
         };
 
