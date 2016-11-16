@@ -102,6 +102,9 @@
         dialogService.setTab(1);
 
         var historyData =[];
+        vm.jsonHistoryData = [];
+        $scope.disableDownload = true;
+
 
         vm.historyObj = historyService.historyMapObj;
 
@@ -115,6 +118,8 @@
         var timeLimit = week;
 
         $scope.getHistory = function () {
+            vm.jsonHistoryData = [];
+            $scope.disableDownload = true;
             historyService.setData('getHistory', false);
 
             historyService.getHistoryData();
@@ -131,15 +136,26 @@
 
             for ( var idx in marker){
                 var loc =  marker[idx].latitude + ', '+ marker[idx].longitude;
-                    var time = marker[idx].gpstime;
+                    var dateTime = new Date(marker[idx].gpstime);
                 var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
                 historyData.push([
                    loc,
-                    new Date(time),
+                    dateTime,
                     marker[idx].odometer.toString(),
                     marker[idx].speed.toString(),
                     ignitionStatus
                 ]);
+
+                vm.jsonHistoryData.push({
+                    vehicle_Name: vm.historyObj.deviceid,
+                    location: loc,
+                    time : dateTime.toDateString(),
+                    odometer: marker[idx].odometer.toString(),
+                    speed:marker[idx].speed.toString(),
+                    ignitionStatus: ignitionStatus
+                });
+
+                $scope.disableDownload = false;
             }
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
@@ -167,7 +183,11 @@
                 page: 'enable',
                 pageSize: 300
             });
-        }
+        };
+
+        $scope.downloadFile = function(){
+            intellicarAPI.importFileservice.JSONToCSVConvertor(vm.jsonHistoryData, "Vehicles History Report", true);
+        };
 
         vm.init = function(){
             if (vm.historyObj.trace.path.length) {

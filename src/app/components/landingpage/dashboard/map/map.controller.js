@@ -291,7 +291,7 @@
 
 
         vm.getStats = function (filterStr) {
-            var count = 0; 
+            var count = 0;
             vm.vehicleStats.noComm = 0;
             vm.vehicleStats.devPullout = 0;
             for (var idx in vm.inMarkers) {
@@ -453,7 +453,7 @@
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
-            var noCommThreshold = 8 * 3600 * 1000; 
+            var noCommThreshold = 8 * 3600 * 1000;
             if (currentTime - lastSeenAt > noCommThreshold) {
                 if(callback){
                     callback(marker);

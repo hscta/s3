@@ -9,13 +9,13 @@
 
 
     function AlarmController($scope, $log, dialogService, alarmService, DTOptionsBuilder, $timeout, $interval,
-                             mapService, $filter) {
+                             mapService, $filter, intellicarAPI) {
         $log.log('AlarmController');
 
 
         var vm = this;
         dialogService.setTab(3);
-
+        vm.jsonAlarmData = [];
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
         vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
@@ -122,8 +122,27 @@
 
 
         vm.getHistory = function(){
+            vm.jsonAlarmData = [];
             vm.alarms.alarmResponseData=[];
             alarmService.getAlarmsHistory();
+        };
+
+        vm.downloadFile = function () {
+            var alarmResp = vm.alarms.alarmResponseData;
+            if ( alarmResp.length ) {
+                for ( var idx in alarmResp) {
+                    var loc = alarmResp[idx].lat+','+alarmResp[idx].lng;
+                    var time = new Date(parseInt(alarmResp[idx].gpstime)).toDateString();
+                    vm.jsonAlarmData.push({
+                        vehicle_name:alarmResp[idx].vehicleno,
+                        time: time,
+                        reason:alarmResp[idx].alarmreason,
+                        operation_mode:alarmResp[idx].opermode,
+                        location:loc
+                    });
+                }
+                intellicarAPI.importFileservice.JSONToCSVConvertor(vm.jsonAlarmData, "Vehicles Alarm Report", true);
+            }
         };
 
         vm.init();

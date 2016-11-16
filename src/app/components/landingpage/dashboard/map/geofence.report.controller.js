@@ -24,6 +24,8 @@
 
         vm.dataFound = false;
 
+        vm.jsonReportData = [];
+
         vm.setSelectedCount = function (type) {
             if (type == 'vehicle') {
                 if (vm.fenceReportObj.filteredItems.length)
@@ -240,6 +242,7 @@
         };
 
         vm.getHistoryReport = function () {
+            vm.jsonReportData=[];
             vm.dataFound = false;
             var myEl = angular.element(document.querySelector('#geo-table'));
             myEl.empty();
@@ -296,6 +299,12 @@
         };
 
 
+        vm.downloadFile = function () {
+            intellicarAPI.importFileservice.JSONToCSVConvertor(
+                vm.jsonReportData, "Vehicles Fence Report", true);
+        };
+
+
         vm.readHistoryInfo = function (history) {
             historyService.geoFenceReports.myHistoryData = [];
 
@@ -323,12 +332,21 @@
                         var startTime = parseInt(data[idx].fentry);
                         var endTime = parseInt(data[idx].fexit);
                         if ((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 )) {
+                            var start_time = new Date(startTime);
+                            var end_time = new Date(endTime);
                             historyService.geoFenceReports.myHistoryData.push([
                                 vehicleName,
                                 fenceName,
-                                new Date(startTime),
-                                new Date(endTime)
+                                start_time,
+                                end_time
                             ]);
+
+                            vm.jsonReportData.push({
+                                vehicle_name:vehicleName,
+                                fence_name: fenceName,
+                                fence_entry: start_time.toDateString(),
+                                fence_exit: end_time.toDateString()
+                            });
                         }
                         break;
                     }

@@ -74,6 +74,7 @@
                                     <md-checkbox ng-model="item.checked" aria-label="myvehicles"
                                                  ng-change="vm.verifyCheckStatus('vehicle')">
                                     </md-checkbox>
+
                                     <div class="md-list-item-text">
                                         <h3>{{item.name}}</h3>
                                     </div>
@@ -98,6 +99,10 @@
                         <input type="text" id="end_time" ng-model="vm.fenceReportObj.endTime">
                     </md-input-container>
                     <md-button class="md-accent" ng-click="vm.getHistoryReport()">Get Report</md-button>
+
+                    <md-button class="my-tooltip pops" ng-disabled="!vm.jsonReportData.length" data-content="Download" ng-click="vm.downloadFile()">
+                        <md-icon md-font-library="material-icons">file_download</md-icon>
+                    </md-button>
                 </div>
                 <div layout="row" layout-align="end start">
                 </div>
@@ -128,5 +133,8 @@
             mask: '9999/19/39 29:59',
             format: 'Y-m-d H:i'
         });
+
+        $('.my-tooltip').webuiPopover({trigger:'hover', animation:'pop'});
+
     });
 </script>

@@ -68,8 +68,7 @@
                 }
             }
             vm.alarmsObj.alarmResponseData = data;
-            $log.log('alarmmmmmmmmmmm');
-             $log.log(vm.alarmsObj.alarmResponseData );
+            $log.log(data);
         };
 
         vm.handleFailure = function(){

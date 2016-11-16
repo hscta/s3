@@ -29,6 +29,10 @@
 
             <a class="waves-effect waves-light" ng-click="getHistory()">Get History</a>
             <!--<md-button class="md-accent" ng-click="getHistory()">Get History</md-button>-->
+
+            <div class="my-tooltip pops" data-content="Download" ng-click="downloadFile()">
+                <md-icon md-font-library="material-icons">file_download</md-icon>
+            </div>
         </div>
         <div layout="row" layout-align="end start">
         </div>
@@ -53,5 +57,8 @@
             mask: '9999/19/39 29:59',
             format: 'Y-m-d H:i'
         });
+
+        $('.my-tooltip').webuiPopover({trigger:'hover', animation:'pop'});
+
     });
 </script>
