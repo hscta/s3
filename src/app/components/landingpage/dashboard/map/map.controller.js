@@ -19,7 +19,7 @@
 
 
         function setMapHeight() {
-            console.log('hel man');
+            // console.log('hel man');
             wh = $(window).height();
             isRendered('.angular-google-map-container', function (el) {
                 el.css('height', (wh - header_height) + 'px');
@@ -572,10 +572,10 @@
 
         vm.highlightMarker = function (vehiclePath) {
             if (vehiclePath in vm.inCustomMaker) {
-                console.log('ehll');
+                // console.log('ehll');
                 vm.inCustomMaker[vehiclePath].highlightMe();
             } else {
-                console.log('[MAP CONTROLLER] no marker found!');
+                // console.log('[MAP CONTROLLER] no marker found!');
             }
         };
 
@@ -659,7 +659,7 @@
 
 
         $scope.executeMobilityCommand = function (resp) {
-            $log.log(resp);
+            // $log.log(resp);
             var vehiclepath = {'vehiclepath': params.clickedMarker.vehiclepath};
 
             if (resp.length > 0) {
@@ -735,7 +735,7 @@
                 .then($scope.executeMobilityCommand,
                     function (resp) {
                         $log.log("getMobilityCommandStatus failure");
-                        $log.log(resp);
+                        // $log.log(resp);
                     });
         };
 

@@ -26,7 +26,10 @@
 
     .play-pause-btns {
         background: #d1e934 !important;
+        color:#000;
     }
+
+    .play-pause-btns i { color: #000 !important;}
 
     .container-margin{margin-bottom: 0; padding:0; height:31px}
 
@@ -144,11 +147,12 @@
             <md-input-container class="container-margin"  ng-show="vm.multiSelect">
                 <label>Vehicle No</label>
                 <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                <md-select ng-model="vm.historyObj.deviceid" ng-change="onVehicleSelect()">
+                <md-select ng-model="vm.historyObj.selectedHistoryVehicle"
+                           ng-model-options="{trackBy: '$value.deviceid'}">
 
                     <md-option
                         ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"
-                        ng-value="vehicle.deviceid">
+                        ng-value="vehicle">
                         {{vehicle.vehicleno}}
                     </md-option>
                 </md-select>

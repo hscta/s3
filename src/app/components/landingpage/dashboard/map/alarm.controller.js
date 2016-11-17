@@ -18,6 +18,7 @@
         vm.jsonAlarmData = [];
 
         vm.dtOptions = DTOptionsBuilder.newOptions();
+
         vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
         // $timeout(function () {
         //     vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);

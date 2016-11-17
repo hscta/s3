@@ -19,10 +19,10 @@
 
         vm.historyObj = historyService.historyMapObj;
 
-
         var mapObj;
 
         $scope.getHistory = function () {
+            $log.log(vm.historyObj.selectedHistoryVehicle);
             historyService.setData('getHistory', false);
 
             historyService.getHistoryData();
@@ -68,7 +68,8 @@
                 //$log.log($scope.clickedMarker);
                 vm.historyObj.historyMap.center.latitude = vm.historyObj.dashboardMapObj.clickedMarker.latitude;
                 vm.historyObj.historyMap.center.longitude = vm.historyObj.dashboardMapObj.clickedMarker.longitude;
-                vm.historyObj.deviceid = vm.historyObj.dashboardMapObj.clickedMarker.deviceid;
+                // vm.historyObj.deviceid = vm.historyObj.dashboardMapObj.clickedMarker.deviceid;
+                vm.historyObj.selectedHistoryVehicle = vm.historyObj.dashboardMapObj.clickedMarker;
                 vm.historyObj.vehicleNumber = vm.historyObj.dashboardMapObj.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
             }
@@ -93,7 +94,7 @@
     }
 
     function HistoryTableController($rootScope,$scope, $log, dialogService, intellicarAPI, historyService,
-                               geofenceViewService) {
+                                    geofenceViewService) {
 
 
         $log.log('HistoryTableController');
@@ -103,8 +104,7 @@
 
         var historyData =[];
         vm.jsonHistoryData = [];
-        $scope.disableDownload = true;
-
+        var tableContainer = document.getElementById('geo-table');
 
         vm.historyObj = historyService.historyMapObj;
 
@@ -117,15 +117,26 @@
         var week = hrs24 * 7;
         var timeLimit = week;
 
+        var table, data;
+
+        vm.disableDownload = true;
+        vm.showLoading = false;
+
         $scope.getHistory = function () {
+            historyData=[];
             vm.jsonHistoryData = [];
-            $scope.disableDownload = true;
+            vm.disableDownload = true;
+            vm.showLoading = true;
+            if ( table)
+                table.clearChart(tableContainer);
+
             historyService.setData('getHistory', false);
 
             historyService.getHistoryData();
         };
 
         $rootScope.$on('gotHistoryEvent', function (event, data) {
+            if ( tableContainer == null ) return;
             vm.showTableData();
         });
 
@@ -136,46 +147,46 @@
 
             for ( var idx in marker){
                 var loc =  marker[idx].latitude + ', '+ marker[idx].longitude;
-                    var dateTime = new Date(marker[idx].gpstime);
+                var dateTime = new Date(marker[idx].gpstime);
                 var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
                 historyData.push([
-                   loc,
                     dateTime,
                     marker[idx].odometer.toString(),
                     marker[idx].speed.toString(),
-                    ignitionStatus
+                    ignitionStatus,
+                    loc,
                 ]);
 
                 vm.jsonHistoryData.push({
-                    vehicle_Name: vm.historyObj.deviceid,
+                    vehicle_Name: vm.historyObj.selectedHistoryVehicle.vehicleno,
                     location: loc,
                     time : dateTime.toDateString(),
                     odometer: marker[idx].odometer.toString(),
                     speed:marker[idx].speed.toString(),
                     ignitionStatus: ignitionStatus
                 });
-
-                $scope.disableDownload = false;
             }
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
+
+            vm.disableDownload = false;
+            vm.showLoading = false;
         };
 
         function drawTable() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Location');
+            table = new google.visualization.Table(tableContainer);
+            data = new google.visualization.DataTable();
             data.addColumn('datetime', 'Time');
             data.addColumn('string', 'Odometer');
             data.addColumn('string', 'Speed');
             data.addColumn('string', 'IgnitionStatus');
+            data.addColumn('string', 'Location');
             data.addRows(
                 historyData
             );
 
             var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
             dateFormatter.format(data, 1);
-
-            var table = new google.visualization.Table(document.getElementById('geo-table'));
 
             table.draw(data, {
                 showRowNumber: true,
@@ -192,12 +203,11 @@
         vm.init = function(){
             if (vm.historyObj.trace.path.length) {
                 vm.showTableData();
+                vm.disableDownload = false;
             }
         };
 
-
         vm.init();
-
     }
 
 })();

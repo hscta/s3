@@ -70,6 +70,7 @@
             endTime:'',
             vehicleNumber:'',
             deviceid:'',
+            selectedHistoryVehicle:[],
             dashboardMapObj : {
                 clickedMarker:{},
                 inMarkers:[]
@@ -135,6 +136,7 @@
             filteredFenceItems : [],
 
             myHistoryData:[],
+            jsonReportData:[],
             reports:[],
             fenceFilter:''
         };
@@ -203,7 +205,7 @@
         var timeLimit = week;
 
         vm.getHistoryData = function(){
-            if (!vm.historyMapObj.deviceid){
+            if (!vm.historyMapObj.selectedHistoryVehicle.deviceid){
                 vm.historyMapObj.errorMsg = "Please Select Vehicle";
                 return;
             }
@@ -224,7 +226,7 @@
 
                     var body = {
                         vehicle: {
-                            vehiclepath: vm.historyMapObj.deviceid.toString(),
+                            vehiclepath: vm.historyMapObj.selectedHistoryVehicle.deviceid.toString(),
                             starttime: starttime,
                             endtime: endtime
                         }
@@ -264,7 +266,7 @@
                 if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
                     position.latitude == 0 || position.longitude == 0
                 ) {
-                    $log.log("Not a number");
+                    // $log.log("Not a number");
                     // $log.log(position);
                     continue;
                 }

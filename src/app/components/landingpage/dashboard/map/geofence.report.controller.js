@@ -22,9 +22,9 @@
         vm.startTime = vm.fenceReportObj.startTime;
         vm.endTime = vm.fenceReportObj.endTime;
 
-        vm.dataFound = false;
+        vm.disableDownload = false;
 
-        vm.jsonReportData = [];
+        // vm.jsonReportData = [];
 
         vm.setSelectedCount = function (type) {
             if (type == 'vehicle') {
@@ -242,8 +242,9 @@
         };
 
         vm.getHistoryReport = function () {
-            vm.jsonReportData=[];
-            vm.dataFound = false;
+            historyService.geoFenceReports.myHistoryData = [];
+            historyService.geoFenceReports.jsonReportData = [];
+            vm.disableDownload = true;
             var myEl = angular.element(document.querySelector('#geo-table'));
             myEl.empty();
             vm.errorMsg = '';
@@ -301,25 +302,20 @@
 
         vm.downloadFile = function () {
             intellicarAPI.importFileservice.JSONToCSVConvertor(
-                vm.jsonReportData, "Vehicles Fence Report", true);
+                historyService.geoFenceReports.jsonReportData, "Vehicles Fence Report", true);
         };
 
 
         vm.readHistoryInfo = function (history) {
-            historyService.geoFenceReports.myHistoryData = [];
 
             var data = history[0].data.data;
             var trackHistoryData = [];
 
             if (!data.length) {
                 vm.loadingHistoryData = false;
-                vm.dataFound = true;
+                vm.disableDownload = false;
                 return;
             }
-
-
-            vm.dataFound = false;
-
             for (var idx in data) {
                 for (var vehicle in vm.selectedVehicles) {
                     if (data[idx].deviceid == vm.selectedVehicles[vehicle].id) {
@@ -341,18 +337,19 @@
                                 end_time
                             ]);
 
-                            vm.jsonReportData.push({
+                            historyService.geoFenceReports.jsonReportData.push({
                                 vehicle_name:vehicleName,
                                 fence_name: fenceName,
                                 fence_entry: start_time.toDateString(),
                                 fence_exit: end_time.toDateString()
                             });
+                            vm.disableDownload = false;
                         }
                         break;
                     }
                 }
             }
-
+            vm.disableDownload = false;
             vm.loadingHistoryData = false;
             vm.showTableData();
         };
@@ -371,6 +368,8 @@
             }
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             vm.getMyGeofenceReports();
+
+            vm.disableDownload = historyService.geoFenceReports.jsonReportData.length ? false : true;
         };
 
         vm.init();
