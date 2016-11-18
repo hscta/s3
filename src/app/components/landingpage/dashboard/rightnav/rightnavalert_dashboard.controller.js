@@ -443,7 +443,7 @@
 
             var vehicleAddress = addr[1]
 
-            $log.log(vm.popoverIndex);
+            // $log.log(vm.popoverIndex);
 
             // $('.'+vm.popoverIndex).attr('data-content', vm.vehicleAddress);
             $log.log(vehicleAddress);

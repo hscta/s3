@@ -94,7 +94,7 @@
     }
 
     function HistoryTableController($rootScope,$scope, $log, dialogService, intellicarAPI, historyService,
-                                    geofenceViewService) {
+                                    geofenceViewService, $q) {
 
 
         $log.log('HistoryTableController');
@@ -140,21 +140,55 @@
             vm.showTableData();
         });
 
+        vm.getAddress = function (latlng, className) {
+            latlng = latlng.split(',');
+
+            vm.myclass = className;
+            var body = {
+                data: [ latlng]
+            };
+            var promise = (intellicarAPI.geocodeService.getAddress(body));
+
+            return $q.resolve(promise)
+                .then(vm.gotAddress, vm.handleFailure);
+        };
+
+        vm.gotAddress = function(data){
+            if ( !data.data.data.length ) return;
+
+            var addr = data.data.data;
+
+            for ( var idx in addr)
+                addr = addr[idx];
+
+            var vehicleAddress = addr[1]
+
+            // $log.log(vehicleAddress);
+
+            $('.'+vm.myclass).attr('data-content', vehicleAddress)
+
+            // console.log(vm.myclass);
+            WebuiPopovers.updateContent( '.'+vm.myclass,vehicleAddress) //Update the Popover content after the popover is created.
+        };
+
         vm.showTableData = function () {
             var marker = vm.historyObj.trace.path;
             // $log.log(marker);
             historyData=[];
 
             for ( var idx in marker){
-                var loc =  marker[idx].latitude + ', '+ marker[idx].longitude;
+                var loc =  marker[idx].latitude + ','+ marker[idx].longitude;
                 var dateTime = new Date(marker[idx].gpstime);
                 var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
+
+                var location = "<span class='latlng loc"+idx+"' data-content='Dynamic content'>"+loc+"</span>";
+
                 historyData.push([
                     dateTime,
                     marker[idx].odometer.toString(),
                     marker[idx].speed.toString(),
                     ignitionStatus,
-                    loc,
+                    location
                 ]);
 
                 vm.jsonHistoryData.push({
@@ -171,19 +205,29 @@
 
             vm.disableDownload = false;
             vm.showLoading = false;
+
+            // $('.latlng').webuiPopover({trigger:'hover',width:300, animation:'pop'});
         };
 
         function drawTable() {
             table = new google.visualization.Table(tableContainer);
             data = new google.visualization.DataTable();
+
             data.addColumn('datetime', 'Time');
             data.addColumn('string', 'Odometer');
             data.addColumn('string', 'Speed');
             data.addColumn('string', 'IgnitionStatus');
             data.addColumn('string', 'Location');
+
             data.addRows(
                 historyData
             );
+
+
+            google.visualization.events.addListener(table, 'ready', function(){
+                $('.latlng').webuiPopover({trigger:'hover',width:300, animation:'pop'});
+            });
+
 
             var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
             dateFormatter.format(data, 1);
@@ -192,7 +236,15 @@
                 showRowNumber: true,
                 width: '100%',
                 page: 'enable',
-                pageSize: 300
+                pageSize: 300,
+                allowHtml:true
+            });
+
+            $('.latlng').hover(function(){
+                var className = $(this).attr('class');
+                className = className.split(' ');
+                var latlng = $(this).text();
+                vm.getAddress(latlng, className[1]);
             });
         };
 

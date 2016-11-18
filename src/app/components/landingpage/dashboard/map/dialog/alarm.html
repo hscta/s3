@@ -28,6 +28,7 @@
         min-height:30px !important;
     }
 
+    .latlng:hover{cursor:pointer;}
 </style>
 
 <div class="alarm-cont" >
@@ -114,12 +115,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="report in vm.alarms.alarmResponseData">
+                <tr ng-repeat="report in vm.alarms.alarmResponseData track by $index">
                     <td>{{report.vehicleno}}</td>
                     <td>{{report.gpstime | date : 'd MMM, h:mm a'}}</td>
                     <td>{{report.alarmreason}}</td>
                     <td>{{report.opermode}}</td>
-                    <td>{{report.lat }},{{report.lng }}</td>
+                    <td>
+                        <span class="latlng loc{{$index}}"
+                              ng-mouseover="vm.getAddress(report.lat, report.lng, $index)"
+                              data-content='Fetching Address'>{{report.lat }},{{report.lng }}
+                        </span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

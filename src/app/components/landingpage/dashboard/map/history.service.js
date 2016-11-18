@@ -19,6 +19,10 @@
             vm.historyData[key] = value;
         };
 
+        vm.setInMapLocation = function (loc) {
+            vm.historyMapObj.historyMap.center = angular.copy(loc);
+        };
+
         vm.getData = function(key) {
             if(vm.historyData.hasOwnProperty(key))
                 return vm.historyData[key];

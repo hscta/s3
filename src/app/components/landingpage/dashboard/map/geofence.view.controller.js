@@ -9,8 +9,8 @@
         .module('uiplatform')
         .controller('GeofenceViewController', mapLeftToolBar);
 
-    function mapLeftToolBar($scope, $log, $timeout, $q, mapService,
-                            geofenceViewService, dialogService, intellicarAPI) {
+    function mapLeftToolBar($scope, $log, $timeout, $q, mapService, historyService,
+                            $state, geofenceViewService, dialogService, intellicarAPI) {
 
         var vm = this;
 
@@ -44,7 +44,7 @@
                 'iconType': 'fa',
                 'icon': 'fa-bar-chart',
                 'type': 'button',
-                'historymap': true,
+                'historymap': false,
                 'data': {
                     'type': 'stateChange', 'independent': true, 'state': 'home.geofence', active: true
                 }
@@ -56,7 +56,7 @@
                 'iconType': 'fa',
                 'icon': 'fa-map-marker',
                 'type': 'button',
-                'historymap': false,
+                'historymap': true,
                 'data': {
                     'type': 'function', 'independent': true, 'function': function (active) {
 
@@ -263,7 +263,11 @@
         vm.childClick = function (data,type) {
             if(type == 'location'){
                 vm.currentLocation = data.id;
-                mapService.setInMapLocation(data.latlng);
+                $log.log($state.current.name);
+                if ( $state.current.name == 'home.history')
+                    historyService.setInMapLocation(data.latlng);
+                else
+                    mapService.setInMapLocation(data.latlng);
             }else if(type == 'button'){
                 data();
             }
