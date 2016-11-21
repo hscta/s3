@@ -142,7 +142,8 @@
             myHistoryData:[],
             jsonReportData:[],
             reports:[],
-            fenceFilter:''
+            fenceFilter:'',
+            currRep:[]
         };
 
         vm.historyCircleEvents = function(model, dest){

@@ -181,7 +181,7 @@
                 var dateTime = new Date(marker[idx].gpstime);
                 var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
 
-                var location = "<span class='latlng loc"+idx+"' data-content='Dynamic content'>"+loc+"</span>";
+                var location = "<span class='latlng loc"+idx+"' data-content='Fetching Address'>"+loc+"</span>";
 
                 historyData.push([
                     dateTime,

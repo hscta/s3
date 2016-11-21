@@ -24,6 +24,7 @@
 
         vm.disableDownload = false;
 
+
         // vm.jsonReportData = [];
 
         vm.setSelectedCount = function (type) {
@@ -40,12 +41,12 @@
 
         vm.filterVehicles = function () {
             vm.fenceReportObj.filteredItems = $filter("filter")
-            (vm.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
+            (vm.fenceReportObj.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
             // $log.log(vm.fenceReportObj.filteredItems);
         };
 
         vm.filterFences = function () {
-            vm.fenceReportObj.filteredFenceItems = $filter("filter")(vm.currRep.fences, vm.fenceReportObj.fenceFilter);
+            vm.fenceReportObj.filteredFenceItems = $filter("filter")(vm.fenceReportObj.currRep.fences, vm.fenceReportObj.fenceFilter);
             // $log.log(vm.fenceReportObj.filteredFenceItems);
         };
 
@@ -57,9 +58,9 @@
 
 
         vm.setReport = function (rep) {
-            vm.currRep = {};
-            vm.currRep.vehicles = [];
-            vm.currRep.fences = [];
+            vm.fenceReportObj.currRep = {};
+            vm.fenceReportObj.currRep.vehicles = [];
+            vm.fenceReportObj.currRep.fences = [];
 
 
             for (var idx in rep.assg) {
@@ -70,14 +71,14 @@
                 };
 
                 if (rep.assg[idx].assgfromassetid == 4) {
-                    vm.currRep.vehicles.push(data);
+                    vm.fenceReportObj.currRep.vehicles.push(data);
                 } else if (rep.assg[idx].assgfromassetid == 15) {
-                    vm.currRep.fences.push(data);
+                    vm.fenceReportObj.currRep.fences.push(data);
                 }
             }
 
-            vm.fenceReportObj.filteredItems = vm.currRep.vehicles;
-            vm.fenceReportObj.filteredFenceItems = vm.currRep.fences;
+            vm.fenceReportObj.filteredItems = vm.fenceReportObj.currRep.vehicles;
+            vm.fenceReportObj.filteredFenceItems = vm.fenceReportObj.currRep.fences;
 
             vm.SelectAllFences = true;
             vm.selectAllVehicles = true;
@@ -213,28 +214,28 @@
 
         vm.verifyCheckStatus = function (type) {
             if (type == 'vehicle') {
-                var trues = $filter("filter")(vm.currRep.vehicles, {checked: true});
+                var trues = $filter("filter")(vm.fenceReportObj.currRep.vehicles, {checked: true});
                 if (trues.length) {
                     vm.deSelectAllVehicles = false;
                 } else {
                     vm.deSelectAllVehicles = true;
                 }
 
-                if (trues.length < vm.currRep.vehicles.length)
+                if (trues.length < vm.fenceReportObj.currRep.vehicles.length)
                     vm.selectAllVehicles = false;
-                else if (trues.length == vm.currRep.vehicles.length)
+                else if (trues.length == vm.fenceReportObj.currRep.vehicles.length)
                     vm.selectAllVehicles = true;
             } else if (type == 'fence') {
-                var trues = $filter("filter")(vm.currRep.fences, {checked: true});
+                var trues = $filter("filter")(vm.fenceReportObj.currRep.fences, {checked: true});
                 if (trues.length) {
                     vm.deSelectAllFences = false;
                 } else {
                     vm.deSelectAllFences = true;
                 }
 
-                if (trues.length < vm.currRep.fences.length)
+                if (trues.length < vm.fenceReportObj.currRep.fences.length)
                     vm.selectAllFences = false;
-                else if (trues.length == vm.currRep.fences.length)
+                else if (trues.length == vm.fenceReportObj.currRep.fences.length)
                     vm.selectAllFences = true;
             }
 
