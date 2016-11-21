@@ -85,6 +85,10 @@
                 }
             };
 
+            vm.setInMapLocation = function (loc) {
+                vm.inMap.center = angular.copy(loc);
+            };
+
             vm.getPolygonMidPoint = function (polygon) {
                 var bound = new google.maps.LatLngBounds();
                 for (var idx in polygon) {

@@ -22,7 +22,10 @@
         vm.startTime = vm.fenceReportObj.startTime;
         vm.endTime = vm.fenceReportObj.endTime;
 
-        vm.dataFound = false;
+        vm.disableDownload = false;
+
+
+        // vm.jsonReportData = [];
 
         vm.setSelectedCount = function (type) {
             if (type == 'vehicle') {
@@ -38,12 +41,12 @@
 
         vm.filterVehicles = function () {
             vm.fenceReportObj.filteredItems = $filter("filter")
-            (vm.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
+            (vm.fenceReportObj.currRep.vehicles, vm.fenceReportObj.vehicleFilter);
             // $log.log(vm.fenceReportObj.filteredItems);
         };
 
         vm.filterFences = function () {
-            vm.fenceReportObj.filteredFenceItems = $filter("filter")(vm.currRep.fences, vm.fenceReportObj.fenceFilter);
+            vm.fenceReportObj.filteredFenceItems = $filter("filter")(vm.fenceReportObj.currRep.fences, vm.fenceReportObj.fenceFilter);
             // $log.log(vm.fenceReportObj.filteredFenceItems);
         };
 
@@ -55,9 +58,9 @@
 
 
         vm.setReport = function (rep) {
-            vm.currRep = {};
-            vm.currRep.vehicles = [];
-            vm.currRep.fences = [];
+            vm.fenceReportObj.currRep = {};
+            vm.fenceReportObj.currRep.vehicles = [];
+            vm.fenceReportObj.currRep.fences = [];
 
 
             for (var idx in rep.assg) {
@@ -68,14 +71,14 @@
                 };
 
                 if (rep.assg[idx].assgfromassetid == 4) {
-                    vm.currRep.vehicles.push(data);
+                    vm.fenceReportObj.currRep.vehicles.push(data);
                 } else if (rep.assg[idx].assgfromassetid == 15) {
-                    vm.currRep.fences.push(data);
+                    vm.fenceReportObj.currRep.fences.push(data);
                 }
             }
 
-            vm.fenceReportObj.filteredItems = vm.currRep.vehicles;
-            vm.fenceReportObj.filteredFenceItems = vm.currRep.fences;
+            vm.fenceReportObj.filteredItems = vm.fenceReportObj.currRep.vehicles;
+            vm.fenceReportObj.filteredFenceItems = vm.fenceReportObj.currRep.fences;
 
             vm.SelectAllFences = true;
             vm.selectAllVehicles = true;
@@ -211,28 +214,28 @@
 
         vm.verifyCheckStatus = function (type) {
             if (type == 'vehicle') {
-                var trues = $filter("filter")(vm.currRep.vehicles, {checked: true});
+                var trues = $filter("filter")(vm.fenceReportObj.currRep.vehicles, {checked: true});
                 if (trues.length) {
                     vm.deSelectAllVehicles = false;
                 } else {
                     vm.deSelectAllVehicles = true;
                 }
 
-                if (trues.length < vm.currRep.vehicles.length)
+                if (trues.length < vm.fenceReportObj.currRep.vehicles.length)
                     vm.selectAllVehicles = false;
-                else if (trues.length == vm.currRep.vehicles.length)
+                else if (trues.length == vm.fenceReportObj.currRep.vehicles.length)
                     vm.selectAllVehicles = true;
             } else if (type == 'fence') {
-                var trues = $filter("filter")(vm.currRep.fences, {checked: true});
+                var trues = $filter("filter")(vm.fenceReportObj.currRep.fences, {checked: true});
                 if (trues.length) {
                     vm.deSelectAllFences = false;
                 } else {
                     vm.deSelectAllFences = true;
                 }
 
-                if (trues.length < vm.currRep.fences.length)
+                if (trues.length < vm.fenceReportObj.currRep.fences.length)
                     vm.selectAllFences = false;
-                else if (trues.length == vm.currRep.fences.length)
+                else if (trues.length == vm.fenceReportObj.currRep.fences.length)
                     vm.selectAllFences = true;
             }
 
@@ -240,7 +243,9 @@
         };
 
         vm.getHistoryReport = function () {
-            vm.dataFound = false;
+            historyService.geoFenceReports.myHistoryData = [];
+            historyService.geoFenceReports.jsonReportData = [];
+            vm.disableDownload = true;
             var myEl = angular.element(document.querySelector('#geo-table'));
             myEl.empty();
             vm.errorMsg = '';
@@ -296,21 +301,22 @@
         };
 
 
+        vm.downloadFile = function () {
+            intellicarAPI.importFileservice.JSONToCSVConvertor(
+                historyService.geoFenceReports.jsonReportData, "Vehicles Fence Report", true);
+        };
+
+
         vm.readHistoryInfo = function (history) {
-            historyService.geoFenceReports.myHistoryData = [];
 
             var data = history[0].data.data;
             var trackHistoryData = [];
 
             if (!data.length) {
                 vm.loadingHistoryData = false;
-                vm.dataFound = true;
+                vm.disableDownload = false;
                 return;
             }
-
-
-            vm.dataFound = false;
-
             for (var idx in data) {
                 for (var vehicle in vm.selectedVehicles) {
                     if (data[idx].deviceid == vm.selectedVehicles[vehicle].id) {
@@ -323,18 +329,28 @@
                         var startTime = parseInt(data[idx].fentry);
                         var endTime = parseInt(data[idx].fexit);
                         if ((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 )) {
+                            var start_time = new Date(startTime);
+                            var end_time = new Date(endTime);
                             historyService.geoFenceReports.myHistoryData.push([
                                 vehicleName,
                                 fenceName,
-                                new Date(startTime),
-                                new Date(endTime)
+                                start_time,
+                                end_time
                             ]);
+
+                            historyService.geoFenceReports.jsonReportData.push({
+                                vehicle_name:vehicleName,
+                                fence_name: fenceName,
+                                fence_entry: start_time.toDateString(),
+                                fence_exit: end_time.toDateString()
+                            });
+                            vm.disableDownload = false;
                         }
                         break;
                     }
                 }
             }
-
+            vm.disableDownload = false;
             vm.loadingHistoryData = false;
             vm.showTableData();
         };
@@ -353,6 +369,8 @@
             }
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             vm.getMyGeofenceReports();
+
+            vm.disableDownload = historyService.geoFenceReports.jsonReportData.length ? false : true;
         };
 
         vm.init();

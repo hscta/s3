@@ -19,7 +19,7 @@
 
 
         function setMapHeight() {
-            console.log('hel man');
+            // console.log('hel man');
             wh = $(window).height();
             isRendered('.angular-google-map-container', function (el) {
                 el.css('height', (wh - header_height) + 'px');
@@ -291,7 +291,7 @@
 
 
         vm.getStats = function (filterStr) {
-            var count = 0; 
+            var count = 0;
             vm.vehicleStats.noComm = 0;
             vm.vehicleStats.devPullout = 0;
             for (var idx in vm.inMarkers) {
@@ -453,7 +453,7 @@
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
-            var noCommThreshold = 8 * 3600 * 1000; 
+            var noCommThreshold = 8 * 3600 * 1000;
             if (currentTime - lastSeenAt > noCommThreshold) {
                 if(callback){
                     callback(marker);
@@ -572,10 +572,10 @@
 
         vm.highlightMarker = function (vehiclePath) {
             if (vehiclePath in vm.inCustomMaker) {
-                console.log('ehll');
+                // console.log('ehll');
                 vm.inCustomMaker[vehiclePath].highlightMe();
             } else {
-                console.log('[MAP CONTROLLER] no marker found!');
+                // console.log('[MAP CONTROLLER] no marker found!');
             }
         };
 
@@ -601,10 +601,6 @@
 
         geofenceViewService.showVehicleNumber = function (vn) {
             vm.showVehicleNumber(vn);
-        };
-
-        mapService.setInMapLocation = function (loc) {
-            vm.inMap.center = angular.copy(loc);
         };
 
         vm.init = function () {
@@ -659,7 +655,7 @@
 
 
         $scope.executeMobilityCommand = function (resp) {
-            $log.log(resp);
+            // $log.log(resp);
             var vehiclepath = {'vehiclepath': params.clickedMarker.vehiclepath};
 
             if (resp.length > 0) {
@@ -735,7 +731,7 @@
                 .then($scope.executeMobilityCommand,
                     function (resp) {
                         $log.log("getMobilityCommandStatus failure");
-                        $log.log(resp);
+                        // $log.log(resp);
                     });
         };
 

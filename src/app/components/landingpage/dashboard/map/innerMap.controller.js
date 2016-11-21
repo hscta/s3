@@ -7,7 +7,8 @@
         .module('uiplatform')
         .controller('InnerMapController', InnerMapController);
 
-    function InnerMapController($rootScope, $scope, $log, $mdToast, historyService, $interval, $filter) {
+    function InnerMapController($rootScope, $scope, $log, $mdToast, historyService,
+                                $state, $interval, $filter) {
         $log.log('InnerMapController');
         var vm = this;
         var marker = historyService.historyMapObj.dashboardMapObj.clickedMarker;
@@ -252,7 +253,8 @@
 
 
         $rootScope.$on('gotHistoryEvent', function (event, data) {
-            $scope.gotHistoryEvent();
+            if($state.current.name == 'home.history')
+                $scope.gotHistoryEvent();
         });
 
         var moveMapWithMarker = function (marker) {
