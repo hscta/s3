@@ -1,9 +1,16 @@
+<style>
+    .error-msg {
+        color: #f00;
+        font-size: 12px;
+        min-height: 20px;
+    }
 
+</style>
 <div style="height: 100%;">
-    <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
+    <!--<span>{{errorMsg}}</span><br/>-->
+    <span  class="error-msg">{{vm.historyObj.errorMsg}}</span>
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
-
             <md-input-container class="container-margin"  ng-show="vm.multiSelect">
                 <label>Vehicle No</label>
                 <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
@@ -46,7 +53,7 @@
     <!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->
     <!--</div>-->
 
-    <div class="progress" ng-if="vm.showLoading">
+    <div class="progress" ng-if="vm.showLoading && !vm.historyObj.errorMsg">
         <div class="indeterminate"></div>
     </div>
 
