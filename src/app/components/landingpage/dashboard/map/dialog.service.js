@@ -88,7 +88,7 @@
 
 
     function cpuService() {
-        
+
         var vm = this;
 
         vm.tracking = true;
@@ -100,7 +100,7 @@
                 if(id in vm.trackArray){
                     if(vm.trackArray[id].end_time == 0){
                         // if the tracking is not ended
-                        vm.trackArray[id].end_time = getCurrentCpuTime(); 
+                        vm.trackArray[id].end_time = getCurrentCpuTime();
                         vm.trackArray[id].diff = vm.trackArray[id].end_time - vm.trackArray[id].start_time ;
                     }else{
                         vm.trackArray[id] = getNewTrackObject(id);

@@ -345,16 +345,15 @@
             </table>
         </md-table-container>
         <div layout="row">
-            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
+            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="vm.hideMobilityControls"
                        ng-click="mobilize(0)">
                 <span> Immobilize </span>
             </md-button>
 
-            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
-                       ng-click="mobilize(1)">
+            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="vm.hideMobilityControls"
+                       ng-click="vm.mobilize(1)">
                 <span> Mobilize </span>
             </md-button>
-
 
             <md-button class="md-raised md-accent md-small infoWBtn" id="historyBtn" ng-click="vm.showHistory()">
                 History
