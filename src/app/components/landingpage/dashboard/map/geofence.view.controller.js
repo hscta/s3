@@ -49,7 +49,7 @@
                     'type': 'stateChange', 'independent': true, 'state': 'home.geofence', active: true
                 }
             },
-            {'type': 'line', 'historymap': true},
+            {'type': 'line', 'historymap': false},
             {
                 'id': 'setLocation',
                 'name': false,
@@ -96,7 +96,7 @@
                 'iconType': 'png',
                 'icon': 'assets/images/icon/fence',
                 'type': 'button',
-                'historymap': false,
+                'historymap': true,
                 'data': {
                     'type': 'function', 'independent': true, 'function': function (active) {
 
