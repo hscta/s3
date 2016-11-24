@@ -168,7 +168,8 @@
             };
 
             vm.setZoom = function (zoom) {
-                vm.zoom = zoom;
+                vm.zoom = zoom;;
+                vm.changeMarkerIcon();
             };
 
             vm.getBounds = function () {
@@ -229,10 +230,8 @@
                 return ORANGE_ICON;
             };
 
-            vm.zoomLevel = 12;
-
             vm.getIconScale = function(){
-                var scale = 0.8 + (vm.zoomLevel-12)*0.5/4;
+                var scale = 0.8 + (vm.zoom-12)*0.5/4;
                 if (scale < 0.3)
                     scale = 0.3;
                 return scale;
