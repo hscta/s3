@@ -119,7 +119,7 @@
         vm.updateMarker = function (vehicleData) {
             // if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
             if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
-                vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
+                // vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
             }
             vm.getMarkers(vehicleData);
             vm.applyFilterToMarker(vehicleData, vm.filterStr);
@@ -146,14 +146,14 @@
             } else {
                 marker.options.visible = true;
                 marker.markerInfo.setVisible(true);
-                if (marker.vehiclepath in vm.inCustomMaker) {
+                if (marker.vehiclepath in vm.inCustomMaker  && vm.geoFilters.showVehicleNumber) {
                     vm.inCustomMaker[marker.vehiclepath].show();
                 }
             }
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
             marker.markerInfo.setVisible(marker.options.visible);
             if (marker.vehiclepath in vm.inCustomMaker) {
-                if (marker.options.visible) {
+                if (marker.options.visible  && vm.geoFilters.showVehicleNumber) {
                     vm.inCustomMaker[marker.vehiclepath].show();
                 } else {
                     vm.inCustomMaker[marker.vehiclepath].hide();
@@ -509,12 +509,12 @@
 
         vm.highlightMarker = function (vehiclePath) {
             if (vehiclePath in vm.inCustomMaker) {
-                // console.log('ehll');
                 vm.inCustomMaker[vehiclePath].highlightMe();
             } else {
                 // console.log('[MAP CONTROLLER] no marker found!');
             }
         };
+
 
         vm.customOverlay = function (marker) {
             if (!(marker.vehiclepath in vm.inCustomMaker)) {
@@ -526,10 +526,12 @@
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {
                 for (idx in vm.inCustomMaker) {
+                    vm.inCustomMaker[idx].show();
                     vm.inCustomMaker[idx].showVehicleNumber();
                 }
             } else {
                 for (idx in vm.inCustomMaker) {
+                    vm.inCustomMaker[idx].hide();
                     vm.inCustomMaker[idx].hideVehicleNumber();
                 }
             }

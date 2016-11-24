@@ -22,7 +22,6 @@
 
             self.dropAnimation = false;
 
-
             self.hide = function () {
                 if(self.div){
                     self.div.style.display = 'none';
@@ -62,15 +61,17 @@
             var self = this;
             if(self.notifier){
                 if(!self.dropAnimation){
+                    self.show();
                     self.notifier.className = 'overlayNotifier animate';
                     self.dropAnimation = true;
                 }else{
+                    self.hide();
                     self.notifier.className = 'overlayNotifier';
                     self.dropAnimation = false;
                 }
             }
         };
-        
+
         vm.CustomMarker.prototype.draw = function() {
 
             var self = this;
@@ -78,6 +79,7 @@
 
                 // initializing DOM Elemets
                 self.div = document.createElement('div');
+
                 self.vehicleNumberWindow = document.createElement('div');
                 self.notifier = document.createElement('span');
                 // Setting propeties
