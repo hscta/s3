@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('historyService', historyService);
 
-    function historyService($log, mapService, $rootScope, intellicarAPI, $interval) {
+    function historyService($log, newMapService, $rootScope, intellicarAPI, $interval) {
         $log.log("historyService");
         var vm = this;
 
@@ -336,12 +336,12 @@
             vm.geoFenceReports.startTime  = defaultTime.startTime;
             vm.geoFenceReports.endTime  = defaultTime.endTime;
 
-            vm.historyMapObj.historyMap.zoom = mapService.getZoom();
-            vm.historyMapObj.historyMap.center = mapService.getCenter();
+            vm.historyMapObj.historyMap.zoom = newMapService.getZoom();
+            vm.historyMapObj.historyMap.center = newMapService.getCenter();
 
 
             if ( !vm.historyMapObj.dashboardMapObj.inMarkers.length ) {
-                vm.historyMapObj.dashboardMapObj.inMarkers = mapService.inMap.markers.inMarkers;
+                vm.historyMapObj.dashboardMapObj.inMarkers = newMapService.inMap.markers.inMarkers;
             }
         };
 

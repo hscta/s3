@@ -11,9 +11,9 @@
 
     angular.module('uiplatform')
         .service('newMapService', function ($log, $interval, $q, $timeout, userprefService,
-                                         intellicarAPI, vehicleService, $mdDialog,
-                                         dialogService) {
-            $log.log("mapService");
+                                            intellicarAPI, vehicleService, $mdDialog,
+                                            dialogService) {
+            $log.log("newmapService");
             var vm = this;
             vm.listeners = {};
 
@@ -31,12 +31,11 @@
                     longitude: '',
                     name: '',
                     other: ''
-                }
+                },
             };
 
             vm.setInMapLocation = function (loc) {
                 vm.inMap.center = angular.copy(loc);
-
                 vm.inMap.map.setCenter({
                     lat : vm.inMap.center.latitude,
                     lng : vm.inMap.center.longitude
@@ -53,13 +52,14 @@
 
 
             vm.setClickedMarker = function (model) {
-                $log.log(model);return;
                 vm.inMap.markers.clickedMarker = model;
+                vm.inMap.markers.clickedMarker.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
             };
+
 
             vm.showHistory = function () {
                 $log.log('clicked');
-                //$log.log(vm.inMap.markers.clickedMarkerObj.clickedMarker);
+                $log.log(vm.inMap.markers.clickedMarker);
                 dialogService.show('home.history', {
                     clickedMarker: angular.copy(vm.inMap.markers.clickedMarker)
                 });
@@ -179,13 +179,17 @@
             vm.checkZoomLevel = function (min, max) {
                 // $log.log(vm.inMap.mapControl);
 
-                for(var prop in vm.inMap.mapControl) {
-                    if(vm.inMap.mapControl.hasOwnProperty(prop)){
-                        // $log.log('ssssssssssssss');
-                        vm.zoom = vm.inMap.mapControl.getGMap().zoom;
-                        return (vm.zoom >= min && vm.zoom <= max);
-                    }
-                }
+                // for(var prop in vm.inMap.mapControl) {
+                //     if(vm.inMap.mapControl.hasOwnProperty(prop)){
+                //         // $log.log('ssssssssssssss');
+                //         vm.zoom = vm.inMap.mapControl.getGMap().zoom;
+                //         return (vm.zoom >= min && vm.zoom <= max);
+                //     }
+                // }
+                // $log.log(vm.zoom);
+
+                return (vm.zoom >= min && vm.zoom <= max);
+
             };
 
 
@@ -261,7 +265,7 @@
                     scale: vm.getIconScale(),
                 }
             }
-            
+
             vm.setMarkerIcon = function (vehicleData) {
                 // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
                 var newIcon = vm.getIcon(vehicleData);

@@ -62,6 +62,7 @@
                 mapObj = $state.params.mapObj;
                 historyService.resetHistoryData();
                 historyService.historyMapObj.dashboardMapObj.clickedMarker = mapObj.clickedMarker;
+                $log.log(mapObj)
                 $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
                 $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
 

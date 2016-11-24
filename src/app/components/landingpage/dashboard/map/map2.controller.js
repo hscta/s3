@@ -21,15 +21,11 @@
         vm.inMarkers = vm.inMap.markers.inMarkers;
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
-
-        $scope.clickedMarker = vm.inMap.markers.clickedMarker;
-
         vm.filterStr = '';
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
 
         vm.onRoaded = true;
         vm.offRoaded = false;
-
 
         function setMapHeight() {
             // console.log('hel man');
@@ -129,6 +125,7 @@
             // $log.log("runFilters");
             // newMapService.infoWindowClose();
             vm.filterStr = filterStr;
+            markerInfowindow.close();
 
             for (var idx in vm.inMarkers) {
                 vm.applyFilterToMarker(vm.inMarkers[idx], filterStr);
@@ -158,7 +155,6 @@
                     vm.inCustomMaker[marker.vehiclepath].hide();
                 }
             }
-
             return marker.options.visible;
         };
 
@@ -574,8 +570,8 @@
 
                 google.maps.event.addListener(vehicleData.markerInfo, 'click', function(event) {
                     newMapService.setClickedMarker(vehicleData);
+                    vm.hideMobilityControls =  vm.inMap.markers.clickedMarker.hideMobilityControls;
                     $scope.clickedMarker = vehicleData;
-                    $log.log($scope.clickedMarker);
                     markerInfowindow.setContent(document.getElementById("marker_infowindow").innerHTML);
                     markerInfowindow.open(map, this);
                 });
@@ -662,15 +658,16 @@
             //     vm.onload();
             // vm.infoWindowCompiled = true;
             // });
-
-            if (markerInfowindow) {
-                markerInfowindow.addListener('domready', function() {
-                    $log.log("marker info window onload");
-                    vm.onload();
-                });
-            }
+            markerInfowindow.addListener('domready', function() {
+                $log.log("marker info window onload");
+                vm.onload();
+            });
 
             $interval(vm.resizeMap, 1000);
+
+            vm.inMap.map.addListener('zoom_changed', function() {
+                newMapService.setZoom( vm.inMap.map.getZoom());
+            });
 
         };
 
