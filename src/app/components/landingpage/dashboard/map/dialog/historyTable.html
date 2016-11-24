@@ -1,17 +1,26 @@
+<style>
+    .error-msg {
+        color: #f00;
+        font-size: 12px;
+        min-height: 20px;
+    }
 
+</style>
 <div style="height: 100%;">
-    <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
+    <!--<span>{{errorMsg}}</span><br/>-->
+    <span  class="error-msg">{{vm.historyObj.errorMsg}}</span>
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
-
             <md-input-container class="container-margin"  ng-show="vm.multiSelect">
                 <label>Vehicle No</label>
                 <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                <md-select ng-model="vm.historyObj.deviceid" ng-change="onVehicleSelect()">
+                <md-select ng-model="vm.historyObj.selectedHistoryVehicle"
+                           ng-model-options="{trackBy: '$value.deviceid'}"
+                >
 
                     <md-option
                         ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"
-                        ng-value="vehicle.deviceid">
+                        ng-value="vehicle">
                         {{vehicle.vehicleno}}
                     </md-option>
                 </md-select>
@@ -29,13 +38,23 @@
 
             <a class="waves-effect waves-light" ng-click="getHistory()">Get History</a>
             <!--<md-button class="md-accent" ng-click="getHistory()">Get History</md-button>-->
+
+            <md-button class="md-fab md-mini my-tooltip pops"
+                       ng-click="downloadFile()"
+                       ng-disabled="vm.disableDownload">
+                <md-icon md-font-library="material-icons">file_download</md-icon>
+            </md-button>
         </div>
         <div layout="row" layout-align="end start">
         </div>
     </div>
 
-    <div layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.historyObj.trace.path">
-        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.historyObj.trace.path">-->
+    <!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->
+    <!--</div>-->
+
+    <div class="progress" ng-if="vm.showLoading && !vm.historyObj.errorMsg">
+        <div class="indeterminate"></div>
     </div>
 
     <div id="geo-table" class="geo-table"></div>

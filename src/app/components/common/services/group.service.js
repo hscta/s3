@@ -119,6 +119,14 @@
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
+        vm.getMyUsersMapList = function (body) {
+            //$log.log("getMyUsersMap");
+            return vm.getMyUsers(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetList, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
 
 
         vm.getMyRolesMap = function (body) {
@@ -126,6 +134,14 @@
             return vm.getMyRoles(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+        vm.getMyRolesList = function (body) {
+            // $log.log("getMyRolesMap");
+            return vm.getMyRoles(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetList, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
 
@@ -146,7 +162,7 @@
         };
 
 
-        vm.getMyDirectAssetsMap = function (body) {
+        vm.getMyDirectAssetsMapWithUser = function (body) {
             //$log.log("groupService getMyDirectAssetsMap");
             var gPromise = vm.getMyGroupsMap(body);
             var vPromise = vm.getMyVehiclesMap(body);
@@ -159,6 +175,21 @@
                 .then(vm.handleDirectAssetResponse, vm.handleFailure);
 
         };
+
+
+        vm.getMyDirectAssetsMap = function (body) {
+            //$log.log("groupService getMyDirectAssetsMap");
+            var gPromise = vm.getMyGroupsMap(body);
+            var vPromise = vm.getMyVehiclesMap(body);
+            var uPromise = vm.getMyUsersMap(body);
+            var rPromise = vm.getMyRolesMap(body);
+            var dPromise = vm.getMyDevicesMap(body);
+
+            return $q.all([gPromise, vPromise, uPromise, rPromise, dPromise])
+                .then(vm.handleDirectAssetResponse, vm.handleFailure);
+
+        };
+
 
         vm.createNewGroup = function (groupName){
             $log.log(groupName);

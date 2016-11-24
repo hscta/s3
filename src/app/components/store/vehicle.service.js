@@ -84,7 +84,7 @@
 
             if (currentTime - vehicleData.timestamp.getTime() > 8 * 3600 * 1000) {
                 vehicleData.noComm = 'no communication';
-                vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING; 
+                vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
             }
 
             if (vehicleData.ignitionstatus == 1) {
@@ -104,7 +104,7 @@
             }
 
             if(vehicleData.carbattery < 2){
-                vehicleData.devicepulloutFilter = VEHICLE_DEVICE_PULLOUT;    
+                vehicleData.devicepulloutFilter = VEHICLE_DEVICE_PULLOUT;
             }
 
             // checkNoComm(vehicleData, function(){
@@ -118,7 +118,7 @@
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
-            var noCommThreshold = 8 * 3600 * 1000; 
+            var noCommThreshold = 8 * 3600 * 1000;
             if (currentTime - lastSeenAt > noCommThreshold) {
                 if(callback){
                     callback(marker);
@@ -127,7 +127,6 @@
         }
 
         vm.updateVehicle = function (msg, key) {
-            // $log.log('vehicleeeeeeeeeee', msg, key);
             if (msg.length == 2 && msg[0] != null && msg[1] != null
                 && msg[0] != undefined && msg[1] != undefined) {
                 var vehicleObj = vm.processVehicleData(msg);

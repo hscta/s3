@@ -19,6 +19,10 @@
             vm.historyData[key] = value;
         };
 
+        vm.setInMapLocation = function (loc) {
+            vm.historyMapObj.historyMap.center = angular.copy(loc);
+        };
+
         vm.getData = function(key) {
             if(vm.historyData.hasOwnProperty(key))
                 return vm.historyData[key];
@@ -70,6 +74,7 @@
             endTime:'',
             vehicleNumber:'',
             deviceid:'',
+            selectedHistoryVehicle:[],
             dashboardMapObj : {
                 clickedMarker:{},
                 inMarkers:[]
@@ -135,8 +140,10 @@
             filteredFenceItems : [],
 
             myHistoryData:[],
+            jsonReportData:[],
             reports:[],
-            fenceFilter:''
+            fenceFilter:'',
+            currRep:[]
         };
 
         vm.historyCircleEvents = function(model, dest){
@@ -183,8 +190,9 @@
         vm.getDefaultTime = function(){
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
-            var startTime = moment().subtract(24, 'hour').format(dateFormat);
-            var endTime = moment().format(dateFormat);
+            // setting time from 6:00 AM to 7:00 PM
+            var startTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
+            var endTime = moment().hours(19).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
 
             return {
                 startTime: startTime,
@@ -203,7 +211,7 @@
         var timeLimit = week;
 
         vm.getHistoryData = function(){
-            if (!vm.historyMapObj.deviceid){
+            if (!vm.historyMapObj.selectedHistoryVehicle.deviceid){
                 vm.historyMapObj.errorMsg = "Please Select Vehicle";
                 return;
             }
@@ -211,8 +219,8 @@
             if (vm.historyMapObj.startTime && vm.historyMapObj.endTime) {
                 if (vm.historyMapObj.startTime.length && vm.historyMapObj.endTime.length) {
 
-                    var starttime = new Date(moment(vm.historyMapObj.startTime).unix()*1000).getTime();
-                    var endtime = new Date(moment(vm.historyMapObj.endTime).unix()*1000).getTime();
+                    var starttime = moment(vm.historyMapObj.startTime).unix() * 1000;
+                    var endtime = moment(vm.historyMapObj.endTime).unix() * 1000;
 
                     if (endtime - starttime > timeLimit)
                         endtime = starttime + timeLimit;
@@ -224,7 +232,7 @@
 
                     var body = {
                         vehicle: {
-                            vehiclepath: vm.historyMapObj.deviceid.toString(),
+                            vehiclepath: vm.historyMapObj.selectedHistoryVehicle.deviceid.toString(),
                             starttime: starttime,
                             endtime: endtime
                         }
@@ -264,7 +272,7 @@
                 if (position.latitude.constructor !== Number || position.longitude.constructor !== Number ||
                     position.latitude == 0 || position.longitude == 0
                 ) {
-                    $log.log("Not a number");
+                    // $log.log("Not a number");
                     // $log.log(position);
                     continue;
                 }
@@ -312,9 +320,12 @@
             }
         };
 
+
         vm.historyMapClickEvent = function(){
             vm.historyFenceInfoWindowClose();
         };
+
+
         vm.init = function(){
 
             var defaultTime = vm.getDefaultTime ();

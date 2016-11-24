@@ -1,4 +1,8 @@
 /**
+ * Created by harshas on 23/11/16.
+ */
+
+/**
  * Created by smiddela on 20/08/16.
  */
 
@@ -6,7 +10,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
+        .service('newMapService', function ($log, $interval, $q, $timeout, userprefService,
                                          intellicarAPI, vehicleService, $mdDialog,
                                          dialogService) {
             $log.log("mapService");
@@ -14,69 +18,14 @@
             vm.listeners = {};
 
             vm.inMap = {
+                map: null,
                 mapOptions: {},
-                mapControl: {},
-                mapEvents: {
-                    click: function () {
-                        vm.mapClickEvent();
-                    },
-                    zoom_changed: function () {
-                        vm.changeMarkerIcon();
-                    }
-                },
-                infoWindow: {
-                    show: false,
-                    control: {},
-                    options: {
-                        maxWidth: 300,
-                        disableAutoPan: false,
-                        pixelOffset: {
-                            width: 0,
-                            height: -20
-                        }
-                    }
-                },
-                fenceInfoWindow: {
-                    show: false,
-                    control: {},
-                    options: {
-                        maxWidth: 300,
-                        disableAutoPan: false,
-                        pixelOffset: {
-                            width: 0,
-                            height: 0
-                        }
-                    }
-                },
                 markers: {
                     inMarkers: [],
                     clickedMarker: {},
-                    markersEvents: {
-                        click: function (marker, eventName, model, args) {
-                            vm.setClickedMarker(model);
-                        }
-                    },
-                    clickedMarkerObj: {}
                 },
                 circles: [],
                 polygons: [],
-
-                circleEvents: {
-                    click: function (circle, eventName, model, args) {
-                        //$log.log('Circle clicked');
-                        vm.circleEvents(model, vm.inMap.selectedFenceObj);
-                        vm.fenceInfoWindowShow();
-                    }
-                },
-
-                polygonEvents: {
-                    click: function (polygon, eventName, model, args) {
-                        vm.polygonEvents(model, vm.inMap.selectedFenceObj);
-                        vm.fenceInfoWindowShow();
-
-                    }
-                },
-
                 selectedFenceObj: {
                     latitude: '',
                     longitude: '',
@@ -87,6 +36,12 @@
 
             vm.setInMapLocation = function (loc) {
                 vm.inMap.center = angular.copy(loc);
+
+                $log.log('sssssssssssss');
+                vm.inMap.map.setCenter({
+                    lat : vm.inMap.center.latitude,
+                    lng : vm.inMap.center.longitude
+                });
             };
 
             vm.getPolygonMidPoint = function (polygon) {
@@ -97,58 +52,22 @@
                 return bound.getCenter();
             };
 
-            vm.polygonEvents = function (model, dest) {
-                var polygonCenter = vm.getPolygonMidPoint(model.path);
-                dest.latitude = polygonCenter.lat();
-                dest.longitude = polygonCenter.lng();
-                dest.name = model.control.info.name;
-                dest.other = model.control.info.tagdata;
-            };
-
-            vm.circleEvents = function (model, dest) {
-                dest.latitude = model.center.latitude;
-                dest.longitude = model.center.longitude;
-                dest.name = model.control.info.name;
-                dest.other = model.control.info.tagdata;
-            };
-
-
-            vm.infoWindowShow = function () {
-                vm.inMap.infoWindow.show = true;
-            };
-
-            vm.infoWindowClose = function () {
-                vm.inMap.infoWindow.show = false;
-            };
-
-
-            vm.fenceInfoWindowClose = function () {
-                vm.inMap.fenceInfoWindow.show = false;
-            };
-
-
-            vm.fenceInfoWindowShow = function () {
-                vm.inMap.fenceInfoWindow.show = true;
-            };
 
             vm.setClickedMarker = function (model) {
-                vm.inMap.markers.clickedMarkerObj.clickedMarker = model;
-                vm.inMap.markers.clickedMarkerObj.mobilize = vm.mobilize;
-                vm.inMap.markers.clickedMarkerObj.showHistory = vm.showHistory;
-                vm.inMap.markers.clickedMarkerObj.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
-
-                vm.infoWindowShow();
+                $log.log(model);return;
+                vm.inMap.markers.clickedMarker = model;
             };
 
             vm.showHistory = function () {
+                $log.log('clicked');
                 //$log.log(vm.inMap.markers.clickedMarkerObj.clickedMarker);
                 dialogService.show('home.history', {
-                    clickedMarker: angular.copy(vm.inMap.markers.clickedMarkerObj.clickedMarker)
+                    clickedMarker: angular.copy(vm.inMap.markers.clickedMarker)
                 });
             };
 
             vm.mobilize = function (mobilityRequest) {
-                vm.inMap.markers.clickedMarkerObj.clickedMarker.mobilityRequest = mobilityRequest;
+                vm.inMap.markers.clickedMarker.mobilityRequest = mobilityRequest;
 
                 var immobalizeDialog = $mdDialog.confirm({
                     controller: 'ImmobalizeController',
@@ -157,7 +76,7 @@
                     escapeToClose: true,
                     locals: {
                         params: {
-                            clickedMarker: vm.inMap.markers.clickedMarkerObj.clickedMarker
+                            clickedMarker: vm.inMap.markers.clickedMarker
                         }
                     }
                 }).ok('Yes').cancel('No');
@@ -211,30 +130,30 @@
             vm.locations = {
                 BANGALORE:{
                     id: vm.loc.BANGALORE,
-                        notation: 'BLR',
+                    notation: 'BLR',
                     latlng: {latitude: 12.967995, longitude: 77.597953}
                 },
                 HYDERABAD:{
                     id: vm.loc.HYDERABAD,
-                        notation: 'HYD',
-                        latlng: {latitude: 17.384125, longitude: 78.479447}
+                    notation: 'HYD',
+                    latlng: {latitude: 17.384125, longitude: 78.479447}
                 },
                 DELHI:{
                     id: vm.loc.DELHI,
-                        notation: 'DEL',
-                        latlng: {latitude: 28.614132, longitude: 77.215449}
+                    notation: 'DEL',
+                    latlng: {latitude: 28.614132, longitude: 77.215449}
                 },
                 MUMBAI:{
                     id: vm.loc.MUMBAI,
-                        notation: 'MUM',
-                        latlng: {latitude: 19.195549, longitude: 72.936381}
+                    notation: 'MUM',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
                 }
             };
 
             vm.currentLocation = vm.locations.MUMBAI;
 
             vm.getCurrentLocation = function () {
-              return vm.currentLocation;
+                return vm.currentLocation;
             };
 
             vm.center = vm.currentLocation.latlng;

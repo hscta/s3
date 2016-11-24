@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($rootScope,$scope, $log, startupData,
+    function LeftNavManagementController($rootScope,$scope, $log, startupData,groupService,
                                          leftNavManagementService, $state, $filter,
                                          settingsService) {
 
@@ -41,25 +41,30 @@
             $log.log(data);
         };
 
+        vm.firedgrouppaths = [];
 
         vm.initialize = function (data) {
-            // $log.log("vm.initialize");
-            leftNavManagementService.getManagementTree({grouppath:startupData})
+            vm.firedgrouppaths.push(startupData);
+            leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure);
         };
-
 
         vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
             if (!collapsed) {
                 toggle(obj);
             }
-
-            console.log(asset);
-
-            // fire api for next level
-            leftNavManagementService.getManagementTree({grouppath:asset.info.assetpath})
-                .then(vm.handleSubGroupResponse, vm.handleResponseFailure);
-
+            if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group'){
+                vm.selectedAsset = asset.id;
+                asset.loading = true;
+                groupService.lastGroupPath = asset.info.assetpath;
+                if(asset.info.assetpath == '/1/1') {
+                    leftNavManagementService.getManagementTreeWithUser({grouppath:asset.info.assetpath})
+                        .then(vm.handleResponse, vm.handleResponseFailure);
+                }else{
+                    leftNavManagementService.getManagementTree({grouppath:asset.info.assetpath})
+                        .then(vm.handleResponse, vm.handleResponseFailure);
+                }
+            }
             settingsService.handleAssetClick(asset);
         };
 
@@ -67,14 +72,12 @@
         vm.expand_tree = function () {
             $log.log('expand');
            // $scope.$broadcast('angular-ui-tree:collapse-all');
-            var duplicateTree;
-
             // if ( vm.tree_search_pattern === '' )
             //     angular.copy(duplicateTree, vm.tree_data);
             // else {
             //     angular.copy(vm.tree_data, duplicateTree);
             // }
-            vm.filterTree(vm.tree_data);
+           // vm.filterTree(vm.tree_data);
 
         };
 

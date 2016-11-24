@@ -16,7 +16,7 @@
         $log.log('HeaderController');
         var vm = this;
 
-        $log.log($state.current);
+        // $log.log($state.current);
 
         vm.currState = $state.current.name;
 

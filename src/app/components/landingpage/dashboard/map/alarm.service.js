@@ -22,12 +22,12 @@
             selectedVehiclesCount:0,
             filteredVehicles:[],
             alarmResponseData:[],
-            loadingHistoryData : false
+            loadingAlarmData : false,
+            msg:''
         };
 
 
         vm.getAlarmsHistory = function(){
-            vm.alarmsObj.loadingHistoryData = true;
             var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
 
             var vehiclesids = [];
@@ -39,13 +39,48 @@
                 }
             }
 
+            if ( vehiclesids.length <= 0 ) {
+                vm.alarmsObj.msg = "Please Select atleast one vehicle";
+                return;
+            }
+
+            var MILLISEC = 1000;
+            var hrs1 = 3600 * MILLISEC;
+            var timeLimit = hrs1;
+
+            var startTime = new Date(moment(vm.alarmsObj.startTime).unix() * 1000).getTime();
+            var endTime = new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime();
+
+
+            if ( !startTime ) {
+                vm.alarmsObj.msg = "Please enter start time";
+                return;
+            }
+
+            if ( !endTime ) {
+                vm.alarmsObj.msg = "Please enter end time";
+                return;
+            }
+
+            if (endTime - startTime > timeLimit)
+                endTime = startTime + timeLimit;
+
+            if (endTime <= startTime) {
+                vm.alarmsObj.msg = "End time should be >= Start time";
+                return;
+            }
+
             var promiseList = [];
+            vm.alarmsObj.loadingAlarmData = true;
+
             var body = {
                 vehiclepath : vehiclesids,
-                starttime: new Date(moment(vm.alarmsObj.startTime).unix() * 1000).getTime(),
-                endtime: new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime()
+                starttime: startTime,
+                endtime: endTime
             };
             promiseList.push(intellicarAPI.myAlarmService.getAlarmInfo(body));
+            vm.alarmsObj.msg = '';
+
             return $q.all(promiseList)
                 .then(vm.readHistoryInfo, vm.handleFailure);
 
@@ -53,7 +88,7 @@
 
         vm.readHistoryInfo = function(history){
             var data = history[0].data.data;
-            vm.alarmsObj.loadingHistoryData = false;
+            vm.alarmsObj.loadingAlarmData = false;
 
             if (!data.length) {
                 return;
@@ -68,8 +103,7 @@
                 }
             }
             vm.alarmsObj.alarmResponseData = data;
-            $log.log('alarmmmmmmmmmmm');
-             $log.log(vm.alarmsObj.alarmResponseData );
+            $log.log(data);
         };
 
         vm.handleFailure = function(){
