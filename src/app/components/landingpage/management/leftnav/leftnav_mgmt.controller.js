@@ -29,6 +29,12 @@
             vm.tree_data = data;
         };
 
+        vm.handleSubGroupResponse = function (data) {
+            //$log.log("handleResponse");
+            // $log.log(data);
+            vm.tree_data = data;
+        };
+
 
         vm.handleResponseFailure = function (data) {
             $log.log("handleResponseFailure");
@@ -59,7 +65,6 @@
                         .then(vm.handleResponse, vm.handleResponseFailure);
                 }
             }
-
             settingsService.handleAssetClick(asset);
         };
 
