@@ -2,36 +2,49 @@
 
     angular
         .module('uiplatform')
-        .controller('GoogleMapController', GoogleMapController)
+        .controller('GoogleMapController', GoogleMapController);
 
-    function GoogleMapController($scope, $log, mapService,cpuService,
-                                 $interval, geofenceViewService, $timeout, customMapOverlay, vehicleService) {
+    function GoogleMapController($scope, $log,cpuService, newMapService,
+                                 $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
+                                 vehicleService) {
         $log.log('MapController');
         var vm = this;
 
         var wh = $(window).height();
         var header_height = 95;
-        // if(headerAutoHide){
-        //     $('.mainHeader').css({'margin-top':'-45px'});
-        //     header_height = 50;
-        // }
+
+        var markerInfowindow = new google.maps.InfoWindow();
+        var fenceInfowindow = new google.maps.InfoWindow();
+
+
+        vm.inMap = newMapService.getMainMap();
+        vm.inMarkers = vm.inMap.markers.inMarkers;
+        vm.selectedFenceObj = vm.inMap.selectedFenceObj;
+        vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
+
+        $scope.clickedMarker = vm.inMap.markers.clickedMarker;
+
+        vm.filterStr = '';
+        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
+
+        vm.onRoaded = true;
+        vm.offRoaded = false;
 
 
         function setMapHeight() {
             // console.log('hel man');
             wh = $(window).height();
-            isRendered('.angular-google-map-container', function (el) {
-                el.css('height', (wh - header_height) + 'px');
-            });
+            // isRendered('.angular-google-map-container', function (el) {
+            //     el.css('height', (wh - header_height) + 'px');
+            // });
             isRendered('.alert-md-content', function (el) {
                 el.css('height', (wh - header_height) + 'px');
             });
+
+            isRendered('#map', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
         }
-
-        $(window).ready(function () {
-            setMapHeight();
-        });
-
 
         $(window).resize(function () {
             setMapHeight();
@@ -46,72 +59,19 @@
             }, 200)
         }
 
-
-
-
-
-        $scope.searchbox = {
-            template: 'searchbox.tpl.html',
-            options: {
-                // autocomplete:true
-            },
-            events: {
-                places_changed: function (searchBox) {
-                    var place = searchBox.getPlaces();
-                    if (!place || place == 'undefined' || place.length == 0) {
-                        //console.log('no place data :(');
-                        return;
-                    }
-
-                    var gfmap = vm.inMap.mapControl.getGMap();
-
-                    if (!place[0].geometry) {
-                        window.alert("Autocomplete's returned place contains no geometry");
-                        return;
-                    }
-
-                    // If the place has a geometry, then present it on a map.
-                    if (place[0].geometry.viewport) {
-                        gfmap.fitBounds(place[0].geometry.viewport);
-                    } else {
-                        gfmap.setCenter(place[0].geometry.location);
-                        gfmap.setZoom(17);  // Why 17? Because it looks good.
-                    }
-                }
-            }
-        };
-
-
         vm.leftToolbar = function () {
             return geofenceViewService.getToolbarVar();
         };
 
 
-        vm.inMap = mapService.getMainMap();
-        vm.inMarkers = vm.inMap.markers.inMarkers;
-        vm.selectedFenceObj = vm.inMap.selectedFenceObj;
-        vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
-        vm.doRebuildAll = false;
-        vm.modelsbyref = false;
-
-        vm.filterStr = '';
-        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
-
-        vm.onRoaded = true;
-        vm.offRoaded = false;
-
         vm.loadMap = function () {
-            vm.inMap.zoom = mapService.getZoom();
-            vm.inMap.center = mapService.getCenter();
-            vm.inMap.bounds = mapService.getBounds();
+            vm.inMap.zoom = newMapService.getZoom();
+            vm.inMap.center = newMapService.getCenter();
+            vm.inMap.bounds = newMapService.getBounds();
+
+            vm.createMap();
         };
 
-        vm.resizeMap = function () {
-            // google.maps.event.trigger(vm.inMap.mapControl.getGMap(), 'resize');
-            return true;
-        };
-
-        $interval(vm.resizeMap, 500);
 
         vm.getMarkerCenter = function (marker) {
             return {latitude: marker.latitude, longitude: marker.longitude};
@@ -129,7 +89,6 @@
             vm.runFilters(vm.filterStr);
             vm.runStats();
         };
-
 
         vm.checkRoaded = function (marker) {
             if (marker && marker.meta) {
@@ -151,7 +110,6 @@
 
         vm.updateMarker2 = function (vehicleData) {
             // $log.log('updateMarker2');
-            //
             // $log.log(vehicleData);
 
             vm.inMarkers.push(vehicleData);
@@ -159,19 +117,18 @@
         };
 
         vm.updateMarker = function (vehicleData) {
-
             // if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
             if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
                 vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
             }
-
+            vm.getMarkers(vehicleData);
             vm.applyFilterToMarker(vehicleData, vm.filterStr);
         };
 
 
         vm.runFilters = function (filterStr) {
             // $log.log("runFilters");
-            mapService.infoWindowClose();
+            // newMapService.infoWindowClose();
             vm.filterStr = filterStr;
 
             for (var idx in vm.inMarkers) {
@@ -179,34 +136,22 @@
             }
         };
 
-
         vm.applyFilterToMarker = function (marker, filterStr) {
-            // $log.log("applying filter to marker");
-            // if(filterStr == 'noComm'){
-            //     marker.options.visible = false;
-            //     checkNoComm(marker, function (marker) {
-            //         marker.options.visible = true;
-            //     });
-            // } else
-            // if(filterStr == 'devPull'){
-            //     marker.options.visible = false;
-            //     if(marker.carbattery < 2){
-            //         marker.options.visible = true;
-            //     }
-            // }
-
             if (!vm.matchesAnyMarkerData(marker, filterStr)) {
                 marker.options.visible = false;
+                marker.markerInfo.setVisible(false);
                 if (marker.vehiclepath in vm.inCustomMaker) {
                     vm.inCustomMaker[marker.vehiclepath].hide();
                 }
             } else {
                 marker.options.visible = true;
+                marker.markerInfo.setVisible(true);
                 if (marker.vehiclepath in vm.inCustomMaker) {
                     vm.inCustomMaker[marker.vehiclepath].show();
                 }
             }
             marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
+            marker.markerInfo.setVisible(marker.options.visible);
             if (marker.vehiclepath in vm.inCustomMaker) {
                 if (marker.options.visible) {
                     vm.inCustomMaker[marker.vehiclepath].show();
@@ -214,10 +159,6 @@
                     vm.inCustomMaker[marker.vehiclepath].hide();
                 }
             }
-
-            // if (marker.options.visible && (!marker.ignitionstatus)) {
-            //     $log.log(marker);
-            // }
 
             return marker.options.visible;
         };
@@ -234,15 +175,11 @@
                     var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
 
                     if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                        // if ((!marker.ignitionstatus && marker.options.visible)) {
-                        //     $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
-                        // }
                         return true;
                     }
                 }
 
                 if (marker[eachidx].constructor == Object) {
-                    // $log.log(marker[eachidx]);
                     for (var myMeta in marker[eachidx]) {
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
@@ -285,6 +222,7 @@
                 }
             }
 
+            $timeout(vm.runStats, 10000);
             // $log.log(vm.vehicleStats);
         };
 
@@ -343,14 +281,13 @@
             $log.log('mapcontroller');
             // $log.log(fences);
             // vm.inMap.circles = fences.circles;
-            mapService.inMap.circles = fences.circles;
-            // vm.inMap.polygons = fences.polygons;
-            mapService.inMap.polygons = fences.polygons;
-            // $log.log("calling geofenceViewService.setData");
+            newMapService.inMap.circles = fences.circles;
+            newMapService.inMap.polygons = fences.polygons;
             geofenceViewService.setData('geofences', true);
             vm.applyFilters({filterType: 'showAll'});
 
             vm.showMyPolygons();
+            vm.showMyCircles();
         };
 
         var DEVBATTERY_THRESHOLD = 3.55;
@@ -369,10 +306,12 @@
                     if (vm.geoFilters.carBattery) {
                         if (marker.carbattery < CARBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
+                            marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
                         }
                     } else {
                         if(recall == 1) {
                             marker.options.animation = null;
+                            marker.markerInfo.setAnimation(null);
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
@@ -384,10 +323,12 @@
                     if (vm.geoFilters.devBattery) {
                         if (marker.devbattery < DEVBATTERY_THRESHOLD) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
+                            marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
                         }
                     } else {
                         if(recall == 1) {
                             marker.options.animation = null;
+                            marker.markerInfo.setAnimation(null);
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
@@ -400,11 +341,13 @@
                     if (vm.geoFilters.noComm) {
                         checkNoComm(marker, function (marker) {
                             marker.options.animation = google.maps.Animation.BOUNCE;
+                            marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
                         });
                     }
                     else {
                         if(recall == 1) {
                             marker.options.animation = null;
+                            marker.markerInfo.setAnimation(null);
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
                         }
@@ -420,12 +363,13 @@
                         // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
                         if (checkFilterString(filterStr)) {
                             vm.inMap.circles[idx].visible = true;
+                            vm.inMap.circles[idx].circleInfo.setVisible(true);
                             vm.inMap.circles[idx].stroke.weight = getStroke(filterStr);
                             vm.inMap.circles[idx].stroke.color = getColor(filterStr);
                             startAnimation(vm.inMap.circles[idx]);
                         } else {
                             vm.inMap.circles[idx].visible = false;
-                            // console.log(mapService.inMap.circles[idx]);
+                            // console.log(newMapService.inMap.circles[idx]);
                             // console.log(idx);
                         }
                     }
@@ -545,20 +489,12 @@
                 return true;
             }
 
-            // if (filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0)
-            //     return true;
-            // if (filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
-            //     return true;
-            // if (filter.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0)
-            //     return true;
-            //
-            // return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
             return false;
         }
 
         vm.addListener = function () {
             vehicleService.addListener('rtgps2', vm.updateMarker2);
-            mapService.addListener('rtgps', vm.updateMarker);
+            newMapService.addListener('rtgps', vm.updateMarker);
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
         };
@@ -567,7 +503,7 @@
 
         vm.inCustomMaker = {};
 
-        mapService.highlightMarker = function (vehiclePath) {
+        newMapService.highlightMarker = function (vehiclePath) {
             vm.highlightMarker(vehiclePath);
         };
 
@@ -604,46 +540,48 @@
             vm.showVehicleNumber(vn);
         };
 
-        vm.init = function () {
-            vm.loadMap();
-            vm.addListener();
-            geofenceViewService.getMyFences();
-            vm.runStats();
-            $interval(vm.runStats, 3000);
-
-            vm.createMap();
-        };
-
-        var map, mapOptions;
 
         vm.createMap = function () {
             var mapCanvas = document.getElementById("map");
-            mapOptions = {
+            vm.inMap.mapOptions = {
                 center: new google.maps.LatLng(vm.inMap.center.latitude, vm.inMap.center.longitude),
                 zoom: vm.inMap.zoom
             }
-            map = new google.maps.Map(mapCanvas, mapOptions);
-        };
+            vm.inMap.map = new google.maps.Map(mapCanvas, vm.inMap.mapOptions);
 
-        vm.getMarkers = function () {
-            for ( var i = 0; i < vm.inMarkers.length; i++ ) {
-                var myMarkers = new google.maps.LatLng(vm.inMarkers[i].latitude,vm.inMarkers[i].longitude);
-                var marker = new google.maps.Marker({
-                    position:myMarkers,
-                    icon:vm.inMarkers[i].icon
-                });
-
-                marker.setMap(map);
-            }
-        };
-
-        vm.setMapCenter = function () {
-            map.setCenter({
-                lat : vm.inMap.center.latitude,
-                lng : vm.inMap.center.longitude
+            vm.inMap.map.addListener('click', function() {
+                markerInfowindow.close();
+                fenceInfowindow.close();
             });
         };
 
+        vm.getMarkers = function (vehicleData) {
+            if ( vehicleData.markerInfo){
+                var markerPos = new google.maps.LatLng(vehicleData.latitude, vehicleData.longitude);
+
+                vehicleData.markerInfo.setPosition(markerPos);
+            }else {
+                var markerPos = new google.maps.LatLng(vehicleData.latitude,
+                    vehicleData.longitude
+                );
+
+                // $log.log(markerPos);
+                vehicleData.markerInfo = new google.maps.Marker({
+                    position:markerPos,
+                    icon: vehicleData.icon,
+                });
+
+                vehicleData.markerInfo.setMap(vm.inMap.map);
+
+                google.maps.event.addListener(vehicleData.markerInfo, 'click', function(event) {
+                    newMapService.setClickedMarker(vehicleData);
+                    $scope.clickedMarker = vehicleData;
+                    $log.log($scope.clickedMarker);
+                    markerInfowindow.setContent(document.getElementById("marker_infowindow").innerHTML);
+                    markerInfowindow.open(map, this);
+                });
+            }
+        };
 
         vm.showMyPolygons = function () {
             for ( var i = 0; i < vm.inMap.polygons.length; i++ ) {
@@ -658,16 +596,89 @@
                     strokeOpacity: 0.8,
                     strokeWeight: vm.inMap.polygons[i].stroke.weight,
                     fillColor: vm.inMap.polygons[i].fill.color,
-                    fillOpacity: vm.inMap.polygons[i].fill.opacity
+                    fillOpacity: vm.inMap.polygons[i].fill.opacity,
                 });
-                polygon.setMap(map);
+                polygon.setMap(vm.inMap.map);
             }
+        };
 
+        vm.showMyCircles = function () {
+            for ( var i = 0; i < vm.inMap.circles.length; i++ ) {
+                vm.inMap.circles.circleInfo = new google.maps.Circle({
+                    strokeColor: vm.inMap.circles[i].stroke.color,
+                    strokeOpacity: 0.8,
+                    strokeWeight: vm.inMap.circles[i].stroke.weight,
+                    fillColor: vm.inMap.circles[i].fill.color,
+                    fillOpacity: vm.inMap.circles[i].fill.opacity,
+                    center: {lat: vm.inMap.circles[i].center.latitude, lng: vm.inMap.circles[i].center.longitude},
+                    radius: vm.inMap.circles[i].radius
+                });
+                vm.inMap.circles.circleInfo.setMap(vm.inMap.map);
 
+                google.maps.event.addListener( vm.inMap.circles.circleInfo , 'click', function(e) {
+                    var contentString = "<table><tbody>\
+                                            <tr>\
+                                                <th>Name:</th>\
+                                                <td>{{vm.selectedFenceObj.name}}</td>\
+                                            </tr>\
+                                            <tr>\
+                                                <th>Type:</th>\
+                                                <td>{{vm.selectedFenceObj.other.olafilter}}</td>\
+                                            </tr>\
+                                        </tbody></table>";
+
+                    fenceInfowindow.setContent(contentString);
+                    fenceInfowindow.open(vm.inMap.map, this);
+                });
+            }
         };
 
 
-        $timeout(vm.getMarkers, 10000);
+        vm.onload = function () {
+            $log.log('onload');
+            $scope.$apply(function(){
+                $compile(document.getElementById("markerWindow"))($scope);
+            });
+        };
+
+
+        vm.showHistory = function () {
+            $log.log("show History");
+            newMapService.showHistory();
+        };
+
+        vm.init = function () {
+            vm.loadMap();
+            vm.addListener();
+            geofenceViewService.getMyFences();
+            //$interval(vm.runStats, 3000);
+            $timeout(vm.runStats, 3000);
+
+            setMapHeight();
+
+            // vm.infoWindowCompiled = false;
+            // vm.inMap.map.addListener('tilesloaded', function() {
+            //     if(vm.infoWindowCompiled)
+            //         return;
+            //     vm.onload();
+            // vm.infoWindowCompiled = true;
+            // });
+
+            if (markerInfowindow) {
+                markerInfowindow.addListener('domready', function() {
+                    $log.log("marker info window onload");
+                    vm.onload();
+                });
+            }
+
+            $interval(vm.resizeMap, 1000);
+
+        };
+
+        vm.resizeMap = function () {
+            google.maps.event.trigger(map, 'resize');
+            return true;
+        };
 
 
         vm.init();

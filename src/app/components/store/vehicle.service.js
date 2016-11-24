@@ -127,7 +127,6 @@
         }
 
         vm.updateVehicle = function (msg, key) {
-            // $log.log('vehicleeeeeeeeeee', msg, key);
             if (msg.length == 2 && msg[0] != null && msg[1] != null
                 && msg[0] != undefined && msg[1] != undefined) {
                 var vehicleObj = vm.processVehicleData(msg);

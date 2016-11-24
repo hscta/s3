@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('GeofenceViewController', mapLeftToolBar);
 
-    function mapLeftToolBar($scope, $log, $timeout, $q, mapService, historyService,
+    function mapLeftToolBar($scope, $log, $timeout, $q, mapService, newMapService, historyService,
                             $state, geofenceViewService, dialogService, intellicarAPI) {
 
         var vm = this;
@@ -32,7 +32,7 @@
 
         vm.setInMarkerLocation = function (data) {
             vm.currentLocation = data.id;
-            mapService.setInMapLocation(data.latlng);
+            newMapService.setInMapLocation(data.latlng);
         };
 
         // mapService.setInMapLocation(latlng: {latitude: 12.967995, longitude: 77.597953}); // banglore
@@ -267,8 +267,9 @@
                 if ( $state.current.name == 'home.history')
                     historyService.setInMapLocation(data.latlng);
                 else
-                    mapService.setInMapLocation(data.latlng);
+                    newMapService.setInMapLocation(data.latlng);
             }else if(type == 'button'){
+                $log.log('other')
                 data();
             }
         };
@@ -353,6 +354,7 @@
         function setFilter(filterType) {
             filterType = filterType.split('.')
             filterType = filterType[filterType.length - 1];
+            $log.log(filterType);
             geofenceViewService.applyFilters(filterType);
         }
 
@@ -362,11 +364,13 @@
 
 
         vm.buttonClick = function (item) {
+            $log.log('low battt');
             if (item.data.type == 'stateChange') {
                 dialogService.show(item.data.state);
             } else if (item.data.type == 'function') {
                 if (vm.fencesActive() || item.data.independent) {
                     item.data.active = !item.data.active;
+                    $log.log(item);
                     item.data.function(item.data.active, item.location);
                 }
             }
