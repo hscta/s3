@@ -68,7 +68,6 @@
             vm.inMap.zoom = newMapService.getZoom();
             vm.inMap.center = newMapService.getCenter();
             vm.inMap.bounds = newMapService.getBounds();
-
             vm.createMap();
         };
 
@@ -511,7 +510,7 @@
             if (vehiclePath in vm.inCustomMaker) {
                 vm.inCustomMaker[vehiclePath].highlightMe();
             } else {
-                // console.log('[MAP CONTROLLER] no marker found!');
+                console.log('[CUSTOM OVERLAY] no marker found to highLight!');
             }
         };
 
@@ -536,8 +535,6 @@
                 }
             }
         };
-
-
         geofenceViewService.showVehicleNumber = function (vn) {
             vm.showVehicleNumber(vn);
         };

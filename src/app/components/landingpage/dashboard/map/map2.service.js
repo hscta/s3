@@ -37,7 +37,6 @@
             vm.setInMapLocation = function (loc) {
                 vm.inMap.center = angular.copy(loc);
 
-                $log.log('sssssssssssss');
                 vm.inMap.map.setCenter({
                     lat : vm.inMap.center.latitude,
                     lng : vm.inMap.center.longitude
@@ -223,14 +222,49 @@
                         return BLUE_ICON;
                     }
                 }
-
                 return ORANGE_ICON;
             };
 
+            vm.zoomLevel = 12;
 
+            vm.getIconScale = function(){
+                var scale = 0.8 + (vm.zoomLevel-12)*0.5/4;
+                if (scale < 0.3)
+                    scale = 0.3;
+                return scale;
+            }
+
+            vm.getIcon = function(data){
+                var direction = data.direction;
+                // var color = '#FF0000';
+                // if(str == 'red'){
+                //     color = '#e74c3c'
+                // }else if(str == 'green'){
+                //     color = '#27ae60'
+                // }else if(str == 'blue'){
+                //     color = '#0000ff'
+                // }else if(str == 'yellow'){
+                //     color = '#f39c12'
+                // }
+                if(direction == undefined){
+                    direction = 0;
+                }
+                return {
+                    path:"M20.686,15.001c0,3.139-2.546,5.684-5.686,5.684s-5.685-2.545-5.685-5.684c0-3.14,2.545-5.685,5.685-5.685 S20.686,11.861,20.686,15.001z M15,1L6,11.587c0,0,3.014-3.984,9-3.984s9,3.984,9,3.984L15,1z",
+                    fillColor: vm.getMarkerColor(data),
+                    // iconColor: vm.getMarkerColor(data),
+                    rotation: direction,
+                    fillOpacity: 1,
+                    anchor: new google.maps.Point(15,15),
+                    strokeWeight: 1.5,
+                    strokeColor:'#ffffff',
+                    scale: vm.getIconScale(),
+                }
+            }
+            
             vm.setMarkerIcon = function (vehicleData) {
-                var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
-
+                // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
+                var newIcon = vm.getIcon(vehicleData);
                 if (newIcon != vehicleData.icon)
                     vehicleData.icon = newIcon;
             };
