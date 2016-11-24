@@ -363,7 +363,7 @@
                         // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
                         if (checkFilterString(filterStr)) {
                             vm.inMap.circles[idx].visible = true;
-                            vm.inMap.circles[idx].circleInfo.setVisible(true);
+                            // vm.inMap.circles[idx].circleInfo.setVisible(true);
                             vm.inMap.circles[idx].stroke.weight = getStroke(filterStr);
                             vm.inMap.circles[idx].stroke.color = getColor(filterStr);
                             startAnimation(vm.inMap.circles[idx]);
@@ -518,7 +518,7 @@
 
         vm.customOverlay = function (marker) {
             if (!(marker.vehiclepath in vm.inCustomMaker)) {
-                // vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, vm.inMap.mapControl.getGMap(), {marker: marker});
+                vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude,newMapService.inMap.map , {marker: marker});
             }
         };
         vm.showVehicleNumber = function (vn) {
