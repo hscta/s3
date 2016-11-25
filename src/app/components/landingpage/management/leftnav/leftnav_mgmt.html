@@ -127,7 +127,7 @@
         <label for="last_name">Search</label>
     </div>
 
-    <div ui-tree id="tree-root" callbacks="treeOptions" class="tree-str">
+    <div ui-tree id="tree-root" callbacks="treeOptions" class="tree-str" ng-cloak>
         <ol ui-tree-nodes ng-model="vm.tree_data" ng-class="{hidden: collapsed}">
             <li ng-repeat="item in vm.tree_data" ui-tree-node data-nodrag data-collapsed="item.collapsed"
 

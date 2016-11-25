@@ -10,6 +10,8 @@
     }
 </style>
 
+<span ng-if="vm.currentGroupAsset">Group Name : {{vm.currentGroupAsset.name}}</span>
+<br/>
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewRoleField()">
     Create Role
 </md-button>
@@ -33,9 +35,15 @@
 
 <script type="text/ng-template" id="outside-panel-content.html">
     <div class="md-title">{{myAsset.name}}</div>
-    <!--<icar-expanel ng-repeat="item in vm.vehicleinfo track by $index"-->
-    <!--details="item" schema="item.schema" layout></icar-expanel>-->
+
+    <a class="waves-effect waves-light btn ng-isolate-scope"
+       ng-if="myAsset.assignPermission"
+         ng-click="vm.addPermission(myAsset)">
+        Assign Permissions
+    </a>
 </script>
+
+<multi-list data="groupData"></multi-list>
 
 <md-expansion-panel-group md-component-id="vehicleGroup" flex>
 

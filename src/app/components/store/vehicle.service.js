@@ -12,9 +12,9 @@
     function vehicleService($log, intellicarAPI) {
         $log.log("vehicleService");
         var vm = this;
-        vm.listeners = {};
         vm.vehiclesByPath = {};
         vm.vehiclesByNumber = {};
+        vm.listeners = {};
 
 
         vm.addListener = function (key, listener) {

@@ -10,7 +10,7 @@
     }
 </style>
 
-<span ng-if="vm.selectedTreeGroup">Group Name : {{vm.selectedTreeGroup.name}}</span>
+<span ng-if="vm.currentGroupAsset">Group Name : {{vm.currentGroupAsset.name}}</span>
 <br/>
 
 <md-button class="md-accent" ng-show="vm.showBtn"
@@ -18,13 +18,13 @@
     Create Group
 </md-button>
 
-<md-button class="md-accent" ng-if="vm.selectedTreeGroup.assignUser"
-           ng-click="vm.assignUsers(vm.selectedTreeGroup)">
+<md-button class="md-accent" ng-if="vm.currentGroupAsset.assignUser"
+           ng-click="vm.assignUsers(vm.currentGroupAsset)">
     Assign User
 </md-button>
 
-<md-button class="md-accent" ng-if="vm.selectedTreeGroup.assignRole"
-           ng-click="vm.assignRoles(vm.selectedTreeGroup)">
+<md-button class="md-accent" ng-if="vm.currentGroupAsset.assignRole"
+           ng-click="vm.assignRoles(vm.currentGroupAsset)">
     Assign Role
 </md-button>
 

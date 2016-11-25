@@ -26,16 +26,18 @@
         vm.ASSIGN_USER_PERM = 10;
         vm.ASSIGN_ROLE_PERM = 5;
 
+        vm.currentGroupAsset = settingsService.lastGroup;
         vm.handleMyVehiclesFailure = function (data) {
             $log.log("GroupMgmtController handleMyVehiclesFailure");
         };
 
-        vm.selectedTreeGroup = null;
+        // vm.selectedTreeGroup = null;
 
         vm.onLoad = function () {
             $log.log(startupData);
 
             for ( var idx in startupData){
+                $log.log(startupData[idx]);
                 if (startupData[idx].permissions.indexOf(vm.ASSIGN_USER_PERM)>= 0 )
                     startupData[idx].assignUser = true;
                 else
@@ -58,14 +60,14 @@
 
             $log.log($stateParams);
 
-            vm.selectedTreeGroup= $stateParams.info;
+            // vm.selectedTreeGroup= $stateParams.info;
 
-            if ( vm.selectedTreeGroup){
-                if (vm.selectedTreeGroup.permissions.indexOf(vm.ASSIGN_USER_PERM) >= 0)
-                    vm.selectedTreeGroup.assignUser = true;
+            if ( vm.currentGroupAsset){
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) >= 0)
+                    vm.currentGroupAsset.assignUser = true;
 
-                if (vm.selectedTreeGroup.permissions.indexOf(vm.ASSIGN_ROLE_PERM) >= 0)
-                    vm.selectedTreeGroup.assignRole = true;
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) >= 0)
+                    vm.currentGroupAsset.assignRole = true;
 
             }
 
@@ -187,6 +189,9 @@
                 grouppath:data.assetpath
             };
             vm.getUsers(body);
+
+            $scope.groupData.datas[1].heading = "Assignable Users";
+            $scope.groupData.datas[0].heading = "Assigned Users";
         };
 
         vm.assignRoles = function (data) {
@@ -221,6 +226,8 @@
                 }},
             ];
 
+            $scope.groupData.datas[1].heading = "Assignable Roles";
+            $scope.groupData.datas[0].heading = "Assigned Roles";
             vm.getRoles(body);
         };
 

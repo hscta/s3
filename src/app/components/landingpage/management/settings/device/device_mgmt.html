@@ -10,6 +10,8 @@
     }
 </style>
 
+<span ng-if="vm.currentGroupAsset">Group Name : {{vm.currentGroupAsset.name}}</span>
+<br/>
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewDeviceField()">
     Add Device
 </md-button>

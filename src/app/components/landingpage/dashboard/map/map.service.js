@@ -196,8 +196,8 @@
             // var lng = 77.6480335;
 
             // Mumbai
-            var lat = 19.19554947109134;
-            var lng = 72.93638193466376;
+            // var lat = 19.19554947109134;
+            // var lng = 72.93638193466376;
 
 
             vm.loc = {
@@ -205,33 +205,48 @@
                 BANGALORE: 'BANGALORE',
                 HYDERABAD: 'HYDERABAD',
                 PUNE: 'PUNE',
-                CHENNAI: 'CHENNAI'
+                CHENNAI: 'CHENNAI',
+                USER: 'USER'
             };
 
             vm.locations = {
                 BANGALORE:{
                     id: vm.loc.BANGALORE,
-                        notation: 'BLR',
+                    notation: 'BLR',
                     latlng: {latitude: 12.967995, longitude: 77.597953}
                 },
                 HYDERABAD:{
                     id: vm.loc.HYDERABAD,
-                        notation: 'HYD',
-                        latlng: {latitude: 17.384125, longitude: 78.479447}
+                    notation: 'HYD',
+                    latlng: {latitude: 17.384125, longitude: 78.479447}
                 },
                 DELHI:{
                     id: vm.loc.DELHI,
-                        notation: 'DEL',
-                        latlng: {latitude: 28.614132, longitude: 77.215449}
+                    notation: 'DEL',
+                    latlng: {latitude: 28.614132, longitude: 77.215449}
                 },
                 MUMBAI:{
                     id: vm.loc.MUMBAI,
-                        notation: 'MUM',
-                        latlng: {latitude: 19.195549, longitude: 72.936381}
+                    notation: 'MUM',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
+                },
+                USER:{
+                    id: vm.loc.USER,
+                    notation: 'USER',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
                 }
             };
 
             vm.currentLocation = vm.locations.MUMBAI;
+
+            vm.setUserPref = function(userSettings) {
+                vm.currentLocation = vm.locations.USER;
+                vm.currentLocation.latlng = userSettings.station;
+                vm.center = vm.currentLocation.latlng;
+                console.log("setting center of map");
+                vm.callListeners(userSettings, 'setUserPref');
+            };
+
 
             vm.getCurrentLocation = function () {
               return vm.currentLocation;
@@ -367,6 +382,7 @@
                 //$log.log('map init()');
                 //intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
                 vehicleService.addListener('rtgps', vm.updateMarker);
+                userprefService.addListener('setUserPref', vm.setUserPref);
             };
 
             vm.init();

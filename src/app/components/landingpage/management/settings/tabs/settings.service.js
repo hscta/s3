@@ -115,7 +115,8 @@
             } else {
                 $log.log('Not changing state');
             }
-        }
+        };
+
     }
 
 })();

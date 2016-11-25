@@ -110,6 +110,7 @@
                     <th>Vehicle No</th>
                     <th>Time</th>
                     <th>Reason</th>
+                    <th>Speed</th>
                     <th>Opperation Mode</th>
                     <th>Location</th>
                 </tr>
@@ -119,6 +120,7 @@
                     <td>{{report.vehicleno}}</td>
                     <td>{{report.gpstime | date : 'd MMM, h:mm a'}}</td>
                     <td>{{report.alarmreason}}</td>
+                    <td>{{report.speed}}</td>
                     <td>{{report.opermode}}</td>
                     <td>
                         <span class="latlng loc{{$index}}"

@@ -19,6 +19,7 @@
         vm.isdiplay = false;
         vm.showBtn = false;
 
+        vm.currentGroupAsset = settingsService.lastGroup;
 
         vm.handleStartupData = function (resp) {
             $log.log(resp);

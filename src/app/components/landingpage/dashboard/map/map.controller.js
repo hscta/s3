@@ -107,6 +107,10 @@
             vm.inMap.bounds = mapService.getBounds();
         };
 
+        vm.setUserPref = function(userSettings) {
+            vm.inMap.center = userSettings.station;
+        };
+
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.inMap.mapControl.getGMap(), 'resize');
             return true;
@@ -560,6 +564,7 @@
             mapService.addListener('rtgps', vm.updateMarker);
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
+            mapService.addListener('setUserPref', vm.setUserPref);
         };
 
         // Google Map Custom HTML Marker ================================================================================================================
