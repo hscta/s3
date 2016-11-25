@@ -121,14 +121,32 @@
         };
 
 
+        vm.showAllMarkers = function() {
+            for (var idx in vm.markerByPath) {
+                var rtgps = vehicleService.vehiclesByPath[idx].rtgps;
+                vm.markerByPath[idx].setVisible(vm.checkRoaded(rtgps) && true);
+            }
+        };
+
         vm.runFilters = function (filterStr) {
             // $log.log("runFilters");
-            // newMapService.infoWindowClose();
             vm.filterStr = filterStr;
             markerInfowindow.close();
 
-            for (var idx in vm.markerByPath) {
-                vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
+            if(vm.filterStr.length == 0) {
+                vm.showAllMarkers();
+                return;
+            }
+
+            var centerMap = false;
+            if(vm.filterStr.length > 2) {
+                for (var idx in vm.markerByPath) {
+                    var visible = vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
+                    if(visible && !centerMap) {
+                        vm.inMap.map.setCenter(vm.markerByPath[idx].getPosition());
+                        centerMap = true;
+                    }
+                }
             }
         };
 
@@ -141,7 +159,6 @@
                 return false;
             }
 
-            var marker = vm.markerByPath[rtgps.vehiclepath];
             var visible = false;
             if (!vm.matchesAnyMarkerData(rtgps, filterStr)) {
                 visible = false;
@@ -154,16 +171,19 @@
                     vm.inCustomMaker[rtgps.vehiclepath].show();
                 }
             }
-            marker.setVisible(vm.checkRoaded(rtgps) && visible);
-            if (marker.vehiclepath in vm.inCustomMaker) {
-                if (marker.getVisible() && vm.geoFilters.showVehicleNumber) {
+
+            visible = vm.checkRoaded(rtgps) && visible;
+            vm.markerByPath[rtgps.vehiclepath].setVisible(visible);
+
+            if (rtgps.vehiclepath in vm.inCustomMaker) {
+                if (visible && vm.geoFilters.showVehicleNumber) {
                     vm.inCustomMaker[rtgps.vehiclepath].show();
                 } else {
                     vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             }
 
-            return marker.getVisible();
+            return visible;
         };
 
 
@@ -670,7 +690,7 @@
                 vm.onload();
             });
 
-            $interval(vm.resizeMap, 1000);
+            //$interval(vm.resizeMap, 1000);
 
             vm.inMap.map.addListener('zoom_changed', function () {
                 newMapService.zoomChanged();
