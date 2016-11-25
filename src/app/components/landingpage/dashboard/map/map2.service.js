@@ -38,8 +38,8 @@
             vm.setInMapLocation = function (loc) {
                 vm.inMap.center = angular.copy(loc);
                 vm.inMap.map.setCenter({
-                    lat : vm.inMap.center.latitude,
-                    lng : vm.inMap.center.longitude
+                    lat: vm.inMap.center.latitude,
+                    lng: vm.inMap.center.longitude
                 });
             };
 
@@ -53,10 +53,8 @@
 
 
             vm.setClickedMarker = function (model) {
-                $log.log(model);
-
-                for ( var idx in vehicleService.vehiclesByPath){
-                    if ( idx == model.vehiclepath){
+                for (var idx in vehicleService.vehiclesByPath) {
+                    if (idx == model.vehiclepath) {
                         delete model['marker'];
                         vm.inMap.markers.clickedMarker = vehicleService.vehiclesByPath[idx];
                         break;
@@ -102,7 +100,7 @@
 
             vm.changeMarkerIcon = function () {
                 var scale = vm.getIconScale();
-                for(var idx in vm.inMap.markers.markerByPath){
+                for (var idx in vm.inMap.markers.markerByPath) {
                     vm.inMap.markers.markerByPath[idx].icon.scale = scale;
                     vm.inMap.markers.markerByPath[idx].setIcon(vm.inMap.markers.markerByPath[idx].icon);
                 }
@@ -135,22 +133,22 @@
             };
 
             vm.locations = {
-                BANGALORE:{
+                BANGALORE: {
                     id: vm.loc.BANGALORE,
                     notation: 'BLR',
                     latlng: {latitude: 12.967995, longitude: 77.597953}
                 },
-                HYDERABAD:{
+                HYDERABAD: {
                     id: vm.loc.HYDERABAD,
                     notation: 'HYD',
                     latlng: {latitude: 17.384125, longitude: 78.479447}
                 },
-                DELHI:{
+                DELHI: {
                     id: vm.loc.DELHI,
                     notation: 'DEL',
                     latlng: {latitude: 28.614132, longitude: 77.215449}
                 },
-                MUMBAI:{
+                MUMBAI: {
                     id: vm.loc.MUMBAI,
                     notation: 'MUM',
                     latlng: {latitude: 19.195549, longitude: 72.936381}
@@ -176,7 +174,7 @@
             };
 
             vm.zoomChanged = function () {
-                if(vm.inMap.map.getZoom() % 2 == 0) {
+                if (vm.inMap.map.getZoom() % 2 == 0) {
                     vm.changeMarkerIcon();
                 }
             };
@@ -237,18 +235,7 @@
                     }
                 }
                 return ORANGE_ICON;
-            };
 
-            vm.getIconScale = function(){
-                var scale = 0.8 + (vm.inMap.map.getZoom()-12)*0.5/4;
-                if (scale < 0.3)
-                    scale = 0.3;
-                return scale;
-            }
-
-            vm.getIcon = function(rtgps){
-                var direction = rtgps.direction;
-                // var color = '#FF0000';
                 // if(str == 'red'){
                 //     color = '#e74c3c'
                 // }else if(str == 'green'){
@@ -258,28 +245,39 @@
                 // }else if(str == 'yellow'){
                 //     color = '#f39c12'
                 // }
-                if(direction != null){
+            };
+
+            vm.getIconScale = function () {
+                var scale = 0.8 + (vm.inMap.map.getZoom() - 12) * 0.5 / 4;
+                if (scale < 0.3)
+                    scale = 0.3;
+                return scale;
+            };
+
+            vm.getIcon = function (rtgps) {
+                var direction = rtgps.direction;
+                if (direction != null) {
                     direction = 0;
                 }
+
                 return {
-                    path:"M20.686,15.001c0,3.139-2.546,5.684-5.686,5.684s-5.685-2.545-5.685-5.684c0-3.14,2.545-5.685,5.685-5.685 S20.686,11.861,20.686,15.001z M15,1L6,11.587c0,0,3.014-3.984,9-3.984s9,3.984,9,3.984L15,1z",
+                    path: "M20.686,15.001c0,3.139-2.546,5.684-5.686,5.684s-5.685-2.545-5.685-5.684c0-3.14,2.545-5.685,5.685-5.685 S20.686,11.861,20.686,15.001z M15,1L6,11.587c0,0,3.014-3.984,9-3.984s9,3.984,9,3.984L15,1z",
                     fillColor: vm.getMarkerColor(rtgps),
-                    // iconColor: vm.getMarkerColor(data),
                     rotation: direction,
                     fillOpacity: 1,
-                    anchor: new google.maps.Point(15,15),
+                    anchor: new google.maps.Point(15, 15),
                     strokeWeight: 1.5,
-                    strokeColor:'#ffffff',
-                    scale: vm.getIconScale(),
+                    strokeColor: '#ffffff',
+                    scale: vm.getIconScale()
                 }
             };
 
-            vm.setMarkerIcon = function (rtgps) {
-                // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
-                var newIcon = vm.getIcon(rtgps);
-                if (newIcon != rtgps.icon)
-                    rtgps.icon = newIcon;
-            };
+            // vm.setMarkerIcon = function (rtgps) {
+            //     // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
+            //     var newIcon = vm.getIcon(rtgps);
+            //     if (newIcon != rtgps.icon)
+            //         rtgps.icon = newIcon;
+            // };
 
 
             vm.getMarkerIndex = function (id) {

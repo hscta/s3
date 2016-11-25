@@ -49,6 +49,9 @@
         vm.processVehicleData = function (msg) {
             var newData = msg[1];
 
+            if(newData.vehiclepath == null || newData.vehiclepath.length == 0)
+                return null;
+
             if (!(newData.vehiclepath in vm.vehiclesByPath)) {
                 //vm.vehiclesByPath[newData.vehiclepath] = msg;
                 $log.log("Receiveing data of vehicle not owned by user!!");
@@ -127,11 +130,11 @@
         }
 
         vm.updateVehicle = function (msg, key) {
-            if (msg.length == 2 && msg[0] != null && msg[1] != null
-                && msg[0] != undefined && msg[1] != undefined) {
+            if (msg.length == 2 && msg[0] != null && msg[1] != null) {
                 var vehicleObj = vm.processVehicleData(msg);
                 //$log.log(vehicleObj);
-                vm.callListeners(vehicleObj, key);
+                if(vehicleObj)
+                    vm.callListeners(vehicleObj, key);
             } else {
                 $log.log("invalid rtgps data");
             }

@@ -4,7 +4,7 @@
         .module('uiplatform')
         .controller('GoogleMapController', GoogleMapController);
 
-    function GoogleMapController($scope, $log,cpuService, newMapService,
+    function GoogleMapController($scope, $log, cpuService, newMapService,
                                  $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
                                  vehicleService) {
         $log.log('MapController');
@@ -27,34 +27,6 @@
 
         vm.onRoaded = true;
         vm.offRoaded = false;
-
-        function setMapHeight() {
-            // console.log('hel man');
-            wh = $(window).height();
-            // isRendered('.angular-google-map-container', function (el) {
-            //     el.css('height', (wh - header_height) + 'px');
-            // });
-            isRendered('.alert-md-content', function (el) {
-                el.css('height', (wh - header_height) + 'px');
-            });
-
-            isRendered('#map', function (el) {
-                el.css('height', (wh - header_height) + 'px');
-            });
-        }
-
-        $(window).resize(function () {
-            setMapHeight();
-        });
-
-        function isRendered(el, callback) {
-            var isr_interval = setInterval(function () {
-                if ($(el).length > 0) {
-                    callback($(el));
-                    clearInterval(isr_interval);
-                }
-            }, 200)
-        }
 
         vm.leftToolbar = function () {
             return geofenceViewService.getToolbarVar();
@@ -104,7 +76,6 @@
         };
 
 
-
         vm.updateMarker2 = function (rtgps) {
             // $log.log('updateMarker2');
             // $log.log(rtgps);
@@ -115,20 +86,20 @@
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(rtgps.latitude, rtgps.longitude),
                 icon: newMapService.getIcon(rtgps),
-                vehiclepath:rtgps.vehiclepath
+                vehiclepath: rtgps.vehiclepath
             });
 
             // var data = rtgps.vehiclepath;
 
-            if(!(rtgps.vehiclepath in vm.markerByPath)){
+            if (!(rtgps.vehiclepath in vm.markerByPath)) {
                 vm.markerByPath[rtgps.vehiclepath] = marker;
             }
 
-            google.maps.event.addListener(marker, 'click', function(event) {
+            google.maps.event.addListener(marker, 'click', function (event) {
                 newMapService.setClickedMarker(this);
                 markerInfowindow.setContent(document.getElementById("marker_infowindow").innerHTML);
                 $scope.clickedMarker = vm.inMap.markers.clickedMarker;
-                $scope.hideMobilityControls =  vm.inMap.markers.clickedMarker.hideMobilityControls;
+                $scope.hideMobilityControls = vm.inMap.markers.clickedMarker.hideMobilityControls;
                 markerInfowindow.open(map, this);
             });
             marker.setMap(vm.inMap.map);
@@ -136,14 +107,16 @@
         };
 
         vm.updateMarker = function (rtgps) {
-            if ((rtgps.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
+            if ((rtgps.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber) {
                 vm.inCustomMaker[rtgps.vehiclepath].setPosition(rtgps);
             }
-            if ( vm.markerByPath.hasOwnProperty(rtgps.vehiclepath)){
+
+            if (rtgps.vehiclepath in vm.markerByPath) {
                 var markerPos = new google.maps.LatLng(rtgps.latitude, rtgps.longitude);
                 vm.markerByPath[rtgps.vehiclepath].setPosition(markerPos);
                 vm.updateMarkerIcon(rtgps);
             }
+
             vm.applyFilterToMarker(rtgps, vm.filterStr);
         };
 
@@ -154,12 +127,20 @@
             vm.filterStr = filterStr;
             markerInfowindow.close();
 
-            for (var idx in vehicleService.vehiclesByPath) {
+            for (var idx in vm.markerByPath) {
                 vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
             }
         };
 
         vm.applyFilterToMarker = function (rtgps, filterStr) {
+            if (rtgps == null)
+                return false;
+
+            if (!(rtgps.vehiclepath in vm.markerByPath)) {
+                console.log(rtgps.vehiclepath);
+                return false;
+            }
+
             var marker = vm.markerByPath[rtgps.vehiclepath];
             var visible = false;
             if (!vm.matchesAnyMarkerData(rtgps, filterStr)) {
@@ -169,7 +150,7 @@
                 }
             } else {
                 visible = true;
-                if (rtgps.vehiclepath in vm.inCustomMaker  && vm.geoFilters.showVehicleNumber) {
+                if (rtgps.vehiclepath in vm.inCustomMaker && vm.geoFilters.showVehicleNumber) {
                     vm.inCustomMaker[rtgps.vehiclepath].show();
                 }
             }
@@ -181,36 +162,36 @@
                     vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             }
-            if(marker.visible && rtgps.ignitionstatus){
-                console.log('===',marker.icon.fillColor, marker.visible);
-            }
+
             return marker.getVisible();
         };
 
 
-        vm.matchesAnyMarkerData = function (marker, filterStr) {
+        vm.matchesAnyMarkerData = function (rtgps, filterStr) {
             cpuService.track('new_one');
-            for (var eachidx in marker) {
+            for (var eachidx in rtgps) {
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
-                if (marker[eachidx]) {
-                    var lowercasefilterStr = filterStr.toString().toLowerCase();
-                    var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
+                if (rtgps[eachidx] == null)
+                    continue;
 
-                    if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                        return true;
-                    }
+                var lowercasefilterStr = filterStr.toString().toLowerCase();
+                var lowercaseMarkerStr = rtgps[eachidx].toString().toLowerCase();
+
+                if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                    return true;
                 }
 
-                if (marker[eachidx].constructor == Object) {
-                    for (var myMeta in marker[eachidx]) {
+
+                if (rtgps[eachidx].constructor == Object) {
+                    for (var myMeta in rtgps[eachidx]) {
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
-                        if (marker[eachidx][myMeta]) {
+                        if (rtgps[eachidx][myMeta]) {
                             var lowercasefilterStr = filterStr.toString().toLowerCase();
-                            // $log.log(marker[eachidx][myMeta]);
-                            var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
+                            // $log.log(rtgps[eachidx][myMeta]);
+                            var lowercaseMarkerStr = rtgps[eachidx][myMeta].toString().toLowerCase();
 
                             if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
                                 return true;
@@ -220,8 +201,6 @@
                 }
             }
             cpuService.track('new_one');
-
-            //$log.log("not matching " + marker.id);
             return false;
         };
 
@@ -246,7 +225,7 @@
                 }
             }
 
-            $timeout(vm.runStats, 10000);
+            //$timeout(vm.runStats, 10000);
             // $log.log(vm.vehicleStats);
         };
 
@@ -261,7 +240,7 @@
                     checkNoComm(rtgps, function (rtgps) {
                         vm.vehicleStats.noComm++;
                     });
-                    if(rtgps.carbattery < 2){
+                    if (rtgps.carbattery < 2) {
                         vm.vehicleStats.devPullout++;
                     }
                     if (vm.matchesAnyMarkerData(rtgps, filterStr)) {
@@ -320,7 +299,7 @@
         vm.applyFilters = function (filterData, recall) {
             var idx;
             var marker;
-            if(recall == null) {
+            if (recall == null) {
                 recall = 1;
             }
 
@@ -333,7 +312,7 @@
                             marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
                         }
                     } else {
-                        if(recall == 1) {
+                        if (recall == 1) {
                             marker.options.animation = null;
                             marker.markerInfo.setAnimation(null);
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
@@ -350,7 +329,7 @@
                             marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
                         }
                     } else {
-                        if(recall == 1) {
+                        if (recall == 1) {
                             marker.options.animation = null;
                             marker.markerInfo.setAnimation(null);
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
@@ -369,7 +348,7 @@
                         });
                     }
                     else {
-                        if(recall == 1) {
+                        if (recall == 1) {
                             marker.options.animation = null;
                             marker.markerInfo.setAnimation(null);
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
@@ -424,7 +403,7 @@
             var lastSeenAt = marker.timestamp.getTime();
             var noCommThreshold = 8 * 3600 * 1000;
             if (currentTime - lastSeenAt > noCommThreshold) {
-                if(callback){
+                if (callback) {
                     callback(marker);
                 }
             }
@@ -542,7 +521,7 @@
 
         vm.customOverlay = function (rtgps) {
             if (!(rtgps.vehiclepath in vm.inCustomMaker)) {
-                vm.inCustomMaker[rtgps.vehiclepath] = new customMapOverlay.CustomMarker(rtgps.latitude, rtgps.longitude,newMapService.inMap.map , {marker: rtgps});
+                vm.inCustomMaker[rtgps.vehiclepath] = new customMapOverlay.CustomMarker(rtgps.latitude, rtgps.longitude, newMapService.inMap.map, {marker: rtgps});
             }
         };
         vm.showVehicleNumber = function (vn) {
@@ -573,7 +552,7 @@
             }
             vm.inMap.map = new google.maps.Map(mapCanvas, vm.inMap.mapOptions);
 
-            vm.inMap.map.addListener('click', function() {
+            vm.inMap.map.addListener('click', function () {
                 markerInfowindow.close();
                 fenceInfowindow.close();
             });
@@ -586,9 +565,9 @@
         }
 
         vm.showMyPolygons = function () {
-            for ( var i = 0; i < vm.inMap.polygons.length; i++ ) {
+            for (var i = 0; i < vm.inMap.polygons.length; i++) {
                 var paths = [];
-                for ( var j = 0; j < vm.inMap.polygons[i].path.length; j++ ) {
+                for (var j = 0; j < vm.inMap.polygons[i].path.length; j++) {
                     paths.push(new google.maps.LatLng(vm.inMap.polygons[i].path[j].latitude,
                         vm.inMap.polygons[i].path[j].longitude));
                 }
@@ -605,7 +584,7 @@
         };
 
         vm.showMyCircles = function () {
-            for ( var i = 0; i < vm.inMap.circles.length; i++ ) {
+            for (var i = 0; i < vm.inMap.circles.length; i++) {
                 vm.inMap.circles.circleInfo = new google.maps.Circle({
                     strokeColor: vm.inMap.circles[i].stroke.color,
                     strokeOpacity: 0.8,
@@ -617,7 +596,7 @@
                 });
                 vm.inMap.circles.circleInfo.setMap(vm.inMap.map);
 
-                google.maps.event.addListener( vm.inMap.circles.circleInfo , 'click', function(e) {
+                google.maps.event.addListener(vm.inMap.circles.circleInfo, 'click', function (e) {
                     var contentString = "<table><tbody>\
                                             <tr>\
                                                 <th>Name:</th>\
@@ -637,8 +616,7 @@
 
 
         vm.onload = function () {
-            $log.log('onload');
-            $scope.$apply(function(){
+            $scope.$apply(function () {
                 $compile(document.getElementById("markerWindow"))($scope);
             });
         };
@@ -649,16 +627,54 @@
             newMapService.showHistory();
         };
 
+
+        function setMapHeight() {
+            // console.log('hel man');
+            wh = $(window).height();
+            // isRendered('.angular-google-map-container', function (el) {
+            //     el.css('height', (wh - header_height) + 'px');
+            // });
+            isRendered('.alert-md-content', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
+
+            isRendered('#map', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
+        }
+
+        $(window).resize(function () {
+            setMapHeight();
+        });
+
+        function isRendered(el, callback) {
+            var isr_interval = setInterval(function () {
+                if ($(el).length > 0) {
+                    callback($(el));
+                    clearInterval(isr_interval);
+                }
+            }, 200)
+        }
+
+
         vm.init = function () {
             vm.loadMap();
+            setMapHeight();
             vm.addListener();
             geofenceViewService.getMyFences();
-            //$interval(vm.runStats, 3000);
-            //$timeout(vm.runStats, 5000);
 
-            vm.runStats();
+            $timeout(vm.runStats, 5000);
+            $interval(vm.runStats, 10000);
 
-            setMapHeight();
+            markerInfowindow.addListener('domready', function () {
+                vm.onload();
+            });
+
+            $interval(vm.resizeMap, 1000);
+
+            vm.inMap.map.addListener('zoom_changed', function () {
+                newMapService.zoomChanged();
+            });
 
             // vm.infoWindowCompiled = false;
             // vm.inMap.map.addListener('tilesloaded', function() {
@@ -667,16 +683,6 @@
             //     vm.onload();
             // vm.infoWindowCompiled = true;
             // });
-            markerInfowindow.addListener('domready', function() {
-                $log.log("marker info window onload");
-                vm.onload();
-            });
-
-            $interval(vm.resizeMap, 1000);
-
-            vm.inMap.map.addListener('zoom_changed', function() {
-                newMapService.zoomChanged();
-            });
         };
 
         vm.resizeMap = function () {

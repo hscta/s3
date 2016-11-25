@@ -299,7 +299,7 @@
     <div layout="column" id="markerWindow" ng-cloak>
         <div class="info-w-header">
         </div>
-        <md-table-container style="min-height: 130px; max-height:130px; min-width:300px; max-width:300px;
+        <md-table-container style="min-height: 150px; max-height:150px; min-width:300px; max-width:300px;
                                 position: relative; overflow: hidden;">
             <table md-table md-row-select multiple class="trPadding" >
                 <tbody md-body>
@@ -335,11 +335,13 @@
                     <td md-cell
                         ng-class="{'redBattery' : clickedMarker.rtgps.devbattery < 3.55 }">{{clickedMarker.rtgps.devbattery}}</td>
                 </tr>
-                <tr md-row md-select-id="deviceid" md-auto-select>
-                    <td md-cell><strong>Device ID</strong></td>
-                    <td md-cell class="infoWmiddle">{{clickedMarker.rtgps.deviceid}}</td>
+                <tr md-row md-select-id="cartype" md-auto-select>
                     <td md-cell><strong>Make</strong></td>
                     <td md-cell>{{clickedMarker.rtgps.meta.cartype}}</td>
+                </tr>
+                <tr md-row md-select-id="deviceid" md-auto-select>
+                    <td md-cell><strong>Device ID</strong></td>
+                    <td md-cell colspan="3">{{clickedMarker.rtgps.deviceid}}</td>
                 </tr>
                 </tbody>
             </table>
