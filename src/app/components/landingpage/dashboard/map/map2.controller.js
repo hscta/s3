@@ -690,7 +690,7 @@
                 vm.onload();
             });
 
-            //$interval(vm.resizeMap, 1000);
+            $interval(vm.resizeMap, 1000);
 
             vm.inMap.map.addListener('zoom_changed', function () {
                 newMapService.zoomChanged();

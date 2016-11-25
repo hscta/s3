@@ -62,7 +62,7 @@
 
                     }
                 },
-                'childType':'location',
+                'childType': 'location',
                 'children': [
                     {
                         id: vm.loc.BANGALORE,
@@ -102,11 +102,15 @@
 
                     }
                 },
-                'childType':'button',
+                'childType': 'button',
                 'children': [
                     {
                         'id': 'setGeoFilter.showAll',
-                        'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'historymap': true,
+                        'name': 'Show All',
+                        'iconType': 'fa',
+                        'icon': 'fa-eye',
+                        'type': 'toggleButton',
+                        'historymap': true,
                         'data': {
                             active: true,
                             'type': 'function', 'function': function (active) {
@@ -158,7 +162,11 @@
                     },
                     {
                         'id': 'setGeoFilter.cityLimits',
-                        'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'historymap': true,
+                        'name': 'City Limits',
+                        'iconType': 'fa',
+                        'icon': 'fa-road',
+                        'type': 'toggleButton',
+                        'historymap': true,
                         'data': {
                             active: false,
                             'type': 'function', 'function': function (active) {
@@ -167,8 +175,13 @@
                         }
                     },
                     {
-                        'id': 'setGeoFilter.getGeo', 'description': 'Use only when new fences are created',
-                        'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'historymap': true,
+                        'id': 'setGeoFilter.getGeo',
+                        'description': 'Use only when new fences are created',
+                        'name': 'Refresh Geofences',
+                        'iconType': 'fa',
+                        'icon': 'fa-globe',
+                        'type': 'button',
+                        'historymap': true,
                         'data': {
                             active: true,
                             'type': 'function', 'function': function () {
@@ -191,7 +204,7 @@
 
                     }
                 },
-                'childType':'button',
+                'childType': 'button',
                 'children': [
                     {
                         'id': 'batteryFilter.devBattery',
@@ -260,20 +273,19 @@
         };
 
 
-        vm.childClick = function (data,type) {
-            if(type == 'location'){
+        vm.childClick = function (data, type) {
+            if (type == 'location') {
                 vm.currentLocation = data.id;
                 $log.log($state.current.name);
-                if ( $state.current.name == 'home.history')
+                if ($state.current.name == 'home.history')
                     historyService.setInMapLocation(data.latlng);
                 else
                     newMapService.setInMapLocation(data.latlng);
-            }else if(type == 'button'){
+            } else if (type == 'button') {
                 $log.log('other')
                 data();
             }
         };
-
 
 
         vm.init = function () {
@@ -318,7 +330,7 @@
         function setActive(id, active) {
             var rid = id;
             id = id.split('.');
-            if(id.length <= 1){
+            if (id.length <= 1) {
                 id = id[0];
                 for (var key in vm.leftTB) {
                     if (vm.leftTB.hasOwnProperty(key)) {
@@ -328,9 +340,9 @@
                         }
                     }
                 }
-            }else{
-                for(var idx=0; idx < vm.leftTB.length; idx++){
-                    if(vm.leftTB[idx].id==id[0]){
+            } else {
+                for (var idx = 0; idx < vm.leftTB.length; idx++) {
+                    if (vm.leftTB[idx].id == id[0]) {
                         for (var key in vm.leftTB[idx].children) {
                             if (vm.leftTB[idx].children.hasOwnProperty(key)) {
                                 if (vm.leftTB[idx].children[key].id == rid) {
@@ -345,14 +357,14 @@
         }
 
         function addFilter(filter, active) {
-            filter = filter.split('.')
+            filter = filter.split('.');
             filter = filter[filter.length - 1];
             vm.geoFilters[filter] = active;
             // console.log(filter +' : '+vm.geoFilters[filter]);
         }
 
         function setFilter(filterType) {
-            filterType = filterType.split('.')
+            filterType = filterType.split('.');
             filterType = filterType[filterType.length - 1];
             $log.log(filterType);
             geofenceViewService.applyFilters(filterType);
