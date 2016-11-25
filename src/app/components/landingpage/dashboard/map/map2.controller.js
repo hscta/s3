@@ -109,24 +109,20 @@
             // $log.log('updateMarker2');
             // $log.log(rtgps);
 
-            vm.inMarkers.push(rtgps);
-            vm.customOverlay(rtgps);
-            var markerPos = new google.maps.LatLng(rtgps.latitude,
-                rtgps.longitude
-            );
+            //vm.inMarkers.push(rtgps);
+
 
             var marker = new google.maps.Marker({
-                position:markerPos,
-                icon: rtgps.icon,
+                position: new google.maps.LatLng(rtgps.latitude, rtgps.longitude),
+                icon: newMapService.getIcon(rtgps),
                 vehiclepath:rtgps.vehiclepath
             });
 
-            marker.setMap(vm.inMap.map);
+            // var data = rtgps.vehiclepath;
 
-            var data = rtgps.vehiclepath;
-
-            vm.markerByPath[rtgps.vehiclepath] ={};
-            vm.markerByPath[rtgps.vehiclepath] = marker;
+            if(!(rtgps.vehiclepath in vm.markerByPath)){
+                vm.markerByPath[rtgps.vehiclepath] = marker;
+            }
 
             google.maps.event.addListener(marker, 'click', function(event) {
                 newMapService.setClickedMarker(this);
@@ -135,15 +131,20 @@
                 $scope.hideMobilityControls =  vm.inMap.markers.clickedMarker.hideMobilityControls;
                 markerInfowindow.open(map, this);
             });
+            marker.setMap(vm.inMap.map);
+            vm.customOverlay(rtgps);
         };
 
-        vm.updateMarker = function (vehicleData) {
-            // if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
-            if ((vehicleData.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
-                // vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
+        vm.updateMarker = function (rtgps) {
+            if ((rtgps.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber ) {
+                vm.inCustomMaker[rtgps.vehiclepath].setPosition(rtgps);
             }
-            vm.getMarkers(vehicleData);
-            // vm.applyFilterToMarker(vehicleData, vm.filterStr);
+            if ( vm.markerByPath.hasOwnProperty(rtgps.vehiclepath)){
+                var markerPos = new google.maps.LatLng(rtgps.latitude, rtgps.longitude);
+                vm.markerByPath[rtgps.vehiclepath].setPosition(markerPos);
+                vm.updateMarkerIcon(rtgps);
+            }
+            vm.applyFilterToMarker(rtgps, vm.filterStr);
         };
 
 
@@ -153,35 +154,37 @@
             vm.filterStr = filterStr;
             markerInfowindow.close();
 
-            for (var idx in vm.inMarkers) {
-                vm.applyFilterToMarker(vm.inMarkers[idx], filterStr);
+            for (var idx in vehicleService.vehiclesByPath) {
+                vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
             }
         };
 
-        vm.applyFilterToMarker = function (marker, filterStr) {
-            if (!vm.matchesAnyMarkerData(marker, filterStr)) {
-                marker.options.visible = false;
-                marker.markerInfo.setVisible(false);
-                if (marker.vehiclepath in vm.inCustomMaker) {
-                    vm.inCustomMaker[marker.vehiclepath].hide();
+        vm.applyFilterToMarker = function (rtgps, filterStr) {
+            var marker = vm.markerByPath[rtgps.vehiclepath];
+            var visible = false;
+            if (!vm.matchesAnyMarkerData(rtgps, filterStr)) {
+                visible = false;
+                if (rtgps.vehiclepath in vm.inCustomMaker) {
+                    vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             } else {
-                marker.options.visible = true;
-                marker.markerInfo.setVisible(true);
-                if (marker.vehiclepath in vm.inCustomMaker  && vm.geoFilters.showVehicleNumber) {
-                    vm.inCustomMaker[marker.vehiclepath].show();
+                visible = true;
+                if (rtgps.vehiclepath in vm.inCustomMaker  && vm.geoFilters.showVehicleNumber) {
+                    vm.inCustomMaker[rtgps.vehiclepath].show();
                 }
             }
-            marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
-            marker.markerInfo.setVisible(marker.options.visible);
+            marker.setVisible(vm.checkRoaded(rtgps) && visible);
             if (marker.vehiclepath in vm.inCustomMaker) {
-                if (marker.options.visible  && vm.geoFilters.showVehicleNumber) {
-                    vm.inCustomMaker[marker.vehiclepath].show();
+                if (marker.getVisible() && vm.geoFilters.showVehicleNumber) {
+                    vm.inCustomMaker[rtgps.vehiclepath].show();
                 } else {
-                    vm.inCustomMaker[marker.vehiclepath].hide();
+                    vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             }
-            return marker.options.visible;
+            if(marker.visible && rtgps.ignitionstatus){
+                console.log('===',marker.icon.fillColor, marker.visible);
+            }
+            return marker.getVisible();
         };
 
 
@@ -252,16 +255,16 @@
             var count = 0;
             vm.vehicleStats.noComm = 0;
             vm.vehicleStats.devPullout = 0;
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (vm.checkRoaded(marker)) {
-                    checkNoComm(marker, function (marker) {
+            for (var idx in vehicleService.vehiclesByPath) {
+                var rtgps = vehicleService.vehiclesByPath[idx].rtgps;
+                if (vm.checkRoaded(rtgps)) {
+                    checkNoComm(rtgps, function (rtgps) {
                         vm.vehicleStats.noComm++;
                     });
-                    if(marker.carbattery < 2){
+                    if(rtgps.carbattery < 2){
                         vm.vehicleStats.devPullout++;
                     }
-                    if (vm.matchesAnyMarkerData(marker, filterStr)) {
+                    if (vm.matchesAnyMarkerData(rtgps, filterStr)) {
                         count++;
                     } else { // <--- Can we use else if instead of this ?
                         if (filterStr === "showall") {
@@ -537,9 +540,9 @@
         };
 
 
-        vm.customOverlay = function (marker) {
-            if (!(marker.vehiclepath in vm.inCustomMaker)) {
-                vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude,newMapService.inMap.map , {marker: marker});
+        vm.customOverlay = function (rtgps) {
+            if (!(rtgps.vehiclepath in vm.inCustomMaker)) {
+                vm.inCustomMaker[rtgps.vehiclepath] = new customMapOverlay.CustomMarker(rtgps.latitude, rtgps.longitude,newMapService.inMap.map , {marker: rtgps});
             }
         };
         vm.showVehicleNumber = function (vn) {
@@ -576,13 +579,11 @@
             });
         };
 
-        vm.getMarkers = function (vehicleData) {
-            if ( vm.markerByPath.hasOwnProperty(vehicleData.vehiclepath)){
-                var markerPos = new google.maps.LatLng(vehicleData.latitude, vehicleData.longitude);
-                vm.markerByPath[vehicleData.vehiclepath].setPosition(markerPos);
-                vm.markerByPath[vehicleData.vehiclepath].setIcon(vehicleData.icon);
-            }
-        };
+        vm.updateMarkerIcon = function (rtgps) {
+            vm.markerByPath[rtgps.vehiclepath].icon.fillColor = newMapService.getMarkerColor(rtgps);
+            vm.markerByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
+            vm.markerByPath[rtgps.vehiclepath].setIcon(vm.markerByPath[rtgps.vehiclepath].icon);
+        }
 
         vm.showMyPolygons = function () {
             for ( var i = 0; i < vm.inMap.polygons.length; i++ ) {
@@ -653,7 +654,9 @@
             vm.addListener();
             geofenceViewService.getMyFences();
             //$interval(vm.runStats, 3000);
-            $timeout(vm.runStats, 3000);
+            //$timeout(vm.runStats, 5000);
+
+            vm.runStats();
 
             setMapHeight();
 
@@ -672,7 +675,7 @@
             $interval(vm.resizeMap, 1000);
 
             vm.inMap.map.addListener('zoom_changed', function() {
-                newMapService.setZoom( vm.inMap.map.getZoom());
+                newMapService.zoomChanged();
             });
         };
 

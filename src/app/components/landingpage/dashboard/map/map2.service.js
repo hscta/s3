@@ -101,9 +101,10 @@
             };
 
             vm.changeMarkerIcon = function () {
-                var inMapMarkers = vm.inMap.markers.inMarkers;
-                for (var idx = 0; idx < inMapMarkers.length; idx++) {
-                    vm.setMarkerIcon(inMapMarkers[idx]);
+                var scale = vm.getIconScale();
+                for(var idx in vm.inMap.markers.markerByPath){
+                    vm.inMap.markers.markerByPath[idx].icon.scale = scale;
+                    vm.inMap.markers.markerByPath[idx].setIcon(vm.inMap.markers.markerByPath[idx].icon);
                 }
             };
 
@@ -174,9 +175,10 @@
                 return vm.zoom;
             };
 
-            vm.setZoom = function (zoom) {
-                vm.zoom = zoom;;
-                vm.changeMarkerIcon();
+            vm.zoomChanged = function () {
+                if(vm.inMap.map.getZoom() % 2 == 0) {
+                    vm.changeMarkerIcon();
+                }
             };
 
             vm.getBounds = function () {
@@ -224,11 +226,11 @@
             var BLUE_ICON = 'blue';
             var ORANGE_ICON = 'orange';
 
-            vm.getMarkerColor = function (vehicleData) {
-                if (!vehicleData.mobilistatus) {
+            vm.getMarkerColor = function (rtgps) {
+                if (!rtgps.mobilistatus) {
                     return RED_ICON;
                 } else {
-                    if (vehicleData.ignitionstatus) {
+                    if (rtgps.ignitionstatus) {
                         return GREEN_ICON;
                     } else {
                         return BLUE_ICON;
@@ -238,16 +240,14 @@
             };
 
             vm.getIconScale = function(){
-                var scale = 0.8 + (vm.zoom-12)*0.5/4;
+                var scale = 0.8 + (vm.inMap.map.getZoom()-12)*0.5/4;
                 if (scale < 0.3)
                     scale = 0.3;
-
-                // $log.log(vm.inMap.markers.markerByPath)
                 return scale;
             }
 
-            vm.getIcon = function(data){
-                var direction = data.direction;
+            vm.getIcon = function(rtgps){
+                var direction = rtgps.direction;
                 // var color = '#FF0000';
                 // if(str == 'red'){
                 //     color = '#e74c3c'
@@ -258,12 +258,12 @@
                 // }else if(str == 'yellow'){
                 //     color = '#f39c12'
                 // }
-                if(direction == undefined){
+                if(direction != null){
                     direction = 0;
                 }
                 return {
                     path:"M20.686,15.001c0,3.139-2.546,5.684-5.686,5.684s-5.685-2.545-5.685-5.684c0-3.14,2.545-5.685,5.685-5.685 S20.686,11.861,20.686,15.001z M15,1L6,11.587c0,0,3.014-3.984,9-3.984s9,3.984,9,3.984L15,1z",
-                    fillColor: vm.getMarkerColor(data),
+                    fillColor: vm.getMarkerColor(rtgps),
                     // iconColor: vm.getMarkerColor(data),
                     rotation: direction,
                     fillOpacity: 1,
@@ -274,11 +274,11 @@
                 }
             };
 
-            vm.setMarkerIcon = function (vehicleData) {
+            vm.setMarkerIcon = function (rtgps) {
                 // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
-                var newIcon = vm.getIcon(vehicleData);
-                if (newIcon != vehicleData.icon)
-                    vehicleData.icon = newIcon;
+                var newIcon = vm.getIcon(rtgps);
+                if (newIcon != rtgps.icon)
+                    rtgps.icon = newIcon;
             };
 
 
@@ -310,21 +310,19 @@
                 }
             };
 
-
             vm.updateMarker = function (vehicleObj, key) {
-                var vehicleData = vehicleObj.rtgps;
-                if (!('id' in vehicleData)) {
-                    var deviceidStr = vehicleData.deviceid;
-                    if (deviceidStr.substring(0, 5) == '213GL') {
-                        deviceidStr = deviceidStr.substring(5);
-                    }
-                    vehicleData.id = parseInt(deviceidStr);
-                    vehicleData.options = {};
-                    vehicleData.options.visible = false;
-                }
+                var rtgps = vehicleObj.rtgps;
+                // if (!('id' in rtgps)) {
+                //     var deviceidStr = rtgps.deviceid;
+                //     if (deviceidStr.substring(0, 5) == '213GL') {
+                //         deviceidStr = deviceidStr.substring(5);
+                //     }
+                //     rtgps.id = parseInt(deviceidStr);
+                //     rtgps.options = {};
+                //     rtgps.options.visible = false;
+                // }
 
-                vm.setMarkerIcon(vehicleData);
-                vm.callListeners(vehicleData, key);
+                vm.callListeners(rtgps, key);
             };
 
 

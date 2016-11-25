@@ -61,55 +61,55 @@
                 vm.callListeners(vehicleObj.rtgps, 'rtgps2');
             }
 
-            var vehicleData = vehicleObj.rtgps;
+            var rtgps = vehicleObj.rtgps;
             //$log.log(msg[0]);
             //$log.log(newData);
 
 
-            vehicleData.timestamp = new Date(newData.timestamp);
-            vehicleData.deviceid = newData.deviceid;
-            vehicleData.latitude = newData.latitude;
-            vehicleData.longitude = newData.longitude;
-            vehicleData.altitude = newData.altitude;
-            vehicleData.vehicleno = newData.vehicleno;
-            vehicleData.odometer = newData.odometer;
-            vehicleData.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
-            vehicleData.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
-            vehicleData.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
-            vehicleData.devbattery = parseFloat(parseFloat(newData.devbattery).toFixed(2));
-            vehicleData.ignitionstatus = newData.ignitionstatus;
-            vehicleData.mobilistatus = newData.mobilistatus;
+            rtgps.timestamp = new Date(newData.timestamp);
+            rtgps.deviceid = newData.deviceid;
+            rtgps.latitude = newData.latitude;
+            rtgps.longitude = newData.longitude;
+            rtgps.altitude = newData.altitude;
+            rtgps.vehicleno = newData.vehicleno;
+            rtgps.odometer = newData.odometer;
+            rtgps.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
+            rtgps.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
+            rtgps.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
+            rtgps.devbattery = parseFloat(parseFloat(newData.devbattery).toFixed(2));
+            rtgps.ignitionstatus = newData.ignitionstatus;
+            rtgps.mobilistatus = newData.mobilistatus;
 
             var currentTime = new Date().getTime();
 
-            if (currentTime - vehicleData.timestamp.getTime() > 8 * 3600 * 1000) {
-                vehicleData.noComm = 'no communication';
-                vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
+            if (currentTime - rtgps.timestamp.getTime() > 8 * 3600 * 1000) {
+                rtgps.noComm = 'no communication';
+                rtgps.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
             }
 
-            if (vehicleData.ignitionstatus == 1) {
-                vehicleData.ignitionstatusStr = VEHICLE_ON;
-                vehicleData.ignitionstatusFilter = VEHICLE_RUNNING;
+            if (rtgps.ignitionstatus == 1) {
+                rtgps.ignitionstatusStr = VEHICLE_ON;
+                rtgps.ignitionstatusFilter = VEHICLE_RUNNING;
 
             } else {
-                vehicleData.ignitionstatusStr = VEHICLE_OFF;
-                vehicleData.ignitionstatusFilter = VEHICLE_STOPPED;
+                rtgps.ignitionstatusStr = VEHICLE_OFF;
+                rtgps.ignitionstatusFilter = VEHICLE_STOPPED;
             }
 
-            if (vehicleData.mobilistatus == 1) {
-                vehicleData.mobilistatusFilter = VEHICLE_ACTIVE;
+            if (rtgps.mobilistatus == 1) {
+                rtgps.mobilistatusFilter = VEHICLE_ACTIVE;
             } else {
-                vehicleData.mobilistatusFilter = VEHICLE_IMMOBILIZED;
-                vehicleData.ignitionstatusFilter = '';
+                rtgps.mobilistatusFilter = VEHICLE_IMMOBILIZED;
+                rtgps.ignitionstatusFilter = '';
             }
 
-            if(vehicleData.carbattery < 2){
-                vehicleData.devicepulloutFilter = VEHICLE_DEVICE_PULLOUT;
+            if(rtgps.carbattery < 2){
+                rtgps.devicepulloutFilter = VEHICLE_DEVICE_PULLOUT;
             }
 
-            // checkNoComm(vehicleData, function(){
-            //     vehicleData.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
-            //     console.log(vehicleData.vehicleno);
+            // checkNoComm(rtgps, function(){
+            //     rtgps.notcommunicatingFilter = VEHICLE_NOT_COMMUNICATING;
+            //     console.log(rtgps.vehicleno);
             // })
             return vehicleObj;
         };
