@@ -23,6 +23,7 @@
                 markers: {
                     inMarkers: [],
                     clickedMarker: {},
+                    markerByPath: {}
                 },
                 circles: [],
                 polygons: [],
@@ -52,16 +53,22 @@
 
 
             vm.setClickedMarker = function (model) {
-                vm.inMap.markers.clickedMarker = model;
+                $log.log(model);
+
+                for ( var idx in vehicleService.vehiclesByPath){
+                    if ( idx == model.vehiclepath){
+                        delete model['marker'];
+                        vm.inMap.markers.clickedMarker = vehicleService.vehiclesByPath[idx];
+                        break;
+                    }
+                }
                 vm.inMap.markers.clickedMarker.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
             };
 
 
             vm.showHistory = function () {
-                $log.log('clicked');
-                $log.log(vm.inMap.markers.clickedMarker);
                 dialogService.show('home.history', {
-                    clickedMarker: angular.copy(vm.inMap.markers.clickedMarker)
+                    clickedMarker: vm.inMap.markers.clickedMarker
                 });
             };
 
@@ -114,8 +121,8 @@
             // var lng = 77.6480335;
 
             // Mumbai
-            var lat = 19.19554947109134;
-            var lng = 72.93638193466376;
+            // var lat = 19.19554947109134;
+            // var lng = 72.93638193466376;
 
 
             vm.loc = {
@@ -149,7 +156,7 @@
                 }
             };
 
-            vm.currentLocation = vm.locations.MUMBAI;
+            vm.currentLocation = vm.locations.BANGALORE;
 
             vm.getCurrentLocation = function () {
                 return vm.currentLocation;
@@ -193,23 +200,23 @@
 
             };
 
+            //
+            // var EXTRA_SMALL = 'extra_small';
+            // var SMALL = 'small';
+            // var MEDIUM = 'medium';
+            // var BIG = 'big';
 
-            var EXTRA_SMALL = 'extra_small';
-            var SMALL = 'small';
-            var MEDIUM = 'medium';
-            var BIG = 'big';
-
-            vm.getMarkerSize = function () {
-                if (vm.checkZoomLevel(1, 6)) {
-                    return EXTRA_SMALL;
-                } else if (vm.checkZoomLevel(7, 8)) {
-                    return SMALL;
-                } else if (vm.checkZoomLevel(9, 10)) {
-                    return MEDIUM;
-                }
-
-                return BIG;
-            };
+            // vm.getMarkerSize = function () {
+            //     if (vm.checkZoomLevel(1, 6)) {
+            //         return EXTRA_SMALL;
+            //     } else if (vm.checkZoomLevel(7, 8)) {
+            //         return SMALL;
+            //     } else if (vm.checkZoomLevel(9, 10)) {
+            //         return MEDIUM;
+            //     }
+            //
+            //     return BIG;
+            // };
 
 
             var RED_ICON = 'red';
@@ -234,6 +241,8 @@
                 var scale = 0.8 + (vm.zoom-12)*0.5/4;
                 if (scale < 0.3)
                     scale = 0.3;
+
+                // $log.log(vm.inMap.markers.markerByPath)
                 return scale;
             }
 
@@ -263,7 +272,7 @@
                     strokeColor:'#ffffff',
                     scale: vm.getIconScale(),
                 }
-            }
+            };
 
             vm.setMarkerIcon = function (vehicleData) {
                 // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';

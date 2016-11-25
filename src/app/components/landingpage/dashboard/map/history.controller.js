@@ -33,7 +33,8 @@
         };
 
         $scope.resizeMap = function () {
-            google.maps.event.trigger(vm.historyObj.historyMap.mapControl.getGMap(), 'resize');
+            google.maps.event.trigger(vm.historyObj.historyMap.map , 'resize');
+            // google.maps.event.trigger(vm.historyObj.historyMap.mapControl.getGMap(), 'resize');
             return true;
         };
 
@@ -50,6 +51,31 @@
             //$log.log(vm.fences);
         };
 
+        vm.loadMap = function () {
+            vm.historyObj.historyMap.zoom = historyService.historyMapObj.historyMap.zoom;
+            vm.historyObj.historyMap.center = historyService.historyMapObj.historyMap.center;
+            vm.createMap();
+        };
+
+        vm.createMap = function () {
+            var mapCanvas = document.getElementById("history_map");
+
+            $log.log(vm.historyObj.historyMap.center.latitude);
+
+            var lat = vm.historyObj.historyMap.center.latitude;
+            var lng = vm.historyObj.historyMap.center.longitude;
+            vm.historyObj.historyMap.mapOptions = {
+                center: new google.maps.LatLng(lat,lng),
+                zoom: vm.historyObj.historyMap.zoom
+            }
+            vm.historyObj.historyMap.map = new google.maps.Map(mapCanvas,
+                vm.historyObj.historyMap.mapOptions);
+
+            vm.historyObj.historyMap.map.addListener('click', function() {
+                // markerInfowindow.close();
+                // fenceInfowindow.close();
+            });
+        };
 
         vm.init = function () {
             // $log.log(vm.historyObj.dashboardMapObj.clickedMarker);
@@ -62,15 +88,14 @@
                 mapObj = $state.params.mapObj;
                 historyService.resetHistoryData();
                 historyService.historyMapObj.dashboardMapObj.clickedMarker = mapObj.clickedMarker;
-                $log.log(mapObj)
-                $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
-                $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
+                // $scope.clickedMarker = vm.historyObj.dashboardMapObj.clickedMarker;
+                // $scope.inMarkers = vm.historyObj.dashboardMapObj.inMarkers;
 
                 //$log.log($scope.clickedMarker);
-                vm.historyObj.historyMap.center.latitude = vm.historyObj.dashboardMapObj.clickedMarker.latitude;
-                vm.historyObj.historyMap.center.longitude = vm.historyObj.dashboardMapObj.clickedMarker.longitude;
+                // vm.historyObj.historyMap.center.latitude = vm.historyObj.dashboardMapObj.clickedMarker.latitude;
+                // vm.historyObj.historyMap.center.longitude = vm.historyObj.dashboardMapObj.clickedMarker.longitude;
                 // vm.historyObj.deviceid = vm.historyObj.dashboardMapObj.clickedMarker.deviceid;
-                vm.historyObj.selectedHistoryVehicle = vm.historyObj.dashboardMapObj.clickedMarker;
+                vm.historyObj.selectedHistoryVehicle = vm.historyObj.dashboardMapObj.clickedMarker.rtgps;
                 vm.historyObj.vehicleNumber = vm.historyObj.dashboardMapObj.clickedMarker.vehicleno;
                 $scope.errorMsg = "";
             }
@@ -88,6 +113,9 @@
 
             vm.getMyFencesListener();
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+
+            vm.loadMap();
+
         };
         $interval($scope.resizeMap, 700);
 

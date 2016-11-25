@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('GeofenceViewController', mapLeftToolBar);
 
-    function mapLeftToolBar($scope, $log, $timeout, $q, mapService, newMapService, historyService,
+    function mapLeftToolBar($scope, $log, $timeout, $q, newMapService, historyService,
                             $state, geofenceViewService, dialogService, intellicarAPI) {
 
         var vm = this;
@@ -26,9 +26,9 @@
             }
         };
 
-        vm.loc = mapService.loc;
+        vm.loc = newMapService.loc;
 
-        vm.currentLocation = mapService.getCurrentLocation().id; // Have to set it Dynamically
+        vm.currentLocation = newMapService.getCurrentLocation().id; // Have to set it Dynamically
 
         vm.setInMarkerLocation = function (data) {
             vm.currentLocation = data.id;

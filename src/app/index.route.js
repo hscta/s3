@@ -71,10 +71,10 @@
                         templateUrl: 'app/components/landingpage/dashboard/lefttoolbar/lefttoolbar_dashboard.html',
                         controller: 'LeftToolbarDashboardController as vm'
                     },
-                    'centermain@home': {
-                        templateUrl: 'app/components/landingpage/dashboard/map/map.html',
-                        controller: 'MapController as vm'
-                    }
+                    // 'centermain@home': {
+                    //     templateUrl: 'app/components/landingpage/dashboard/map/map.html',
+                    //     controller: 'MapController as vm'
+                    // }
                 }
             })
             .state('home.management', {
