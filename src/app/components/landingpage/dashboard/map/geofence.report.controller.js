@@ -16,6 +16,7 @@
         // $log.log(historyService.playerControls);
         dialogService.setTab(2);
         var vm = this;
+        var dateFormat = 'DD-MM-YYYY HH:mm A';
 
         vm.fenceReportObj = historyService.geoFenceReports;
 
@@ -100,7 +101,7 @@
                 historyService.geoFenceReports.myHistoryData
             );
 
-            var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
+            var dateFormatter = new google.visualization.DateFormat({pattern: 'd MMM, h:mm a'});
             dateFormatter.format(data, 2);
             dateFormatter.format(data, 3);
 
@@ -317,6 +318,7 @@
                 vm.disableDownload = false;
                 return;
             }
+
             for (var idx in data) {
                 for (var vehicle in vm.selectedVehicles) {
                     if (data[idx].deviceid == vm.selectedVehicles[vehicle].id) {
@@ -341,8 +343,8 @@
                             historyService.geoFenceReports.jsonReportData.push({
                                 vehicle_name:vehicleName,
                                 fence_name: fenceName,
-                                fence_entry: start_time.toDateString(),
-                                fence_exit: end_time.toDateString()
+                                fence_entry: moment(start_time).format(dateFormat),
+                                fence_exit: moment(end_time).format(dateFormat)
                             });
                             vm.disableDownload = false;
                         }

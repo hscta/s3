@@ -22,7 +22,7 @@
         var mapObj;
 
         $scope.getHistory = function () {
-            $log.log(vm.historyObj.selectedHistoryVehicle);
+            //$log.log(vm.historyObj.selectedHistoryVehicle);
             historyService.setData('getHistory', false);
 
             historyService.getHistoryData();
@@ -100,6 +100,8 @@
         $log.log('HistoryTableController');
 
         var vm = this;
+        var dateFormat = 'DD-MM-YYYY HH:mm A';
+
         dialogService.setTab(1);
 
         var historyData =[];
@@ -194,7 +196,7 @@
                 vm.jsonHistoryData.push({
                     vehicle_Name: vm.historyObj.selectedHistoryVehicle.vehicleno,
                     location: loc,
-                    time : dateTime.toDateString(),
+                    time : moment(dateTime).format(dateFormat),
                     odometer: marker[idx].odometer.toString(),
                     speed:marker[idx].speed.toString(),
                     ignitionStatus: ignitionStatus
@@ -229,8 +231,10 @@
             });
 
 
-            var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
-            dateFormatter.format(data, 1);
+            //var dateFormatter = new google.visualization.DateFormat({pattern: 'dd-MM-yyyy hh:mm a'});
+            var dateFormatter = new google.visualization.DateFormat({pattern: 'd MMM, h:mm a'});
+
+            dateFormatter.format(data, 0);
 
             table.draw(data, {
                 showRowNumber: true,
