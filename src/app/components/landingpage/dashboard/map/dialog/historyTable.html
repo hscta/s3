@@ -11,20 +11,20 @@
     <span  class="error-msg">{{vm.historyObj.errorMsg}}</span>
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
-            <md-input-container class="container-margin"  ng-show="vm.multiSelect">
-                <label>Vehicle No</label>
-                <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                <md-select ng-model="vm.historyObj.selectedHistoryVehicle"
-                           ng-model-options="{trackBy: '$value.deviceid'}"
-                >
+            <!--<md-input-container class="container-margin"  ng-show="vm.multiSelect">-->
+                <!--<label>Vehicle No</label>-->
+                <!--&lt;!&ndash;<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">&ndash;&gt;-->
+                <!--<md-select ng-model="vm.historyObj.selectedHistoryVehicle"-->
+                           <!--ng-model-options="{trackBy: '$value.deviceid'}"-->
+                <!--&gt;-->
 
-                    <md-option
-                        ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"
-                        ng-value="vehicle">
-                        {{vehicle.vehicleno}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
+                    <!--<md-option-->
+                        <!--ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"-->
+                        <!--ng-value="vehicle">-->
+                        <!--{{vehicle.vehicleno}}-->
+                    <!--</md-option>-->
+                <!--</md-select>-->
+            <!--</md-input-container>-->
 
             <md-input-container class="container-margin">
                 <label>Start Time</label>

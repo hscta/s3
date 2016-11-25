@@ -21,6 +21,10 @@
 
         vm.setInMapLocation = function (loc) {
             vm.historyMapObj.historyMap.center = angular.copy(loc);
+            vm.historyMapObj.historyMap.map.setCenter({
+                lat : vm.historyMapObj.historyMap.center.latitude,
+                lng : vm.historyMapObj.historyMap.center.longitude
+            });
         };
 
         vm.getData = function(key) {
@@ -33,8 +37,8 @@
         vm.historyMapObj = {
             errorMsg : '',
             historyMap : {
+                map:{},
                 mapOptions: {},
-                mapControl: {},
                 zoom:'',
                 center:''
             },

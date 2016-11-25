@@ -305,52 +305,52 @@
                 <tbody md-body>
                 <tr md-row md-select-id="carnumber" class="infoWHead"   md-auto-select>
                     <td md-cell><strong>Reg.No</strong></td>
-                    <td md-cell colspan="3"  id="myreg">{{clickedMarker.vehicleno}}</td>
+                    <td md-cell colspan="3"  id="myreg">{{clickedMarker.rtgps.vehicleno}}</td>
                 </tr>
                 <tr md-row md-select-id="timestamp" md-auto-select>
                     <td md-cell><strong>Last seen at</strong></td>
-                    <td md-cell colspan="3" id="timestamp">{{clickedMarker.timestamp | date : 'dd MMM yyyy - h:mm a'}}</td>
+                    <td md-cell colspan="3" id="timestamp">{{clickedMarker.rtgps.timestamp | date : 'dd MMM yyyy - h:mm a'}}</td>
                 </tr>
                 <tr md-row md-select-id="odometer" md-auto-select>
                     <td md-cell><strong>Odometer</strong></td>
-                    <td md-cell class="infoWmiddle" id="odometer">{{clickedMarker.odometer}}</td>
+                    <td md-cell class="infoWmiddle" id="odometer">{{clickedMarker.rtgps.odometer}}</td>
                     <td md-cell><strong>Speed</strong></td>
-                    <td md-cell id="speed">{{clickedMarker.speed}}</td>
+                    <td md-cell id="speed">{{clickedMarker.rtgps.speed}}</td>
                 </tr>
 
                 <tr md-row md-select-id="ignitionstatus" md-auto-select>
                     <td md-cell><strong>Ignition</strong></td>
-                    <td md-cell class="infoWmiddle" id="ignition">{{clickedMarker.ignitionstatus ? 'On' : 'Off'}}</td>
+                    <td md-cell class="infoWmiddle" id="ignition">{{clickedMarker.rtgps.ignitionstatus ? 'On' : 'Off'}}</td>
                     <td md-cell><strong>Mobility</strong></td>
-                    <td md-cell id="mobility">{{clickedMarker.mobilistatusFilter}}</td>
+                    <td md-cell id="mobility">{{clickedMarker.rtgps.mobilistatusFilter}}</td>
                 </tr>
                 <tr md-row md-select-id="carbattery" md-auto-select>
                     <td md-cell>
                         <strong>Vehicle batt</strong>
                     </td>
                     <td md-cell class="infoWmiddle"
-                        ng-class="{'redBattery' : clickedMarker.carbattery < 9.5 }">{{clickedMarker.carbattery}}</td>
+                        ng-class="{'redBattery' : clickedMarker.rtgps.carbattery < 9.5 }">{{clickedMarker.rtgps.carbattery}}</td>
                     <td md-cell><strong>Device batt</strong>
                     </td>
                     <td md-cell
-                        ng-class="{'redBattery' : clickedMarker.devbattery < 3.55 }">{{clickedMarker.devbattery}}</td>
+                        ng-class="{'redBattery' : clickedMarker.rtgps.devbattery < 3.55 }">{{clickedMarker.rtgps.devbattery}}</td>
                 </tr>
                 <tr md-row md-select-id="deviceid" md-auto-select>
                     <td md-cell><strong>Device ID</strong></td>
-                    <td md-cell class="infoWmiddle">{{clickedMarker.deviceid}}</td>
+                    <td md-cell class="infoWmiddle">{{clickedMarker.rtgps.deviceid}}</td>
                     <td md-cell><strong>Make</strong></td>
-                    <td md-cell>{{clickedMarker.meta.cartype}}</td>
+                    <td md-cell>{{clickedMarker.rtgps.meta.cartype}}</td>
                 </tr>
                 </tbody>
             </table>
         </md-table-container>
         <div layout="row">
-            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="vm.hideMobilityControls"
+            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
                        ng-click="mobilize(0)">
                 <span> Immobilize </span>
             </md-button>
 
-            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="vm.hideMobilityControls"
+            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
                        ng-click="vm.mobilize(1)">
                 <span> Mobilize </span>
             </md-button>
@@ -358,6 +358,7 @@
             <md-button class="md-raised md-accent md-small infoWBtn" id="historyBtn" ng-click="vm.showHistory()">
                 History
             </md-button>
+
         </div>
     </div>
 </div>
