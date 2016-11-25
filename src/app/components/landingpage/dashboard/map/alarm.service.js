@@ -98,7 +98,8 @@
             for ( var idx in data ) {
                 for ( var veh in vm.alarmsObj.vehicles){
                     if ( data[idx].deviceid == vm.alarmsObj.vehicles[veh].deviceid){
-                        data[idx].vehicleno = vm.alarmsObj.vehicles[veh].vehicleno
+                        data[idx].vehicleno = vm.alarmsObj.vehicles[veh].vehicleno;
+                        data[idx].speed = Math.floor(data[idx].speed);
                     }
                 }
             }

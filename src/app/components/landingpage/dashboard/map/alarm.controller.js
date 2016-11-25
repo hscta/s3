@@ -133,6 +133,7 @@
                         vehicle_name:alarmResp[idx].vehicleno,
                         time: time,
                         reason:alarmResp[idx].alarmreason,
+                        speed:alarmResp[idx].speed,
                         operation_mode:alarmResp[idx].opermode,
                         location:loc
                     });

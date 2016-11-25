@@ -37,11 +37,13 @@
                 <td md-cell
                     ng-class="{'redBattery' : parameter.clickedMarker.devbattery < 3.55 }">{{parameter.clickedMarker.devbattery}}</td>
             </tr>
-            <tr md-row md-select-id="deviceid" md-auto-select>
-                <td md-cell><strong>Device ID</strong></td>
-                <td md-cell class="infoWmiddle">{{parameter.clickedMarker.deviceid}}</td>
+            <tr md-row md-select-id="cartype" md-auto-select>
                 <td md-cell><strong>Make</strong></td>
                 <td md-cell>{{parameter.clickedMarker.meta.cartype}}</td>
+            </tr>
+            <tr md-row md-select-id="deviceid" md-auto-select>
+                <td md-cell><strong>Device ID</strong></td>
+                <td md-cell colspan="3">{{parameter.clickedMarker.deviceid}}</td>
             </tr>
             </tbody>
         </table>
