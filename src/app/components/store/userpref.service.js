@@ -13,6 +13,28 @@
         $log.log("userprefService");
         var vm = this;
         vm.userpref = {};
+        vm.listeners = {};
+
+
+        vm.addListener = function (key, listener) {
+            if (!(key in vm.listeners)) {
+                vm.listeners[key] = [];
+            }
+
+            if (vm.listeners[key].indexOf(listener) === -1) {
+                vm.listeners[key].push(listener);
+            }
+        };
+
+
+        vm.callListeners = function (msg, key) {
+            if (key in vm.listeners) {
+                for (var idx in vm.listeners[key]) {
+                    vm.listeners[key][idx](msg, key);
+                }
+            }
+        };
+
 
         vm.loginSuccess = function (data) {
             $log.log("loginSuccess");
@@ -23,12 +45,12 @@
         vm.handleGetMyInfo = function (resp) {
             //$log.log(resp);
             vm.userpref = resp.data.data[0];
-            // console.log();
             vm.pgrouppath = helperService.getParentFromPath(vm.userpref.assetpath);
             settingsService.setCurrentGroupPath(vm.pgrouppath);
-            // $log.log(vm.userpref);
-            console.log(settingsService.getCurrentGroup());
-            latlngService.geocodeAddress('bhopal');
+            $log.log(vm.userpref);
+            vm.callListeners(vm.userpref, 'setUserPref');
+            //console.log(settingsService.getCurrentGroup());
+            //latlngService.geocodeAddress('bhopal');
         };
 
 

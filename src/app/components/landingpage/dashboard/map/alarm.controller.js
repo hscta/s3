@@ -15,6 +15,7 @@
 
 
         var vm = this;
+        var dateFormat = 'DD-MM-YY HH:mm A';
         dialogService.setTab(3);
         vm.jsonAlarmData = [];
 
@@ -57,7 +58,6 @@
                     vm.deSelectAllVehicles = true;
                 }
 
-                $log.log(trues.length, vm.alarms.filteredVehicles.length);
                 if (trues.length < vm.alarms.filteredVehicles.length)
                     vm.selectAllVehicles = false;
                 else if (trues.length == vm.alarms.filteredVehicles.length){
@@ -128,11 +128,12 @@
             if ( alarmResp.length ) {
                 for ( var idx in alarmResp) {
                     var loc = alarmResp[idx].lat+','+alarmResp[idx].lng;
-                    var time = new Date(parseInt(alarmResp[idx].gpstime)).toDateString();
+                    var alarmTime = new Date(parseInt(alarmResp[idx].gpstime));
                     vm.jsonAlarmData.push({
                         vehicle_name:alarmResp[idx].vehicleno,
-                        time: time,
+                        time: moment(alarmTime).format(dateFormat),
                         reason:alarmResp[idx].alarmreason,
+                        speed:alarmResp[idx].speed,
                         operation_mode:alarmResp[idx].opermode,
                         location:loc
                     });
