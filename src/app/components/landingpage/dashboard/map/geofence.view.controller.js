@@ -384,7 +384,6 @@
             } else if (item.data.type == 'function') {
                 if (vm.fencesActive() || item.data.independent) {
                     item.data.active = !item.data.active;
-                    $log.log(item);
                     item.data.function(item.data.active, item.location);
                 }
             }

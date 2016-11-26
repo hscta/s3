@@ -89,20 +89,13 @@
             return {
                 center: {},
                 radius: 0,
-                stroke: {
-                    color: blueColor,
-                    weight: 2,
-                    opacity: 1
-                },
-                fill: {
-                    color: blueColor,
-                    opacity: 0.2
-                },
+                strokeColor: blueColor,
+                strokeWeight: 2,
+                strokeOpacity: 1,
+                fillColor: blueColor,
+                fillOpacity: 0.2,
                 clickable: true, // optional: defaults to true
                 visible: true, // optional: defaults to true
-                editable: false, // optional: defaults to false
-                draggable: false, // optional: defaults to false
-                geodesic: false, // optional: defaults to false
                 control: {}
             }
         };
@@ -110,19 +103,12 @@
         vm.getDefaultPolygon = function () {
             return {
                 path: [],
-                stroke: {
-                    color: blueColor,
-                    weight: 3
-                },
-                fill: {
-                    color: blueColor,
-                    opacity: 0.2
-                },
+                strokeColor: blueColor,
+                strokeWeight: 3,
+                fillColor: blueColor,
+                fillOpacity: 0.2,
                 clickable: true,
                 visible: true,
-                editable: false,
-                draggable: false,
-                geodesic: false,
                 control: {}
             }
         };

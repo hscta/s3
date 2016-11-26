@@ -304,14 +304,72 @@
             $log.log('mapcontroller');
             // $log.log(fences);
             // vm.inMap.circles = fences.circles;
-            newMapService.inMap.circles = fences.circles;
-            newMapService.inMap.polygons = fences.polygons;
+            // newMapService.inMap.circles = fences.circles;
+            // newMapService.inMap.polygons = fences.polygons;
             geofenceViewService.setData('geofences', true);
             vm.applyFilters({filterType: 'showAll'});
 
-            vm.showMyPolygons();
-            vm.showMyCircles();
+            vm.createPolygons(fences.polygons);
+            vm.createCircles(fences.circles);
+
+            // vm.showMyPolygons();
+            // vm.showMyCircles();
         };
+
+        vm.createPolygons = function(polygons){
+            var polygonMap = {};
+            for(var idx in polygons){
+                var paths = [];
+                for (var j = 0; j < polygons[idx].path.length; j++) {
+                    paths.push(new google.maps.LatLng(polygons[idx].path[j].latitude,
+                        polygons[idx].path[j].longitude));
+                }
+                var googlePolygon = new google.maps.Polygon({
+                    path: paths,
+                    strokeColor: polygons[idx].strokeColor,
+                    strokeOpacity: 0.8,
+                    strokeWeight: polygons[idx].strokeWeight,
+                    fillColor: polygons[idx].fillColor,
+                    fillOpacity: polygons[idx].fillOpacity
+                });
+                polygons[idx].googleObject = googlePolygon;
+                polygonMap[polygons[idx].control.info.assetpath] = polygons[idx];
+            }
+            vm.polygonsByPath = polygonMap;
+        }
+
+        vm.createCircles = function(circles){
+            var circlesMap = {};
+            for(var idx in circles){
+                var googleCircle = new google.maps.Circle({
+                    strokeColor: circles[idx].strokeColor,
+                    strokeOpacity: 0.8,
+                    strokeWeight: circles[idx].strokeWeight,
+                    fillColor: circles[idx].fillColor,
+                    fillOpacity: circles[idx].fillOpacity,
+                    center: {lat: circles[idx].center.latitude,lng: circles[idx].center.longitude},
+                    radius: circles[idx].radius
+                });
+
+                google.maps.event.addListener(googleCircle, 'click', function (e) {
+                    var contentString = "<table><tbody>\
+                                            <tr>\
+                                                <th>Name:</th>\
+                                                <td>{{vm.selectedFenceObj.name}}</td>\
+                                            </tr>\
+                                            <tr>\
+                                                <th>Type:</th>\
+                                                <td>{{vm.selectedFenceObj.other.olafilter}}</td>\
+                                            </tr>\
+                                        </tbody></table>";
+                    fenceInfowindow.setContent(contentString);
+                    fenceInfowindow.open(vm.inMap.map, this);
+                });
+                circles[idx].googleObject = googleCircle;
+                circlesMap[circles[idx].control.info.assetpath] = circles[idx];
+            }
+            vm.circlesByPath = circlesMap;
+        }
 
         var DEVBATTERY_THRESHOLD = 3.55;
         var CARBATTERY_THRESHOLD = 9.5;
@@ -379,39 +437,32 @@
             } else if (filterData.filterType == 'showVehicleNo') {
                 // Do something to notify showVehicleNo filter is On
             } else {
-                if (vm.inMap.circles) {
-                    //$log.log(vm.inMap.circles);
-                    for (idx = 0; idx < vm.inMap.circles.length; idx++) {
-                        var filterStr = vm.inMap.circles[idx].control.info.tagdata;
-                        // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
+                if (vm.circlesByPath) {
+                    for (var idx in vm.circlesByPath.length) {
+                        var filterStr = vm.circlesByPath[idx].control.info.tagdata;
                         if (checkFilterString(filterStr)) {
-                            vm.inMap.circles[idx].visible = true;
-                            // vm.inMap.circles[idx].circleInfo.setVisible(true);
-                            vm.inMap.circles[idx].stroke.weight = getStroke(filterStr);
-                            vm.inMap.circles[idx].stroke.color = getColor(filterStr);
-                            startAnimation(vm.inMap.circles[idx]);
+                            vm.circlesByPath[idx].googleObject.setMap(vm.inMap.map);
+                            vm.circlesByPath[idx].strokeWeight = getStroke(filterStr);
+                            vm.circlesByPath[idx].strokeColor = getColor(filterStr);
+                            startAnimation(vm.circlesByPath[idx]);
                         } else {
-                            vm.inMap.circles[idx].visible = false;
-                            // console.log(newMapService.inMap.circles[idx]);
-                            // console.log(idx);
+                            vm.circlesByPath[idx].googleObject.setMap(null);
                         }
                     }
                 }
-
-                if (vm.inMap.polygons) {
-                    for (idx = 0; idx < vm.inMap.polygons.length; idx++) {
-                        filterStr = vm.inMap.polygons[idx].control.info.tagdata;
-                        // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
+                if(vm.polygonsByPath){
+                    for(var idx in vm.polygonsByPath){
+                        filterStr = vm.polygonsByPath[idx].control.info.tagdata;
                         if (checkFilterString(filterStr)) {
-                            vm.inMap.polygons[idx].visible = true;
-                            vm.inMap.polygons[idx].stroke.weight = getStroke(filterStr);
-                            vm.inMap.polygons[idx].stroke.color = getColor(filterStr);
-                            startAnimation(vm.inMap.polygons[idx]);
+                            vm.polygonsByPath[idx].googleObject.setMap(vm.inMap.map);
+                            vm.polygonsByPath[idx].strokeWeight = getStroke(filterStr);
+                            vm.polygonsByPath[idx].strokeColor = getColor(filterStr);
+                            startAnimation(vm.polygonsByPath[idx]);
                         } else {
-                            vm.inMap.polygons[idx].visible = false;
-                            if (filterData.filterType == 'cityLimits') {
+                            vm.polygonsByPath[idx].googleObject.setMap(null);
+                            // if (filterData.filterType == 'cityLimits') {
                                 // $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
-                            }
+                            // }
                         }
                     }
                 }
@@ -463,9 +514,9 @@
                 $interval(function () {
                     count++;
                     if (count % 2 == 0)
-                        obj.stroke.weight = DEFAULT_STROKE;
+                        obj.strokeWeight = DEFAULT_STROKE;
                     else
-                        obj.stroke.weight = MIN_STROKE;
+                        obj.strokeWeight = MIN_STROKE;
 
                 }, 500, 4);
             }
@@ -568,7 +619,7 @@
             var mapCanvas = document.getElementById("map");
             vm.inMap.mapOptions = {
                 center: new google.maps.LatLng(vm.inMap.center.latitude, vm.inMap.center.longitude),
-                zoom: vm.inMap.zoom
+                zoom: vm.inMap.zoom,
             }
             vm.inMap.map = new google.maps.Map(mapCanvas, vm.inMap.mapOptions);
 
@@ -584,6 +635,7 @@
             vm.markerByPath[rtgps.vehiclepath].setIcon(vm.markerByPath[rtgps.vehiclepath].icon);
         };
 
+
         vm.showMyPolygons = function () {
             for (var i = 0; i < vm.inMap.polygons.length; i++) {
                 var paths = [];
@@ -593,11 +645,11 @@
                 }
                 var polygon = new google.maps.Polygon({
                     path: paths,
-                    strokeColor: vm.inMap.polygons[i].stroke.color,
+                    strokeColor: vm.inMap.polygons[i].strokeColor,
                     strokeOpacity: 0.8,
-                    strokeWeight: vm.inMap.polygons[i].stroke.weight,
-                    fillColor: vm.inMap.polygons[i].fill.color,
-                    fillOpacity: vm.inMap.polygons[i].fill.opacity
+                    strokeWeight: vm.inMap.polygons[i].strokeWeight,
+                    fillColor: vm.inMap.polygons[i].fillColor,
+                    fillOpacity: vm.inMap.polygons[i].fillOpacity
                 });
                 polygon.setMap(vm.inMap.map);
             }
@@ -606,11 +658,11 @@
         vm.showMyCircles = function () {
             for (var i = 0; i < vm.inMap.circles.length; i++) {
                 var circle = new google.maps.Circle({
-                    strokeColor: vm.inMap.circles[i].stroke.color,
+                    strokeColor: vm.inMap.circles[i].strokeColor,
                     strokeOpacity: 0.8,
-                    strokeWeight: vm.inMap.circles[i].stroke.weight,
-                    fillColor: vm.inMap.circles[i].fill.color,
-                    fillOpacity: vm.inMap.circles[i].fill.opacity,
+                    strokeWeight: vm.inMap.circles[i].strokeWeight,
+                    fillColor: vm.inMap.circles[i].fillColor,
+                    fillOpacity: vm.inMap.circles[i].fillOpacity,
                     center: {lat: vm.inMap.circles[i].center.latitude, lng: vm.inMap.circles[i].center.longitude},
                     radius: vm.inMap.circles[i].radius
                 });
