@@ -57,12 +57,34 @@
             }
         };
 
-        vm.CustomMarker.prototype.highlightMe = function() {
+        vm.CustomMarker.prototype.unhighlight = function() {
             var self = this;
+            self.hide();
+            self.notifier.className = 'overlayNotifier';
+            self.dropAnimation = false;
+        }
+        vm.CustomMarker.prototype.highlight = function(str) {
+            var self = this;
+            if(str != null){
+                str = "-anim-color-" + str;
+            }else{
+                str = "";
+            }
+            self.show();
+            self.notifier.className = 'overlayNotifier animate '+str;
+            self.dropAnimation = true;
+        }
+        vm.CustomMarker.prototype.highlightMe = function(str) {
+            var self = this;
+            if(str != null){
+                str = "-anim-color-" + str;
+            }else{
+                str = "";
+            }
             if(self.notifier){
                 if(!self.dropAnimation){
                     self.show();
-                    self.notifier.className = 'overlayNotifier animate';
+                    self.notifier.className = 'overlayNotifier animate '+str;
                     self.dropAnimation = true;
                 }else{
                     self.hide();

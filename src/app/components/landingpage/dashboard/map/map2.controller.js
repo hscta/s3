@@ -107,7 +107,7 @@
         };
 
         vm.updateMarker = function (rtgps) {
-            if ((rtgps.vehiclepath in vm.inCustomMaker) && vm.geoFilters.showVehicleNumber) {
+            if ((rtgps.vehiclepath in vm.inCustomMaker) && ( vm.geoFilters.showVehicleNumber || vm.geoFilters.noComm || vm.geoFilters.devBattery ||vm.geoFilters.carBattery )) {
                 vm.inCustomMaker[rtgps.vehiclepath].setPosition(rtgps);
             }
 
@@ -382,34 +382,31 @@
             }
 
             if (filterData.filterType == 'carBattery') {
-                for (idx in vm.inMarkers) {
-                    marker = vm.inMarkers[idx];
+                for (idx in vm.markerByPath) {
+                    marker = vm.markerByPath[idx];
                     if (vm.geoFilters.carBattery) {
-                        if (marker.carbattery < CARBATTERY_THRESHOLD) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
-                            marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
+                        if (vehicleService.vehiclesByPath[idx].rtgps.carbattery < CARBATTERY_THRESHOLD &&  vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
+
+                            vm.inCustomMaker[marker.vehiclepath].highlight('orange');
                         }
                     } else {
                         if (recall == 1) {
-                            marker.options.animation = null;
-                            marker.markerInfo.setAnimation(null);
+                            vm.inCustomMaker[marker.vehiclepath].unhighlight();
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
                     }
                 }
             } else if (filterData.filterType == 'devBattery') {
-                for (idx in vm.inMarkers) {
-                    marker = vm.inMarkers[idx];
+                for (idx in vm.markerByPath) {
+                    marker = vm.markerByPath[idx];
                     if (vm.geoFilters.devBattery) {
-                        if (marker.devbattery < DEVBATTERY_THRESHOLD) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
-                            marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
+                        if (vehicleService.vehiclesByPath[idx].rtgps.devbattery < DEVBATTERY_THRESHOLD &&  vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
+                            vm.inCustomMaker[marker.vehiclepath].highlight('yellow');
                         }
                     } else {
                         if (recall == 1) {
-                            marker.options.animation = null;
-                            marker.markerInfo.setAnimation(null);
+                            vm.inCustomMaker[marker.vehiclepath].unhighlight();
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
@@ -417,18 +414,19 @@
                     }
                 }
             } else if (filterData.filterType == 'noComm') {
-                for (idx in vm.inMarkers) {
-                    marker = vm.inMarkers[idx];
+                for (idx in vm.markerByPath) {
+                    marker = vm.markerByPath[idx];
                     if (vm.geoFilters.noComm) {
-                        checkNoComm(marker, function (marker) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
-                            marker.markerInfo.setAnimation(google.maps.Animation.BOUNCE)
+                        checkNoComm(vehicleService.vehiclesByPath[idx].rtgps, function () {
+                            if(vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)){
+                                vm.inCustomMaker[marker.vehiclepath].highlight('red');
+
+                            }
                         });
                     }
                     else {
                         if (recall == 1) {
-                            marker.options.animation = null;
-                            marker.markerInfo.setAnimation(null);
+                            vm.inCustomMaker[marker.vehiclepath].unhighlight();
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
                         }
