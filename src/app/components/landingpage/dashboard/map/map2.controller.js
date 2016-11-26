@@ -746,6 +746,7 @@
 
             vm.inMap.map.addListener('zoom_changed', function () {
                 newMapService.zoomChanged();
+                vm.changeMapStyle();
             });
 
             // vm.infoWindowCompiled = false;
@@ -756,6 +757,26 @@
             // vm.infoWindowCompiled = true;
             // });
         };
+
+        var MAP_STYLES = {
+            DARK:'dark',
+            DEFAULT:'default'
+        }
+
+        vm.changeMapStyle = function () {
+            var zoom = vm.inMap.map.getZoom();
+            if(zoom < 11){
+                if(vm.inMap.styleType != MAP_STYLES.DARK){
+                    vm.inMap.styleType = MAP_STYLES.DARK;
+                    vm.inMap.map.setOptions({ styles : newMapService.mapStyles[MAP_STYLES.DARK] })
+                }
+            }else{
+                if(vm.inMap.styleType != MAP_STYLES.DEFAULT) {
+                    vm.inMap.styleType = MAP_STYLES.DEFAULT;
+                    vm.inMap.map.setOptions({styles: newMapService.mapStyles[MAP_STYLES.DEFAULT]})
+                }
+            }
+        }
 
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.inMap.map, 'resize');
