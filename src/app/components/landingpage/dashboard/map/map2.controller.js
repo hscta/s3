@@ -300,7 +300,7 @@
         var MIN_STROKE = 3;
 
 
-        vm.getMyFencesListener = function (fences) {
+        vm.getMyFences = function (fences) {
             $log.log('mapcontroller');
             // $log.log(fences);
             // vm.inMap.circles = fences.circles;
@@ -518,7 +518,7 @@
         vm.addListener = function () {
             vehicleService.addListener('rtgps2', vm.updateMarker2);
             newMapService.addListener('rtgps', vm.updateMarker);
-            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+            geofenceViewService.addListener('getMyFences', vm.getMyFences);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
         };
 
@@ -582,7 +582,7 @@
             vm.markerByPath[rtgps.vehiclepath].icon.fillColor = newMapService.getMarkerColor(rtgps);
             vm.markerByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
             vm.markerByPath[rtgps.vehiclepath].setIcon(vm.markerByPath[rtgps.vehiclepath].icon);
-        }
+        };
 
         vm.showMyPolygons = function () {
             for (var i = 0; i < vm.inMap.polygons.length; i++) {
@@ -597,7 +597,7 @@
                     strokeOpacity: 0.8,
                     strokeWeight: vm.inMap.polygons[i].stroke.weight,
                     fillColor: vm.inMap.polygons[i].fill.color,
-                    fillOpacity: vm.inMap.polygons[i].fill.opacity,
+                    fillOpacity: vm.inMap.polygons[i].fill.opacity
                 });
                 polygon.setMap(vm.inMap.map);
             }
@@ -605,7 +605,7 @@
 
         vm.showMyCircles = function () {
             for (var i = 0; i < vm.inMap.circles.length; i++) {
-                vm.inMap.circles.circleInfo = new google.maps.Circle({
+                var circle = new google.maps.Circle({
                     strokeColor: vm.inMap.circles[i].stroke.color,
                     strokeOpacity: 0.8,
                     strokeWeight: vm.inMap.circles[i].stroke.weight,
@@ -614,9 +614,8 @@
                     center: {lat: vm.inMap.circles[i].center.latitude, lng: vm.inMap.circles[i].center.longitude},
                     radius: vm.inMap.circles[i].radius
                 });
-                vm.inMap.circles.circleInfo.setMap(vm.inMap.map);
 
-                google.maps.event.addListener(vm.inMap.circles.circleInfo, 'click', function (e) {
+                google.maps.event.addListener(circle, 'click', function (e) {
                     var contentString = "<table><tbody>\
                                             <tr>\
                                                 <th>Name:</th>\
@@ -631,6 +630,8 @@
                     fenceInfowindow.setContent(contentString);
                     fenceInfowindow.open(vm.inMap.map, this);
                 });
+
+                circle.setMap(vm.inMap.map);
             }
         };
 
@@ -681,7 +682,6 @@
             vm.loadMap();
             setMapHeight();
             vm.addListener();
-            geofenceViewService.getMyFences();
 
             $timeout(vm.runStats, 5000);
             $interval(vm.runStats, 10000);

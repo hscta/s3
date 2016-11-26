@@ -185,10 +185,10 @@
                         'data': {
                             active: true,
                             'type': 'function', 'function': function () {
-                                geofenceViewService.getMyFences();
+                                //geofenceViewService.getMyFences();
                             }
                         }
-                    },
+                    }
                 ]
             },
 
@@ -244,7 +244,7 @@
                                 vm.checkGeoFilters.set('batteryFilter.noComm', active);
                             }
                         }
-                    },
+                    }
                 ]
             },
 
@@ -264,7 +264,7 @@
                     }
                 }
             },
-            {'type': 'line', 'historymap': false},
+            {'type': 'line', 'historymap': false}
         ];
 
         vm.fencesActive = function () {
@@ -282,13 +282,15 @@
                 else
                     newMapService.setInMapLocation(data.latlng);
             } else if (type == 'button') {
-                $log.log('other')
+                $log.log('other');
                 data();
             }
         };
 
 
         vm.init = function () {
+            geofenceViewService.getMyFences();
+
             vm.geoFilters = geofenceViewService.getData('geoFilters');
             // $log.log(vm.geoFilters);
             for (var key in vm.geoFilters) {
@@ -376,7 +378,7 @@
 
 
         vm.buttonClick = function (item) {
-            $log.log('low battt');
+            $log.log('buttonClick');
             if (item.data.type == 'stateChange') {
                 dialogService.show(item.data.state);
             } else if (item.data.type == 'function') {
