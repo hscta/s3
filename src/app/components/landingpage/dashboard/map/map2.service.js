@@ -23,7 +23,7 @@
                 markers: {
                     inMarkers: [],
                     clickedMarker: {},
-                    markerByPath: {}
+                    markersByPath: {}
                 },
                 circles: [],
                 polygons: [],
@@ -63,7 +63,6 @@
                 vm.inMap.markers.clickedMarker.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
             };
 
-
             vm.showHistory = function () {
                 dialogService.show('home.history', {
                     clickedMarker: vm.inMap.markers.clickedMarker
@@ -100,9 +99,9 @@
 
             vm.changeMarkerIcon = function () {
                 var scale = vm.getIconScale();
-                for (var idx in vm.inMap.markers.markerByPath) {
-                    vm.inMap.markers.markerByPath[idx].icon.scale = scale;
-                    vm.inMap.markers.markerByPath[idx].setIcon(vm.inMap.markers.markerByPath[idx].icon);
+                for (var idx in vm.inMap.markers.markersByPath) {
+                    vm.inMap.markers.markersByPath[idx].icon.scale = scale;
+                    vm.inMap.markers.markersByPath[idx].setIcon(vm.inMap.markers.markersByPath[idx].icon);
                 }
             };
 

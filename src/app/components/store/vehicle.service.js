@@ -160,11 +160,12 @@
 
         vm.handleGetMyVehicles = function (resp) {
             // $log.log(resp);
-            vm.vehiclesByPath = resp;
+            //vm.vehiclesByPath = resp;
             for (var idx in resp) {
                 vm.subscribe(resp[idx].assetpath, true, 'gps');
                 vm.subscribe(resp[idx].assetpath, true, 'rtalarm');
                 vm.vehiclesByNumber[resp[idx].name] = resp[idx];
+                vm.vehiclesByPath[resp[idx].assetpath] = resp[idx];
             }
         };
 

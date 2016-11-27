@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('historyService', historyService);
 
-    function historyService($log, newMapService, $rootScope, intellicarAPI, $interval) {
+    function historyService($log, newMapService, $rootScope, intellicarAPI, $interval, $timeout) {
         $log.log("historyService");
         var vm = this;
 
@@ -214,6 +214,7 @@
         var week = hrs24 * 7;
         var timeLimit = week;
 
+
         vm.getHistoryData = function(){
             if (!vm.historyMapObj.selectedHistoryVehicle.deviceid){
                 vm.historyMapObj.errorMsg = "Please Select Vehicle";
@@ -342,10 +343,8 @@
 
             vm.historyMapObj.historyMap.zoom = newMapService.getZoom();
             vm.historyMapObj.historyMap.center = newMapService.getCenter();
-
-
             if ( !vm.historyMapObj.dashboardMapObj.inMarkers.length ) {
-                vm.historyMapObj.dashboardMapObj.inMarkers = newMapService.inMap.markers.inMarkers;
+                vm.historyMapObj.dashboardMapObj.inMarkers = newMapService.inMap.markers.markersByPath;
             }
         };
 

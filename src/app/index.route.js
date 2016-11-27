@@ -143,7 +143,7 @@
                 views: {
                     'dialogview@home': {
                         templateUrl: 'app/components/landingpage/dashboard/map/dialog/history.html',
-                        controller: 'HistoryController as vm'
+                        controller: 'History2Controller as vm'
                     }
                 }
             })
