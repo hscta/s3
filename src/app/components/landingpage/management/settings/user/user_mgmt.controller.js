@@ -62,10 +62,8 @@
                                 var userpath = data.item.assetpath;
 
                                 var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
+                                    grouppath:vm.selectedGrouppath,
+                                    userpath:userpath
                                 };
                                 $log.log(body);
                                 processGUI(-1);
@@ -182,10 +180,8 @@
                         var userpath = data.item.assetpath;
 
                         var body = {
-                            user: {
-                                grouppath:vm.selectedGrouppath,
-                                userpath:userpath
-                            }
+                            grouppath:vm.selectedGrouppath,
+                            userpath:userpath
                         };
 
                         processGUI(-1);

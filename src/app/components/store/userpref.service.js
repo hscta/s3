@@ -61,7 +61,7 @@
 
         vm.init = function () {
             loginService.addListener('loginSuccess', vm.loginSuccess);
-            intellicarAPI.userService.getMyInfo({user:{}})
+            intellicarAPI.userService.getMyInfo({})
                 .then(vm.handleGetMyInfo, vm.handleFailure);
         };
 

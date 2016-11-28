@@ -45,10 +45,8 @@
                                 var userpath = data.item.assetpath;
 
                                 var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
+                                    grouppath:vm.selectedGrouppath,
+                                    userpath:userpath
                                 };
 
                                 // intellicarAPI.roleService.removePermission(body)
@@ -71,10 +69,8 @@
                                 var userpath = data.item.assetpath;
 
                                 var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
+                                    grouppath:vm.selectedGrouppath,
+                                    userpath:userpath
                                 };
 
                                 // intellicarAPI.roleService.assignPermission(body)

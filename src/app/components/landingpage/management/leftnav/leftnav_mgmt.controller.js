@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($rootScope,$scope, $log, startupData,groupService,
+    function LeftNavManagementController($rootScope,$scope, $log, startupData, groupService,
                                          leftNavManagementService, $state, $filter,
                                          settingsService) {
 
@@ -22,6 +22,8 @@
 
         vm.availableFields = ['title', 'description'];
         vm.supportedFields = ['title', 'description'];
+        //vm.firedgrouppaths = [];
+
 
         vm.handleResponse = function (data) {
             //$log.log("handleResponse");
@@ -41,18 +43,12 @@
             $log.log(data);
         };
 
-        vm.firedgrouppaths = [];
-
-        vm.initialize = function (data) {
-            vm.firedgrouppaths.push(startupData);
-            leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
-                .then(vm.handleResponse, vm.handleResponseFailure)
-                .then(vm.setFirstGroup, vm.handleResponseFailure);
-        };
 
         vm.setFirstGroup = function(resp){
-            groupService.lastGroupPath = resp[0].info.assetpath;
-            settingsService.lastGroup = resp[0].info;
+            if(resp.length) {
+                groupService.lastGroupPath = resp[0].info.assetpath;
+                settingsService.lastGroup = resp[0].info;
+            }
         };
 
         vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
@@ -125,11 +121,19 @@
         //     }
         // };
 
-        vm.initialize();
+        vm.init = function (data) {
+            //vm.firedgrouppaths.push(startupData);
+            leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
+                .then(vm.handleResponse, vm.handleResponseFailure)
+                .then(vm.setFirstGroup, vm.handleResponseFailure);
+        };
+
+
+        vm.init();
 
         $scope.$on('toggleLeftSidebar', vm.toggleLeftSidebar);
 
-        $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);
+        $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.init);
     }
 
 })();

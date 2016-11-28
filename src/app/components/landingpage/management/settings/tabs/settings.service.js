@@ -39,10 +39,10 @@
 
 
         vm.setCurrentGroupPath = function(grouppath) {
-
             vm.currentGroup = {grouppath: grouppath};
             console.log(vm.currentGroup);
         };
+
 
         vm.setCurrentGroup = function(stateParams) {
             var grouppath = null;

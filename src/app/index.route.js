@@ -83,15 +83,18 @@
                     'leftnavtree@home': {
                         templateUrl: 'app/components/landingpage/management/leftnav/leftnav_mgmt.html',
                         resolve: {
-                            startupData : function($stateParams, $log, $q, $state, settingsService, intellicarAPI) {
+                            startupData : function($stateParams, $log, $q, $state, $rootScope,
+                                                   settingsService, intellicarAPI) {
                                 $log.log($stateParams);
                                 $log.log($state);
 
                                 var handleGetMyInfo = function (resp) {
-                                    var userpref = resp.data.data[0];
-                                    var pgrouppath = intellicarAPI.helperService.getParentFromPath(userpref.assetpath);
+                                    var userinfo = resp.data.data[0];
+                                    console.log(userinfo);
+                                    var pgrouppath = intellicarAPI.helperService.getParentFromPath(userinfo.assetpath);
                                     settingsService.setCurrentGroupPath(pgrouppath);
                                     console.log(settingsService.getCurrentGroup());
+                                    //$rootScope.$broadcast('loadVehicleMgmt', settingsService.getCurrentGroup());
                                     return pgrouppath;
                                 };
 
@@ -103,7 +106,7 @@
                                 };
 
 
-                                return intellicarAPI.userService.getMyInfo({user: {}})
+                                return intellicarAPI.userService.getMyInfo({})
                                     .then(handleGetMyInfo, handleFailure);
 
                                 // $log.log('in management left nav');
@@ -120,15 +123,16 @@
                         templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
                         controller: 'SettingsController as vm'
                     },
-                    'mgmttab@home.management': {
-                        templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
-                        resolve: {
-                            startupData : function($stateParams, $log, vehicleMgmtService, settingsService, $state) {
-                                return vehicleMgmtService.getData(settingsService.getCurrentGroup());
-                            }
-                        },
-                        controller: 'VehicleMgmtController as vm'
-                    },
+                    // 'mgmttab@home.management': {
+                    //     templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
+                    //     // resolve: {
+                    //     //     startupData : function($state, $stateParams, $log, vehicleMgmtService,
+                    //     //                            settingsService, userprefService) {
+                    //     //         return vehicleMgmtService.getData(settingsService.getCurrentGroup());
+                    //     //     }
+                    //     // },
+                    //     controller: 'VehicleMgmtController as vm'
+                    // },
                     'rightnav@home': {
                         templateUrl: 'app/components/landingpage/management/rightnav/rightnav_mgmt.html',
                         controller: 'RightNavMgmtController as vm'
