@@ -10,13 +10,16 @@
 
     function LeftNavManagementController($rootScope,$scope, $log, startupData, groupService,
                                          leftNavManagementService, $state, $filter,
-                                         settingsService) {
+                                         settingsService, $timeout) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
         vm.state = $state;
         vm.tree_search_pattern = '';
         vm.search_results;
+
+        $log.log(startupData);
+
 
         $scope.treeFilter = $filter('uiTreeFilter');
 
@@ -30,12 +33,12 @@
             vm.tree_data = data;
             return vm.tree_data;
         };
-
-        vm.handleSubGroupResponse = function (data) {
-            //$log.log("handleResponse");
-            // $log.log(data);
-            vm.tree_data = data;
-        };
+        //
+        // vm.handleSubGroupResponse = function (data) {
+        //     //$log.log("handleResponse");
+        //     // $log.log(data);
+        //     vm.tree_data = data;
+        // };
 
 
         vm.handleResponseFailure = function (data) {
@@ -53,9 +56,9 @@
 
         vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
             $log.log('handle asset click', collapsed);
-            if (!collapsed) {
-                toggle(obj);
-            }
+            // if (!collapsed) {
+            //     toggle(obj);
+            // }
 
             if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group') {
                 vm.selectedAsset = asset.id;
@@ -71,6 +74,8 @@
                         .then(vm.handleResponse, vm.handleResponseFailure);
                 }
             }
+            settingsService.setCurrentGroup(asset);
+
             settingsService.handleAssetClick(asset);
         };
 
@@ -123,6 +128,7 @@
 
         vm.init = function (data) {
             //vm.firedgrouppaths.push(startupData);
+            startupData = startupData.toString();
             leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
                 .then(vm.handleResponse, vm.handleResponseFailure)
                 .then(vm.setFirstGroup, vm.handleResponseFailure);

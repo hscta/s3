@@ -240,7 +240,7 @@
                     uiTree.push(resultNode);
                 }
             }
-            $log.log(uiTree);
+            // $log.log(uiTree);
             if(vm.globalGenericTree == null){
                 uiTree[0].collapsed = true;
                 // vm.globalGenericTree  = angular.copy(uiTree);

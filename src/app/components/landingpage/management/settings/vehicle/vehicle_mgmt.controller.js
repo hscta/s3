@@ -9,7 +9,8 @@
         .module('uiplatform')
         .controller('VehicleMgmtController', VehicleMgmtController);
 
-    function VehicleMgmtController($scope, $log, intellicarAPI, settingsService) {
+    function VehicleMgmtController($scope, $rootScope, $log, intellicarAPI, settingsService,
+                                   vehicleMgmtService) {
         $log.log('VehicleMgmtController');
         settingsService.setTab(intellicarAPI.appConstants.VEHICLE);
         var vm = this;
@@ -22,13 +23,12 @@
 
         vm.handleStartupData = function (startupData) {
             $log.log(startupData);
-            $log.log(startupData);
             vm.assets = [];
             for (var key in startupData) {
                 vm.assets.push(startupData[key]);
             }
 
-            $log.log(vm.assets);
+            // $log.log(vm.assets);
 
             if (settingsService.getCurrentGroupPath() )
                 vm.showBtn = true;
@@ -41,6 +41,7 @@
 
 
         vm.init = function (currentGroup) {
+            $log.log('sssssssssssssssssss', settingsService.getCurrentGroup());
             vehicleMgmtService.getData(settingsService.getCurrentGroup())
                 .then(vm.handleStartupData, vm.handleStartupDataFailure);
         };
@@ -52,7 +53,12 @@
             vm.msg = ""
         };
 
-        $scope.$on('loadVehicleMgmt', vm.init);
+
+        if ( settingsService.getCurrentGroup()){
+            vm.assets = [];
+            vm.init();
+        }
+        // $scope.$on('loadVehicleMgmt', vm.init);
     }
 })();
 

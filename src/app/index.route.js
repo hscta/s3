@@ -79,40 +79,39 @@
             })
             .state('home.management', {
                 url: 'home/management',
+                resolve: {
+                    startupData : function($stateParams, $log, $q, $state, $rootScope,
+                                           settingsService, intellicarAPI, $timeout) {
+                        $log.log($stateParams);
+                        $log.log($state);
+
+                        var handleGetMyInfo = function (resp) {
+                            var userinfo = resp.data.data[0];
+                            console.log(userinfo);
+                            var pgrouppath = intellicarAPI.helperService.getParentFromPath(userinfo.assetpath);
+                            settingsService.setCurrentGroupPath(pgrouppath);
+                            console.log(settingsService.getCurrentGroup());
+                            return pgrouppath;
+                        };
+
+
+                        var handleFailure = function (resp) {
+                            $log.log("handleFailure");
+                            $log.log(resp);
+                            return resp;
+                        };
+
+
+                        return intellicarAPI.userService.getMyInfo({})
+                            .then(handleGetMyInfo, handleFailure);
+
+                        // $log.log('in management left nav');
+                        // return $q.resolve({startupData: 'my startup data'});
+                    }
+                },
                 views: {
                     'leftnavtree@home': {
                         templateUrl: 'app/components/landingpage/management/leftnav/leftnav_mgmt.html',
-                        resolve: {
-                            startupData : function($stateParams, $log, $q, $state, $rootScope,
-                                                   settingsService, intellicarAPI) {
-                                $log.log($stateParams);
-                                $log.log($state);
-
-                                var handleGetMyInfo = function (resp) {
-                                    var userinfo = resp.data.data[0];
-                                    console.log(userinfo);
-                                    var pgrouppath = intellicarAPI.helperService.getParentFromPath(userinfo.assetpath);
-                                    settingsService.setCurrentGroupPath(pgrouppath);
-                                    console.log(settingsService.getCurrentGroup());
-                                    //$rootScope.$broadcast('loadVehicleMgmt', settingsService.getCurrentGroup());
-                                    return pgrouppath;
-                                };
-
-
-                                var handleFailure = function (resp) {
-                                    $log.log("handleFailure");
-                                    $log.log(resp);
-                                    return resp;
-                                };
-
-
-                                return intellicarAPI.userService.getMyInfo({})
-                                    .then(handleGetMyInfo, handleFailure);
-
-                                // $log.log('in management left nav');
-                                // return $q.resolve({startupData: 'my startup data'});
-                            }
-                        },
                         controller: 'LeftNavManagementController as vm'
                     },
                     'lefttoolbar@home': {
@@ -123,16 +122,16 @@
                         templateUrl: 'app/components/landingpage/management/settings/tabs/settings.html',
                         controller: 'SettingsController as vm'
                     },
-                    // 'mgmttab@home.management': {
-                    //     templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
-                    //     // resolve: {
-                    //     //     startupData : function($state, $stateParams, $log, vehicleMgmtService,
-                    //     //                            settingsService, userprefService) {
-                    //     //         return vehicleMgmtService.getData(settingsService.getCurrentGroup());
-                    //     //     }
-                    //     // },
-                    //     controller: 'VehicleMgmtController as vm'
-                    // },
+                    'mgmttab@home.management': {
+                        templateUrl: 'app/components/landingpage/management/settings/vehicle/vehicle_mgmt.html',
+                        // resolve: {
+                        //     startupData : function($state, $stateParams, $log, vehicleMgmtService,
+                        //                            settingsService, userprefService) {
+                        //         return vehicleMgmtService.getData(settingsService.getCurrentGroup());
+                        //     }
+                        // },
+                        controller: 'VehicleMgmtController as vm'
+                    },
                     'rightnav@home': {
                         templateUrl: 'app/components/landingpage/management/rightnav/rightnav_mgmt.html',
                         controller: 'RightNavMgmtController as vm'

@@ -90,7 +90,7 @@
         };
 
 
-        vm.onLoad = function () {
+        vm.init = function () {
             $log.log(startupData);
             vm.assets = [];
             for (var key in startupData) {
@@ -105,6 +105,16 @@
             $log.log(vm.assets);
             if ( settingsService.getCurrentGroupPath() )
                 vm.showBtn = true;
+
+            if (vm.currentGroupAsset) {
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) != 0)
+                    vm.currentGroupAsset.assignUser = true;
+
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
+                    vm.currentGroupAsset.assignRole = true;
+
+            }
+
         };
 
         vm.showNewRoleField = function () {
@@ -171,7 +181,7 @@
             $scope.groupData.visible = true;
         };
 
-        vm.onLoad();
+        vm.init();
     }
 })();
 

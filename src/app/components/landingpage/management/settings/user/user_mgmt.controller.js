@@ -75,14 +75,13 @@
         };
 
 
-        vm.onLoad = function () {
+        vm.init = function () {
             vm.assets = [];
             for (var key in startupData) {
                 vm.assets.push(startupData[key]);
             }
 
             $log.log(vm.assets);
-
 
             if ( settingsService.getCurrentGroupPath() )
                 vm.showBtn = true;
@@ -98,6 +97,16 @@
                     startupData[idx].assignRole = true;
                 else
                     startupData[idx].assignRole = false;
+            }
+
+
+            if (vm.currentGroupAsset) {
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_GROUP_PERM) != 0)
+                    vm.currentGroupAsset.assignGroup = true;
+
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
+                    vm.currentGroupAsset.assignRole = true;
+
             }
 
             $log.log(startupData);
@@ -145,7 +154,7 @@
         vm.getUsers = function(body) {
             $scope.groupData.datas[1].heading = "Assignable Groups";
             $scope.groupData.datas[0].heading = "Assigned Groups";
-            
+
             var users = intellicarAPI.userService.getMyUsersMapList({});
 
             var groupUsers = intellicarAPI.groupService.getMyUsersMapList(body);
@@ -237,7 +246,7 @@
             $scope.groupData.visible = true;
         };
 
-        vm.onLoad();
+        vm.init();
     }
 })();
 

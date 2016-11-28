@@ -12,6 +12,8 @@
             var vm = this;
             vm.listeners = {};
 
+            vm.tree_data = [];
+
 
             vm.addListener = function (key, listener) {
                 if (!(key in vm.listeners)) {

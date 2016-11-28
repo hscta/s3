@@ -98,7 +98,7 @@
             if(vm.tabs.indexOf(asset.id) != -1) {
                 tab = asset.id;
             } else {
-                $log.log("duniya " + asset.info.ui_asset_type);
+                // $log.log("duniya " + asset.info.ui_asset_type);
                 tab = asset.info.ui_asset_type;
             }
 
