@@ -262,7 +262,7 @@
                 if (assetTree[pgrouppath].info == null) {
                     assetTree[pgrouppath].info = {
                         name: asset.pname,
-                        assetpath: asset.pgrouppath,
+                        assetpath: asset.pgrouppath
                     };
                     helperService.addAssetInfo(assetTree[pgrouppath].info);
                 }

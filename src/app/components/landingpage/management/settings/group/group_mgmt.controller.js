@@ -99,7 +99,7 @@
                                     }, 1000);
                                 });
                             }
-                        },
+                        }
                     ]
                 }, {
                     heading: 'Assignable Users',
@@ -131,10 +131,10 @@
                                     }, 1000);
                                 });
                             }
-                        },
+                        }
                     ]
-                },
-            ],
+                }
+            ]
         };
 
         vm.assignUserSuccess = function (resp) {
@@ -184,7 +184,7 @@
                         }, 1000);
                     });
                 }
-                },
+                }
             ];
 
             $scope.groupData.datas[1].heading = "Assignable Roles";

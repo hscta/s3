@@ -140,7 +140,7 @@
                             "displayname": "Key11 Level 3 Keys Array",
                             "select": null,
                             "editable": false,
-                            "default": {"level3key1": 100, "level3key2": "200"},
+                            "default": {"level3key1": 100, "level3key2": "200"}
                         }
                     },
                     "displayname": "Key11 Level 2 Keys Array",
@@ -199,12 +199,12 @@
                                         "func": 'function(inpdataofthisfield, overalldataofthisjson, schemaforthisfield, overallschema)' +
                                         '{return {"status":"FAILURE", "errmsg":"I havent yet checked it"}}'
                                     }
-                                },
+                                }
                             },
                             "displayname": "Key12 Level 3 Keys Array",
                             "select": null,
                             "editable": false,
-                            "default": {"level3key1": 100, "level3key2": "200"},
+                            "default": {"level3key1": 100, "level3key2": "200"}
                         }
                     },
                     "displayname": "Key12 Level 2 Keys Array",

@@ -15,7 +15,7 @@
             restrict: 'AE',
             templateUrl: 'app/components/common/directives/readonly-list.html',
             scope: {
-                listData: '=',
+                listData: '='
             },
 
             link: function (scope) {

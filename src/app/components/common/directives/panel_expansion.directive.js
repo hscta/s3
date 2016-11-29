@@ -58,7 +58,7 @@
                     var options = {
                         templateUrl: '/app/components/common_directives/panel_delete_dialog.html',
                         scope: scope,
-                        preserveScope: true,
+                        preserveScope: true
                     };
 
                     scope.deleted_panel_id = ev.toString();

@@ -48,7 +48,7 @@
 
                                 processGUI(1);
                             });
-                        }},
+                        }}
                     ]
                 },{
                     heading:'',
@@ -68,10 +68,10 @@
                                 $log.log(body);
                                 processGUI(-1);
                             });
-                        }},
+                        }}
                     ]
-                },
-            ],
+                }
+            ]
         };
 
 
@@ -195,7 +195,7 @@
 
                         processGUI(-1);
                     });
-                }},
+                }}
             ];
 
             vm.getRoles(body);

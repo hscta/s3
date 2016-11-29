@@ -32,7 +32,7 @@
                     longitude: '',
                     name: '',
                     other: ''
-                },
+                }
             };
 
             vm.setInMapLocation = function (loc) {

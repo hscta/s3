@@ -14,7 +14,7 @@
         return {
             restrict: 'E',
             scope :{
-                popup:'=data',
+                popup:'=data'
             },
             templateUrl: 'app/components/common/directives/multi-list.html',
 

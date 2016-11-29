@@ -45,7 +45,7 @@
             historyMapEvents : {
                 click: function () {
                     vm.historyMapClickEvent();
-                },
+                }
             },
             trace:{
                 path: [],
@@ -113,7 +113,7 @@
                     vm.polygonEvents(model, vm.historyMapObj.historyFenceObj);
                     vm.historyFenceInfoWindowShow();
                 }
-            },
+            }
         };
 
         vm.resetHistoryData = function(){

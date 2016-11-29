@@ -55,7 +55,7 @@
 
                                 processGUI(1);
                             });
-                        }},
+                        }}
                     ]
                 },{
                     heading:'Assignable Users',
@@ -79,10 +79,10 @@
                                 $log.log(body);
                                 processGUI(-1);
                             });
-                        }},
+                        }}
                     ]
-                },
-            ],
+                }
+            ]
         };
 
         vm.assignPermissionSuccess = function(resp){
