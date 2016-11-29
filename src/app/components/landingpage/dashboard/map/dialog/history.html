@@ -182,8 +182,9 @@
                            ng-model-options="{trackBy: '$value.rtgps.deviceid'}">
 
                     <md-option ng-repeat="(key, vehicle) in vm.historyMap.markersByPath"
-                            ng-value="vm.historyMap.vehiclesByPath[key]">
-                        {{vm.historyMap.vehiclesByPath[key].rtgps.vehicleno}}
+                               ng-value="vm.historyMap.vehiclesByPath[key]"
+                               ng-if="vm.historyMap.vehiclesByPath[key].rtgps.meta.onroad">
+                            {{vm.historyMap.vehiclesByPath[key].rtgps.vehicleno}}
                     </md-option>
                 </md-select>
             </md-input-container>

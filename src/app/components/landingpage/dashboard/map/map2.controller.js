@@ -58,9 +58,10 @@
             vm.runStats();
         };
 
-        vm.checkRoaded = function (marker) {
-            if (marker && marker.meta) {
-                if (marker.meta.onroad) {
+
+        vm.checkRoaded = function (rtgps) {
+            if (rtgps && rtgps.meta) {
+                if (rtgps.meta.onroad) {
                     if (vm.onRoaded) {
                         return true;
                     }
