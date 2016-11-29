@@ -15,15 +15,24 @@
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewRoleField()">
     Create Role
 </md-button>
+<md-button class="md-accent" ng-if="vm.currentGroupAsset.assignGroup"
+           ng-click="vm.assignUsers(vm.currentGroupAsset)">
+    Assign User
+</md-button>
+
+<md-button class="md-accent" ng-if="vm.currentGroupAsset.assignRole"
+           ng-click="vm.assignRoles(vm.currentGroupAsset)">
+    Assign Group
+</md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
 <md-content layout="column">
     <md-input-container flex>
         <label>Enter Role Name</label>
-        <input type="text" ng-model="vm.newGroupName">
+        <input type="text" ng-model="vm.newRoleName">
     </md-input-container>
 
-    <md-button class="md-accent" ng-click="vm.createGroup();" flex="66">Create Role</md-button>
+    <md-button class="md-accent" ng-click="vm.createRole();" flex="66">Create Role</md-button>
 </md-content>
 </div><br/>
 

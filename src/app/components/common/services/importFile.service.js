@@ -8,7 +8,7 @@
     angular.module('uiplatform')
         .service('importFileservice', importFileservice);
 
-    function importFileservice($rootScope, $log, $q, appConstants) {
+    function importFileservice($rootScope, $log, $q) {
         var vm = this;
         $log.log("importFileService");
 

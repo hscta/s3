@@ -617,7 +617,7 @@
             var mapCanvas = document.getElementById("map");
             vm.inMap.mapOptions = {
                 center: new google.maps.LatLng(vm.inMap.center.latitude, vm.inMap.center.longitude),
-                zoom: vm.inMap.zoom,
+                zoom: vm.inMap.zoom
             }
             vm.inMap.map = new google.maps.Map(mapCanvas, vm.inMap.mapOptions);
 

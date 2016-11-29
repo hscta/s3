@@ -30,13 +30,13 @@
             map: {},
             mapOptions:{
                 center: {lat:newMapService.getCenter().latitude, lng:newMapService.getCenter().longitude},
-                zoom:newMapService.getZoom(),
+                zoom:newMapService.getZoom()
             },
             markersByPath:newMapService.inMap.markers.markersByPath,
             vehiclesByPath : vehicleService.vehiclesByPath,
             trace:{
-                path:[],
-            },
+                path:[]
+            }
         }
 
         vm.getHistoryData = function(){
@@ -130,7 +130,7 @@
 
             vm.historyMap.startMarker = new google.maps.Marker({
                 position: path[0],
-                icon: 'assets/images/markers/big/red-dot.png',
+                icon: 'assets/images/markers/big/red-dot.png'
             });
 
 

@@ -18,7 +18,7 @@
                                            geofenceService,
                                            fenceReportService,
                                            vehicleAPIService,
-                                           myAlarmService, geocodeService,
+                                           geocodeService,
                                            permissionService, roleService,
                                            importFileservice
                                            ) {
@@ -41,7 +41,6 @@
                 geofenceService : geofenceService,
                 fenceReportService: fenceReportService,
                 vehicleAPIService: vehicleAPIService,
-                myAlarmService: myAlarmService,
                 geocodeService:geocodeService,
                 permissionService:permissionService,
                 roleService:roleService,

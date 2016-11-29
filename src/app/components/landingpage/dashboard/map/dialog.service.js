@@ -117,7 +117,7 @@
                 id : id,
                 count: 0,
                 start_time: getCurrentCpuTime(),
-                end_time: 0,
+                end_time: 0
             }
         }
 

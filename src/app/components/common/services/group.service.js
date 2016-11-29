@@ -45,11 +45,24 @@
             return requestService.firePost('/group/myusers', body);
         };
 
+        vm.getAssignedUsers = function (body) {
+            // $log.log("getMyUsers");
+            body = vm.encloseBody(body);
+            return requestService.firePost('/group/assignedusers', body);
+        };
+
 
         vm.getMyRoles = function (body) {
             // $log.log("getMyRoles");
             body = vm.encloseBody(body);
             return requestService.firePost('/group/myroles', body);
+        };
+
+
+        vm.getAssignedRoles = function (body) {
+            // $log.log("getMyRoles");
+            body = vm.encloseBody(body);
+            return requestService.firePost('/group/assignedroles', body);
         };
 
 
@@ -69,6 +82,12 @@
         vm.assignRole = function(body) {
             body = vm.encloseBody(body);
             return requestService.firePost('/group/assignrole', body);
+        };
+
+
+        vm.deAssignRole = function(body) {
+            body = vm.encloseBody(body);
+            return requestService.firePost('/group/deassignrole', body);
         };
 
 
@@ -128,6 +147,16 @@
         };
 
 
+        vm.getAssignedUsersMapList = function (body) {
+            //$log.log("getMyUsersMap");
+            return vm.getAssignedUsers(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetList, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+
 
         vm.getMyRolesMap = function (body) {
             // $log.log("getMyRolesMap");
@@ -140,6 +169,14 @@
         vm.getMyRolesList = function (body) {
             // $log.log("getMyRolesMap");
             return vm.getMyRoles(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetList, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+        vm.getAssignedRolesList = function (body) {
+            // $log.log("getMyRolesMap");
+            return vm.getAssignedRoles(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
                 .then(helperService.makeAssetList, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);

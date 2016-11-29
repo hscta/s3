@@ -9,8 +9,8 @@
         .module('uiplatform')
         .controller('VehicleMgmtController', VehicleMgmtController);
 
-    function VehicleMgmtController($scope, $log, startupData,
-                                   intellicarAPI, settingsService) {
+    function VehicleMgmtController($scope, $rootScope, $log, intellicarAPI, settingsService,
+                                   vehicleMgmtService) {
         $log.log('VehicleMgmtController');
         settingsService.setTab(intellicarAPI.appConstants.VEHICLE);
         var vm = this;
@@ -21,8 +21,17 @@
 
         vm.currentGroupAsset = settingsService.lastGroup;
 
-        vm.handleStartupData = function (resp) {
-            $log.log(resp);
+        vm.handleStartupData = function (startupData) {
+            $log.log(startupData);
+            vm.assets = [];
+            for (var key in startupData) {
+                vm.assets.push(startupData[key]);
+            }
+
+            // $log.log(vm.assets);
+
+            if (settingsService.getCurrentGroupPath() )
+                vm.showBtn = true;
         };
 
 
@@ -30,18 +39,13 @@
             $log.log(resp);
         };
 
-        vm.onLoad = function () {
-            $log.log(startupData);
-            vm.assets = [];
-            for (var key in startupData) {
-                vm.assets.push(startupData[key]);
-            }
 
-            $log.log(vm.assets);
-
-            if ( settingsService.getCurrentGroupPath() )
-                vm.showBtn = true;
+        vm.init = function (currentGroup) {
+            $log.log('sssssssssssssssssss', settingsService.getCurrentGroup());
+            vehicleMgmtService.getData(settingsService.getCurrentGroup())
+                .then(vm.handleStartupData, vm.handleStartupDataFailure);
         };
+
 
         vm.showNewVehicleField = function () {
             $log.log('show/hide');
@@ -50,7 +54,11 @@
         };
 
 
-        vm.onLoad();
+        if ( settingsService.getCurrentGroup()){
+            vm.assets = [];
+            vm.init();
+        }
+        // $scope.$on('loadVehicleMgmt', vm.init);
     }
 })();
 

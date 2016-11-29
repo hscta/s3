@@ -15,6 +15,9 @@
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewDeviceField()">
     Add Device
 </md-button>
+<md-button class="md-accent" ng-show="vm.showBtn">
+    Bind to Vehicle
+</md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
     <div class="error" ng-show="vm.msg" style="color:red"><span>{{vm.msg}}</span></div>

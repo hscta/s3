@@ -12,68 +12,86 @@
         $log.log("userService");
         var vm = this;
 
+        vm.encloseBody = function (data) {
+            // return data;
+            return {user: data};
+        };
+
 
         vm.getMyInfo = function (body) {
             //$log.log("getMyInfo");
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/myinfo', body);
         };
 
 
         vm.getMyGroups = function (body) {
             // $log.log("getMyGroups");
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/mygroups', body);
         };
 
 
         vm.getMyAssetGroups = function (body) {
             // $log.log("getMyAssetGroups");
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/myassetgroups', body);
         };
 
 
         vm.getMyVehicles = function (body) {
             // $log.log("getMyVehicles");
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/myvehicles', body);
         };
 
 
         vm.getMyUsers = function (body) {
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/myusers', body);
         };
 
 
         vm.getUserPermissions = function (body) {
+            body = vm.encloseBody(body);
             return requestService.firePost('/permission/map', body);
         };
 
 
         vm.getMyRoles = function (body) {
             // $log.log("getMyRoles");
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/myroles', body);
         };
 
 
         vm.getMyDevices = function (body) {
             // $log.log("getMyDevices");
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/mydevices', body);
         };
 
 
         vm.createUser = function (body) {
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/create', body);
         };
 
 
         vm.getMyFences = function (body) {
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/mygeofences', body);
         };
 
 
         vm.getMyGeofenceReports = function (body) {
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/mygeofencereports', body);
         };
 
+
         vm.assignUser = function (body) {
+            body = vm.encloseBody(body);
             return requestService.firePost('/user/assigngroup', body);
         };
 

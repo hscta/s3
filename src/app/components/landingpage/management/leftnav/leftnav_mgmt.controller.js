@@ -8,9 +8,9 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($rootScope,$scope, $log, startupData,groupService,
+    function LeftNavManagementController($rootScope,$scope, $log, startupTreeData, groupService,
                                          leftNavManagementService, $state, $filter,
-                                         settingsService) {
+                                         settingsService, $timeout) {
 
         $log.log('LeftNavManagementController');
         var vm = this;
@@ -18,22 +18,27 @@
         vm.tree_search_pattern = '';
         vm.search_results;
 
+        $log.log(startupTreeData);
+
+
         $scope.treeFilter = $filter('uiTreeFilter');
 
         vm.availableFields = ['title', 'description'];
         vm.supportedFields = ['title', 'description'];
+        //vm.firedgrouppaths = [];
+
 
         vm.handleResponse = function (data) {
             //$log.log("handleResponse");
             vm.tree_data = data;
             return vm.tree_data;
         };
-
-        vm.handleSubGroupResponse = function (data) {
-            //$log.log("handleResponse");
-            // $log.log(data);
-            vm.tree_data = data;
-        };
+        //
+        // vm.handleSubGroupResponse = function (data) {
+        //     //$log.log("handleResponse");
+        //     // $log.log(data);
+        //     vm.tree_data = data;
+        // };
 
 
         vm.handleResponseFailure = function (data) {
@@ -41,25 +46,19 @@
             $log.log(data);
         };
 
-        vm.firedgrouppaths = [];
-
-        vm.initialize = function (data) {
-            vm.firedgrouppaths.push(startupData);
-            leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
-                .then(vm.handleResponse, vm.handleResponseFailure)
-                .then(vm.setFirstGroup, vm.handleResponseFailure);
-        };
 
         vm.setFirstGroup = function(resp){
-            groupService.lastGroupPath = resp[0].info.assetpath;
-            settingsService.lastGroup = resp[0].info;
+            if(resp.length) {
+                groupService.lastGroupPath = resp[0].info.assetpath;
+                settingsService.lastGroup = resp[0].info;
+            }
         };
 
         vm.handleAssetClick = function (asset, collapsed, toggle, obj) {
             $log.log('handle asset click', collapsed);
-            if (!collapsed) {
-                toggle(obj);
-            }
+            // if (!collapsed) {
+            //     toggle(obj);
+            // }
 
             if(!asset.ui_asset_type && asset.info.ui_asset_type === 'group') {
                 vm.selectedAsset = asset.id;
@@ -75,6 +74,8 @@
                         .then(vm.handleResponse, vm.handleResponseFailure);
                 }
             }
+            settingsService.setCurrentGroup(asset);
+
             settingsService.handleAssetClick(asset);
         };
 
@@ -125,11 +126,20 @@
         //     }
         // };
 
-        vm.initialize();
+        vm.init = function (data) {
+            //vm.firedgrouppaths.push(startupTreeData);
+            startupTreeData = startupTreeData.toString();
+            leftNavManagementService.getManagementTreeWithUser({grouppath:startupTreeData})
+                .then(vm.handleResponse, vm.handleResponseFailure)
+                .then(vm.setFirstGroup, vm.handleResponseFailure);
+        };
+
+
+        vm.init();
 
         $scope.$on('toggleLeftSidebar', vm.toggleLeftSidebar);
 
-        $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.initialize);
+        $scope.$on('EVENT_MGMT_TREE_CHANGE', vm.init);
     }
 
 })();

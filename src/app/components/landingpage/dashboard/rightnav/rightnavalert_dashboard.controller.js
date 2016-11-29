@@ -341,7 +341,7 @@
                 for ( var vehicle in data[idx].assg){
                     var detail = {
                         id: data[idx].assg[vehicle].assetpath,
-                        name: data[idx].assg[vehicle].name,
+                        name: data[idx].assg[vehicle].name
                     };
                     if (data[idx].assg[vehicle].assgfromassetid == 4) {
                         rep.vehiclesAssetPath.push(data[idx].assg[vehicle].assetpath);

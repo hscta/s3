@@ -240,7 +240,7 @@
                     uiTree.push(resultNode);
                 }
             }
-            $log.log(uiTree);
+            // $log.log(uiTree);
             if(vm.globalGenericTree == null){
                 uiTree[0].collapsed = true;
                 // vm.globalGenericTree  = angular.copy(uiTree);
@@ -262,7 +262,7 @@
                 if (assetTree[pgrouppath].info == null) {
                     assetTree[pgrouppath].info = {
                         name: asset.pname,
-                        assetpath: asset.pgrouppath,
+                        assetpath: asset.pgrouppath
                     };
                     helperService.addAssetInfo(assetTree[pgrouppath].info);
                 }

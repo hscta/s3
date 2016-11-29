@@ -25,5 +25,12 @@
             body = vm.encloseBody(body);
             return requestService.firePost('/role/addpermission', body);
         };
+
+
+        vm.createRole = function(body) {
+            // $log.log("getMyGroups");
+            body = vm.encloseBody(body);
+            return requestService.firePost('/role/create', body);
+        };
     }
 })();

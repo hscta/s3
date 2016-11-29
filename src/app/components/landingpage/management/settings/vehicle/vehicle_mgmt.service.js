@@ -36,7 +36,6 @@
             // if(settingsService.getRequestedGroupPath(stateParams) === settingsService.getCurrentGroupPath())
             //     return vm.startupData;
 
-            settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyVehiclesMap(settingsService.getCurrentGroup())
                 .then(vm.handleGetMyVehicles, vm.handleGetMyVehiclesFailure);
         }

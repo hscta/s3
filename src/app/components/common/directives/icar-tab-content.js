@@ -10,7 +10,7 @@
         .directive('icarTabContent', icarTabContent)
         .directive('addContent', addContent);
 
-    function icarTabContent($log, $compile, $stateParams) {
+    function icarTabContent($log, $compile) {
         return {
             restrict: 'E',
             template: '<div style="overflow:hidden;"></div>',

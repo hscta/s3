@@ -9,8 +9,7 @@
         .module('uiplatform')
         .directive('icarExpanel', icarExpanel);
 
-    function icarExpanel($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
-                         $stateParams) {
+    function icarExpanel($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup) {
 
         return {
             restrict: 'ACE',

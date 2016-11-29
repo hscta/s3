@@ -14,7 +14,7 @@
         return {
             restrict: 'E',
             scope :{
-                popup:'=data',
+                popup:'=data'
             },
             templateUrl: 'app/components/common/directives/multi-list.html',
 
@@ -23,6 +23,7 @@
                 scope.defaultClick = function(param,callback){
 
                     var processGUI = function(id){
+                        console.log(param.data);
                         param.item.processing = false;
                         for(var idx=0; idx < param.object.list.length; idx++){
                             if(param.object.list[idx].id == param.item.id){

@@ -45,10 +45,8 @@
                                 var userpath = data.item.assetpath;
 
                                 var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
+                                    grouppath:vm.selectedGrouppath,
+                                    userpath:userpath
                                 };
 
                                 // intellicarAPI.roleService.removePermission(body)
@@ -57,7 +55,7 @@
 
                                 processGUI(1);
                             });
-                        }},
+                        }}
                     ]
                 },{
                     heading:'Assignable Users',
@@ -71,10 +69,8 @@
                                 var userpath = data.item.assetpath;
 
                                 var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
+                                    grouppath:vm.selectedGrouppath,
+                                    userpath:userpath
                                 };
 
                                 // intellicarAPI.roleService.assignPermission(body)
@@ -83,33 +79,16 @@
                                 $log.log(body);
                                 processGUI(-1);
                             });
-                        }},
+                        }}
                     ]
-                },
-            ],
+                }
+            ]
         };
 
         vm.assignPermissionSuccess = function(resp){
             $log.log(resp);
         };
 
-
-        vm.onLoad = function () {
-            $log.log(startupData);
-            vm.assets = [];
-            for (var key in startupData) {
-                if ( startupData[key].permissions.indexOf(vm.ASSIGN_PERMISSION)>=0){
-                    startupData[key].assignPermission = true;
-                }else {
-                    startupData[key].assignPermission = false;
-                }
-                    vm.assets.push(startupData[key]);
-            }
-
-            $log.log(vm.assets);
-            if ( settingsService.getCurrentGroupPath() )
-                vm.showBtn = true;
-        };
 
         vm.showNewRoleField = function () {
             $log.log('show/hide');
@@ -153,7 +132,7 @@
             $scope.groupData.datas[0].list = [];
 
             $scope.groupData.datas[1].list = [];
-            $scope.groupData.datas[0].list = assignedPermList;
+            $scope.groupData.datas[1].list = assignedPermList;
 
             var matching = false;
             for ( var idx in assignablePermList){
@@ -175,7 +154,57 @@
             $scope.groupData.visible = true;
         };
 
-        vm.onLoad();
+
+        vm.createRole = function () {
+            $log.log(vm.currentGroupAsset);
+
+            name = vm.newRoleName;
+            pgrouppath = vm.currentGroupAsset.assetpath;
+            var body = {
+                name : name,
+                pgrouppath: pgrouppath
+            };
+
+
+            intellicarAPI.roleService.createRole(body)
+                .then(vm.createRoleSuccess, vm.handleFailure);
+
+        };
+
+
+        vm.createRoleSuccess = function (resp) {
+            $log.log(resp);
+        };
+
+
+        vm.init = function () {
+            $log.log(startupData);
+            vm.assets = [];
+            for (var key in startupData) {
+                if ( startupData[key].permissions.indexOf(vm.ASSIGN_PERMISSION)>=0){
+                    startupData[key].assignPermission = true;
+                }else {
+                    startupData[key].assignPermission = false;
+                }
+                vm.assets.push(startupData[key]);
+            }
+
+            $log.log(vm.assets);
+            if ( settingsService.getCurrentGroupPath() )
+                vm.showBtn = true;
+
+            if (vm.currentGroupAsset) {
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) != 0)
+                    vm.currentGroupAsset.assignUser = true;
+
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
+                    vm.currentGroupAsset.assignRole = true;
+
+            }
+
+        };
+
+        vm.init();
     }
 })();
 

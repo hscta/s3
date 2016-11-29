@@ -48,7 +48,7 @@
 
                                 processGUI(1);
                             });
-                        }},
+                        }}
                     ]
                 },{
                     heading:'',
@@ -62,29 +62,26 @@
                                 var userpath = data.item.assetpath;
 
                                 var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
+                                    grouppath:vm.selectedGrouppath,
+                                    userpath:userpath
                                 };
                                 $log.log(body);
                                 processGUI(-1);
                             });
-                        }},
+                        }}
                     ]
-                },
-            ],
+                }
+            ]
         };
 
 
-        vm.onLoad = function () {
+        vm.init = function () {
             vm.assets = [];
             for (var key in startupData) {
                 vm.assets.push(startupData[key]);
             }
 
             $log.log(vm.assets);
-
 
             if ( settingsService.getCurrentGroupPath() )
                 vm.showBtn = true;
@@ -100,6 +97,16 @@
                     startupData[idx].assignRole = true;
                 else
                     startupData[idx].assignRole = false;
+            }
+
+
+            if (vm.currentGroupAsset) {
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_GROUP_PERM) != 0)
+                    vm.currentGroupAsset.assignGroup = true;
+
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
+                    vm.currentGroupAsset.assignRole = true;
+
             }
 
             $log.log(startupData);
@@ -147,7 +154,7 @@
         vm.getUsers = function(body) {
             $scope.groupData.datas[1].heading = "Assignable Groups";
             $scope.groupData.datas[0].heading = "Assigned Groups";
-            
+
             var users = intellicarAPI.userService.getMyUsersMapList({});
 
             var groupUsers = intellicarAPI.groupService.getMyUsersMapList(body);
@@ -166,7 +173,7 @@
         vm.assignRoles = function (data) {
             $log.log(data);
             // $scope.groupData.visible = true;
-            $scope.groupData.heading = 'Assign Roles to Users';
+            $scope.groupData.heading = 'Assign Roles to '+ data.name ;
             vm.selectedGrouppath = data.assetpath;
 
             var body ={
@@ -182,15 +189,13 @@
                         var userpath = data.item.assetpath;
 
                         var body = {
-                            user: {
-                                grouppath:vm.selectedGrouppath,
-                                userpath:userpath
-                            }
+                            grouppath:vm.selectedGrouppath,
+                            userpath:userpath
                         };
 
                         processGUI(-1);
                     });
-                }},
+                }}
             ];
 
             vm.getRoles(body);
@@ -241,7 +246,7 @@
             $scope.groupData.visible = true;
         };
 
-        vm.onLoad();
+        vm.init();
     }
 })();
 

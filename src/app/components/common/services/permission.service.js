@@ -17,6 +17,7 @@
             // $log.log("getMyGroups");
             return requestService.firePost('/permission/map', body);
         };
+
     }
 
 })();

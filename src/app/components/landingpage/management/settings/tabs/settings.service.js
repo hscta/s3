@@ -5,7 +5,7 @@
     angular.module('uiplatform')
         .service('settingsService', settingsService);
 
-    function settingsService($log, $state, intellicarAPI, $timeout) {
+    function settingsService($log, $state, intellicarAPI) {
         $log.log('settingsService');
         var vm = this;
         vm.setTabListener = null;
@@ -39,10 +39,10 @@
 
 
         vm.setCurrentGroupPath = function(grouppath) {
-
             vm.currentGroup = {grouppath: grouppath};
             console.log(vm.currentGroup);
         };
+
 
         vm.setCurrentGroup = function(stateParams) {
             var grouppath = null;
@@ -98,7 +98,7 @@
             if(vm.tabs.indexOf(asset.id) != -1) {
                 tab = asset.id;
             } else {
-                $log.log("duniya " + asset.info.ui_asset_type);
+                // $log.log("duniya " + asset.info.ui_asset_type);
                 tab = asset.info.ui_asset_type;
             }
 

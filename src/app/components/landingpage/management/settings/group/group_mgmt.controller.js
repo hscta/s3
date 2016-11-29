@@ -11,7 +11,7 @@
         .controller('GroupMgmtController', GroupMgmtController);
 
     function GroupMgmtController($scope, $rootScope, $log,
-                                 intellicarAPI, groupMgmtService,$timeout,
+                                 intellicarAPI, groupMgmtService, $timeout,
                                  settingsService, startupData, $q, $stateParams) {
 
         $log.log('GroupMgmtController');
@@ -27,66 +27,17 @@
         vm.ASSIGN_ROLE_PERM = 5;
 
         vm.currentGroupAsset = settingsService.lastGroup;
+
+
         vm.handleMyVehiclesFailure = function (data) {
             $log.log("GroupMgmtController handleMyVehiclesFailure");
         };
 
         // vm.selectedTreeGroup = null;
 
-        vm.onLoad = function () {
-            $log.log(startupData);
-
-            for ( var idx in startupData){
-                $log.log(startupData[idx]);
-                if (startupData[idx].permissions.indexOf(vm.ASSIGN_USER_PERM)>= 0 )
-                    startupData[idx].assignUser = true;
-                else
-                    startupData[idx].assignUser = false;
-
-                if (startupData[idx].permissions.indexOf(vm.ASSIGN_ROLE_PERM)>= 0 )
-                    startupData[idx].assignRole = true;
-                else
-                    startupData[idx].assignRole = false;
-            }
-            vm.panelData(startupData);
-
-            //
-            // window.setTimeout(function(){
-            //     var newData = groupMgmtService.getData((settingsService.getCurrentGroup()));
-            //
-            //     $log.log(newData);
-            //     $log.log($q.resolve(newData));
-            // }, 5000);
-
-            $log.log($stateParams);
-
-            // vm.selectedTreeGroup= $stateParams.info;
-
-            if ( vm.currentGroupAsset){
-                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) >= 0)
-                    vm.currentGroupAsset.assignUser = true;
-
-                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) >= 0)
-                    vm.currentGroupAsset.assignRole = true;
-
-            }
-
-
-        };
-
         vm.handleFailure = function (resp) {
             $log.log('handleFailure');
             $log.log(resp);
-        };
-
-        vm.panelData = function (data) {
-            vm.assets = [];
-            for (var key in data) {
-                vm.assets.push(data[key]);
-            }
-
-            if (settingsService.getCurrentGroupPath())
-                vm.showBtn = true;
         };
 
         vm.createGroup = function () {
@@ -123,133 +74,192 @@
         $scope.groupData = {
             // visible : true,
             heading: 'Add User to the Group',
-            options:{
+            options: {
                 width: 70, // in  percentage
                 height: 70 // in percentage
             },
-            datas:[
+            datas: [
                 {
-                    heading:'Assigned Users',
-                    list :[],
-                    buttons:[
-                        {iconType:'fa', icon: 'trash', color: '#e74c3c', fColor: '#fff', onClick : function(data, func){
-                            func(data, function(processGUI){
-                                // Fire api
-                                $log.log('deasssign');
-                                $log.log(data);
+                    heading: 'Assigned Users',
+                    list: [],
+                    buttons: [
+                        {
+                            iconType: 'fa',
+                            icon: 'trash',
+                            color: '#e74c3c',
+                            fColor: '#fff',
+                            onClick: function (data, func) {
+                                func(data, function (processGUI) {
+                                    // Fire api
+                                    $log.log('deasssign');
+                                    $log.log(data);
 
-                                $timeout(function(){
-                                    processGUI(1);
-                                },1000);
-                            });
-                        }},
+                                    $timeout(function () {
+                                        processGUI(1);
+                                    }, 1000);
+                                });
+                            }
+                        }
                     ]
-                },{
-                    heading:'Assignable Users',
-                    list :[],
-                    buttons:[
-                        {iconType:'fa', icon: 'plus', color: '#2ecc71', fColor: '#fff', onClick : function(data, func){
-                            func(data, function(processGUI){
-                                // Fire api
-                                $log.log('Asssign');
-                                $log.log(data);
-                                var userpath = data.item.assetpath;
+                }, {
+                    heading: 'Assignable Users',
+                    list: [],
+                    buttons: [
+                        {
+                            iconType: 'fa',
+                            icon: 'plus',
+                            color: '#2ecc71',
+                            fColor: '#fff',
+                            onClick: function (data, func) {
+                                func(data, function (processGUI) {
+                                    // Fire api
+                                    $log.log('Asssign');
+                                    $log.log(data);
+                                    var userpath = data.item.assetpath;
 
-                                var body = {
-                                    user: {
-                                        grouppath:vm.selectedGrouppath,
-                                        userpath:userpath
-                                    }
-                                };
+                                    var body = {
+                                        grouppath: vm.selectedGrouppath,
+                                        userpath: userpath
+                                    };
 
-                                // intellicarAPI.userService.assignUser(body)
-                                //     .then(vm.assignUserSuccess, vm.handleFailure);
+                                    // intellicarAPI.groupService.assignUser(body)
+                                    //     .then(vm.assignUserSuccess, vm.handleFailure);
 
-                                $log.log(body);
-                                $timeout(function(){
-                                    processGUI(-1);
-                                },1000);
-                            });
-                        }},
+                                    $log.log(body);
+                                    $timeout(function () {
+                                        processGUI(-1);
+                                    }, 1000);
+                                });
+                            }
+                        }
                     ]
-                },
-            ],
+                }
+            ]
         };
 
-        vm.assignUserSuccess = function(resp){
+        vm.assignUserSuccess = function (resp) {
             $log.log(resp);
         };
 
 
         vm.assignUsers = function (data) {
             $log.log(data);
+            $scope.groupData.heading = "Add Users to the "+ data.name + " group";
             vm.selectedGrouppath = data.assetpath;
-
-            var body ={
-                grouppath:data.assetpath
-            };
-            vm.getUsers(body);
 
             $scope.groupData.datas[1].heading = "Assignable Users";
             $scope.groupData.datas[0].heading = "Assigned Users";
+            $scope.groupData.datas[0].list = [];
+            $scope.groupData.datas[1].list = [];
+            $scope.groupData.visible = true;
+
+            var body = {
+                grouppath: data.assetpath
+            };
+            vm.getUsers(body);
         };
 
         vm.assignRoles = function (data) {
             // $scope.groupData.visible = true;
-            $scope.groupData.heading = 'Add Roles to the group';
+            $log.log(data);
+            $scope.groupData.heading = "Add Roles to the "+ data.name + " group";
             vm.selectedGrouppath = data.assetpath;
 
-            var body ={
-                grouppath:data.assetpath
-            };
+            $scope.groupData.datas[0].buttons = [{
+                iconType: 'fa',
+                icon: 'trash',
+                color: '#e74c3c',
+                fColor: '#fff',
+                onClick: function (data, func) {
+                    func(data, function (processGUI) {
+
+                        var rolepath = data.item.assetpath;
+
+                        var body = {
+                            grouppath: vm.selectedGrouppath,
+                            rolepath: rolepath
+                        };
+
+                        intellicarAPI.groupService.deAssignRole(body)
+                            .then(vm.deAssignRoleSuccess, vm.handleFailure);
+
+
+                        vm.processGui = processGUI(-1);
+                    });
+                }
+            }];
 
             $scope.groupData.datas[1].buttons = [
-                {iconType:'fa', icon: 'plus', color: '#2ecc71', fColor: '#fff', onClick : function(data, func){
-                    func(data, function(processGUI){
+                {
+                    iconType: 'fa', icon: 'plus', color: '#2ecc71', fColor: '#fff', onClick: function (data, func) {
+                    func(data, function (processGUI) {
                         // Fire api
                         $log.log('Asssign Role');
                         $log.log(data);
-                        var userpath = data.item.assetpath;
+                        var rolepath = data.item.assetpath;
 
                         var body = {
-                            user: {
-                                grouppath:vm.selectedGrouppath,
-                                userpath:userpath
-                            }
+                            grouppath: vm.selectedGrouppath,
+                            rolepath: rolepath
                         };
 
+                        intellicarAPI.groupService.assignRole(body)
+                            .then(vm.assignRoleSuccess, vm.handleFailure);
+
+                        vm.processGui = processGUI(-1);
                         $log.log(body);
-                        $timeout(function(){
-                            processGUI(-1);
-                        },1000);
+                        // $timeout(function () {
+                        //     processGUI(-1);
+                        // }, 1000);
                     });
-                }},
+                }
+                }
             ];
 
             $scope.groupData.datas[1].heading = "Assignable Roles";
             $scope.groupData.datas[0].heading = "Assigned Roles";
+            $scope.groupData.datas[0].list = [];
+            $scope.groupData.datas[1].list = [];
+            $scope.groupData.visible = true;
+
+            var body = {
+                grouppath: data.assetpath
+            };
             vm.getRoles(body);
         };
 
-        vm.getUsers = function(body) {
+
+        vm.deAssignRoleSuccess = function (resp) {
+            $log.log(resp);
+            vm.processGui;
+        };
+
+
+        vm.assignRoleSuccess = function (resp) {
+            $log.log(resp);
+            vm.processGui;
+        };
+
+
+        vm.getUsers = function (body) {
             var users = intellicarAPI.userService.getMyUsersMapList({});
 
-            var groupUsers = intellicarAPI.groupService.getMyUsersMapList(body);
+            var groupUsers = intellicarAPI.groupService.getAssignedUsersMapList(body);
 
             return $q.all([users, groupUsers])
                 .then(vm.handleUsersResponse, vm.handleFailure);
         };
 
-        vm.handleUsersResponse = function(resp){
+        vm.handleUsersResponse = function (resp) {
             $log.log(resp);
 
             vm.setData(resp, vm.ASSIGN_USER_PERM);
         };
 
-        vm.getRoles = function(body){
+        vm.getRoles = function (body) {
             var userRoles = intellicarAPI.userService.getMyRolesList({});
 
-            var groupRoles = intellicarAPI.groupService.getMyRolesList(body);
+                var groupRoles = intellicarAPI.groupService.getAssignedRolesList(body);
 
             return $q.all([userRoles, groupRoles])
                 .then(vm.handleRolesResponse, vm.handleFailure);
@@ -259,35 +269,85 @@
             vm.setData(resp, vm.ASSIGN_ROLE_PERM);
         };
 
-        vm.setData = function(resp, permission){
-            $scope.groupData.datas[0].list = [];
-            $scope.groupData.datas[1].list = [];
-
+        vm.setData = function (resp, permission) {
             $scope.groupData.datas[0].list = resp[1];
 
             var userRole = resp[1];
             var matching = false;
-            for( var idx in resp[0] ) {
-                for ( var role in resp[1] ) {
-                    if ( resp[0][idx].assetpath == resp[1][role].assetpath){
+            for (var idx in resp[0]) {
+                for (var role in resp[1]) {
+                    if (resp[0][idx].assetpath == resp[1][role].assetpath) {
                         matching = true;
                         break;
-                    }else {
+                    } else {
                         matching = false;
                     }
                 }
-                if ( !matching ) {
-                    if ( resp[0][idx].permissions.indexOf(permission) >= 0 ) {
+                if (!matching) {
+                    if (resp[0][idx].permissions.indexOf(permission) >= 0) {
                         $scope.groupData.datas[1].list.push(resp[0][idx]);
                     }
                 }
             }
 
             $log.log($scope.groupData.datas);
-            $scope.groupData.visible = true;
         };
 
-        vm.onLoad();
+
+        vm.panelData = function (data) {
+            vm.assets = [];
+            for (var key in data) {
+                vm.assets.push(data[key]);
+            }
+
+            if (settingsService.getCurrentGroupPath())
+                vm.showBtn = true;
+        };
+
+
+        vm.init = function () {
+            $log.log(startupData);
+
+            for (var idx in startupData) {
+                startupData[idx].assignUser = false;
+                if (startupData[idx].permissions.indexOf(vm.ASSIGN_USER_PERM) != -1)
+                    startupData[idx].assignUser = true;
+
+                startupData[idx].assignRole = false;
+                if (startupData[idx].permissions.indexOf(vm.ASSIGN_ROLE_PERM) != -1)
+                    startupData[idx].assignRole = true;
+            }
+
+            vm.panelData(startupData);
+
+            //
+            // window.setTimeout(function(){
+            //     var newData = groupMgmtService.getData((settingsService.getCurrentGroup()));
+            //
+            //     $log.log(newData);
+            //     $log.log($q.resolve(newData));
+            // }, 5000);
+
+            $log.log($stateParams);
+
+            // vm.selectedTreeGroup= $stateParams.info;
+
+            // vm.currentGroupAsset = settingsService.getCurrentGroupPath();
+            //
+            if (vm.currentGroupAsset) {
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) != 0)
+                    vm.currentGroupAsset.assignUser = true;
+
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
+                    vm.currentGroupAsset.assignRole = true;
+
+            }
+
+
+        };
+
+
+        vm.init();
     }
 })();
 
