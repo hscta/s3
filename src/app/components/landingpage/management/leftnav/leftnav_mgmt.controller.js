@@ -8,7 +8,7 @@
         .module('uiplatform')
         .controller('LeftNavManagementController', LeftNavManagementController);
 
-    function LeftNavManagementController($rootScope,$scope, $log, startupData, groupService,
+    function LeftNavManagementController($rootScope,$scope, $log, startupTreeData, groupService,
                                          leftNavManagementService, $state, $filter,
                                          settingsService, $timeout) {
 
@@ -18,7 +18,7 @@
         vm.tree_search_pattern = '';
         vm.search_results;
 
-        $log.log(startupData);
+        $log.log(startupTreeData);
 
 
         $scope.treeFilter = $filter('uiTreeFilter');
@@ -127,9 +127,9 @@
         // };
 
         vm.init = function (data) {
-            //vm.firedgrouppaths.push(startupData);
-            startupData = startupData.toString();
-            leftNavManagementService.getManagementTreeWithUser({grouppath:startupData})
+            //vm.firedgrouppaths.push(startupTreeData);
+            startupTreeData = startupTreeData.toString();
+            leftNavManagementService.getManagementTreeWithUser({grouppath:startupTreeData})
                 .then(vm.handleResponse, vm.handleResponseFailure)
                 .then(vm.setFirstGroup, vm.handleResponseFailure);
         };

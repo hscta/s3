@@ -70,7 +70,7 @@
                     'lefttoolbar@home': {
                         templateUrl: 'app/components/landingpage/dashboard/lefttoolbar/lefttoolbar_dashboard.html',
                         controller: 'LeftToolbarDashboardController as vm'
-                    },
+                    }
                     // 'centermain@home': {
                     //     templateUrl: 'app/components/landingpage/dashboard/map/map.html',
                     //     controller: 'MapController as vm'
@@ -80,7 +80,7 @@
             .state('home.management', {
                 url: 'home/management',
                 resolve: {
-                    startupData : function($stateParams, $log, $q, $state, $rootScope,
+                    startupTreeData : function($stateParams, $log, $q, $state, $rootScope,
                                            settingsService, intellicarAPI, $timeout) {
                         $log.log($stateParams);
                         $log.log($state);
