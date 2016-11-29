@@ -215,12 +215,12 @@
 
             <md-input-container class="container-margin">
                 <label>Start Time</label>
-                <input type="text" id="start_time" ng-model="vm.historyObj.startTime">
+                <input type="text" id="start_time" ng-model="vm.historyMap.startTime">
             </md-input-container>
 
             <md-input-container class="container-margin">
                 <label>End Time</label>
-                <input type="text" id="end_time" ng-model="vm.historyObj.endTime">
+                <input type="text" id="end_time" ng-model="vm.historyMap.endTime">
             </md-input-container>
 
 
@@ -235,7 +235,58 @@
         <div class="md-dialog-content historyMap map-dialog history-dialog">
 
             <div id="history_map" style="width:100%;height:500px"></div>
-
+            <div class="traceControls">
+                <div class="tc_controls">
+                    <div class="tc_button" ng-click="vm.traceControls.togglePlay()" ng-class="{'active':vm.traceControls.playing}">
+                        <i class="fa fa-play" ng-show="!vm.traceControls.playing"></i>
+                        <i class="fa fa-pause" ng-show="vm.traceControls.playing"></i>
+                    </div>
+                    <div class="tc_button" ng-click="vm.traceControls.stepBackward()" >
+                        <i class="fa fa-minus" ></i>
+                    </div>
+                    <div class="tc_button" ng-click="vm.traceControls.stepForward()" >
+                        <i class="fa fa-plus" ></i>
+                    </div>
+                    <div class="tc_speedButton" >
+                        <div class="tc_button" ng-click="vm.traceControls.decrementSpeed()">
+                            <i class="fa fa-backward" ></i>
+                        </div>
+                        <div class="tc_speedDisplay">
+                            <span ng-show="vm.traceControls.speed == 0">0.5x</span>
+                            <span ng-show="vm.traceControls.speed == 1">1x</span>
+                            <span ng-show="vm.traceControls.speed == 2">2x</span>
+                            <span ng-show="vm.traceControls.speed == 3">3x</span>
+                            <span ng-show="vm.traceControls.speed == 4">4x</span>
+                        </div>
+                        <div class="tc_button" ng-click="vm.traceControls.incrementSpeed()">
+                            <i class="fa fa-forward" ></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="tc_panel">
+                    <div class="tc_pointer" ng-class="{'active':vm.traceControls.playing}"></div>
+                </div>
+                <div class="info">
+                    <table>
+                        <tr>
+                            <td>Ignition</td>
+                            <td>{{ vm.getCurrentPos().ignstatus ? 'On' : 'Off' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Speed</td>
+                            <td>{{vm.getCurrentPos().speed}}</td>
+                        </tr>
+                        <tr>
+                            <td>Odometer</td>
+                            <td>{{vm.getCurrentPos().odometer}}</td>
+                        </tr>
+                        <tr>
+                            <td>Time</td>
+                            <td>{{vm.getCurrentPos().gpstime | date : 'd MMM yy, hh:mm '}} </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
             <!--<ui-gmap-google-map center='vm.historyObj.historyMap.center'-->
                                 <!--zoom='vm.historyObj.historyMap.zoom'-->
                                 <!--options="vm.historyObj.historyMap.mapOptions"-->

@@ -65,7 +65,6 @@
                             endtime: endtime
                         }
                     };
-
                     intellicarAPI.reportService.getDeviceLocation(body)
                         .then(vm.drawTrace, vm.handleGetLocationFailure);
                 } else {
@@ -88,6 +87,16 @@
 
 
         vm.drawTrace = function(resp) {
+
+            // resetting previous drawings
+
+            if(vm.historyMap.trace && vm.historyMap.trace.setMap)
+                vm.historyMap.trace.setMap(null)
+            if(vm.historyMap.startMarker && vm.historyMap.startMarker.setMap)
+                vm.historyMap.startMarker.setMap(null);
+            if(vm.historyMap.endMarker && vm.historyMap.endMarker.setMap)
+                vm.historyMap.endMarker.setMap(null);
+
             vm.historyMap.errorMsg = '';
             var traceData = resp.data.data;
 
@@ -109,13 +118,15 @@
                 latlng.gpstime = parseInt(position.gpstime);
                 latlng.speed = parseInt(position.speed.toFixed(2));
                 latlng.odometer = position.odometer;
+                latlng.heading = position.heading;
+                latlng.ignstatus = position.ignstatus;
                 path.push(latlng);
             }
-            //
-            // function compare(a, b) {
-            //     return a.gpstime - b.gpstime;
-            // }
-            // vm.historyMap.trace.path.sort(compare);
+            function compare(a, b) {
+                return a.gpstime - b.gpstime;
+            }
+            path.sort(compare);
+
 
             vm.historyMap.startMarker = new google.maps.Marker({
                 position: path[0],
@@ -134,12 +145,24 @@
             vm.historyMap.map.setCenter(path[midPoint]);
             vm.historyMap.map.setZoom(11);
 
-            vm.historyMap.trace = new google.maps.Polyline({path:path});
+            vm.historyMap.trace = new google.maps.Polyline({
+                path:path,
+                icons: [{
+                    icon: {
+                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+                    },
+                    offset: '100px',
+                    repeat: '100px'
+                }],
+                strokeColor: "blue",
+                strokeWeight: 2,
+                strokeOpacity:1,
+            });
             vm.historyMap.trace.setMap(vm.historyMap.map);
             vm.historyMap.startMarker.setMap(vm.historyMap.map);
             vm.historyMap.endMarker.setMap(vm.historyMap.map);
             vm.setData('getHistory', true);
-            $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true});
+            $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path:path});
         };
 
         vm.getDefaultTime = function(){
@@ -164,12 +187,11 @@
             var defaultTime = vm.getDefaultTime ();
             vm.historyMap.startTime = defaultTime.startTime;
             vm.historyMap.endTime = defaultTime.endTime;
-
         }
 
         vm.init();
-        
+
     }
-    
+
 })();
 

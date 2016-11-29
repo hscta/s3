@@ -2129,3 +2129,154 @@ div.dataTables_info {
          @include transform(rotate(90deg))
      }
  }
+
+
+ .traceControls{
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     height: 110px;
+     background: #ebe6ee;
+     @include shadow(0 -2px 5px rgba(0,0,0,0.4))
+     .tc_controls{
+         position: absolute;
+         top:0;
+         left:0;
+         width: 160px;
+         @include borderBox();
+         height:100%;
+         padding: 5px;
+         .tc_button{
+             float: left;
+             width: 40px;
+             height:40px;
+             margin:5px;
+             @include border-radius(2px);
+             overflow: hidden;
+             background-color: #34495e;
+             @include transition(0.4s);
+             i{
+                 display: block;
+                 float: left;
+                 width:100%;
+                 height:100%;
+                 line-height:40px;
+                 text-align: center;
+                 color: #fff;
+             }
+         }
+         .tc_button.dark{
+             background-color: #34495e;
+         }
+         .tc_button:active{
+             background-color: rgba(0,0,0,0.6);
+             i{
+                 @include transform(scale(0.85));
+             }
+         }
+         .tc_speedButton{
+             float: left;
+             height:40px;
+             margin:5px;
+             width:140px;
+             .tc_button{
+                 margin:0;
+             }
+             .tc_speedDisplay{
+                 float: left;
+                 width:60px;
+                 height:40px;
+                 font-family: gotham-b;
+                 font-size: 130%;
+                 color: #555555;
+                 line-height: 40px;
+                 text-align: center;
+                 background:rgba(0,0,0,0.1);
+             }
+         }
+         .tc_button.active{
+             background: #3498db;
+             i{
+                 color: #404040;
+             }
+         }
+     }
+     .tc_panel{
+         position: absolute;
+         top:5px;
+         bottom:5px;
+         left:190px;
+         right:250px;
+         background:#fefefe;
+         overflow: hidden;
+         border: 1px solid #ccc;
+         @include borderBox();
+         cursor:pointer;
+         @include border-radius(2px);
+         .myCanvas{
+             width: 100%;
+             height:100%;
+             background: #fff;
+         }
+         .tc_pointer{
+             display: block;
+             float: left;
+             position: absolute;
+             left:0;
+             top:0;
+             width:2px;
+             height:100%;
+             margin-left:-1px;
+             background: #ff0000;
+             @include transition(0.2s linear);
+             opacity:0.5;
+         }
+         .tc_pointer:after,
+         .tc_pointer:before{
+             content: '';
+             position: absolute;
+             display: block;
+             float: left;
+             top:0;
+         }
+         .tc_pointer:before{
+             left:-4px;
+             width: 10px;
+             height:10px;
+             @include transform(rotate(45deg));
+             top:-5px;
+             border-top:10px solid #f00;
+         }
+         .tc_pointer:after{
+             right:2px;
+             height:100%;
+             width: 0px;
+             opacity:0.3;
+             @include transition(0.3s);
+             /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff0004+0,ff0004+100&0+0,1+100 */
+             background: -moz-linear-gradient(left,  rgba(255,0,4,0) 0%, rgba(255,0,4,1) 100%); /* FF3.6-15 */
+             background: -webkit-linear-gradient(left,  rgba(255,0,4,0) 0%,rgba(255,0,4,1) 100%); /* Chrome10-25,Safari5.1-6 */
+             background: linear-gradient(to right,  rgba(255,0,4,0) 0%,rgba(255,0,4,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ff0004', endColorstr='#ff0004',GradientType=1 ); /* IE6-9 */
+         }
+         .tc_pointer.active:after{
+             width: 50px;
+             @include transition(3s);
+         }
+     }
+     .info{
+         position:absolute;
+         width:250px;
+         right:0px;
+         top:0;
+         bottom:0;
+         table{
+             td,
+             tr{
+                 margin:0!important;
+                 padding:2px!important;
+             }
+         }
+     }
+ }
