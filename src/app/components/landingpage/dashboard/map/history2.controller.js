@@ -68,8 +68,8 @@
             interval:30000, // 30 seconds
             timeline:[],
             playing:false,
-            SPEEDS:[600,400,200,100,50],
-            speed:1, // normal
+            SPEEDS:[2000, 1000, 500, 250, 125, 62.5, 31.25, 15.625, 7.8125],
+            speed:4, // normal
             current:0,
             togglePlay:function () {
                 isPointer();

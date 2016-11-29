@@ -252,11 +252,15 @@
                             <i class="fa fa-backward" ></i>
                         </div>
                         <div class="tc_speedDisplay">
-                            <span ng-show="vm.traceControls.speed == 0">0.5x</span>
-                            <span ng-show="vm.traceControls.speed == 1">1x</span>
-                            <span ng-show="vm.traceControls.speed == 2">2x</span>
-                            <span ng-show="vm.traceControls.speed == 3">3x</span>
-                            <span ng-show="vm.traceControls.speed == 4">4x</span>
+                            <span ng-show="vm.traceControls.speed == 0">1/16x</span>
+                            <span ng-show="vm.traceControls.speed == 1">1/8x</span>
+                            <span ng-show="vm.traceControls.speed == 2">1/4x</span>
+                            <span ng-show="vm.traceControls.speed == 3">1/2x</span>
+                            <span ng-show="vm.traceControls.speed == 4">1x</span>
+                            <span ng-show="vm.traceControls.speed == 5">2x</span>
+                            <span ng-show="vm.traceControls.speed == 6">4x</span>
+                            <span ng-show="vm.traceControls.speed == 7">8x</span>
+                            <span ng-show="vm.traceControls.speed == 8">16x</span>
                         </div>
                         <div class="tc_button" ng-click="vm.traceControls.incrementSpeed()">
                             <i class="fa fa-forward" ></i>
@@ -282,7 +286,7 @@
                         </tr>
                         <tr>
                             <td>Time</td>
-                            <td>{{vm.getCurrentPos().gpstime | date : 'd MMM yy, hh:mm '}} </td>
+                            <td>{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
                         </tr>
                     </table>
                 </div>
