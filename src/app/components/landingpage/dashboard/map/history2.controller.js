@@ -323,7 +323,6 @@
             };
             vm.traceControls.panel.element = $('.tc_panel');
             vm.traceControls.panel.element.mousedown(function (event) {
-                console.log('im mouse down');
                 if(!vm.traceControls.playing){
                     if(!vm.traceControls.panel.clicked){
                         vm.traceControls.panel.clicked = true;
@@ -350,7 +349,6 @@
                 setPointerTransition(true);
             });
             $($window).keydown(function (event) {
-                console.log('im down');
                 setPointerTransition(false);
                 if(!vm.traceControls.playing && vm.traceControls.panel.clicked){
                     if(event.keyCode == 37){ // left
