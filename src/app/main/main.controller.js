@@ -5,7 +5,7 @@
         .module('uiplatform')
         .controller('MainController', MainController);
 
-    function MainController($scope, $rootScope, $log, intellicarAPI) {
+    function MainController($scope, $rootScope, $log) {
 
         $log.log('MainController');
         var vm = this;
@@ -35,7 +35,7 @@
      * */
 
     // var headerAutoHide = false;
- 
+
 
     // var headerYVal = 80;
     // var wh = $(window).height();

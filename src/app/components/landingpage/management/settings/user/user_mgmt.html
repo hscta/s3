@@ -38,12 +38,12 @@
         <md-input-container flex>
             <div layout="row">
                 <label>Password</label>
-                <input type="password" ng-model="vm.newUser.password"></div>
+                <input type="password" ng-model="vm.newUser.password" autocomplete="off"></div>
         </md-input-container>
         <md-input-container flex>
             <div layout="row">
                 <label>Confirm Password</label>
-                <input type="password" ng-model="vm.confirmPassword"></div>
+                <input type="password" ng-model="vm.confirmPassword" autocomplete="off"></div>
         </md-input-container>
         <md-button class="md-accent" ng-click="vm.createUser()" flex="66">Create User</md-button>
     </md-content>
@@ -72,8 +72,14 @@
 
 <multi-list data="groupData"></multi-list>
 
-
-<md-expansion-panel-group md-component-id="vehicleGroup" flex>
+<style>
+    .expansion-panel {
+        height: 500px;
+        overflow: auto;
+        display: block;
+    }
+</style>
+<md-expansion-panel-group class="expansion-panel" md-component-id="vehicleGroup" flex>
 
     <md-expansion-panel md-component-id="$index" ng-repeat="myAsset in vm.assets track by $index">
 

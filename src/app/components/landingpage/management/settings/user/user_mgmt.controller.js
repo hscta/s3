@@ -173,7 +173,7 @@
         vm.assignRoles = function (data) {
             $log.log(data);
             // $scope.groupData.visible = true;
-            $scope.groupData.heading = 'Assign Roles to Users';
+            $scope.groupData.heading = 'Assign Roles to '+ data.name ;
             vm.selectedGrouppath = data.assetpath;
 
             var body ={

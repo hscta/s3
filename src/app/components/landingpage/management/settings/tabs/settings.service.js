@@ -5,7 +5,7 @@
     angular.module('uiplatform')
         .service('settingsService', settingsService);
 
-    function settingsService($log, $state, intellicarAPI, $timeout) {
+    function settingsService($log, $state, intellicarAPI) {
         $log.log('settingsService');
         var vm = this;
         vm.setTabListener = null;

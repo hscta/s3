@@ -10,7 +10,7 @@
         .module('uiplatform')
         .directive('readOnlyList', readOnlyList);
 
-    function readOnlyList($log, $mdDialog, $stateParams) {
+    function readOnlyList($log, $mdDialog) {
         return {
             restrict: 'AE',
             templateUrl: 'app/components/common/directives/readonly-list.html',

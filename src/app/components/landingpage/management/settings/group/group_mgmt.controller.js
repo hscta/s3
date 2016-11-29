@@ -122,7 +122,7 @@
                                         userpath: userpath
                                     };
 
-                                    // intellicarAPI.userService.assignUser(body)
+                                    // intellicarAPI.groupService.assignUser(body)
                                     //     .then(vm.assignUserSuccess, vm.handleFailure);
 
                                     $log.log(body);
@@ -144,25 +144,50 @@
 
         vm.assignUsers = function (data) {
             $log.log(data);
+            $scope.groupData.heading = "Add Users to the "+ data.name + " group";
             vm.selectedGrouppath = data.assetpath;
+
+            $scope.groupData.datas[1].heading = "Assignable Users";
+            $scope.groupData.datas[0].heading = "Assigned Users";
+            $scope.groupData.datas[0].list = [];
+            $scope.groupData.datas[1].list = [];
+            $scope.groupData.visible = true;
 
             var body = {
                 grouppath: data.assetpath
             };
             vm.getUsers(body);
-
-            $scope.groupData.datas[1].heading = "Assignable Users";
-            $scope.groupData.datas[0].heading = "Assigned Users";
         };
 
         vm.assignRoles = function (data) {
             // $scope.groupData.visible = true;
-            $scope.groupData.heading = 'Add Roles to the group';
+            $log.log(data);
+            $scope.groupData.heading = "Add Roles to the "+ data.name + " group";
             vm.selectedGrouppath = data.assetpath;
 
-            var body = {
-                grouppath: data.assetpath
-            };
+            $scope.groupData.datas[0].buttons = [{
+                iconType: 'fa',
+                icon: 'trash',
+                color: '#e74c3c',
+                fColor: '#fff',
+                onClick: function (data, func) {
+                    func(data, function (processGUI) {
+
+                        var rolepath = data.item.assetpath;
+
+                        var body = {
+                            grouppath: vm.selectedGrouppath,
+                            rolepath: rolepath
+                        };
+
+                        intellicarAPI.groupService.deAssignRole(body)
+                            .then(vm.deAssignRoleSuccess, vm.handleFailure);
+
+
+                        vm.processGui = processGUI(-1);
+                    });
+                }
+            }];
 
             $scope.groupData.datas[1].buttons = [
                 {
@@ -171,17 +196,21 @@
                         // Fire api
                         $log.log('Asssign Role');
                         $log.log(data);
-                        var userpath = data.item.assetpath;
+                        var rolepath = data.item.assetpath;
 
                         var body = {
                             grouppath: vm.selectedGrouppath,
-                            userpath: userpath
+                            rolepath: rolepath
                         };
 
+                        intellicarAPI.groupService.assignRole(body)
+                            .then(vm.assignRoleSuccess, vm.handleFailure);
+
+                        vm.processGui = processGUI(-1);
                         $log.log(body);
-                        $timeout(function () {
-                            processGUI(-1);
-                        }, 1000);
+                        // $timeout(function () {
+                        //     processGUI(-1);
+                        // }, 1000);
                     });
                 }
                 }
@@ -189,13 +218,33 @@
 
             $scope.groupData.datas[1].heading = "Assignable Roles";
             $scope.groupData.datas[0].heading = "Assigned Roles";
+            $scope.groupData.datas[0].list = [];
+            $scope.groupData.datas[1].list = [];
+            $scope.groupData.visible = true;
+
+            var body = {
+                grouppath: data.assetpath
+            };
             vm.getRoles(body);
         };
+
+
+        vm.deAssignRoleSuccess = function (resp) {
+            $log.log(resp);
+            vm.processGui;
+        };
+
+
+        vm.assignRoleSuccess = function (resp) {
+            $log.log(resp);
+            vm.processGui;
+        };
+
 
         vm.getUsers = function (body) {
             var users = intellicarAPI.userService.getMyUsersMapList({});
 
-            var groupUsers = intellicarAPI.groupService.getMyUsersMapList(body);
+            var groupUsers = intellicarAPI.groupService.getAssignedUsersMapList(body);
 
             return $q.all([users, groupUsers])
                 .then(vm.handleUsersResponse, vm.handleFailure);
@@ -210,7 +259,7 @@
         vm.getRoles = function (body) {
             var userRoles = intellicarAPI.userService.getMyRolesList({});
 
-            var groupRoles = intellicarAPI.groupService.getMyRolesList(body);
+                var groupRoles = intellicarAPI.groupService.getAssignedRolesList(body);
 
             return $q.all([userRoles, groupRoles])
                 .then(vm.handleRolesResponse, vm.handleFailure);
@@ -221,9 +270,6 @@
         };
 
         vm.setData = function (resp, permission) {
-            $scope.groupData.datas[0].list = [];
-            $scope.groupData.datas[1].list = [];
-
             $scope.groupData.datas[0].list = resp[1];
 
             var userRole = resp[1];
@@ -245,7 +291,6 @@
             }
 
             $log.log($scope.groupData.datas);
-            $scope.groupData.visible = true;
         };
 
 

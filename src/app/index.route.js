@@ -81,16 +81,16 @@
                 url: 'home/management',
                 resolve: {
                     startupTreeData : function($stateParams, $log, $q, $state, $rootScope,
-                                           settingsService, intellicarAPI, $timeout) {
+                                           settingsService, intellicarAPI) {
                         $log.log($stateParams);
                         $log.log($state);
 
                         var handleGetMyInfo = function (resp) {
                             var userinfo = resp.data.data[0];
-                            console.log(userinfo);
+                            // console.log(userinfo);
                             var pgrouppath = intellicarAPI.helperService.getParentFromPath(userinfo.assetpath);
                             settingsService.setCurrentGroupPath(pgrouppath);
-                            console.log(settingsService.getCurrentGroup());
+                            // console.log(settingsService.getCurrentGroup());
                             return pgrouppath;
                         };
 

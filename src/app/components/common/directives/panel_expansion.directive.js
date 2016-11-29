@@ -9,7 +9,7 @@
         .directive('icarPanelExpansion', icarPanelExpansion)
 
     function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
-                                $stateParams, $compile, $sce) {
+                                $stateParams, $compile) {
         return{
             restrict : 'E',
             templateUrl : 'app/components/common/directives/panel-expansion.html',

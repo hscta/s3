@@ -10,7 +10,7 @@
         .module('uiplatform')
         .service('anchorSmoothScrollService', anchorSmoothScrollService);
 
-    function anchorSmoothScrollService($log, $q, userService) {
+    function anchorSmoothScrollService($log, $q, $timeout) {
         var vm = this;
         vm.scrollTo = function(eID) {
             var startY = currentYPosition();
@@ -27,7 +27,8 @@
             var timer = 0;
             if (stopY > startY) {
                 for (var i = startY; i < stopY; i += step) {
-                    setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+                    // setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+                    $timeout("window.scrollTo(0, " + leapY + ")", timer * speed);
                     leapY += step;
                     if (leapY > stopY) leapY = stopY;
                     timer++;
@@ -35,7 +36,8 @@
                 return;
             }
             for (var i = startY; i > stopY; i -= step) {
-                setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+                // setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+                $timeout("window.scrollTo(0, " + leapY + ")", timer * speed);
                 leapY -= step;
                 if (leapY < stopY) leapY = stopY;
                 timer++;

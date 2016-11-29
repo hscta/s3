@@ -90,33 +90,6 @@
         };
 
 
-        vm.init = function () {
-            $log.log(startupData);
-            vm.assets = [];
-            for (var key in startupData) {
-                if ( startupData[key].permissions.indexOf(vm.ASSIGN_PERMISSION)>=0){
-                    startupData[key].assignPermission = true;
-                }else {
-                    startupData[key].assignPermission = false;
-                }
-                    vm.assets.push(startupData[key]);
-            }
-
-            $log.log(vm.assets);
-            if ( settingsService.getCurrentGroupPath() )
-                vm.showBtn = true;
-
-            if (vm.currentGroupAsset) {
-                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) != 0)
-                    vm.currentGroupAsset.assignUser = true;
-
-                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
-                    vm.currentGroupAsset.assignRole = true;
-
-            }
-
-        };
-
         vm.showNewRoleField = function () {
             $log.log('show/hide');
             vm.isdiplay = !vm.isdiplay;
@@ -159,7 +132,7 @@
             $scope.groupData.datas[0].list = [];
 
             $scope.groupData.datas[1].list = [];
-            $scope.groupData.datas[0].list = assignedPermList;
+            $scope.groupData.datas[1].list = assignedPermList;
 
             var matching = false;
             for ( var idx in assignablePermList){
@@ -179,6 +152,56 @@
 
             $log.log($scope.groupData.datas);
             $scope.groupData.visible = true;
+        };
+
+
+        vm.createRole = function () {
+            $log.log(vm.currentGroupAsset);
+
+            name = vm.newRoleName;
+            pgrouppath = vm.currentGroupAsset.assetpath;
+            var body = {
+                name : name,
+                pgrouppath: pgrouppath
+            };
+
+
+            intellicarAPI.roleService.createRole(body)
+                .then(vm.createRoleSuccess, vm.handleFailure);
+
+        };
+
+
+        vm.createRoleSuccess = function (resp) {
+            $log.log(resp);
+        };
+
+
+        vm.init = function () {
+            $log.log(startupData);
+            vm.assets = [];
+            for (var key in startupData) {
+                if ( startupData[key].permissions.indexOf(vm.ASSIGN_PERMISSION)>=0){
+                    startupData[key].assignPermission = true;
+                }else {
+                    startupData[key].assignPermission = false;
+                }
+                vm.assets.push(startupData[key]);
+            }
+
+            $log.log(vm.assets);
+            if ( settingsService.getCurrentGroupPath() )
+                vm.showBtn = true;
+
+            if (vm.currentGroupAsset) {
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_USER_PERM) != 0)
+                    vm.currentGroupAsset.assignUser = true;
+
+                if (vm.currentGroupAsset.permissions.indexOf(vm.ASSIGN_ROLE_PERM) != 0)
+                    vm.currentGroupAsset.assignRole = true;
+
+            }
+
         };
 
         vm.init();
