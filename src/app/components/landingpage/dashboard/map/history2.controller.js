@@ -441,7 +441,7 @@
                 ]);
 
                 vm.jsonHistoryData.push({
-                    vehicle_Name: vm.historyMap.selectedVehicle.vehicleno,
+                    vehicle_Name: vm.historyMap.selectedVehicle.rtgps.vehicleno,
                     location: loc,
                     time : moment(dateTime).format(dateFormat),
                     odometer: marker[idx].odometer.toString(),
