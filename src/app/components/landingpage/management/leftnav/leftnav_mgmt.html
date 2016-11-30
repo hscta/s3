@@ -82,29 +82,6 @@
              ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></div>
     </div>
 </script>
-<!-- Template for parent nodes -->
-<script type="text/ng-template" id="parent_nodes_renderer_old.html">
-    <div class="icar-wrap-text" >
-         <a ng-click="toggle(this); item.collapsed = !item.collapsed" style="cursor:pointer;" ng-show="item.items.length > 0">
-            <md-icon md-font-library="material-icons" ng-show="item.collapsed">arrow_drop_down</md-icon>
-            <md-icon md-font-library="material-icons" ng-show="!item.collapsed">play_arrow</md-icon>
-        </a>
-
-        <!--<span ng-hide="item.items.length" style="padding-left:20px;" ></span>-->
-        <span ng-click="vm.handleAssetClick(item, item.collapsed, toggle, this); item.collapsed = true"
-              style="cursor:pointer;">{{item.title | titleCase }}
-            <span class="spinner -blue -relative" ng-class="{'opacity_0':!item.loading}" ng-if="item.loading"></span>
-        </span ><br/>
-        <!--<span ng-click="vm.handleAssetClick(item, item.collapsed, toggle, this); item.collapsed = !item.collapsed"-->
-              <!--style="cursor:pointer;">{{item.title | titleCase }}-->
-        <!--</span ><br/>-->
-    </div>
-    <ol ui-tree-nodes ng-model="item.items" ng-show="item.collapsed">
-        <li ng-repeat="item in item.items" ui-tree-node
-            ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'">  </li>
-    </ol>
-
-</script>
 
 <!-- Template for terminal nodes -->
 <script type="text/ng-template" id="terminal_node_renderer.html">

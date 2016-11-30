@@ -240,12 +240,12 @@
                     uiTree.push(resultNode);
                 }
             }
+
             // $log.log(uiTree);
             if(vm.globalGenericTree == null){
-                uiTree[0].collapsed = true;
-                // vm.globalGenericTree  = angular.copy(uiTree);
                 vm.globalGenericTree  = uiTree;
             }
+
             vm.globalGenericTree[0].collapsed = true;
             vm.globalGenericTree[0].loading = false;
             return $q.resolve(uiTree);
@@ -416,15 +416,15 @@
         vm.getManagementTreeNoUser = function (body) {
             return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
-                .then(vm.createManagementTree, vm.handleFailure);
+                .then(vm.createManagementTree, vm.handleFailure)
+                .then(vm.mergeChildTree, vm.handleFailure);
         };
 
 
         vm.getManagementTree = function (body) {
             return groupService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
-                .then(vm.createManagementTree, vm.handleFailure)
-                .then(vm.mergeChildTree, vm.handleFailure);
+                .then(vm.createManagementTree, vm.handleFailure);
         };
     }
 
