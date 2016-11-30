@@ -32,6 +32,7 @@
                 center: {lat:newMapService.getCenter().latitude, lng:newMapService.getCenter().longitude},
                 zoom:newMapService.getZoom()
             },
+            traceObj:[],
             markersByPath:newMapService.inMap.markers.markersByPath,
             vehiclesByPath : vehicleService.vehiclesByPath,
             trace:{
@@ -42,6 +43,7 @@
         vm.getHistoryData = function(){
             if (!vm.historyMap.selectedVehicle.rtgps.deviceid){
                 vm.historyMap.errorMsg = "Please Select Vehicle";
+                $rootScope.$broadcast('gotHistoryEventFailed');
                 return;
             }
             if (vm.historyMap.startTime && vm.historyMap.endTime) {
@@ -55,6 +57,7 @@
 
                     if (endtime <= starttime) {
                         vm.historyMap.errorMsg = "End time should be >= Start time";
+                        $rootScope.$broadcast('gotHistoryEventFailed');
                         return;
                     }
 
@@ -69,11 +72,13 @@
                         .then(vm.drawTrace, vm.handleGetLocationFailure);
                 } else {
                     vm.historyMap.errorMsg = "Enter valid start and end time";
+                    $rootScope.$broadcast('gotHistoryEventFailed');
                     return;
                 }
             } else {
                 // $log.log(vm.historyMap.startTime, vm.historyMap.endTime);
                 vm.historyMap.errorMsg = "Enter valid start and end time.";
+                $rootScope.$broadcast('gotHistoryEventFailed');
                 return;
             }
         };
@@ -86,7 +91,11 @@
         };
 
 
+
+
         vm.drawTrace = function(resp) {
+
+            if(resp) vm.historyMap.traceData = resp.data.data;
 
             // resetting previous drawings
 
@@ -98,10 +107,11 @@
                 vm.historyMap.endMarker.setMap(null);
 
             vm.historyMap.errorMsg = '';
-            var traceData = resp.data.data;
+            var traceData = vm.historyMap.traceData;
 
             if (traceData.length < 1){
                 vm.historyMap.errorMsg = "No Data Found";
+                $rootScope.$broadcast('gotHistoryEventFailed');
                 return;
             }
 
@@ -158,6 +168,7 @@
                 strokeWeight: 2,
                 strokeOpacity:1,
             });
+            vm.historyMap.traceObj = path;
             vm.historyMap.trace.setMap(vm.historyMap.map);
             vm.historyMap.startMarker.setMap(vm.historyMap.map);
             vm.historyMap.endMarker.setMap(vm.historyMap.map);
@@ -169,8 +180,15 @@
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
             // setting time from 6:00 AM to 7:00 PM
-            var startTime = moment().hours(6).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
-            var endTime = moment().hours(19).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
+
+            var startTimeHour = 6;
+            var endTimeHour = 19;
+            if(moment().unix() - moment().hours(startTimeHour).unix() < 0){
+                startTimeHour-=24;
+                endTimeHour-= 24;
+            }
+            var startTime = moment().hours(startTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
+            var endTime = moment().hours(endTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
 
             return {
                 startTime: startTime,
@@ -182,6 +200,60 @@
         var hrs24 = 86400 * MILLISEC;
         var week = hrs24 * 7;
         var timeLimit = week;
+
+
+
+        vm.traceControls = {
+            interval:30000, // 30 seconds
+            timeline:[],
+            playing:false,
+            SPEEDS:[2000, 1000, 500, 250, 125, 62, 31, 15, 8],
+            speed:4, // normal
+            current:0,
+            togglePlay:function () {
+                vm.traceControls.isPointer();
+                if(vm.traceControls.playing){
+                    vm.traceControls.stopMotion();
+                }else{
+                    vm.traceControls.setPointerTransition(true);
+                    vm.traceControls.startMotion()
+                }
+            },
+            stepForward:function () {
+                if(vm.traceControls.current < vm.traceControls.timeline.length-1){
+                    vm.traceControls.current++;
+                    vm.traceControls.setPointerTransition(false);
+                    vm.traceControls.moveTimeline();
+                }
+            },
+            stepBackward:function () {
+                if(vm.traceControls.current > 0){
+                    vm.traceControls.current--;
+                    vm.traceControls.setPointerTransition(false);
+                    vm.traceControls.moveTimeline();
+                }
+            },
+            incrementSpeed:function () {
+                if(vm.traceControls.speed < vm.traceControls.SPEEDS.length-1){
+                    vm.traceControls.speed++;
+                    if(vm.traceControls.playing){
+                        vm.traceControls.startMotion();
+                    }
+                    vm.traceControls.setPointerTransition(true);
+                }
+            },
+            decrementSpeed:function () {
+                if(vm.traceControls.speed > 0){
+                    vm.traceControls.speed--;
+                    if(vm.traceControls.playing){
+                        vm.traceControls.startMotion();
+                    }
+                    vm.traceControls.setPointerTransition(true);
+                }
+            },
+            engine:{},
+        }
+
 
         vm.init = function () {
             var defaultTime = vm.getDefaultTime ();

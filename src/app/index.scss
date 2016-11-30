@@ -1727,7 +1727,7 @@ $customMarkerOpacity : 0.7;
 }
 
 .historyMap .gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom{
-    bottom:150px!important;
+    //bottom:150px!important;
 }
 //.gmnoprint div[draggable="false"],
 div[draggable="false"] a[title="Report errors in the road map or imagery to Google"],
@@ -2130,14 +2130,31 @@ div.dataTables_info {
      }
  }
 
-
+.history-err{
+    display: flex;
+    justify-content:center;
+    //align-content:center;
+    flex-direction:column; /* column | row */
+    position: absolute;
+    top:50px;
+    left: 0;
+    bottom:0;
+    right:0;
+    background:rgba(255,255,255,0.8);
+    //font-family: gotham-b;
+    font-size: 150%;
+    text-align: center;
+    color: #ff4c4d;
+}
  .traceControls{
      position: absolute;
-     bottom: 0;
+     bottom: -120px;
+     @include transition(0.4s);
      left: 0;
      right: 0;
      height: 110px;
-     background: #ebe6ee;
+     background: #fff;
+     z-index: 100;
      @include shadow(0 -2px 5px rgba(0,0,0,0.4))
      .tc_controls{
          position: absolute;
@@ -2147,6 +2164,7 @@ div.dataTables_info {
          @include borderBox();
          height:100%;
          padding: 5px;
+         a,
          .tc_button{
              float: left;
              width: 40px;
@@ -2154,7 +2172,8 @@ div.dataTables_info {
              margin:5px;
              @include border-radius(2px);
              overflow: hidden;
-             background-color: #34495e;
+             padding:1px;
+             background-color: #d1e934;
              @include transition(0.4s);
              i{
                  display: block;
@@ -2163,11 +2182,11 @@ div.dataTables_info {
                  height:100%;
                  line-height:40px;
                  text-align: center;
-                 color: #fff;
+                 color: #000;
              }
          }
-         .tc_button.dark{
-             background-color: #34495e;
+         .tc_button:hover{
+             background-color: #1abc9c;
          }
          .tc_button:active{
              background-color: rgba(0,0,0,0.6);
@@ -2192,14 +2211,11 @@ div.dataTables_info {
                  color: #555555;
                  line-height: 40px;
                  text-align: center;
-                 background:rgba(0,0,0,0.1);
+                 //background:rgba(0,0,0,0.1);
              }
          }
          .tc_button.active{
              background: #3498db;
-             i{
-                 color: #404040;
-             }
          }
      }
      .tc_panel{
@@ -2272,11 +2288,38 @@ div.dataTables_info {
          top:0;
          bottom:0;
          table{
+             font-size: 90%;
+             margin:10px 10%;
+             width:80%;
+             .time{
+                 td{
+                     font-size: 120%;
+                     color: #4c5172;
+                     font-family: gotham-b;
+                 }
+             }
              td,
              tr{
+                 color:#555;
                  margin:0!important;
                  padding:2px!important;
+             }
+             td:nth-child(2){
+                 color:#555;
+                 span{
+                     color:#888;
+                     font-size: 90%;
+                 }
              }
          }
      }
  }
+.traceControls.active{
+    bottom:0;
+}
+.md-select-menu-container{
+    z-index: 9999999!important;
+}
+md-backdrop{
+    z-index: 999999!important;
+}

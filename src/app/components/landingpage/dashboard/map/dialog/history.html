@@ -188,32 +188,6 @@
                     </md-option>
                 </md-select>
             </md-input-container>
-
-            <!--<div class="geo-mul-back" ng-show="vm.currPop" ng-click="vm.currPop = null"></div>-->
-            <!--<md-input-container class="container-margin geo-multiSel">-->
-                <!--<label>Vehicle No</label>-->
-                <!--<input type="text"-->
-                       <!--placeholder="Select Vehicle" ng-model="vm.historyObj.deviceid"-->
-                       <!--ng-change="vm.filterFences()"-->
-                <!--&gt;-->
-                <!--<div class="geo-ms-cont" ng-show="vm.currPop == 'fencePop'">-->
-                    <!--<md-list>-->
-                        <!--<md-list-item class="md-2-line"-->
-                                      <!--ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true'-->
-                                       <!--ng-value="vehicle.deviceid">-->
-                            <!--<div class="md-list-item-text">-->
-                                <!--<h3>{{vehicle.vehicleno}}</h3>-->
-                            <!--</div>-->
-                        <!--</md-list-item>-->
-                    <!--</md-list>-->
-                <!--</div>-->
-            <!--</md-input-container>-->
-
-
-
-
-
-
             <md-input-container class="container-margin">
                 <label>Start Time</label>
                 <input type="text" id="start_time" ng-model="vm.historyMap.startTime">
@@ -223,9 +197,6 @@
                 <label>End Time</label>
                 <input type="text" id="end_time" ng-model="vm.historyMap.endTime">
             </md-input-container>
-
-
-            <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
             <md-button class="md-accent" ng-click="vm.getHistory()">Get History</md-button>
         </div>
         <div layout="row" layout-align="end start">
@@ -236,22 +207,24 @@
         <div class="md-dialog-content historyMap map-dialog history-dialog">
 
             <div id="history_map" style="width:100%;height:500px"></div>
-            <div class="traceControls">
+            <div class="history-err" ng-show="!vm.gotHistory">{{vm.historyMap.errorMsg}}</div>
+            <div class="traceControls" ng-class="{'active':vm.gotHistory}">
                 <div class="tc_controls">
-                    <div class="tc_button" ng-click="vm.traceControls.togglePlay()" ng-class="{'active':vm.traceControls.playing}">
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()" ng-class="{'active':vm.traceControls.playing}">
                         <i class="fa fa-play" ng-show="!vm.traceControls.playing"></i>
                         <i class="fa fa-pause" ng-show="vm.traceControls.playing"></i>
-                    </div>
-                    <div class="tc_button" ng-click="vm.traceControls.stepBackward()" >
+                    </a>
+                    <!--<a class="waves-effect waves-light btn raised">a</a>-->
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.stepBackward()" >
                         <i class="fa fa-minus" ></i>
-                    </div>
-                    <div class="tc_button" ng-click="vm.traceControls.stepForward()" >
+                    </a>
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.stepForward()" >
                         <i class="fa fa-plus" ></i>
-                    </div>
+                    </a>
                     <div class="tc_speedButton" >
-                        <div class="tc_button" ng-click="vm.traceControls.decrementSpeed()">
+                        <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.decrementSpeed()">
                             <i class="fa fa-backward" ></i>
-                        </div>
+                        </a>
                         <div class="tc_speedDisplay">
                             <span ng-show="vm.traceControls.speed == 0">1/16x</span>
                             <span ng-show="vm.traceControls.speed == 1">1/8x</span>
@@ -263,130 +236,34 @@
                             <span ng-show="vm.traceControls.speed == 7">8x</span>
                             <span ng-show="vm.traceControls.speed == 8">16x</span>
                         </div>
-                        <div class="tc_button" ng-click="vm.traceControls.incrementSpeed()">
+                        <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.incrementSpeed()">
                             <i class="fa fa-forward" ></i>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <div class="tc_panel">
                     <div class="tc_pointer" ng-class="{'active':vm.traceControls.playing}"></div>
                 </div>
-                <div class="info">
+                <div class="info" >
                     <table>
+                        <tr class="time">
+                            <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
+                        </tr>
                         <tr>
                             <td>Ignition</td>
-                            <td>{{ vm.getCurrentPos().ignstatus ? 'On' : 'Off' }}</td>
+                            <td style="width:50%">{{ vm.getCurrentPos().ignstatus ? 'On' : 'Off' }}</td>
                         </tr>
                         <tr>
                             <td>Speed</td>
-                            <td>{{vm.getCurrentPos().speed}}</td>
+                            <td>{{vm.getCurrentPos().speed}} <span>kmph</span></td>
                         </tr>
                         <tr>
                             <td>Odometer</td>
-                            <td>{{vm.getCurrentPos().odometer}}</td>
-                        </tr>
-                        <tr>
-                            <td>Time</td>
-                            <td>{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
+                            <td>{{vm.getCurrentPos().odometer}} <span>km</span></td>
                         </tr>
                     </table>
                 </div>
             </div>
-            <!--<ui-gmap-google-map center='vm.historyObj.historyMap.center'-->
-                                <!--zoom='vm.historyObj.historyMap.zoom'-->
-                                <!--options="vm.historyObj.historyMap.mapOptions"-->
-                                <!--bounds="vm.historyObj.historyMap.bounds"-->
-                                <!--events="vm.historyObj.historyMapEvents"-->
-                                <!--control="vm.historyObj.historyMap.mapControl">-->
-
-                <!--&lt;!&ndash;<ui-gmap-map-control&ndash;&gt;-->
-                    <!--&lt;!&ndash;template="app/components/landingpage/dashboard/map/history-map-control.html"&ndash;&gt;-->
-                    <!--&lt;!&ndash;controller="InnerMapController"&ndash;&gt;-->
-                    <!--&lt;!&ndash;position="BOTTOM_CENTER"></ui-gmap-map-control>&ndash;&gt;-->
-                <!--&lt;!&ndash;</ui-gmap-map-control>&ndash;&gt;-->
-
-                <!--<ui-gmap-map-control-->
-                    <!--position="CENTER"><span ng-if="vm.historyObj.errorMsg" class="errorMsg">{{vm.historyObj.errorMsg}}</span></ui-gmap-map-control>-->
-                <!--</ui-gmap-map-control>-->
-
-                <!--<ui-gmap-marker-->
-                    <!--idkey="'self'"-->
-                    <!--coords="vm.historyObj.dashboardMapObj.clickedMarker"-->
-                    <!--click="vm.historyObj.dashboardMapObj.clickedMarker.click"-->
-                    <!--options="vm.historyObj.dashboardMapObj.clickedMarker.options"-->
-                    <!--events="vm.historyObj.dashboardMapObj.clickedMarker.events"-->
-                    <!--control="vm.historyObj.dashboardMapObj.clickedMarker.control">-->
-                <!--</ui-gmap-marker>-->
-
-                <!--<ui-gmap-marker-->
-                    <!--idkey="'self'"-->
-                    <!--coords="vm.historyObj.endMarker"-->
-                    <!--click="vm.historyObj.endMarker.click"-->
-                    <!--options="vm.historyObj.endMarker.options"-->
-                    <!--events="vm.historyObj.endMarker.events"-->
-                    <!--control="vm.historyObj.endMarker.control">-->
-                <!--</ui-gmap-marker>-->
-
-                <!--<ui-gmap-polyline-->
-                    <!--path="vm.historyObj.trace.path"-->
-                    <!--stroke="vm.historyObj.trace.stroke"-->
-                    <!--clickable="vm.historyObj.trace.clickable"-->
-                    <!--geodesic="vm.historyObj.trace.geodesic"-->
-                    <!--visible="vm.historyObj.trace.visible"-->
-                    <!--fit="vm.historyObj.trace.fit"-->
-                    <!--static="vm.historyObj.trace.static"-->
-                    <!--events="vm.historyObj.trace.events"-->
-                    <!--icons="vm.historyObj.trace.icons">-->
-                <!--</ui-gmap-polyline>-->
-
-
-                <!--<ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"-->
-                                <!--center="gcircle.center" radius="gcircle.radius"-->
-                                <!--stroke="gcircle.stroke" fill="gcircle.fill"-->
-                                <!--visible="gcircle.visible" geodesic="gcircle.geodesic"-->
-                                <!--editable="gcircle.editable" draggable="gcircle.draggable"-->
-                                <!--clickable="gcircle.clickable" control="gcircle.control"-->
-                                <!--events="vm.historyObj.historyCircleEvents">-->
-                <!--</ui-gmap-circle>-->
-
-                <!--<ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"-->
-                                 <!--path="gpolygon.path"-->
-                                 <!--stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"-->
-                                 <!--visible="gpolygon.visible" geodesic="gpolygon.geodesic"-->
-                                 <!--editable="gpolygon.editable" draggable="gpolygon.draggable"-->
-                                 <!--clickable="gpolygon.clickable" control="gpolygon.control"-->
-                                 <!--events="vm.historyObj.historyPolygonEvents" static="true">-->
-
-                <!--</ui-gmap-polygon>-->
-
-                <!--&lt;!&ndash;<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"&ndash;&gt;-->
-                <!--&lt;!&ndash;control="historyInfoWindow.control"&ndash;&gt;-->
-                <!--&lt;!&ndash;options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"&ndash;&gt;-->
-                <!--&lt;!&ndash;templateUrl="'historyInfoWindow.html'"&ndash;&gt;-->
-                <!--&lt;!&ndash;templateParameter="historyInfoWindow"&ndash;&gt;-->
-                <!--&lt;!&ndash;isIconVisibleOnClick="true">&ndash;&gt;-->
-                <!--&lt;!&ndash;</ui-gmap-window>&ndash;&gt;-->
-
-                <!--<ui-gmap-window show="vm.historyObj.historyFenceInfoWindow.show" coords="vm.historyObj.historyFenceObj"-->
-                                <!--control="historyFenceInfoWindow.control" optimized="false"-->
-                                <!--options="historyFenceInfoWindow.options"-->
-                                <!--isIconVisibleOnClick="true">-->
-
-                    <!--<table>-->
-                        <!--<tbody>-->
-                        <!--<tr>-->
-                            <!--<th>Name: </th>-->
-                            <!--<td>{{vm.historyObj.historyFenceObj.name}}</td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<th>Type:   </th>-->
-                            <!--<td>{{vm.historyObj.historyFenceObj.other}}</td>-->
-                        <!--</tr>-->
-                        <!--</tbody>-->
-                    <!--</table>-->
-                <!--</ui-gmap-window>-->
-
-            <!--</ui-gmap-google-map>-->
         </div>
 </div>
 

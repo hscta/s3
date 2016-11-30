@@ -8,18 +8,18 @@
 </style>
 <div style="height: 100%;">
     <!--<span>{{errorMsg}}</span><br/>-->
-    <span  class="error-msg">{{vm.historyObj.errorMsg}}</span>
+    <span  class="error-msg">{{vm.historyMap.errorMsg}}</span>
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
             <!--<md-input-container class="container-margin"  ng-show="vm.multiSelect">-->
                 <!--<label>Vehicle No</label>-->
                 <!--&lt;!&ndash;<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">&ndash;&gt;-->
-                <!--<md-select ng-model="vm.historyObj.selectedHistoryVehicle"-->
+                <!--<md-select ng-model="vm.historyMap.selectedHistoryVehicle"-->
                            <!--ng-model-options="{trackBy: '$value.deviceid'}"-->
                 <!--&gt;-->
 
                     <!--<md-option-->
-                        <!--ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"-->
+                        <!--ng-repeat="vehicle in vm.historyMap.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"-->
                         <!--ng-value="vehicle">-->
                         <!--{{vehicle.vehicleno}}-->
                     <!--</md-option>-->
@@ -28,12 +28,12 @@
 
             <md-input-container class="container-margin">
                 <label>Start Time</label>
-                <input type="text" id="start_time" ng-model="vm.historyObj.startTime">
+                <input type="text" id="start_time" ng-model="vm.historyMap.startTime">
             </md-input-container>
 
             <md-input-container class="container-margin">
                 <label>End Time</label>
-                <input type="text" id="end_time" ng-model="vm.historyObj.endTime">
+                <input type="text" id="end_time" ng-model="vm.historyMap.endTime">
             </md-input-container>
 
             <a class="waves-effect waves-light" ng-click="getHistory()">Get History</a>
@@ -49,11 +49,11 @@
         </div>
     </div>
 
-    <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.historyObj.trace.path">-->
+    <!--<div layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.historyMap.trace.path">-->
     <!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->
     <!--</div>-->
 
-    <div class="progress" ng-if="vm.showLoading && !vm.historyObj.errorMsg">
+    <div class="progress" ng-if="vm.showLoading && !vm.historyMap.errorMsg">
         <div class="indeterminate"></div>
     </div>
 
