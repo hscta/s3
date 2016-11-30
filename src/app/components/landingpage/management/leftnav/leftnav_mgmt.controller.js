@@ -70,7 +70,7 @@
                     leftNavManagementService.getManagementTreeWithUser({grouppath: asset.info.assetpath})
                         .then(vm.handleResponse, vm.handleResponseFailure);
                 } else {
-                    leftNavManagementService.getManagementTree({grouppath: asset.info.assetpath})
+                    leftNavManagementService.getManagementTreeNoUser({grouppath: asset.info.assetpath})
                         .then(vm.handleResponse, vm.handleResponseFailure);
                 }
             }

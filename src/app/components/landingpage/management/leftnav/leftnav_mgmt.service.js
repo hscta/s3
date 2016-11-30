@@ -54,8 +54,8 @@
                     .then(vm.handleResponse, vm.handleFailure);
             };
 
-            vm.getManagementTree = function (body) {
-                return intellicarAPI.treeDataService.getManagementTree(body)
+            vm.getManagementTreeNoUser = function (body) {
+                return intellicarAPI.treeDataService.getManagementTreeNoUser(body)
                     .then(vm.handleResponse, vm.handleFailure);
             };
         });
