@@ -8,9 +8,10 @@
         .controller('History2Controller', History2Controller)
         .controller('HistoryTableController', HistoryTableController);
 
-    function History2Controller($scope,$window, $interval, history2Service ) {
+    function History2Controller($scope,$window, $interval, history2Service, dialogService) {
 
         var vm = this;
+        dialogService.setTab(0);
 
         function loadMap() {
             vm.historyMap = history2Service.historyMap;
@@ -25,7 +26,7 @@
         vm.getHistory = function () {
             history2Service.setData('getHistory', false);
             history2Service.getHistoryData();
-        }
+        };
 
         function setMapHeight() {
             if(vm.gotHistory){
@@ -297,7 +298,7 @@
             });
             $($window).keydown(function (event) {
                 vm.traceControls.setPointerTransition(false);
-                if(event.keyCode == 32){
+                if(event.keyCode == 32 || event.keyCode == 31){
                     event.preventDefault();
                     vm.traceControls.togglePlay();
                 }

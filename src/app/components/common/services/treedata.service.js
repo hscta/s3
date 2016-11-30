@@ -408,10 +408,10 @@
 
         vm.getManagementTreeWithUser = function (body) {
             return groupService.getMyDirectAssetsMapWithUser(body)
-            //return userService.getMyDirectAssetsMap(body)
                 .then(vm.createGenericTree, vm.handleFailure)
                 .then(vm.createManagementTree, vm.handleFailure);
         };
+
 
         vm.getManagementTreeNoUser = function (body) {
             return groupService.getMyDirectAssetsMap(body)
