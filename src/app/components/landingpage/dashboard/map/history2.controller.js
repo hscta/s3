@@ -298,7 +298,7 @@
             });
             $($window).keydown(function (event) {
                 vm.traceControls.setPointerTransition(false);
-                if(event.keyCode == 32){
+                if(event.keyCode == 32 || event.keyCode == 31){
                     event.preventDefault();
                     vm.traceControls.togglePlay();
                 }
