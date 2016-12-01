@@ -10,7 +10,7 @@
         var vm = this;
         vm.dialogShow = false;
 
-        var dialogStates = ['home.geofence', 'home.historyData', 'home.history', 'home.alarm'];
+        var dialogStates = ['home.geofence', 'home.historyData', 'home.history', 'home.alarm', 'home.downloadHistory'];
         // var testObject = {'myName':{'yo1':'yoyo'}};
         // $cookies.put('hell',JSON.stringify(testObject));
 

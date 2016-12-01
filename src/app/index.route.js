@@ -171,6 +171,15 @@
                     }
                 }
             })
+            .state('home.downloadHistory', {
+                url: 'downloadHistory',
+                views: {
+                    'dialogview@home': {
+                        templateUrl: 'app/components/landingpage/dashboard/map/dialog/downloadHistory.html',
+                        controller: 'DownloadHistoryController as vm'
+                    }
+                }
+            })
             .state('home.geofence', {
                 url: 'geofence',
                 views: {

@@ -15,7 +15,7 @@
 
 
         var vm = this;
-        var dateFormat = 'DD-MM-YY HH:mm A';
+        var dateFormat = 'DD-MM-YY HH:mm';
         dialogService.setTab(3);
         vm.jsonAlarmData = [];
 

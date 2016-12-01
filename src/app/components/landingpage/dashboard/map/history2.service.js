@@ -95,7 +95,7 @@
                             endtime: endtime
                         }
                     };
-                    intellicarAPI.reportService.getDeviceLocation(body)
+                    intellicarAPI.reportsService.getDeviceLocation(body)
                         .then(vm.drawTrace, vm.handleGetLocationFailure);
                 } else {
                     vm.historyMap.errorMsg = "Enter valid start and end time";

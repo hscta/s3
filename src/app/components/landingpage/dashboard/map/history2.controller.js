@@ -440,7 +440,7 @@
         $log.log('HistoryTableController');
 
         var vm = this;
-        var dateFormat = 'DD-MM-YYYY HH:mm A';
+        var dateFormat = 'DD-MM-YYYY HH:mm';
 
         dialogService.setTab(1);
 
