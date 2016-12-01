@@ -41,7 +41,6 @@
 
 
         vm.init = function (currentGroup) {
-            $log.log('sssssssssssssssssss', settingsService.getCurrentGroup());
             vehicleMgmtService.getData(settingsService.getCurrentGroup())
                 .then(vm.handleStartupData, vm.handleStartupDataFailure);
         };

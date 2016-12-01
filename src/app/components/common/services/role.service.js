@@ -32,5 +32,11 @@
             body = vm.encloseBody(body);
             return requestService.firePost('/role/create', body);
         };
+
+
+        vm.rolePermissions = function (body) {
+            body = vm.encloseBody(body);
+            return requestService.firePost('/role/permissions', body);
+        };
     }
 })();

@@ -26,6 +26,20 @@
                 <!--</md-select>-->
             <!--</md-input-container>-->
 
+            <md-input-container class="container-margin" >
+                <label>Vehicle No</label>
+                <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
+                <md-select ng-model="vm.historyMap.selectedVehicle"
+                           ng-model-options="{trackBy: '$value.rtgps.deviceid'}">
+
+                    <md-option ng-repeat="(key, vehicle) in vm.historyMap.vehiclesByPath"
+                               ng-value="vm.historyMap.vehiclesByPath[key]"
+                               ng-if="vm.historyMap.vehiclesByPath[key].rtgps.meta.onroad">
+                        {{vm.historyMap.vehiclesByPath[key].rtgps.vehicleno}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
             <md-input-container class="container-margin">
                 <label>Start Time</label>
                 <input type="text" id="start_time" ng-model="vm.historyMap.startTime">

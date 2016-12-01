@@ -40,7 +40,7 @@
 
         vm.setCurrentGroupPath = function(grouppath) {
             vm.currentGroup = {grouppath: grouppath};
-            console.log(vm.currentGroup);
+            // console.log(vm.currentGroup);
         };
 
 

@@ -194,7 +194,7 @@
 
         vm.handleDirectAssetResponse = function(resp) {
             $log.log("groupService handleDirectAssetResponse");
-            $log.log(resp);
+            // $log.log(resp);
             return $q.resolve(resp);
         };
 

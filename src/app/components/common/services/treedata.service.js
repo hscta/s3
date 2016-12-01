@@ -291,10 +291,11 @@
 
         vm.createGenericTree = function (resp) {
             //$log.log("createGenericTree");
-            //$log.log(resp);
+            $log.log(resp);
 
             var groups = resp[0];
             var assetTree = {};
+
 
             for (var ridx = 0; ridx < resp.length; ridx++) {
                 var assets = resp[ridx];

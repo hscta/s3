@@ -52,16 +52,6 @@
             };
 
 
-            vm.setClickedMarker = function (model) {
-                for (var idx in vehicleService.vehiclesByPath) {
-                    if (idx == model.vehiclepath) {
-                        delete model['marker'];
-                        vm.inMap.markers.clickedMarker = vehicleService.vehiclesByPath[idx];
-                        break;
-                    }
-                }
-                vm.inMap.markers.clickedMarker.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
-            };
 
             vm.showHistory = function () {
                 dialogService.show('home.history', {

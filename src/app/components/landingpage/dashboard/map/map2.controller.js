@@ -77,6 +77,18 @@
         };
 
 
+        vm.setClickedMarker = function (model) {
+            if(model.vehiclepath in vm.markersByPath) {
+                //delete model['marker'];
+                console.log(model.vehiclepath);
+                vm.inMap.markers.clickedMarker = vehicleService.vehiclesByPath[model.vehiclepath];
+                vm.inMap.markers.clickedMarker.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
+                $scope.clickedMarker = vm.inMap.markers.clickedMarker;
+                $scope.hideMobilityControls = vm.inMap.markers.clickedMarker.hideMobilityControls;
+            }
+        };
+
+
         vm.updateMarker2 = function (rtgps) {
             // $log.log('updateMarker2');
             // $log.log(rtgps);
@@ -97,12 +109,13 @@
             }
 
             google.maps.event.addListener(marker, 'click', function (event) {
-                newMapService.setClickedMarker(this);
+                vm.setClickedMarker(this);
                 markerInfowindow.setContent(document.getElementById("marker_infowindow").innerHTML);
-                $scope.clickedMarker = vm.inMap.markers.clickedMarker;
-                $scope.hideMobilityControls = vm.inMap.markers.clickedMarker.hideMobilityControls;
+
+                $log.log(this);
                 markerInfowindow.open(map, this);
             });
+
             marker.setMap(vm.inMap.map);
             vm.customOverlay(rtgps);
         };

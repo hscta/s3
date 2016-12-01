@@ -86,7 +86,7 @@
                         resolve: {
                             startupData : function($stateParams, $log, roleMgmtService, $state) {
                                 $log.log("toState " + $state.current.name);
-                                $log.log($stateParams);
+                                // $log.log($stateParams);
                                 return roleMgmtService.getData($stateParams);
                             }
                         },

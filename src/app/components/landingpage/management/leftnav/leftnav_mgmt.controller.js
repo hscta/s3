@@ -30,6 +30,7 @@
 
         vm.handleResponse = function (data) {
             //$log.log("handleResponse");
+            $log.log(data);
             vm.tree_data = data;
             return vm.tree_data;
         };
@@ -48,6 +49,7 @@
 
 
         vm.setFirstGroup = function(resp){
+            $log.log(resp);
             if(resp.length) {
                 groupService.lastGroupPath = resp[0].info.assetpath;
                 settingsService.lastGroup = resp[0].info;
@@ -127,6 +129,7 @@
         // };
 
         vm.init = function (data) {
+            $log.log(startupTreeData);
             //vm.firedgrouppaths.push(startupTreeData);
             startupTreeData = startupTreeData.toString();
             leftNavManagementService.getManagementTreeWithUser({grouppath:startupTreeData})

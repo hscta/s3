@@ -8,7 +8,7 @@
         .controller('History2Controller', History2Controller)
         .controller('HistoryTableController', HistoryTableController);
 
-    function History2Controller($scope,$window, $interval, history2Service ) {
+    function History2Controller($scope, $window, $interval, history2Service, $stateParams, $log) {
 
         var vm = this;
 
@@ -58,6 +58,7 @@
             var startInterval = $interval(function () {
                 var keys = Object.keys(vm.historyMap.markersByPath);
                 if(keys.length > 0){
+                    $log.log(vm.historyMap.vehiclesByPath[keys[0]]);
                     vm.historyMap.selectedVehicle = vm.historyMap.vehiclesByPath[keys[0]];
                     $interval.cancel(startInterval);
                 }
@@ -302,15 +303,15 @@
                     vm.traceControls.togglePlay();
                 }
                 // if(!vm.traceControls.playing ){
-                    if(event.keyCode == 37){ // left
-                        vm.traceControls.jumpToTime(-1);
-                    }else if(event.keyCode == 38){ // up
-                        vm.traceControls.jumpToTime(10);
-                    }else if(event.keyCode == 39){ // right
-                        vm.traceControls.jumpToTime(1);
-                    }else if(event.keyCode == 40){ // down
-                        vm.traceControls.jumpToTime(-10);
-                    }
+                if(event.keyCode == 37){ // left
+                    vm.traceControls.jumpToTime(-1);
+                }else if(event.keyCode == 38){ // up
+                    vm.traceControls.jumpToTime(10);
+                }else if(event.keyCode == 39){ // right
+                    vm.traceControls.jumpToTime(1);
+                }else if(event.keyCode == 40){ // down
+                    vm.traceControls.jumpToTime(-10);
+                }
                 // }
             });
         }
@@ -340,11 +341,19 @@
                 history2Service.drawTrace();
                 drawTimeline();
             }else{
-                setDefaultVehicle();
+                if($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)
+                    vm.historyMap.selectedVehicle = $stateParams.mapObj.clickedMarker;
+                else
+                    setDefaultVehicle();
             }
+
+
             setMapHeight();
             $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
             $scope.$on('gotHistoryEventFailed', vm.gotHistoryEventFailed);
+
+            $log.log(vm.historyMap.markersByPath);
+            $log.log($stateParams.mapObj);
         };
         vm.init();
     }
