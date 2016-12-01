@@ -296,6 +296,26 @@
     </div>
 </div>
 
+
+
+<div id="fence_infowindow" layout="row" ng-non-bindable flex>
+  <div layout="column" id="fenceWindow" ng-cloak>
+      <table>
+          <tbody>
+          <tr>
+              <th>Name:</th>
+              <td>{{vm.selectedFenceObj.info.name}}</td>
+          </tr>
+          <tr>
+              <th>Type:</th>
+              <td>{{vm.selectedFenceObj.info.tagdata.olafilter}}</td>
+          </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
+
+
 <div id="marker_infowindow" layout="row" ng-non-bindable flex>
     <div layout="column" id="markerWindow" ng-cloak>
         <div class="info-w-header">

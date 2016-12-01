@@ -67,7 +67,6 @@
             });
         };
 
-
         vm.getHistoryData = function(){
             if (!vm.historyMap.selectedVehicle.rtgps.deviceid){
                 vm.historyMap.errorMsg = "Please Select Vehicle";

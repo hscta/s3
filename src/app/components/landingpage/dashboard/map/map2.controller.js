@@ -21,7 +21,6 @@
         vm.inMarkers = vm.inMap.markers.inMarkers;
         vm.markersByPath = vm.inMap.markers.markersByPath;
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
-        vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
         vm.filterStr = '';
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
 
@@ -112,7 +111,6 @@
                 vm.setClickedMarker(this);
                 markerInfowindow.setContent(document.getElementById("marker_infowindow").innerHTML);
 
-                $log.log(this);
                 markerInfowindow.open(map, this);
             });
 
@@ -315,19 +313,11 @@
 
 
         vm.getMyFences = function (fences) {
-            $log.log('mapcontroller');
-            // $log.log(fences);
-            // vm.inMap.circles = fences.circles;
-            // newMapService.inMap.circles = fences.circles;
-            // newMapService.inMap.polygons = fences.polygons;
             geofenceViewService.setData('geofences', true);
             vm.applyFilters({filterType: 'showAll'});
 
             vm.createPolygons(fences.polygons);
             vm.createCircles(fences.circles);
-
-            // vm.showMyPolygons();
-            // vm.showMyCircles();
         };
 
         vm.createPolygons = function(polygons){
@@ -338,14 +328,28 @@
                     paths.push(new google.maps.LatLng(polygons[idx].path[j].latitude,
                         polygons[idx].path[j].longitude));
                 }
+
+                var color = getColor( polygons[idx].control.info.tagdata);
                 var googlePolygon = new google.maps.Polygon({
                     path: paths,
-                    strokeColor: polygons[idx].strokeColor,
-                    strokeOpacity: 0.8,
+                    strokeColor: color,
                     strokeWeight: polygons[idx].strokeWeight,
                     fillColor: polygons[idx].fillColor,
-                    fillOpacity: polygons[idx].fillOpacity
+                    fillOpacity: polygons[idx].fillOpacity,
+                    info : polygons[idx].control.info
                 });
+
+                google.maps.event.addListener(googlePolygon, 'click', function (evt) {
+                    vm.setClickedMarker(this);
+
+                    vm.selectedFenceObj = this;
+                    fenceInfowindow.setContent(document.getElementById("fence_infowindow").innerHTML);
+                    fenceInfowindow.setPosition(evt.latLng);
+                    fenceInfowindow.open(vm.inMap.map, this);
+                });
+
+                // googlePolygon.setMap(vm.inMap.map);
+
                 polygons[idx].googleObject = googlePolygon;
                 polygonMap[polygons[idx].control.info.assetpath] = polygons[idx];
             }
@@ -355,32 +359,34 @@
         vm.createCircles = function(circles){
             var circlesMap = {};
             for(var idx in circles){
+
+                var color = getColor( circles[idx].control.info.tagdata);
+                circles[idx].strokeColor = color;
+
+                var strokeWeight = getStroke( circles[idx].control.info.tagdata);
+                circles[idx].strokeWeight = strokeWeight;
+
                 var googleCircle = new google.maps.Circle({
                     strokeColor: circles[idx].strokeColor,
-                    strokeOpacity: 0.8,
                     strokeWeight: circles[idx].strokeWeight,
                     fillColor: circles[idx].fillColor,
                     fillOpacity: circles[idx].fillOpacity,
                     center: {lat: circles[idx].center.latitude,lng: circles[idx].center.longitude},
-                    radius: circles[idx].radius
+                    radius: circles[idx].radius,
+                    info: circles[idx].control.info
                 });
 
-                google.maps.event.addListener(googleCircle, 'click', function (e) {
-                    var contentString = "<table><tbody>\
-                                            <tr>\
-                                                <th>Name:</th>\
-                                                <td>{{vm.selectedFenceObj.name}}</td>\
-                                            </tr>\
-                                            <tr>\
-                                                <th>Type:</th>\
-                                                <td>{{vm.selectedFenceObj.other.olafilter}}</td>\
-                                            </tr>\
-                                        </tbody></table>";
-                    fenceInfowindow.setContent(contentString);
+                google.maps.event.addListener(googleCircle, 'click', function (evt) {
+                    vm.selectedFenceObj = this;
+                    fenceInfowindow.setPosition(evt.latLng);
+                    fenceInfowindow.setContent(document.getElementById("fence_infowindow").innerHTML);
                     fenceInfowindow.open(vm.inMap.map, this);
                 });
+
                 circles[idx].googleObject = googleCircle;
                 circlesMap[circles[idx].control.info.assetpath] = circles[idx];
+                googleCircle.setMap(vm.inMap.map);
+
             }
             vm.circlesByPath = circlesMap;
         }
@@ -449,13 +455,18 @@
             } else if (filterData.filterType == 'showVehicleNo') {
                 // Do something to notify showVehicleNo filter is On
             } else {
+
                 if (vm.circlesByPath) {
-                    for (var idx in vm.circlesByPath.length) {
+                    $log.log(vm.circlesByPath);
+                    for (var idx in vm.circlesByPath) {
                         var filterStr = vm.circlesByPath[idx].control.info.tagdata;
                         if (checkFilterString(filterStr)) {
-                            vm.circlesByPath[idx].googleObject.setMap(vm.inMap.map);
+                            $log.log(vm.circlesByPath[idx]);
+                            $log.log(getColor(filterStr));
+                            $log.log(filterStr);
                             vm.circlesByPath[idx].strokeWeight = getStroke(filterStr);
                             vm.circlesByPath[idx].strokeColor = getColor(filterStr);
+                            vm.circlesByPath[idx].googleObject.setMap(vm.inMap.map);
                             startAnimation(vm.circlesByPath[idx]);
                         } else {
                             vm.circlesByPath[idx].googleObject.setMap(null);
@@ -467,8 +478,8 @@
                         filterStr = vm.polygonsByPath[idx].control.info.tagdata;
                         if (checkFilterString(filterStr)) {
                             vm.polygonsByPath[idx].googleObject.setMap(vm.inMap.map);
-                            vm.polygonsByPath[idx].strokeWeight = getStroke(filterStr);
-                            vm.polygonsByPath[idx].strokeColor = getColor(filterStr);
+                            // vm.polygonsByPath[idx].strokeWeight = getStroke(filterStr);
+                            // vm.polygonsByPath[idx].strokeColor = getColor(filterStr);
                             startAnimation(vm.polygonsByPath[idx]);
                         } else {
                             vm.polygonsByPath[idx].googleObject.setMap(null);
@@ -648,61 +659,65 @@
         };
 
 
-        vm.showMyPolygons = function () {
-            for (var i = 0; i < vm.inMap.polygons.length; i++) {
-                var paths = [];
-                for (var j = 0; j < vm.inMap.polygons[i].path.length; j++) {
-                    paths.push(new google.maps.LatLng(vm.inMap.polygons[i].path[j].latitude,
-                        vm.inMap.polygons[i].path[j].longitude));
-                }
-                var polygon = new google.maps.Polygon({
-                    path: paths,
-                    strokeColor: vm.inMap.polygons[i].strokeColor,
-                    strokeOpacity: 0.8,
-                    strokeWeight: vm.inMap.polygons[i].strokeWeight,
-                    fillColor: vm.inMap.polygons[i].fillColor,
-                    fillOpacity: vm.inMap.polygons[i].fillOpacity
-                });
-                polygon.setMap(vm.inMap.map);
-            }
-        };
-
-        vm.showMyCircles = function () {
-            for (var i = 0; i < vm.inMap.circles.length; i++) {
-                var circle = new google.maps.Circle({
-                    strokeColor: vm.inMap.circles[i].strokeColor,
-                    strokeOpacity: 0.8,
-                    strokeWeight: vm.inMap.circles[i].strokeWeight,
-                    fillColor: vm.inMap.circles[i].fillColor,
-                    fillOpacity: vm.inMap.circles[i].fillOpacity,
-                    center: {lat: vm.inMap.circles[i].center.latitude, lng: vm.inMap.circles[i].center.longitude},
-                    radius: vm.inMap.circles[i].radius
-                });
-
-                google.maps.event.addListener(circle, 'click', function (e) {
-                    var contentString = "<table><tbody>\
-                                            <tr>\
-                                                <th>Name:</th>\
-                                                <td>{{vm.selectedFenceObj.name}}</td>\
-                                            </tr>\
-                                            <tr>\
-                                                <th>Type:</th>\
-                                                <td>{{vm.selectedFenceObj.other.olafilter}}</td>\
-                                            </tr>\
-                                        </tbody></table>";
-
-                    fenceInfowindow.setContent(contentString);
-                    fenceInfowindow.open(vm.inMap.map, this);
-                });
-
-                circle.setMap(vm.inMap.map);
-            }
-        };
+        // vm.showMyPolygons = function () {
+        //     for (var i = 0; i < vm.inMap.polygons.length; i++) {
+        //         var paths = [];
+        //         for (var j = 0; j < vm.inMap.polygons[i].path.length; j++) {
+        //             paths.push(new google.maps.LatLng(vm.inMap.polygons[i].path[j].latitude,
+        //                 vm.inMap.polygons[i].path[j].longitude));
+        //         }
+        //         var polygon = new google.maps.Polygon({
+        //             path: paths,
+        //             strokeColor: vm.inMap.polygons[i].strokeColor,
+        //             strokeOpacity: 0.8,
+        //             strokeWeight: vm.inMap.polygons[i].strokeWeight,
+        //             fillColor: vm.inMap.polygons[i].fillColor,
+        //             fillOpacity: vm.inMap.polygons[i].fillOpacity
+        //         });
+        //         polygon.setMap(vm.inMap.map);
+        //     }
+        // };
+        //
+        // vm.showMyCircles = function () {
+        //     for (var i = 0; i < vm.inMap.circles.length; i++) {
+        //         var circle = new google.maps.Circle({
+        //             strokeColor: vm.inMap.circles[i].strokeColor,
+        //             strokeOpacity: 0.8,
+        //             strokeWeight: vm.inMap.circles[i].strokeWeight,
+        //             fillColor: vm.inMap.circles[i].fillColor,
+        //             fillOpacity: vm.inMap.circles[i].fillOpacity,
+        //             center: {lat: vm.inMap.circles[i].center.latitude, lng: vm.inMap.circles[i].center.longitude},
+        //             radius: vm.inMap.circles[i].radius
+        //         });
+        //
+        //         google.maps.event.addListener(circle, 'click', function (e) {
+        //             var contentString = "<table><tbody>\
+        //                                     <tr>\
+        //                                         <th>Name:</th>\
+        //                                         <td>{{vm.selectedFenceObj.name}}</td>\
+        //                                     </tr>\
+        //                                     <tr>\
+        //                                         <th>Type:</th>\
+        //                                         <td>{{vm.selectedFenceObj.other.olafilter}}</td>\
+        //                                     </tr>\
+        //                                 </tbody></table>";
+        //
+        //             fenceInfowindow.setContent(contentString);
+        //             fenceInfowindow.open(vm.inMap.map, this);
+        //         });
+        //
+        //         circle.setMap(vm.inMap.map);
+        //
+        //     }
+        // };
 
 
         vm.onload = function () {
             $scope.$apply(function () {
                 $compile(document.getElementById("markerWindow"))($scope);
+            });
+            $scope.$apply(function () {
+                $compile(document.getElementById("fenceWindow"))($scope);
             });
         };
 
@@ -753,6 +768,10 @@
             $interval(vm.runStats, 10000);
 
             markerInfowindow.addListener('domready', function () {
+                vm.onload();
+            });
+
+            fenceInfowindow.addListener('domready', function () {
                 vm.onload();
             });
 

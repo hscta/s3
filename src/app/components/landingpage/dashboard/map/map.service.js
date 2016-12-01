@@ -36,18 +36,6 @@
                         }
                     }
                 },
-                fenceInfoWindow: {
-                    show: false,
-                    control: {},
-                    options: {
-                        maxWidth: 300,
-                        disableAutoPan: false,
-                        pixelOffset: {
-                            width: 0,
-                            height: 0
-                        }
-                    }
-                },
                 markers: {
                     inMarkers: [],
                     clickedMarker: {},
@@ -60,23 +48,6 @@
                 },
                 circles: [],
                 polygons: [],
-
-                circleEvents: {
-                    click: function (circle, eventName, model, args) {
-                        //$log.log('Circle clicked');
-                        vm.circleEvents(model, vm.inMap.selectedFenceObj);
-                        vm.fenceInfoWindowShow();
-                    }
-                },
-
-                polygonEvents: {
-                    click: function (polygon, eventName, model, args) {
-                        vm.polygonEvents(model, vm.inMap.selectedFenceObj);
-                        vm.fenceInfoWindowShow();
-
-                    }
-                },
-
                 selectedFenceObj: {
                     latitude: '',
                     longitude: '',
