@@ -35,6 +35,8 @@
             // $log.log(vm.alarmsObj.filteredVehicles);
             for (var idx in vm.alarmsObj.filteredVehicles) {
                 if (vm.alarmsObj.filteredVehicles[idx].checked) {
+                    $log.log(vm.alarmsObj.filteredVehicles[idx]);
+
                     vehiclesids.push(vm.alarmsObj.filteredVehicles[idx].rtgps.deviceid);
                 }
             }
@@ -97,8 +99,8 @@
 
             for ( var idx in data ) {
                 for ( var veh in vm.alarmsObj.vehicles){
-                    if ( data[idx].deviceid == vm.alarmsObj.vehicles[veh].deviceid){
-                        data[idx].vehicleno = vm.alarmsObj.vehicles[veh].vehicleno;
+                    if ( data[idx].deviceid == vm.alarmsObj.vehicles[veh].rtgps.deviceid){
+                        data[idx].vehicleno = vm.alarmsObj.vehicles[veh].rtgps.vehicleno;
                         data[idx].speed = Math.floor(data[idx].speed);
                     }
                 }
@@ -112,7 +114,7 @@
         }
 
 
-        function init(){
+        vm.init = function (){
             var defaultTime = vm.getDefaultTime();
 
             vm.alarmsObj.startTime = defaultTime.startTime;
@@ -120,6 +122,8 @@
 
             for ( var idx in vehicleService.vehiclesByPath) {
                 // $log.log(vehicleService.vehiclesByPath[idx]);
+
+                if ( vehicleService.vehiclesByPath[idx].hasOwnProperty('rtgps'))
                     vm.alarmsObj.vehicles.push(vehicleService.vehiclesByPath[idx]);
             }
             // vm.alarmsObj.vehicles =  vehicleService.vehiclesByPath,
@@ -139,7 +143,7 @@
             }
         };
 
-        init();
+        vm.init();
 
     }
 })();
