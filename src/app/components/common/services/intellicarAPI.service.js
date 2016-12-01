@@ -20,7 +20,7 @@
                                            vehicleAPIService,
                                            geocodeService,
                                            permissionService, roleService,
-                                           importFileservice
+                                           importFileservice, myAlarmService
                                            ) {
             var vm = this;
             $log.log("intellicarAPI");
@@ -44,7 +44,8 @@
                 geocodeService:geocodeService,
                 permissionService:permissionService,
                 roleService:roleService,
-                importFileservice:importFileservice
+                importFileservice:importFileservice,
+                myAlarmService : myAlarmService
             }
         });
 })();

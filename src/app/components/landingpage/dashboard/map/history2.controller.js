@@ -8,13 +8,17 @@
         .controller('History2Controller', History2Controller)
         .controller('HistoryTableController', HistoryTableController);
 
-    function History2Controller($scope, $window, $interval, history2Service, $stateParams, $log) {
+    function History2Controller($scope, $window, $interval, history2Service, $stateParams, $log,
+                                dialogService) {
 
         var vm = this;
 
+        dialogService.setTab(0);
+
         function loadMap() {
             vm.historyMap = history2Service.historyMap;
-            vm.historyMap.map = new google.maps.Map(document.getElementById("history_map"), vm.historyMap.mapOptions);
+            vm.historyMap.map = new google.maps.Map(document.getElementById("history_map"),
+                vm.historyMap.mapOptions);
             vm.historyMap.map.addListener('click', function() {
 
             });
@@ -41,9 +45,11 @@
             });
         }
 
+
         $(window).resize(function () {
             setMapHeight();
         });
+
 
         function isRendered(el, callback) {
             var isr_interval = setInterval(function () {
@@ -54,21 +60,29 @@
             }, 200)
         }
 
+
         function setDefaultVehicle() {
-            var startInterval = $interval(function () {
-                var keys = Object.keys(vm.historyMap.markersByPath);
+
+            $log.log(vm.historyMap.selectedVehicle);
+            if ( vm.historyMap.selectedVehicle == null ) {
+                // var startInterval = $interval(function () {
+                var keys = Object.keys(vm.historyMap.vehiclesByPath);
                 if(keys.length > 0){
                     $log.log(vm.historyMap.vehiclesByPath[keys[0]]);
                     vm.historyMap.selectedVehicle = vm.historyMap.vehiclesByPath[keys[0]];
-                    $interval.cancel(startInterval);
+                    // $interval.cancel(startInterval);
                 }
-            }, 500 )
+                // }, 500 )
+            }
+
         }
+
 
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.historyMap.map , 'resize');
             return true;
         };
+
 
         vm.traceControls = history2Service.traceControls;
 
@@ -347,7 +361,6 @@
                     setDefaultVehicle();
             }
 
-
             setMapHeight();
             $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
             $scope.$on('gotHistoryEventFailed', vm.gotHistoryEventFailed);
@@ -449,7 +462,7 @@
                 ]);
 
                 vm.jsonHistoryData.push({
-                    vehicle_Name: vm.historyMap.selectedVehicle.vehicleno,
+                    vehicle_Name: vm.historyMap.selectedVehicle.rtgps.vehicleno,
                     location: loc,
                     time : moment(dateTime).format(dateFormat),
                     odometer: marker[idx].odometer.toString(),

@@ -38,7 +38,35 @@
             trace:{
                 path:[]
             }
-        }
+        };
+
+
+        vm.geoFenceReports = {
+            startTime:'',
+            endTime:'',
+            reportId:'',
+            selectedVehiclesCount : 0,
+            selectedFencesCount : 0,
+
+            filteredItems : [],
+            filteredFenceItems : [],
+
+            myHistoryData:[],
+            jsonReportData:[],
+            reports:[],
+            fenceFilter:'',
+            currRep:[]
+        };
+
+
+        vm.setInMapLocation = function (loc) {
+            vm.historyMap.mapOptions.center = angular.copy(loc);
+            vm.historyMap.map.setCenter({
+                lat: vm.historyMap.mapOptions.center.latitude,
+                lng: vm.historyMap.mapOptions.center.longitude
+            });
+        };
+
 
         vm.getHistoryData = function(){
             if (!vm.historyMap.selectedVehicle.rtgps.deviceid){
@@ -259,6 +287,9 @@
             var defaultTime = vm.getDefaultTime ();
             vm.historyMap.startTime = defaultTime.startTime;
             vm.historyMap.endTime = defaultTime.endTime;
+
+            vm.geoFenceReports.startTime  = defaultTime.startTime;
+            vm.geoFenceReports.endTime  = defaultTime.endTime;
         }
 
         vm.init();

@@ -9,7 +9,7 @@
         .module('uiplatform')
         .controller('GeofenceViewController', mapLeftToolBar);
 
-    function mapLeftToolBar($scope, $log, $timeout, $q, newMapService, historyService,
+    function mapLeftToolBar($scope, $log, $timeout, $q, newMapService, history2Service,
                             $state, geofenceViewService, dialogService, intellicarAPI) {
 
         var vm = this;
@@ -278,7 +278,7 @@
                 vm.currentLocation = data.id;
                 $log.log($state.current.name);
                 if ($state.current.name == 'home.history')
-                    historyService.setInMapLocation(data.latlng);
+                    history2Service.setInMapLocation(data.latlng);
                 else
                     newMapService.setInMapLocation(data.latlng);
             } else if (type == 'button') {

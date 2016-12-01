@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('alarmService', alarmService);
 
-    function alarmService($log, mapService, intellicarAPI, $filter, $q) {
+    function alarmService($log, vehicleService, intellicarAPI, $filter, $q) {
         $log.log("alarmService");
         var vm = this;
 
@@ -28,14 +28,14 @@
 
 
         vm.getAlarmsHistory = function(){
-            var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
+            // var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
 
             var vehiclesids = [];
 
             // $log.log(vm.alarmsObj.filteredVehicles);
             for (var idx in vm.alarmsObj.filteredVehicles) {
                 if (vm.alarmsObj.filteredVehicles[idx].checked) {
-                    vehiclesids.push(vm.alarmsObj.filteredVehicles[idx].deviceid);
+                    vehiclesids.push(vm.alarmsObj.filteredVehicles[idx].rtgps.deviceid);
                 }
             }
 
@@ -104,8 +104,8 @@
                 }
             }
             vm.alarmsObj.alarmResponseData = data;
-            $log.log(data);
         };
+
 
         vm.handleFailure = function(){
             $log.log('fails');
@@ -117,9 +117,15 @@
 
             vm.alarmsObj.startTime = defaultTime.startTime;
             vm.alarmsObj.endTime = defaultTime.endTime;
-            vm.alarmsObj.vehicles = mapService.inMap.markers.inMarkers;
+
+            for ( var idx in vehicleService.vehiclesByPath) {
+                // $log.log(vehicleService.vehiclesByPath[idx]);
+                    vm.alarmsObj.vehicles.push(vehicleService.vehiclesByPath[idx]);
+            }
+            // vm.alarmsObj.vehicles =  vehicleService.vehiclesByPath,
             vm.alarmsObj.filteredVehicles = vm.alarmsObj.vehicles;
         };
+
 
         vm.getDefaultTime = function(){
             var dateFormat = 'YYYY-MM-DD HH:mm';

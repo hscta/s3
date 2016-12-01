@@ -6,7 +6,7 @@
 
     function GoogleMapController($scope, $log, cpuService, newMapService,
                                  $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
-                                 vehicleService) {
+                                 vehicleService, history2Service) {
         $log.log('MapController');
         var vm = this;
 
@@ -709,6 +709,8 @@
 
         vm.showHistory = function () {
             $log.log("show History");
+            history2Service.setData('getHistory', false);
+            history2Service.historyMap.traceObj = [];
             newMapService.showHistory();
         };
 

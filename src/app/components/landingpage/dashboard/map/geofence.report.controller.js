@@ -9,16 +9,18 @@
         .controller('GeofenceReportController', GeofenceReportController);
 
     function GeofenceReportController($log, $q, dialogService, geofenceReportService, $filter, $timeout,
-                                      intellicarAPI, historyService, mapService, $state) {
+                                      intellicarAPI, history2Service, mapService, $state) {
 
         $log.log("GeofenceReportController");
 
-        // $log.log(historyService.playerControls);
+        // $log.log(history2Service.playerControls);
         dialogService.setTab(2);
         var vm = this;
         var dateFormat = 'DD-MM-YYYY HH:mm A';
 
-        vm.fenceReportObj = historyService.geoFenceReports;
+        vm.fenceReportObj = history2Service.geoFenceReports;
+
+        // $log.log(vm.fenceReportObj);
 
         vm.startTime = vm.fenceReportObj.startTime;
         vm.endTime = vm.fenceReportObj.endTime;
@@ -98,7 +100,7 @@
             data.addColumn('datetime', 'Fence Entry');
             data.addColumn('datetime', 'Fence Exit');
             data.addRows(
-                historyService.geoFenceReports.myHistoryData
+                history2Service.geoFenceReports.myHistoryData
             );
 
             var dateFormatter = new google.visualization.DateFormat({pattern: 'd MMM, h:mm a'});
@@ -128,8 +130,8 @@
 
                     var endTime = moment(data.getValue(table.getSelection()[0].row, 3)).add(1, 'hour').format(dateFormat);
 
-                    historyService.historyMapObj.startTime = startTime;
-                    historyService.historyMapObj.endTime = endTime;
+                    history2Service.historyMapObj.startTime = startTime;
+                    history2Service.historyMapObj.endTime = endTime;
 
                     var params = {
                         clickedMarker: vehicleDetail[0]
@@ -157,6 +159,8 @@
             if (vm.initialSelect) {
                 vm.initialSelect = false;
                 vm.fenceReportObj.reports = geofenceReportService.getMyGeofenceReports();
+
+                // $log.log(vm.fenceReportObj.reports);
                 for (var idx in vm.fenceReportObj.reports) {
                     return vm.getSelectedFences(vm.fenceReportObj.reports[idx]);
                 }
@@ -243,9 +247,10 @@
             vm.setSelectedCount(type);
         };
 
+
         vm.getHistoryReport = function () {
-            historyService.geoFenceReports.myHistoryData = [];
-            historyService.geoFenceReports.jsonReportData = [];
+            history2Service.geoFenceReports.myHistoryData = [];
+            history2Service.geoFenceReports.jsonReportData = [];
             vm.disableDownload = true;
             var myEl = angular.element(document.querySelector('#geo-table'));
             myEl.empty();
@@ -304,12 +309,11 @@
 
         vm.downloadFile = function () {
             intellicarAPI.importFileservice.JSONToCSVConvertor(
-                historyService.geoFenceReports.jsonReportData, "Vehicles Fence Report", true);
+                history2Service.geoFenceReports.jsonReportData, "Vehicles Fence Report", true);
         };
 
 
         vm.readHistoryInfo = function (history) {
-
             var data = history[0].data.data;
             var trackHistoryData = [];
 
@@ -333,14 +337,14 @@
                         if ((startTime < endTime) && (endTime - startTime) > ( 1000 * 60 * 3 )) {
                             var start_time = new Date(startTime);
                             var end_time = new Date(endTime);
-                            historyService.geoFenceReports.myHistoryData.push([
+                            history2Service.geoFenceReports.myHistoryData.push([
                                 vehicleName,
                                 fenceName,
                                 start_time,
                                 end_time
                             ]);
 
-                            historyService.geoFenceReports.jsonReportData.push({
+                            history2Service.geoFenceReports.jsonReportData.push({
                                 vehicle_name:vehicleName,
                                 fence_name: fenceName,
                                 fence_entry: moment(start_time).format(dateFormat),
@@ -357,13 +361,15 @@
             vm.showTableData();
         };
 
+
         vm.showTableData = function () {
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
         };
 
+
         vm.init = function () {
-            if (historyService.geoFenceReports.myHistoryData.length) {
+            if (history2Service.geoFenceReports.myHistoryData.length) {
                 vm.initialSelect = false;
                 vm.showTableData();
             } else {
@@ -372,7 +378,7 @@
             geofenceReportService.addListener('mygeofencereportsinfo', vm.getMyGeofenceReports);
             vm.getMyGeofenceReports();
 
-            vm.disableDownload = historyService.geoFenceReports.jsonReportData.length ? false : true;
+            vm.disableDownload = history2Service.geoFenceReports.jsonReportData.length ? false : true;
         };
 
         vm.init();

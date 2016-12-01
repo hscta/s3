@@ -93,6 +93,7 @@
         vm.init = function(){
             vm.alarms = alarmService.alarmsObj;
 
+
             for ( var idx in vm.alarms.vehicles ){
                 if ( !vm.alarms.vehicles[idx].hasOwnProperty('checked'))
                     vm.alarms.vehicles[idx].checked = false;
@@ -103,6 +104,10 @@
                 (vm.alarms.filteredVehicles, {checked: true})).length;
 
             // vm.verifyCheckStatus('vehicle');
+            // $log.log(vm.alarms.vehicles);
+            //
+            // $log.log(vm.alarms.filteredVehicles);
+
             vm.filterVehicles();
 
             vm.showAddress();
