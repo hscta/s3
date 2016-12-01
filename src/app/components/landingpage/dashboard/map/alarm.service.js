@@ -15,19 +15,19 @@
 
 
         vm.alarmsObj = {
-            vehicles:[],
-            startTime:'',
-            endTime:'',
-            vehicleFilterPattern:'',
-            selectedVehiclesCount:0,
-            filteredVehicles:[],
-            alarmResponseData:[],
-            loadingAlarmData : false,
-            msg:''
+            vehicles: [],
+            startTime: '',
+            endTime: '',
+            vehicleFilterPattern: '',
+            selectedVehiclesCount: 0,
+            filteredVehicles: [],
+            alarmResponseData: [],
+            loadingAlarmData: false,
+            msg: ''
         };
 
 
-        vm.getAlarmsHistory = function(){
+        vm.getAlarmsHistory = function () {
             // var selectedVehicles = $filter("filter")(vm.alarmsObj.vehicles, {checked: true});
 
             var vehiclesids = [];
@@ -41,7 +41,7 @@
                 }
             }
 
-            if ( vehiclesids.length <= 0 ) {
+            if (vehiclesids.length <= 0) {
                 vm.alarmsObj.msg = "Please Select atleast one vehicle";
                 return;
             }
@@ -54,12 +54,12 @@
             var endTime = new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime();
 
 
-            if ( !startTime ) {
+            if (!startTime) {
                 vm.alarmsObj.msg = "Please enter start time";
                 return;
             }
 
-            if ( !endTime ) {
+            if (!endTime) {
                 vm.alarmsObj.msg = "Please enter end time";
                 return;
             }
@@ -76,7 +76,7 @@
             vm.alarmsObj.loadingAlarmData = true;
 
             var body = {
-                vehiclepath : vehiclesids,
+                vehiclepath: vehiclesids,
                 starttime: startTime,
                 endtime: endTime
             };
@@ -88,7 +88,7 @@
 
         };
 
-        vm.readHistoryInfo = function(history){
+        vm.readHistoryInfo = function (history) {
             var data = history[0].data.data;
             vm.alarmsObj.loadingAlarmData = false;
 
@@ -97,9 +97,9 @@
             }
 
 
-            for ( var idx in data ) {
-                for ( var veh in vm.alarmsObj.vehicles){
-                    if ( data[idx].deviceid == vm.alarmsObj.vehicles[veh].rtgps.deviceid){
+            for (var idx in data) {
+                for (var veh in vm.alarmsObj.vehicles) {
+                    if (data[idx].deviceid == vm.alarmsObj.vehicles[veh].rtgps.deviceid) {
                         data[idx].vehicleno = vm.alarmsObj.vehicles[veh].rtgps.vehicleno;
                         data[idx].speed = Math.floor(data[idx].speed);
                     }
@@ -109,21 +109,21 @@
         };
 
 
-        vm.handleFailure = function(){
+        vm.handleFailure = function () {
             $log.log('fails');
         }
 
 
-        vm.init = function (){
+        vm.init = function () {
             var defaultTime = vm.getDefaultTime();
 
             vm.alarmsObj.startTime = defaultTime.startTime;
             vm.alarmsObj.endTime = defaultTime.endTime;
 
-            for ( var idx in vehicleService.vehiclesByPath) {
+            for (var idx in vehicleService.vehiclesByPath) {
                 // $log.log(vehicleService.vehiclesByPath[idx]);
 
-                if ( vehicleService.vehiclesByPath[idx].hasOwnProperty('rtgps'))
+                if (vehicleService.vehiclesByPath[idx].hasOwnProperty('rtgps'))
                     vm.alarmsObj.vehicles.push(vehicleService.vehiclesByPath[idx]);
             }
             // vm.alarmsObj.vehicles =  vehicleService.vehiclesByPath,
@@ -131,7 +131,7 @@
         };
 
 
-        vm.getDefaultTime = function(){
+        vm.getDefaultTime = function () {
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
             var startTime = moment().subtract(1, 'hour').format(dateFormat);

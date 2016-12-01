@@ -2155,7 +2155,7 @@ div.dataTables_info {
      height: 110px;
      background: #fff;
      z-index: 100;
-     @include shadow(0 -2px 5px rgba(0,0,0,0.4))
+     @include shadow(0 -2px 5px rgba(0,0,0,0.4));
      .tc_controls{
          position: absolute;
          top:0;

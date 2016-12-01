@@ -22,7 +22,7 @@
             vm.historyMap = history2Service.historyMap;
             vm.historyMap.map = new google.maps.Map(document.getElementById("history_map"),
                 vm.historyMap.mapOptions);
-            vm.historyMap.map.addListener('click', function() {
+            vm.historyMap.map.addListener('click', function () {
 
             });
             setMapHeight();
@@ -32,12 +32,12 @@
         vm.getHistory = function () {
             history2Service.setData('getHistory', false);
             history2Service.getHistoryData();
-        }
+        };
 
         function setMapHeight() {
-            if(vm.gotHistory){
+            if (vm.gotHistory) {
                 header_height = 160;
-            }else{
+            } else {
                 header_height = 50;
             }
             isRendered('.mapDView', function (el1) {
@@ -65,90 +65,88 @@
 
 
         function setDefaultVehicle() {
-
-            $log.log(vm.historyMap.selectedVehicle);
-            if ( vm.historyMap.selectedVehicle == null ) {
+            //$log.log(vm.historyMap.selectedVehicle);
+            if (vm.historyMap.selectedVehicle == null) {
                 // var startInterval = $interval(function () {
                 var keys = Object.keys(vm.historyMap.vehiclesByPath);
-                if(keys.length > 0){
+                if (keys.length > 0) {
                     $log.log(vm.historyMap.vehiclesByPath[keys[0]]);
                     vm.historyMap.selectedVehicle = vm.historyMap.vehiclesByPath[keys[0]];
                     // $interval.cancel(startInterval);
                 }
                 // }, 500 )
             }
-
         }
 
 
         vm.resizeMap = function () {
-            google.maps.event.trigger(vm.historyMap.map , 'resize');
+            google.maps.event.trigger(vm.historyMap.map, 'resize');
             return true;
         };
 
 
         vm.traceControls = history2Service.traceControls;
 
-        vm.traceControls.jumpToTime = function(time) {
-            if(vm.traceControls.current + time < 0){
+        vm.traceControls.jumpToTime = function (time) {
+            if (vm.traceControls.current + time < 0) {
                 vm.traceControls.current = 0;
                 vm.traceControls.moveTimeline();
-            } else if(vm.traceControls.current + time > vm.traceControls.timeline.length){
-                vm.traceControls.current = vm.traceControls.timeline.length-1;
+            } else if (vm.traceControls.current + time > vm.traceControls.timeline.length) {
+                vm.traceControls.current = vm.traceControls.timeline.length - 1;
                 vm.traceControls.moveTimeline();
-            }else{
+            } else {
                 vm.traceControls.current += time;
                 vm.traceControls.moveTimeline();
             }
         }
 
-        vm.traceControls.setPointerTransition = function(bool) {
-            if(bool){
+        vm.traceControls.setPointerTransition = function (bool) {
+            if (bool) {
                 vm.traceControls.pointer.css('transition', vm.traceControls.SPEEDS[vm.traceControls.speed] + 'ms linear');
-            }else{
+            } else {
                 vm.traceControls.pointer.css('transition', 0 + 'ms linear');
             }
         }
 
-        vm.traceControls.isPointer = function() {
-            if(!vm.traceControls.pointer){
+        vm.traceControls.isPointer = function () {
+            if (!vm.traceControls.pointer) {
                 vm.traceControls.pointer = $('.tc_pointer');
             }
             vm.traceControls.setPointerTransition(true);
         }
 
-        vm.traceControls.stopMotion = function(){
-            if(vm.traceControls.playing){
+        vm.traceControls.stopMotion = function () {
+            if (vm.traceControls.playing) {
                 vm.traceControls.playing = false;
                 $interval.cancel(vm.traceControls.engine);
             }
         }
 
-        vm.traceControls.startMotion = function() {
-            if(vm.traceControls.timeline.length > 0 && vm.traceControls.current < vm.traceControls.timeline.length){
+        vm.traceControls.startMotion = function () {
+            if (vm.traceControls.timeline.length > 0 && vm.traceControls.current < vm.traceControls.timeline.length) {
                 vm.traceControls.panel.clicked = false;
                 vm.traceControls.playing = true;
-                if(vm.traceControls.engine){
+                if (vm.traceControls.engine) {
                     $interval.cancel(vm.traceControls.engine);
                 }
                 vm.traceControls.current++;
                 vm.traceControls.moveTimeline();
                 vm.traceControls.engine = $interval(function () {
-                    if(vm.traceControls.current >= vm.traceControls.timeline.length){
+                    if (vm.traceControls.current >= vm.traceControls.timeline.length) {
                         $interval.cancel(vm.traceControls.engine);
                         vm.traceControls.playing = false;
                         vm.traceControls.current = -1;
                     }
                     vm.traceControls.current++;
                     vm.traceControls.moveTimeline();
-                },vm.traceControls.SPEEDS[vm.traceControls.speed]);
+                }, vm.traceControls.SPEEDS[vm.traceControls.speed]);
             }
         }
 
         vm.traceControls.moveTimeline = function () {
-            if(vm.historyMap.startMarker){
+            if (vm.historyMap.startMarker) {
                 var left = vm.traceControls.current / vm.traceControls.timeline.length * 100;
-                vm.traceControls.pointer.css({'left':left+'%'});
+                vm.traceControls.pointer.css({'left': left + '%'});
                 vm.historyMap.startMarker.setPosition(vm.traceControls.timeline[vm.traceControls.current]);
             }
         };
@@ -157,10 +155,10 @@
             var start = vm.traceControls.timeline.length;
             var width = vm.traceControls.panel.element.width()
             var position = vm.traceControls.panel.element.offset().left;
-            if(position < 0)
+            if (position < 0)
                 position = 0;
-            vm.traceControls.current = parseInt( (event.pageX - position) * start / width)+1;
-            if(vm.traceControls.current >= vm.traceControls.timeline.length)
+            vm.traceControls.current = parseInt((event.pageX - position) * start / width) + 1;
+            if (vm.traceControls.current >= vm.traceControls.timeline.length)
                 vm.traceControls.current = vm.traceControls.timeline.length - 1;
             vm.traceControls.moveTimeline();
         }
@@ -178,14 +176,14 @@
 
         function drawTimeline() {
             // creating canvas
-            if(vm.traceControls.myCanvas != null){
+            if (vm.traceControls.myCanvas != null) {
                 vm.traceControls.myCanvas.remove();
             }
             vm.traceControls.myCanvas = document.createElement('canvas');
             vm.traceControls.ctx = vm.traceControls.myCanvas.getContext("2d");
             vm.traceControls.cw = vm.traceControls.panel.element.width();
             vm.traceControls.ch = vm.traceControls.panel.element.height();
-            vm.traceControls.wr = vm.traceControls.panel.element.width() /  vm.traceControls.timeline.length ;
+            vm.traceControls.wr = vm.traceControls.panel.element.width() / vm.traceControls.timeline.length;
             vm.traceControls.myCanvas.height = vm.traceControls.ch;
             vm.traceControls.myCanvas.width = vm.traceControls.cw;
             vm.traceControls.panel.element.append(vm.traceControls.myCanvas);
@@ -201,42 +199,42 @@
             var moving_rect = {};
             var highestSpeed = 0;
             vm.traceControls.ctx.strokeStyle = 'rgba(0,0,0, 0.04)';
-            for(var idx in vm.traceControls.timeline){
-                if(idx % 10 == 0){
+            for (var idx in vm.traceControls.timeline) {
+                if (idx % 10 == 0) {
                     vm.traceControls.ctx.moveTo(idx * vm.traceControls.wr, 0);
                     vm.traceControls.ctx.lineTo(idx * vm.traceControls.wr, vm.traceControls.ch);
                 }
             }
             vm.traceControls.ctx.stroke();
             vm.traceControls.ctx.strokeStyle = 'rgba(0,0,0, 0.1)';
-            for(var idx=1; idx < 4; idx++){
-                vm.traceControls.ctx.moveTo(0,  idx * vm.traceControls.ch/4);
-                vm.traceControls.ctx.lineTo(vm.traceControls.cw, idx * vm.traceControls.ch/4);
+            for (var idx = 1; idx < 4; idx++) {
+                vm.traceControls.ctx.moveTo(0, idx * vm.traceControls.ch / 4);
+                vm.traceControls.ctx.lineTo(vm.traceControls.cw, idx * vm.traceControls.ch / 4);
             }
             vm.traceControls.ctx.stroke();
-            for(var idx in vm.traceControls.timeline){
+            for (var idx in vm.traceControls.timeline) {
                 var speed = vm.traceControls.timeline[idx].speed;
-                if(highestSpeed < speed)
+                if (highestSpeed < speed)
                     highestSpeed = speed;
                 var ignition = vm.traceControls.timeline[idx].ignstatus;
                 var moving = false;
-                if(vm.traceControls.timeline[idx].speed > vm.traceControls.speedThreshold){
+                if (vm.traceControls.timeline[idx].speed > vm.traceControls.speedThreshold) {
                     moving = true;
                 }
-                if(ignition && !pre_ignstatus){
-                    ign_rect.x = idx ;
-                }else if(pre_ignstatus){
-                    ign_rect.w = idx - ign_rect.x ;
+                if (ignition && !pre_ignstatus) {
+                    ign_rect.x = idx;
+                } else if (pre_ignstatus) {
+                    ign_rect.w = idx - ign_rect.x;
                     vm.traceControls.ctx.fillStyle = '#9DAAFF';
                     vm.traceControls.ctx.fillRect(ign_rect.x * vm.traceControls.wr, vm.traceControls.barBase, ign_rect.w * vm.traceControls.wr, vm.traceControls.barHeight);
                     vm.traceControls.ctx.fill();
                 }
-                if(moving && !pre_moving){
-                    moving_rect.x = idx ;
-                }else if(pre_moving){
-                    moving_rect.w = idx -  moving_rect.x ;
+                if (moving && !pre_moving) {
+                    moving_rect.x = idx;
+                } else if (pre_moving) {
+                    moving_rect.w = idx - moving_rect.x;
                     vm.traceControls.ctx.fillStyle = '#63DB5D';
-                    vm.traceControls.ctx.fillRect(moving_rect.x * vm.traceControls.wr, vm.traceControls.barBase+((vm.traceControls.barHeight + vm.traceControls.barMargin) ), moving_rect.w * vm.traceControls.wr, vm.traceControls.barHeight);
+                    vm.traceControls.ctx.fillRect(moving_rect.x * vm.traceControls.wr, vm.traceControls.barBase + ((vm.traceControls.barHeight + vm.traceControls.barMargin) ), moving_rect.w * vm.traceControls.wr, vm.traceControls.barHeight);
                     vm.traceControls.ctx.fill();
                 }
                 pre_ignstatus = ignition;
@@ -245,17 +243,18 @@
             }
             highestSpeed += 20 + vm.traceControls.graphBase;
             vm.traceControls.ctx.beginPath();
-            vm.traceControls.ctx.moveTo(0, vm.traceControls.ch-vm.traceControls.graphBase);
+            vm.traceControls.ctx.moveTo(0, vm.traceControls.ch - vm.traceControls.graphBase);
             vm.traceControls.ctx.strokeStyle = 'rgba(255, 69, 0, 0.77)';
             vm.traceControls.ctx.fillStyle = 'rgba(255, 69, 0, 0.2)';
-            for(var idx in vm.traceControls.timeline){
-                if(vm.traceControls.timeline[idx].speed < vm.traceControls.speedThreshold)
+            for (var idx in vm.traceControls.timeline) {
+                if (vm.traceControls.timeline[idx].speed < vm.traceControls.speedThreshold)
                     vm.traceControls.timeline[idx].speed = 0;
-                var speed = vm.traceControls.timeline[idx].speed / highestSpeed * vm.traceControls.ch ;
+                var speed = vm.traceControls.timeline[idx].speed / highestSpeed * vm.traceControls.ch;
                 vm.traceControls.ctx.lineTo(idx * vm.traceControls.wr, vm.traceControls.ch - speed - vm.traceControls.graphBase);
-            };
-            vm.traceControls.ctx.lineTo(vm.traceControls.timeline.length * vm.traceControls.wr, vm.traceControls.ch-vm.traceControls.graphBase);
-            vm.traceControls.ctx.lineTo(0, vm.traceControls.ch-vm.traceControls.graphBase);
+            }
+            ;
+            vm.traceControls.ctx.lineTo(vm.traceControls.timeline.length * vm.traceControls.wr, vm.traceControls.ch - vm.traceControls.graphBase);
+            vm.traceControls.ctx.lineTo(0, vm.traceControls.ch - vm.traceControls.graphBase);
             vm.traceControls.ctx.closePath();
             vm.traceControls.ctx.stroke();
             vm.traceControls.ctx.fill();
@@ -264,19 +263,19 @@
         function generateTimeline(path) {
             var timeline = [];
             var first = path[0];
-            var last = path[path.length-1];
+            var last = path[path.length - 1];
             var currentTime = first.gpstime;
             var currentPathIdx = 0;
 
-            while(currentTime < last.gpstime){
-                if(path[currentPathIdx].gpstime < currentTime){
+            while (currentTime < last.gpstime) {
+                if (path[currentPathIdx].gpstime < currentTime) {
                     currentPathIdx++;
                     path[currentPathIdx].gpstime = currentTime;
                     timeline.push(path[currentPathIdx]);
-                }else{
+                } else {
                     timeline.push(path[currentPathIdx]);
                 }
-                currentTime+= vm.traceControls.interval;
+                currentTime += vm.traceControls.interval;
             }
             vm.traceControls.timeline = timeline;
         }
@@ -284,14 +283,14 @@
         function getTimelineObjects() {
             vm.traceControls.pointer = $('.tc_pointer');
             vm.traceControls.panel = {
-                clicked:true,
+                clicked: true,
             };
             vm.traceControls.panel.element = $('.tc_panel');
             vm.traceControls.panel.element.mousedown(function (event) {
-                if(!vm.traceControls.playing){
-                    if(!vm.traceControls.panel.clicked){
+                if (!vm.traceControls.playing) {
+                    if (!vm.traceControls.panel.clicked) {
                         vm.traceControls.panel.clicked = true;
-                    }else{
+                    } else {
                         vm.traceControls.panel.clicked = false;
                     }
                 }
@@ -304,7 +303,7 @@
                 // vm.traceControls.pointer.css('transition', vm.traceControls.SPEEDS[vm.traceControls.speed] + 'ms linear');
             });
             vm.traceControls.panel.element.mousemove(function (event) {
-                if(vm.traceControls.panel.clicked){
+                if (vm.traceControls.panel.clicked) {
                     vm.traceControls.setPointerTransition(false);
                     vm.traceControls.mouseMoveEvent(event);
                 }
@@ -315,18 +314,18 @@
             });
             $($window).keydown(function (event) {
                 vm.traceControls.setPointerTransition(false);
-                if(event.keyCode == 32 || event.keyCode == 31){
+                if (event.keyCode == 32 || event.keyCode == 31) {
                     event.preventDefault();
                     vm.traceControls.togglePlay();
                 }
                 // if(!vm.traceControls.playing ){
-                if(event.keyCode == 37){ // left
+                if (event.keyCode == 37) { // left
                     vm.traceControls.jumpToTime(-1);
-                }else if(event.keyCode == 38){ // up
+                } else if (event.keyCode == 38) { // up
                     vm.traceControls.jumpToTime(10);
-                }else if(event.keyCode == 39){ // right
+                } else if (event.keyCode == 39) { // right
                     vm.traceControls.jumpToTime(1);
-                }else if(event.keyCode == 40){ // down
+                } else if (event.keyCode == 40) { // down
                     vm.traceControls.jumpToTime(-10);
                 }
                 // }
@@ -358,20 +357,18 @@
         };
 
         vm.getMyFencesListener = function (fences) {
-            $log.log(fences);
-
-
-            if ( fences.polygons )
+            //$log.log(fences);
+            if (fences.polygons)
                 vm.createPolygons(fences.polygons);
 
-            if ( fences.circles)
+            if (fences.circles)
                 vm.createCircles(fences.circles);
         };
 
 
-        vm.createPolygons = function(polygons){
+        vm.createPolygons = function (polygons) {
             var polygonMap = {};
-            for(var idx in polygons){
+            for (var idx in polygons) {
                 google.maps.event.addListener(polygons[idx].googleObject, 'click', function (evt) {
                     vm.selectedFenceObj = this;
                     historyFenceInfowindow.setContent(document.getElementById("history_fence_infowindow").innerHTML);
@@ -379,14 +376,14 @@
                     historyFenceInfowindow.open(vm.historyMap.map, this);
                 });
 
-               // if (checkFilterString( polygons[idx].control.info.tagdata)){
-               //  polygons[idx].googleObject.setMap( vm.historyMap.map);
-               // }
+                // if (checkFilterString( polygons[idx].control.info.tagdata)){
+                //  polygons[idx].googleObject.setMap( vm.historyMap.map);
+                // }
             }
         };
 
-        vm.createCircles = function(circles){
-            for(var idx in circles){
+        vm.createCircles = function (circles) {
+            for (var idx in circles) {
                 google.maps.event.addListener(circles[idx].googleObject, 'click', function (evt) {
                     vm.selectedFenceObj = this;
                     historyFenceInfowindow.setPosition(evt.latLng);
@@ -402,11 +399,13 @@
         vm.init = function () {
             loadMap();
             vm.gotHistory = history2Service.getData('getHistory');
-            if(vm.gotHistory){
+
+
+            if (vm.gotHistory) {
                 history2Service.drawTrace();
                 drawTimeline();
-            }else{
-                if($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)
+            } else {
+                if ($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)
                     vm.historyMap.selectedVehicle = $stateParams.mapObj.clickedMarker;
                 else
                     setDefaultVehicle();
@@ -421,21 +420,19 @@
 
 
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-            // geofenceViewService.addListener('applyFilters', vm.applyFilters);
+            history2Service.addListener('loadMap', loadMap);
 
             historyFenceInfowindow.addListener('domready', function () {
                 vm.historyFenceWindowLoad();
             });
 
         };
+
         vm.init();
     }
 
 
-
-
-
-    function HistoryTableController($rootScope,$scope, $log, dialogService, intellicarAPI, history2Service, $q) {
+    function HistoryTableController($rootScope, $scope, $log, dialogService, intellicarAPI, history2Service, $q) {
 
         $log.log('HistoryTableController');
 
@@ -444,7 +441,7 @@
 
         dialogService.setTab(1);
 
-        var historyData =[];
+        var historyData = [];
         vm.jsonHistoryData = [];
         var tableContainer = document.getElementById('geo-table');
 
@@ -465,18 +462,18 @@
         vm.showLoading = false;
 
         $scope.getHistory = function () {
-            historyData=[];
+            historyData = [];
             vm.jsonHistoryData = [];
             vm.disableDownload = true;
             vm.showLoading = true;
-            if ( table)
+            if (table)
                 table.clearChart(tableContainer);
             history2Service.setData('getHistory', false);
             history2Service.getHistoryData();
         };
 
         $rootScope.$on('gotHistoryEvent', function (event, data) {
-            if ( tableContainer == null ) return;
+            if (tableContainer == null) return;
             vm.showTableData();
         });
 
@@ -484,34 +481,34 @@
             latlng = latlng.split(',');
             vm.myclass = className;
             var body = {
-                data: [ latlng]
+                data: [latlng]
             };
             var promise = (intellicarAPI.geocodeService.getAddress(body));
             return $q.resolve(promise)
                 .then(vm.gotAddress, vm.handleFailure);
         };
 
-        vm.gotAddress = function(data){
-            if ( !data.data.data.length ) return;
+        vm.gotAddress = function (data) {
+            if (!data.data.data.length) return;
             var addr = data.data.data;
-            for ( var idx in addr)
+            for (var idx in addr)
                 addr = addr[idx];
             var vehicleAddress = addr[1]
-            $('.'+vm.myclass).attr('data-content', vehicleAddress)
-            WebuiPopovers.updateContent( '.'+vm.myclass,vehicleAddress) //Update the Popover content after the popover is created.
+            $('.' + vm.myclass).attr('data-content', vehicleAddress)
+            WebuiPopovers.updateContent('.' + vm.myclass, vehicleAddress) //Update the Popover content after the popover is created.
         };
 
         vm.showTableData = function () {
             var marker = vm.historyMap.traceObj;
             // $log.log(marker);
-            historyData=[];
+            historyData = [];
 
-            for ( var idx in marker){
-                var loc =  marker[idx].lat() + ','+ marker[idx].lng();
+            for (var idx in marker) {
+                var loc = marker[idx].lat() + ',' + marker[idx].lng();
                 var dateTime = new Date(marker[idx].gpstime);
                 var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
 
-                var location = "<span class='latlng loc"+idx+"' data-content='Fetching Address'>"+loc+"</span>";
+                var location = "<span class='latlng loc" + idx + "' data-content='Fetching Address'>" + loc + "</span>";
 
                 historyData.push([
                     dateTime,
@@ -523,11 +520,11 @@
 
                 vm.jsonHistoryData.push({
                     vehicle_Name: vm.historyMap.selectedVehicle.rtgps.vehicleno,
-                    location: loc,
-                    time : moment(dateTime).format(dateFormat),
+                    time: moment(dateTime).format(dateFormat),
                     odometer: marker[idx].odometer.toString(),
-                    speed:marker[idx].speed.toString(),
-                    ignitionStatus: ignitionStatus
+                    speed: marker[idx].speed.toString(),
+                    ignitionStatus: ignitionStatus,
+                    location: loc
                 });
             }
             google.charts.load('current', {'packages': ['table']});
@@ -551,8 +548,8 @@
                 historyData
             );
 
-            google.visualization.events.addListener(table, 'ready', function(){
-                $('.latlng').webuiPopover({trigger:'hover',width:300, animation:'pop'});
+            google.visualization.events.addListener(table, 'ready', function () {
+                $('.latlng').webuiPopover({trigger: 'hover', width: 300, animation: 'pop'});
             });
 
             var dateFormatter = new google.visualization.DateFormat({pattern: 'd MMM, h:mm a'});
@@ -563,10 +560,10 @@
                 width: '100%',
                 page: 'enable',
                 pageSize: 300,
-                allowHtml:true
+                allowHtml: true
             });
 
-            $('.latlng').hover(function(){
+            $('.latlng').hover(function () {
                 var className = $(this).attr('class');
                 className = className.split(' ');
                 var latlng = $(this).text();
@@ -574,12 +571,12 @@
             });
         };
 
-        $scope.downloadFile = function(){
+        $scope.downloadFile = function () {
             intellicarAPI.importFileservice.JSONToCSVConvertor(vm.jsonHistoryData, "Vehicles History Report", true);
         };
 
 
-        vm.init = function(){
+        vm.init = function () {
             if (vm.historyMap.traceObj.length) {
                 vm.showTableData();
                 vm.disableDownload = false;
