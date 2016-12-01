@@ -68,7 +68,7 @@
         };
 
         vm.getHistoryData = function(){
-            if (!vm.historyMap.selectedVehicle.rtgps.deviceid){
+            if (!vm.historyMap.selectedVehicle){
                 vm.historyMap.errorMsg = "Please Select Vehicle";
                 $rootScope.$broadcast('gotHistoryEventFailed');
                 return;

@@ -9,11 +9,14 @@
         .controller('HistoryTableController', HistoryTableController);
 
     function History2Controller($scope, $window, $interval, history2Service, $stateParams, $log,
-                                dialogService) {
+                                dialogService, geofenceViewService, $compile) {
 
         var vm = this;
 
         dialogService.setTab(0);
+
+        var historyFenceInfowindow = new google.maps.InfoWindow();
+
 
         function loadMap() {
             vm.historyMap = history2Service.historyMap;
@@ -345,7 +348,55 @@
 
         vm.getCurrentPos = function () {
             return vm.traceControls.timeline[vm.traceControls.current];
-        }
+        };
+
+
+        vm.historyFenceWindowLoad = function () {
+            $scope.$apply(function () {
+                $compile(document.getElementById("historyFenceWindow"))($scope);
+            });
+        };
+
+        vm.getMyFencesListener = function (fences) {
+            $log.log(fences);
+
+
+            if ( fences.polygons )
+                vm.createPolygons(fences.polygons);
+
+            if ( fences.circles)
+                vm.createCircles(fences.circles);
+        };
+
+
+        vm.createPolygons = function(polygons){
+            var polygonMap = {};
+            for(var idx in polygons){
+                google.maps.event.addListener(polygons[idx].googleObject, 'click', function (evt) {
+                    vm.selectedFenceObj = this;
+                    historyFenceInfowindow.setContent(document.getElementById("history_fence_infowindow").innerHTML);
+                    historyFenceInfowindow.setPosition(evt.latLng);
+                    historyFenceInfowindow.open(vm.historyMap.map, this);
+                });
+
+               // if (checkFilterString( polygons[idx].control.info.tagdata)){
+               //  polygons[idx].googleObject.setMap( vm.historyMap.map);
+               // }
+            }
+        };
+
+        vm.createCircles = function(circles){
+            for(var idx in circles){
+                google.maps.event.addListener(circles[idx].googleObject, 'click', function (evt) {
+                    vm.selectedFenceObj = this;
+                    historyFenceInfowindow.setPosition(evt.latLng);
+                    historyFenceInfowindow.setContent(document.getElementById("history_fence_infowindow").innerHTML);
+                    historyFenceInfowindow.open(vm.historyMap.map, this);
+                });
+
+                circles[idx].googleObject.setMap(vm.historyMap.map);
+            }
+        };
 
 
         vm.init = function () {
@@ -365,8 +416,17 @@
             $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
             $scope.$on('gotHistoryEventFailed', vm.gotHistoryEventFailed);
 
-            $log.log(vm.historyMap.markersByPath);
-            $log.log($stateParams.mapObj);
+            // $log.log(vm.historyMap.markersByPath);
+            // $log.log($stateParams.mapObj);
+
+
+            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+            // geofenceViewService.addListener('applyFilters', vm.applyFilters);
+
+            historyFenceInfowindow.addListener('domready', function () {
+                vm.historyFenceWindowLoad();
+            });
+
         };
         vm.init();
     }
@@ -518,11 +578,13 @@
             intellicarAPI.importFileservice.JSONToCSVConvertor(vm.jsonHistoryData, "Vehicles History Report", true);
         };
 
+
         vm.init = function(){
             if (vm.historyMap.traceObj.length) {
                 vm.showTableData();
                 vm.disableDownload = false;
             }
+
         };
 
         vm.init();

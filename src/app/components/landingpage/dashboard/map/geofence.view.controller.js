@@ -368,7 +368,7 @@
         function setFilter(filterType) {
             filterType = filterType.split('.');
             filterType = filterType[filterType.length - 1];
-            $log.log(filterType);
+            // $log.log(filterType);
             geofenceViewService.applyFilters(filterType);
         }
 
@@ -378,7 +378,7 @@
 
 
         vm.buttonClick = function (item) {
-            $log.log('buttonClick');
+            // $log.log('buttonClick');
             if (item.data.type == 'stateChange') {
                 dialogService.show(item.data.state);
             } else if (item.data.type == 'function') {

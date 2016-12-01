@@ -6,7 +6,7 @@
 
     function GoogleMapController($scope, $log, cpuService, newMapService,
                                  $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
-                                 vehicleService, history2Service) {
+                                 vehicleService, history2Service, $state) {
         $log.log('MapController');
         var vm = this;
 
@@ -345,8 +345,6 @@
                 });
 
                 google.maps.event.addListener(googlePolygon, 'click', function (evt) {
-                    vm.setClickedMarker(this);
-                    $log.log(this);
                     vm.selectedFenceObj = this;
                     fenceInfowindow.setContent(document.getElementById("fence_infowindow").innerHTML);
                     fenceInfowindow.setPosition(evt.latLng);
@@ -465,34 +463,32 @@
             } else if (filterData.filterType == 'showVehicleNo') {
                 // Do something to notify showVehicleNo filter is On
             } else {
+                if ($state.current.name == 'home.history')
+                    vm.currentMap = history2Service.historyMap.map;
+                else
+                    vm.currentMap = vm.inMap.map;
 
                 if (vm.circlesByPath) {
-                    $log.log(vm.circlesByPath);
+                    // $log.log(vm.circlesByPath);
                     for (var idx in vm.circlesByPath) {
                         var filterStr = vm.circlesByPath[idx].control.info.tagdata;
+                        vm.circlesByPath[idx].googleObject.setMap(null);
+
                         if (checkFilterString(filterStr)) {
                             vm.circlesByPath[idx].strokeWeight = getStroke(filterStr);
                             vm.circlesByPath[idx].strokeColor = getColor(filterStr);
-                            vm.circlesByPath[idx].googleObject.setMap(vm.inMap.map);
+                            vm.circlesByPath[idx].googleObject.setMap(vm.currentMap);
                             startAnimation(vm.circlesByPath[idx]);
-                        } else {
-                            vm.circlesByPath[idx].googleObject.setMap(null);
                         }
                     }
                 }
                 if(vm.polygonsByPath){
                     for(var idx in vm.polygonsByPath){
                         filterStr = vm.polygonsByPath[idx].control.info.tagdata;
+                        vm.polygonsByPath[idx].googleObject.setMap(null);
                         if (checkFilterString(filterStr)) {
-                            vm.polygonsByPath[idx].googleObject.setMap(vm.inMap.map);
-                            // vm.polygonsByPath[idx].strokeWeight = getStroke(filterStr);
-                            // vm.polygonsByPath[idx].strokeColor = getColor(filterStr);
+                            vm.polygonsByPath[idx].googleObject.setMap(vm.currentMap);
                             startAnimation(vm.polygonsByPath[idx]);
-                        } else {
-                            vm.polygonsByPath[idx].googleObject.setMap(null);
-                            // if (filterData.filterType == 'cityLimits') {
-                                // $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
-                            // }
                         }
                     }
                 }
@@ -734,7 +730,7 @@
 
 
         vm.showHistory = function () {
-            $log.log("show History");
+            // $log.log("show History");
             history2Service.setData('getHistory', false);
             history2Service.historyMap.traceObj = [];
             newMapService.showHistory();

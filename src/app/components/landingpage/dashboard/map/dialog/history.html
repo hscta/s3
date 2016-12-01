@@ -267,6 +267,24 @@
         </div>
 </div>
 
+
+<div id="history_fence_infowindow" layout="row" ng-non-bindable flex>
+    <div layout="column" id="historyFenceWindow" ng-cloak>
+        <table>
+            <tbody>
+            <tr>
+                <th>Name:</th>
+                <td>{{vm.selectedFenceObj.info.name}}</td>
+            </tr>
+            <tr>
+                <th>Type:</th>
+                <td>{{vm.selectedFenceObj.info.tagdata.olafilter}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <!--</md-tab-body>-->
 
 <script>
