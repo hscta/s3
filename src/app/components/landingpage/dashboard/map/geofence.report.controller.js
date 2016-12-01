@@ -16,7 +16,7 @@
         // $log.log(history2Service.playerControls);
         dialogService.setTab(2);
         var vm = this;
-        var dateFormat = 'DD-MM-YYYY HH:mm A';
+        var dateFormat = 'DD-MM-YYYY HH:mm';
 
         vm.fenceReportObj = history2Service.geoFenceReports;
 

@@ -2323,3 +2323,30 @@ div.dataTables_info {
 //md-backdrop{
 //    z-index: 999999!important;
 //}
+
+.dh_container{
+    @include borderBox();
+    *{
+        @include borderBox();
+    }
+    width:100%;
+    height:60px;
+    margin:3px 0;
+    @include shadow(0 0 3px rgba(0,0,0,0.2));
+    border: 1px solid #ddd;
+    @include transition(0.5s);
+    .dhc_name{
+        float:left;
+        height:80px;
+        padding:0 30px;
+        line-height: 60px;
+        font-size: 120%;
+        color:#999;
+        text-transform: uppercase;
+    }
+    .btn{
+        margin-top:10px;
+        float:right;
+        margin-right:30px;
+    }
+}
