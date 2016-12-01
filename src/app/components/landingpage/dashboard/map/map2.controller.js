@@ -330,9 +330,14 @@
                 }
 
                 var color = getColor( polygons[idx].control.info.tagdata);
+                polygons[idx].strokeColor = color;
+
+                var strokeWeight = getStroke( polygons[idx].control.info.tagdata);
+                polygons[idx].strokeWeight = strokeWeight;
+
                 var googlePolygon = new google.maps.Polygon({
                     path: paths,
-                    strokeColor: color,
+                    strokeColor: polygons[idx].strokeColor,
                     strokeWeight: polygons[idx].strokeWeight,
                     fillColor: polygons[idx].fillColor,
                     fillOpacity: polygons[idx].fillOpacity,
@@ -341,14 +346,16 @@
 
                 google.maps.event.addListener(googlePolygon, 'click', function (evt) {
                     vm.setClickedMarker(this);
-
+                    $log.log(this);
                     vm.selectedFenceObj = this;
                     fenceInfowindow.setContent(document.getElementById("fence_infowindow").innerHTML);
                     fenceInfowindow.setPosition(evt.latLng);
                     fenceInfowindow.open(vm.inMap.map, this);
                 });
 
-                // googlePolygon.setMap(vm.inMap.map);
+                if (checkFilterString( polygons[idx].control.info.tagdata)){
+                    googlePolygon.setMap(vm.inMap.map);
+                }
 
                 polygons[idx].googleObject = googlePolygon;
                 polygonMap[polygons[idx].control.info.assetpath] = polygons[idx];
@@ -383,9 +390,12 @@
                     fenceInfowindow.open(vm.inMap.map, this);
                 });
 
+                if (checkFilterString(circles[idx].control.info.tagdata)){
+                    googleCircle.setMap(vm.inMap.map);
+                }
+
                 circles[idx].googleObject = googleCircle;
                 circlesMap[circles[idx].control.info.assetpath] = circles[idx];
-                googleCircle.setMap(vm.inMap.map);
 
             }
             vm.circlesByPath = circlesMap;
@@ -461,9 +471,6 @@
                     for (var idx in vm.circlesByPath) {
                         var filterStr = vm.circlesByPath[idx].control.info.tagdata;
                         if (checkFilterString(filterStr)) {
-                            $log.log(vm.circlesByPath[idx]);
-                            $log.log(getColor(filterStr));
-                            $log.log(filterStr);
                             vm.circlesByPath[idx].strokeWeight = getStroke(filterStr);
                             vm.circlesByPath[idx].strokeColor = getColor(filterStr);
                             vm.circlesByPath[idx].googleObject.setMap(vm.inMap.map);
@@ -716,6 +723,10 @@
             $scope.$apply(function () {
                 $compile(document.getElementById("markerWindow"))($scope);
             });
+        };
+
+
+        vm.fenceWindowLoad = function () {
             $scope.$apply(function () {
                 $compile(document.getElementById("fenceWindow"))($scope);
             });
@@ -772,7 +783,7 @@
             });
 
             fenceInfowindow.addListener('domready', function () {
-                vm.onload();
+                vm.fenceWindowLoad();
             });
 
             $interval(vm.resizeMap, 1000);
