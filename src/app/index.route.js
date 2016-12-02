@@ -46,8 +46,8 @@
                         controller: 'CenterController as vm'
                     },
                     'centermain@home': {
-                        templateUrl: 'app/components/landingpage/dashboard/map/map2.html',
-                        controller: 'GoogleMapController as vm'
+                        templateUrl: 'app/components/landingpage/dashboard/map/map.html',
+                        controller: 'MapController as vm'
                     },
                     'rightnav@home': {
                         templateUrl: 'app/components/landingpage/dashboard/rightnav/rightnavalert_dashboard.html',
@@ -146,7 +146,7 @@
                 views: {
                     'dialogview@home': {
                         templateUrl: 'app/components/landingpage/dashboard/map/dialog/history.html',
-                        controller: 'History2Controller as vm'
+                        controller: 'HistoryController as vm'
                     }
                 }
             })
