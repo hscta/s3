@@ -685,59 +685,6 @@
         };
 
 
-        // vm.showMyPolygons = function () {
-        //     for (var i = 0; i < vm.inMap.polygons.length; i++) {
-        //         var paths = [];
-        //         for (var j = 0; j < vm.inMap.polygons[i].path.length; j++) {
-        //             paths.push(new google.maps.LatLng(vm.inMap.polygons[i].path[j].latitude,
-        //                 vm.inMap.polygons[i].path[j].longitude));
-        //         }
-        //         var polygon = new google.maps.Polygon({
-        //             path: paths,
-        //             strokeColor: vm.inMap.polygons[i].strokeColor,
-        //             strokeOpacity: 0.8,
-        //             strokeWeight: vm.inMap.polygons[i].strokeWeight,
-        //             fillColor: vm.inMap.polygons[i].fillColor,
-        //             fillOpacity: vm.inMap.polygons[i].fillOpacity
-        //         });
-        //         polygon.setMap(vm.inMap.map);
-        //     }
-        // };
-        //
-        // vm.showMyCircles = function () {
-        //     for (var i = 0; i < vm.inMap.circles.length; i++) {
-        //         var circle = new google.maps.Circle({
-        //             strokeColor: vm.inMap.circles[i].strokeColor,
-        //             strokeOpacity: 0.8,
-        //             strokeWeight: vm.inMap.circles[i].strokeWeight,
-        //             fillColor: vm.inMap.circles[i].fillColor,
-        //             fillOpacity: vm.inMap.circles[i].fillOpacity,
-        //             center: {lat: vm.inMap.circles[i].center.latitude, lng: vm.inMap.circles[i].center.longitude},
-        //             radius: vm.inMap.circles[i].radius
-        //         });
-        //
-        //         google.maps.event.addListener(circle, 'click', function (e) {
-        //             var contentString = "<table><tbody>\
-        //                                     <tr>\
-        //                                         <th>Name:</th>\
-        //                                         <td>{{vm.selectedFenceObj.name}}</td>\
-        //                                     </tr>\
-        //                                     <tr>\
-        //                                         <th>Type:</th>\
-        //                                         <td>{{vm.selectedFenceObj.other.olafilter}}</td>\
-        //                                     </tr>\
-        //                                 </tbody></table>";
-        //
-        //             fenceInfowindow.setContent(contentString);
-        //             fenceInfowindow.open(vm.inMap.map, this);
-        //         });
-        //
-        //         circle.setMap(vm.inMap.map);
-        //
-        //     }
-        // };
-
-
         vm.onload = function () {
             $scope.$apply(function () {
                 $compile(document.getElementById("markerWindow"))($scope);
@@ -753,7 +700,7 @@
 
 
         vm.mobilize = function (mobilityRequest) {
-            vm.inMap.markers.clickedMarker.mobilityRequest = mobilityRequest;
+            vm.inMap.markers.clickedMarker.rtgps.mobilityRequest = mobilityRequest;
 
             $log.log(vm.inMap.markers.clickedMarker);
 
@@ -883,6 +830,9 @@
         //var vm = this;
         //$log.log('ImmobalizeController');
 
+
+        $log.log(params);
+        $log.log('ssssssssssssssssssssssss');
         $scope.msg = '';
         $scope.notify = '';
         $scope.commandSent = false;
