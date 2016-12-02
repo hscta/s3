@@ -166,6 +166,9 @@
                     }
                 }
             }
+            if (vm.vehicleNumber) {
+                showVehicleNumberWindow();
+            }
         };
 
         vm.applyFilterToMarker = function (rtgps, filterStr) {
@@ -199,9 +202,6 @@
                 } else {
                     vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
-            }
-            if (vm.vehicleNumber) {
-                showVehicleNumberWindow();
             }
             return visible;
         };
