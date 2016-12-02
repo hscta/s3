@@ -834,7 +834,7 @@
             }
 
             //console.log("zoom = ", vm.inMap.map.getZoom());
-            //$timeout(vm.changeMapStyle(), 3000);
+            $timeout(vm.changeMapStyle(), 100);
         };
 
 
