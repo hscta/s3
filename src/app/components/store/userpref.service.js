@@ -47,7 +47,7 @@
             vm.userpref = resp.data.data[0];
             vm.pgrouppath = helperService.getParentFromPath(vm.userpref.assetpath);
             settingsService.setCurrentGroupPath(vm.pgrouppath);
-            $log.log(vm.userpref);
+            // $log.log(vm.userpref);
             vm.callListeners(vm.userpref, 'setUserPref');
             //console.log(settingsService.getCurrentGroup());
             //latlngService.geocodeAddress('bhopal');
