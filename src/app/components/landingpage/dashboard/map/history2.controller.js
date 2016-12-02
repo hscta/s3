@@ -404,7 +404,7 @@
             if (vm.gotHistory) {
                 history2Service.drawTrace();
                 console.log(vm.historyMap);
-                generateTimeline(vm.historyMap.traceData);
+                generateTimeline(vm.historyMap.traceObj);
                 drawTimeline();
             } else {
                 if ($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)
