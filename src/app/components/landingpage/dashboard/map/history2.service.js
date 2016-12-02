@@ -179,8 +179,6 @@
             });
 
             var midPoint = Math.floor(path.length / 2);
-            vm.historyMap.map.setCenter(path[midPoint]);
-            vm.historyMap.map.setZoom(11);
 
             vm.historyMap.trace = new google.maps.Polyline({
                 path:path,
@@ -196,9 +194,15 @@
                 strokeOpacity:1,
             });
             vm.historyMap.traceObj = path;
-            vm.historyMap.trace.setMap(vm.historyMap.map);
-            vm.historyMap.startMarker.setMap(vm.historyMap.map);
-            vm.historyMap.endMarker.setMap(vm.historyMap.map);
+
+            if(vm.historyMap.map.setCenter){
+                vm.historyMap.map.setCenter(path[midPoint]);
+                vm.historyMap.map.setZoom(11);
+
+                vm.historyMap.trace.setMap(vm.historyMap.map);
+                vm.historyMap.startMarker.setMap(vm.historyMap.map);
+                vm.historyMap.endMarker.setMap(vm.historyMap.map);
+            }
             vm.setData('getHistory', true);
             $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path:path});
         };

@@ -353,6 +353,8 @@
             vm.gotHistory = history2Service.getData('getHistory');
             if(vm.gotHistory){
                 history2Service.drawTrace();
+                console.log(vm.historyMap);
+                generateTimeline(vm.historyMap.traceData);
                 drawTimeline();
             }else{
                 if($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)
@@ -365,8 +367,6 @@
             $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
             $scope.$on('gotHistoryEventFailed', vm.gotHistoryEventFailed);
 
-            $log.log(vm.historyMap.markersByPath);
-            $log.log($stateParams.mapObj);
         };
         vm.init();
     }

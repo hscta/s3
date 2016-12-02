@@ -467,7 +467,6 @@
             } else {
 
                 if (vm.circlesByPath) {
-                    $log.log(vm.circlesByPath);
                     for (var idx in vm.circlesByPath) {
                         var filterStr = vm.circlesByPath[idx].control.info.tagdata;
                         if (checkFilterString(filterStr)) {
