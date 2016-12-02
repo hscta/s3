@@ -814,7 +814,7 @@
 
         vm.triggerMarkerIconChange = function() {
             if (Math.abs(vm.inMap.map.getZoom() - vm.lastZoomLevel) > 2) {
-                console.log("changing marker icons");
+                //console.log("changing marker icons");
                 vm.changeMarkerIcon();
             }
             vm.markerIconChangeTriggered = false;
@@ -827,8 +827,8 @@
                 $timeout(vm.triggerMarkerIconChange, 4000);
             }
 
-            console.log("zoom = ", vm.inMap.map.getZoom());
-            //$timeout(vm.changeMapStyle(), 2000);
+            //console.log("zoom = ", vm.inMap.map.getZoom());
+            //$timeout(vm.changeMapStyle(), 3000);
         };
 
 
