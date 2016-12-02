@@ -26,6 +26,7 @@
         vm.filterStr = '';
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
         vm.markerIconChangeTriggered = false;
+        vm.zoomhappened = true;
 
         vm.onRoaded = true;
         vm.offRoaded = false;
@@ -790,7 +791,7 @@
 
             vm.inMap.map.addListener('tilesloaded', function(){
                 vm.zoomChanged();
-            })
+            });
 
             // vm.infoWindowCompiled = false;
             // vm.inMap.map.addListener('tilesloaded', function() {
@@ -827,7 +828,7 @@
 
 
         vm.zoomChanged = function () {
-            if(!vm.markerIconChangeTriggered && vm.zoomhappened != null && vm.zoomhappened) {
+            if(!vm.markerIconChangeTriggered && vm.zoomhappened) {
                 vm.markerIconChangeTriggered = true;
                 vm.zoomhappened = false;
                 $timeout(vm.triggerMarkerIconChange, 2000);
@@ -869,16 +870,6 @@
                 }
             }
             return ORANGE_ICON;
-
-            // if(str == 'red'){
-            //     color = '#e74c3c'
-            // }else if(str == 'green'){
-            //     color = '#27ae60'
-            // }else if(str == 'blue'){
-            //     color = '#0000ff'
-            // }else if(str == 'yellow'){
-            //     color = '#f39c12'
-            // }
         };
 
 
@@ -1050,3 +1041,14 @@
     }
 
 })();
+
+
+// if(str == 'red'){
+//     color = '#e74c3c'
+// }else if(str == 'green'){
+//     color = '#27ae60'
+// }else if(str == 'blue'){
+//     color = '#0000ff'
+// }else if(str == 'yellow'){
+//     color = '#f39c12'
+// }
