@@ -635,8 +635,10 @@
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {
                 for (idx in vm.inCustomMaker) {
-                    vm.inCustomMaker[idx].show();
-                    vm.inCustomMaker[idx].showVehicleNumber();
+                    if(vm.markersByPath[vm.inCustomMaker[idx].args.marker.vehiclepath].getVisible()){
+                        vm.inCustomMaker[idx].show();
+                        vm.inCustomMaker[idx].showVehicleNumber();
+                    }
                 }
             } else {
                 for (idx in vm.inCustomMaker) {
