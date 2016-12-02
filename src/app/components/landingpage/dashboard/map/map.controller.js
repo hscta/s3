@@ -784,8 +784,13 @@
             $interval(vm.resizeMap, 1000);
 
             vm.inMap.map.addListener('zoom_changed', function () {
-                vm.zoomChanged();
+                vm.zoomhappened = true;
+                //vm.zoomChanged();
             });
+
+            vm.inMap.map.addListener('tilesloaded', function(){
+                vm.zoomChanged();
+            })
 
             // vm.infoWindowCompiled = false;
             // vm.inMap.map.addListener('tilesloaded', function() {
@@ -822,9 +827,10 @@
 
 
         vm.zoomChanged = function () {
-            if(!vm.markerIconChangeTriggered) {
+            if(!vm.markerIconChangeTriggered && vm.zoomhappened != null && vm.zoomhappened) {
                 vm.markerIconChangeTriggered = true;
-                $timeout(vm.triggerMarkerIconChange, 4000);
+                vm.zoomhappened = false;
+                $timeout(vm.triggerMarkerIconChange, 2000);
             }
 
             //console.log("zoom = ", vm.inMap.map.getZoom());
