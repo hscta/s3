@@ -25,6 +25,7 @@
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.filterStr = '';
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
+        vm.markerIconChangeTriggered = false;
 
         vm.onRoaded = true;
         vm.offRoaded = false;
@@ -105,7 +106,7 @@
 
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(rtgps.latitude, rtgps.longitude),
-                icon: mapService.getIcon(rtgps),
+                icon: vm.getIcon(rtgps),
                 vehiclepath: rtgps.vehiclepath
             });
 
@@ -676,10 +677,12 @@
                 markerInfowindow.close();
                 fenceInfowindow.close();
             });
+
+            vm.lastZoomLevel = vm.inMap.map.getZoom();
         };
 
         vm.updateMarkerIcon = function (rtgps) {
-            vm.markersByPath[rtgps.vehiclepath].icon.fillColor = mapService.getMarkerColor(rtgps);
+            vm.markersByPath[rtgps.vehiclepath].icon.fillColor = vm.getMarkerColor(rtgps);
             vm.markersByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
             vm.markersByPath[rtgps.vehiclepath].setIcon(vm.markersByPath[rtgps.vehiclepath].icon);
         };
@@ -781,8 +784,7 @@
             $interval(vm.resizeMap, 1000);
 
             vm.inMap.map.addListener('zoom_changed', function () {
-                mapService.zoomChanged();
-                vm.changeMapStyle();
+                vm.zoomChanged();
             });
 
             // vm.infoWindowCompiled = false;
@@ -797,7 +799,38 @@
         var MAP_STYLES = {
             DARK: 'dark',
             DEFAULT: 'default'
-        }
+        };
+
+
+        vm.changeMarkerIcon = function () {
+            var scale = vm.getIconScale();
+            for (var idx in vm.inMap.markers.markersByPath) {
+                vm.inMap.markers.markersByPath[idx].icon.scale = scale;
+                vm.inMap.markers.markersByPath[idx].setIcon(vm.inMap.markers.markersByPath[idx].icon);
+            }
+            vm.lastZoomLevel = vm.inMap.map.getZoom();
+        };
+
+
+        vm.triggerMarkerIconChange = function() {
+            if (Math.abs(vm.inMap.map.getZoom() - vm.lastZoomLevel) > 2) {
+                console.log("changing marker icons");
+                vm.changeMarkerIcon();
+            }
+            vm.markerIconChangeTriggered = false;
+        };
+
+
+        vm.zoomChanged = function () {
+            if(!vm.markerIconChangeTriggered) {
+                vm.markerIconChangeTriggered = true;
+                $timeout(vm.triggerMarkerIconChange, 4000);
+            }
+
+            console.log("zoom = ", vm.inMap.map.getZoom());
+            //$timeout(vm.changeMapStyle(), 2000);
+        };
+
 
         vm.changeMapStyle = function () {
             var zoom = vm.inMap.map.getZoom();
@@ -812,7 +845,61 @@
                     vm.inMap.map.setOptions({styles: mapService.mapStyles[MAP_STYLES.DEFAULT]})
                 }
             }
-        }
+        };
+
+        var RED_ICON = 'red';
+        var GREEN_ICON = 'green';
+        var BLUE_ICON = 'blue';
+        var ORANGE_ICON = 'orange';
+
+        vm.getMarkerColor = function (rtgps) {
+            if (!rtgps.mobilistatus) {
+                return RED_ICON;
+            } else {
+                if (rtgps.ignitionstatus) {
+                    return GREEN_ICON;
+                } else {
+                    return BLUE_ICON;
+                }
+            }
+            return ORANGE_ICON;
+
+            // if(str == 'red'){
+            //     color = '#e74c3c'
+            // }else if(str == 'green'){
+            //     color = '#27ae60'
+            // }else if(str == 'blue'){
+            //     color = '#0000ff'
+            // }else if(str == 'yellow'){
+            //     color = '#f39c12'
+            // }
+        };
+
+
+        vm.getIconScale = function () {
+            var scale = 0.8 + (vm.inMap.map.getZoom() - 11) * 0.4 / 4;
+            if (scale < 0.3)
+                scale = 0.3;
+            return scale;
+        };
+
+        vm.getIcon = function (rtgps) {
+            var direction = rtgps.direction;
+            if (direction != null) {
+                direction = 0;
+            }
+
+            return {
+                path: "M20.029,15c0,2.777-2.251,5.028-5.029,5.028c-2.778,0-5.029-2.251-5.029-5.028 c0-2.778,2.251-5.029,5.029-5.029C17.778,9.971,20.029,12.222,20.029,15z M15,3.931L9.893,9.938c0,0,1.71-1.095,5.107-1.095 c3.396,0,5.107,1.095,5.107,1.095L15,3.931z",
+                fillColor: vm.getMarkerColor(rtgps),
+                rotation: direction,
+                fillOpacity: 1,
+                anchor: new google.maps.Point(15, 15),
+                strokeWeight: 1,
+                strokeColor: '#ffffff',
+                scale: vm.getIconScale()
+            }
+        };
 
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.inMap.map, 'resize');

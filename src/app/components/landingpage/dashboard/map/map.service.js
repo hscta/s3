@@ -85,14 +85,6 @@
                 vm.infoWindowClose();
             };
 
-            vm.changeMarkerIcon = function () {
-                var scale = vm.getIconScale();
-                for (var idx in vm.inMap.markers.markersByPath) {
-                    vm.inMap.markers.markersByPath[idx].icon.scale = scale;
-                    vm.inMap.markers.markersByPath[idx].setIcon(vm.inMap.markers.markersByPath[idx].icon);
-                }
-            };
-
             vm.getMainMap = function () {
                 return vm.inMap;
             };
@@ -173,12 +165,6 @@
                 return vm.zoom;
             };
 
-            vm.zoomChanged = function () {
-                //console.log("zoom = ", vm.inMap.map.getZoom());
-                if (vm.inMap.map.getZoom() % 2 != 0 || vm.inMap.map.getZoom() == 10) {
-                    vm.changeMarkerIcon();
-                }
-            };
 
             vm.getBounds = function () {
                 return vm.bounds;
@@ -220,58 +206,7 @@
             // };
 
 
-            var RED_ICON = 'red';
-            var GREEN_ICON = 'green';
-            var BLUE_ICON = 'blue';
-            var ORANGE_ICON = 'orange';
 
-            vm.getMarkerColor = function (rtgps) {
-                if (!rtgps.mobilistatus) {
-                    return RED_ICON;
-                } else {
-                    if (rtgps.ignitionstatus) {
-                        return GREEN_ICON;
-                    } else {
-                        return BLUE_ICON;
-                    }
-                }
-                return ORANGE_ICON;
-
-                // if(str == 'red'){
-                //     color = '#e74c3c'
-                // }else if(str == 'green'){
-                //     color = '#27ae60'
-                // }else if(str == 'blue'){
-                //     color = '#0000ff'
-                // }else if(str == 'yellow'){
-                //     color = '#f39c12'
-                // }
-            };
-
-            vm.getIconScale = function () {
-                var scale = 0.8 + (vm.inMap.map.getZoom() - 11) * 0.4 / 4;
-                if (scale < 0.3)
-                    scale = 0.3;
-                return scale;
-            };
-
-            vm.getIcon = function (rtgps) {
-                var direction = rtgps.direction;
-                if (direction != null) {
-                    direction = 0;
-                }
-
-                return {
-                    path: "M20.029,15c0,2.777-2.251,5.028-5.029,5.028c-2.778,0-5.029-2.251-5.029-5.028 c0-2.778,2.251-5.029,5.029-5.029C17.778,9.971,20.029,12.222,20.029,15z M15,3.931L9.893,9.938c0,0,1.71-1.095,5.107-1.095 c3.396,0,5.107,1.095,5.107,1.095L15,3.931z",
-                    fillColor: vm.getMarkerColor(rtgps),
-                    rotation: direction,
-                    fillOpacity: 1,
-                    anchor: new google.maps.Point(15, 15),
-                    strokeWeight: 1,
-                    strokeColor: '#ffffff',
-                    scale: vm.getIconScale()
-                }
-            };
 
 
             vm.addListener = function (key, listener) {
