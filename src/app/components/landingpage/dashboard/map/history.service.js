@@ -209,7 +209,7 @@
 
             vm.historyMap.traceObj = path;
 
-            if(vm.historyMap.map != null) {
+            if(vm.historyMap.map != null && vm.historyMap.map.setCenter) {
                 if (vm.historyMap.trace)
                     vm.historyMap.trace.setMap(null);
                 if (vm.historyMap.startMarker)

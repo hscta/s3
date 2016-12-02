@@ -30,7 +30,7 @@
             // vm.toggleLeftnav = toggleLeftnav;
         // $rootScope.left_nav_toggle = true;
         // $rootScope.right_nav_toggle = true;
-        vm.right_nav_toggle = true;
+        vm.right_nav_toggle = false;
         vm.left_nav_toggle = true;
 
         vm.userpref = function() {
