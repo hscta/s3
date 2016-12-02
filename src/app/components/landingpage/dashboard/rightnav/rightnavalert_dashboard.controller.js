@@ -8,7 +8,7 @@
         .controller('RightNavDashboardController', RightNavDashboardController);
 
     function RightNavDashboardController($log, $scope, $timeout, rightNavAlertDashboardService,
-                                         geofenceReportService, vehicleService, newMapService,
+                                         geofenceReportService, vehicleService, mapService,
                                          intellicarAPI, $q, $interval) {
         $log.log("RightNavDashboardController");
         var vm = this;
@@ -172,7 +172,7 @@
         vm.itemClicked = function (data, level) {
             data.active = !data.active;
             if (level == 3) {
-                newMapService.highlightMarker(vehicleService.vehiclesByNumber[data.vehicleno].assetpath);
+                mapService.highlightMarker(vehicleService.vehiclesByNumber[data.vehicleno].assetpath);
             }
         };
 

@@ -10,7 +10,7 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('newMapService', function ($log, $interval, $q, $timeout, userprefService,
+        .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
                                             intellicarAPI, vehicleService, $mdDialog,
                                             dialogService) {
             $log.log("newmapService");

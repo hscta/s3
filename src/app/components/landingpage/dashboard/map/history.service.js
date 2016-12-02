@@ -7,9 +7,9 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('history2Service', history2Service);
+        .service('historyService', historyService);
 
-    function history2Service($log, newMapService, $rootScope, intellicarAPI, vehicleService, $timeout) {
+    function historyService($log, mapService, $rootScope, intellicarAPI, vehicleService, $timeout) {
 
         var vm = this;
 
@@ -31,11 +31,11 @@
         vm.historyMap = {
             map: {},
             mapOptions: {
-                center: {lat: newMapService.getCenter().latitude, lng: newMapService.getCenter().longitude},
-                zoom: newMapService.getZoom()
+                center: {lat: mapService.getCenter().latitude, lng: mapService.getCenter().longitude},
+                zoom: mapService.getZoom()
             },
             traceObj: [],
-            markersByPath: newMapService.inMap.markers.markersByPath,
+            markersByPath: mapService.inMap.markers.markersByPath,
             vehiclesByPath: vehicleService.vehiclesByPath,
             trace: {
                 path: []

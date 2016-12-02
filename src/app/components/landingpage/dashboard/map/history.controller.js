@@ -5,10 +5,10 @@
 (function () {
     angular
         .module('uiplatform')
-        .controller('History2Controller', History2Controller)
+        .controller('HistoryController', HistoryController)
         .controller('HistoryTableController', HistoryTableController);
 
-    function History2Controller($scope, $window, $interval, history2Service, $stateParams, $log,
+    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log,
                                 dialogService, geofenceViewService, $compile) {
 
         var vm = this;
@@ -19,7 +19,7 @@
 
 
         function loadMap() {
-            vm.historyMap = history2Service.historyMap;
+            vm.historyMap = historyService.historyMap;
             vm.historyMap.map = new google.maps.Map(document.getElementById("history_map"),
                 vm.historyMap.mapOptions);
             vm.historyMap.map.addListener('click', function () {
@@ -30,8 +30,8 @@
         }
 
         vm.getHistory = function () {
-            history2Service.setData('getHistory', false);
-            history2Service.getHistoryData();
+            historyService.setData('getHistory', false);
+            historyService.getHistoryData();
         };
 
         function setMapHeight() {
@@ -85,7 +85,7 @@
         };
 
 
-        vm.traceControls = history2Service.traceControls;
+        vm.traceControls = historyService.traceControls;
 
         vm.traceControls.jumpToTime = function (time) {
             if (vm.traceControls.current + time < 0) {
@@ -334,14 +334,14 @@
 
         getTimelineObjects();
         vm.gotHistoryEvent = function (event, data) {
-            vm.gotHistory = history2Service.getData('getHistory');
+            vm.gotHistory = historyService.getData('getHistory');
             setMapHeight();
             generateTimeline(data.path);
             drawTimeline();
         }
 
         vm.gotHistoryEventFailed = function () {
-            vm.gotHistory = history2Service.getData('getHistory');
+            vm.gotHistory = historyService.getData('getHistory');
             setMapHeight();
         }
 
@@ -398,11 +398,11 @@
 
         vm.init = function () {
             loadMap();
-            vm.gotHistory = history2Service.getData('getHistory');
+            vm.gotHistory = historyService.getData('getHistory');
 
 
             if (vm.gotHistory) {
-                history2Service.drawTrace();
+                historyService.drawTrace();
                 console.log(vm.historyMap);
                 generateTimeline(vm.historyMap.traceObj);
                 drawTimeline();
@@ -422,7 +422,7 @@
 
 
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
-            history2Service.addListener('loadMap', loadMap);
+            historyService.addListener('loadMap', loadMap);
 
             historyFenceInfowindow.addListener('domready', function () {
                 vm.historyFenceWindowLoad();
@@ -434,7 +434,7 @@
     }
 
 
-    function HistoryTableController($rootScope, $scope, $log, dialogService, intellicarAPI, history2Service, $q) {
+    function HistoryTableController($rootScope, $scope, $log, dialogService, intellicarAPI, historyService, $q) {
 
         $log.log('HistoryTableController');
 
@@ -447,7 +447,7 @@
         vm.jsonHistoryData = [];
         var tableContainer = document.getElementById('geo-table');
 
-        vm.historyMap = history2Service.historyMap;
+        vm.historyMap = historyService.historyMap;
 
         vm.multiSelect = vm.historyMap.multiSelect;
 
@@ -470,8 +470,8 @@
             vm.showLoading = true;
             if (table)
                 table.clearChart(tableContainer);
-            history2Service.setData('getHistory', false);
-            history2Service.getHistoryData();
+            historyService.setData('getHistory', false);
+            historyService.getHistoryData();
         };
 
         $rootScope.$on('gotHistoryEvent', function (event, data) {
