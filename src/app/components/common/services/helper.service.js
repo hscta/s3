@@ -201,10 +201,9 @@
             for (var idx in data.assets) {
                 var asset = data.assets[idx];
                 vm.addAssetInfo(asset);
-                //asset.permissions = [];
                 for (var pidx in data.permissions) {
                     var permission = data.permissions[pidx];
-                    if (asset.assetpath === permission.assetpath) {
+                    if (asset.assetpath == permission.assetpath) {
                         asset.permissions = JSON.parse(permission.permid);
                     }
                 }
@@ -249,6 +248,23 @@
         };
 
 
+        vm.mergeFenceInfo = function (resp) {
+            var data = resp.data.data;
+            for (var idx in data.assets) {
+                var asset = data.assets[idx];
+                asset.info = [];
+                for (var pidx in data.info) {
+                    var item = data.info[pidx];
+                    if (asset.assetpath == item.assetpath) {
+                        asset.info.push(item);
+                    }
+                }
+            }
+
+            return $q.resolve(resp);
+        };
+
+
         vm.makeAssetMap = function (resp) {
             var data = resp.data.data;
             var assets = {};
@@ -256,6 +272,7 @@
                 var asset = data.assets[idx];
                 assets[asset.assetpath] = asset;
             }
+
             return $q.resolve(assets);
         };
 

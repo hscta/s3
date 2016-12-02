@@ -96,16 +96,16 @@
         vm.trackArray = [];
 
         vm.track = function (id) {
-            if(vm.tracking){
-                if(id in vm.trackArray){
-                    if(vm.trackArray[id].end_time == 0){
+            if (vm.tracking) {
+                if (id in vm.trackArray) {
+                    if (vm.trackArray[id].end_time == 0) {
                         // if the tracking is not ended
                         vm.trackArray[id].end_time = getCurrentCpuTime();
-                        vm.trackArray[id].diff = vm.trackArray[id].end_time - vm.trackArray[id].start_time ;
-                    }else{
+                        vm.trackArray[id].diff = vm.trackArray[id].end_time - vm.trackArray[id].start_time;
+                    } else {
                         vm.trackArray[id] = getNewTrackObject(id);
                     }
-                }else{
+                } else {
                     vm.trackArray[id] = getNewTrackObject(id);
                 }
             }
@@ -114,7 +114,7 @@
 
         function getNewTrackObject(id) {
             return {
-                id : id,
+                id: id,
                 count: 0,
                 start_time: getCurrentCpuTime(),
                 end_time: 0

@@ -9,7 +9,7 @@
         .controller('GeofenceReportController', GeofenceReportController);
 
     function GeofenceReportController($log, $q, dialogService, geofenceReportService, $filter, $timeout,
-                                      intellicarAPI, history2Service, mapService, $state) {
+                                      intellicarAPI, history2Service, newMapService, $state) {
 
         $log.log("GeofenceReportController");
 
@@ -123,7 +123,7 @@
                 var selectedVehicle = data.getValue(table.getSelection()[0].row, 0);
 
                 if (selectedVehicle) {
-                    var vehicleDetail = $filter("filter")(mapService.inMap.markers.inMarkers, selectedVehicle);
+                    var vehicleDetail = $filter("filter")(newMapService.inMap.markers.inMarkers, selectedVehicle);
 
                     var dateFormat = 'YYYY-MM-DD HH:mm';
                     var startTime = moment(data.getValue(table.getSelection()[0].row, 2)).subtract(1, 'hour').format(dateFormat);
@@ -345,7 +345,7 @@
                             ]);
 
                             history2Service.geoFenceReports.jsonReportData.push({
-                                vehicle_name:vehicleName,
+                                vehicle_name: vehicleName,
                                 fence_name: fenceName,
                                 fence_entry: moment(start_time).format(dateFormat),
                                 fence_exit: moment(end_time).format(dateFormat)

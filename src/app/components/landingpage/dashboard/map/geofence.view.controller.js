@@ -276,20 +276,20 @@
         vm.childClick = function (data, type) {
             if (type == 'location') {
                 vm.currentLocation = data.id;
-                $log.log($state.current.name);
                 if ($state.current.name == 'home.history')
                     history2Service.setInMapLocation(data.latlng);
                 else
                     newMapService.setInMapLocation(data.latlng);
             } else if (type == 'button') {
-                $log.log('other');
                 data();
             }
         };
 
 
         vm.init = function () {
-            geofenceViewService.getMyFences();
+            //geofenceViewService.getMyFences();
+
+            geofenceViewService.getMyFenceInfos();
 
             vm.geoFilters = geofenceViewService.getData('geoFilters');
             // $log.log(vm.geoFilters);
@@ -368,7 +368,7 @@
         function setFilter(filterType) {
             filterType = filterType.split('.');
             filterType = filterType[filterType.length - 1];
-            $log.log(filterType);
+            // $log.log(filterType);
             geofenceViewService.applyFilters(filterType);
         }
 
@@ -378,7 +378,7 @@
 
 
         vm.buttonClick = function (item) {
-            $log.log('buttonClick');
+            // $log.log('buttonClick');
             if (item.data.type == 'stateChange') {
                 dialogService.show(item.data.state);
             } else if (item.data.type == 'function') {

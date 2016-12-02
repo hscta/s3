@@ -21,7 +21,6 @@
                 map: null,
                 mapOptions: {},
                 markers: {
-                    inMarkers: [],
                     clickedMarker: {},
                     markersByPath: {}
                 },
@@ -50,7 +49,6 @@
                 }
                 return bound.getCenter();
             };
-
 
 
             vm.showHistory = function () {
@@ -118,7 +116,8 @@
                 BANGALORE: 'BANGALORE',
                 HYDERABAD: 'HYDERABAD',
                 PUNE: 'PUNE',
-                CHENNAI: 'CHENNAI'
+                CHENNAI: 'CHENNAI',
+                USER: 'USER'
             };
 
             vm.locations = {
@@ -141,10 +140,22 @@
                     id: vm.loc.MUMBAI,
                     notation: 'MUM',
                     latlng: {latitude: 19.195549, longitude: 72.936381}
+                },
+                USER: {
+                    id: vm.loc.USER,
+                    notation: 'USER',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
                 }
             };
 
-            vm.currentLocation = vm.locations.BANGALORE;
+            vm.currentLocation = vm.locations.MUMBAI;
+
+            vm.setUserPref = function (userSettings) {
+                vm.currentLocation = vm.locations.USER;
+                vm.currentLocation.latlng = userSettings.station;
+                vm.center = vm.currentLocation.latlng;
+                vm.callListeners(userSettings, 'setUserPref');
+            };
 
             vm.getCurrentLocation = function () {
                 return vm.currentLocation;
@@ -163,7 +174,8 @@
             };
 
             vm.zoomChanged = function () {
-                if (vm.inMap.map.getZoom() % 2 == 0) {
+                //console.log("zoom = ", vm.inMap.map.getZoom());
+                if (vm.inMap.map.getZoom() % 2 != 0 || vm.inMap.map.getZoom() == 10) {
                     vm.changeMarkerIcon();
                 }
             };
@@ -237,7 +249,7 @@
             };
 
             vm.getIconScale = function () {
-                var scale = 0.8 + (vm.inMap.map.getZoom() - 12) * 0.5 / 4;
+                var scale = 0.8 + (vm.inMap.map.getZoom() - 11) * 0.4 / 4;
                 if (scale < 0.3)
                     scale = 0.3;
                 return scale;
@@ -259,22 +271,6 @@
                     strokeColor: '#ffffff',
                     scale: vm.getIconScale()
                 }
-            };
-
-            // vm.setMarkerIcon = function (rtgps) {
-            //     // var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
-            //     var newIcon = vm.getIcon(rtgps);
-            //     if (newIcon != rtgps.icon)
-            //         rtgps.icon = newIcon;
-            // };
-
-
-            vm.getMarkerIndex = function (id) {
-                for (var idx in vm.inMap.markers.inMarkers) {
-                    if (vm.inMap.markers.inMarkers[idx].id === id)
-                        return idx;
-                }
-                return -1;
             };
 
 
@@ -315,8 +311,8 @@
 
             vm.init = function () {
                 //$log.log('map init()');
-                //intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
                 vehicleService.addListener('rtgps', vm.updateMarker);
+                userprefService.addListener('setUserPref', vm.setUserPref);
             };
 
             vm.init();

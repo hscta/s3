@@ -46,42 +46,6 @@
         };
 
 
-        vm.readFenceInfo = function (fenceList) {
-            vm.endTime = new Date().getTime();
-            // $log.log("fence query time = " + (vm.endTime - vm.startTime));
-            //$log.log(fenceList);
-            for (var idx in fenceList) {
-                var fence = fenceList[idx];
-                vm.createFenceObjects(fence);
-            }
-            return vm.drawFences();
-        };
-
-
-        vm.createFenceObjects = function (fence) {
-            fence.tagdata = JSON.parse(fence.tagdata);
-            for (var idx in fence.info) {
-                var infoitem = fence.info[idx];
-                infoitem.settingsdata = JSON.parse(infoitem.settingsdata);
-                if (infoitem.settingstag === 'GEOFENCE_BOUNDARY') {
-                    if (infoitem.settingsdata.fencetype === 'polygon') {
-                        var gpolygon = vm.getPolygonFromInfo(infoitem.settingsdata);
-                        //gpolygon.info = fence;
-                        gpolygon.control.info = fence;
-                        //$log.log(gpolygon);
-                        vm.polygons.push(gpolygon);
-                    } else if (infoitem.settingsdata.fencetype === 'circle') {
-                        var gcircle = vm.getCircleFromInfo(infoitem.settingsdata);
-                        //gcircle.info = fence;
-                        gcircle.control.info = fence;
-                        //$log.log(gcircle);
-                        vm.circles.push(gcircle);
-                    }
-                }
-            }
-            //$log.log(fence);
-        };
-
         var spgreenColor = '#08B21F';
         var blueColor = 'blue';
 
@@ -146,15 +110,55 @@
             return vm.fences;
         };
 
+
         vm.applyFilters = function (filterType) {
             vm.callListeners('applyFilters', {filterType: filterType});
         };
 
 
-        vm.fetchFences = function (fences) {
+        vm.readFenceInfo = function (fenceList) {
             vm.circles = [];
             vm.polygons = [];
 
+            vm.endTime = new Date().getTime();
+            //$log.log("fence query time = " + (vm.endTime - vm.startTime));
+            //$log.log(fenceList);
+            for (var idx in fenceList) {
+                var fence = fenceList[idx];
+
+                vm.createFenceObjects(fence);
+            }
+            return vm.drawFences();
+        };
+
+
+        vm.createFenceObjects = function (fence) {
+            if (!('info' in fence))
+                return;
+
+            fence.tagdata = JSON.parse(fence.tagdata);
+            for (var idx in fence.info) {
+                var infoitem = fence.info[idx];
+                infoitem.settingsdata = JSON.parse(infoitem.settingsdata);
+                if (infoitem.settingstag == 'GEOFENCE_BOUNDARY') {
+                    if (infoitem.settingsdata.fencetype == 'polygon') {
+                        var gpolygon = vm.getPolygonFromInfo(infoitem.settingsdata);
+                        gpolygon.control.info = fence;
+                        //$log.log(gpolygon);
+                        vm.polygons.push(gpolygon);
+                    } else if (infoitem.settingsdata.fencetype == 'circle') {
+                        var gcircle = vm.getCircleFromInfo(infoitem.settingsdata);
+                        gcircle.control.info = fence;
+                        //$log.log(gcircle);
+                        vm.circles.push(gcircle);
+                    }
+                }
+            }
+            //$log.log(fence);
+        };
+
+
+        vm.fetchFences = function (fences) {
             var promiseList = [];
             for (var idx in fences) {
                 var body = {geofencepath: fences[idx].assetpath};
@@ -175,6 +179,20 @@
             vm.startTime = new Date().getTime();
             return intellicarAPI.userService.getMyFencesMap({})
                 .then(vm.fetchFences, vm.handleFailure);
+        };
+
+
+        // vm.processMyFenceInfos = function(resp) {
+        //     vm.circles = [];
+        //     vm.polygons = [];
+        //     console.log(resp);
+        // };
+
+
+        vm.getMyFenceInfos = function () {
+            vm.startTime = new Date().getTime();
+            return intellicarAPI.userService.getMyFenceInfosMap({})
+                .then(vm.readFenceInfo, vm.handleFailure);
         };
 
 

@@ -84,6 +84,12 @@
         };
 
 
+        vm.getMyFenceInfos = function (body) {
+            body = vm.encloseBody(body);
+            return requestService.firePost('/user/mygeofenceinfos', body);
+        };
+
+
         vm.getMyGeofenceReports = function (body) {
             body = vm.encloseBody(body);
             return requestService.firePost('/user/mygeofencereports', body);
@@ -189,6 +195,16 @@
             // $log.log("getMyFencesMap");
             return vm.getMyFences(body)
                 .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
+
+        vm.getMyFenceInfosMap = function (body) {
+            // $log.log("getMyFenceInfosMap");
+            return vm.getMyFenceInfos(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.mergeFenceInfo, vm.handleFailure)
                 .then(helperService.makeAssetMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };

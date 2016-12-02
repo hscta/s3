@@ -9,8 +9,7 @@
 
 
     function AlarmController($scope, $log, dialogService, alarmService, DTOptionsBuilder,
-                             $timeout, $interval, $q,
-                             mapService, $filter, intellicarAPI) {
+                             $timeout, $interval, $q, $filter, intellicarAPI) {
         $log.log('AlarmController');
 
 
@@ -60,8 +59,8 @@
 
                 if (trues.length < vm.alarms.filteredVehicles.length)
                     vm.selectAllVehicles = false;
-                else if (trues.length == vm.alarms.filteredVehicles.length){
-                    if (vm.alarms.filteredVehicles.length <= 0 )
+                else if (trues.length == vm.alarms.filteredVehicles.length) {
+                    if (vm.alarms.filteredVehicles.length <= 0)
                         vm.selectAllVehicles = false;
                     else
                         vm.selectAllVehicles = true;
@@ -72,9 +71,9 @@
 
         vm.filterVehicles = function () {
 
-            if ( !vm.alarms.vehicleFilterPattern ){
+            if (!vm.alarms.vehicleFilterPattern) {
                 vm.alarms.filteredVehicles = vm.alarms.vehicles;
-            }else
+            } else
                 vm.alarms.filteredVehicles = $filter("filter")
                 (vm.alarms.vehicles, vm.alarms.vehicleFilterPattern);
             // $log.log(vm.fenceReportObj.filteredItems);
@@ -90,12 +89,12 @@
             }
         };
 
-        vm.init = function(){
+        vm.init = function () {
             vm.alarms = alarmService.alarmsObj;
 
 
-            for ( var idx in vm.alarms.vehicles ){
-                if ( !vm.alarms.vehicles[idx].hasOwnProperty('checked'))
+            for (var idx in vm.alarms.vehicles) {
+                if (!vm.alarms.vehicles[idx].hasOwnProperty('checked'))
                     vm.alarms.vehicles[idx].checked = false;
             }
 
@@ -114,33 +113,33 @@
         };
 
 
-        vm.getHistory = function(){
+        vm.getHistory = function () {
             vm.jsonAlarmData = [];
-            vm.alarms.alarmResponseData=[];
+            vm.alarms.alarmResponseData = [];
             alarmService.getAlarmsHistory();
 
             vm.showAddress();
         };
 
-        vm.showAddress = function(){
-            $timeout( function(){
-                $('.latlng').webuiPopover({trigger:'hover',width:300, animation:'pop'})
+        vm.showAddress = function () {
+            $timeout(function () {
+                $('.latlng').webuiPopover({trigger: 'hover', width: 300, animation: 'pop'})
             }, 3000);
         };
 
         vm.downloadFile = function () {
             var alarmResp = vm.alarms.alarmResponseData;
-            if ( alarmResp.length ) {
-                for ( var idx in alarmResp) {
-                    var loc = alarmResp[idx].lat+','+alarmResp[idx].lng;
+            if (alarmResp.length) {
+                for (var idx in alarmResp) {
+                    var loc = alarmResp[idx].lat + ',' + alarmResp[idx].lng;
                     var alarmTime = new Date(parseInt(alarmResp[idx].gpstime));
                     vm.jsonAlarmData.push({
-                        vehicle_name:alarmResp[idx].vehicleno,
+                        vehicle_name: alarmResp[idx].vehicleno,
                         time: moment(alarmTime).format(dateFormat),
-                        reason:alarmResp[idx].alarmreason,
-                        speed:alarmResp[idx].speed,
-                        operation_mode:alarmResp[idx].opermode,
-                        location:loc
+                        reason: alarmResp[idx].alarmreason,
+                        speed: alarmResp[idx].speed,
+                        operation_mode: alarmResp[idx].opermode,
+                        location: loc
                     });
                 }
                 intellicarAPI.importFileservice.JSONToCSVConvertor(vm.jsonAlarmData, "Vehicles Alarm Report", true);
@@ -148,9 +147,9 @@
         };
 
         vm.getAddress = function (lat, lng, className) {
-            vm.myclass = 'loc'+className;
+            vm.myclass = 'loc' + className;
             var body = {
-                data: [ [lat, lng]]
+                data: [[lat, lng]]
             };
             var promise = (intellicarAPI.geocodeService.getAddress(body));
 
@@ -158,21 +157,21 @@
                 .then(vm.gotAddress, vm.handleFailure);
         };
 
-        vm.gotAddress = function(data){
-            if ( !data.data.data.length ) return;
+        vm.gotAddress = function (data) {
+            if (!data.data.data.length) return;
 
             var addr = data.data.data;
 
-            for ( var idx in addr)
+            for (var idx in addr)
                 addr = addr[idx];
 
             var vehicleAddress = addr[1]
 
             // $log.log(vehicleAddress);
 
-            $('.'+vm.myclass).attr('data-content', vehicleAddress)
+            $('.' + vm.myclass).attr('data-content', vehicleAddress)
 
-            WebuiPopovers.updateContent( '.'+vm.myclass,vehicleAddress) //Update the Popover content after the popover is created.
+            WebuiPopovers.updateContent('.' + vm.myclass, vehicleAddress) //Update the Popover content after the popover is created.
         };
 
         vm.init();
