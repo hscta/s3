@@ -199,10 +199,9 @@
                 <div class="ltbi_icon" ng-if="item.hasOwnProperty('icon')">
                     <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                     <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
-                    <img ng-if="item.iconType == 'png' && item.data.active" src="{{item.icon}}.active.png">
-                    <img ng-if="item.iconType == 'png' && !item.data.active" src="{{item.icon}}.png">
-                    <i ng-if="item.iconType == 'png'"
-                       style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                    <img ng-if="item.iconType == 'png' && item.data.active" ng-src="{{item.icon}}.active.png">
+                    <img ng-if="item.iconType == 'png' && !item.data.active" ng-src="{{item.icon}}.png">
+                    <i ng-if="item.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"></i>
                 </div>
                 <div class="ltbi_name" ng-if="item.name">
                     {{item.name}}
@@ -229,10 +228,9 @@
                     <div class="ltbi_icon" ng-if="child.hasOwnProperty('icon')">
                         <i class="fa {{child.icon}}" ng-if="child.iconType == 'fa'" aria-hidden="true"></i>
                         <i ng-if="child.iconType == 'md'" class="material-icons">{{child.icon}}</i>
-                        <img ng-if="child.iconType == 'png' && !child.data.active" src="{{child.icon}}.png">
-                        <img ng-if="child.iconType == 'png' && child.data.active" src="{{child.icon}}.active.png">
-                        <i ng-if="child.iconType == 'png'"
-                           style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                        <img ng-if="child.iconType == 'png' && !child.data.active" ng-src="{{child.icon}}.png">
+                        <img ng-if="child.iconType == 'png' && child.data.active" ng-src="{{child.icon}}.active.png">
+                        <i ng-if="child.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
                     </div>
                     <div class="ltbi_name" ng-if="child.name">
                         {{child.name}}
