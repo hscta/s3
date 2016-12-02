@@ -200,7 +200,9 @@
                     vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             }
-
+            if (vm.vehicleNumber) {
+                showVehicleNumberWindow();
+            }
             return visible;
         };
 
@@ -630,16 +632,24 @@
                 vm.inCustomMaker[rtgps.vehiclepath] = new customMapOverlay.CustomMarker(rtgps.latitude, rtgps.longitude, newMapService.inMap.map, {marker: rtgps});
             }
         };
+
+        function showVehicleNumberWindow() {
+            for (idx in vm.inCustomMaker) {
+                if(vm.markersByPath[vm.inCustomMaker[idx].args.marker.vehiclepath].getVisible()){
+                    vm.inCustomMaker[idx].show();
+                    vm.inCustomMaker[idx].showVehicleNumber();
+                }else{
+                    vm.inCustomMaker[idx].hide();
+                    vm.inCustomMaker[idx].hideVehicleNumber();
+                }
+            }
+        }
+
         vm.showVehicleNumber = function (vn) {
             vm.runFilters(vm.filterStr);
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {
-                for (idx in vm.inCustomMaker) {
-                    if(vm.markersByPath[vm.inCustomMaker[idx].args.marker.vehiclepath].getVisible()){
-                        vm.inCustomMaker[idx].show();
-                        vm.inCustomMaker[idx].showVehicleNumber();
-                    }
-                }
+                showVehicleNumberWindow();
             } else {
                 for (idx in vm.inCustomMaker) {
                     vm.inCustomMaker[idx].hide();
