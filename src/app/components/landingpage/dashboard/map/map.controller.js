@@ -709,7 +709,7 @@
         vm.mobilize = function (mobilityRequest) {
             vm.inMap.markers.clickedMarker.rtgps.mobilityRequest = mobilityRequest;
 
-            $log.log(vm.inMap.markers.clickedMarker);
+            // $log.log(vm.inMap.markers.clickedMarker);
 
             var immobalizeDialog = $mdDialog.confirm({
                 controller: 'ImmobalizeController',
@@ -842,7 +842,7 @@
 
 
         vm.getMarkerColor = function (rtgps) {
-            $log.log(rtgps.vehicleno, rtgps.mobilistatus, rtgps.ignitionstatus);
+            // $log.log(rtgps.vehicleno, rtgps.mobilistatus, rtgps.ignitionstatus);
             if (!rtgps.mobilistatus) {
                 return RED_ICON;
             } else {
