@@ -686,6 +686,7 @@
         vm.updateMarkerIcon = function (rtgps) {
             // vm.markersByPath[rtgps.vehiclepath].icon.fillColor = vm.getMarkerColor(rtgps);
             // vm.markersByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
+            vm.markersByPath[rtgps.vehiclepath].icon = vm.getIcon(rtgps);
             vm.markersByPath[rtgps.vehiclepath].icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
             vm.markersByPath[rtgps.vehiclepath].setIcon(vm.markersByPath[rtgps.vehiclepath].icon);
         };
@@ -841,8 +842,7 @@
 
 
         vm.getMarkerColor = function (rtgps) {
-            // $log.log(rtgps.vehicleno);
-            // $log.log(rtgps);
+            $log.log(rtgps.vehicleno, rtgps.mobilistatus, rtgps.ignitionstatus);
             if (!rtgps.mobilistatus) {
                 return RED_ICON;
             } else {
