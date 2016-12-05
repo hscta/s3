@@ -839,7 +839,10 @@
         var BLUE_ICON = 'blue';
         var ORANGE_ICON = 'orange';
 
+
         vm.getMarkerColor = function (rtgps) {
+            // $log.log(rtgps.vehicleno);
+            // $log.log(rtgps);
             if (!rtgps.mobilistatus) {
                 return RED_ICON;
             } else {
@@ -858,17 +861,17 @@
         };
 
 
-        var SCALE = 32;
+        var SCALE = 16;
 
 
         vm.zoomChanged = function () {
-            if (vm.checkZoomLevel(1, 6)) {
+            if (vm.checkZoomLevel(1, 8)) {
                 SCALE = 8;
-            } else if (vm.checkZoomLevel(7, 8)) {
-                SCALE = 16;
             } else if (vm.checkZoomLevel(9, 10)) {
-                SCALE = 24;
+                SCALE = 16;
             } else if (vm.checkZoomLevel(11, 12)) {
+                SCALE = 24;
+            } else if (vm.checkZoomLevel(13, 14)) {
                 SCALE = 32;
             } else {
                 SCALE = 40;
@@ -888,8 +891,7 @@
 
                 icon.size = new google.maps.Size(SCALE, SCALE);
                 icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
-                icon.scaledSize = new google.maps.Size(SCALE, SCALE * 3);
-                //console.log(icon);
+                icon.scaledSize = new google.maps.Size(SCALE, SCALE * 19);
                 marker.setIcon(icon);
             }
         };
@@ -899,8 +901,8 @@
             if (rtgps.direction == null)
                 return 0;
 
-            var direction = Math.floor(rtgps.direction / SCALE) * SCALE;
-            if (direction > SCALE * 3)
+            var direction = Math.floor(rtgps.direction / 19) * SCALE;
+            if (direction > SCALE * 19)
                 direction = SCALE;
 
             //console.log(direction);
@@ -912,7 +914,7 @@
                 url: vm.getIconURL(rtgps),
                 size: new google.maps.Size(SCALE, SCALE),
                 origin: new google.maps.Point(0, vm.getDirection(rtgps)),
-                scaledSize: new google.maps.Size(SCALE, SCALE * 3),
+                scaledSize: new google.maps.Size(SCALE, SCALE * 19),
                 //anchor: new google.maps.Point(SCALE, SCALE)
             };
         };
