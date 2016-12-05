@@ -7,8 +7,8 @@
 
 
     function MapController($scope, $log, cpuService, mapService,
-                                 $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
-                                 vehicleService, historyService, $state, $mdDialog) {
+                           $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
+                           vehicleService, historyService, $state, $mdDialog) {
         $log.log('MapController');
         var vm = this;
 
@@ -160,6 +160,7 @@
                 return;
             }
 
+            /* center the map based on the first marker position that matches the filter */
             var centerMap = false;
             if (vm.filterStr.length > 2) {
                 for (var idx in vm.markersByPath) {
@@ -639,10 +640,10 @@
 
         function showVehicleNumberWindow() {
             for (idx in vm.inCustomMaker) {
-                if(vm.markersByPath[vm.inCustomMaker[idx].args.marker.vehiclepath].getVisible()){
+                if (vm.markersByPath[vm.inCustomMaker[idx].args.marker.vehiclepath].getVisible()) {
                     vm.inCustomMaker[idx].show();
                     vm.inCustomMaker[idx].showVehicleNumber();
-                }else{
+                } else {
                     vm.inCustomMaker[idx].hide();
                     vm.inCustomMaker[idx].hideVehicleNumber();
                 }
@@ -683,8 +684,9 @@
         };
 
         vm.updateMarkerIcon = function (rtgps) {
-            vm.markersByPath[rtgps.vehiclepath].icon.fillColor = vm.getMarkerColor(rtgps);
-            vm.markersByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
+            // vm.markersByPath[rtgps.vehiclepath].icon.fillColor = vm.getMarkerColor(rtgps);
+            // vm.markersByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
+            vm.markersByPath[rtgps.vehiclepath].icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
             vm.markersByPath[rtgps.vehiclepath].setIcon(vm.markersByPath[rtgps.vehiclepath].icon);
         };
 
@@ -726,7 +728,7 @@
                 }, function () {
                     //$log.log("No Function");
                 })
-        }
+        };
 
 
         vm.showHistory = function () {
@@ -789,7 +791,7 @@
                 //vm.zoomChanged();
             });
 
-            vm.inMap.map.addListener('tilesloaded', function(){
+            vm.inMap.map.addListener('tilesloaded', function () {
                 vm.zoomChanged();
             });
 
@@ -808,34 +810,12 @@
         };
 
 
-        vm.changeMarkerIcon = function () {
-            var scale = vm.getIconScale();
-            for (var idx in vm.inMap.markers.markersByPath) {
-                vm.inMap.markers.markersByPath[idx].icon.scale = scale;
-                vm.inMap.markers.markersByPath[idx].setIcon(vm.inMap.markers.markersByPath[idx].icon);
-            }
-            vm.lastZoomLevel = vm.inMap.map.getZoom();
-        };
-
-
-        vm.triggerMarkerIconChange = function() {
+        vm.triggerMarkerIconChange = function () {
             if (Math.abs(vm.inMap.map.getZoom() - vm.lastZoomLevel) > 2) {
                 //console.log("changing marker icons");
                 vm.changeMarkerIcon();
             }
             vm.markerIconChangeTriggered = false;
-        };
-
-
-        vm.zoomChanged = function () {
-            if(!vm.markerIconChangeTriggered && vm.zoomhappened) {
-                vm.markerIconChangeTriggered = true;
-                vm.zoomhappened = false;
-                $timeout(vm.triggerMarkerIconChange, 2000);
-            }
-
-            //console.log("zoom = ", vm.inMap.map.getZoom());
-            $timeout(vm.changeMapStyle(), 100);
         };
 
 
@@ -873,30 +853,153 @@
         };
 
 
-        vm.getIconScale = function () {
-            var scale = 0.8 + (vm.inMap.map.getZoom() - 11) * 0.4 / 4;
-            if (scale < 0.3)
-                scale = 0.3;
-            return scale;
+        vm.getIconURL = function (rtgps) {
+            return ['assets/images/markers', 'extralarge', vm.getMarkerColor(rtgps) + '-dot.png'].join('/');
+        };
+
+
+        var SCALE = 32;
+
+
+        vm.zoomChanged = function () {
+            if (vm.checkZoomLevel(1, 6)) {
+                SCALE = 8;
+            } else if (vm.checkZoomLevel(7, 8)) {
+                SCALE = 16;
+            } else if (vm.checkZoomLevel(9, 10)) {
+                SCALE = 24;
+            } else if (vm.checkZoomLevel(11, 12)) {
+                SCALE = 32;
+            } else {
+                SCALE = 40;
+            }
+
+
+            vm.changeMarkerIcon();
+            //$timeout(vm.changeMarkerIcon, 1000);
+        };
+
+
+        vm.changeMarkerIcon = function () {
+            for (var idx in vm.inMap.markers.markersByPath) {
+                var marker = vm.inMap.markers.markersByPath[idx];
+                var icon = marker.icon;
+                var rtgps = vehicleService.vehiclesByPath[marker.vehiclepath].rtgps;
+
+                icon.size = new google.maps.Size(SCALE, SCALE);
+                icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
+                icon.scaledSize = new google.maps.Size(SCALE, SCALE * 3);
+                //console.log(icon);
+                marker.setIcon(icon);
+            }
+        };
+
+
+        vm.getDirection = function (rtgps) {
+            if (rtgps.direction == null)
+                return 0;
+
+            var direction = Math.floor(rtgps.direction / SCALE) * SCALE;
+            if (direction > SCALE * 3)
+                direction = SCALE;
+
+            //console.log(direction);
+            return direction;
         };
 
         vm.getIcon = function (rtgps) {
-            var direction = rtgps.direction;
-            if (direction != null) {
-                direction = 0;
-            }
-
             return {
-                path: "M20.029,15c0,2.777-2.251,5.028-5.029,5.028c-2.778,0-5.029-2.251-5.029-5.028 c0-2.778,2.251-5.029,5.029-5.029C17.778,9.971,20.029,12.222,20.029,15z M15,3.931L9.893,9.938c0,0,1.71-1.095,5.107-1.095 c3.396,0,5.107,1.095,5.107,1.095L15,3.931z",
-                fillColor: vm.getMarkerColor(rtgps),
-                rotation: direction,
-                fillOpacity: 1,
-                anchor: new google.maps.Point(15, 15),
-                strokeWeight: 1,
-                strokeColor: '#ffffff',
-                scale: vm.getIconScale()
-            }
+                url: vm.getIconURL(rtgps),
+                size: new google.maps.Size(SCALE, SCALE),
+                origin: new google.maps.Point(0, vm.getDirection(rtgps)),
+                scaledSize: new google.maps.Size(SCALE, SCALE * 3),
+                //anchor: new google.maps.Point(SCALE, SCALE)
+            };
         };
+
+
+        vm.checkZoomLevel = function (min, max) {
+            return (vm.inMap.map.getZoom() >= min && vm.inMap.map.getZoom() <= max);
+        };
+
+
+        // var EXTRALARGE = 'extralarge';
+        // var LARGE = 'large';
+        // var MEDIUM = 'medium';
+        // var SMALL = 'small';
+        // var EXTRASMALL = 'extrasmall';
+        //
+        // vm.getMarkerSize = function () {
+        //     if (vm.checkZoomLevel(1, 6)) {
+        //         return EXTRASMALL;
+        //     } else if (vm.checkZoomLevel(7, 8)) {
+        //         return SMALL;
+        //     } else if (vm.checkZoomLevel(9, 10)) {
+        //         return MEDIUM;
+        //     }
+        //     // else if (vm.checkZoomLevel(11, 12)) {
+        //     //     return LARGE;
+        //     // }
+        //
+        //     return LARGE;
+        // };
+
+
+        // vm.getIcon = function (rtgps) {
+        //     var direction = rtgps.direction;
+        //     if (direction != null) {
+        //         direction = 0;
+        //     }
+        //
+        //     return {
+        //         path: "M20.029,15c0,2.777-2.251,5.028-5.029,5.028c-2.778,0-5.029-2.251-5.029-5.028 c0-2.778,2.251-5.029,5.029-5.029C17.778,9.971,20.029,12.222,20.029,15z M15,3.931L9.893,9.938c0,0,1.71-1.095,5.107-1.095 c3.396,0,5.107,1.095,5.107,1.095L15,3.931z",
+        //         fillColor: vm.getMarkerColor(rtgps),
+        //         rotation: direction,
+        //         fillOpacity: 1,
+        //         anchor: new google.maps.Point(15, 15),
+        //         strokeWeight: 1,
+        //         strokeColor: '#ffffff',
+        //         scale: vm.getIconScale()
+        //     }
+        // };
+
+        // vm.getIconScale = function () {
+        //     var scale = 0.8 + (vm.inMap.map.getZoom() - 11) * 0.4 / 4;
+        //     if (scale < 0.3)
+        //         scale = 0.3;
+        //     return scale;
+        // };
+        //
+        //
+        // vm.changeMarkerIcon = function () {
+        //     var scale = vm.getIconScale();
+        //     for (var idx in vm.inMap.markers.markersByPath) {
+        //         vm.inMap.markers.markersByPath[idx].icon.scale = scale;
+        //         vm.inMap.markers.markersByPath[idx].setIcon(vm.inMap.markers.markersByPath[idx].icon);
+        //     }
+        //     vm.lastZoomLevel = vm.inMap.map.getZoom();
+        // };
+        //
+        //
+        // vm.triggerMarkerIconChange = function() {
+        //     if (Math.abs(vm.inMap.map.getZoom() - vm.lastZoomLevel) > 2) {
+        //         //console.log("changing marker icons");
+        //         vm.changeMarkerIcon();
+        //     }
+        //     vm.markerIconChangeTriggered = false;
+        // };
+        //
+        // vm.zoomChanged = function () {
+        //     if(!vm.markerIconChangeTriggered && vm.zoomhappened) {
+        //         vm.markerIconChangeTriggered = true;
+        //         vm.zoomhappened = false;
+        //         $timeout(vm.triggerMarkerIconChange, 500);
+        //     }
+        //
+        //     //console.log("zoom = ", vm.inMap.map.getZoom());
+        //     $timeout(vm.changeMapStyle(), 100);
+        // };
+
 
         vm.resizeMap = function () {
             google.maps.event.trigger(vm.inMap.map, 'resize');
@@ -906,8 +1009,6 @@
 
         vm.init();
     }
-
-
 
 
     function ImmobalizeController($scope, $log, $mdDialog, params, intellicarAPI, vehicleService) {
@@ -1038,6 +1139,12 @@
         };
 
         $scope.init();
+
+        var red = '#ff4955';
+        var green = '#27ae60';
+        var blue = '#4673ff';
+        var yellow = '#f3b212';
+        var orange = '#f37813';
     }
 
 })();

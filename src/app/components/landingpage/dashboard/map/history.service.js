@@ -94,6 +94,7 @@
                 $rootScope.$broadcast('gotHistoryEventFailed');
                 return;
             }
+
             if (vm.historyMap.startTime && vm.historyMap.endTime) {
                 if (vm.historyMap.startTime.length && vm.historyMap.endTime.length) {
 
@@ -180,7 +181,7 @@
 
             vm.historyMap.startMarker = new google.maps.Marker({
                 position: path[0],
-                icon: 'assets/images/markers/big/red-dot.png'
+                //icon: 'assets/images/markers/extralarge/red-dot.png'
             });
 
 
@@ -241,6 +242,7 @@
                 startTimeHour -= 24;
                 endTimeHour -= 24;
             }
+
             var startTime = moment().hours(startTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
             var endTime = moment().hours(endTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
 
@@ -252,7 +254,7 @@
 
         var MILLISEC = 1000;
         var hrs24 = 86400 * MILLISEC;
-        var week = hrs24 * 7;
+        var week = hrs24 * 7 * 2;
         var timeLimit = week;
 
 

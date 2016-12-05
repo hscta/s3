@@ -171,40 +171,6 @@
             };
 
 
-            vm.checkZoomLevel = function (min, max) {
-                // $log.log(vm.inMap.mapControl);
-
-                // for(var prop in vm.inMap.mapControl) {
-                //     if(vm.inMap.mapControl.hasOwnProperty(prop)){
-                //         // $log.log('ssssssssssssss');
-                //         vm.zoom = vm.inMap.mapControl.getGMap().zoom;
-                //         return (vm.zoom >= min && vm.zoom <= max);
-                //     }
-                // }
-                // $log.log(vm.zoom);
-
-                return (vm.zoom >= min && vm.zoom <= max);
-
-            };
-
-            //
-            // var EXTRA_SMALL = 'extra_small';
-            // var SMALL = 'small';
-            // var MEDIUM = 'medium';
-            // var BIG = 'big';
-
-            // vm.getMarkerSize = function () {
-            //     if (vm.checkZoomLevel(1, 6)) {
-            //         return EXTRA_SMALL;
-            //     } else if (vm.checkZoomLevel(7, 8)) {
-            //         return SMALL;
-            //     } else if (vm.checkZoomLevel(9, 10)) {
-            //         return MEDIUM;
-            //     }
-            //
-            //     return BIG;
-            // };
-
 
 
 
