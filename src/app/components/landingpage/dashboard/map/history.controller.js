@@ -120,7 +120,7 @@
                 vm.traceControls.playing = false;
                 $interval.cancel(vm.traceControls.engine);
             }
-        }
+        };
 
         vm.traceControls.startMotion = function () {
             if (vm.traceControls.timeline.length > 0 && vm.traceControls.current < vm.traceControls.timeline.length) {

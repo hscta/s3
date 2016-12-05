@@ -210,7 +210,8 @@
             <div class="history-err" ng-show="!vm.gotHistory">{{vm.historyMap.errorMsg}}</div>
             <div class="traceControls" ng-class="{'active':vm.gotHistory}">
                 <div class="tc_controls">
-                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()" ng-class="{'active':vm.traceControls.playing}">
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()"
+                       ng-class="{'active':vm.traceControls.playing}">
                         <i class="fa fa-play" ng-show="!vm.traceControls.playing"></i>
                         <i class="fa fa-pause" ng-show="vm.traceControls.playing"></i>
                     </a>
@@ -247,7 +248,7 @@
                 <div class="info" >
                     <table>
                         <tr class="time">
-                            <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
+                            <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss'}} </td>
                         </tr>
                         <tr>
                             <td>Ignition</td>

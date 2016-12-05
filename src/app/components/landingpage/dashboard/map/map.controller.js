@@ -892,6 +892,7 @@
                 icon.size = new google.maps.Size(SCALE, SCALE);
                 icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
                 icon.scaledSize = new google.maps.Size(SCALE, SCALE * 19);
+                icon.anchor = new google.maps.Point(SCALE/2, SCALE/2);
                 marker.setIcon(icon);
             }
         };
@@ -915,7 +916,7 @@
                 size: new google.maps.Size(SCALE, SCALE),
                 origin: new google.maps.Point(0, vm.getDirection(rtgps)),
                 scaledSize: new google.maps.Size(SCALE, SCALE * 19),
-                //anchor: new google.maps.Point(SCALE, SCALE)
+                anchor: new google.maps.Point(SCALE/2, SCALE/2)
             };
         };
 

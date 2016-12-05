@@ -88,7 +88,30 @@
             }
         };
 
+        vm.clearMap = function () {
+
+            if ( vm.historyMap.startMarker){
+
+                vm.historyMap.startMarker.setMap(null);
+            }
+
+            if ( vm.historyMap.endMarker){
+
+                vm.historyMap.endMarker.setMap(null);
+            }
+
+            if ('setMap' in vm.historyMap.trace) {
+                vm.historyMap.trace.setMap(null);
+            }
+
+            vm.traceControls.stopMotion();
+            vm.traceControls.current = 0;
+            vm.traceControls.moveTimeline();
+
+        };
+
         vm.getHistoryData = function () {
+            vm.clearMap();
             if (!vm.historyMap.selectedVehicle) {
                 vm.historyMap.errorMsg = "Please Select Vehicle";
                 $rootScope.$broadcast('gotHistoryEventFailed');
@@ -211,20 +234,24 @@
             vm.historyMap.traceObj = path;
 
             if(vm.historyMap.map != null && vm.historyMap.map.setCenter) {
-                if (vm.historyMap.trace)
-                    vm.historyMap.trace.setMap(null);
-                if (vm.historyMap.startMarker)
-                    vm.historyMap.startMarker.setMap(null);
-                if (vm.historyMap.endMarker)
-                    vm.historyMap.endMarker.setMap(null);
+                // if (vm.historyMap.trace)
+                //     vm.historyMap.trace.setMap(null);
+                // if (vm.historyMap.startMarker)
+                //     vm.historyMap.startMarker.setMap(null);
+                // if (vm.historyMap.endMarker)
+                //     vm.historyMap.endMarker.setMap(null);
 
 
-
+                // vm.historyMap.map.setCenter(path[midPoint]);
+                // $log.log(path[0]);
+                vm.historyMap.map.setCenter({
+                    lat: path[0].lat(),
+                    lng: path[0].lng()
+                });
+                vm.historyMap.map.setZoom(11);
                 vm.historyMap.trace.setMap(vm.historyMap.map);
                 vm.historyMap.startMarker.setMap(vm.historyMap.map);
                 vm.historyMap.endMarker.setMap(vm.historyMap.map);
-                vm.historyMap.map.setCenter(path[midPoint]);
-                vm.historyMap.map.setZoom(11);
             }
 
             vm.setData('getHistory', true);
