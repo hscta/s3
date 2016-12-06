@@ -124,8 +124,12 @@
                     var starttime = moment(vm.historyMap.startTime).unix() * 1000;
                     var endtime = moment(vm.historyMap.endTime).unix() * 1000;
 
-                    if (endtime - starttime > timeLimit)
-                        endtime = starttime + timeLimit;
+                    if (endtime - starttime > timeLimit){
+                        vm.historyMap.errorMsg = "Maximum time limit is one week.";
+                        $rootScope.$broadcast('gotHistoryEventFailed');
+                        return;
+                        // endtime = starttime + timeLimit;
+                    }
 
                     if (endtime <= starttime) {
                         vm.historyMap.errorMsg = "End time should be >= Start time";
@@ -281,7 +285,7 @@
 
         var MILLISEC = 1000;
         var hrs24 = 86400 * MILLISEC;
-        var week = hrs24 * 7 * 2;
+        var week = hrs24 * 7;
         var timeLimit = week;
 
 
