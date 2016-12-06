@@ -197,10 +197,15 @@
             var pre_moving = false;
             var ign_rect = {};
             var moving_rect = {};
+            var graphLineLimit = parseInt(vm.traceControls.timeline.length / 1000);
+            graphLineLimit *= 10;
+            if(graphLineLimit < 10)
+                graphLineLimit = 10;
             var highestSpeed = 0;
+
             vm.traceControls.ctx.strokeStyle = 'rgba(0,0,0, 0.04)';
             for (var idx in vm.traceControls.timeline) {
-                if (idx % 10 == 0) {
+                if (idx % graphLineLimit == 0) {
                     vm.traceControls.ctx.moveTo(idx * vm.traceControls.wr, 0);
                     vm.traceControls.ctx.lineTo(idx * vm.traceControls.wr, vm.traceControls.ch);
                 }
@@ -241,6 +246,9 @@
                 pre_moving = moving;
                 vm.traceControls.ctx.fill();
             }
+            if(highestSpeed < 60){
+                highestSpeed = 60;
+            }
             highestSpeed += 20 + vm.traceControls.graphBase;
             vm.traceControls.ctx.beginPath();
             vm.traceControls.ctx.moveTo(0, vm.traceControls.ch - vm.traceControls.graphBase);
@@ -261,17 +269,23 @@
         }
 
         function generateTimeline(path) {
+            // setting and resetting track history  variables
+            vm.traceControls.selectedVehicle = vm.historyMap.selectedVehicle;
+            vm.traceControls.panel.clicked = true;
+
             var timeline = [];
-            var first = path[0];
-            var last = path[path.length - 1];
+            var first = angular.copy(path[0]);
+            var last = angular.copy(path[path.length - 1]);
             var currentTime = first.gpstime;
             var currentPathIdx = 0;
 
-            while (currentTime < last.gpstime) {
+            while (currentTime < last.gpstime ) {
                 if (path[currentPathIdx].gpstime < currentTime) {
+                    if(currentPathIdx < path.length) {
+                        path[currentPathIdx].gpstime = currentTime;
+                        timeline.push(path[currentPathIdx]);
+                    }
                     currentPathIdx++;
-                    path[currentPathIdx].gpstime = currentTime;
-                    timeline.push(path[currentPathIdx]);
                 } else {
                     timeline.push(path[currentPathIdx]);
                 }

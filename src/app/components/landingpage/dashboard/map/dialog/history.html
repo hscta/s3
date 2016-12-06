@@ -243,12 +243,13 @@
                     </div>
                 </div>
                 <div class="tc_panel">
+                    <div class="tc_carname">{{vm.traceControls.selectedVehicle.rtgps.meta.cartype}}</div>
                     <div class="tc_pointer" ng-class="{'active':vm.traceControls.playing}"></div>
                 </div>
                 <div class="info" >
                     <table>
                         <tr class="time">
-                            <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss'}} </td>
+                            <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
                         </tr>
                         <tr>
                             <td>Ignition</td>
