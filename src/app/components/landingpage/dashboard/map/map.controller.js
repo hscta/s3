@@ -128,6 +128,7 @@
             vm.customOverlay(rtgps);
         };
 
+
         vm.updateMarker = function (rtgps) {
             if ((rtgps.vehiclepath in vm.inCustomMaker) && ( vm.geoFilters.showVehicleNumber || vm.geoFilters.noComm || vm.geoFilters.devBattery || vm.geoFilters.carBattery )) {
                 vm.inCustomMaker[rtgps.vehiclepath].setPosition(rtgps);
@@ -181,7 +182,7 @@
                 return false;
 
             if (!(rtgps.vehiclepath in vm.markersByPath)) {
-                console.log(rtgps.vehiclepath);
+                // console.log(rtgps.vehiclepath);
                 return false;
             }
 
@@ -372,7 +373,8 @@
                 polygonMap[polygons[idx].control.info.assetpath] = polygons[idx];
             }
             vm.polygonsByPath = polygonMap;
-        }
+        };
+
 
         vm.createCircles = function (circles) {
             var circlesMap = {};
@@ -410,7 +412,8 @@
 
             }
             vm.circlesByPath = circlesMap;
-        }
+        };
+
 
         var DEVBATTERY_THRESHOLD = 3.55;
         var CARBATTERY_THRESHOLD = 9.5;
@@ -508,6 +511,7 @@
             }
         };
 
+
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
@@ -518,6 +522,7 @@
                 }
             }
         }
+
 
         function getColor(str) {
             var type = getType(str);
@@ -548,6 +553,7 @@
             }
         }
 
+
         function startAnimation(obj) {
             var count = 0;
             //$log.log(getType(obj.control.info.tagdata));
@@ -562,6 +568,7 @@
                 }, 500, 4);
             }
         }
+
 
         function getType(tagdata) {
             var str = tagdata.olafilter;
@@ -879,6 +886,8 @@
 
 
             vm.changeMarkerIcon();
+
+            vm.changeMapStyle();
             //$timeout(vm.changeMarkerIcon, 1000);
         };
 
@@ -891,7 +900,7 @@
 
                 icon.size = new google.maps.Size(SCALE, SCALE);
                 icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
-                icon.scaledSize = new google.maps.Size(SCALE, SCALE * 19);
+                icon.scaledSize = new google.maps.Size(SCALE, SCALE * 36);
                 icon.anchor = new google.maps.Point(SCALE/2, SCALE/2);
                 marker.setIcon(icon);
             }
@@ -902,20 +911,21 @@
             if (rtgps.direction == null)
                 return 0;
 
-            var direction = Math.floor(rtgps.direction / 19) * SCALE;
-            if (direction > SCALE * 19)
-                direction = SCALE;
+            var direction = Math.floor(rtgps.direction / 10) * SCALE;
+            if (direction > SCALE * 36)
+                direction = SCALE * 36;
 
-            //console.log(direction);
+            // console.log(direction);
             return direction;
         };
+
 
         vm.getIcon = function (rtgps) {
             return {
                 url: vm.getIconURL(rtgps),
                 size: new google.maps.Size(SCALE, SCALE),
                 origin: new google.maps.Point(0, vm.getDirection(rtgps)),
-                scaledSize: new google.maps.Size(SCALE, SCALE * 19),
+                scaledSize: new google.maps.Size(SCALE, SCALE * 36),
                 anchor: new google.maps.Point(SCALE/2, SCALE/2)
             };
         };
@@ -924,6 +934,15 @@
         vm.checkZoomLevel = function (min, max) {
             return (vm.inMap.map.getZoom() >= min && vm.inMap.map.getZoom() <= max);
         };
+
+
+        vm.resizeMap = function () {
+            google.maps.event.trigger(vm.inMap.map, 'resize');
+            return true;
+        };
+
+
+        vm.init();
 
 
         // var EXTRALARGE = 'extralarge';
@@ -1000,17 +1019,9 @@
         //     }
         //
         //     //console.log("zoom = ", vm.inMap.map.getZoom());
-        //     $timeout(vm.changeMapStyle(), 100);
         // };
 
 
-        vm.resizeMap = function () {
-            google.maps.event.trigger(vm.inMap.map, 'resize');
-            return true;
-        };
-
-
-        vm.init();
     }
 
 
@@ -1019,8 +1030,6 @@
         //$log.log('ImmobalizeController');
 
 
-        $log.log(params);
-        $log.log('ssssssssssssssssssssssss');
         $scope.msg = '';
         $scope.notify = '';
         $scope.commandSent = false;
@@ -1144,7 +1153,7 @@
         $scope.init();
 
         var red = '#ff4955';
-        var green = '#27ae60';
+        var green = '#27ae60'; //new color code for green #2ad230
         var blue = '#4673ff';
         var yellow = '#f3b212';
         var orange = '#f37813';
