@@ -98,7 +98,7 @@
                 vm.traceControls.current += time;
                 vm.traceControls.moveTimeline();
             }
-        }
+        };
 
         vm.traceControls.setPointerTransition = function (bool) {
             if (bool) {
@@ -106,14 +106,14 @@
             } else {
                 vm.traceControls.pointer.css('transition', 0 + 'ms linear');
             }
-        }
+        };
 
         vm.traceControls.isPointer = function () {
             if (!vm.traceControls.pointer) {
                 vm.traceControls.pointer = $('.tc_pointer');
             }
             vm.traceControls.setPointerTransition(true);
-        }
+        };
 
         vm.traceControls.stopMotion = function () {
             if (vm.traceControls.playing) {
@@ -141,19 +141,42 @@
                     vm.traceControls.moveTimeline();
                 }, vm.traceControls.SPEEDS[vm.traceControls.speed]);
             }
-        }
+        };
 
         vm.traceControls.moveTimeline = function () {
             if (vm.historyMap.startMarker) {
                 var left = vm.traceControls.current / vm.traceControls.timeline.length * 100;
                 vm.traceControls.pointer.css({'left': left + '%'});
                 vm.historyMap.startMarker.setPosition(vm.traceControls.timeline[vm.traceControls.current]);
+                moveMapWithMarker(vm.historyMap.startMarker);
             }
         };
 
+
+        var moveMapWithMarker = function (marker) {
+            var map = vm.historyMap.map;
+            var projection = map.getProjection();
+
+            var centerPoint = projection.fromLatLngToPoint(map.getCenter());
+            var scale = Math.pow(2, map.getZoom());
+
+            var worldPoint = projection.fromLatLngToPoint(marker.getPosition());
+
+            var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
+
+            var ydiff = Math.abs((worldPoint.y - centerPoint.y) * scale);
+            var panX = Math.floor((worldPoint.x - centerPoint.x) * scale);
+
+            var panY = Math.floor((worldPoint.y - centerPoint.y) * scale);
+            if (xdiff > 500 || ydiff > 200) {
+                map.panBy(panX, panY);
+            }
+        };
+
+
         vm.traceControls.mouseMoveEvent = function (event) {
             var start = vm.traceControls.timeline.length;
-            var width = vm.traceControls.panel.element.width()
+            var width = vm.traceControls.panel.element.width();
             var position = vm.traceControls.panel.element.offset().left;
             if (position < 0)
                 position = 0;
@@ -161,7 +184,7 @@
             if (vm.traceControls.current >= vm.traceControls.timeline.length)
                 vm.traceControls.current = vm.traceControls.timeline.length - 1;
             vm.traceControls.moveTimeline();
-        }
+        };
 
         vm.traceControls.speedThreshold = 3;
         vm.traceControls.graphBase = 0;

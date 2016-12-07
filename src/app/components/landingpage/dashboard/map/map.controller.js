@@ -776,42 +776,6 @@
         }
 
 
-        vm.init = function () {
-            vm.loadMap();
-            setMapHeight();
-            vm.addListener();
-
-            $timeout(vm.runStats, 5000);
-            $interval(vm.runStats, 10000);
-
-            markerInfowindow.addListener('domready', function () {
-                vm.onload();
-            });
-
-            fenceInfowindow.addListener('domready', function () {
-                vm.fenceWindowLoad();
-            });
-
-            $interval(vm.resizeMap, 1000);
-
-            vm.inMap.map.addListener('zoom_changed', function () {
-                vm.zoomhappened = true;
-                //vm.zoomChanged();
-            });
-
-            vm.inMap.map.addListener('tilesloaded', function () {
-                vm.zoomChanged();
-            });
-
-            // vm.infoWindowCompiled = false;
-            // vm.inMap.map.addListener('tilesloaded', function() {
-            //     if(vm.infoWindowCompiled)
-            //         return;
-            //     vm.onload();
-            // vm.infoWindowCompiled = true;
-            // });
-        };
-
         var MAP_STYLES = {
             DARK: 'dark',
             DEFAULT: 'default'
@@ -942,86 +906,36 @@
         };
 
 
+        vm.init = function () {
+            vm.loadMap();
+            setMapHeight();
+            vm.addListener();
+
+            $timeout(vm.runStats, 5000);
+            $interval(vm.runStats, 10000);
+
+            markerInfowindow.addListener('domready', function () {
+                vm.onload();
+            });
+
+            fenceInfowindow.addListener('domready', function () {
+                vm.fenceWindowLoad();
+            });
+
+            $interval(vm.resizeMap, 1000);
+
+            vm.inMap.map.addListener('zoom_changed', function () {
+                vm.zoomhappened = true;
+                //vm.zoomChanged();
+            });
+
+            vm.inMap.map.addListener('tilesloaded', function () {
+                vm.zoomChanged();
+            });
+        };
+
+
         vm.init();
-
-
-        // var EXTRALARGE = 'extralarge';
-        // var LARGE = 'large';
-        // var MEDIUM = 'medium';
-        // var SMALL = 'small';
-        // var EXTRASMALL = 'extrasmall';
-        //
-        // vm.getMarkerSize = function () {
-        //     if (vm.checkZoomLevel(1, 6)) {
-        //         return EXTRASMALL;
-        //     } else if (vm.checkZoomLevel(7, 8)) {
-        //         return SMALL;
-        //     } else if (vm.checkZoomLevel(9, 10)) {
-        //         return MEDIUM;
-        //     }
-        //     // else if (vm.checkZoomLevel(11, 12)) {
-        //     //     return LARGE;
-        //     // }
-        //
-        //     return LARGE;
-        // };
-
-
-        // vm.getIcon = function (rtgps) {
-        //     var direction = rtgps.direction;
-        //     if (direction != null) {
-        //         direction = 0;
-        //     }
-        //
-        //     return {
-        //         path: "M20.029,15c0,2.777-2.251,5.028-5.029,5.028c-2.778,0-5.029-2.251-5.029-5.028 c0-2.778,2.251-5.029,5.029-5.029C17.778,9.971,20.029,12.222,20.029,15z M15,3.931L9.893,9.938c0,0,1.71-1.095,5.107-1.095 c3.396,0,5.107,1.095,5.107,1.095L15,3.931z",
-        //         fillColor: vm.getMarkerColor(rtgps),
-        //         rotation: direction,
-        //         fillOpacity: 1,
-        //         anchor: new google.maps.Point(15, 15),
-        //         strokeWeight: 1,
-        //         strokeColor: '#ffffff',
-        //         scale: vm.getIconScale()
-        //     }
-        // };
-
-        // vm.getIconScale = function () {
-        //     var scale = 0.8 + (vm.inMap.map.getZoom() - 11) * 0.4 / 4;
-        //     if (scale < 0.3)
-        //         scale = 0.3;
-        //     return scale;
-        // };
-        //
-        //
-        // vm.changeMarkerIcon = function () {
-        //     var scale = vm.getIconScale();
-        //     for (var idx in vm.inMap.markers.markersByPath) {
-        //         vm.inMap.markers.markersByPath[idx].icon.scale = scale;
-        //         vm.inMap.markers.markersByPath[idx].setIcon(vm.inMap.markers.markersByPath[idx].icon);
-        //     }
-        //     vm.lastZoomLevel = vm.inMap.map.getZoom();
-        // };
-        //
-        //
-        // vm.triggerMarkerIconChange = function() {
-        //     if (Math.abs(vm.inMap.map.getZoom() - vm.lastZoomLevel) > 2) {
-        //         //console.log("changing marker icons");
-        //         vm.changeMarkerIcon();
-        //     }
-        //     vm.markerIconChangeTriggered = false;
-        // };
-        //
-        // vm.zoomChanged = function () {
-        //     if(!vm.markerIconChangeTriggered && vm.zoomhappened) {
-        //         vm.markerIconChangeTriggered = true;
-        //         vm.zoomhappened = false;
-        //         $timeout(vm.triggerMarkerIconChange, 500);
-        //     }
-        //
-        //     //console.log("zoom = ", vm.inMap.map.getZoom());
-        // };
-
-
     }
 
 
