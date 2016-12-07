@@ -10,7 +10,7 @@
         .controller('GeofenceViewController', mapLeftToolBar);
 
     function mapLeftToolBar($scope, $log, $timeout, $q, mapService, historyService,
-                            $state, geofenceViewService, dialogService, intellicarAPI) {
+                            $state, geofenceViewService, dialogService) {
 
         var vm = this;
 
@@ -27,7 +27,6 @@
         };
 
         vm.loc = mapService.loc;
-
         vm.currentLocation = mapService.getCurrentLocation().id; // Have to set it Dynamically
 
         vm.setInMarkerLocation = function (data) {
@@ -63,29 +62,7 @@
                     }
                 },
                 'childType': 'location',
-                'children': [
-                    {
-                        id: vm.loc.BANGALORE,
-                        notation: 'BLR',
-                        latlng: {latitude: 12.967995, longitude: 77.597953}
-                    }, {
-                        id: vm.loc.HYDERABAD,
-                        notation: 'HYD',
-                        latlng: {latitude: 17.384125, longitude: 78.479447}
-                    }, {
-                        id: vm.loc.PUNE,
-                        notation: 'PUN',
-                        latlng: {latitude: 18.521445, longitude: 73.866031}
-                    }, {
-                        id: vm.loc.CHENNAI,
-                        notation: 'CHE',
-                        latlng: {latitude: 13.075837, longitude: 80.206900}
-                    }, {
-                        id: vm.loc.MUMBAI,
-                        notation: 'MUM',
-                        latlng: {latitude: 19.195549, longitude: 72.936381}
-                    }
-                ]
+                'children': mapService.locations
             },
             // {'type': 'line', 'historymap': false},
 

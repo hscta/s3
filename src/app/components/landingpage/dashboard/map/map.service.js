@@ -11,8 +11,8 @@
 
     angular.module('uiplatform')
         .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
-                                            intellicarAPI, vehicleService, $mdDialog,
-                                            dialogService) {
+                                         intellicarAPI, vehicleService, $mdDialog,
+                                         dialogService) {
             $log.log("newmapService");
             var vm = this;
             vm.listeners = {};
@@ -89,61 +89,57 @@
                 return vm.inMap;
             };
 
-            // vm.getMainMarkers = function () {
-            //     return vm.inMarkers;
-            // };
-
-
-            // Bangalore
-            // var lat = 12.9176383;
-            // var lng = 77.6480335;
-
-            // Mumbai
-            // var lat = 19.19554947109134;
-            // var lng = 72.93638193466376;
-
 
             vm.loc = {
+                USER: 'USER',
                 MUMBAI: 'MUMBAI',
                 BANGALORE: 'BANGALORE',
                 HYDERABAD: 'HYDERABAD',
                 PUNE: 'PUNE',
-                CHENNAI: 'CHENNAI',
-                USER: 'USER'
+                DELHI: 'DELHI',
+                CHENNAI: 'CHENNAI'
+
             };
 
-            vm.locations = {
-                BANGALORE: {
-                    id: vm.loc.BANGALORE,
-                    notation: 'BLR',
-                    latlng: {latitude: 12.967995, longitude: 77.597953}
+
+            vm.locations = [
+                {
+                    id: vm.loc.USER,
+                    notation: 'USR',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
                 },
-                HYDERABAD: {
-                    id: vm.loc.HYDERABAD,
-                    notation: 'HYD',
-                    latlng: {latitude: 17.384125, longitude: 78.479447}
-                },
-                DELHI: {
-                    id: vm.loc.DELHI,
-                    notation: 'DEL',
-                    latlng: {latitude: 28.614132, longitude: 77.215449}
-                },
-                MUMBAI: {
+                {
                     id: vm.loc.MUMBAI,
                     notation: 'MUM',
                     latlng: {latitude: 19.195549, longitude: 72.936381}
                 },
-                USER: {
-                    id: vm.loc.USER,
-                    notation: 'USER',
-                    latlng: {latitude: 19.195549, longitude: 72.936381}
+                {
+                    id: vm.loc.BANGALORE,
+                    notation: 'BLR',
+                    latlng: {latitude: 12.967995, longitude: 77.597953}
+                }, {
+                    id: vm.loc.HYDERABAD,
+                    notation: 'HYD',
+                    latlng: {latitude: 17.384125, longitude: 78.479447}
+                }, {
+                    id: vm.loc.PUNE,
+                    notation: 'PUN',
+                    latlng: {latitude: 18.521445, longitude: 73.866031}
+                }, {
+                    id: vm.loc.DELHI,
+                    notation: 'DEL',
+                    latlng: {latitude: 28.614132, longitude: 77.215449}
+                }, {
+                    id: vm.loc.CHENNAI,
+                    notation: 'CHE',
+                    latlng: {latitude: 13.075837, longitude: 80.206900}
                 }
-            };
+            ];
 
-            vm.currentLocation = vm.locations.MUMBAI;
+            vm.currentLocation = vm.locations[1];
 
             vm.setUserPref = function (userSettings) {
-                vm.currentLocation = vm.locations.USER;
+                vm.currentLocation = vm.locations[0];
                 vm.currentLocation.latlng = userSettings.station;
                 vm.center = vm.currentLocation.latlng;
                 vm.callListeners(userSettings, 'setUserPref');
@@ -169,10 +165,6 @@
             vm.getBounds = function () {
                 return vm.bounds;
             };
-
-
-
-
 
 
             vm.addListener = function (key, listener) {
