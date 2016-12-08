@@ -1,5 +1,5 @@
 /**
- * Created by smiddela on 20/09/16.
+ * Created by Rinas Musthafa on 11/27/2016.
  */
 
 
@@ -9,38 +9,237 @@
     angular.module('uiplatform')
         .service('historyService', historyService);
 
-    function historyService($log, mapService) {
-        $log.log("historyService");
+    function historyService($log, mapService, $rootScope, intellicarAPI, vehicleService, $timeout, myAlarmService, $q) {
+
         var vm = this;
 
         vm.historyData = {};
+        vm.listeners = {};
 
-        vm.setData = function(key, value) {
+
+        vm.setData = function (key, value) {
             vm.historyData[key] = value;
         };
 
-        vm.getData = function(key) {
-            if(vm.historyData.hasOwnProperty(key))
+        vm.getData = function (key) {
+            if (key in vm.historyData)
                 return vm.historyData[key];
-
             return null;
         };
 
-        vm.historyMapObj = {
-            historyMap : {
-                mapOptions: {},
-                mapControl: {},
-                zoom:'',
-                center:''
+
+        vm.historyMap = {
+            map: {},
+            mapOptions: {
+                center: {lat: mapService.getCenter().latitude, lng: mapService.getCenter().longitude},
+                zoom: mapService.getZoom()
             },
-            historyMapEvents : {
-                click: function () {
-                    vm.historyMapClickEvent();
-                },
-            },
-            trace:{
-                path: [],
-                stroke: {color: "blue", weight: 2, opacity: 1},
+            traceObj: [],
+            markersByPath: mapService.inMap.markers.markersByPath,
+            vehiclesByPath: vehicleService.vehiclesByPath,
+            trace: {
+                path: []
+            }
+        };
+
+
+        vm.geoFenceReports = {
+            startTime: '',
+            endTime: '',
+            reportId: '',
+            selectedVehiclesCount: 0,
+            selectedFencesCount: 0,
+
+            filteredItems: [],
+            filteredFenceItems: [],
+
+            myHistoryData: [],
+            jsonReportData: [],
+            reports: [],
+            fenceFilter: '',
+            currRep: []
+        };
+
+
+        vm.setInMapLocation = function (loc) {
+            vm.historyMap.mapOptions.center = angular.copy(loc);
+            vm.historyMap.map.setCenter({
+                lat: vm.historyMap.mapOptions.center.latitude,
+                lng: vm.historyMap.mapOptions.center.longitude
+            });
+        };
+
+        vm.addListener = function (key, listener) {
+            if (!(key in vm.listeners)) {
+                vm.listeners[key] = [];
+            }
+
+            if (vm.listeners[key].indexOf(listener) === -1) {
+                vm.listeners[key].push(listener);
+            }
+        };
+
+
+        vm.callListeners = function (msg, key) {
+            if (key in vm.listeners) {
+                for (var idx in vm.listeners[key]) {
+                    vm.listeners[key][idx](msg, key);
+                }
+            }
+        };
+
+        vm.clearMap = function () {
+
+            if ( vm.historyMap.startMarker){
+
+                vm.historyMap.startMarker.setMap(null);
+            }
+
+            if ( vm.historyMap.endMarker){
+
+                vm.historyMap.endMarker.setMap(null);
+            }
+
+            if ('setMap' in vm.historyMap.trace) {
+                vm.historyMap.trace.setMap(null);
+            }
+
+            vm.traceControls.stopMotion();
+            vm.traceControls.current = 0;
+            vm.traceControls.moveTimeline();
+
+        };
+
+        vm.getHistoryData = function () {
+            vm.clearMap();
+            if (!vm.historyMap.selectedVehicle) {
+                vm.historyMap.errorMsg = "Please Select Vehicle";
+                $rootScope.$broadcast('gotHistoryEventFailed');
+                return;
+            }
+
+            if (vm.historyMap.startTime && vm.historyMap.endTime) {
+                if (vm.historyMap.startTime.length && vm.historyMap.endTime.length) {
+
+                    var starttime = moment(vm.historyMap.startTime).unix() * 1000;
+                    var endtime = moment(vm.historyMap.endTime).unix() * 1000;
+
+                    if (endtime - starttime > timeLimit){
+                        vm.historyMap.errorMsg = "Maximum time limit is one week.";
+                        $rootScope.$broadcast('gotHistoryEventFailed');
+                        return;
+                        // endtime = starttime + timeLimit;
+                    }
+
+                    if (endtime <= starttime) {
+                        vm.historyMap.errorMsg = "End time should be >= Start time";
+                        $rootScope.$broadcast('gotHistoryEventFailed');
+                        return;
+                    }
+
+                    var body = {
+                        vehicle: {
+                            vehiclepath: vm.historyMap.selectedVehicle.rtgps.deviceid.toString(),
+                            starttime: starttime,
+                            endtime: endtime
+                        }
+                    };
+                    var body2 = {
+                        vehiclepath: [vm.historyMap.selectedVehicle.rtgps.deviceid.toString()],
+                        starttime: starttime,
+                        endtime: endtime
+                    };
+                    var gpsDataPromise = intellicarAPI.reportsService.getDeviceLocation(body);
+                    var alarmDataPromise = intellicarAPI.myAlarmService.getAlarmInfo(body2);
+
+                        $q.all([gpsDataPromise,alarmDataPromise])
+                        .then(vm.drawTrace, vm.handleGetLocationFailure);
+
+                } else {
+                    vm.historyMap.errorMsg = "Enter valid start and end time";
+                    $rootScope.$broadcast('gotHistoryEventFailed');
+                    return;
+                }
+            } else {
+                // $log.log(vm.historyMap.startTime, vm.historyMap.endTime);
+                vm.historyMap.errorMsg = "Enter valid start and end time.";
+                $rootScope.$broadcast('gotHistoryEventFailed');
+                return;
+            }
+        };
+
+
+        vm.handleGetLocationFailure = function (resp) {
+            $log.log("handleGetLocationFailure");
+            $log.log(resp);
+            vm.historyMap.trace.path = [];
+        };
+
+
+        vm.drawTrace = function (respArray) {
+            console.log(respArray);
+            var resp = respArray[0];
+            var alarmData = respArray[1];
+
+
+
+            if (resp) vm.historyMap.traceData = resp.data.data;
+
+            // resetting previous drawings
+
+            vm.historyMap.errorMsg = '';
+            var traceData = vm.historyMap.traceData;
+
+            if (traceData.length < 1) {
+                vm.historyMap.errorMsg = "No Data Found";
+                $rootScope.$broadcast('gotHistoryEventFailed');
+                return;
+            }
+
+            var path = [];
+
+            for (var idx in traceData) {
+                var position = traceData[idx];
+                if (position.latitude == null || position.longitude == null || position.latitude == 0 || position.longitude == 0) {
+                    continue;
+                }
+                var latlng = new google.maps.LatLng(position.latitude, position.longitude);
+                // latlng.id = vm.historyMap.deviceid;
+                // latlng.deviceid = vm.historyMap.deviceid;
+                latlng.gpstime = parseInt(position.gpstime);
+                latlng.speed = parseInt(position.speed.toFixed(2));
+                latlng.odometer = position.odometer;
+                latlng.heading = position.heading;
+                latlng.carbattery = parseInt(position.carbattery.toFixed(2));
+                latlng.devbattery = parseInt(position.devbattery.toFixed(2));
+                latlng.numsat = position.numsat;
+                latlng.ignstatus = position.ignstatus;
+                path.push(latlng);
+            }
+            function compare(a, b) {
+                return a.gpstime - b.gpstime;
+            }
+
+            path.sort(compare);
+
+
+            vm.historyMap.startMarker = new google.maps.Marker({
+                position: path[0],
+                //icon: 'assets/images/markers/extralarge/red-dot.png'
+            });
+
+
+            var lastBeacon = path[path.length - 1];
+            vm.historyMap.endMarker = new google.maps.Marker({
+                position: lastBeacon,
+                label: 'E',
+                title: 'End point'
+            });
+
+            var midPoint = Math.floor(path.length / 2);
+
+            vm.historyMap.trace = new google.maps.Polyline({
+                path: path,
                 icons: [{
                     icon: {
                         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
@@ -48,143 +247,52 @@
                     offset: '100px',
                     repeat: '100px'
                 }],
-                clickable: true,
-                visible: true,
-                geodesic: true,
-                fit: true,
-                static: true,
-                events: {}
-            },
-            endMarker:{
-                options: {},
-                events: {
-                }
-            },
-            selectedVehicle:'',
-            multiSelect:true,
-            circles:[],
-            polygons:[],
-            fences:[],
-            startTime:'',
-            endTime:'',
-            vehicleNumber:'',
-            deviceid:'',
-            dashboardMapObj : {
-                clickedMarker:{},
-                inMarkers:[]
-            },
-            getHistory :false,
-            historyFenceObj : {
-                latitude : '',
-                longitude:'',
-                name: '',
-                other: ''
-            },
-            historyFenceInfoWindow : {
-                show: false,
-                control: {},
-                options: {
-                    maxWidth: 300,
-                    disableAutoPan: false,
-                    pixelOffset: {
-                        width: 0,
-                        height: 0
-                    }
-                }
-            },
-            historyCircleEvents : {
-                click: function (circle, eventName, model, args) {
-                    vm.historyCircleEvents (model, vm.historyMapObj.historyFenceObj);
-                    vm.historyFenceInfoWindowShow();
-                }
-            },
-            historyPolygonEvents : {
-                click: function (polygon, eventName, model, args) {
-                    $log.log('pppppppppppppppppp', model);
-                    vm.polygonEvents(model, vm.historyMapObj.historyFenceObj);
-                    vm.historyFenceInfoWindowShow();
-                }
-            },
-        };
+                strokeColor: "blue",
+                strokeWeight: 2,
+                strokeOpacity: 1
+            });
 
-        vm.resetHistoryData = function(){
-            vm.historyMapObj.trace.path = [];
-            vm.historyMapObj.endMarker = {
-                options:{},
-                events:{}
-            };
-            vm.setData('getHistory', false);
-        };
+            vm.historyMap.traceObj = path;
+
+            if(vm.historyMap.map != null && vm.historyMap.map.setCenter) {
+                // if (vm.historyMap.trace)
+                //     vm.historyMap.trace.setMap(null);
+                // if (vm.historyMap.startMarker)
+                //     vm.historyMap.startMarker.setMap(null);
+                // if (vm.historyMap.endMarker)
+                //     vm.historyMap.endMarker.setMap(null);
 
 
-        vm.playerControls = {
-            slider : 0,
-            animationCount : 0,
-            ffRate : 1
-        };
-
-
-        vm.geoFenceReports = {
-            startTime:'',
-            endTime:'',
-            reportId:'',
-            selectedVehiclesCount : 0,
-            selectedFencesCount : 0,
-
-            filteredItems : [],
-            filteredFenceItems : [],
-
-            myHistoryData:[],
-            reports:[],
-            fenceFilter:''
-        };
-
-        vm.historyCircleEvents = function(model, dest){
-            $log.log('clickedhistorycircle', model);
-            dest.latitude =  model.center.latitude;
-            dest.longitude =  model.center.longitude;
-            dest.name =  model.control.info.tagdata.company;
-            dest.other =  model.control.info.tagdata.olafilter;
-        };
-
-        vm.polygonEvents = function(model, dest){
-            var polygonCenter = vm.getPolygonMidPoint(model.control.info.info[0].settingsdata.vertex);
-            $log.log(model.control.info.info[0].settingsdata.vertex);
-            $log.log(polygonCenter);
-            dest.latitude =  polygonCenter.lat();
-            dest.longitude =  polygonCenter.lng();
-            dest.name =  model.control.info.name;
-            dest.other =  model.control.info.tagdata.olafilter;
-        };
-
-        vm.getPolygonMidPoint = function (polygon) {
-            var bound = new google.maps.LatLngBounds();
-            for (var idx in polygon) {
-                bound.extend(new google.maps.LatLng(polygon[idx].lat, polygon[idx].lng));
+                // vm.historyMap.map.setCenter(path[midPoint]);
+                // $log.log(path[0]);
+                vm.historyMap.map.setCenter({
+                    lat: path[0].lat(),
+                    lng: path[0].lng()
+                });
+                vm.historyMap.map.setZoom(11);
+                vm.historyMap.trace.setMap(vm.historyMap.map);
+                vm.historyMap.startMarker.setMap(vm.historyMap.map);
+                vm.historyMap.endMarker.setMap(vm.historyMap.map);
             }
-            return bound.getCenter();
+
+            vm.setData('getHistory', true);
+            $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path});
         };
 
-
-        vm.historyFenceInfoWindowShow = function () {
-            vm.historyMapObj.historyFenceInfoWindow.show = true;
-        };
-
-        vm.historyFenceInfoWindowClose = function () {
-            vm.historyMapObj.historyFenceInfoWindow.show = false;
-        };
-
-        vm.resetPlayerControls = function(){
-            vm.playerControls.slider = 0;
-            vm.playerControls.animationCount = 0;
-            // vm.playerControls.ffRate = 1;
-        };
-
-        vm.getDefaultTime = function(){
+        vm.getDefaultTime = function () {
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
-            var startTime = moment().subtract(24, 'hour').format(dateFormat);
-            var endTime = moment().format(dateFormat);
+            // setting time from 6:00 AM to 7:00 PM
+
+            var startTimeHour = 6;
+            var endTimeHour = 19;
+            if (moment().unix() - moment().hours(startTimeHour).unix() < 0) {
+                startTimeHour -= 24;
+                endTimeHour -= 24;
+            }
+
+            var startTime = moment().hours(startTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
+            var endTime = moment().hours(endTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
 
             return {
                 startTime: startTime,
@@ -192,31 +300,77 @@
             }
         };
 
-        vm.historyMapClickEvent = function(){
-            vm.historyFenceInfoWindowClose();
+        var MILLISEC = 1000;
+        var hrs24 = 86400 * MILLISEC;
+        var week = hrs24 * 7;
+        var timeLimit = week;
+
+
+        vm.traceControls = {
+            interval: 30000, // 30 seconds
+            timeline: [],
+            expandedGraphs : true,
+            playing: false,
+            SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
+            speed: 4, // normal
+            current: 0,
+            togglePlay: function () {
+                vm.traceControls.isPointer();
+                if (vm.traceControls.playing) {
+                    vm.traceControls.stopMotion();
+                } else {
+                    vm.traceControls.setPointerTransition(true);
+                    vm.traceControls.startMotion()
+                }
+            },
+            stepForward: function () {
+                if (vm.traceControls.current < vm.traceControls.timeline.length - 1) {
+                    vm.traceControls.current++;
+                    vm.traceControls.setPointerTransition(false);
+                    vm.traceControls.moveTimeline();
+                }
+            },
+            stepBackward: function () {
+                if (vm.traceControls.current > 0) {
+                    vm.traceControls.current--;
+                    vm.traceControls.setPointerTransition(false);
+                    vm.traceControls.moveTimeline();
+                }
+            },
+            incrementSpeed: function () {
+                if (vm.traceControls.speed < vm.traceControls.SPEEDS.length - 1) {
+                    vm.traceControls.speed++;
+                    if (vm.traceControls.playing) {
+                        vm.traceControls.startMotion();
+                    }
+                    vm.traceControls.setPointerTransition(true);
+                }
+            },
+            decrementSpeed: function () {
+                if (vm.traceControls.speed > 0) {
+                    vm.traceControls.speed--;
+                    if (vm.traceControls.playing) {
+                        vm.traceControls.startMotion();
+                    }
+                    vm.traceControls.setPointerTransition(true);
+                }
+            },
+            engine: {}
         };
-        vm.init = function(){
-
-            var defaultTime = vm.getDefaultTime ();
-
-            vm.historyMapObj.startTime = defaultTime.startTime;
-            vm.historyMapObj.endTime = defaultTime.endTime;
-
-            vm.geoFenceReports.startTime  = defaultTime.startTime;
-            vm.geoFenceReports.endTime  = defaultTime.endTime;
-
-            vm.historyMapObj.historyMap.zoom = mapService.getZoom();
-            vm.historyMapObj.historyMap.center = mapService.getCenter();
 
 
-            if ( !vm.historyMapObj.dashboardMapObj.inMarkers.length ) {
-                vm.historyMapObj.dashboardMapObj.inMarkers = mapService.inMap.markers.inMarkers;
-            }
+        vm.init = function () {
+            var defaultTime = vm.getDefaultTime();
+            vm.historyMap.startTime = defaultTime.startTime;
+            vm.historyMap.endTime = defaultTime.endTime;
+
+            vm.geoFenceReports.startTime = defaultTime.startTime;
+            vm.geoFenceReports.endTime = defaultTime.endTime;
         };
 
         vm.init();
+
     }
 
-
-
 })();
+

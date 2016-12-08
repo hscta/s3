@@ -5,8 +5,8 @@
     .module('uiplatform', ['ngAnimate', 'ngCookies', 'ngSanitize',
       'ngMessages', 'ngAria', 'ngResource',  'ngMaterial', 'ui.bootstrap',
       'ui.router', 'ui.tree', 'toastr', 'google.places', 'uiGmapgoogle-maps',
-        'material.components.expansionPanels', 'ui.tree-filter', 'angular-carousel',
-        'angular-bind-html-compile', 'ct.ui.router.extras','datatables'
+        'material.components.expansionPanels', 'ui.tree-filter',
+        'angular-bind-html-compile', 'ct.ui.router.extras','datatables', 'nvd3'
     ]);
 
 

@@ -14,10 +14,6 @@
         overflow: hidden;
     }
 
-    /*.input-fields {*/
-    /*margin-top: -5px;*/
-    /*}*/
-
     .error-msg {
         color: #f00;
         font-size: 12px;
@@ -30,7 +26,10 @@
 
     .play-pause-btns {
         background: #d1e934 !important;
+        color:#000;
     }
+
+    .play-pause-btns i { color: #000 !important;}
 
     .container-margin{margin-bottom: 0; padding:0; height:31px}
 
@@ -44,7 +43,6 @@
         display: inline-block;
         font-size: 16px;
         margin: 4px 2px;
-        /* border-radius: 100%; */
         width: 10px;
         box-shadow: 1px 1px 8px 0px #FFF;
         height: 10px;
@@ -74,13 +72,16 @@
     }
 
     .md-button.md-fab.md-mini{
-        line-height:37px;
+        /*line-height:37px;*/
         width:34px;
         height:36px;
     }
 
     .icon-font {
-        font-size: 19px;
+        font-size: 20px;
+        left: -1px;
+        position: relative;
+        top: 2px;
     }
 
     .errorMsg {
@@ -97,7 +98,7 @@
         <table>
             <tr>
                 <td><strong>End Time: </strong></td>
-                <td>{{parameter.data.gpstime | date : 'dd MMM yyyy - h:mm:ss a'}}</td>
+                <td>{{parameter.data.gpstime | date : 'd MMM, h:mm a'}}</td>
             </tr>
             <tr>
                 <td style="padding-right:5px;"><strong>Odometer: </strong></td>
@@ -114,21 +115,23 @@
         </table>
     </div>
 </script>
-
 <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
-    <div class="ltb_item" ng-if="item.historymap" ng-repeat="item in vm.leftTB"
-         ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
-        <div class="ltbi_button" ng-click="vm.buttonClick(item.data)"
-             ng-if="(item.type == 'button' || item.type == 'toggleButton')"
-             ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent }">
-            <div class="ltbi_icon">
+    <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-mouseenter="item.activeInt = 1"
+         ng-mouseleave="item.activeInt = 0"
+         ng-class="{'ltb_item-line':item.type == 'line', 'active': vm.fencesActive()}"
+         ng-if="item.historymap">
+        <div class="ltbi_button" ng-click="vm.buttonClick(item)"
+             ng-if="item.type == 'button' || item.type == 'toggleButton'"
+             ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent,'hasChildren':item.children }">
+            <div class="ltbi_icon" ng-if="item.hasOwnProperty('icon')">
                 <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                 <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
-                <img ng-if="item.iconType == 'png'" src="{{item.icon}}">
+                <img ng-if="item.iconType == 'png' && item.data.active" ng-src="{{item.icon}}.active.png">
+                <img ng-if="item.iconType == 'png' && !item.data.active" ng-src="{{item.icon}}.png">
                 <i ng-if="item.iconType == 'png'"
-                   style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"></i>
+                   style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
             </div>
-            <div class="ltbi_name">
+            <div class="ltbi_name" ng-if="item.name">
                 {{item.name}}
                 <span>{{item.description}}</span>
             </div>
@@ -139,148 +142,167 @@
                 <input type="text" ng-model="color">
             </md-input-container>
         </div>
+        <!--Child Buttons-->
+        <div class="ltbi_loc" ng-init="item.activeInt = 0" ng-if="item.children"
+             style="width: {{((item.children.length * 44) + 40 ) * item.activeInt }}px">
+            <div ng-repeat="child in item.children" class="ltbil_item" ng-click="vm.childClick(child,item.childType )"
+                 ng-class="{'active':child.id == vm.currentLocation}" ng-if="item.childType == 'location'">{{child.notation}}
+            </div>
+
+
+            <div class="ltbil_item childButton" ng-click="vm.buttonClick(child)"
+                 ng-if="item.childType == 'button'"  ng-repeat="child in item.children"
+                 ng-class="{'active':child.data.active && child.type == 'toggleButton','independ':child.data.independent }">
+                <div class="ltbi_icon" ng-if="child.hasOwnProperty('icon')">
+                    <i class="fa {{child.icon}}" ng-if="child.iconType == 'fa'" aria-hidden="true"></i>
+                    <i ng-if="child.iconType == 'md'" class="material-icons">{{child.icon}}</i>
+                    <img ng-if="child.iconType == 'png' && !child.data.active" ng-src="{{child.icon}}.png">
+                    <img ng-if="child.iconType == 'png' && child.data.active" ng-src="{{child.icon}}.active.png">
+                    <i ng-if="child.iconType == 'png'"
+                       style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                </div>
+                <div class="ltbi_name" ng-if="child.name">
+                    {{child.name}}
+                    <!--<span>{{child.description}}</span>-->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+
 <div style="height: 100%;">
-    <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
+   <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
-
-            <md-input-container class="container-margin"  ng-show="vm.multiSelect">
+            <md-input-container class="container-margin" >
                 <label>Vehicle No</label>
                 <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                <md-select ng-model="vm.historyObj.deviceid" ng-change="onVehicleSelect()">
+                <md-select ng-model="vm.historyMap.selectedVehicle"
+                           ng-model-options="{trackBy: '$value.rtgps.deviceid'}">
 
-                    <md-option
-                        ng-repeat="vehicle in vm.historyObj.dashboardMapObj.inMarkers | filter:vehicle.visible='true' | orderBy:'vehicleno'"
-                        ng-value="vehicle.deviceid">
-                        {{vehicle.vehicleno}}
+                    <md-option ng-repeat="(key, vehicle) in vm.historyMap.vehiclesByPath"
+                               ng-value="vm.historyMap.vehiclesByPath[key]"
+                               ng-if="vm.historyMap.vehiclesByPath[key].rtgps.meta.onroad">
+                            {{vm.historyMap.vehiclesByPath[key].rtgps.vehicleno}}
                     </md-option>
                 </md-select>
             </md-input-container>
-
-            <!--<md-input-container class="container-margin"  ng-show="!vm.multiSelect">-->
-            <!--<label>Vehicle No</label>-->
-            <!--<input type="text" ng-model="vm.historyObj.vehicleNumber">-->
-            <!--</md-input-container>-->
-
             <md-input-container class="container-margin">
                 <label>Start Time</label>
-                <input type="text" id="start_time" ng-model="vm.historyObj.startTime">
+                <input type="text" id="start_time" ng-model="vm.historyMap.startTime">
             </md-input-container>
 
             <md-input-container class="container-margin">
                 <label>End Time</label>
-                <input type="text" id="end_time" ng-model="vm.historyObj.endTime">
+                <input type="text" id="end_time" ng-model="vm.historyMap.endTime">
             </md-input-container>
-
-            <!--<a class="btn-flat" ng-click="getHistory()">Get History</a>-->
-            <md-button class="md-accent" ng-click="getHistory()">Get History</md-button>
+            <md-button class="md-accent" ng-click="vm.getHistory()">Get History</md-button>
         </div>
         <div layout="row" layout-align="end start">
         </div>
     </div>
 
-    <md-dialog-content class="map-dialog-content">
+    <md-dialog-content class="map-dialog-content" ng-class="{'expandedGraphs':vm.traceControls.expandedGraphs}">
         <div class="md-dialog-content historyMap map-dialog history-dialog">
-            <ui-gmap-google-map center='vm.historyObj.historyMap.center'
-                                zoom='vm.historyObj.historyMap.zoom'
-                                options="vm.historyObj.historyMap.mapOptions"
-                                bounds="vm.historyObj.historyMap.bounds"
-                                events="vm.historyObj.historyMapEvents"
-                                control="vm.historyObj.historyMap.mapControl">
 
-                <ui-gmap-map-control
-                    template="app/components/landingpage/dashboard/map/history-map-control.html"
-                    controller="InnerMapController"
-                    position="BOTTOM_CENTER"></ui-gmap-map-control>
-                </ui-gmap-map-control>
+            <div id="history_map" style="width:100%;height:500px"></div>
 
-                <ui-gmap-map-control
-                    position="CENTER"><span ng-if="errorMsg" class="errorMsg">{{errorMsg}}</span></ui-gmap-map-control>
-                </ui-gmap-map-control>
+            <div class="tc_graphs">
+                <div class="tc_graph-container">
+                    <!--<div class="tcg_item" ng-repeat="chart in vm.tcGraphs.charts">-->
+                        <!--<nvd3 options="vm.tcGraphs.options" data="chart.data"></nvd3>-->
+                    <!--</div>-->
 
-                <ui-gmap-marker
-                    idkey="'self'"
-                    coords="vm.historyObj.dashboardMapObj.clickedMarker"
-                    click="vm.historyObj.dashboardMapObj.clickedMarker.click"
-                    options="vm.historyObj.dashboardMapObj.clickedMarker.options"
-                    events="vm.historyObj.dashboardMapObj.clickedMarker.events"
-                    control="vm.historyObj.dashboardMapObj.clickedMarker.control">
-                </ui-gmap-marker>
+                    <div class="tcg_item">
+                        <svg id="visualisation" width="1000" height="500"></svg>
+                    </div>
+                </div>
+            </div>
 
-                <ui-gmap-marker
-                    idkey="'self'"
-                    coords="vm.historyObj.endMarker"
-                    click="vm.historyObj.endMarker.click"
-                    options="vm.historyObj.endMarker.options"
-                    events="vm.historyObj.endMarker.events"
-                    control="vm.historyObj.endMarker.control">
-                </ui-gmap-marker>
-
-                <ui-gmap-polyline
-                    path="vm.historyObj.trace.path"
-                    stroke="vm.historyObj.trace.stroke"
-                    clickable="vm.historyObj.trace.clickable"
-                    geodesic="vm.historyObj.trace.geodesic"
-                    visible="vm.historyObj.trace.visible"
-                    fit="vm.historyObj.trace.fit"
-                    static="vm.historyObj.trace.static"
-                    events="vm.historyObj.trace.events"
-                    icons="vm.historyObj.trace.icons">
-                </ui-gmap-polyline>
-
-
-                <ui-gmap-circle ng-repeat="gcircle in vm.circles track by gcircle.control.info.assetid"
-                                center="gcircle.center" radius="gcircle.radius"
-                                stroke="gcircle.stroke" fill="gcircle.fill"
-                                visible="gcircle.visible" geodesic="gcircle.geodesic"
-                                editable="gcircle.editable" draggable="gcircle.draggable"
-                                clickable="gcircle.clickable" control="gcircle.control"
-                                events="vm.historyObj.historyCircleEvents">
-                </ui-gmap-circle>
-
-                <ui-gmap-polygon ng-repeat="gpolygon in vm.polygons track by gpolygon.control.info.assetid"
-                                 path="gpolygon.path"
-                                 stroke="gpolygon.stroke" fill="gpolygon.fill"  fit="true"
-                                 visible="gpolygon.visible" geodesic="gpolygon.geodesic"
-                                 editable="gpolygon.editable" draggable="gpolygon.draggable"
-                                 clickable="gpolygon.clickable" control="gpolygon.control"
-                                 events="vm.historyObj.historyPolygonEvents" static="true">
-
-                </ui-gmap-polygon>
-
-                <!--<ui-gmap-window show="historyInfoWindow.show" coords="historyInfoWindow.coords"-->
-                <!--control="historyInfoWindow.control"-->
-                <!--options="historyInfoWindow.options" closeClick="historyInfoWindowClose()"-->
-                <!--templateUrl="'historyInfoWindow.html'"-->
-                <!--templateParameter="historyInfoWindow"-->
-                <!--isIconVisibleOnClick="true">-->
-                <!--</ui-gmap-window>-->
-
-                <ui-gmap-window show="vm.historyObj.historyFenceInfoWindow.show" coords="vm.historyObj.historyFenceObj"
-                                control="historyFenceInfoWindow.control" optimized="false"
-                                options="historyFenceInfoWindow.options"
-                                isIconVisibleOnClick="true">
-
+            <div class="history-err" ng-show="!vm.gotHistory">{{vm.historyMap.errorMsg}}</div>
+            <div class="traceControls" ng-class="{'active':vm.gotHistory}">
+                <div class="tc_controls">
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()"
+                       ng-class="{'active':vm.traceControls.playing}">
+                        <i class="fa fa-play" ng-show="!vm.traceControls.playing"></i>
+                        <i class="fa fa-pause" ng-show="vm.traceControls.playing"></i>
+                    </a>
+                    <!--<a class="waves-effect waves-light btn raised">a</a>-->
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.stepBackward()" >
+                        <i class="fa fa-minus" ></i>
+                    </a>
+                    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.stepForward()" >
+                        <i class="fa fa-plus" ></i>
+                    </a>
+                    <div class="tc_speedButton" >
+                        <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.decrementSpeed()">
+                            <i class="fa fa-backward" ></i>
+                        </a>
+                        <div class="tc_speedDisplay">
+                            <span ng-show="vm.traceControls.speed == 0">1/16x</span>
+                            <span ng-show="vm.traceControls.speed == 1">1/8x</span>
+                            <span ng-show="vm.traceControls.speed == 2">1/4x</span>
+                            <span ng-show="vm.traceControls.speed == 3">1/2x</span>
+                            <span ng-show="vm.traceControls.speed == 4">1x</span>
+                            <span ng-show="vm.traceControls.speed == 5">2x</span>
+                            <span ng-show="vm.traceControls.speed == 6">4x</span>
+                            <span ng-show="vm.traceControls.speed == 7">8x</span>
+                            <span ng-show="vm.traceControls.speed == 8">16x</span>
+                        </div>
+                        <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.incrementSpeed()">
+                            <i class="fa fa-forward" ></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="tc_panel">
+                    <div class="tc_carname">{{vm.traceControls.selectedVehicle.rtgps.meta.cartype}}</div>
+                    <div class="tc_pointer" ng-class="{'active':vm.traceControls.playing}"></div>
+                </div>
+                <div class="tc_info" >
+                    <a class="tc_button tcb_abs waves-effect waves-light btn raised" ng-click="vm.toggleExpandedGraphs()">
+                        <i class="fa fa-chevron-up" ></i>
+                    </a>
                     <table>
-                        <tbody>
-                        <tr>
-                            <th>Name: </th>
-                            <td>{{vm.historyObj.historyFenceObj.name}}</td>
+                        <tr class="time">
+                            <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
                         </tr>
                         <tr>
-                            <th>Type:   </th>
-                            <td>{{vm.historyObj.historyFenceObj.other}}</td>
+                            <td>Ignition</td>
+                            <td style="width:50%">{{ vm.getCurrentPos().ignstatus ? 'On' : 'Off' }}</td>
                         </tr>
-                        </tbody>
+                        <tr>
+                            <td>Speed</td>
+                            <td>{{vm.getCurrentPos().speed}} <span>kmph</span></td>
+                        </tr>
+                        <tr>
+                            <td>Odometer</td>
+                            <td>{{vm.getCurrentPos().odometer}} <span>km</span></td>
+                        </tr>
                     </table>
-                </ui-gmap-window>
-
-            </ui-gmap-google-map>
+                </div>
+            </div>
         </div>
 </div>
+
+
+<div id="history_fence_infowindow" layout="row" ng-non-bindable flex>
+    <div layout="column" id="historyFenceWindow" ng-cloak>
+        <table>
+            <tbody>
+            <tr>
+                <th>Name:</th>
+                <td>{{vm.selectedFenceObj.info.name}}</td>
+            </tr>
+            <tr>
+                <th>Type:</th>
+                <td>{{vm.selectedFenceObj.info.tagdata.olafilter}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <!--</md-tab-body>-->
 
 <script>
