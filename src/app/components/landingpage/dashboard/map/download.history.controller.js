@@ -12,8 +12,9 @@
         var vm = this;
         dialogService.setTab(4);
 
-        userService.getMyGroupsMap({})
+        userService.getMyAssignedGroupsMap({})
             .then(function (data) {
+                console.log(data);
                 vm.groups = sortArray(data);
                 vm.selectedGroup = vm.groups[0];
             });
