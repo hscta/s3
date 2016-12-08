@@ -9,8 +9,8 @@
         .module('uiplatform')
         .controller('GeofenceViewController', mapLeftToolBar);
 
-    function mapLeftToolBar($scope, $log, $timeout, $q, mapService,
-                            geofenceViewService, dialogService, intellicarAPI) {
+    function mapLeftToolBar($scope, $log, $timeout, $q, mapService, historyService,
+                            $state, geofenceViewService, dialogService) {
 
         var vm = this;
 
@@ -27,7 +27,6 @@
         };
 
         vm.loc = mapService.loc;
-
         vm.currentLocation = mapService.getCurrentLocation().id; // Have to set it Dynamically
 
         vm.setInMarkerLocation = function (data) {
@@ -44,44 +43,26 @@
                 'iconType': 'fa',
                 'icon': 'fa-bar-chart',
                 'type': 'button',
-                'historymap': true,
+                'historymap': false,
                 'data': {
                     'type': 'stateChange', 'independent': true, 'state': 'home.geofence', active: true
                 }
             },
-            {'type': 'line', 'historymap': true},
+            {'type': 'line', 'historymap': false},
             {
                 'id': 'setLocation',
                 'name': false,
                 'iconType': 'fa',
                 'icon': 'fa-map-marker',
                 'type': 'button',
-                'historymap': false,
+                'historymap': true,
                 'data': {
                     'type': 'function', 'independent': true, 'function': function (active) {
 
                     }
                 },
-                'childType':'location',
-                'children': [
-                    {
-                        id: vm.loc.BANGALORE,
-                        notation: 'BLR',
-                        latlng: {latitude: 12.967995, longitude: 77.597953}
-                    }, {
-                        id: vm.loc.HYDERABAD,
-                        notation: 'HYD',
-                        latlng: {latitude: 17.384125, longitude: 78.479447}
-                    }, {
-                        id: vm.loc.DELHI,
-                        notation: 'DEL',
-                        latlng: {latitude: 28.614132, longitude: 77.215449}
-                    }, {
-                        id: vm.loc.MUMBAI,
-                        notation: 'MUM',
-                        latlng: {latitude: 19.195549, longitude: 72.936381}
-                    }
-                ]
+                'childType': 'location',
+                'children': mapService.locations
             },
             // {'type': 'line', 'historymap': false},
 
@@ -92,17 +73,21 @@
                 'iconType': 'png',
                 'icon': 'assets/images/icon/fence',
                 'type': 'button',
-                'historymap': false,
+                'historymap': true,
                 'data': {
                     'type': 'function', 'independent': true, 'function': function (active) {
 
                     }
                 },
-                'childType':'button',
+                'childType': 'button',
                 'children': [
                     {
                         'id': 'setGeoFilter.showAll',
-                        'name': 'Show All', 'iconType': 'fa', 'icon': 'fa-eye', 'type': 'toggleButton', 'historymap': true,
+                        'name': 'Show All',
+                        'iconType': 'fa',
+                        'icon': 'fa-eye',
+                        'type': 'toggleButton',
+                        'historymap': true,
                         'data': {
                             active: true,
                             'type': 'function', 'function': function (active) {
@@ -154,7 +139,11 @@
                     },
                     {
                         'id': 'setGeoFilter.cityLimits',
-                        'name': 'City Limits', 'iconType': 'fa', 'icon': 'fa-road', 'type': 'toggleButton', 'historymap': true,
+                        'name': 'City Limits',
+                        'iconType': 'fa',
+                        'icon': 'fa-road',
+                        'type': 'toggleButton',
+                        'historymap': true,
                         'data': {
                             active: false,
                             'type': 'function', 'function': function (active) {
@@ -163,15 +152,20 @@
                         }
                     },
                     {
-                        'id': 'setGeoFilter.getGeo', 'description': 'Use only when new fences are created',
-                        'name': 'Refresh Geofences', 'iconType': 'fa', 'icon': 'fa-globe', 'type': 'button', 'historymap': true,
+                        'id': 'setGeoFilter.getGeo',
+                        'description': 'Use only when new fences are created',
+                        'name': 'Refresh Geofences',
+                        'iconType': 'fa',
+                        'icon': 'fa-globe',
+                        'type': 'button',
+                        'historymap': true,
                         'data': {
                             active: true,
                             'type': 'function', 'function': function () {
-                                geofenceViewService.getMyFences();
+                                //geofenceViewService.getMyFences();
                             }
                         }
-                    },
+                    }
                 ]
             },
 
@@ -187,7 +181,7 @@
 
                     }
                 },
-                'childType':'button',
+                'childType': 'button',
                 'children': [
                     {
                         'id': 'batteryFilter.devBattery',
@@ -227,7 +221,7 @@
                                 vm.checkGeoFilters.set('batteryFilter.noComm', active);
                             }
                         }
-                    },
+                    }
                 ]
             },
 
@@ -247,7 +241,7 @@
                     }
                 }
             },
-            {'type': 'line', 'historymap': false},
+            {'type': 'line', 'historymap': false}
         ];
 
         vm.fencesActive = function () {
@@ -256,18 +250,24 @@
         };
 
 
-        vm.childClick = function (data,type) {
-            if(type == 'location'){
+        vm.childClick = function (data, type) {
+            if (type == 'location') {
                 vm.currentLocation = data.id;
-                mapService.setInMapLocation(data.latlng);
-            }else if(type == 'button'){
+                if ($state.current.name == 'home.history')
+                    historyService.setInMapLocation(data.latlng);
+                else
+                    mapService.setInMapLocation(data.latlng);
+            } else if (type == 'button') {
                 data();
             }
         };
 
 
-
         vm.init = function () {
+            //geofenceViewService.getMyFences();
+
+            geofenceViewService.getMyFenceInfos();
+
             vm.geoFilters = geofenceViewService.getData('geoFilters');
             // $log.log(vm.geoFilters);
             for (var key in vm.geoFilters) {
@@ -309,7 +309,7 @@
         function setActive(id, active) {
             var rid = id;
             id = id.split('.');
-            if(id.length <= 1){
+            if (id.length <= 1) {
                 id = id[0];
                 for (var key in vm.leftTB) {
                     if (vm.leftTB.hasOwnProperty(key)) {
@@ -319,9 +319,9 @@
                         }
                     }
                 }
-            }else{
-                for(var idx=0; idx < vm.leftTB.length; idx++){
-                    if(vm.leftTB[idx].id==id[0]){
+            } else {
+                for (var idx = 0; idx < vm.leftTB.length; idx++) {
+                    if (vm.leftTB[idx].id == id[0]) {
                         for (var key in vm.leftTB[idx].children) {
                             if (vm.leftTB[idx].children.hasOwnProperty(key)) {
                                 if (vm.leftTB[idx].children[key].id == rid) {
@@ -336,15 +336,16 @@
         }
 
         function addFilter(filter, active) {
-            filter = filter.split('.')
+            filter = filter.split('.');
             filter = filter[filter.length - 1];
             vm.geoFilters[filter] = active;
             // console.log(filter +' : '+vm.geoFilters[filter]);
         }
 
         function setFilter(filterType) {
-            filterType = filterType.split('.')
+            filterType = filterType.split('.');
             filterType = filterType[filterType.length - 1];
+            // $log.log(filterType);
             geofenceViewService.applyFilters(filterType);
         }
 
@@ -354,6 +355,7 @@
 
 
         vm.buttonClick = function (item) {
+            // $log.log('buttonClick');
             if (item.data.type == 'stateChange') {
                 dialogService.show(item.data.state);
             } else if (item.data.type == 'function') {

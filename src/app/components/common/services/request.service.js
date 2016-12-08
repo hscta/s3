@@ -7,9 +7,10 @@
 
     angular
         .module('uiplatform')
+        .constant('GEOCODE_API_HOST', 'http://maps.intellicar.in:8082')
         .service('requestService', requestService);
 
-    function requestService($log, $http, $q, API_HOST, authService) {
+    function requestService($log, $http, $q, API_HOST, GEOCODE_API_HOST, authService) {
         var vm = this;
         var authListeners = [];
         var errorStatusCodes = [400, 401, 403];
@@ -66,6 +67,28 @@
             }
         };
 
+        vm.fireGeoCode = function(api, body, auth){
+            api = GEOCODE_API_HOST + api;
+            if(body === null)
+                body = {};
+
+            if(auth == null || auth)
+                auth = true;
+            else
+                auth = false;
+
+            if(!auth)
+                return $http.post(api, body);
+
+            if(authService.isAuthed() || api.indexOf('gettoken') > 0) {
+                return $http.post(api, body)
+                    .catch(vm.handleFailure)
+            } else {
+                $log.log("user not authenticated");
+                vm.checkLogin();
+                return $q.reject({'auth': false});
+            }
+        };
 
         vm.handleFailure = function(resp) {
             //$log.log("API returned error");

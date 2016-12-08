@@ -8,7 +8,7 @@
         .controller('HistoryController', HistoryController)
         .controller('HistoryTableController', HistoryTableController);
 
-    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log,$timeout,
+    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log,
                                 dialogService, geofenceViewService, $compile) {
 
         var vm = this;
@@ -303,9 +303,6 @@
             var currentPathIdx = 0;
 
             while (currentTime < last.gpstime ) {
-                if(path[currentPathIdx].speed < 2){
-                    path[currentPathIdx].speed = 0;
-                }
                 if (path[currentPathIdx].gpstime < currentTime) {
                     if(currentPathIdx < path.length) {
                         path[currentPathIdx].gpstime = currentTime;
@@ -377,7 +374,6 @@
             vm.gotHistory = historyService.getData('getHistory');
             setMapHeight();
             generateTimeline(data.path);
-            generateExpandedGraph(data.path);
             drawTimeline();
         }
 
@@ -431,207 +427,21 @@
                     historyFenceInfowindow.setContent(document.getElementById("history_fence_infowindow").innerHTML);
                     historyFenceInfowindow.open(vm.historyMap.map, this);
                 });
+
                 circles[idx].googleObject.setMap(vm.historyMap.map);
             }
         };
-
-        vm.toggleExpandedGraphs = function () {
-            if(!vm.traceControls.expandedGraphs){
-                vm.traceControls.expandedGraphs = true;
-            }else{
-                vm.traceControls.expandedGraphs = false;
-            }
-            $timeout(function () {
-                moveMapWithMarker(vm.historyMap.startMarker);
-            },1000);
-        }
-
-
-        function generateExpandedGraph() {
-            for(var idx in vm.tcGraphs.charts){
-                parseToGraphData(vm.tcGraphs.charts[idx], vm.traceControls.timeline);
-            }
-        }
-        function parseToGraphData(object, data) {
-            var graphs = object.graphs;
-            var genGraphs = [];
-            var values;
-            for(var jdx in graphs){
-                graphs[jdx].originalKey = graphs[jdx].key;
-                values = [];
-                for(var idx in data){
-                    values.push({
-                        x:data[idx].gpstime,
-                        y:data[idx][graphs[jdx].item]
-                    })
-                }
-                graphs[jdx].values = values;
-                genGraphs.push(graphs[jdx]);
-            }
-            object.data = genGraphs;
-        }
-
-
-
-
-
-
-        //
-        //
-        // var datas = [
-        //     {
-        //         color:"#e74c3c",
-        //         values : [[ "12", "2000"],["149", "2002"],["124","2004"],["300","2006"]["200","2008"],["106","2010"]]
-        //     },
-        //     {
-        //         color:"#e74c3c",
-        //         values : [[ "152", "2000"],["189", "2002"],["179","2004"],["199","2006"]["134","2008"],["176","2010"]]
-        //     }
-        // ]
-        //
-        //
-        // var d3graph1 = new d3Graph({
-        //     svg : "#visualisation",
-        //     width : 900,
-        //     height : 400,
-        //     data : datas,
-        // });
-        //
-        // d3graph1.draw();
-        //
-        // function d3Graph(settings) {
-        //     var d3g = this;
-        //     d3g.settings = settings;
-        //     if(!d3g.settings.margin){
-        //         d3g.settings.margin = {
-        //             top: 20,
-        //             right: 20,
-        //             bottom: 20,
-        //             left: 50
-        //         }
-        //     }
-        //     d3g.vis = d3.select(settings.svg);
-        //
-        //     d3g.draw = function () {
-        //
-        //         d3g.xScale = d3.scale.linear().range([d3g.settings.margin.left, d3g.settings.width - d3g.settings.margin.right]).domain([2000, 2010]);
-        //         d3g.yScale = d3.scale.linear().range([d3g.settings.height - d3g.settings.margin.top, d3g.settings.margin.bottom]).domain([134, 215]);
-        //
-        //         // Drawing axis
-        //         d3g.xAxis = d3.svg.axis()
-        //             .scale(d3g.xScale);
-        //
-        //         d3g.yAxis = d3.svg.axis()
-        //             .scale(d3g.yScale)
-        //             .orient("left");
-        //         // appending axis
-        //         d3g.vis.append("svg:g")
-        //             .attr("class","axis")
-        //             .attr("transform", "translate(0," + (d3g.settings.height - d3g.settings.margin.bottom) + ")")
-        //             .call(d3g.xAxis);
-        //         d3g.vis.append("svg:g")
-        //             .attr("class","axis")
-        //             .attr("transform", "translate(" + (d3g.settings.margin.left) + ",0)")
-        //             .call(d3g.yAxis);
-        //
-        //
-        //
-        //         d3g.lineGen = d3.svg.line()
-        //             .x(function(d) {
-        //                 return d3g.xScale(d[0]);
-        //             })
-        //             .y(function(d) {
-        //                 return d3g.yScale(d[1]);
-        //             })
-        //             .interpolate("basis"); // for smoothening the lines
-        //
-        //         for(var idx in d3g.settings.data){
-        //             d3g.vis.append('svg:path')
-        //                 .attr('d', d3g.lineGen(d3g.settings.data[idx].values))
-        //                 .attr('stroke', d3g.settings.data[idx].color )
-        //                 .attr('stroke-width', 1)
-        //                 .attr('fill', 'none');
-        //         }
-        //
-        //     }
-        // }
-        //
-        //
-        //
-
-
-
-
-
-
-
-        vm.tcGraphs  = {
-            options : {
-                chart: {
-                    type: 'multiChart',
-                    margin: {
-                        top: 30,
-                        right: 60,
-                        bottom: 50,
-                        left: 70
-                    },
-                    color: d3.scale.category10().range(),
-                    //useInteractiveGuideline: true,
-                    duration: 500,
-                    xAxis: {
-                        tickFormat: function (d) {
-                            return d3.time.format('%H:%M %b %d')(new Date(d))
-                        }
-                    },
-                    yAxis1: {
-                        tickFormat: function (d) {
-                            return d3.format(',.1f')(d);
-                        }
-                    },
-                    yAxis2: {
-                        tickFormat: function (d) {
-                            return d3.format(',.1f')(d);
-                        }
-                    }
-                },
-            },
-            charts : [
-                // {
-                //     data: [],
-                //     graphs: [{color: '#e74c3c', key: 'Speed', type: 'line', item: 'speed', yAxis: 1}],
-                // },
-                {
-                    data: [],
-                    graphs: [{color: '#3498db', key: 'Car battery', type: 'line', item: 'carbattery', yAxis: 1},
-                        {color: '#e74c3c', key: 'Dev battery', type: 'line', item: 'devbattery', yAxis: 2}],
-                }, {
-                    data: [],
-                    graphs: [{color: '#2ecc71', key: 'GPS Signal', type: 'line', item: 'numsat', yAxis: 1}],
-                },
-                // {
-                //     data: [],
-                //     graphs: [{color: '#e67e22', key: 'Something', type: 'line', item: 'speed', yAxis: 1}],
-                // },
-            ]
-        }
-
-
-
-
-
-
-
-
 
 
         vm.init = function () {
             loadMap();
             vm.gotHistory = historyService.getData('getHistory');
 
+
             if (vm.gotHistory) {
                 historyService.drawTrace();
+                console.log(vm.historyMap);
                 generateTimeline(vm.historyMap.traceObj);
-                generateExpandedGraph();
                 drawTimeline();
             } else {
                 if ($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)

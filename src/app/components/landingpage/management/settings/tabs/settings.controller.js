@@ -25,7 +25,7 @@
             //$log.log('stateChangeStart =================');
             //$log.log("from state = " + fromState.name);
             //$log.log("to state = " + toState.name);
-            $log.log(toParams); 
+            $log.log(toParams);
 
             var leafState = intellicarAPI.stateService.getStateTree(toState.name).leaf;
             if(leafState != intellicarAPI.appConstants.GROUP || ('tabClick' in toParams)) {
@@ -62,10 +62,11 @@
             $log.log(currentGroup);
             var stateParams = {
                 info: {
-                    pgrouppath: currentGroup.group.grouppath,
-                    assetpath: currentGroup.group.grouppath,
+                    pgrouppath: currentGroup.grouppath,
+                    assetpath: currentGroup.grouppath,
                     ui_asset_type: assetType,
-                    tabClick: true
+                    tabClick: true,
+                    permissions:[]
                 }
             };
             // $log.log(stateParams);

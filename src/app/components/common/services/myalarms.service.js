@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('myAlarmService', myAlarmService);
 
-    function myAlarmService($log, $q, requestService, helperService) {
+    function myAlarmService($log, $q, requestService) {
         var vm = this;
         $log.log("myAlarmService");
 

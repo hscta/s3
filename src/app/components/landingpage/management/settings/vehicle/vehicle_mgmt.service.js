@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('vehicleMgmtService', vehicleMgmtService);
 
-    function vehicleMgmtService($rootScope, $log, $q, $state, intellicarAPI, settingsService) {
+    function vehicleMgmtService($rootScope, $log, $q, intellicarAPI, settingsService) {
         var vm = this;
         vm.startupData = null;
         $log.log("vehicleMgmtService");
@@ -36,7 +36,6 @@
             // if(settingsService.getRequestedGroupPath(stateParams) === settingsService.getCurrentGroupPath())
             //     return vm.startupData;
 
-            settingsService.setCurrentGroup(stateParams);
             return intellicarAPI.groupService.getMyVehiclesMap(settingsService.getCurrentGroup())
                 .then(vm.handleGetMyVehicles, vm.handleGetMyVehiclesFailure);
         }

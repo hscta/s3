@@ -35,6 +35,8 @@
             // $log.log(vm.alarmsObj.filteredVehicles);
             for (var idx in vm.alarmsObj.filteredVehicles) {
                 if (vm.alarmsObj.filteredVehicles[idx].checked) {
+                    $log.log(vm.alarmsObj.filteredVehicles[idx]);
+
                     vehiclesids.push(vm.alarmsObj.filteredVehicles[idx].rtgps.deviceid);
                 }
             }

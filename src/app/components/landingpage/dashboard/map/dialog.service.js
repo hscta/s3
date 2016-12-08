@@ -2,14 +2,15 @@
     'use strict';
 
     angular.module('uiplatform')
-        .service('dialogService', dialogService);
+        .service('dialogService', dialogService)
+        .service('cpuService', cpuService);
 
     function dialogService($log, $state, $cookies) {
         $log.log("dialogService");
         var vm = this;
         vm.dialogShow = false;
 
-        var dialogStates = ['home.geofence', 'home.historyData', 'home.history', 'home.alarm'];
+        var dialogStates = ['home.geofence', 'home.historyData', 'home.history', 'home.alarm', 'home.downloadHistory'];
         // var testObject = {'myName':{'yo1':'yoyo'}};
         // $cookies.put('hell',JSON.stringify(testObject));
 
@@ -82,6 +83,47 @@
         };
 
         vm.init();
+
+    }
+
+
+    function cpuService() {
+
+        var vm = this;
+
+        vm.tracking = true;
+
+        vm.trackArray = [];
+
+        vm.track = function (id) {
+            if (vm.tracking) {
+                if (id in vm.trackArray) {
+                    if (vm.trackArray[id].end_time == 0) {
+                        // if the tracking is not ended
+                        vm.trackArray[id].end_time = getCurrentCpuTime();
+                        vm.trackArray[id].diff = vm.trackArray[id].end_time - vm.trackArray[id].start_time;
+                    } else {
+                        vm.trackArray[id] = getNewTrackObject(id);
+                    }
+                } else {
+                    vm.trackArray[id] = getNewTrackObject(id);
+                }
+            }
+            // console.log(vm.trackArray);
+        }
+
+        function getNewTrackObject(id) {
+            return {
+                id: id,
+                count: 0,
+                start_time: getCurrentCpuTime(),
+                end_time: 0
+            }
+        }
+
+        function getCurrentCpuTime() {
+            return performance.now();
+        }
 
     }
 

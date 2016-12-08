@@ -9,21 +9,29 @@
         .module('uiplatform')
         .controller('HeaderController', HeaderController);
 
-    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet, $log, $q, $state,
+    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet,
+                              $log, $q, $state, $stateParams,
                             $mdToast, $document, loginService, userprefService) {
 
         $log.log('HeaderController');
         var vm = this;
+
+        // $log.log($state.current);
+
+        vm.currState = $state.current.name;
+
+        vm.isManagementTab = vm.currState.indexOf('home.management');
         vm.menuItems = [ ];
         vm.selectItem = selectItem;
         vm.toggleItemsList = toggleItemsList;
         vm.showActions = showActions;
         //vm.title = $state.current.data.title;
         vm.showSimpleToast = showSimpleToast;
-            vm.toggleLeftnav = toggleLeftnav;
-        $rootScope.left_nav_toggle = false;
+            // vm.toggleLeftnav = toggleLeftnav;
+        // $rootScope.left_nav_toggle = true;
         // $rootScope.right_nav_toggle = true;
-        vm.right_nav_toggle = true;
+        vm.right_nav_toggle = false;
+        vm.left_nav_toggle = true;
 
         vm.userpref = function() {
             return userprefService.userpref;
@@ -44,15 +52,15 @@
         };
 
         vm.toggleRightSidebar = function (){
-            // $rootScope.right_nav_toggle = !$rootScope.right_nav_toggle;
-
             vm.right_nav_toggle = !vm.right_nav_toggle;
             $rootScope.$broadcast('toggleRightSidebar', {'right_nav_toggle': vm.right_nav_toggle});
         };
 
 
-        function toggleLeftnav() {
-            //$rootScope.left_nav_toggle = !$rootScope.left_nav_toggle;
+        vm.toggleLeftSidebar = function() {
+            $log.log('left nav header');
+            vm.left_nav_toggle = !vm.left_nav_toggle;
+            $rootScope.$broadcast('toggleLeftSidebar', {'left_nav_toggle': vm.left_nav_toggle});
         }
 
         function toggleItemsList() {

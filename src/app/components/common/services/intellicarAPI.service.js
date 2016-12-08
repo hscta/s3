@@ -13,13 +13,14 @@
                                            stateService, treeDataService,
                                            userService, groupService,
                                            mqttService, schemaService,
-                                           reportService,
+                                           reportsService,
                                            anchorSmoothScrollService,
                                            geofenceService,
                                            fenceReportService,
                                            vehicleAPIService,
-                                           myAlarmService
-
+                                           geocodeService,
+                                           permissionService, roleService,
+                                           importFileservice, myAlarmService
                                            ) {
             var vm = this;
             $log.log("intellicarAPI");
@@ -36,11 +37,15 @@
                 appConstants : appConstants,
                 mqttService : mqttService,
                 schemaService : schemaService,
-                reportService : reportService,
+                reportsService : reportsService,
                 geofenceService : geofenceService,
                 fenceReportService: fenceReportService,
                 vehicleAPIService: vehicleAPIService,
-                myAlarmService: myAlarmService
+                geocodeService:geocodeService,
+                permissionService:permissionService,
+                roleService:roleService,
+                importFileservice:importFileservice,
+                myAlarmService : myAlarmService
             }
         });
 })();

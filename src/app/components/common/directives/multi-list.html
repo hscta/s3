@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<div class="grp-popup" ng-if="popup.visible">
+    <div class="grp-popup-backdrop" ng-click="popup.visible = false"></div>
+    <div class="grp-popup-inner" style="
+        width:{{popup.options.width}}%;
+        height:{{popup.options.height}}%;
+        left:{{ ( 100 - popup.options.width ) / 2 }}%;
+        top:{{ ( 100 - popup.options.height ) / 2 }}%;">
+        <div class="gp-head">
+            <span>{{popup.heading}}</span>
+            <a class="waves-effect waves-light btn ng-isolate-scope gph-close" ng-click="popup.visible = false">x</a>
+        </div>
+        <div class="gp-content">
+            <span class="spinner -blue -big" ng-show="!popup.datas || popup.datas.length <= 0" ng-class="{'opacity_0':popup.datas.length > 0}"></span>
+            <div class="gpc-half" style="width:{{100 / popup.datas.length }}%" ng-repeat="obj in popup.datas"
+                 ng-init="obj.id = $index">
+                <div class="gpc-wrapper">
+                    <nav class="gp-head nav-wrapper">
+                        <span>{{obj.heading}}</span><span class="gph-smallHead"> </span>
+                        <i class="inputAfter fa fa-search"></i>
+                        <input type="text" placeholder="Search" ng-model="obj.FilterStr"/>
+                    </nav>
+                    <div class="gp-content coolbar">
+                        <div class="gpc-item" ng-repeat="item in obj.list | filter : obj.FilterStr" >
+                            <span>{{item.name}}</span>
+                            <div class="gpc-right-btn" style="background:{{button.color}}"
+                                 ng-repeat="button in obj.buttons"
+                                 ng-click="button.onClick({item:item, object:obj, data:popup.datas}, defaultClick)"
+                                 ng-class="{'inactive':item.processing}">
+                                <i ng-if="button.iconType =='fa' && !item.processing" class="fa fa-{{button.icon}}"
+                                   style="color:{{button.fColor}}; "></i>
+                                <i ng-if="button.iconType =='fa' && item.processing" class="fa fa-spin fa-gear"
+                                   style="color:{{button.fColor}}; "></i>
+                            </div>
+                        </div>
+                        <div ng-if="obj.list.length <= 0" class="gpc-noitem">No Items</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

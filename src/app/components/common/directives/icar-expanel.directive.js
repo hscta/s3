@@ -9,8 +9,8 @@
         .module('uiplatform')
         .directive('icarExpanel', icarExpanel);
 
-    function icarExpanel($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
-                         $stateParams) {
+    function icarExpanel($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup) {
+
         return {
             restrict: 'ACE',
             templateUrl: 'app/components/common/directives/icar-expanel.html',
@@ -20,7 +20,6 @@
             },
 
             link: function (scope) {
-                $log.log('sssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
                 scope.contentTemplate = "panel-content.html";
                 scope.headerTemplate = "panel-header.html";
                 scope.footerTemplate = "panel-footer.html";

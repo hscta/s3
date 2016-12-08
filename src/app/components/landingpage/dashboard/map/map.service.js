@@ -1,4 +1,8 @@
 /**
+ * Created by harshas on 23/11/16.
+ */
+
+/**
  * Created by smiddela on 20/08/16.
  */
 
@@ -9,80 +13,33 @@
         .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
                                          intellicarAPI, vehicleService, $mdDialog,
                                          dialogService) {
-            $log.log("mapService");
+            $log.log("newmapService");
             var vm = this;
             vm.listeners = {};
 
             vm.inMap = {
+                map: null,
                 mapOptions: {},
-                mapControl: {},
-                mapEvents: {
-                    click: function () {
-                        vm.mapClickEvent();
-                    },
-                    zoom_changed: function () {
-                        vm.changeMarkerIcon();
-                    }
-                },
-                infoWindow: {
-                    show: false,
-                    control: {},
-                    options: {
-                        maxWidth: 300,
-                        disableAutoPan: false,
-                        pixelOffset: {
-                            width: 0,
-                            height: -20
-                        }
-                    }
-                },
-                fenceInfoWindow: {
-                    show: false,
-                    control: {},
-                    options: {
-                        maxWidth: 300,
-                        disableAutoPan: false,
-                        pixelOffset: {
-                            width: 0,
-                            height: 0
-                        }
-                    }
-                },
                 markers: {
-                    inMarkers: [],
                     clickedMarker: {},
-                    markersEvents: {
-                        click: function (marker, eventName, model, args) {
-                            vm.setClickedMarker(model);
-                        }
-                    },
-                    clickedMarkerObj: {}
+                    markersByPath: {}
                 },
                 circles: [],
                 polygons: [],
-
-                circleEvents: {
-                    click: function (circle, eventName, model, args) {
-                        //$log.log('Circle clicked');
-                        vm.circleEvents(model, vm.inMap.selectedFenceObj);
-                        vm.fenceInfoWindowShow();
-                    }
-                },
-
-                polygonEvents: {
-                    click: function (polygon, eventName, model, args) {
-                        vm.polygonEvents(model, vm.inMap.selectedFenceObj);
-                        vm.fenceInfoWindowShow();
-
-                    }
-                },
-
                 selectedFenceObj: {
                     latitude: '',
                     longitude: '',
                     name: '',
                     other: ''
                 }
+            };
+
+            vm.setInMapLocation = function (loc) {
+                vm.inMap.center = angular.copy(loc);
+                vm.inMap.map.setCenter({
+                    lat: vm.inMap.center.latitude,
+                    lng: vm.inMap.center.longitude
+                });
             };
 
             vm.getPolygonMidPoint = function (polygon) {
@@ -93,59 +50,15 @@
                 return bound.getCenter();
             };
 
-            vm.polygonEvents = function (model, dest) {
-                var polygonCenter = vm.getPolygonMidPoint(model.path);
-                dest.latitude = polygonCenter.lat();
-                dest.longitude = polygonCenter.lng();
-                dest.name = model.control.info.name;
-                dest.other = model.control.info.tagdata;
-            };
-
-            vm.circleEvents = function (model, dest) {
-                dest.latitude = model.center.latitude;
-                dest.longitude = model.center.longitude;
-                dest.name = model.control.info.name;
-                dest.other = model.control.info.tagdata;
-            };
-
-
-            vm.infoWindowShow = function () {
-                vm.inMap.infoWindow.show = true;
-
-            };
-
-            vm.infoWindowClose = function () {
-                vm.inMap.infoWindow.show = false;
-            };
-
-
-            vm.fenceInfoWindowClose = function () {
-                vm.inMap.fenceInfoWindow.show = false;
-            };
-
-
-            vm.fenceInfoWindowShow = function () {
-                vm.inMap.fenceInfoWindow.show = true;
-            };
-
-            vm.setClickedMarker = function (model) {
-                vm.inMap.markers.clickedMarkerObj.clickedMarker = model;
-                vm.inMap.markers.clickedMarkerObj.mobilize = vm.mobilize;
-                vm.inMap.markers.clickedMarkerObj.showHistory = vm.showHistory;
-                vm.inMap.markers.clickedMarkerObj.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
-
-                vm.infoWindowShow();
-            };
 
             vm.showHistory = function () {
-                //$log.log(vm.inMap.markers.clickedMarkerObj.clickedMarker);
                 dialogService.show('home.history', {
-                    clickedMarker: angular.copy(vm.inMap.markers.clickedMarkerObj.clickedMarker)
+                    clickedMarker: vm.inMap.markers.clickedMarker
                 });
             };
 
             vm.mobilize = function (mobilityRequest) {
-                vm.inMap.markers.clickedMarkerObj.clickedMarker.mobilityRequest = mobilityRequest;
+                vm.inMap.markers.clickedMarker.mobilityRequest = mobilityRequest;
 
                 var immobalizeDialog = $mdDialog.confirm({
                     controller: 'ImmobalizeController',
@@ -154,7 +67,7 @@
                     escapeToClose: true,
                     locals: {
                         params: {
-                            clickedMarker: vm.inMap.markers.clickedMarkerObj.clickedMarker
+                            clickedMarker: vm.inMap.markers.clickedMarker
                         }
                     }
                 }).ok('Yes').cancel('No');
@@ -172,65 +85,68 @@
                 vm.infoWindowClose();
             };
 
-            vm.changeMarkerIcon = function () {
-                var inMapMarkers = vm.inMap.markers.inMarkers;
-                for (var idx = 0; idx < inMapMarkers.length; idx++) {
-                    vm.setMarkerIcon(inMapMarkers[idx]);
-                }
-            };
-
             vm.getMainMap = function () {
                 return vm.inMap;
             };
 
-            // vm.getMainMarkers = function () {
-            //     return vm.inMarkers;
-            // };
-
-
-            // Bangalore
-            // var lat = 12.9176383;
-            // var lng = 77.6480335;
-
-            // Mumbai
-            var lat = 19.19554947109134;
-            var lng = 72.93638193466376;
-
 
             vm.loc = {
+                USER: 'USER',
                 MUMBAI: 'MUMBAI',
                 BANGALORE: 'BANGALORE',
                 HYDERABAD: 'HYDERABAD',
-                DELHI: 'DELHI'
+                PUNE: 'PUNE',
+                DELHI: 'DELHI',
+                CHENNAI: 'CHENNAI'
+
             };
 
-            vm.locations = {
-                BANGALORE:{
-                    id: vm.loc.BANGALORE,
-                        notation: 'BLR',
-                    latlng: {latitude: 12.967995, longitude: 77.597953}
+
+            vm.locations = [
+                {
+                    id: vm.loc.USER,
+                    notation: 'USR',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
                 },
-                HYDERABAD:{
-                    id: vm.loc.HYDERABAD,
-                        notation: 'HYD',
-                        latlng: {latitude: 17.384125, longitude: 78.479447}
-                },
-                DELHI:{
-                    id: vm.loc.DELHI,
-                        notation: 'DEL',
-                        latlng: {latitude: 28.614132, longitude: 77.215449}
-                },
-                MUMBAI:{
+                {
                     id: vm.loc.MUMBAI,
-                        notation: 'MUM',
-                        latlng: {latitude: 19.195549, longitude: 72.936381}
+                    notation: 'MUM',
+                    latlng: {latitude: 19.195549, longitude: 72.936381}
+                },
+                {
+                    id: vm.loc.BANGALORE,
+                    notation: 'BLR',
+                    latlng: {latitude: 12.967995, longitude: 77.597953}
+                }, {
+                    id: vm.loc.HYDERABAD,
+                    notation: 'HYD',
+                    latlng: {latitude: 17.384125, longitude: 78.479447}
+                }, {
+                    id: vm.loc.PUNE,
+                    notation: 'PUN',
+                    latlng: {latitude: 18.521445, longitude: 73.866031}
+                }, {
+                    id: vm.loc.DELHI,
+                    notation: 'DEL',
+                    latlng: {latitude: 28.614132, longitude: 77.215449}
+                }, {
+                    id: vm.loc.CHENNAI,
+                    notation: 'CHE',
+                    latlng: {latitude: 13.075837, longitude: 80.206900}
                 }
-            };
+            ];
 
-            vm.currentLocation = vm.locations.MUMBAI;
+            vm.currentLocation = vm.locations[1];
+
+            vm.setUserPref = function (userSettings) {
+                vm.currentLocation = vm.locations[0];
+                vm.currentLocation.latlng = userSettings.station;
+                vm.center = vm.currentLocation.latlng;
+                vm.callListeners(userSettings, 'setUserPref');
+            };
 
             vm.getCurrentLocation = function () {
-              return vm.currentLocation;
+                return vm.currentLocation;
             };
 
             vm.center = vm.currentLocation.latlng;
@@ -245,74 +161,9 @@
                 return vm.zoom;
             };
 
-            vm.setZoom = function (zoom) {
-                vm.zoom = zoom;
-            };
 
             vm.getBounds = function () {
                 return vm.bounds;
-            };
-
-
-            vm.checkZoomLevel = function (min, max) {
-                vm.zoom = vm.inMap.mapControl.getGMap().zoom;
-                return (vm.zoom >= min && vm.zoom <= max);
-            };
-
-
-            var EXTRA_SMALL = 'extra_small';
-            var SMALL = 'small';
-            var MEDIUM = 'medium';
-            var BIG = 'big';
-
-            vm.getMarkerSize = function () {
-                if (vm.checkZoomLevel(1, 6)) {
-                    return EXTRA_SMALL;
-                } else if (vm.checkZoomLevel(7, 8)) {
-                    return SMALL;
-                } else if (vm.checkZoomLevel(9, 10)) {
-                    return MEDIUM;
-                }
-
-                return BIG;
-            };
-
-
-            var RED_ICON = 'red';
-            var GREEN_ICON = 'green';
-            var BLUE_ICON = 'blue';
-            var ORANGE_ICON = 'orange';
-
-            vm.getMarkerColor = function (vehicleData) {
-                if (!vehicleData.mobilistatus) {
-                    return RED_ICON;
-                } else {
-                    if (vehicleData.ignitionstatus) {
-                        return GREEN_ICON;
-                    } else {
-                        return BLUE_ICON;
-                    }
-                }
-
-                return ORANGE_ICON;
-            };
-
-
-            vm.setMarkerIcon = function (vehicleData) {
-                var newIcon = 'assets/images/markers/' + vm.getMarkerSize() + '/' + vm.getMarkerColor(vehicleData) + '-dot.png';
-
-                if (newIcon != vehicleData.icon)
-                    vehicleData.icon = newIcon;
-            };
-
-
-            vm.getMarkerIndex = function (id) {
-                for (var idx in vm.inMap.markers.inMarkers) {
-                    if (vm.inMap.markers.inMarkers[idx].id === id)
-                        return idx;
-                }
-
-                return -1;
             };
 
 
@@ -335,31 +186,200 @@
                 }
             };
 
-
             vm.updateMarker = function (vehicleObj, key) {
-                var vehicleData = vehicleObj.rtgps;
-                if (!('id' in vehicleData)) {
-                    var deviceidStr = vehicleData.deviceid;
-                    if (deviceidStr.substring(0, 5) == '213GL') {
-                        deviceidStr = deviceidStr.substring(5);
-                    }
-                    vehicleData.id = parseInt(deviceidStr);
-                    vehicleData.options = {};
-                    vehicleData.options.visible = false;
-                }
+                var rtgps = vehicleObj.rtgps;
+                // if (!('id' in rtgps)) {
+                //     var deviceidStr = rtgps.deviceid;
+                //     if (deviceidStr.substring(0, 5) == '213GL') {
+                //         deviceidStr = deviceidStr.substring(5);
+                //     }
+                //     rtgps.id = parseInt(deviceidStr);
+                //     rtgps.options = {};
+                //     rtgps.options.visible = false;
+                // }
 
-                vm.setMarkerIcon(vehicleData);
-                vm.callListeners(vehicleData, key);
+                vm.callListeners(rtgps, key);
             };
 
 
             vm.init = function () {
                 //$log.log('map init()');
-                //intellicarAPI.mqttService.addListener('rtgps', vm.updateMap);
                 vehicleService.addListener('rtgps', vm.updateMarker);
+                userprefService.addListener('setUserPref', vm.setUserPref);
             };
 
             vm.init();
+
+
+            vm.mapStyles = {};
+            vm.mapStyles.default = [];
+            vm.mapStyles.dark = [
+                {
+                    "featureType": "all",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "saturation": 36
+                        },
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 40
+                        }
+                    ]
+                },
+                {
+                    "featureType": "all",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 16
+                        }
+                    ]
+                },
+                {
+                    "featureType": "all",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 20
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 17
+                        },
+                        {
+                            "weight": 1.2
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 20
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 21
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 17
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 29
+                        },
+                        {
+                            "weight": 0.2
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 18
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 16
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#000000"
+                        },
+                        {
+                            "lightness": 19
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#0f252e"
+                        },
+                        {
+                            "lightness": 17
+                        }
+                    ]
+                }
+            ];
 
         });
 })();

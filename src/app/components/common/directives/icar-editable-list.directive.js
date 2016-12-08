@@ -8,7 +8,7 @@
         .module('uiplatform')
         .directive('icarEditableList', icarEditableList);
 
-    function icarEditableList($log) {
+    function icarEditableList() {
         return {
             restrict: 'AE',
             template: '<label>{{displayName}}</label>\

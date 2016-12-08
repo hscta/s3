@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
 <style>
-    md-checkbox {
-        margin: 8px;
-        cursor: pointer;
-        padding-left: 0px;
-        padding-right: 0;
-        line-height: 4px;
-        min-width: 18px;
-        min-height: 1px;
-    }
-    md-sidenav{height:100%;}
+    /*md-checkbox {*/
+        /*margin: 8px;*/
+        /*cursor: pointer;*/
+        /*padding-left: 0px;*/
+        /*padding-right: 0;*/
+        /*line-height: 4px;*/
+        /*min-width: 18px;*/
+        /*min-height: 1px;*/
+    /*}*/
+    /*md-sidenav{height:100%;}*/
     md-checkbox span{font-weight:normal;}
 
     .angular-ui-tree-node, .angular-ui-tree-placeholder{line-height:22px;}
@@ -25,29 +25,62 @@
         font-style:italic;
         font-weight:normal;
     }
+
+    .tree-str{
+        overflow-y: scroll;
+        position: absolute;
+        width: 100%;
+        top: 120px;
+        right: 0;
+        bottom: 0;
+    }
+</style>
+
+<style>
+
+    .left-sidenav {
+        height: 100%;
+        width: 320px;
+        position: fixed;
+        z-index: 1;
+        top: 0px;
+        left: 0;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        color:#000;
+    }
+    #main {
+        margin-left:320px;
+        transition: margin-left .5s;
+    }
+
+    @media screen and (max-height: 450px) {
+        .left-sidenav {padding-top: 15px;}
+        .left-sidenav a {font-size: 18px;}
+    }
+
+    #myLeftSidenav{
+        border-right:1px solid #ccc;
+        overflow:hidden;
+    }
 </style>
 
 
 <!-- Template for parent nodes -->
 <script type="text/ng-template" id="parent_nodes_renderer.html">
-    <div class="icar-wrap-text">
-        <a ng-click="toggle(this); item.collapsed = !item.collapsed" style="cursor:pointer;" ng-show="item.items.length > 0">
-            <md-icon md-font-library="material-icons" ng-show="item.collapsed">arrow_drop_down</md-icon>
-            <md-icon md-font-library="material-icons" ng-show="!item.collapsed">play_arrow</md-icon>
-        </a>
-        <span ng-hide="item.items.length" style="padding-left:20px;"></span>
-        <span ng-click="vm.handleAssetClick(item, item.collapsed, toggle, this); item.collapsed = true"
-              style="cursor:pointer;">{{item.title | titleCase }}
-        </span ><br/>
-        <!--<span ng-click="vm.handleAssetClick(item, item.collapsed, toggle, this); item.collapsed = !item.collapsed"-->
-              <!--style="cursor:pointer;">{{item.title | titleCase }}-->
-        <!--</span ><br/>-->
+    <div class="ln-main"ng-class="{'active':vm.selectedAsset == item.id}">
+        <div class="ln-arrow" ng-click="item.collapsed = !item.collapsed" ng-show="item.items.length > 0"
+        ng-class="{'active':item.collapsed}"><i class="fa fa-chevron-right"></i></div>
+
+        <div class="ln-heading" ng-click="vm.handleAssetClick(item, item.collapsed, toggle, this); item.collapsed = true"
+        ng-class="{'no-arrow':item.items.length <= 0, 'active':vm.selectedAsset == item.id}">{{item.title | titleCase }}</div>
+        <span class="spinner -blue -relative" ng-class="{'opacity_0':!item.loading}" ng-if="item.loading"></span>
     </div>
-    <ol ui-tree-nodes ng-model="item.items" ng-show="item.collapsed">
-        <li ng-repeat="item in item.items" ui-tree-node
-            ng-hide="!treeFilter(item, vm.tree_search_pattern, supportedFields)"
-            ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'">  </li>
-    </ol>
+    <div class="ln-child-cont" ng-model="item.items" ng-show="item.collapsed">
+        <div ng-repeat="item in item.items" ui-tree-node class="ln-child"
+             ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></div>
+    </div>
 </script>
 
 <!-- Template for terminal nodes -->
@@ -63,23 +96,20 @@
     </div>
 </script>
 
-<md-sidenav  class="md-sidenav-left" md-component-id="left"
-             md-is-locked-open = "left_nav_toggle" flex>
-    <!--The ROot Node-->
+<div id="myLeftSidenav" class="left-sidenav">
+    <div class="input-field col s6">
+        <input id="last_name" type="text" class="validate" ng-model="vm.tree_search_pattern"
+               ng-change="vm.expand_tree()">
+        <label for="last_name">Search</label>
+    </div>
 
-    <md-input-container>
-        <label>Search</label>
-        <input type="text" ng-model="vm.tree_search_pattern" ng-change="vm.expand_tree()">
-        <span class="search-result" ng-hide="!vm.search_results"> 0 results found</span>
-    </md-input-container>
-
-    <md-button ng-click="vm.expand_tree()">Expand</md-button>
-
-    <div ui-tree id="tree-root" callbacks="treeOptions">
+    <div ui-tree id="tree-root" callbacks="treeOptions" class="tree-str" ng-cloak>
         <ol ui-tree-nodes ng-model="vm.tree_data" ng-class="{hidden: collapsed}">
             <li ng-repeat="item in vm.tree_data" ui-tree-node data-nodrag data-collapsed="item.collapsed"
-                ng-hide="vm.search_results = !treeFilter(item, vm.tree_search_pattern, supportedFields)"
-                ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'terminal_node_renderer.html'"></li>
+
+                ng-include="(item.items) ? 'parent_nodes_renderer.html' : 'parent_nodes_renderer.html'"></li>
         </ol>
     </div>
-</md-sidenav>
+
+</div>
+

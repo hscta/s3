@@ -10,8 +10,13 @@
     }
 </style>
 
+<span ng-if="vm.currentGroupAsset">Group Name : {{vm.currentGroupAsset.name}}</span>
+<br/>
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewDeviceField()">
     Add Device
+</md-button>
+<md-button class="md-accent" ng-show="vm.showBtn">
+    Bind to Vehicle
 </md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">

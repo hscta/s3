@@ -9,7 +9,7 @@
         .directive('icarPanelExpansion', icarPanelExpansion)
 
     function icarPanelExpansion($log, $mdDialog, $mdExpansionPanel, $mdExpansionPanelGroup,
-                                $stateParams, $compile, $sce) {
+                                $stateParams, $compile) {
         return{
             restrict : 'E',
             templateUrl : 'app/components/common/directives/panel-expansion.html',
@@ -58,7 +58,7 @@
                     var options = {
                         templateUrl: '/app/components/common_directives/panel_delete_dialog.html',
                         scope: scope,
-                        preserveScope: true,
+                        preserveScope: true
                     };
 
                     scope.deleted_panel_id = ev.toString();

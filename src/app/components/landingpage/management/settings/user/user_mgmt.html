@@ -10,8 +10,21 @@
     }
 </style>
 
+<span ng-if="vm.currentGroupAsset">Group Name : {{vm.currentGroupAsset.name}}</span>
+<br/>
+
 <md-button class="md-accent" ng-show="vm.showBtn" ng-click="vm.showNewUserField()">
     Create User
+</md-button>
+
+<md-button class="md-accent" ng-if="vm.currentGroupAsset.assignGroup"
+           ng-click="vm.assignUsers(vm.currentGroupAsset)">
+    Assign Group
+</md-button>
+
+<md-button class="md-accent" ng-if="vm.currentGroupAsset.assignRole"
+           ng-click="vm.assignRoles(vm.currentGroupAsset)">
+    Assign Role
 </md-button>
 
 <div class="list list-inset icar-new-group" ng-class="{'active':vm.isdiplay}">
@@ -25,12 +38,12 @@
         <md-input-container flex>
             <div layout="row">
                 <label>Password</label>
-                <input type="password" ng-model="vm.newUser.password"></div>
+                <input type="password" ng-model="vm.newUser.password" autocomplete="off"></div>
         </md-input-container>
         <md-input-container flex>
             <div layout="row">
                 <label>Confirm Password</label>
-                <input type="password" ng-model="vm.confirmPassword"></div>
+                <input type="password" ng-model="vm.confirmPassword" autocomplete="off"></div>
         </md-input-container>
         <md-button class="md-accent" ng-click="vm.createUser()" flex="66">Create User</md-button>
     </md-content>
@@ -48,9 +61,25 @@
     <div class="md-title">{{myAsset.name}}</div>
     <!--<icar-expanel ng-repeat="item in vm.vehicleinfo track by $index"-->
     <!--details="item" schema="item.schema" layout></icar-expanel>-->
+    <div class="waves-effect waves-light btn ng-isolate-scope" ng-if="myAsset.assignGroup"
+         ng-click="vm.assignGroups(myAsset)">
+        Assign Group
+    </div>
+    <a class="waves-effect waves-light btn ng-isolate-scope"
+       ng-if="myAsset.assignRole"
+       ng-click="vm.assignRoles(myAsset)">Assign Role</a>
 </script>
 
-<md-expansion-panel-group md-component-id="vehicleGroup" flex>
+<multi-list data="groupData"></multi-list>
+
+<style>
+    .expansion-panel {
+        height: 500px;
+        overflow: auto;
+        display: block;
+    }
+</style>
+<md-expansion-panel-group class="expansion-panel" md-component-id="vehicleGroup" flex>
 
     <md-expansion-panel md-component-id="$index" ng-repeat="myAsset in vm.assets track by $index">
 

@@ -93,6 +93,10 @@
     .anchor-line {
         border-bottom: 1px solid #F00;
     }
+
+    #marker_infowindow {
+        display:none;
+    }
 </style>
 
 
@@ -106,15 +110,13 @@
         <div layout="row" layout-align="center center">
             <div class="toggleButton" ng-class="{'active':vm.onRoaded}">
                 On Road
-                <md-checkbox class='icar-checkbox' ng-model="vm.onRoaded"
-                             aria-label="onroaded" ng-change="vm.onRoadCheck()">
-                </md-checkbox>
+                <input type="checkbox" class='icar-checkbox' ng-model="vm.onRoaded"
+                       aria-label="onroaded" ng-change="vm.onRoadCheck()"/>
             </div>
             <div class="toggleButton" ng-class="{'active':vm.offRoaded}">
                 Off Road
-                <md-checkbox class='icar-checkbox' ng-model="vm.offRoaded"
-                             aria-label="onroaded" ng-change="vm.offRoadCheck()">
-                </md-checkbox>
+                <input type="checkbox" class='icar-checkbox' ng-model="vm.offRoaded"
+                       aria-label="onroaded" ng-change="vm.offRoadCheck()"/>
             </div>
         </div>
 
@@ -165,22 +167,41 @@
                       style="font-size: 13px;">{{vm.vehicleStats.immobilized}}</span>
                 <md-tooltip>Immoblized</md-tooltip>
             </li>
+
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Not Communicating']"
+                ng-click="vm.runFilters('Not Communicating')" layout="column">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Not Communicating']"
+                         class="icon-font icon-immobilized" md-font-library="material-icons">signal_cellular_off
+                </md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Immobilized']"
+                      style="font-size: 13px;">{{vm.vehicleStats.noComm}}</span>
+                <md-tooltip>Vehicle Not Communicating</md-tooltip>
+            </li>
+            <li ng-class="{true: 'li-clicked'}[vm.filterStr=='Device pullout']"
+                ng-click="vm.runFilters('Device pullout')" layout="column">
+                <md-icon ng-class="{true: 'md-light'}[vm.filterStr=='Device pullout']"
+                         class="icon-font icon-immobilized" md-font-library="material-icons">sim_card_alert
+                </md-icon>
+                <span ng-class="{true: 'md-light'}[vm.filterStr=='Device pullout']"
+                      style="font-size: 13px;">{{vm.vehicleStats.devPullout}}</span>
+                <md-tooltip>Device Pullout</md-tooltip>
+            </li>
         </ul>
     </div>
     <div class="lefttoolbar" ng-controller="GeofenceViewController as vm">
         <div class="ltb_item" ng-repeat="item in vm.leftTB" ng-mouseenter="item.activeInt = 1"
              ng-mouseleave="item.activeInt = 0"
-             ng-class="{'ltb_item-line':item.type == 'line','active': vm.fencesActive()}">
+             ng-class="{'ltb_item-line':item.type == 'line', 'active': vm.fencesActive()}">
             <div class="ltbi_button" ng-click="vm.buttonClick(item)"
                  ng-if="item.type == 'button' || item.type == 'toggleButton'"
-                 ng-class="{'active':item.data.active && item.type == 'toggleButton','independ':item.data.independent,'hasChildren':item.children }">
+                 ng-class="{'active':item.data.active && item.type == 'toggleButton',
+                 'independ':item.data.independent,'hasChildren':item.children }">
                 <div class="ltbi_icon" ng-if="item.hasOwnProperty('icon')">
                     <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                     <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
-                    <img ng-if="item.iconType == 'png' && item.data.active" src="{{item.icon}}.active.png">
-                    <img ng-if="item.iconType == 'png' && !item.data.active" src="{{item.icon}}.png">
-                    <i ng-if="item.iconType == 'png'"
-                       style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                    <img ng-if="item.iconType == 'png' && item.data.active" ng-src="{{item.icon}}.active.png">
+                    <img ng-if="item.iconType == 'png' && !item.data.active" ng-src="{{item.icon}}.png">
+                    <i ng-if="item.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"></i>
                 </div>
                 <div class="ltbi_name" ng-if="item.name">
                     {{item.name}}
@@ -207,10 +228,9 @@
                     <div class="ltbi_icon" ng-if="child.hasOwnProperty('icon')">
                         <i class="fa {{child.icon}}" ng-if="child.iconType == 'fa'" aria-hidden="true"></i>
                         <i ng-if="child.iconType == 'md'" class="material-icons">{{child.icon}}</i>
-                        <img ng-if="child.iconType == 'png' && !child.data.active" src="{{child.icon}}.png">
-                        <img ng-if="child.iconType == 'png' && child.data.active" src="{{child.icon}}.active.png">
-                        <i ng-if="child.iconType == 'png'"
-                           style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
+                        <img ng-if="child.iconType == 'png' && !child.data.active" ng-src="{{child.icon}}.png">
+                        <img ng-if="child.iconType == 'png' && child.data.active" ng-src="{{child.icon}}.active.png">
+                        <i ng-if="child.iconType == 'png'" style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
                     </div>
                     <div class="ltbi_name" ng-if="child.name">
                         {{child.name}}
@@ -227,68 +247,8 @@
             <input id="pac-input" type="text" placeholder="Search">
         </script>
 
-        <ui-gmap-google-map center='vm.inMap.center' zoom='vm.inMap.zoom'
-                            options="vm.inMap.mapOptions" optimized="false" bounds="vm.inMap.bounds"
-                            events="vm.inMap.mapEvents"
-                            control="vm.inMap.mapControl">
+        <div id="map" style="width:100%;"></div>
 
-            <!-- <ui-gmap-search-box template="vm.SearchBox.template" events="vm.SearchBox.events" position="RIGHT_BOTTOM"></ui-gmap-search-box> -->
-
-            <ui-gmap-search-box options="searchbox.options" template="searchbox.template"
-                                events="searchbox.events"></ui-gmap-search-box>
-
-            <ui-gmap-markers models="vm.inMarkers" optimized="false" coords="'self'" icon="'icon'"
-                             options="'options'" events="vm.inMap.markers.markersEvents"
-                             doRebuildAll="vm.doRebuildAll" modelsbyref="vm.modelsbyref">
-            </ui-gmap-markers>
-
-
-            <ui-gmap-window show="vm.inMap.infoWindow.show" coords="vm.inMap.markers.clickedMarkerObj.clickedMarker"
-                            control="vm.inMap.infoWindow.control" optimized="false"
-                            options="vm.inMap.infoWindow.options"
-                            templateUrl="'app/components/landingpage/dashboard/map/info-window.html'"
-                            templateParameter="vm.inMap.markers.clickedMarkerObj"
-                            controller="MainMapWindowController"
-                            isIconVisibleOnClick="true">
-            </ui-gmap-window>
-            <ui-gmap-window show="vm.fenceInfoWindow.show" coords="vm.selectedFenceObj"
-                            control="vm.fenceInfoWindow.control" optimized="false"
-                            options="vm.fenceInfoWindow.options"
-                            isIconVisibleOnClick="true">
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>Name:</th>
-                        <td>{{vm.selectedFenceObj.name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Type:</th>
-                        <td>{{vm.selectedFenceObj.other.olafilter}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </ui-gmap-window>
-            <!--<div ng-init="vm.customOverlay(marker);" ng-repeat="marker in vm.inMarkers"></div>-->
-
-            <ui-gmap-circle ng-repeat="gcircle in vm.inMap.circles track by gcircle.control.info.assetid"
-                            center="gcircle.center" radius="gcircle.radius"
-                            stroke="gcircle.stroke" fill="gcircle.fill"
-                            visible="gcircle.visible" geodesic="gcircle.geodesic"
-                            editable="gcircle.editable" draggable="gcircle.draggable"
-                            clickable="gcircle.clickable" control="gcircle.control"
-                            events="vm.inMap.circleEvents">
-            </ui-gmap-circle>
-
-            <ui-gmap-polygon static="true"
-                             ng-repeat="gpolygon in vm.inMap.polygons track by gpolygon.control.info.assetid"
-                             path="gpolygon.path"
-                             stroke="gpolygon.stroke" fill="gpolygon.fill"
-                             visible="gpolygon.visible" geodesic="gpolygon.geodesic"
-                             editable="gpolygon.editable" draggable="gcircle.draggable"
-                             clickable="gpolygon.clickable" control="gpolygon.control"
-                             events="vm.inMap.polygonEvents" static="true">
-            </ui-gmap-polygon>
-        </ui-gmap-google-map>
     </div>
 </div>
 
@@ -308,7 +268,7 @@
         </div>
         <div class="id-body">
             <div class="row icar-tabs">
-                <div class="col s6">
+                <div class="col s12">
                     <ul class="tabs" select_tab="vm.selectedTab">
                         <li class="tab col s2">
                             <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 0]"
@@ -316,7 +276,7 @@
                         </li>
                         <li class="tab col s2">
                             <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 1]"
-                               ui-sref="home.historyData">HISTORY Table</a>
+                               ui-sref="home.historyData">HISTORY Report</a>
                         </li>
                         <li class="tab col s2">
                             <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 2]"
@@ -326,6 +286,10 @@
                             <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 3]"
                                ui-sref="home.alarm">Alarms</a>
                         </li>
+                        <li class="tab col s2">
+                            <a ng-class="{true: 'active anchor-line'}[vm.selectedTab == 4]"
+                               ui-sref="home.downloadHistory">Download History</a>
+                        </li>
                     </ul>
                 </div>
                 <div flex ui-view="dialogview" class="mapDView"></div>
@@ -333,3 +297,94 @@
         </div>
     </div>
 </div>
+
+
+
+<div id="fence_infowindow" layout="row" ng-non-bindable flex>
+    <div layout="column" id="fenceWindow" ng-cloak>
+        <table>
+            <tbody>
+            <tr>
+                <th>Name:</th>
+                <td>{{vm.selectedFenceObj.info.name}}</td>
+            </tr>
+            <tr>
+                <th>Type:</th>
+                <td>{{vm.selectedFenceObj.info.tagdata.olafilter}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div id="marker_infowindow" layout="row" ng-non-bindable flex>
+    <div layout="column" id="markerWindow" ng-cloak>
+        <div class="info-w-header">
+        </div>
+        <md-table-container style="min-height: 150px; max-height:150px; min-width:300px; max-width:300px;
+                                position: relative; overflow: hidden;">
+            <table md-table md-row-select multiple class="trPadding" >
+                <tbody md-body>
+                <tr md-row md-select-id="carnumber" class="infoWHead"   md-auto-select>
+                    <td md-cell><strong>Reg.No</strong></td>
+                    <td md-cell colspan="3"  id="myreg">{{clickedMarker.rtgps.vehicleno}}</td>
+                </tr>
+                <tr md-row md-select-id="timestamp" md-auto-select>
+                    <td md-cell><strong>Last seen at</strong></td>
+                    <td md-cell colspan="3" id="timestamp">{{clickedMarker.rtgps.timestamp | date : 'dd MMM yyyy - h:mm a'}}</td>
+                </tr>
+                <tr md-row md-select-id="odometer" md-auto-select>
+                    <td md-cell><strong>Odometer</strong></td>
+                    <td md-cell class="infoWmiddle" id="odometer">{{clickedMarker.rtgps.odometer}}</td>
+                    <td md-cell><strong>Speed</strong></td>
+                    <td md-cell id="speed">{{clickedMarker.rtgps.speed}}</td>
+                </tr>
+
+                <tr md-row md-select-id="ignitionstatus" md-auto-select>
+                    <td md-cell><strong>Ignition</strong></td>
+                    <td md-cell class="infoWmiddle" id="ignition">{{clickedMarker.rtgps.ignitionstatus ? 'On' : 'Off'}}</td>
+                    <td md-cell><strong>Mobility</strong></td>
+                    <td md-cell id="mobility">{{clickedMarker.rtgps.mobilistatusFilter}}</td>
+                </tr>
+                <tr md-row md-select-id="carbattery" md-auto-select>
+                    <td md-cell>
+                        <strong>Vehicle batt</strong>
+                    </td>
+                    <td md-cell class="infoWmiddle"
+                        ng-class="{'redBattery' : clickedMarker.rtgps.carbattery < 9.5 }">{{clickedMarker.rtgps.carbattery}}</td>
+                    <td md-cell><strong>Device batt</strong>
+                    </td>
+                    <td md-cell
+                        ng-class="{'redBattery' : clickedMarker.rtgps.devbattery < 3.55 }">{{clickedMarker.rtgps.devbattery}}</td>
+                </tr>
+                <tr md-row md-select-id="cartype" md-auto-select>
+                    <td md-cell><strong>Make</strong></td>
+                    <td md-cell>{{clickedMarker.rtgps.meta.cartype}}</td>
+                </tr>
+                <tr md-row md-select-id="deviceid" md-auto-select>
+                    <td md-cell><strong>Device ID</strong></td>
+                    <td md-cell colspan="3">{{clickedMarker.rtgps.deviceid}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <div layout="row">
+            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
+                       ng-click="vm.mobilize(0)">
+                <span> Immobilize </span>
+            </md-button>
+
+            <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
+                       ng-click="vm.mobilize(1)">
+                <span> Mobilize </span>
+            </md-button>
+
+            <md-button class="md-raised md-accent md-small infoWBtn" id="historyBtn" ng-click="vm.showHistory()">
+                History
+            </md-button>
+
+        </div>
+    </div>
+</div>
+

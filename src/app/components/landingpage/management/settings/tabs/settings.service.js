@@ -6,6 +6,7 @@
         .service('settingsService', settingsService);
 
     function settingsService($log, $state, intellicarAPI) {
+        $log.log('settingsService');
         var vm = this;
         vm.setTabListener = null;
         vm.currentGroup = null;
@@ -37,11 +38,11 @@
         };
 
 
-        // vm.setCurrentGroup = function(stateParams) {
-        //     $log.log("setCurrentGroup grouppath: " + grouppath);
-        //     vm.currentGroup = {group: {grouppath: vm.getRequestedGroupPath(stateParams)}};
-        //     $log.log(vm.currentGroup);
-        // };
+        vm.setCurrentGroupPath = function(grouppath) {
+            vm.currentGroup = {grouppath: grouppath};
+            // console.log(vm.currentGroup);
+        };
+
 
         vm.setCurrentGroup = function(stateParams) {
             var grouppath = null;
@@ -54,7 +55,9 @@
                 }
             }
 
-            vm.currentGroup = {group: {grouppath: grouppath}};
+            // vm.currentGroup =  grouppath;
+            vm.currentGroup = {grouppath: grouppath};
+            // console.log(vm.currentGroup);
             //return grouppath;
         };
 
@@ -80,8 +83,8 @@
 
 
         vm.getCurrentGroupPath = function() {
-            if('group' in vm.currentGroup && 'grouppath' in vm.currentGroup.group)
-                return vm.currentGroup.group.grouppath;
+            if(vm.currentGroup && 'grouppath' in vm.currentGroup)
+                return vm.currentGroup.grouppath;
 
             return null;
         };
@@ -95,7 +98,7 @@
             if(vm.tabs.indexOf(asset.id) != -1) {
                 tab = asset.id;
             } else {
-                $log.log("duniya " + asset.info.ui_asset_type);
+                // $log.log("duniya " + asset.info.ui_asset_type);
                 tab = asset.info.ui_asset_type;
             }
 
@@ -112,7 +115,8 @@
             } else {
                 $log.log('Not changing state');
             }
-        }
+        };
+
     }
 
 })();

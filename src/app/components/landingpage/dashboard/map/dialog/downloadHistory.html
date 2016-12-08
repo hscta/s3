@@ -1,0 +1,14 @@
+<div class="dh_container">
+    <div class="dhc_name">Last seen</div>
+    <md-input-container class="container-margin" >
+        <label>Select Area</label>
+        <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
+        <md-select ng-model="vm.selectedGroup" ng-model-options="{trackBy: '$value.assetpath'}">
+            <md-option ng-repeat="group in vm.groups"
+                       ng-value="group" >
+                {{group.name}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.download()">DOWNLOAD</a>
+</div>

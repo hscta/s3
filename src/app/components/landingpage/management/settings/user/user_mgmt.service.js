@@ -31,11 +31,11 @@
 
 
         vm.createUser = function (newUser) {
-            var body = {user: {
+            var body = {
                 pgrouppath: settingsService.getCurrentGroupPath(),
                 name: newUser.name,
                 usermeta: {password: newUser.password}
-            }};
+            };
 
             return intellicarAPI.userService.createUser(body);
         };

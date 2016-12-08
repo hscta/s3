@@ -39,7 +39,7 @@
 
 
         vm.handleMyGeofenceReportsMap = function (resp) {
-            //$log.log(resp);
+            // $log.log(resp);
             vm.reportList = resp;
             var promiseList = [];
 

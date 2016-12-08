@@ -9,7 +9,7 @@
     angular.module('uiplatform')
         .service('historyService', historyService);
 
-    function historyService($log, mapService, $rootScope, intellicarAPI, vehicleService, $timeout, myAlarmService, $q) {
+    function historyService($log, mapService, $rootScope, intellicarAPI, vehicleService, $timeout) {
 
         var vm = this;
 
@@ -144,17 +144,8 @@
                             endtime: endtime
                         }
                     };
-                    var body2 = {
-                        vehiclepath: [vm.historyMap.selectedVehicle.rtgps.deviceid.toString()],
-                        starttime: starttime,
-                        endtime: endtime
-                    };
-                    var gpsDataPromise = intellicarAPI.reportsService.getDeviceLocation(body);
-                    var alarmDataPromise = intellicarAPI.myAlarmService.getAlarmInfo(body2);
-
-                        $q.all([gpsDataPromise,alarmDataPromise])
+                    intellicarAPI.reportsService.getDeviceLocation(body)
                         .then(vm.drawTrace, vm.handleGetLocationFailure);
-
                 } else {
                     vm.historyMap.errorMsg = "Enter valid start and end time";
                     $rootScope.$broadcast('gotHistoryEventFailed');
@@ -176,12 +167,7 @@
         };
 
 
-        vm.drawTrace = function (respArray) {
-            console.log(respArray);
-            var resp = respArray[0];
-            var alarmData = respArray[1];
-
-
+        vm.drawTrace = function (resp) {
 
             if (resp) vm.historyMap.traceData = resp.data.data;
 
@@ -210,9 +196,6 @@
                 latlng.speed = parseInt(position.speed.toFixed(2));
                 latlng.odometer = position.odometer;
                 latlng.heading = position.heading;
-                latlng.carbattery = parseInt(position.carbattery.toFixed(2));
-                latlng.devbattery = parseInt(position.devbattery.toFixed(2));
-                latlng.numsat = position.numsat;
                 latlng.ignstatus = position.ignstatus;
                 path.push(latlng);
             }
@@ -309,7 +292,6 @@
         vm.traceControls = {
             interval: 30000, // 30 seconds
             timeline: [],
-            expandedGraphs : true,
             playing: false,
             SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
             speed: 4, // normal

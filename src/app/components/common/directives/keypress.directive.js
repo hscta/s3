@@ -8,7 +8,7 @@
         .module('uiplatform')
         .directive('icarKeypress', icarKeypress)
 
-    function icarKeypress($log) {
+    function icarKeypress() {
         return function (scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
                 if(event.which === 13) {
@@ -20,5 +20,5 @@
                 }
             });
         };
-    };
+    }
 })();

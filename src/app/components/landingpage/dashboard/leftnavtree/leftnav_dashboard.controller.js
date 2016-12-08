@@ -153,9 +153,8 @@
         vm.init = function () {
             // leftNavDashboardService.getDashboardTree({})
             //     .then(vm.handleDashboardTree, vm.handleFailure);
-            vm.getMyVehicles();
+            //vm.getMyVehicles();
         };
-
 
         vm.init();
     }

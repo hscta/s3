@@ -5,80 +5,57 @@
         .controller('MapController', MapController)
         .controller('ImmobalizeController', ImmobalizeController);
 
-    function MapController($scope, $log, mapService,
-                           $interval, geofenceViewService, $timeout, customMapOverlay, vehicleService) {
+
+    function MapController($scope, $log, cpuService, mapService,
+                           $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
+                           vehicleService, historyService, $state, $mdDialog) {
         $log.log('MapController');
         var vm = this;
 
-        $scope.searchbox = {
-            template: 'searchbox.tpl.html',
-            options: {
-                // autocomplete:true
-            },
-            events: {
-                places_changed: function (searchBox) {
-                    var place = searchBox.getPlaces();
-                    if (!place || place == 'undefined' || place.length == 0) {
-                        //console.log('no place data :(');
-                        return;
-                    }
+        var wh = $(window).height();
+        var header_height = 95;
 
-                    var gfmap = vm.inMap.mapControl.getGMap();
+        var markerInfowindow = new google.maps.InfoWindow();
+        var fenceInfowindow = new google.maps.InfoWindow();
 
-                    if (!place[0].geometry) {
-                        window.alert("Autocomplete's returned place contains no geometry");
-                        return;
-                    }
 
-                    // If the place has a geometry, then present it on a map.
-                    if (place[0].geometry.viewport) {
-                        gfmap.fitBounds(place[0].geometry.viewport);
-                    } else {
-                        gfmap.setCenter(place[0].geometry.location);
-                        gfmap.setZoom(17);  // Why 17? Because it looks good.
-                    }
-                }
-            }
-        };
+        vm.inMap = mapService.getMainMap();
+        vm.inMarkers = vm.inMap.markers.inMarkers;
+        vm.markersByPath = vm.inMap.markers.markersByPath;
+        vm.selectedFenceObj = vm.inMap.selectedFenceObj;
+        vm.filterStr = '';
+        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
+        vm.markerIconChangeTriggered = false;
+        vm.zoomhappened = true;
 
+        vm.onRoaded = true;
+        vm.offRoaded = false;
 
         vm.leftToolbar = function () {
             return geofenceViewService.getToolbarVar();
         };
 
 
-        vm.inMap = mapService.getMainMap();
-        vm.inMarkers = vm.inMap.markers.inMarkers;
-        vm.selectedFenceObj = vm.inMap.selectedFenceObj;
-        vm.fenceInfoWindow = vm.inMap.fenceInfoWindow;
-        vm.doRebuildAll = false;
-        vm.modelsbyref = false;
-
-        vm.filterStr = '';
-        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
-
-        vm.onRoaded = true;
-        vm.offRoaded = false;
-
         vm.loadMap = function () {
             vm.inMap.zoom = mapService.getZoom();
             vm.inMap.center = mapService.getCenter();
             vm.inMap.bounds = mapService.getBounds();
+            vm.createMap();
         };
 
-        vm.resizeMap = function () {
-            google.maps.event.trigger(vm.inMap.mapControl.getGMap(), 'resize');
-            return true;
+
+        vm.setUserPref = function (userSettings) {
+            //vm.inMap.center = userSettings.station;
+            vm.inMap.map.setCenter(new google.maps.LatLng(userSettings.station.latitude, userSettings.station.longitude));
         };
 
-        $interval(vm.resizeMap, 500);
 
         vm.getMarkerCenter = function (marker) {
             return {latitude: marker.latitude, longitude: marker.longitude};
         };
 
         vm.onRoadCheck = function () {
-            //$log.log("onroad check");
+            // $log.log("onroad check");
             vm.runFilters(vm.filterStr);
             vm.runStats();
         };
@@ -91,9 +68,9 @@
         };
 
 
-        vm.checkRoaded = function (marker) {
-            if (marker && marker.meta) {
-                if (marker.meta.onroad) {
+        vm.checkRoaded = function (rtgps) {
+            if (rtgps && rtgps.meta) {
+                if (rtgps.meta.onroad) {
                     if (vm.onRoaded) {
                         return true;
                     }
@@ -109,94 +86,158 @@
         };
 
 
-        vm.updateMarker2 = function (vehicleData) {
-            //$log.log('updateMarker2');
-
-            // $log.log(vehicleData);
-
-            vm.inMarkers.push(vehicleData);
-            // vm.customOverlay(vehicleData);
+        vm.setClickedMarker = function (model) {
+            if (model.vehiclepath in vm.markersByPath) {
+                //delete model['marker'];
+                // console.log(model.vehiclepath);
+                vm.inMap.markers.clickedMarker = vehicleService.vehiclesByPath[model.vehiclepath];
+                vm.inMap.markers.clickedMarker.hideMobilityControls = (vehicleService.vehiclesByPath[model.vehiclepath].permissions.indexOf(74) == -1);
+                $scope.clickedMarker = vm.inMap.markers.clickedMarker;
+                $scope.hideMobilityControls = vm.inMap.markers.clickedMarker.hideMobilityControls;
+            }
         };
 
-        vm.updateMarker = function (vehicleData) {
-            if (vehicleData.vehiclepath in vm.inCustomMaker) {
-                vm.inCustomMaker[vehicleData.vehiclepath].setPosition(vehicleData);
+
+        vm.updateMarker2 = function (rtgps) {
+            // $log.log('updateMarker2');
+            // $log.log(rtgps);
+
+            //vm.inMarkers.push(rtgps);
+
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(rtgps.latitude, rtgps.longitude),
+                icon: vm.getIcon(rtgps),
+                vehiclepath: rtgps.vehiclepath
+            });
+
+            // var data = rtgps.vehiclepath;
+
+            if (!(rtgps.vehiclepath in vm.markersByPath)) {
+                vm.markersByPath[rtgps.vehiclepath] = marker;
             }
 
-            vm.applyFilterToMarker(vehicleData, vm.filterStr);
+            google.maps.event.addListener(marker, 'click', function (event) {
+                vm.setClickedMarker(this);
+                markerInfowindow.setContent(document.getElementById("marker_infowindow").innerHTML);
+
+                markerInfowindow.open(map, this);
+            });
+
+            marker.setMap(vm.inMap.map);
+            vm.customOverlay(rtgps);
         };
 
+
+        vm.updateMarker = function (rtgps) {
+            if ((rtgps.vehiclepath in vm.inCustomMaker) && ( vm.geoFilters.showVehicleNumber || vm.geoFilters.noComm || vm.geoFilters.devBattery || vm.geoFilters.carBattery )) {
+                vm.inCustomMaker[rtgps.vehiclepath].setPosition(rtgps);
+            }
+
+            if (rtgps.vehiclepath in vm.markersByPath) {
+                var markerPos = new google.maps.LatLng(rtgps.latitude, rtgps.longitude);
+                vm.markersByPath[rtgps.vehiclepath].setPosition(markerPos);
+                vm.updateMarkerIcon(rtgps);
+            }
+
+            vm.applyFilterToMarker(rtgps, vm.filterStr);
+        };
+
+
+        vm.showAllMarkers = function () {
+            for (var idx in vm.markersByPath) {
+                var rtgps = vehicleService.vehiclesByPath[idx].rtgps;
+                vm.markersByPath[idx].setVisible(vm.checkRoaded(rtgps) && true);
+            }
+        };
 
         vm.runFilters = function (filterStr) {
             // $log.log("runFilters");
-            mapService.infoWindowClose();
-
             vm.filterStr = filterStr;
+            markerInfowindow.close();
 
-            for (var idx in vm.inMarkers) {
-                vm.applyFilterToMarker(vm.inMarkers[idx], filterStr);
+            if (vm.filterStr.length == 0) {
+                vm.showAllMarkers();
+                return;
+            }
+
+            /* center the map based on the first marker position that matches the filter */
+            var centerMap = false;
+            if (vm.filterStr.length > 2) {
+                for (var idx in vm.markersByPath) {
+                    var visible = vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
+                    if (visible && !centerMap) {
+                        vm.inMap.map.setCenter(vm.markersByPath[idx].getPosition());
+                        centerMap = true;
+                    }
+                }
+            }
+            if (vm.vehicleNumber) {
+                showVehicleNumberWindow();
             }
         };
 
+        vm.applyFilterToMarker = function (rtgps, filterStr) {
+            if (rtgps == null)
+                return false;
 
-        vm.applyFilterToMarker = function (marker, filterStr) {
-            //$log.log("applying filter to marker");
-            if (!vm.matchesAnyMarkerData(marker, filterStr)) {
-                marker.options.visible = false;
-                if (marker.vehiclepath in vm.inCustomMaker) {
-                    vm.inCustomMaker[marker.vehiclepath].hide();
+            if (!(rtgps.vehiclepath in vm.markersByPath)) {
+                // console.log(rtgps.vehiclepath);
+                return false;
+            }
+
+            var visible = false;
+            if (!vm.matchesAnyMarkerData(rtgps, filterStr)) {
+                visible = false;
+                if (rtgps.vehiclepath in vm.inCustomMaker) {
+                    vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             } else {
-                marker.options.visible = true;
-                if (marker.vehiclepath in vm.inCustomMaker) {
-                    vm.inCustomMaker[marker.vehiclepath].show();
+                visible = true;
+                if (rtgps.vehiclepath in vm.inCustomMaker && vm.geoFilters.showVehicleNumber) {
+                    vm.inCustomMaker[rtgps.vehiclepath].show();
                 }
             }
 
-            marker.options.visible = vm.checkRoaded(marker) && marker.options.visible;
-            if (marker.vehiclepath in vm.inCustomMaker) {
-                if (marker.options.visible) {
-                    vm.inCustomMaker[marker.vehiclepath].show();
+            visible = vm.checkRoaded(rtgps) && visible;
+            vm.markersByPath[rtgps.vehiclepath].setVisible(visible);
+
+            if (rtgps.vehiclepath in vm.inCustomMaker) {
+                if (visible && vm.geoFilters.showVehicleNumber) {
+                    vm.inCustomMaker[rtgps.vehiclepath].show();
                 } else {
-                    vm.inCustomMaker[marker.vehiclepath].hide();
+                    vm.inCustomMaker[rtgps.vehiclepath].hide();
                 }
             }
-
-            // if (marker.options.visible && (!marker.ignitionstatus)) {
-            //     $log.log(marker);
-            // }
-
-            return marker.options.visible;
+            return visible;
         };
 
 
-        vm.matchesAnyMarkerData = function (marker, filterStr) {
-            for (var eachidx in marker) {
+        vm.matchesAnyMarkerData = function (rtgps, filterStr) {
+            cpuService.track('new_one');
+            for (var eachidx in rtgps) {
                 if (vm.excludeFilters.indexOf(eachidx) != -1)
                     continue;
 
-                if (marker[eachidx]) {
-                    var lowercasefilterStr = filterStr.toString().toLowerCase();
-                    var lowercaseMarkerStr = marker[eachidx].toString().toLowerCase();
+                if (rtgps[eachidx] == null)
+                    continue;
 
-                    if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                        // if ((!marker.ignitionstatus && marker.options.visible)) {
-                        //     $log.log(lowercasefilterStr + " = " + lowercaseMarkerStr);
-                        // }
-                        return true;
-                    }
+                var lowercasefilterStr = filterStr.toString().toLowerCase();
+                var lowercaseMarkerStr = rtgps[eachidx].toString().toLowerCase();
+
+                if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                    return true;
                 }
 
-                if (marker[eachidx].constructor == Object) {
-                    // $log.log(marker[eachidx]);
-                    for (var myMeta in marker[eachidx]) {
+
+                if (rtgps[eachidx].constructor == Object) {
+                    for (var myMeta in rtgps[eachidx]) {
                         if (vm.excludeFilters.indexOf(eachidx) != -1)
                             continue;
-
-                        if (marker[eachidx][myMeta]) {
+                        if (rtgps[eachidx][myMeta]) {
                             var lowercasefilterStr = filterStr.toString().toLowerCase();
-                            // $log.log(marker[eachidx][myMeta]);
-                            var lowercaseMarkerStr = marker[eachidx][myMeta].toString().toLowerCase();
+                            // $log.log(rtgps[eachidx][myMeta]);
+                            var lowercaseMarkerStr = rtgps[eachidx][myMeta].toString().toLowerCase();
 
                             if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
                                 return true;
@@ -205,8 +246,7 @@
                     }
                 }
             }
-
-            //$log.log("not matching " + marker.id);
+            cpuService.track('new_one');
             return false;
         };
 
@@ -216,38 +256,48 @@
             running: 0,
             stopped: 0,
             active: 0,
+            noComm: 0,
+            devPullout: 0,
             immobilized: 0
         };
 
 
         vm.runStats = function () {
             for (var filter in vm.vehicleStats) {
-                if (filter === 'showall') {
+                if (filter === 'showall') { // <---- Why we put condition ?
                     vm.vehicleStats[filter] = vm.getStats(filter);
                 } else {
                     vm.vehicleStats[filter] = vm.getStats(filter);
                 }
             }
 
+            //$timeout(vm.runStats, 10000);
             // $log.log(vm.vehicleStats);
         };
 
+
         vm.getStats = function (filterStr) {
             var count = 0;
-            for (var idx in vm.inMarkers) {
-                var marker = vm.inMarkers[idx];
-                if (vm.checkRoaded(marker)) {
-                    if (vm.matchesAnyMarkerData(marker, filterStr)) {
+            vm.vehicleStats.noComm = 0;
+            vm.vehicleStats.devPullout = 0;
+            for (var idx in vehicleService.vehiclesByPath) {
+                var rtgps = vehicleService.vehiclesByPath[idx].rtgps;
+                if (vm.checkRoaded(rtgps)) {
+                    checkNoComm(rtgps, function (rtgps) {
+                        vm.vehicleStats.noComm++;
+                    });
+                    if (rtgps.carbattery < 2) {
+                        vm.vehicleStats.devPullout++;
+                    }
+                    if (vm.matchesAnyMarkerData(rtgps, filterStr)) {
                         count++;
-                    } else {
+                    } else { // <--- Can we use else if instead of this ?
                         if (filterStr === "showall") {
                             count++;
                         }
                     }
                 }
-                // vm.customOverlay(vm.inMarkers[idx]);
             }
-
             //$log.log("Filtered vehicles = " + count);
             return count;
         };
@@ -276,17 +326,94 @@
         var MIN_STROKE = 3;
 
 
-        vm.getMyFencesListener = function (fences) {
-            $log.log('mapcontroller');
-            // $log.log(fences);
-            // vm.inMap.circles = fences.circles;
-            mapService.inMap.circles = fences.circles;
-            // vm.inMap.polygons = fences.polygons;
-            mapService.inMap.polygons = fences.polygons;
-            // $log.log("calling geofenceViewService.setData");
+        vm.getMyFences = function (fences) {
             geofenceViewService.setData('geofences', true);
             vm.applyFilters({filterType: 'showAll'});
+
+            vm.createPolygons(fences.polygons);
+            vm.createCircles(fences.circles);
         };
+
+        vm.createPolygons = function (polygons) {
+            var polygonMap = {};
+            for (var idx in polygons) {
+                var paths = [];
+                for (var j = 0; j < polygons[idx].path.length; j++) {
+                    paths.push(new google.maps.LatLng(polygons[idx].path[j].latitude,
+                        polygons[idx].path[j].longitude));
+                }
+
+                var color = getColor(polygons[idx].control.info.tagdata);
+                polygons[idx].strokeColor = color;
+
+                var strokeWeight = getStroke(polygons[idx].control.info.tagdata);
+                polygons[idx].strokeWeight = strokeWeight;
+
+                var googlePolygon = new google.maps.Polygon({
+                    path: paths,
+                    strokeColor: polygons[idx].strokeColor,
+                    strokeWeight: polygons[idx].strokeWeight,
+                    fillColor: polygons[idx].fillColor,
+                    fillOpacity: polygons[idx].fillOpacity,
+                    info: polygons[idx].control.info
+                });
+
+                google.maps.event.addListener(googlePolygon, 'click', function (evt) {
+                    vm.selectedFenceObj = this;
+                    fenceInfowindow.setContent(document.getElementById("fence_infowindow").innerHTML);
+                    fenceInfowindow.setPosition(evt.latLng);
+                    fenceInfowindow.open(vm.inMap.map, this);
+                });
+
+                if (checkFilterString(polygons[idx].control.info.tagdata)) {
+                    googlePolygon.setMap(vm.inMap.map);
+                }
+
+                polygons[idx].googleObject = googlePolygon;
+                polygonMap[polygons[idx].control.info.assetpath] = polygons[idx];
+            }
+            vm.polygonsByPath = polygonMap;
+        };
+
+
+        vm.createCircles = function (circles) {
+            var circlesMap = {};
+            for (var idx in circles) {
+
+                var color = getColor(circles[idx].control.info.tagdata);
+                circles[idx].strokeColor = color;
+
+                var strokeWeight = getStroke(circles[idx].control.info.tagdata);
+                circles[idx].strokeWeight = strokeWeight;
+
+                var googleCircle = new google.maps.Circle({
+                    strokeColor: circles[idx].strokeColor,
+                    strokeWeight: circles[idx].strokeWeight,
+                    fillColor: circles[idx].fillColor,
+                    fillOpacity: circles[idx].fillOpacity,
+                    center: {lat: circles[idx].center.latitude, lng: circles[idx].center.longitude},
+                    radius: circles[idx].radius,
+                    info: circles[idx].control.info
+                });
+
+                google.maps.event.addListener(googleCircle, 'click', function (evt) {
+                    vm.selectedFenceObj = this;
+                    fenceInfowindow.setPosition(evt.latLng);
+                    fenceInfowindow.setContent(document.getElementById("fence_infowindow").innerHTML);
+                    fenceInfowindow.open(vm.inMap.map, this);
+                });
+
+                if (checkFilterString(circles[idx].control.info.tagdata)) {
+                    googleCircle.setMap(vm.inMap.map);
+                }
+
+                circles[idx].googleObject = googleCircle;
+                circlesMap[circles[idx].control.info.assetpath] = circles[idx];
+
+            }
+            vm.circlesByPath = circlesMap;
+        };
+
 
         var DEVBATTERY_THRESHOLD = 3.55;
         var CARBATTERY_THRESHOLD = 9.5;
@@ -294,36 +421,36 @@
         vm.applyFilters = function (filterData, recall) {
             var idx;
             var marker;
-
-            if(recall == null) {
+            if (recall == null) {
                 recall = 1;
             }
 
             if (filterData.filterType == 'carBattery') {
-                for (idx in vm.inMarkers) {
-                    marker = vm.inMarkers[idx];
+                for (idx in vm.markersByPath) {
+                    marker = vm.markersByPath[idx];
                     if (vm.geoFilters.carBattery) {
-                        if (marker.carbattery < CARBATTERY_THRESHOLD) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        if (vehicleService.vehiclesByPath[idx].rtgps.carbattery < CARBATTERY_THRESHOLD && vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
+
+                            vm.inCustomMaker[marker.vehiclepath].highlight('orange');
                         }
                     } else {
-                        if(recall == 1) {
-                            marker.options.animation = null;
+                        if (recall == 1) {
+                            vm.inCustomMaker[marker.vehiclepath].unhighlight();
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
                     }
                 }
             } else if (filterData.filterType == 'devBattery') {
-                for (idx in vm.inMarkers) {
-                    marker = vm.inMarkers[idx];
+                for (idx in vm.markersByPath) {
+                    marker = vm.markersByPath[idx];
                     if (vm.geoFilters.devBattery) {
-                        if (marker.devbattery < DEVBATTERY_THRESHOLD) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
+                        if (vehicleService.vehiclesByPath[idx].rtgps.devbattery < DEVBATTERY_THRESHOLD && vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
+                            vm.inCustomMaker[marker.vehiclepath].highlight('yellow');
                         }
                     } else {
-                        if(recall == 1) {
-                            marker.options.animation = null;
+                        if (recall == 1) {
+                            vm.inCustomMaker[marker.vehiclepath].unhighlight();
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'noComm'}, recall - 1);
                         }
@@ -331,21 +458,19 @@
                     }
                 }
             } else if (filterData.filterType == 'noComm') {
-                for (idx in vm.inMarkers) {
-                    marker = vm.inMarkers[idx];
+                for (idx in vm.markersByPath) {
+                    marker = vm.markersByPath[idx];
                     if (vm.geoFilters.noComm) {
-                        var currentTime = new Date().getTime();
-                        var lastSeenAt = marker.timestamp.getTime();
-                        var noCommThreshold = 8 * 3600 * 1000;
-                        //$log.log("currentTime: " + currentTime);
-                        //$log.log("lastSeenAt: " + lastSeenAt);
-                        if (currentTime - lastSeenAt > noCommThreshold) {
-                            marker.options.animation = google.maps.Animation.BOUNCE;
-                        }
+                        checkNoComm(vehicleService.vehiclesByPath[idx].rtgps, function () {
+                            if (vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
+                                vm.inCustomMaker[marker.vehiclepath].highlight('red');
+
+                            }
+                        });
                     }
                     else {
-                        if(recall == 1) {
-                            marker.options.animation = null;
+                        if (recall == 1) {
+                            vm.inCustomMaker[marker.vehiclepath].unhighlight();
                             vm.applyFilters({filterType: 'devBattery'}, recall - 1);
                             vm.applyFilters({filterType: 'carBattery'}, recall - 1);
                         }
@@ -354,43 +479,50 @@
             } else if (filterData.filterType == 'showVehicleNo') {
                 // Do something to notify showVehicleNo filter is On
             } else {
-                if (vm.inMap.circles) {
-                    //$log.log(vm.inMap.circles);
-                    for (idx = 0; idx < vm.inMap.circles.length; idx++) {
-                        var filterStr = vm.inMap.circles[idx].control.info.tagdata;
-                        // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
+                if ($state.current.name == 'home.history')
+                    vm.currentMap = historyService.historyMap.map;
+                else
+                    vm.currentMap = vm.inMap.map;
+
+                if (vm.circlesByPath) {
+                    // $log.log(vm.circlesByPath);
+                    for (var idx in vm.circlesByPath) {
+                        var filterStr = vm.circlesByPath[idx].control.info.tagdata;
+                        vm.circlesByPath[idx].googleObject.setMap(null);
+
                         if (checkFilterString(filterStr)) {
-                            vm.inMap.circles[idx].visible = true;
-                            vm.inMap.circles[idx].stroke.weight = getStroke(filterStr);
-                            vm.inMap.circles[idx].stroke.color = getColor(filterStr);
-                            startAnimation(vm.inMap.circles[idx]);
-                        } else {
-                            vm.inMap.circles[idx].visible = false;
-                            // console.log(mapService.inMap.circles[idx]);
-                            // console.log(idx);
+                            vm.circlesByPath[idx].strokeWeight = getStroke(filterStr);
+                            vm.circlesByPath[idx].strokeColor = getColor(filterStr);
+                            vm.circlesByPath[idx].googleObject.setMap(vm.currentMap);
+                            startAnimation(vm.circlesByPath[idx]);
                         }
                     }
                 }
-
-                if (vm.inMap.polygons) {
-                    for (idx = 0; idx < vm.inMap.polygons.length; idx++) {
-                        filterStr = vm.inMap.polygons[idx].control.info.tagdata;
-                        // $log.log(filterData.filterType + ", checkfilterstr = " + checkFilterString(filterStr));
+                if (vm.polygonsByPath) {
+                    for (var idx in vm.polygonsByPath) {
+                        filterStr = vm.polygonsByPath[idx].control.info.tagdata;
+                        vm.polygonsByPath[idx].googleObject.setMap(null);
                         if (checkFilterString(filterStr)) {
-                            vm.inMap.polygons[idx].visible = true;
-                            vm.inMap.polygons[idx].stroke.weight = getStroke(filterStr);
-                            vm.inMap.polygons[idx].stroke.color = getColor(filterStr);
-                            startAnimation(vm.inMap.polygons[idx]);
-                        } else {
-                            vm.inMap.polygons[idx].visible = false;
-                            if (filterData.filterType == 'cityLimits') {
-                                // $log.log(filterData.filterType + " == check == " + vm.polygons[idx].visible);
-                            }
+                            vm.polygonsByPath[idx].googleObject.setMap(vm.currentMap);
+                            startAnimation(vm.polygonsByPath[idx]);
                         }
                     }
                 }
             }
         };
+
+
+        function checkNoComm(marker, callback) {
+            var currentTime = new Date().getTime();
+            var lastSeenAt = marker.timestamp.getTime();
+            var noCommThreshold = 8 * 3600 * 1000;
+            if (currentTime - lastSeenAt > noCommThreshold) {
+                if (callback) {
+                    callback(marker);
+                }
+            }
+        }
+
 
         function getColor(str) {
             var type = getType(str);
@@ -398,12 +530,14 @@
                 return 'black';
             } else if (type == SERVICE_STATION) {
                 //return '#f89406';
-                return 'blue';
+                return '#bc31ff';
             } else if (type == COMPETITOR_HUB) {
                 return 'red';
             } else if (type == CITY_LIMIT) {
                 return 'blue';
             }
+
+            var x = "#bc31ff";
         }
 
         function getStroke(str) {
@@ -419,6 +553,7 @@
             }
         }
 
+
         function startAnimation(obj) {
             var count = 0;
             //$log.log(getType(obj.control.info.tagdata));
@@ -426,13 +561,14 @@
                 $interval(function () {
                     count++;
                     if (count % 2 == 0)
-                        obj.stroke.weight = DEFAULT_STROKE;
+                        obj.strokeWeight = DEFAULT_STROKE;
                     else
-                        obj.stroke.weight = MIN_STROKE;
+                        obj.strokeWeight = MIN_STROKE;
 
                 }, 500, 4);
             }
         }
+
 
         function getType(tagdata) {
             var str = tagdata.olafilter;
@@ -475,22 +611,15 @@
                 return true;
             }
 
-            // if (filter.parkingLot && str.match(/parking/g) && str.match(/parking/g).length > 0)
-            //     return true;
-            // if (filter.serviceStation && str.match(/servicestation/g) && str.match(/servicestation/g).length > 0)
-            //     return true;
-            // if (filter.competitorHub && str.match(/competitor/g) && str.match(/competitor/g).length > 0)
-            //     return true;
-            //
-            // return (filter.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0);
             return false;
         }
 
         vm.addListener = function () {
             vehicleService.addListener('rtgps2', vm.updateMarker2);
             mapService.addListener('rtgps', vm.updateMarker);
-            geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
+            geofenceViewService.addListener('getMyFences', vm.getMyFences);
             geofenceViewService.addListener('applyFilters', vm.applyFilters);
+            mapService.addListener('setUserPref', vm.setUserPref);
         };
 
         // Google Map Custom HTML Marker ================================================================================================================
@@ -505,53 +634,315 @@
             if (vehiclePath in vm.inCustomMaker) {
                 vm.inCustomMaker[vehiclePath].highlightMe();
             } else {
-                console.log('[MAP CONTROLLER] no marker found!');
+                console.log('[CUSTOM OVERLAY] no marker found to highLight!');
             }
         };
 
-        vm.customOverlay = function (marker) {
-            if (!(marker.vehiclepath in vm.inCustomMaker)) {
-                vm.inCustomMaker[marker.vehiclepath] = new customMapOverlay.CustomMarker(marker.latitude, marker.longitude, vm.inMap.mapControl.getGMap(), {marker: marker});
+
+        vm.customOverlay = function (rtgps) {
+            if (!(rtgps.vehiclepath in vm.inCustomMaker)) {
+                vm.inCustomMaker[rtgps.vehiclepath] = new customMapOverlay.CustomMarker(rtgps.latitude, rtgps.longitude, mapService.inMap.map, {marker: rtgps});
             }
         };
+
+        function showVehicleNumberWindow() {
+            for (idx in vm.inCustomMaker) {
+                if (vm.markersByPath[vm.inCustomMaker[idx].args.marker.vehiclepath].getVisible()) {
+                    vm.inCustomMaker[idx].show();
+                    vm.inCustomMaker[idx].showVehicleNumber();
+                } else {
+                    vm.inCustomMaker[idx].hide();
+                    vm.inCustomMaker[idx].hideVehicleNumber();
+                }
+            }
+        }
+
         vm.showVehicleNumber = function (vn) {
+            vm.runFilters(vm.filterStr);
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {
-                for (idx in vm.inCustomMaker) {
-                    vm.inCustomMaker[idx].showVehicleNumber();
-                }
+                showVehicleNumberWindow();
             } else {
                 for (idx in vm.inCustomMaker) {
+                    vm.inCustomMaker[idx].hide();
                     vm.inCustomMaker[idx].hideVehicleNumber();
                 }
             }
         };
-
-
         geofenceViewService.showVehicleNumber = function (vn) {
             vm.showVehicleNumber(vn);
         };
 
-        mapService.setInMapLocation = function (loc) {
-            vm.inMap.center = loc;
+
+        vm.createMap = function () {
+            var mapCanvas = document.getElementById("map");
+            vm.inMap.mapOptions = {
+                center: new google.maps.LatLng(vm.inMap.center.latitude, vm.inMap.center.longitude),
+                zoom: vm.inMap.zoom
+            };
+            vm.inMap.map = new google.maps.Map(mapCanvas, vm.inMap.mapOptions);
+
+            vm.inMap.map.addListener('click', function () {
+                markerInfowindow.close();
+                fenceInfowindow.close();
+            });
+
+            vm.lastZoomLevel = vm.inMap.map.getZoom();
         };
+
+        vm.updateMarkerIcon = function (rtgps) {
+            // vm.markersByPath[rtgps.vehiclepath].icon.fillColor = vm.getMarkerColor(rtgps);
+            // vm.markersByPath[rtgps.vehiclepath].icon.rotation = rtgps.direction;
+            vm.markersByPath[rtgps.vehiclepath].icon = vm.getIcon(rtgps);
+            vm.markersByPath[rtgps.vehiclepath].icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
+            vm.markersByPath[rtgps.vehiclepath].setIcon(vm.markersByPath[rtgps.vehiclepath].icon);
+        };
+
+
+        vm.onload = function () {
+            $scope.$apply(function () {
+                $compile(document.getElementById("markerWindow"))($scope);
+            });
+        };
+
+
+        vm.fenceWindowLoad = function () {
+            $scope.$apply(function () {
+                $compile(document.getElementById("fenceWindow"))($scope);
+            });
+        };
+
+
+        vm.mobilize = function (mobilityRequest) {
+            vm.inMap.markers.clickedMarker.rtgps.mobilityRequest = mobilityRequest;
+
+            // $log.log(vm.inMap.markers.clickedMarker);
+
+            var immobalizeDialog = $mdDialog.confirm({
+                controller: 'ImmobalizeController',
+                templateUrl: 'app/components/landingpage/dashboard/map/immobalize-dialog.html',
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                locals: {
+                    params: {
+                        clickedMarker: vm.inMap.markers.clickedMarker.rtgps
+                    }
+                }
+            }).ok('Yes').cancel('No');
+
+            $mdDialog.show(immobalizeDialog)
+                .then(function () {
+                    //$log.log("Yes Function");
+                }, function () {
+                    //$log.log("No Function");
+                })
+        };
+
+
+        vm.showHistory = function () {
+            // $log.log("show History");
+            historyService.setData('getHistory', false);
+            historyService.historyMap.traceObj = [];
+            mapService.showHistory();
+        };
+
+
+        function setMapHeight() {
+            // console.log('hel man');
+            wh = $(window).height();
+            // isRendered('.angular-google-map-container', function (el) {
+            //     el.css('height', (wh - header_height) + 'px');
+            // });
+            isRendered('.alert-md-content', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
+
+            isRendered('#map', function (el) {
+                el.css('height', (wh - header_height) + 'px');
+            });
+        }
+
+        $(window).resize(function () {
+            setMapHeight();
+        });
+
+        function isRendered(el, callback) {
+            var isr_interval = setInterval(function () {
+                if ($(el).length > 0) {
+                    callback($(el));
+                    clearInterval(isr_interval);
+                }
+            }, 200)
+        }
+
+
+        var MAP_STYLES = {
+            DARK: 'dark',
+            DEFAULT: 'default'
+        };
+
+
+        vm.triggerMarkerIconChange = function () {
+            if (Math.abs(vm.inMap.map.getZoom() - vm.lastZoomLevel) > 2) {
+                //console.log("changing marker icons");
+                vm.changeMarkerIcon();
+            }
+            vm.markerIconChangeTriggered = false;
+        };
+
+
+        vm.changeMapStyle = function () {
+            var zoom = vm.inMap.map.getZoom();
+            if (zoom < 10) {
+                if (vm.inMap.styleType != MAP_STYLES.DARK) {
+                    vm.inMap.styleType = MAP_STYLES.DARK;
+                    vm.inMap.map.setOptions({styles: mapService.mapStyles[MAP_STYLES.DARK]})
+                }
+            } else {
+                if (vm.inMap.styleType != MAP_STYLES.DEFAULT) {
+                    vm.inMap.styleType = MAP_STYLES.DEFAULT;
+                    vm.inMap.map.setOptions({styles: mapService.mapStyles[MAP_STYLES.DEFAULT]})
+                }
+            }
+        };
+
+        var RED_ICON = 'red';
+        var GREEN_ICON = 'green';
+        var BLUE_ICON = 'blue';
+        var ORANGE_ICON = 'orange';
+
+
+        vm.getMarkerColor = function (rtgps) {
+            // $log.log(rtgps.vehicleno, rtgps.mobilistatus, rtgps.ignitionstatus);
+            if (!rtgps.mobilistatus) {
+                return RED_ICON;
+            } else {
+                if (rtgps.ignitionstatus) {
+                    return GREEN_ICON;
+                } else {
+                    return BLUE_ICON;
+                }
+            }
+            return ORANGE_ICON;
+        };
+
+
+        vm.getIconURL = function (rtgps) {
+            return ['assets/images/markers', 'extralarge', vm.getMarkerColor(rtgps) + '-dot.png'].join('/');
+        };
+
+
+        var SCALE = 16;
+
+
+        vm.zoomChanged = function () {
+            if (vm.checkZoomLevel(1, 8)) {
+                SCALE = 8;
+            } else if (vm.checkZoomLevel(9, 10)) {
+                SCALE = 16;
+            } else if (vm.checkZoomLevel(11, 12)) {
+                SCALE = 24;
+            } else if (vm.checkZoomLevel(13, 14)) {
+                SCALE = 32;
+            } else {
+                SCALE = 40;
+            }
+
+
+            vm.changeMarkerIcon();
+
+            vm.changeMapStyle();
+            //$timeout(vm.changeMarkerIcon, 1000);
+        };
+
+
+        vm.changeMarkerIcon = function () {
+            for (var idx in vm.inMap.markers.markersByPath) {
+                var marker = vm.inMap.markers.markersByPath[idx];
+                var icon = marker.icon;
+                var rtgps = vehicleService.vehiclesByPath[marker.vehiclepath].rtgps;
+
+                icon.size = new google.maps.Size(SCALE, SCALE);
+                icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
+                icon.scaledSize = new google.maps.Size(SCALE, SCALE * 36);
+                icon.anchor = new google.maps.Point(SCALE/2, SCALE/2);
+                marker.setIcon(icon);
+            }
+        };
+
+
+        vm.getDirection = function (rtgps) {
+            if (rtgps.direction == null)
+                return 0;
+
+            var direction = Math.floor(rtgps.direction / 10) * SCALE;
+            if (direction > SCALE * 36)
+                direction = SCALE * 36;
+
+            // console.log(direction);
+            return direction;
+        };
+
+
+        vm.getIcon = function (rtgps) {
+            return {
+                url: vm.getIconURL(rtgps),
+                size: new google.maps.Size(SCALE, SCALE),
+                origin: new google.maps.Point(0, vm.getDirection(rtgps)),
+                scaledSize: new google.maps.Size(SCALE, SCALE * 36),
+                anchor: new google.maps.Point(SCALE/2, SCALE/2)
+            };
+        };
+
+
+        vm.checkZoomLevel = function (min, max) {
+            return (vm.inMap.map.getZoom() >= min && vm.inMap.map.getZoom() <= max);
+        };
+
+
+        vm.resizeMap = function () {
+            google.maps.event.trigger(vm.inMap.map, 'resize');
+            return true;
+        };
+
 
         vm.init = function () {
             vm.loadMap();
+            setMapHeight();
             vm.addListener();
-            geofenceViewService.getMyFences();
+
+            $timeout(vm.runStats, 5000);
             $interval(vm.runStats, 10000);
+
+            markerInfowindow.addListener('domready', function () {
+                vm.onload();
+            });
+
+            fenceInfowindow.addListener('domready', function () {
+                vm.fenceWindowLoad();
+            });
+
+            $interval(vm.resizeMap, 1000);
+
+            vm.inMap.map.addListener('zoom_changed', function () {
+                vm.zoomhappened = true;
+                //vm.zoomChanged();
+            });
+
+            vm.inMap.map.addListener('tilesloaded', function () {
+                vm.zoomChanged();
+            });
         };
+
 
         vm.init();
     }
-
-//#################################################################################################################
 
 
     function ImmobalizeController($scope, $log, $mdDialog, params, intellicarAPI, vehicleService) {
         //var vm = this;
         //$log.log('ImmobalizeController');
+
 
         $scope.msg = '';
         $scope.notify = '';
@@ -587,7 +978,7 @@
 
 
         $scope.executeMobilityCommand = function (resp) {
-            $log.log(resp);
+            // $log.log(resp);
             var vehiclepath = {'vehiclepath': params.clickedMarker.vehiclepath};
 
             if (resp.length > 0) {
@@ -663,7 +1054,7 @@
                 .then($scope.executeMobilityCommand,
                     function (resp) {
                         $log.log("getMobilityCommandStatus failure");
-                        $log.log(resp);
+                        // $log.log(resp);
                     });
         };
 
@@ -674,5 +1065,23 @@
         };
 
         $scope.init();
+
+        var red = '#ff4955';
+        var green = '#27ae60'; //new color code for green #2ad230
+        var blue = '#4673ff';
+        var yellow = '#f3b212';
+        var orange = '#f37813';
     }
+
 })();
+
+
+// if(str == 'red'){
+//     color = '#e74c3c'
+// }else if(str == 'green'){
+//     color = '#27ae60'
+// }else if(str == 'blue'){
+//     color = '#0000ff'
+// }else if(str == 'yellow'){
+//     color = '#f39c12'
+// }

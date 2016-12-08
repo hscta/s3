@@ -8,7 +8,7 @@
         .module('uiplatform')
         .directive('icarInput', icarInput);
 
-    function icarInput($log) {
+    function icarInput() {
         return {
             restrict: 'AE',
             template: '<md-input-container>\
