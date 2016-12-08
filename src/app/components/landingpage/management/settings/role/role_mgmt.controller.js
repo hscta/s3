@@ -71,8 +71,8 @@
 
         vm.setData = function(resp, permission){
             // $log.log( resp);
-            // var assignablePermList = resp[0].data.data.vdmap;
-            // var assignedPermList = resp[1].data.data.vdmap;
+            // var assignablePermList = resp[0].data.data.permmap;
+            // var assignedPermList = resp[1].data.data.permmap;
             //
             // $scope.groupData.datas[0].list = [];
             //
