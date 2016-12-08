@@ -32,6 +32,13 @@
         };
 
 
+        vm.getMyAssignedGroups = function (body) {
+            // $log.log("getMyGroups");
+            body = vm.encloseBody(body);
+            return requestService.firePost('/user/myassignedgroups', body);
+        };
+
+
         vm.getMyAssetGroups = function (body) {
             // $log.log("getMyAssetGroups");
             body = vm.encloseBody(body);
@@ -128,6 +135,16 @@
                 .then(helperService.makeAssetMap, vm.handleFailure)
                 .then(vm.handleResponse, vm.handleFailure);
         };
+
+
+        vm.getMyAssignedGroupsMap = function (body) {
+            // $log.log("getMyGroupsMap");
+            return vm.getMyAssignedGroups(body)
+                .then(helperService.mergeAssetPermissions, vm.handleFailure)
+                .then(helperService.makeAssetMap, vm.handleFailure)
+                .then(vm.handleResponse, vm.handleFailure);
+        };
+
 
         vm.getMyAssetGroupsMap = function (body) {
             //$log.log("getMyAssetGroupsMap");

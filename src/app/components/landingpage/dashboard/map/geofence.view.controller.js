@@ -39,7 +39,7 @@
         vm.leftTB = [
             {
                 'id': 'geoReport',
-                'name': 'Geofences Reports',
+                'name': 'Reports',
                 'iconType': 'fa',
                 'icon': 'fa-bar-chart',
                 'type': 'button',
