@@ -36,10 +36,9 @@
 
             vm.setInMapLocation = function (loc) {
                 vm.inMap.center = angular.copy(loc);
-                vm.inMap.map.setCenter({
-                    lat: vm.inMap.center.latitude,
-                    lng: vm.inMap.center.longitude
-                });
+                var latlng = new google.maps.LatLng (vm.inMap.center.latitude, vm.inMap.center.longitude);
+                vm.inMap.map.setCenter(latlng);
+                vm.inMap.map.setZoom(11);
             };
 
             vm.getPolygonMidPoint = function (polygon) {
