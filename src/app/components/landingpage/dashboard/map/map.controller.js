@@ -25,6 +25,7 @@
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.filterStr = '';
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
+        vm.mainFilters = ['Running', 'Stopped', 'Active',  'Immobilized',  'Not Communicating',  'Device pullout'];
         vm.markerIconChangeTriggered = false;
         vm.zoomhappened = true;
 
@@ -164,14 +165,39 @@
             /* center the map based on the first marker position that matches the filter */
             var centerMap = false;
             if (vm.filterStr.length > 2) {
+                var matchedMarker = null;
                 for (var idx in vm.markersByPath) {
                     var visible = vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
-                    if (visible && !centerMap) {
-                        vm.inMap.map.setCenter(vm.markersByPath[idx].getPosition());
-                        centerMap = true;
+                    // if (visible && !centerMap) {
+                    //     vm.inMap.map.setCenter(vm.markersByPath[idx].getPosition());
+                    //     centerMap = true;
+                    //     vm.inMap.map.setZoom(16);
+                    // }
+                    if (visible) {
+                        matchedMarker = vm.markersByPath[idx];
+                        var lat = Math.floor(matchedMarker.getPosition().lat());
+                        var lng = Math.floor(matchedMarker.getPosition().lng());
+                        var maplat = Math.floor(vm.inMap.map.getCenter().lat());
+                        var maplng = Math.floor(vm.inMap.map.getCenter().lng());
+
+                        if (lat == maplat && lng == maplng && !centerMap) {
+                            vm.inMap.map.setCenter(matchedMarker.getPosition());
+                            centerMap = true;
+                            if (vm.mainFilters.indexOf(vm.filterStr) == -1)
+                                vm.inMap.map.setZoom(16);
+                            //break;
+                        }
                     }
                 }
+
+                if (matchedMarker && !centerMap) {
+                    vm.inMap.map.setCenter(matchedMarker.getPosition());
+                    centerMap = true;
+                    if (vm.mainFilters.indexOf(vm.filterStr) == -1)
+                        vm.inMap.map.setZoom(16);
+                }
             }
+
             if (vm.vehicleNumber) {
                 showVehicleNumberWindow();
             }
@@ -865,7 +891,7 @@
                 icon.size = new google.maps.Size(SCALE, SCALE);
                 icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
                 icon.scaledSize = new google.maps.Size(SCALE, SCALE * 36);
-                icon.anchor = new google.maps.Point(SCALE/2, SCALE/2);
+                icon.anchor = new google.maps.Point(SCALE / 2, SCALE / 2);
                 marker.setIcon(icon);
             }
         };
@@ -890,7 +916,7 @@
                 size: new google.maps.Size(SCALE, SCALE),
                 origin: new google.maps.Point(0, vm.getDirection(rtgps)),
                 scaledSize: new google.maps.Size(SCALE, SCALE * 36),
-                anchor: new google.maps.Point(SCALE/2, SCALE/2)
+                anchor: new google.maps.Point(SCALE / 2, SCALE / 2)
             };
         };
 
