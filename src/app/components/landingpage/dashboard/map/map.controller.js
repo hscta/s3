@@ -25,7 +25,7 @@
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.filterStr = mapService.filterStr;
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
-        vm.mainFilters = ['Running', 'Stopped', 'Active',  'Immobilized',  'Not Communicating',  'Device pullout'];
+        vm.mainFilters = ['Running', 'Stopped', 'Active', 'Immobilized', 'Not Communicating', 'Device pullout'];
         vm.markerIconChangeTriggered = false;
         vm.zoomhappened = true;
 
@@ -169,11 +169,6 @@
                 var matchedMarker = null;
                 for (var idx in vm.markersByPath) {
                     var visible = vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
-                    // if (visible && !centerMap) {
-                    //     vm.inMap.map.setCenter(vm.markersByPath[idx].getPosition());
-                    //     centerMap = true;
-                    //     vm.inMap.map.setZoom(16);
-                    // }
                     if (visible) {
                         matchedMarker = vm.markersByPath[idx];
                         var lat = Math.floor(matchedMarker.getPosition().lat());
@@ -182,18 +177,18 @@
                         var maplng = Math.floor(vm.inMap.map.getCenter().lng());
 
                         if (lat == maplat && lng == maplng && !centerMap) {
-                            vm.inMap.map.setCenter(matchedMarker.getPosition());
+                            if(matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat() > 0.2) {
+                                vm.inMap.map.setCenter(matchedMarker.getPosition());
+                            }
                             centerMap = true;
                             if (vm.mainFilters.indexOf(vm.filterStr) == -1)
                                 vm.inMap.map.setZoom(16);
-                            //break;
                         }
                     }
                 }
 
                 if (matchedMarker && !centerMap) {
                     vm.inMap.map.setCenter(matchedMarker.getPosition());
-                    centerMap = true;
                     if (vm.mainFilters.indexOf(vm.filterStr) == -1)
                         vm.inMap.map.setZoom(16);
                 }
