@@ -309,6 +309,10 @@
         }
 
         function generateTimeline(path) {
+            if(path.length < 1){
+                vm.traceControls.timeline = [];
+                return;
+            }
             // setting and resetting track history  variables
             vm.traceControls.selectedVehicle = vm.historyMap.selectedVehicle;
             vm.traceControls.panel.clicked = true;
@@ -319,19 +323,34 @@
             var currentTime = first.gpstime;
             var currentPathIdx = 0;
 
-            while (currentTime < last.gpstime ) {
-                if (path[currentPathIdx].gpstime < currentTime) {
-                    if(currentPathIdx < path.length) {
-                        path[currentPathIdx].gpstime = currentTime;
-                        timeline.push(path[currentPathIdx]);
-                    }
-                    currentPathIdx++;
-                } else {
+            while (1) {
+                if(currentPathIdx >= path.length){
+                    break;
+                }
+
+                if (currentTime >= path[currentPathIdx].gpstime) { // regular points
                     timeline.push(path[currentPathIdx]);
+                    currentPathIdx++;
+                } else { // dummy points
+                    var dummy = getDefaultGraphObject(path[currentPathIdx]);
+                    dummy.gpstime = currentTime;
+                    timeline.push(dummy);
                 }
                 currentTime += vm.traceControls.interval;
             }
             vm.traceControls.timeline = timeline;
+        }
+
+        function getDefaultGraphObject(point) {
+            var latlng =  angular.copy(point);
+            // latlng.id = vm.historyMap.deviceid;
+            // latlng.deviceid = vm.historyMap.deviceid;
+            latlng.gpstime = 0;
+            latlng.speed = 0
+            latlng.odometer = 0
+            latlng.heading = 0
+            latlng.ignstatus = 0
+            return latlng;
         }
 
         function getTimelineObjects() {
