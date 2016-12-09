@@ -160,6 +160,8 @@
 
             if (vm.filterStr.length == 0) {
                 vm.showAllMarkers();
+                vm.inMap.map.setZoom(11);
+
                 return;
             }
 
@@ -180,9 +182,14 @@
                             if(matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat() > 0.2) {
                                 vm.inMap.map.setCenter(matchedMarker.getPosition());
                             }
-                            centerMap = true;
-                            if (vm.mainFilters.indexOf(vm.filterStr) == -1)
+
+                            if (vm.mainFilters.indexOf(vm.filterStr) == -1) {
+                                vm.inMap.map.setCenter(matchedMarker.getPosition());
                                 vm.inMap.map.setZoom(16);
+                            }
+
+                            centerMap = true;
+
                         }
                     }
                 }

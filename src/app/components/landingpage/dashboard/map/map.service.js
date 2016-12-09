@@ -107,13 +107,11 @@
                     id: vm.loc.USER,
                     notation: 'USR',
                     latlng: {latitude: 19.195549, longitude: 72.936381}
-                },
-                {
+                }, {
                     id: vm.loc.MUMBAI,
                     notation: 'MUM',
                     latlng: {latitude: 19.195549, longitude: 72.936381}
-                },
-                {
+                }, {
                     id: vm.loc.BANGALORE,
                     notation: 'BLR',
                     latlng: {latitude: 12.967995, longitude: 77.597953}
