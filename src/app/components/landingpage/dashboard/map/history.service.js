@@ -31,7 +31,7 @@
         vm.historyMap = {
             map: {},
             mapOptions: {
-                center: {lat: mapService.getCenter().latitude, lng: mapService.getCenter().longitude},
+                center: new google.maps.LatLng(mapService.getCenter().latitude, mapService.getCenter().longitude),
                 zoom: mapService.getZoom()
             },
             traceObj: [],
@@ -63,10 +63,8 @@
 
         vm.setInMapLocation = function (loc) {
             vm.historyMap.mapOptions.center = angular.copy(loc);
-            vm.historyMap.map.setCenter({
-                lat: vm.historyMap.mapOptions.center.latitude,
-                lng: vm.historyMap.mapOptions.center.longitude
-            });
+            var latlng = new google.maps.LatLng(vm.historyMap.mapOptions.center.latitude, vm.historyMap.mapOptions.center.longitude);
+            vm.historyMap.map.setCenter(latlng);
         };
 
         vm.addListener = function (key, listener) {
@@ -169,6 +167,7 @@
 
         vm.drawTrace = function (resp) {
 
+            vm.setData('getHistory', true);
             if (resp) vm.historyMap.traceData = resp.data.data;
 
             // resetting previous drawings
@@ -202,64 +201,52 @@
             function compare(a, b) {
                 return a.gpstime - b.gpstime;
             }
+            if(path.length > 0) {
 
-            path.sort(compare);
+                path.sort(compare);
 
-
-            vm.historyMap.startMarker = new google.maps.Marker({
-                position: path[0],
-                //icon: 'assets/images/markers/extralarge/red-dot.png'
-            });
-
-
-            var lastBeacon = path[path.length - 1];
-            vm.historyMap.endMarker = new google.maps.Marker({
-                position: lastBeacon,
-                label: 'E',
-                title: 'End point'
-            });
-
-            var midPoint = Math.floor(path.length / 2);
-
-            vm.historyMap.trace = new google.maps.Polyline({
-                path: path,
-                icons: [{
-                    icon: {
-                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
-                    },
-                    offset: '100px',
-                    repeat: '100px'
-                }],
-                strokeColor: "blue",
-                strokeWeight: 2,
-                strokeOpacity: 1
-            });
-
-            vm.historyMap.traceObj = path;
-
-            if(vm.historyMap.map != null && vm.historyMap.map.setCenter) {
-                // if (vm.historyMap.trace)
-                //     vm.historyMap.trace.setMap(null);
-                // if (vm.historyMap.startMarker)
-                //     vm.historyMap.startMarker.setMap(null);
-                // if (vm.historyMap.endMarker)
-                //     vm.historyMap.endMarker.setMap(null);
-
-
-                // vm.historyMap.map.setCenter(path[midPoint]);
-                // $log.log(path[0]);
-                vm.historyMap.map.setCenter({
-                    lat: path[0].lat(),
-                    lng: path[0].lng()
+                vm.historyMap.startMarker = new google.maps.Marker({
+                    position: path[0],
                 });
-                vm.historyMap.map.setZoom(11);
-                vm.historyMap.trace.setMap(vm.historyMap.map);
-                vm.historyMap.startMarker.setMap(vm.historyMap.map);
-                vm.historyMap.endMarker.setMap(vm.historyMap.map);
-            }
 
-            vm.setData('getHistory', true);
-            $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path});
+                var lastBeacon = path[path.length - 1];
+                vm.historyMap.endMarker = new google.maps.Marker({
+                    position: lastBeacon,
+                    label: 'E',
+                    title: 'End point'
+                });
+
+                var midPoint = Math.floor(path.length / 2);
+
+                vm.historyMap.trace = new google.maps.Polyline({
+                    path: path,
+                    icons: [{
+                        icon: {
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+                        },
+                        offset: '100px',
+                        repeat: '100px'
+                    }],
+                    strokeColor: "blue",
+                    strokeWeight: 2,
+                    strokeOpacity: 1
+                });
+
+                vm.historyMap.traceObj = path;
+
+                if (vm.historyMap.map != null && vm.historyMap.map.setCenter ) {
+                    var latlng = new google.maps.LatLng(path[0].lat(), path[0].lng());
+                    vm.historyMap.map.setCenter(latlng);
+                    vm.historyMap.map.setZoom(11);
+                    vm.historyMap.trace.setMap(vm.historyMap.map);
+                    vm.historyMap.startMarker.setMap(vm.historyMap.map);
+                    vm.historyMap.endMarker.setMap(vm.historyMap.map);
+                }
+                $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path});
+            }else{
+                vm.historyMap.errorMsg = "No GPS Signal";
+                $rootScope.$broadcast('gotHistoryEventFailed');
+            }
         };
 
         vm.getDefaultTime = function () {

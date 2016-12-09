@@ -23,7 +23,7 @@
         vm.inMarkers = vm.inMap.markers.inMarkers;
         vm.markersByPath = vm.inMap.markers.markersByPath;
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
-        vm.filterStr = '';
+        vm.filterStr = mapService.filterStr;
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
         vm.mainFilters = ['Running', 'Stopped', 'Active',  'Immobilized',  'Not Communicating',  'Device pullout'];
         vm.markerIconChangeTriggered = false;
@@ -155,6 +155,7 @@
         vm.runFilters = function (filterStr) {
             // $log.log("runFilters");
             vm.filterStr = filterStr;
+            mapService.filterStr = filterStr;
             markerInfowindow.close();
 
             if (vm.filterStr.length == 0) {
@@ -417,7 +418,7 @@
                     strokeWeight: circles[idx].strokeWeight,
                     fillColor: circles[idx].fillColor,
                     fillOpacity: circles[idx].fillOpacity,
-                    center: {lat: circles[idx].center.latitude, lng: circles[idx].center.longitude},
+                    center: new google.maps.LatLng(circles[idx].center.latitude, circles[idx].center.longitude),
                     radius: circles[idx].radius,
                     info: circles[idx].control.info
                 });

@@ -45,7 +45,7 @@
                 'type': 'button',
                 'historymap': false,
                 'data': {
-                    'type': 'stateChange', 'independent': true, 'state': 'home.geofence', active: true
+                    'type': 'stateChange', 'independent': true, 'state': 'home.history', active: true,
                 }
             },
             {'type': 'line', 'historymap': false},

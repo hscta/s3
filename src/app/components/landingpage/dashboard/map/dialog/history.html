@@ -126,8 +126,8 @@
             <div class="ltbi_icon" ng-if="item.hasOwnProperty('icon')">
                 <i class="fa {{item.icon}}" ng-if="item.iconType == 'fa'" aria-hidden="true"></i>
                 <i ng-if="item.iconType == 'md'" class="material-icons">{{item.icon}}</i>
-                <img ng-if="item.iconType == 'png' && item.data.active" src="{{item.icon}}.active.png">
-                <img ng-if="item.iconType == 'png' && !item.data.active" src="{{item.icon}}.png">
+                <img ng-if="item.iconType == 'png' && item.data.active" ng-src="{{item.icon}}.active.png">
+                <img ng-if="item.iconType == 'png' && !item.data.active" ng-src="{{item.icon}}.png">
                 <i ng-if="item.iconType == 'png'"
                    style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
             </div>
@@ -156,8 +156,8 @@
                 <div class="ltbi_icon" ng-if="child.hasOwnProperty('icon')">
                     <i class="fa {{child.icon}}" ng-if="child.iconType == 'fa'" aria-hidden="true"></i>
                     <i ng-if="child.iconType == 'md'" class="material-icons">{{child.icon}}</i>
-                    <img ng-if="child.iconType == 'png' && !child.data.active" src="{{child.icon}}.png">
-                    <img ng-if="child.iconType == 'png' && child.data.active" src="{{child.icon}}.active.png">
+                    <img ng-if="child.iconType == 'png' && !child.data.active" ng-src="{{child.icon}}.png">
+                    <img ng-if="child.iconType == 'png' && child.data.active" ng-src="{{child.icon}}.active.png">
                     <i ng-if="child.iconType == 'png'"
                        style="position: absolute; color: rgba(0,0,0,0)!important; width: 80%; height: 80%;"> a</i>
                 </div>
@@ -175,19 +175,17 @@
    <!--<span class="error-msg">{{errorMsg}}</span><br/>-->
     <div layout="row" layout-align="space-around center">
         <div layout="row" class="input-fields" layout-align="space-around center" flex>
-            <md-input-container class="container-margin" >
-                <label>Vehicle No</label>
-                <!--<md-select ng-model="vehicle" ng-model-options="{trackBy: '$value.vehicleno'}">-->
-                <md-select ng-model="vm.historyMap.selectedVehicle"
-                           ng-model-options="{trackBy: '$value.rtgps.deviceid'}">
 
-                    <md-option ng-repeat="(key, vehicle) in vm.historyMap.vehiclesByPath"
-                               ng-value="vm.historyMap.vehiclesByPath[key]"
-                               ng-if="vm.historyMap.vehiclesByPath[key].rtgps.meta.onroad">
-                            {{vm.historyMap.vehiclesByPath[key].rtgps.vehicleno}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
+            <md-autocomplete class="hsitoryAutocomplete" md-selected-item="vm.historyMap.selectedVehicle" md-search-text="searchText"
+                             md-items="item in getMatches(searchText)" md-item-text="item.rtgps.vehicleno">
+                <md-item-template>
+                    <span>{{item.rtgps.vehicleno}}</span>
+                </md-item-template>
+                <md-not-found>
+                    No matches found.
+                </md-not-found>
+            </md-autocomplete>
+
             <md-input-container class="container-margin">
                 <label>Start Time</label>
                 <input type="text" id="start_time" ng-model="vm.historyMap.startTime">
@@ -207,7 +205,9 @@
         <div class="md-dialog-content historyMap map-dialog history-dialog">
 
             <div id="history_map" style="width:100%;height:500px"></div>
-            <div class="history-err" ng-show="!vm.gotHistory">{{vm.historyMap.errorMsg}}</div>
+            <div class="history-err" ng-show="!vm.gotHistory">
+                {{vm.historyMap.errorMsg}}
+            </div>
             <div class="traceControls" ng-class="{'active':vm.gotHistory}">
                 <div class="tc_controls">
                     <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()"

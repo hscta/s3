@@ -8,10 +8,26 @@
         .controller('HistoryController', HistoryController)
         .controller('HistoryTableController', HistoryTableController);
 
-    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log,
+    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log, vehicleService, mapService,
                                 dialogService, geofenceViewService, $compile) {
 
         var vm = this;
+
+        $scope.getMatches = function (str) {
+            var matchArray = [];
+            if(str == null) str = '';
+            var modelString;
+            str = str.toLowerCase();
+            for(var idx in vm.historyMap.markersByPath){
+                modelString = vehicleService.vehiclesByPath[idx].rtgps.vehicleno;
+                modelString = modelString.toLowerCase();
+                if(modelString.indexOf(str) != -1){
+                    matchArray.push(vehicleService.vehiclesByPath[idx]);
+                }
+            }
+            return matchArray;
+        }
+
 
         dialogService.setTab(0);
 
@@ -68,10 +84,10 @@
             //$log.log(vm.historyMap.selectedVehicle);
             if (vm.historyMap.selectedVehicle == null) {
                 // var startInterval = $interval(function () {
-                var keys = Object.keys(vm.historyMap.vehiclesByPath);
+                var keys = Object.keys(vehicleService.vehiclesByPath);
                 if (keys.length > 0) {
-                    $log.log(vm.historyMap.vehiclesByPath[keys[0]]);
-                    vm.historyMap.selectedVehicle = vm.historyMap.vehiclesByPath[keys[0]];
+                    $log.log(vehicleService.vehiclesByPath[keys[0]]);
+                    vm.historyMap.selectedVehicle = vehicleService.vehiclesByPath[keys[0]];
                     // $interval.cancel(startInterval);
                 }
                 // }, 500 )
@@ -135,16 +151,16 @@
                     if (vm.traceControls.current >= vm.traceControls.timeline.length) {
                         $interval.cancel(vm.traceControls.engine);
                         vm.traceControls.playing = false;
-                        vm.traceControls.current = -1;
+                    }else{
+                        vm.traceControls.current++;
                     }
-                    vm.traceControls.current++;
                     vm.traceControls.moveTimeline();
                 }, vm.traceControls.SPEEDS[vm.traceControls.speed]);
             }
         };
 
         vm.traceControls.moveTimeline = function () {
-            if (vm.historyMap.startMarker) {
+            if (vm.historyMap.startMarker && vm.traceControls.current < vm.traceControls.timeline.length) {
                 var left = vm.traceControls.current / vm.traceControls.timeline.length * 100;
                 vm.traceControls.pointer.css({'left': left + '%'});
                 vm.historyMap.startMarker.setPosition(vm.traceControls.timeline[vm.traceControls.current]);
@@ -154,12 +170,13 @@
 
 
         var moveMapWithMarker = function (marker) {
+            if(marker == null)
+                return;
             var map = vm.historyMap.map;
             var projection = map.getProjection();
 
             var centerPoint = projection.fromLatLngToPoint(map.getCenter());
             var scale = Math.pow(2, map.getZoom());
-
             var worldPoint = projection.fromLatLngToPoint(marker.getPosition());
 
             var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
@@ -436,11 +453,14 @@
         vm.init = function () {
             loadMap();
             vm.gotHistory = historyService.getData('getHistory');
+            var tempSelectedvehicles = $scope.getMatches(mapService.filterStr);
+            if(tempSelectedvehicles.length > 0){
+                vm.historyMap.selectedVehicle = tempSelectedvehicles[0];
+            }
 
 
             if (vm.gotHistory) {
                 historyService.drawTrace();
-                console.log(vm.historyMap);
                 generateTimeline(vm.historyMap.traceObj);
                 drawTimeline();
             } else {

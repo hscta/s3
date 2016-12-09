@@ -16,6 +16,7 @@
             $log.log("newmapService");
             var vm = this;
             vm.listeners = {};
+            vm.filterStr = "";
 
             vm.inMap = {
                 map: null,
