@@ -9,6 +9,15 @@
     function DialogController( $log, dialogService) {
 
         var vm = this;
+
+
+        $(window).keydown(function (event) {
+            if(event.keyCode == 27){ // escape
+                vm.closeTab();
+            }
+        });
+
+
         $log.log("DialogController");
 
         vm.getTab = function () {

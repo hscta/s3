@@ -23,8 +23,9 @@
         vm.inMarkers = vm.inMap.markers.inMarkers;
         vm.markersByPath = vm.inMap.markers.markersByPath;
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
-        vm.filterStr = '';
+        vm.filterStr = mapService.filterStr;
         vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
+        vm.mainFilters = ['Running', 'Stopped', 'Active', 'Immobilized', 'Not Communicating', 'Device pullout'];
         vm.markerIconChangeTriggered = false;
         vm.zoomhappened = true;
 
@@ -154,24 +155,52 @@
         vm.runFilters = function (filterStr) {
             // $log.log("runFilters");
             vm.filterStr = filterStr;
+            mapService.filterStr = filterStr;
             markerInfowindow.close();
 
             if (vm.filterStr.length == 0) {
                 vm.showAllMarkers();
+                vm.inMap.map.setZoom(11);
+
                 return;
             }
 
             /* center the map based on the first marker position that matches the filter */
             var centerMap = false;
             if (vm.filterStr.length > 2) {
+                var matchedMarker = null;
                 for (var idx in vm.markersByPath) {
                     var visible = vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
-                    if (visible && !centerMap) {
-                        vm.inMap.map.setCenter(vm.markersByPath[idx].getPosition());
-                        centerMap = true;
+                    if (visible) {
+                        matchedMarker = vm.markersByPath[idx];
+                        var lat = Math.floor(matchedMarker.getPosition().lat());
+                        var lng = Math.floor(matchedMarker.getPosition().lng());
+                        var maplat = Math.floor(vm.inMap.map.getCenter().lat());
+                        var maplng = Math.floor(vm.inMap.map.getCenter().lng());
+
+                        if (lat == maplat && lng == maplng && !centerMap) {
+                            if(matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat() > 0.2) {
+                                vm.inMap.map.setCenter(matchedMarker.getPosition());
+                            }
+
+                            if (vm.mainFilters.indexOf(vm.filterStr) == -1) {
+                                vm.inMap.map.setCenter(matchedMarker.getPosition());
+                                vm.inMap.map.setZoom(16);
+                            }
+
+                            centerMap = true;
+
+                        }
                     }
                 }
+
+                if (matchedMarker && !centerMap) {
+                    vm.inMap.map.setCenter(matchedMarker.getPosition());
+                    if (vm.mainFilters.indexOf(vm.filterStr) == -1)
+                        vm.inMap.map.setZoom(16);
+                }
             }
+
             if (vm.vehicleNumber) {
                 showVehicleNumberWindow();
             }
@@ -391,7 +420,7 @@
                     strokeWeight: circles[idx].strokeWeight,
                     fillColor: circles[idx].fillColor,
                     fillOpacity: circles[idx].fillOpacity,
-                    center: {lat: circles[idx].center.latitude, lng: circles[idx].center.longitude},
+                    center: new google.maps.LatLng(circles[idx].center.latitude, circles[idx].center.longitude),
                     radius: circles[idx].radius,
                     info: circles[idx].control.info
                 });
@@ -865,7 +894,7 @@
                 icon.size = new google.maps.Size(SCALE, SCALE);
                 icon.origin = new google.maps.Point(0, vm.getDirection(rtgps));
                 icon.scaledSize = new google.maps.Size(SCALE, SCALE * 36);
-                icon.anchor = new google.maps.Point(SCALE/2, SCALE/2);
+                icon.anchor = new google.maps.Point(SCALE / 2, SCALE / 2);
                 marker.setIcon(icon);
             }
         };
@@ -890,7 +919,7 @@
                 size: new google.maps.Size(SCALE, SCALE),
                 origin: new google.maps.Point(0, vm.getDirection(rtgps)),
                 scaledSize: new google.maps.Size(SCALE, SCALE * 36),
-                anchor: new google.maps.Point(SCALE/2, SCALE/2)
+                anchor: new google.maps.Point(SCALE / 2, SCALE / 2)
             };
         };
 
