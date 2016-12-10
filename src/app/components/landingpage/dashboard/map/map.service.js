@@ -134,7 +134,7 @@
                 }
             ];
 
-            vm.currentLocation = vm.locations[3];
+            vm.currentLocation = vm.locations[1];
 
             vm.setUserPref = function (userSettings) {
                 vm.currentLocation = vm.locations[0];
