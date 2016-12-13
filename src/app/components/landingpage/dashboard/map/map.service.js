@@ -13,7 +13,7 @@
         .service('mapService', function ($log, $interval, $q, $timeout, userprefService,
                                          intellicarAPI, vehicleService, $mdDialog,
                                          dialogService) {
-            $log.log("newmapService");
+            $log.log("mapService");
             var vm = this;
             vm.listeners = {};
             vm.filterStr = "";

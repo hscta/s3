@@ -1,3 +1,12 @@
+<style>
+    .error-msg {
+        color: #f00;
+        font-size: 12px;
+        min-height: 20px;
+    }
+</style>
+
+<span class="error-msg">{{vm.errorMsg}}</span><br/>
 <div class="dh_container">
     <div class="dhc_name">Last location report</div>
     <md-input-container class="container-margin" >
@@ -10,5 +19,12 @@
             </md-option>
         </md-select>
     </md-input-container>
-    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.download()">DOWNLOAD</a>
+    <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.download()" ng-disabled="vm.showLoading">
+        DOWNLOAD
+    </a>
+</div>
+
+
+<div class="progress" ng-if="vm.showLoading">
+    <div class="indeterminate"></div>
 </div>
