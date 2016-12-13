@@ -131,7 +131,7 @@
 
 
         vm.updateMarker = function (rtgps) {
-            if ((rtgps.vehiclepath in vm.inCustomMaker) && ( vm.geoFilters.showVehicleNumber || vm.geoFilters.noComm || vm.geoFilters.devBattery || vm.geoFilters.carBattery )) {
+            if ((rtgps.vehiclepath in vm.inCustomMaker) && (vm.geoFilters.showVehicleNo)) {
                 vm.inCustomMaker[rtgps.vehiclepath].setPosition(rtgps);
             }
 
@@ -223,7 +223,7 @@
                 }
             } else {
                 visible = true;
-                if (rtgps.vehiclepath in vm.inCustomMaker && vm.geoFilters.showVehicleNumber) {
+                if (rtgps.vehiclepath in vm.inCustomMaker && vm.geoFilters.showVehicleNo) {
                     vm.inCustomMaker[rtgps.vehiclepath].show();
                 }
             }
@@ -232,7 +232,7 @@
             vm.markersByPath[rtgps.vehiclepath].setVisible(visible);
 
             if (rtgps.vehiclepath in vm.inCustomMaker) {
-                if (visible && vm.geoFilters.showVehicleNumber) {
+                if (visible && vm.geoFilters.showVehicleNo) {
                     vm.inCustomMaker[rtgps.vehiclepath].show();
                 } else {
                     vm.inCustomMaker[rtgps.vehiclepath].hide();
@@ -458,8 +458,8 @@
                 for (idx in vm.markersByPath) {
                     marker = vm.markersByPath[idx];
                     if (vm.geoFilters.carBattery) {
-                        if (vehicleService.vehiclesByPath[idx].rtgps.carbattery < CARBATTERY_THRESHOLD && vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
-
+                        if (vehicleService.vehiclesByPath[idx].rtgps.carbattery < CARBATTERY_THRESHOLD &&
+                            vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
                             vm.inCustomMaker[marker.vehiclepath].highlight('orange');
                         }
                     } else {
@@ -474,7 +474,8 @@
                 for (idx in vm.markersByPath) {
                     marker = vm.markersByPath[idx];
                     if (vm.geoFilters.devBattery) {
-                        if (vehicleService.vehiclesByPath[idx].rtgps.devbattery < DEVBATTERY_THRESHOLD && vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
+                        if (vehicleService.vehiclesByPath[idx].rtgps.devbattery < DEVBATTERY_THRESHOLD &&
+                            vm.checkRoaded(vehicleService.vehiclesByPath[idx].rtgps)) {
                             vm.inCustomMaker[marker.vehiclepath].highlight('yellow');
                         }
                     } else {
@@ -687,7 +688,7 @@
         }
 
         vm.showVehicleNumber = function (vn) {
-            vm.runFilters(vm.filterStr);
+            //vm.runFilters(vm.filterStr);
             vm.vehicleNumber = vn;
             if (vm.vehicleNumber) {
                 showVehicleNumberWindow();
@@ -698,6 +699,8 @@
                 }
             }
         };
+
+
         geofenceViewService.showVehicleNumber = function (vn) {
             vm.showVehicleNumber(vn);
         };

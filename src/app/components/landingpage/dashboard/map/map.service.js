@@ -140,7 +140,7 @@
                 vm.currentLocation = vm.locations[0];
                 vm.currentLocation.latlng = userSettings.station;
                 vm.center = vm.currentLocation.latlng;
-                vm.callListeners(userSettings, 'setUserPref');
+                //vm.callListeners(userSettings, 'setUserPref');
             };
 
             vm.getCurrentLocation = function () {

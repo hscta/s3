@@ -7,11 +7,11 @@
 
     function customMapOverlay($log) {
         var vm = this;
+        var innerHtml;
 
         vm.markerHeight = 12;
         vm.markerWidth = 12;
 
-        var innerHtml;
 
         vm.CustomMarker = function (lat, lng, map, args) {
             var self = this;
@@ -41,6 +41,7 @@
             }
         };
 
+
         vm.CustomMarker.prototype = new google.maps.OverlayView();
 
 
@@ -56,12 +57,15 @@
             }
         };
 
+
         vm.CustomMarker.prototype.unhighlight = function () {
             var self = this;
             self.hide();
             self.notifier.className = 'overlayNotifier';
             self.dropAnimation = false;
-        }
+        };
+
+
         vm.CustomMarker.prototype.highlight = function (str) {
             var self = this;
             if (str != null) {
@@ -72,7 +76,9 @@
             self.show();
             self.notifier.className = 'overlayNotifier animate ' + str;
             self.dropAnimation = true;
-        }
+        };
+
+
         vm.CustomMarker.prototype.highlightMe = function (str) {
             var self = this;
             if (str != null) {
@@ -92,6 +98,7 @@
                 }
             }
         };
+
 
         vm.CustomMarker.prototype.draw = function () {
 
@@ -146,6 +153,7 @@
             }
         };
 
+
         vm.CustomMarker.prototype.remove = function () {
             if (this.div) {
                 this.div.parentNode.removeChild(this.div);
@@ -153,10 +161,9 @@
             }
         };
 
+
         vm.CustomMarker.prototype.getPosition = function () {
             return this.latlng;
         };
-        // console.log(new vm.CustomMarker());
-
     }
 })();
