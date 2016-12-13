@@ -56,6 +56,14 @@ body{
     transform:$str;
 }
 
+@mixin transition-delay($time){
+    -webkit-transition-delay: $time;
+    -moz-transition-delay: $time;
+    -ms-transition-delay: $time;
+    -o-transition-delay: $time;
+    transition-delay: $time;
+}
+
 @mixin no-select(){
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
@@ -2156,67 +2164,72 @@ div.dataTables_info {
      background: #fff;
      z-index: 100;
      @include shadow(0 -2px 5px rgba(0,0,0,0.4));
-     .tc_controls{
+     .tc_controls {
          position: absolute;
-         top:0;
-         left:0;
+         top: 0;
+         left: 0;
          width: 160px;
          @include borderBox();
-         height:100%;
+         height: 100%;
          padding: 5px;
-         a,
+     }
+     a,
+     .tc_button{
+         float: left;
+         width: 40px;
+         height:40px;
+         margin:5px;
+         @include border-radius(2px);
+         overflow: hidden;
+         padding:1px;
+         background-color: #d1e934;
+         @include transition(0.4s);
+         i{
+             display: block;
+             float: left;
+             width:100%;
+             height:100%;
+             line-height:40px;
+             text-align: center;
+             color: #000;
+         }
+     }
+     .tc_button:hover{
+         background-color: #1abc9c;
+     }
+     .tc_button:active{
+         background-color: rgba(0,0,0,0.6);
+         i{
+             @include transform(scale(0.85));
+         }
+     }
+     .tc_speedButton{
+         float: left;
+         height:40px;
+         margin:5px;
+         width:140px;
          .tc_button{
+             margin:0;
+         }
+         .tc_speedDisplay{
              float: left;
-             width: 40px;
+             width:60px;
              height:40px;
-             margin:5px;
-             @include border-radius(2px);
-             overflow: hidden;
-             padding:1px;
-             background-color: #d1e934;
-             @include transition(0.4s);
-             i{
-                 display: block;
-                 float: left;
-                 width:100%;
-                 height:100%;
-                 line-height:40px;
-                 text-align: center;
-                 color: #000;
-             }
+             font-family: gotham-b;
+             font-size: 130%;
+             color: #555555;
+             line-height: 40px;
+             text-align: center;
+             //background:rgba(0,0,0,0.1);
          }
-         .tc_button:hover{
-             background-color: #1abc9c;
-         }
-         .tc_button:active{
-             background-color: rgba(0,0,0,0.6);
-             i{
-                 @include transform(scale(0.85));
-             }
-         }
-         .tc_speedButton{
-             float: left;
-             height:40px;
-             margin:5px;
-             width:140px;
-             .tc_button{
-                 margin:0;
-             }
-             .tc_speedDisplay{
-                 float: left;
-                 width:60px;
-                 height:40px;
-                 font-family: gotham-b;
-                 font-size: 130%;
-                 color: #555555;
-                 line-height: 40px;
-                 text-align: center;
-                 //background:rgba(0,0,0,0.1);
-             }
-         }
-         .tc_button.active{
-             background: #3498db;
-         }
+     }
+     .tc_button.active{
+         background: #3498db;
+     }
+     .tcb_abs{
+         position: absolute;
+         left:10px;
+         top:10px;
      }
      .tc_panel{
          position: absolute;
@@ -2288,19 +2301,20 @@ div.dataTables_info {
              @include transition(3s);
          }
      }
-     .info{
+     .tc_info{
          position:absolute;
          width:250px;
          right:0px;
          top:0;
          bottom:0;
+         padding-left:50px;
          table{
              font-size: 90%;
              margin:10px 10%;
              width:80%;
              .time{
                  td{
-                     font-size: 120%;
+                     font-size: 110%;
                      color: #4c5172;
                      font-family: gotham-b;
                  }
@@ -2309,20 +2323,54 @@ div.dataTables_info {
              tr{
                  color:#555;
                  margin:0!important;
-                 padding:2px!important;
+                 padding:1px!important;
+                 font-size:95%;
              }
              td:nth-child(2){
                  color:#555;
                  span{
                      color:#888;
-                     font-size: 90%;
+                     font-size: 80%;
                  }
              }
          }
      }
+     bottom:0;
  }
 .traceControls.active{
     bottom:0;
+}
+.expandedGraphs{
+    #history_map{
+        width: 35%!important;
+        @include transition-delay(1s);
+    }
+    .tc_graphs {
+        right: 0;
+    }
+}
+.tc_graphs{
+    position: absolute;
+    right:-70%;
+    top:50px;
+    bottom:111px;
+    background-color: #fff;
+    @include shadow(0 0 10px rgba(0,0,0,0.2));
+    z-index: 200;
+    width: 65%;
+    @include transition(0.6s);
+    .tc_graph-container{
+        float:left;
+        width:100%;
+        height:80%;
+    }
+    .tcg_item{
+        float:left;
+        width: 50%;
+        height:50%;
+        @include borderBox();
+
+    }
 }
 .md-select-menu-container{
     z-index: 9999999!important;
@@ -2364,4 +2412,36 @@ md-virtual-repeat-container{
         float:right;
         margin-right:30px;
     }
+}
+
+
+
+
+.axis path {
+    fill: none;
+    stroke: #777;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: gotham;
+    font-size:75%;
+}
+
+.click-circle{
+    fill:#000;
+    opacity:0.4;
+}
+.focus-line{
+    stroke:#000;
+    opacity:0.2;
+}
+.focusText{
+    color:#aaa;
+    font-size:70%;
+    opacity:0.8;
+    background:red;
+}
+.focusRect{
+    opacity:0.3;
+    background:#eee;
 }
