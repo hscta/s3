@@ -56,7 +56,7 @@
             var timeLimit = hrs1;
 
 
-            $log.log(vm.alarmsObj.startTime, vm.alarmsObj.endTime);
+            // $log.log(vm.alarmsObj.startTime, vm.alarmsObj.endTime);
             var startTime = new Date(moment(vm.alarmsObj.startTime).unix() * 1000).getTime();
             var endTime = new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime();
 
