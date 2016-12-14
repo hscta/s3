@@ -29,7 +29,6 @@
             return matchArray;
         }
 
-
         dialogService.setTab(0);
 
         var historyFenceInfowindow = new google.maps.InfoWindow();
@@ -916,7 +915,7 @@
         vm.disableDownload = true;
         vm.showLoading = false;
 
-        vm.convertLatLngToAddr = false;
+        vm.convertLatLngToAddr = true;
 
         $scope.getHistory = function () {
             historyData = [];
@@ -940,11 +939,11 @@
                 vm.myclass = className;
             }
 
-            var body = {
-                data: latlng
-            };
+            // var body = {
+            //     data: latlng
+            // };
 
-            return intellicarAPI.geocodeService.getAddress(body);
+            return intellicarAPI.geocodeService.getAddress(latlng);
             // .then(vm.gotAddress, vm.handleFailure);
         };
         //

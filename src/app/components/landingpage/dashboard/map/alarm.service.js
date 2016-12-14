@@ -55,6 +55,8 @@
             var hrs1 = 3600 * MILLISEC;
             var timeLimit = hrs1;
 
+
+            $log.log(vm.alarmsObj.startTime, vm.alarmsObj.endTime);
             var startTime = new Date(moment(vm.alarmsObj.startTime).unix() * 1000).getTime();
             var endTime = new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime();
 
@@ -69,8 +71,8 @@
                 return;
             }
 
-            if (endTime - startTime > timeLimit)
-                endTime = startTime + timeLimit;
+            // if (endTime - startTime > timeLimit)
+            //     endTime = startTime + timeLimit;
 
             if (endTime <= startTime) {
                 vm.alarmsObj.msg = "End time should be >= Start time";
@@ -114,10 +116,10 @@
             }
 
             if ( vm.convertLatLngToAddr ){
-                var body = {
-                    data : vm.latlngList
-                }
-                intellicarAPI.geocodeService.getAddress(body).then(function(resp){
+                // var body = {
+                //     data : vm.latlngList
+                // }
+                intellicarAPI.geocodeService.getAddress(vm.latlngList).then(function(resp){
                     for ( var idx in resp ) {
                         vm.addressList.push(resp[idx][1]);
 

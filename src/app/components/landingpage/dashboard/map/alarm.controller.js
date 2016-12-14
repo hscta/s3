@@ -159,11 +159,11 @@
 
             }else {
                 vm.myclass = 'loc' + className;
-                var body = {
-                    data: [[lat, lng]]
-                };
+                // var body = {
+                //     data: [[lat, lng]]
+                // };
 
-                (intellicarAPI.geocodeService.getAddress(body))
+                (intellicarAPI.geocodeService.getAddress([[lat, lng]]))
                     .then(vm.gotAddress, vm.handleFailure);
 
 
