@@ -88,12 +88,12 @@
 
         vm.clearMap = function () {
 
-            if ( vm.historyMap.startMarker){
+            if (vm.historyMap.startMarker) {
 
                 vm.historyMap.startMarker.setMap(null);
             }
 
-            if ( vm.historyMap.endMarker){
+            if (vm.historyMap.endMarker) {
 
                 vm.historyMap.endMarker.setMap(null);
             }
@@ -122,7 +122,7 @@
                     var starttime = moment(vm.historyMap.startTime).unix() * 1000;
                     var endtime = moment(vm.historyMap.endTime).unix() * 1000;
 
-                    if (endtime - starttime > timeLimit){
+                    if (endtime - starttime > timeLimit) {
                         vm.historyMap.errorMsg = "Maximum time limit is one week.";
                         $rootScope.$broadcast('gotHistoryEventFailed');
                         return;
@@ -150,7 +150,7 @@
                     var gpsDataPromise = intellicarAPI.reportsService.getDeviceLocation(body);
                     var alarmDataPromise = intellicarAPI.myAlarmService.getAlarmInfo(body2);
 
-                        $q.all([gpsDataPromise,alarmDataPromise])
+                    $q.all([gpsDataPromise, alarmDataPromise])
                         .then(vm.drawTrace, vm.handleGetLocationFailure);
 
                 } else {
@@ -175,26 +175,30 @@
 
 
         vm.drawTrace = function (respArray) {
-            var resp = respArray[0];
-            var alarmData = respArray[1];
-
-
-
             vm.setData('getHistory', true);
-            if (resp) vm.historyMap.traceData = resp.data.data;
-
-            // resetting previous drawings
-
             vm.historyMap.errorMsg = '';
-            var traceData = vm.historyMap.traceData;
 
-            if (traceData.length < 1) {
-                vm.historyMap.errorMsg = "No Data Found";
+            var traceData = [];
+            var alarmData = [];
+            var path = [];
+
+            if(respArray == null) {
+                traceData = vm.historyMap.traceData;
+                alarmData = vm.historyMap.alarmData;
+            } else {
+                if(respArray.length == 2) {
+                    traceData = vm.historyMap.traceData = respArray[0].data.data;
+                    alarmData = vm.historyMap.alarmData = respArray[1].data.data;
+                } else {
+                    return;
+                }
+            }
+
+            if (traceData.length == 0) {
+                vm.historyMap.errorMsg = "No Data";
                 $rootScope.$broadcast('gotHistoryEventFailed');
                 return;
             }
-
-            var path = [];
 
             for (var idx in traceData) {
                 var position = traceData[idx];
@@ -214,15 +218,16 @@
                 latlng.ignstatus = position.ignstatus;
                 path.push(latlng);
             }
+
             function compare(a, b) {
                 return a.gpstime - b.gpstime;
             }
-            if(path.length > 0) {
 
+            if (path.length > 0) {
                 path.sort(compare);
 
                 vm.historyMap.startMarker = new google.maps.Marker({
-                    position: path[0],
+                    position: path[0]
                 });
 
                 var lastBeacon = path[path.length - 1];
@@ -250,7 +255,7 @@
 
                 vm.historyMap.traceObj = path;
 
-                if (vm.historyMap.map != null && vm.historyMap.map.setCenter ) {
+                if (vm.historyMap.map != null && vm.historyMap.map.setCenter) {
                     var latlng = new google.maps.LatLng(path[0].lat(), path[0].lng());
                     vm.historyMap.map.setCenter(latlng);
                     vm.historyMap.map.setZoom(11);
@@ -258,8 +263,9 @@
                     vm.historyMap.startMarker.setMap(vm.historyMap.map);
                     vm.historyMap.endMarker.setMap(vm.historyMap.map);
                 }
+
                 $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path});
-            }else{
+            } else {
                 vm.historyMap.errorMsg = "No GPS Signal";
                 $rootScope.$broadcast('gotHistoryEventFailed');
             }
@@ -295,7 +301,7 @@
         vm.traceControls = {
             interval: 30000, // 30 seconds
             timeline: [],
-            expandedGraphs : 'half',
+            expandedGraphs: 'half',
             playing: false,
             SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
             speed: 4, // normal
