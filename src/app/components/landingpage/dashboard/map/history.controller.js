@@ -423,7 +423,7 @@
             vm.gotHistory = historyService.getData('getHistory');
             setMapHeight();
             generateTimeline(data.path);
-            generateExpandedGraph(data.path);
+            generateExpandedGraph();
             drawTimeline();
         };
 
@@ -501,23 +501,28 @@
             }, 1000);
         };
 
-        function createExpandedGraph() {
-            var tempInter = $interval(function () {
-                if ($('.tcg_item')) {
-                    vm.traceControls.expDiv = $('.tcg_item');
-                    $interval.cancel(tempInter);
-                    for (var idx in vm.tcGraphs.charts) {
-                        vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height() - 30;
-                        vm.tcGraphs.charts[idx].data.width = vm.traceControls.expDiv.width();
-                        if (!vm.tcGraphs.charts[idx].data.margin)
-                            vm.tcGraphs.charts[idx].data.margin = vm.tcGraphs.margin;
-                        vm.tcGraphs.charts[idx].object = new d3Graph(vm.tcGraphs.charts[idx]);
+        function createExpandedGraph(callback) {
+            // if(vm.traceControls.expDiv == null){
+                var tempInter = $interval(function () {
+                    if ($('.tcg_item')) {
+                        vm.traceControls.expDiv = $('.tcg_item');
+                        $interval.cancel(tempInter);
+                        for (var idx in vm.tcGraphs.charts) {
+                            vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height() - 30;
+                            vm.tcGraphs.charts[idx].data.width = vm.traceControls.expDiv.width();
+                            if (!vm.tcGraphs.charts[idx].data.margin)
+                                vm.tcGraphs.charts[idx].data.margin = vm.tcGraphs.margin;
+                            vm.tcGraphs.charts[idx].object = new d3Graph(vm.tcGraphs.charts[idx]);
+                        }
+                        $(window).resize(function () {
+                            resizeTcGraphs();
+                        });
+                        if(callback) callback();
                     }
-                    $(window).resize(function () {
-                        resizeTcGraphs();
-                    });
-                }
-            }, 200);
+                }, 200);
+            // }else{
+            //     if(callback) callback();
+            // }
         }
 
         function resizeTcGraphs() {
@@ -525,10 +530,12 @@
         }
 
         function generateExpandedGraph() {
-            for (var idx in vm.tcGraphs.charts) {
-                parseToGraphData(vm.tcGraphs.charts[idx], vm.traceControls.timeline);
-                vm.tcGraphs.charts[idx].object.draw(vm.tcGraphs.charts[idx].graphs);
-            }
+            createExpandedGraph(function () {
+                for (var idx in vm.tcGraphs.charts) {
+                    parseToGraphData(vm.tcGraphs.charts[idx], vm.traceControls.timeline);
+                    vm.tcGraphs.charts[idx].object.draw(vm.tcGraphs.charts[idx].graphs);
+                }
+            })
         }
 
         function parseToGraphData(object, data) {
@@ -648,9 +655,6 @@
             }
 
             self.updateLine = function (x, chart) {
-                if(!('xScale' in self)) {
-                    console.log("xScale not present");
-                }
 
                 var timelineObject = vm.traceControls.timeline[vm.traceControls.current];
                 self.mouseX = self.xScale(x);
@@ -856,6 +860,9 @@
         vm.init = function () {
             loadMap();
             getTimelineObjects();
+            createExpandedGraph();
+            $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
+            $scope.$on('gotHistoryEventFailed', vm.gotHistoryEventFailed);
 
             vm.gotHistory = historyService.getData('getHistory');
             var tempSelectedvehicles = $scope.getMatches(mapService.filterStr);
@@ -875,11 +882,8 @@
                     setDefaultVehicle();
             }
 
-            createExpandedGraph();
 
             setMapHeight();
-            $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
-            $scope.$on('gotHistoryEventFailed', vm.gotHistoryEventFailed);
 
             geofenceViewService.addListener('getMyFences', vm.getMyFencesListener);
             historyService.addListener('loadMap', loadMap);

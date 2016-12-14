@@ -263,7 +263,6 @@
                     vm.historyMap.startMarker.setMap(vm.historyMap.map);
                     vm.historyMap.endMarker.setMap(vm.historyMap.map);
                 }
-
                 $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path});
             } else {
                 vm.historyMap.errorMsg = "No GPS Signal";
