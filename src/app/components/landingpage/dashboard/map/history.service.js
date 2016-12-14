@@ -175,7 +175,6 @@
 
 
         vm.drawTrace = function (respArray) {
-            console.log(respArray);
             var resp = respArray[0];
             var alarmData = respArray[1];
 
@@ -296,7 +295,7 @@
         vm.traceControls = {
             interval: 30000, // 30 seconds
             timeline: [],
-            expandedGraphs : true,
+            expandedGraphs : 'half',
             playing: false,
             SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
             speed: 4, // normal

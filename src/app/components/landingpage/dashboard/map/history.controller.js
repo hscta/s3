@@ -482,11 +482,21 @@
             }
         };
 
-        vm.toggleExpandedGraphs = function () {
-            if(!vm.traceControls.expandedGraphs){
-                vm.traceControls.expandedGraphs = true;
-            }else{
-                vm.traceControls.expandedGraphs = false;
+
+        vm.toggleExpandedGraphs = function (id) {
+            if(id == 'toggle'){
+                if(vm.traceControls.expandedGraphs == 'full'){
+                    vm.traceControls.expandedGraphs = 'half';
+                }else{
+                    vm.traceControls.expandedGraphs = 'full';
+                }
+            }else
+            if(id == 'close'){
+                if(vm.traceControls.expandedGraphs == false){
+                    vm.traceControls.expandedGraphs = 'half';
+                }else{
+                    vm.traceControls.expandedGraphs = false;
+                }
             }
             $timeout(function () {
                 moveMapWithMarker(vm.historyMap.startMarker);
@@ -498,24 +508,25 @@
                 if($('.tcg_item')){
                     vm.traceControls.expDiv = $('.tcg_item');
                     $interval.cancel(tempInter);
-
                     for(var idx in vm.tcGraphs.charts){
-                        vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height() - 40;
+                        vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height();
                         vm.tcGraphs.charts[idx].data.width = vm.traceControls.expDiv.width();
-
                         if(!vm.tcGraphs.charts[idx].data.margin)
                             vm.tcGraphs.charts[idx].data.margin = vm.tcGraphs.margin;
-
                         vm.tcGraphs.charts[idx].object = new d3Graph(vm.tcGraphs.charts[idx]);
                     }
-
+                    $(window).resize(function () {
+                        resizeTcGraphs();
+                    });
                 }
             },200);
         }
 
+        function resizeTcGraphs() {
+            drawTimeline();
+        }
 
         function generateExpandedGraph() {
-            console.log(vm.tcGraphs);
             for(var idx in vm.tcGraphs.charts){
                 parseToGraphData(vm.tcGraphs.charts[idx], vm.traceControls.timeline);
                 vm.tcGraphs.charts[idx].object.draw(vm.tcGraphs.charts[idx].graphs);
@@ -574,12 +585,12 @@
             charts : [
                 {
                     data : {svg : '#visualisation1'},
-                    graphs: [{color: '#e74c3c', key: 'Speed / RPM', type: 'line', item: 'speed', unit:'kmph', yAxis: 1}],
+                    graphs: [{color: '#e74c3c', key: 'Speed', type: 'line', item: 'speed', unit:'kmph', yAxis: 1}],
                 },
                 {
                     data : {svg : '#visualisation2'},
-                    graphs: [{color: '#3498db', key: 'Car battery', type: 'line', item: 'carbattery', unit:'v', yAxis: 1},
-                        {color: '#e74c3c', key: 'Dev battery', type: 'line', item: 'devbattery', unit:'v', yAxis: 2}],
+                    graphs: [{color: '#3498db', key: 'Vehicle battery', type: 'line', item: 'carbattery', unit:'v', yAxis: 1},
+                        {color: '#e74c3c', key: 'Device battery', type: 'line', item: 'devbattery', unit:'v', yAxis: 2}],
                 }, {
                     data : {svg : '#visualisation3'},
                     graphs: [{color: '#2ecc71', key: 'GPS Signal', type: 'line', item: 'numsat', unit:'', yAxis: 1}],
@@ -593,8 +604,13 @@
             var self = this;
             self.data = param.data;
             self.chart = param;
-            self.vis = d3.select(self.data.svg);
-            self.vis.on("mousemove", mouseHoverEvent);
+            self.vis = d3.select(self.data.svg)
+            //responsive SVG needs these 2 attributes and no width and height attr
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height) )
+                //class to make it responsive
+                .classed("svg-content-responsive", true)
+                .on("mousemove", mouseHoverEvent);
 
             function mouseHoverEvent() {
                 // var posSvg = Math.ceil($('#visualisation').offset().left);
@@ -628,33 +644,41 @@
                     self.focusCircle[idx]
                         .attr("cx", self.mouseX)
                         .attr("cy", self.graphY);
-
-                    self.focusText[idx]
-                        .attr('x', self.mouseX + 8)
+                    var focusRecMargin = 0;
                     var focusStr = timelineObject[key] + ' ' + chart.graphs[idx].unit;
-                    self.focusText[idx].attr("transform", "translate(" +  self.mouseX  + "," + 10 + ")")
-                        .select("text").text(focusStr)
-                        .select("rect")
-                            .attr("width", focusStr.length * 3)
+                    var rectWidth = ( focusStr.length * 7) + 5;
 
-                    console.log(focusStr.length * 3);
+                    if(self.mouseX + rectWidth + 10 > self.data.width - self.data.margin.right){
+                        focusRecMargin = rectWidth + 15;
+                    }
+
+                    self.focusText[idx].attr("transform", "translate(" +  (self.mouseX - focusRecMargin + 8) + "," + 30 + ")")
+                        .select("text").text(focusStr);
+                    self.focusText[idx]
+                        .select("rect")
+                            .attr("width", rectWidth )
                 }
 
 
             }
 
+            self.resize = function (data) {
+                self.data.height = data.height;
+                self.data.width = data.width;
+                self.draw();
+            }
 
             self.draw = function(graphs) {
-                d3.selectAll(self.data.svg+" > *").remove();
-
                 if(graphs) self.data.graph = graphs;
+
+                d3.selectAll(self.data.svg+" > *").remove();
                 getAxisScale();
 
                 self.xAxis = d3.svg.axis()
                     .scale(self.xScale)
-                    .ticks(4)
+                    .ticks(12)
                     .tickFormat(function(d) {
-                        return d3.time.format('%m-%d, %H:%M')(new Date(d))
+                        return d3.time.format('%H:%M')(new Date(d))
                     })
 
                 self.y1Axis = d3.svg.axis()
@@ -671,13 +695,13 @@
                     .attr("class","axis")
                     .attr("transform", "translate(0," + (self.data.height - self.data.margin.bottom) + ")")
                     .call(self.xAxis)
-                        .selectAll("text")
-                        .style("text-anchor", "end")
-                        .attr("dx", "-.8em")
-                        .attr("dy", ".15em")
-                        .attr("transform", function(d) {
-                            return "rotate(-30)"
-                        });
+                        // .selectAll("text")
+                        // .style("text-anchor", "end")
+                        // .attr("dx", "-.8em")
+                        // .attr("dy", ".15em")
+                        // .attr("transform", function(d) {
+                        //     return "rotate(-30)"
+                        // });
 
                 self.vis.append("svg:g")
                     .attr("class","axis")
@@ -706,6 +730,7 @@
                 });
                 self.focusCircle = [];
                 self.focusText = [];
+                self.nameText = [];
                 for(var idx in self.chart.graphs){
                     self.focusCircle[idx] = self.vis.append("circle")
                         .attr('class', 'click-circle')
@@ -713,27 +738,28 @@
                         .attr("cy", -1000)
                         .attr("fill", self.chart.graphs[idx].color)
                         .attr("r", 5);
-                    //
-                    // self.focusText[idx] = self.vis.append("text")
-                    //     .attr("x", -10)
-                    //     .attr('class', 'focusText')
-                    //     .attr("y", self.data.margin.top + 20 + (idx * 13));
-                    self.focusText[idx] = self.vis.append("g")
 
+                    self.nameText[idx] = self.vis.append("text")
+                        .attr("x", self.data.margin.left + 10)
+                        .attr('fill', self.chart.graphs[idx].color)
+                        .attr('class', 'nameText')
+                        .attr("y", self.data.margin.top +  10 + (idx * 15))
+                        .text(self.chart.graphs[idx].key);
+
+
+                    self.focusText[idx] = self.vis.append("g")
                     self.focusText[idx].append("rect")
-                        .attr("width", 0)
+                        .attr("width", 10)
                         .attr("height", 16)
                         .attr('class', 'focusRect')
-                        .attr("fill", '#eee')
-                        .attr("y",  8 + (idx * 16));
+                        .attr("y",  -8 + (idx * 20));
 
                     self.focusText[idx].append("text")
                         .attr("x", 4)
+                        .attr('fill', self.chart.graphs[idx].color)
                         .attr('class', 'focusText')
-                        .attr("y",  20 + (idx * 16));
+                        .attr("y",  4 + (idx * 20));
                 }
-
-
                 self.focusLine = self.vis.append("line")
                     .attr('class', 'focus-line')
                     .attr("x1", -1000)
@@ -743,8 +769,9 @@
                     .attr("stroke-width", 1)
                     .attr("stroke", "#ccc");
 
-
+                self.updateLine(vm.traceControls.timeline[vm.traceControls.current].gpstime, self.chart)
             }
+
 
             function getYlineGen(y, val){
                 if(y == 1){

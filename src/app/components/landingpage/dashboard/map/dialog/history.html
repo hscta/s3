@@ -201,12 +201,24 @@
         </div>
     </div>
 
-    <md-dialog-content class="map-dialog-content" ng-class="{'expandedGraphs':vm.traceControls.expandedGraphs}">
+    <md-dialog-content class="map-dialog-content"
+                       ng-class="{'expandedGraphs':vm.traceControls.expandedGraphs == 'full' && vm.gotHistory,
+                       'expandedGraphsHalf':vm.traceControls.expandedGraphs == 'half' && vm.gotHistory}">
         <div class="md-dialog-content historyMap map-dialog history-dialog">
 
             <div id="history_map" style="width:100%;height:500px"></div>
 
             <div class="tc_graphs">
+                <div class="tcg_buttons" ng-show="vm.gotHistory">
+                    <a class="tc_button tcb_abs waves-effect waves-light btn raised" ng-click="vm.toggleExpandedGraphs('close')">
+                        <i class="fa fa-times" ng-if="vm.traceControls.expandedGraphs"></i>
+                        <i class="fa fa-line-chart"  ng-if="!vm.traceControls.expandedGraphs"></i>
+                    </a>
+                    <a class="tc_button tcb_abs waves-effect waves-light btn raised" ng-click="vm.toggleExpandedGraphs('toggle')">
+                        <i class="fa fa-chevron-left" ng-if="vm.traceControls.expandedGraphs != 'full'"></i>
+                        <i class="fa fa-chevron-right" ng-if="vm.traceControls.expandedGraphs == 'full'"></i>
+                    </a>
+                </div>
                 <div class="tc_graph-container">
                     <!--<div class="tcg_item" ng-repeat="chart in vm.tcGraphs.charts">-->
                         <!--<nvd3 options="vm.tcGraphs.options" data="chart.data"></nvd3>-->
@@ -263,10 +275,7 @@
                     <div class="tc_carname">{{vm.traceControls.selectedVehicle.rtgps.meta.cartype}}</div>
                     <div class="tc_pointer" ng-class="{'active':vm.traceControls.playing}"></div>
                 </div>
-                <div class="tc_info" >
-                    <a class="tc_button tcb_abs waves-effect waves-light btn raised" ng-click="vm.toggleExpandedGraphs()">
-                        <i class="fa fa-chevron-up" ></i>
-                    </a>
+                <div class="tc_info">
                     <table>
                         <tr class="time">
                             <td colspan="2">{{vm.getCurrentPos().gpstime | date : 'd MMM yy, h:mm:ss a'}} </td>
