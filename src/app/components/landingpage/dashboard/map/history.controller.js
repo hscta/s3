@@ -8,7 +8,7 @@
         .controller('HistoryController', HistoryController)
         .controller('HistoryTableController', HistoryTableController);
 
-    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log, vehicleService, mapService,
+    function HistoryController($scope, $window, $interval, historyService, $stateParams, $log, vehicleService, mapService,$timeout,
                                 dialogService, geofenceViewService, $compile) {
 
         var vm = this;
@@ -165,8 +165,16 @@
                 vm.traceControls.pointer.css({'left': left + '%'});
                 vm.historyMap.startMarker.setPosition(vm.traceControls.timeline[vm.traceControls.current]);
                 moveMapWithMarker(vm.historyMap.startMarker);
+                vm.traceControls.updateAllTimelines(vm.traceControls.timeline[vm.traceControls.current].gpstime);
             }
         };
+
+        vm.traceControls.updateAllTimelines = function (timestamp) {
+            selectTimelineData(timestamp);
+            for(var idx in vm.tcGraphs.charts){
+                vm.tcGraphs.charts[idx].object.updateLine(timestamp, vm.tcGraphs.charts[idx]);
+            }
+        }
 
 
         var moveMapWithMarker = function (marker) {
@@ -177,6 +185,7 @@
 
             var centerPoint = projection.fromLatLngToPoint(map.getCenter());
             var scale = Math.pow(2, map.getZoom());
+
             var worldPoint = projection.fromLatLngToPoint(marker.getPosition());
 
             var xdiff = Math.abs((worldPoint.x - centerPoint.x) * scale);
@@ -292,7 +301,7 @@
             highestSpeed += 20 + vm.traceControls.graphBase;
             vm.traceControls.ctx.beginPath();
             vm.traceControls.ctx.moveTo(0, vm.traceControls.ch - vm.traceControls.graphBase);
-            vm.traceControls.ctx.strokeStyle = 'rgba(255, 69, 0, 0.77)';
+            vm.traceControls.ctx.strokeStyle = '#e74c3c';
             vm.traceControls.ctx.fillStyle = 'rgba(255, 69, 0, 0.2)';
             for (var idx in vm.traceControls.timeline) {
                 if (vm.traceControls.timeline[idx].speed < vm.traceControls.speedThreshold)
@@ -330,13 +339,18 @@
 
                 if (currentTime >= path[currentPathIdx].gpstime) { // regular points
                     timeline.push(path[currentPathIdx]);
+                    currentTime = path[currentPathIdx].gpstime + vm.traceControls.interval;
                     currentPathIdx++;
                 } else { // dummy points
                     var dummy = getDefaultGraphObject(path[currentPathIdx]);
                     dummy.gpstime = currentTime;
                     timeline.push(dummy);
+                    currentTime += vm.traceControls.interval;
                 }
-                currentTime += vm.traceControls.interval;
+
+                if(timeline.length > 2 && timeline[timeline.length - 1].gpstime - timeline[timeline.length - 2].gpstime > 30000) {
+                    console.log(new Date(timeline[timeline.length - 2].gpstime) , new Date(timeline[timeline.length - 1].gpstime) )
+                }
             }
             vm.traceControls.timeline = timeline;
         }
@@ -410,6 +424,7 @@
             vm.gotHistory = historyService.getData('getHistory');
             setMapHeight();
             generateTimeline(data.path);
+            generateExpandedGraph(data.path);
             drawTimeline();
         }
 
@@ -463,10 +478,342 @@
                     historyFenceInfowindow.setContent(document.getElementById("history_fence_infowindow").innerHTML);
                     historyFenceInfowindow.open(vm.historyMap.map, this);
                 });
-
                 circles[idx].googleObject.setMap(vm.historyMap.map);
             }
         };
+
+        vm.toggleExpandedGraphs = function () {
+            if(!vm.traceControls.expandedGraphs){
+                vm.traceControls.expandedGraphs = true;
+            }else{
+                vm.traceControls.expandedGraphs = false;
+            }
+            $timeout(function () {
+                moveMapWithMarker(vm.historyMap.startMarker);
+            },1000);
+        }
+
+        function createExpandedGraph() {
+            var tempInter = $interval(function () {
+                if($('.tcg_item')){
+                    vm.traceControls.expDiv = $('.tcg_item');
+                    $interval.cancel(tempInter);
+
+                    for(var idx in vm.tcGraphs.charts){
+                        vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height() - 40;
+                        vm.tcGraphs.charts[idx].data.width = vm.traceControls.expDiv.width();
+
+                        if(!vm.tcGraphs.charts[idx].data.margin)
+                            vm.tcGraphs.charts[idx].data.margin = vm.tcGraphs.margin;
+
+                        vm.tcGraphs.charts[idx].object = new d3Graph(vm.tcGraphs.charts[idx]);
+                    }
+
+                }
+            },200);
+        }
+
+
+        function generateExpandedGraph() {
+            console.log(vm.tcGraphs);
+            for(var idx in vm.tcGraphs.charts){
+                parseToGraphData(vm.tcGraphs.charts[idx], vm.traceControls.timeline);
+                vm.tcGraphs.charts[idx].object.draw(vm.tcGraphs.charts[idx].graphs);
+            }
+        }
+        function parseToGraphData(object, data) {
+            var graphs = object.graphs;
+            // var genGraphs = [];
+            for(var jdx in graphs){
+                graphs[jdx].values = [];
+                for(var idx in data){
+                    graphs[jdx].values.push({
+                        x:data[idx].gpstime,
+                        y:data[idx][graphs[jdx].item]
+                    })
+                }
+                // genGraphs.push(graphs[jdx]);
+            }
+        }
+
+        function selectTimelineData(timestamp) {
+            vm.traceControls.current = binSearch(vm.traceControls.timeline, timestamp, 'gpstime');;
+        }
+
+
+        function binSearch(array, element, key) {
+            var start = 0;
+            var end = array.length - 1;
+            var mid = start + parseInt((end - start)/ 2);
+
+            var binLooping = true;
+            var stacksize = 0;
+            while(binLooping){
+                stacksize++;
+                if(array[mid][key] < element){ // Creater
+                    if(mid < array.length - 1)
+                        start = mid+1;
+                }else if(array[mid][key] > element){
+                    if(mid > 0)
+                        end = mid-1;
+                }else if(Math.abs(array[mid][key] - element) <= 30000){
+                    binLooping = false;
+                    break;
+                }
+                mid = start + parseInt((end - start )/ 2)
+                if(stacksize > 1000) break;
+            }
+            return mid;
+        }
+
+
+
+
+        vm.tcGraphs  = {
+            margin:{ left:50, right:50, top: 20, bottom: 20 },
+            charts : [
+                {
+                    data : {svg : '#visualisation1'},
+                    graphs: [{color: '#e74c3c', key: 'Speed / RPM', type: 'line', item: 'speed', unit:'kmph', yAxis: 1}],
+                },
+                {
+                    data : {svg : '#visualisation2'},
+                    graphs: [{color: '#3498db', key: 'Car battery', type: 'line', item: 'carbattery', unit:'v', yAxis: 1},
+                        {color: '#e74c3c', key: 'Dev battery', type: 'line', item: 'devbattery', unit:'v', yAxis: 2}],
+                }, {
+                    data : {svg : '#visualisation3'},
+                    graphs: [{color: '#2ecc71', key: 'GPS Signal', type: 'line', item: 'numsat', unit:'', yAxis: 1}],
+                },
+            ]
+        }
+
+        // var d3g1 = new d3Graph(data);
+
+        function d3Graph(param) {
+            var self = this;
+            self.data = param.data;
+            self.chart = param;
+            self.vis = d3.select(self.data.svg);
+            self.vis.on("mousemove", mouseHoverEvent);
+
+            function mouseHoverEvent() {
+                // var posSvg = Math.ceil($('#visualisation').offset().left);
+                // console.log(self.xScale.invert(d3.mouse(this)[0]) - self.xScale.invert(d3.event.pageX - posSvg));
+                self.mouseX = d3.mouse(this)[0];
+                self.mouseY = d3.mouse(this)[1];
+                if(self.xScale != null && self.mouseX >= self.data.margin.left &&self.mouseX <= (self.data.width - self.data.margin.right)
+                && self.mouseY >= self.data.margin.top && self.mouseY <= (self.data.height - self.data.margin.bottom)){
+
+                    var timestamp = parseInt(self.xScale.invert(self.mouseX));
+                    vm.traceControls.updateAllTimelines(timestamp);
+                    vm.traceControls.moveTimeline();
+
+                }
+            }
+
+            self.updateLine = function (x, chart) {
+                var timelineObject = vm.traceControls.timeline[vm.traceControls.current];
+                self.mouseX = self.xScale(x);
+                self.focusLine
+                    .attr('x1', self.mouseX)
+                    .attr('x2', self.mouseX);
+
+                for(var idx in chart.graphs){
+                    var key = chart.graphs[idx].item;
+                    if(chart.graphs[idx].yAxis == 1){
+                        self.graphY = self.y1Scale(timelineObject[key]);
+                    }else{
+                        self.graphY = self.y2Scale(timelineObject[key]);
+                    }
+                    self.focusCircle[idx]
+                        .attr("cx", self.mouseX)
+                        .attr("cy", self.graphY);
+
+                    self.focusText[idx]
+                        .attr('x', self.mouseX + 8)
+                    var focusStr = timelineObject[key] + ' ' + chart.graphs[idx].unit;
+                    self.focusText[idx].attr("transform", "translate(" +  self.mouseX  + "," + 10 + ")")
+                        .select("text").text(focusStr)
+                        .select("rect")
+                            .attr("width", focusStr.length * 3)
+
+                    console.log(focusStr.length * 3);
+                }
+
+
+            }
+
+
+            self.draw = function(graphs) {
+                d3.selectAll(self.data.svg+" > *").remove();
+
+                if(graphs) self.data.graph = graphs;
+                getAxisScale();
+
+                self.xAxis = d3.svg.axis()
+                    .scale(self.xScale)
+                    .ticks(4)
+                    .tickFormat(function(d) {
+                        return d3.time.format('%m-%d, %H:%M')(new Date(d))
+                    })
+
+                self.y1Axis = d3.svg.axis()
+                    .scale(self.y1Scale)
+                    .ticks(6)
+                    .orient("left");
+
+                self.y2Axis = d3.svg.axis()
+                    .scale(self.y2Scale)
+                    .ticks(6)
+                    .orient("right");
+
+                self.vis.append("svg:g")
+                    .attr("class","axis")
+                    .attr("transform", "translate(0," + (self.data.height - self.data.margin.bottom) + ")")
+                    .call(self.xAxis)
+                        .selectAll("text")
+                        .style("text-anchor", "end")
+                        .attr("dx", "-.8em")
+                        .attr("dy", ".15em")
+                        .attr("transform", function(d) {
+                            return "rotate(-30)"
+                        });
+
+                self.vis.append("svg:g")
+                    .attr("class","axis")
+                    .attr("transform", "translate(" + (self.data.margin.left) + ",0)")
+                    .call(self.y1Axis);
+
+                self.vis.append("svg:g")
+                    .attr("class","axis")
+                    .attr("transform", "translate(" + self.xScale(self.axisScale.xh) + ",0)")
+                    .call(self.y2Axis);
+
+                self.lineGenY1 = d3.svg.line().x(function(d) {    return self.xScale(d.x);}).y(function(d) {    return self.y1Scale(d.y); });
+                self.lineGenY2 = d3.svg.line().x(function(d) {    return self.xScale(d.x);}).y(function(d) {    return self.y2Scale(d.y); });
+                for(var idx in self.data.graph){
+                    self.vis.append('svg:path')
+                        .attr('d', getYlineGen(self.data.graph[idx].yAxis, self.data.graph[idx].values))
+                        .attr('stroke', self.data.graph[idx].color)
+                        .attr('stroke-width', self.data.graph[idx].strokeWidth)
+                        .attr('fill', 'none');
+                }
+                self.vis.selectAll("circle").on("mouseover", function(){
+                    d3.select(this).attr('r', 25)
+                });
+                self.vis.selectAll("circle").on("mouseout", function(){
+                    d3.select(this).attr('r', 6)
+                });
+                self.focusCircle = [];
+                self.focusText = [];
+                for(var idx in self.chart.graphs){
+                    self.focusCircle[idx] = self.vis.append("circle")
+                        .attr('class', 'click-circle')
+                        .attr("cx", -1000)
+                        .attr("cy", -1000)
+                        .attr("fill", self.chart.graphs[idx].color)
+                        .attr("r", 5);
+                    //
+                    // self.focusText[idx] = self.vis.append("text")
+                    //     .attr("x", -10)
+                    //     .attr('class', 'focusText')
+                    //     .attr("y", self.data.margin.top + 20 + (idx * 13));
+                    self.focusText[idx] = self.vis.append("g")
+
+                    self.focusText[idx].append("rect")
+                        .attr("width", 0)
+                        .attr("height", 16)
+                        .attr('class', 'focusRect')
+                        .attr("fill", '#eee')
+                        .attr("y",  8 + (idx * 16));
+
+                    self.focusText[idx].append("text")
+                        .attr("x", 4)
+                        .attr('class', 'focusText')
+                        .attr("y",  20 + (idx * 16));
+                }
+
+
+                self.focusLine = self.vis.append("line")
+                    .attr('class', 'focus-line')
+                    .attr("x1", -1000)
+                    .attr("x2", -1000)
+                    .attr("y1", self.data.margin.top)
+                    .attr("y2", (self.data.height - self.data.margin.top) )
+                    .attr("stroke-width", 1)
+                    .attr("stroke", "#ccc");
+
+
+            }
+
+            function getYlineGen(y, val){
+                if(y == 1){
+                    return self.lineGenY1(val);
+                }else if(y == 2){
+                    return self.lineGenY2(val);
+                }
+            }
+            function getAxisScale() {
+                self.axisScale = { y1 : {}, y2 : {}}
+                for(var idx in self.data.graph){
+                    var dataItem = self.data.graph[idx];
+                    if(dataItem.yAxis == null){
+                        dataItem.yAxis = 1;
+                    }
+
+                    for(var jdx in dataItem.values){
+                        if(dataItem.values[jdx].x < self.axisScale.xl || self.axisScale.xl == null ) self.axisScale.xl = dataItem.values[jdx].x;
+                        if(dataItem.values[jdx].x > self.axisScale.xh || self.axisScale.xh == null ) self.axisScale.xh = dataItem.values[jdx].x;
+
+                        if(dataItem.values[jdx].y < self.axisScale['y'+dataItem.yAxis].yl || self.axisScale['y'+dataItem.yAxis].yl == null  ) self.axisScale['y'+dataItem.yAxis].yl = dataItem.values[jdx].y;
+                        if(dataItem.values[jdx].y > self.axisScale['y'+dataItem.yAxis].yh || self.axisScale['y'+dataItem.yAxis].yh == null  ) self.axisScale['y'+dataItem.yAxis].yh = dataItem.values[jdx].y;
+                    }
+                }
+
+                self.axisScale.xh += 0;
+                self.axisScale.y1.yh = parseInt(self.axisScale.y1.yh + self.axisScale.y1.yh * 0.6);
+                self.axisScale.y2.yh = parseInt(self.axisScale.y2.yh + self.axisScale.y1.yh * 0.6);
+                // if(self.axisScale.xl > 0 && self.axisScale.xl < 20){self.axisScale.xh = 0; }
+                // if(self.axisScale.y1.yl > 0 && self.axisScale.y1.yl < 20 ){self.axisScale.y1.yl = 0; }
+                // if(self.axisScale.y2.yl > 0 && self.axisScale.y2.yl < 20 ){self.axisScale.y2.yl = 0; }
+                self.axisScale.y1.yl = 0;
+                self.axisScale.y2.yl = 0;
+
+
+                self.xScale = d3.scale.linear().range([self.data.margin.left, self.data.width - self.data.margin.right]).domain([new Date(self.axisScale.xl), new Date(self.axisScale.xh)]);
+                self.y1Scale = d3.scale.linear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y1.yl,self.axisScale.y1.yh]);
+                self.y2Scale = d3.scale.linear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y2.yl,self.axisScale.y2.yh]);
+
+                // self.xScale.ticks(5);
+                //     tickFormat = self.xScale.tickFormat(5, "+%");
+                //
+                // ticks.map(tickFormat); // ["-100%", "-50%", "+0%", "+50%", "+100%"]
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         vm.init = function () {
@@ -477,10 +824,10 @@
                 vm.historyMap.selectedVehicle = tempSelectedvehicles[0];
             }
 
-
             if (vm.gotHistory) {
                 historyService.drawTrace();
                 generateTimeline(vm.historyMap.traceObj);
+                generateExpandedGraph();
                 drawTimeline();
             } else {
                 if ($stateParams && $stateParams.mapObj && $stateParams.mapObj.clickedMarker)
@@ -488,6 +835,7 @@
                 else
                     setDefaultVehicle();
             }
+            createExpandedGraph();
 
             setMapHeight();
             $scope.$on('gotHistoryEvent', vm.gotHistoryEvent);
@@ -503,6 +851,7 @@
             historyFenceInfowindow.addListener('domready', function () {
                 vm.historyFenceWindowLoad();
             });
+
 
         };
 
