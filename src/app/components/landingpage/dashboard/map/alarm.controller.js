@@ -17,6 +17,7 @@
         var dateFormat = 'DD-MM-YY HH:mm';
         dialogService.setTab(3);
         vm.jsonAlarmData = [];
+        vm.searchTerm = null;
 
         vm.convertLatLngToAddr = alarmService.convertLatLngToAddr;
 
@@ -131,7 +132,16 @@
         };
 
         vm.downloadFile = function () {
+            vm.jsonAlarmData = [];
             var alarmResp = vm.alarms.alarmResponseData;
+
+
+            if ( vm.searchTerm != null ) {
+                alarmResp = $filter("filter")(vm.alarms.alarmResponseData, {$: vm.searchTerm});
+            }
+
+            // $log.log(alarmResp);
+
             if (alarmResp.length) {
                 for (var idx in alarmResp) {
                     var loc = alarmResp[idx].lat + ',' + alarmResp[idx].lng;
@@ -172,6 +182,8 @@
 
         };
 
+
+
         vm.gotAddress = function (data) {
             // $log.log(data);return;
             if (!data.length) return;
@@ -186,6 +198,20 @@
 
             WebuiPopovers.updateContent('.' + vm.myclass, vehicleAddress) //Update the Popover content after the popover is created.
         };
+
+
+
+        // $('table').on( 'draw.dt', function (e) {
+        //         $log.log(e);
+        //         $log.log(e.target.innerText);
+        // } );
+
+
+        angular.element('body').on('search.dt', function() {
+            vm.searchTerm = document.querySelector('.dataTables_filter input').value;
+            console.log('dataTables search : ' + vm.searchTerm);
+        })
+
 
         vm.init();
 
