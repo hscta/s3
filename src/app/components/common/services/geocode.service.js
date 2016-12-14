@@ -15,12 +15,10 @@
 
 
         var handleGetAddress = function(resp) {
-            // $log.log(resp.data.data);
-
             if (resp.data && resp.data.data && resp.data.data.length) {
+                //$log.log(resp.data.data);
                 return $q.resolve(resp.data.data);
             }
-
             return $q.reject(resp);
         };
 
@@ -32,6 +30,7 @@
 
 
         vm.getAddress = function(body){
+            body = {data: body};
             return requestService.fireGeoCode('/geocodeint', body)
                 .then(handleGetAddress, handleGetAddressFailure);
         }

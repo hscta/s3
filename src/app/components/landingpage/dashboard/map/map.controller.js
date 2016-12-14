@@ -8,9 +8,10 @@
 
     function MapController($scope, $log, cpuService, mapService,
                            $interval, geofenceViewService, $timeout, customMapOverlay, $compile,
-                           vehicleService, historyService, $state, $mdDialog) {
+                           vehicleService, historyService, $state, $mdDialog, intellicarAPI) {
         $log.log('MapController');
         var vm = this;
+        var dateFormat = 'DD-MM-YYYY HH:mm';
 
         var wh = $(window).height();
         var header_height = 95;
@@ -179,7 +180,7 @@
                         var maplng = Math.floor(vm.inMap.map.getCenter().lng());
 
                         if (lat == maplat && lng == maplng && !centerMap) {
-                            if(matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat() > 0.2) {
+                            if (matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat() > 0.2) {
                                 vm.inMap.map.setCenter(matchedMarker.getPosition());
                             }
 
@@ -299,9 +300,6 @@
                     vm.vehicleStats[filter] = vm.getStats(filter);
                 }
             }
-
-            //$timeout(vm.runStats, 10000);
-            // $log.log(vm.vehicleStats);
         };
 
 
@@ -706,6 +704,43 @@
         };
 
 
+        vm.downloadView = function (event, active) {
+            var selectedView = [];
+            var latlngList = [];
+            var UNKNOWN = "UNKNOWN";
+            for (var idx in vm.inMap.markers.markersByPath) {
+                var marker = vm.inMap.markers.markersByPath[idx];
+                if (marker.getVisible()) {
+                    var rtgps = vehicleService.vehiclesByPath[idx].rtgps;
+
+                    selectedView.push({
+                        "Vehicle No": rtgps.vehicleno,
+                        "Device ID": rtgps.deviceid,
+                        "Last seen at": moment(rtgps.timestamp).format(dateFormat),
+                        "odometer": rtgps.odometer,
+                        "Ignition": rtgps.ignitionstatusStr,
+                        "Mobility": rtgps.mobilistatusFilter,
+                        "Vehicle Battery": rtgps.carbattery,
+                        "Device Battery": rtgps.devbattery,
+                        "Last Location": UNKNOWN
+                    });
+
+                    latlngList.push([rtgps.latitude, rtgps.longitude]);
+                }
+            }
+
+            intellicarAPI.geocodeService.getAddress(latlngList)
+                .then(function (resp) {
+                    for (var idx in resp) {
+                        selectedView[idx]["Last Location"] = resp[idx][1];
+                    }
+                    intellicarAPI.importFileservice.JSONToCSVConvertor(selectedView, "ViewReport", true);
+                }, function (resp) {
+                    intellicarAPI.importFileservice.JSONToCSVConvertor(selectedView, "ViewReport", true);
+                });
+        };
+
+
         vm.createMap = function () {
             var mapCanvas = document.getElementById("map");
             vm.inMap.mapOptions = {
@@ -943,7 +978,6 @@
             setMapHeight();
             vm.addListener();
 
-            $timeout(vm.runStats, 5000);
             $interval(vm.runStats, 10000);
 
             markerInfowindow.addListener('domready', function () {
@@ -966,6 +1000,7 @@
             });
         };
 
+        $scope.$on('downloadView', vm.downloadView);
 
         vm.init();
     }

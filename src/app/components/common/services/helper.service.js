@@ -111,7 +111,7 @@
                 }
             }
             return assetpath.substring(0, idx);
-        }
+        };
 
 
         vm.getParentId = function (asset) {
