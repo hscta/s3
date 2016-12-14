@@ -8,11 +8,12 @@
     angular.module('uiplatform')
         .service('geofenceViewService', geofenceViewService);
 
-    function geofenceViewService($log, $q, intellicarAPI, geofenceReportService) {
+    function geofenceViewService($rootScope, $log, $q, intellicarAPI, geofenceReportService) {
 
         var vm = this;
         vm.toolbar = true;
         vm.listeners = {};
+        vm.geoData = {};
 
 
         vm.circles = [];
@@ -182,13 +183,6 @@
         };
 
 
-        // vm.processMyFenceInfos = function(resp) {
-        //     vm.circles = [];
-        //     vm.polygons = [];
-        //     console.log(resp);
-        // };
-
-
         vm.getMyFenceInfos = function () {
             vm.startTime = new Date().getTime();
             return intellicarAPI.userService.getMyFenceInfosMap({})
@@ -215,8 +209,6 @@
             }
         };
 
-        vm.geoData = {};
-
         vm.setData = function (key, value) {
             vm.geoData[key] = value;
             // $log.log('vm.setData:' + key);
@@ -231,6 +223,10 @@
 
             return null;
         };
+
+        vm.downloadView = function(active) {
+            $rootScope.$broadcast('downloadView', active);
+        }
     }
 
 

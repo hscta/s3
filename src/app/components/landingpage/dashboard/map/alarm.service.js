@@ -13,6 +13,7 @@
         $log.log("alarmService");
         var vm = this;
 
+        vm.convertLatLngToAddr = true;
 
         vm.alarmsObj = {
             vehicles: [],
@@ -25,6 +26,10 @@
             loadingAlarmData: false,
             msg: ''
         };
+
+
+        vm.latlngList = [];
+        vm.addressList = [];
 
 
         vm.getAlarmsHistory = function () {
@@ -50,6 +55,8 @@
             var hrs1 = 3600 * MILLISEC;
             var timeLimit = hrs1;
 
+
+            // $log.log(vm.alarmsObj.startTime, vm.alarmsObj.endTime);
             var startTime = new Date(moment(vm.alarmsObj.startTime).unix() * 1000).getTime();
             var endTime = new Date(moment(vm.alarmsObj.endTime).unix() * 1000).getTime();
 
@@ -64,8 +71,8 @@
                 return;
             }
 
-            if (endTime - startTime > timeLimit)
-                endTime = startTime + timeLimit;
+            // if (endTime - startTime > timeLimit)
+            //     endTime = startTime + timeLimit;
 
             if (endTime <= startTime) {
                 vm.alarmsObj.msg = "End time should be >= Start time";
@@ -104,8 +111,37 @@
                         data[idx].speed = Math.floor(data[idx].speed);
                     }
                 }
+
+                vm.latlngList.push([data[idx].lat, data[idx].lng]);
             }
-            vm.alarmsObj.alarmResponseData = data;
+
+            if ( vm.convertLatLngToAddr ){
+                // var body = {
+                //     data : vm.latlngList
+                // }
+                intellicarAPI.geocodeService.getAddress(vm.latlngList).then(function(resp){
+                    for ( var idx in resp ) {
+                        vm.addressList.push(resp[idx][1]);
+
+                        // $log.log(resp[idx][0])
+                        for ( var xidx in data ) {
+
+                            if ( (data[xidx].lat == resp[idx][0][0]) &&
+                                ( data[xidx].lng == resp[idx][0][1]) ) {
+                                data[xidx].addr = resp[idx][1];
+                            }
+                        }
+                        vm.alarmsObj.alarmResponseData = data;
+                    }
+                },function(resp){
+                    $log.log(resp);
+                });
+            } else{
+                vm.alarmsObj.alarmResponseData = data;
+
+            }
+
+            // $log.log(data);
         };
 
 

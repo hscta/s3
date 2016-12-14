@@ -9,11 +9,11 @@
         .service('mqttService', mqttService);
 
     function mqttService($log, authService, helperService,
-                         $timeout) {
+                         $timeout, MQTT_HOST) {
         $log.log("mqttService");
 
         var vm = this;
-        vm.socketiohost = 'http://in2.intellicar.in:10105';
+        vm.socketiohost = MQTT_HOST;
         vm.socket = null;
         vm.toConnect = true;
         vm.listeners = {};

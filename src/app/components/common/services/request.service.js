@@ -7,7 +7,6 @@
 
     angular
         .module('uiplatform')
-        .constant('GEOCODE_API_HOST', 'http://maps.intellicar.in:8082')
         .service('requestService', requestService);
 
     function requestService($log, $http, $q, API_HOST, GEOCODE_API_HOST, authService) {

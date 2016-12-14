@@ -9,7 +9,8 @@
     angular
         .module('uiplatform')
         .constant('API_HOST', 'http://in2.intellicar.in:10104')
-        //.constant('API_HOST', 'http://in2.intellicar.in:10104')
+        .constant('MQTT_HOST', 'http://in2.intellicar.in:10105')
+        .constant('GEOCODE_API_HOST', 'http://maps.intellicar.in:8082')
         .constant('TOKEN_KEY', 'JWT_TOKEN_KEY')
         .service('authService', authService)
         .factory('authInterceptor', authInterceptor)

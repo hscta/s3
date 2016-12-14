@@ -241,7 +241,22 @@
                     }
                 }
             },
-            {'type': 'line', 'historymap': false}
+            {'type': 'line', 'historymap': false},
+            {
+                'id': 'downloadView',
+                'name': 'Download View',
+                'iconType': 'fa',
+                'icon': 'fa-download',
+                'type': 'toggleButton',
+                'historymap': false,
+                'data': {
+                    active: false,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('downloadView', false);
+                        geofenceViewService.downloadView(false);
+                    }
+                }
+            }
         ];
 
         vm.fencesActive = function () {
