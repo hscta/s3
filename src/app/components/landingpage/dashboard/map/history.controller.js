@@ -509,7 +509,7 @@
                     vm.traceControls.expDiv = $('.tcg_item');
                     $interval.cancel(tempInter);
                     for(var idx in vm.tcGraphs.charts){
-                        vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height();
+                        vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height() - 30;
                         vm.tcGraphs.charts[idx].data.width = vm.traceControls.expDiv.width();
                         if(!vm.tcGraphs.charts[idx].data.margin)
                             vm.tcGraphs.charts[idx].data.margin = vm.tcGraphs.margin;
@@ -607,10 +607,19 @@
             self.vis = d3.select(self.data.svg)
             //responsive SVG needs these 2 attributes and no width and height attr
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height) )
+                .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height - 30) )
                 //class to make it responsive
                 .classed("svg-content-responsive", true)
-                .on("mousemove", mouseHoverEvent);
+                .on("mousemove", mouseHoverEvent)
+            //     .on("click", graphDrag)
+            //
+            // function graphDrag() {
+            //     self.mouseX = d3.mouse(this)[0];
+            //     var timestamp = parseInt(self.xScale.invert(self.mouseX));
+            //     // console.log(self.mouseX);
+            //     self.xScale = d3.scale.linear().domain([new Date(timestamp), new Date(self.axisScale.xh)]);
+            //     self.draw();
+            // }
 
             function mouseHoverEvent() {
                 // var posSvg = Math.ceil($('#visualisation').offset().left);
