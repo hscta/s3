@@ -13,7 +13,7 @@
         $log.log("alarmService");
         var vm = this;
 
-        vm.convertLatLngToAddr = false;
+        vm.convertLatLngToAddr = true;
 
         vm.alarmsObj = {
             vehicles: [],
