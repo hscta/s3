@@ -122,11 +122,14 @@
                     <td>{{report.alarmreason}}</td>
                     <td>{{report.speed}}</td>
                     <td>{{report.opermode}}</td>
-                    <td>
-                        <span class="latlng loc{{$index}}"
+                    <td >
+                        <span ng-if="!vm.convertLatLngToAddr" class="latlng loc{{$index}}"
                               ng-mouseover="vm.getAddress(report.lat, report.lng, $index)"
-                              data-content='Fetching Address'>{{report.lat }},{{report.lng }}
+                              data-content='Fetching Address'>
+                         {{report.lat }},{{report.lng }}
                         </span>
+
+                        <span ng-if="vm.convertLatLngToAddr">{{report.addr}}</span>
                     </td>
                 </tr>
                 </tbody>

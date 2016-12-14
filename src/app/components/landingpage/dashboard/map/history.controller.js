@@ -9,7 +9,7 @@
         .controller('HistoryTableController', HistoryTableController);
 
     function HistoryController($scope, $window, $interval, historyService, $stateParams, $log, vehicleService, mapService,
-                                dialogService, geofenceViewService, $compile) {
+                               dialogService, geofenceViewService, $compile) {
 
         var vm = this;
 
@@ -86,7 +86,7 @@
                 // var startInterval = $interval(function () {
                 var keys = Object.keys(vehicleService.vehiclesByPath);
                 if (keys.length > 0) {
-                    $log.log(vehicleService.vehiclesByPath[keys[0]]);
+                    // $log.log(vehicleService.vehiclesByPath[keys[0]]);
                     vm.historyMap.selectedVehicle = vehicleService.vehiclesByPath[keys[0]];
                     // $interval.cancel(startInterval);
                 }
@@ -539,6 +539,8 @@
         vm.disableDownload = true;
         vm.showLoading = false;
 
+        vm.convertLatLngToAddr = false;
+
         $scope.getHistory = function () {
             historyData = [];
             vm.jsonHistoryData = [];
@@ -556,42 +558,89 @@
         });
 
         vm.getAddress = function (latlng, className) {
-            latlng = latlng.split(',');
-            vm.myclass = className;
-            var body = {
-                data: [latlng]
-            };
-            var promise = (intellicarAPI.geocodeService.getAddress(body));
-            return $q.resolve(promise)
-                .then(vm.gotAddress, vm.handleFailure);
-        };
+            if ( typeof(latlng) == 'string'){
+                latlng = [latlng.split(',')];
+                vm.myclass = className;
+            }
 
-        vm.gotAddress = function (data) {
-            if (!data.data.data.length) return;
-            var addr = data.data.data;
-            for (var idx in addr)
-                addr = addr[idx];
-            var vehicleAddress = addr[1]
-            $('.' + vm.myclass).attr('data-content', vehicleAddress)
-            WebuiPopovers.updateContent('.' + vm.myclass, vehicleAddress) //Update the Popover content after the popover is created.
+            var body = {
+                data: latlng
+            };
+
+            return intellicarAPI.geocodeService.getAddress(body);
+            // .then(vm.gotAddress, vm.handleFailure);
         };
+        //
+        // vm.gotAddress = function (data) {
+        //     $log.log(data);
+        //     return;
+        //     if (!data.data.data.length) return;
+        //     var addr = data.data.data;
+        //     for (var idx in addr)
+        //         addr = addr[idx];
+        //
+        //
+        //     if ( vm.convertLatLngToAddr ) {
+        //         return addr[1];
+        //     }else {
+        //         var vehicleAddress = addr[1];
+        //         $('.' + vm.myclass).attr('data-content', vehicleAddress)
+        //         WebuiPopovers.updateContent('.' + vm.myclass, vehicleAddress) //Update the Popover content after the popover is created.
+        //     }
+        // };
 
         vm.showTableData = function () {
-            var marker = vm.historyMap.traceObj;
-            // $log.log(marker);
+            var traceObj = vm.historyMap.traceObj;
+            // $log.log(traceObj);
             historyData = [];
 
-            for (var idx in marker) {
-                var loc = marker[idx].lat() + ',' + marker[idx].lng();
-                var dateTime = new Date(marker[idx].gpstime);
-                var ignitionStatus = marker[idx].ignstatus ? 'On' : 'Off';
+            var latlngList = [];
 
+            for (var idx in traceObj) {
+                latlngList.push([traceObj[idx].lat(), traceObj[idx].lng()]);
+            }
+
+            var addressList = [];
+            if(traceObj != null) {
+                if ( vm.convertLatLngToAddr ) {
+                    vm.getAddress(latlngList).then(
+                        function(resp) {     // On success
+                            // $log.log(resp);
+                            for (var idx in resp) {
+                                addressList.push (resp[idx][1]);
+                            }
+                            getTableData(traceObj, addressList);
+                        },
+
+                        function(resp) {   // On failure
+                            $log.log(resp);
+                        }
+                    );
+                } else {
+                    getTableData(traceObj, addressList);
+                }
+            }
+
+            // $log.log(traceObj);
+
+        };
+
+
+        function getTableData (traceObj, addressList){
+
+            for ( var idx in traceObj ) {
+                var loc = traceObj[idx].lat() + ',' + traceObj[idx].lng();
+                var dateTime = new Date(traceObj[idx].gpstime);
+                var ignitionStatus = traceObj[idx].ignstatus ? 'On' : 'Off';
                 var location = "<span class='latlng loc" + idx + "' data-content='Fetching Address'>" + loc + "</span>";
 
+                if ( addressList.length ) {
+                    location = loc = addressList[idx];
+                }
                 historyData.push([
                     dateTime,
-                    marker[idx].odometer.toString(),
-                    marker[idx].speed.toString(),
+                    traceObj[idx].odometer.toString(),
+                    traceObj[idx].speed.toString(),
                     ignitionStatus,
                     location
                 ]);
@@ -599,21 +648,51 @@
                 vm.jsonHistoryData.push({
                     vehicle_Name: vm.historyMap.selectedVehicle.rtgps.vehicleno,
                     time: moment(dateTime).format(dateFormat),
-                    odometer: marker[idx].odometer.toString(),
-                    speed: marker[idx].speed.toString(),
+                    odometer: traceObj[idx].odometer.toString(),
+                    speed: traceObj[idx].speed.toString(),
                     ignitionStatus: ignitionStatus,
                     location: loc
                 });
             }
+
+
+            // $log.log(traceObj);
             google.charts.load('current', {'packages': ['table']});
             google.charts.setOnLoadCallback(drawTable);
 
             vm.disableDownload = false;
             vm.showLoading = false;
-        };
+        }
+
 
         function drawTable() {
             table = new google.visualization.Table(tableContainer);
+
+            google.visualization.events.addListener(table, 'ready', function () {
+                if ( vm.convertLatLngToAddr ){
+
+                }else {
+                    $('.latlng').webuiPopover({trigger: 'hover', width: 300, animation: 'pop'});
+
+                    $('.latlng').hover(function () {
+                        var className = $(this).attr('class');
+                        className = className.split(' ');
+                        var latlng = $(this).text();
+                        vm.getAddress(latlng, className[1]).then(function (resp ){
+                            for ( var idx in resp ) {
+                                if (resp[idx][1]) {
+                                    var vehicleAddress = resp[idx][1];
+                                    $('.' + vm.myclass).attr('data-content', vehicleAddress)
+                                    WebuiPopovers.updateContent('.' + vm.myclass, vehicleAddress) //Update the Popover content after the popover is created.
+                                    return;
+                                }
+                            }
+                        }, function ( resp ) {
+                            $log.log(resp);
+                        });
+                    });
+                }
+            });
             data = new google.visualization.DataTable();
 
             data.addColumn('datetime', 'Time');
@@ -626,10 +705,6 @@
                 historyData
             );
 
-            google.visualization.events.addListener(table, 'ready', function () {
-                $('.latlng').webuiPopover({trigger: 'hover', width: 300, animation: 'pop'});
-            });
-
             var dateFormatter = new google.visualization.DateFormat({pattern: 'd MMM, h:mm a'});
             dateFormatter.format(data, 0);
 
@@ -639,13 +714,6 @@
                 page: 'enable',
                 pageSize: 300,
                 allowHtml: true
-            });
-
-            $('.latlng').hover(function () {
-                var className = $(this).attr('class');
-                className = className.split(' ');
-                var latlng = $(this).text();
-                vm.getAddress(latlng, className[1]);
             });
         };
 

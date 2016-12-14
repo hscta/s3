@@ -18,6 +18,9 @@
         dialogService.setTab(3);
         vm.jsonAlarmData = [];
 
+        vm.convertLatLngToAddr = alarmService.convertLatLngToAddr;
+
+
         vm.dtOptions = DTOptionsBuilder.newOptions();
 
         vm.dtOptions.withOption('paging', false).withOption('scrollY', "58vh").withOption('scrollCollapse', true);
@@ -132,6 +135,11 @@
             if (alarmResp.length) {
                 for (var idx in alarmResp) {
                     var loc = alarmResp[idx].lat + ',' + alarmResp[idx].lng;
+
+                    if ( vm.convertLatLngToAddr ) {
+                        loc = alarmResp[idx].addr
+                    }
+
                     var alarmTime = new Date(parseInt(alarmResp[idx].gpstime));
                     vm.jsonAlarmData.push({
                         vehicle_name: alarmResp[idx].vehicleno,
@@ -147,27 +155,32 @@
         };
 
         vm.getAddress = function (lat, lng, className) {
-            vm.myclass = 'loc' + className;
-            var body = {
-                data: [[lat, lng]]
-            };
-            var promise = (intellicarAPI.geocodeService.getAddress(body));
+            if (vm.convertLatLngToAddr) {
 
-            return $q.resolve(promise)
-                .then(vm.gotAddress, vm.handleFailure);
+            }else {
+                vm.myclass = 'loc' + className;
+                var body = {
+                    data: [[lat, lng]]
+                };
+
+                (intellicarAPI.geocodeService.getAddress(body))
+                    .then(vm.gotAddress, vm.handleFailure);
+
+
+                // return $q.resolve(promise)
+            }
+
         };
 
         vm.gotAddress = function (data) {
-            if (!data.data.data.length) return;
+            // $log.log(data);return;
+            if (!data.length) return;
 
-            var addr = data.data.data;
-
-            for (var idx in addr)
-                addr = addr[idx];
+            var addr;
+            for (var idx in data)
+                addr = data[idx];
 
             var vehicleAddress = addr[1]
-
-            // $log.log(vehicleAddress);
 
             $('.' + vm.myclass).attr('data-content', vehicleAddress)
 

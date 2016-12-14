@@ -13,6 +13,7 @@
         $log.log("alarmService");
         var vm = this;
 
+        vm.convertLatLngToAddr = false;
 
         vm.alarmsObj = {
             vehicles: [],
@@ -25,6 +26,10 @@
             loadingAlarmData: false,
             msg: ''
         };
+
+
+        vm.latlngList = [];
+        vm.addressList = [];
 
 
         vm.getAlarmsHistory = function () {
@@ -104,8 +109,37 @@
                         data[idx].speed = Math.floor(data[idx].speed);
                     }
                 }
+
+                vm.latlngList.push([data[idx].lat, data[idx].lng]);
             }
-            vm.alarmsObj.alarmResponseData = data;
+
+            if ( vm.convertLatLngToAddr ){
+                var body = {
+                    data : vm.latlngList
+                }
+                intellicarAPI.geocodeService.getAddress(body).then(function(resp){
+                    for ( var idx in resp ) {
+                        vm.addressList.push(resp[idx][1]);
+
+                        // $log.log(resp[idx][0])
+                        for ( var xidx in data ) {
+
+                            if ( (data[xidx].lat == resp[idx][0][0]) &&
+                                ( data[xidx].lng == resp[idx][0][1]) ) {
+                                data[xidx].addr = resp[idx][1];
+                            }
+                        }
+                        vm.alarmsObj.alarmResponseData = data;
+                    }
+                },function(resp){
+                    $log.log(resp);
+                });
+            } else{
+                vm.alarmsObj.alarmResponseData = data;
+
+            }
+
+            // $log.log(data);
         };
 
 
