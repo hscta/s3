@@ -79,7 +79,6 @@
                 return;
             }
 
-            var promiseList = [];
             vm.alarmsObj.loadingAlarmData = true;
 
             var body = {
@@ -87,16 +86,15 @@
                 starttime: startTime,
                 endtime: endTime
             };
-            promiseList.push(intellicarAPI.myAlarmService.getAlarmInfo(body));
+
             vm.alarmsObj.msg = '';
 
-            return $q.all(promiseList)
+            return intellicarAPI.myAlarmService.getAlarmInfo(body)
                 .then(vm.readHistoryInfo, vm.handleFailure);
-
         };
 
         vm.readHistoryInfo = function (history) {
-            var data = history[0].data.data;
+            var data = history;
             vm.alarmsObj.loadingAlarmData = false;
 
             if (!data.length) {

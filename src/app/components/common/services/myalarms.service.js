@@ -14,9 +14,23 @@
         $log.log("myAlarmService");
 
 
+        vm.handleGetAlarms = function(resp) {
+            if(resp.data && resp.data.data)
+                return $q.resolve(resp.data.data);
+            return $q.reject(resp);
+        };
+
+
+        vm.handleFailure = function (resp) {
+            $log.log(resp);
+            return $q.reject(resp);
+        };
+
+
         vm.getAlarmInfo = function (body) {
-            var reqbody = {vehicle: body};
-            return requestService.firePost('/reports/rtalarm/trackhistorym', reqbody);
+            var body = {vehicle: body};
+            return requestService.firePost('/reports/rtalarm/trackhistorym', body)
+                .then(vm.handleGetAlarms, vm.handleFailure);
         };
 
         vm.subscribe = function (assetpath, flag) {
