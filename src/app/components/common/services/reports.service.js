@@ -19,9 +19,23 @@
             return {"reports":body}
         }
 
+        vm.handleTrackHistory = function (resp) {
+            if(resp.data && resp.data.data)
+                return $q.resolve(resp.data.data);
+            return $q.reject(resp);
+        };
+
+
+        vm.handleFailure = function (resp) {
+            $log.log(resp);
+            $q.reject(resp);
+        };
+
+
         vm.getDeviceLocation = function(body) {
-            return requestService.firePost('/reports/rtgps/trackhistory', body);
-        }
+            return requestService.firePost('/reports/rtgps/trackhistory', body)
+                .then(vm.handleTrackHistory, vm.handleFailure);
+        };
 
         vm.getGPSLastseen = function(body) {
             body = encloseBody(body);
