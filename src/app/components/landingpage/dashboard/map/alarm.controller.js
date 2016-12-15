@@ -209,8 +209,8 @@
 
         angular.element('body').on('search.dt', function() {
             vm.searchTerm = document.querySelector('.dataTables_filter input').value;
-            console.log('dataTables search : ' + vm.searchTerm);
-        })
+            //console.log('dataTables search : ' + vm.searchTerm);
+        });
 
 
         vm.init();
