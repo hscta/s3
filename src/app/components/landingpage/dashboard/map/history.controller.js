@@ -1097,12 +1097,21 @@
             var dateFormatter = new google.visualization.DateFormat({pattern: 'd MMM, h:mm a'});
             dateFormatter.format(data, 0);
 
+
+            // data.setProperty(0, 0, 'style', 'width:150px');
+            // data.setProperty(0, 1, 'style', 'width:150px');
+            // data.setProperty(0, 2, 'style', 'width:150px');
+            // data.setProperty(0, 3, 'style', 'width:150px');
+            // data.setProperty(0, 4, 'style', 'width:250px');
+
             table.draw(data, {
                 showRowNumber: true,
-                width: '100%',
                 page: 'enable',
+                width:'100%',
+                height:'100%',
                 pageSize: 300,
-                allowHtml: true
+                allowHtml: true,
+                alternatingRowStyle:true
             });
         };
 
