@@ -187,8 +187,8 @@
                 alarmData = vm.historyMap.alarmData;
             } else {
                 if(respArray.length == 2) {
-                    traceData = vm.historyMap.traceData = respArray[0].data.data;
-                    alarmData = vm.historyMap.alarmData = respArray[1].data.data;
+                    traceData = vm.historyMap.traceData = respArray[0];
+                    alarmData = vm.historyMap.alarmData = respArray[1];
                 } else {
                     return;
                 }
