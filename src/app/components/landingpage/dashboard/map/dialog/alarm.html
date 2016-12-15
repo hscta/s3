@@ -104,11 +104,11 @@
 
         <div ng-hide="vm.alarms.loadingAlarmData" style="width: 100%; height: 100%;">
             <table datatable="ng"  dt-options="vm.dtOptions" dt-instance="dtInstanceCallback"
-                   class="row-border hover"width="100%"   ng-cloak>
+                   class="row-border hover table table-striped"width="100%"   ng-cloak>
                 <thead>
                 <tr>
-                    <th>Vehicle No</th>
-                    <th>Time</th>
+                    <th width="150">Vehicle No</th>
+                    <th width="150">Time</th>
                     <th>Reason</th>
                     <th>Speed</th>
                     <th>Opperation Mode</th>
@@ -117,8 +117,8 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="report in vm.alarms.alarmResponseData track by $index">
-                    <td>{{report.vehicleno}}</td>
-                    <td>{{report.gpstime | date : 'd MMM, h:mm a'}}</td>
+                    <td width="150">{{report.vehicleno}}</td>
+                    <td width="150">{{report.gpstime | date : 'd MMM, h:mm a'}}</td>
                     <td>{{report.alarmreason}}</td>
                     <td>{{report.speed}}</td>
                     <td>{{report.opermode}}</td>
