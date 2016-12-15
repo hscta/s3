@@ -219,7 +219,7 @@
                         <i class="fa fa-chevron-right" ng-if="vm.traceControls.expandedGraphs == 'full'"></i>
                     </a>
                 </div>
-                <div class="tc_graph-container">
+                <div class="tc_graph-container noselect">
                     <!--<div class="tcg_item" ng-repeat="chart in vm.tcGraphs.charts">-->
                         <!--<nvd3 options="vm.tcGraphs.options" data="chart.data"></nvd3>-->
                     <!--</div>-->
@@ -236,8 +236,12 @@
                 </div>
             </div>
 
+            <div class="tc_popup" style="left:{{vm.getPopLeft()}}"ng-show="vm.traceControls.timeline[vm.traceControls.current].alarmData">
+                {{vm.traceControls.timeline[vm.traceControls.current].alarmData.alarmreason}}
+            </div>
+
             <div class="history-err" ng-show="!vm.gotHistory">{{vm.historyMap.errorMsg}}</div>
-            <div class="traceControls" ng-class="{'active':vm.gotHistory}">
+            <div class="traceControls noselect" ng-class="{'active':vm.gotHistory}">
                 <div class="tc_controls">
                     <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()"
                        ng-class="{'active':vm.traceControls.playing}">

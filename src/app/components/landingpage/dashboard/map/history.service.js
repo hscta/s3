@@ -263,8 +263,8 @@
                     vm.historyMap.startMarker.setMap(vm.historyMap.map);
                     vm.historyMap.endMarker.setMap(vm.historyMap.map);
                 }
-                $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path});
-            } else {
+                $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path, alarm : alarmData});
+            }else{
                 vm.historyMap.errorMsg = "No GPS Signal";
                 $rootScope.$broadcast('gotHistoryEventFailed');
             }
@@ -305,6 +305,7 @@
             SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
             speed: 4, // normal
             current: 0,
+            excludedAlarm : ['End_of_Over_speed'],
             togglePlay: function () {
                 vm.traceControls.isPointer();
                 if (vm.traceControls.playing) {
