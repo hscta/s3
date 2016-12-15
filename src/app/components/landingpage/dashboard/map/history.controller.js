@@ -116,6 +116,18 @@
             }
         };
 
+        vm.traceControls.jumpToAlarm = function (opcode) {
+            var idx=vm.traceControls.current + opcode;
+            while( idx < vm.traceControls.timeline.length && idx >= 0){
+                if(vm.traceControls.timeline[idx].alarmData){
+                    vm.traceControls.current = idx;
+                    vm.traceControls.moveTimeline();
+                    break;
+                }
+                idx+=opcode;
+            }
+        }
+
         vm.traceControls.setPointerTransition = function (bool) {
             if (bool) {
                 vm.traceControls.pointer.css('transition', vm.traceControls.SPEEDS[vm.traceControls.speed] + 'ms linear');
@@ -460,11 +472,19 @@
                 }
                 // if(!vm.traceControls.playing ){
                 if (event.keyCode == 37) { // left
-                    vm.traceControls.jumpToTime(-1);
+                    if(event.ctrlKey){
+                        vm.traceControls.jumpToAlarm(-1);
+                    }else {
+                        vm.traceControls.jumpToTime(-1);
+                    }
                 } else if (event.keyCode == 38) { // up
                     vm.traceControls.jumpToTime(10);
                 } else if (event.keyCode == 39) { // right
-                    vm.traceControls.jumpToTime(1);
+                    if(event.ctrlKey){
+                        vm.traceControls.jumpToAlarm(1);
+                    }else{
+                        vm.traceControls.jumpToTime(1);
+                    }
                 } else if (event.keyCode == 40) { // down
                     vm.traceControls.jumpToTime(-10);
                 }
