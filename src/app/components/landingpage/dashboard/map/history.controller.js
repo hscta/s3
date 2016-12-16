@@ -1019,6 +1019,7 @@
                 self.y1Scale = d3.scale.linear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y1.yl, self.axisScale.y1.yh]);
                 self.y2Scale = d3.scale.linear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y2.yl, self.axisScale.y2.yh]);
 
+                console.log(d3.scale);
                 // self.xScale.ticks(5);
                 //     tickFormat = self.xScale.tickFormat(5, "+%");
                 //
