@@ -77,7 +77,8 @@
                     <label>End Time</label>
                     <input type="text" id="end_time" ng-model="vm.alarms.endTime">
                 </md-input-container>
-                <md-button class="md-accent" ng-click="vm.getHistory()">Get Report</md-button>
+                <!--<md-button class="md-accent" ng-click="vm.getHistory()">Get Report</md-button>-->
+                <a class="waves-effect waves-light btn" ng-click="vm.getHistory()">Get Report</a>
 
                 <md-button class="md-fab md-mini my-tooltip pops"
                            ng-disabled="vm.alarms.loadingAlarmData" ng-click="vm.downloadFile()">
