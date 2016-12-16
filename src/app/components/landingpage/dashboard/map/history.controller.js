@@ -788,6 +788,7 @@
             };
 
             self.draw = function(graphs) {
+                $log.log('draw')
                 if(graphs) self.data.graph = graphs;
                 getAxisScale();
                 draw();
@@ -795,22 +796,20 @@
 
             function draw() {
                 d3.selectAll(self.data.svg+" > *").remove();
-                self.xAxis = d3.svg.axis()
+                self.xAxis = d3.axisBottom()
                     .scale(self.xScale)
                     .ticks(5)
                     .tickFormat(function(d) {
-                        return d3.time.format('%H:%M')(new Date(d))
+                        return d3.timeFormat('%H:%M')(new Date(d))
                     })
 
-                self.y1Axis = d3.svg.axis()
+                self.y1Axis = d3.axisLeft()
                     .scale(self.y1Scale)
                     .ticks(6)
-                    .orient("left");
 
-                self.y2Axis = d3.svg.axis()
+                self.y2Axis = d3.axisLeft()
                     .scale(self.y2Scale)
                     .ticks(6)
-                    .orient("right");
 
                 self.vis.append("svg:g")
                     .attr("class", "axis")
@@ -834,12 +833,12 @@
                     .attr("transform", "translate(" + self.xScale(self.axisScale.xh) + ",0)")
                     .call(self.y2Axis);
 
-                self.lineGenY1 = d3.svg.line().x(function (d) {
+                self.lineGenY1 = d3.line().x(function (d) {
                     return self.xScale(d.x);
                 }).y(function (d) {
                     return self.y1Scale(d.y);
                 });
-                self.lineGenY2 = d3.svg.line().x(function (d) {
+                self.lineGenY2 = d3.line().x(function (d) {
                     return self.xScale(d.x);
                 }).y(function (d) {
                     return self.y2Scale(d.y);
@@ -936,10 +935,11 @@
                 self.axisScale.y1.yl = 0;
                 self.axisScale.y2.yl = 0;
 
+                console.log(d3);
 
-                self.xScale = d3.scale.linear().range([self.data.margin.left, self.data.width - self.data.margin.right]).domain([new Date(self.axisScale.xl), new Date(self.axisScale.xh)]);
-                self.y1Scale = d3.scale.linear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y1.yl, self.axisScale.y1.yh]);
-                self.y2Scale = d3.scale.linear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y2.yl, self.axisScale.y2.yh]);
+                self.xScale = d3.scaleLinear().range([self.data.margin.left, self.data.width - self.data.margin.right]).domain([new Date(self.axisScale.xl), new Date(self.axisScale.xh)]);
+                self.y1Scale = d3.scaleLinear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y1.yl, self.axisScale.y1.yh]);
+                self.y2Scale = d3.scaleLinear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y2.yl, self.axisScale.y2.yh]);
 
                 // self.xScale.ticks(5);
                 //     tickFormat = self.xScale.tickFormat(5, "+%");
