@@ -788,7 +788,6 @@
             };
 
             self.draw = function(graphs) {
-                $log.log('draw')
                 if(graphs) self.data.graph = graphs;
                 getAxisScale();
                 draw();
@@ -934,8 +933,6 @@
                 // if(self.axisScale.y2.yl > 0 && self.axisScale.y2.yl < 20 ){self.axisScale.y2.yl = 0; }
                 self.axisScale.y1.yl = 0;
                 self.axisScale.y2.yl = 0;
-
-                console.log(d3);
 
                 self.xScale = d3.scaleLinear().range([self.data.margin.left, self.data.width - self.data.margin.right]).domain([new Date(self.axisScale.xl), new Date(self.axisScale.xh)]);
                 self.y1Scale = d3.scaleLinear().range([self.data.height - self.data.margin.top, self.data.margin.bottom]).domain([self.axisScale.y1.yl, self.axisScale.y1.yh]);
