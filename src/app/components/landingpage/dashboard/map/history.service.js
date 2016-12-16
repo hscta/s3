@@ -303,7 +303,7 @@
             SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
             speed: 4, // normal
             current: 0,
-            excludedAlarm : ['End_of_Over_speed'],
+            excludedAlarm : ['End_of_Over_speed', 'IGNITION_OFF', 'IGNITION_ON'],
             togglePlay: function () {
                 vm.traceControls.isPointer();
                 if (vm.traceControls.playing) {

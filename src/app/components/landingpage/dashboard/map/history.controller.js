@@ -1091,7 +1091,7 @@
         var hrs24 = 86400 * MILLISEC;
 
         var week = hrs24 * 7;
-        var timeLimit = week;
+        var timeLimit = week * 2;
 
         var table, data;
 
