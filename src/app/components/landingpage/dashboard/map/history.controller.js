@@ -676,7 +676,7 @@
 
         vm.tcGraphs = {
             mouseclicked : false,
-            margin: {left: 50, right: 50, top: 20, bottom: 20},
+            margin: {left: 35, right: 35, top: 20, bottom: 20},
             charts: [
                 {
                     data: {svg: '#visualisation1'},
@@ -734,46 +734,52 @@
                 .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height - 30))
                 //class to make it responsive
                 .classed("svg-content-responsive", true)
-                .on("dblclick", restoreGraph)
+                .on("contextmenu", function(d) {
+                    d3.event.preventDefault();
+                })
                 .on("mousemove", mouseHoverEvent)
                 .on("mousedown", graphStartDrag)
                 .on("mouseup", graphEndDrag)
 
-            function restoreGraph() {
-                    // Double click
-                    vm.tcGraphs.restoreGraph();
-
-            }
 
             function graphStartDrag() {
-                if(self.mouseX > self.data.margin.left && self.mouseX < self.data.width - self.data.margin.right){
-                    vm.tcGraphs.mouseclicked = true;
-                    vm.tcGraphs.zoomStartX = angular.copy(self.mouseX);
-                    vm.tcGraphs.zoomStart = parseInt(self.xScale.invert(self.mouseX));
+                if(d3.event.button == 0){
+                    if(self.mouseX > self.data.margin.left && self.mouseX < self.data.width - self.data.margin.right){
+                        vm.tcGraphs.mouseclicked = true;
+                        vm.tcGraphs.zoomStartX = angular.copy(self.mouseX);
+                        vm.tcGraphs.zoomStart = parseInt(self.xScale.invert(self.mouseX));
 
-                    self.selectRect = self.vis.append('rect')
-                        .attr('x', vm.tcGraphs.zoomStartX)
-                        .attr('y', self.data.margin.top)
-                        .attr('width', 0)
-                        .attr('fill', 'rgba(255,0,0,0.2)')
-                        .attr('height', self.data.height -  self.data.margin.top -  self.data.margin.bottom)
+                        self.selectRect = self.vis.append('rect')
+                            .attr('x', vm.tcGraphs.zoomStartX)
+                            .attr('y', self.data.margin.top)
+                            .attr('width', 0)
+                            .attr('fill', 'rgba(255,0,0,0.2)')
+                            .attr('height', self.data.height -  self.data.margin.top -  self.data.margin.bottom)
+                    }
+                }else if(d3.event.button == 2){
+                    d3.event.preventDefault();
+                    vm.tcGraphs.restoreGraph();
                 }
             }
 
             function graphEndDrag() {
-                if(vm.tcGraphs.mouseclicked){
-                    vm.tcGraphs.mouseclicked = false;
-                    self.mouseX = d3.mouse(this)[0];
-                    vm.tcGraphs.zoomEnd = parseInt(self.xScale.invert(self.mouseX));
-                    if(Math.abs(vm.tcGraphs.zoomEnd - vm.tcGraphs.zoomStart) > 1000 * 60 * 5){
-                        if(vm.tcGraphs.zoomEnd < vm.tcGraphs.zoomStart){
-                            var tempStartZoon = vm.tcGraphs.zoomStart;
-                            vm.tcGraphs.zoomStart = vm.tcGraphs.zoomEnd;
-                            vm.tcGraphs.zoomEnd = tempStartZoon;
+                if(d3.event.button == 0){
+                    if(vm.tcGraphs.mouseclicked){
+                        vm.tcGraphs.mouseclicked = false;
+                        self.mouseX = d3.mouse(this)[0];
+                        vm.tcGraphs.zoomEnd = parseInt(self.xScale.invert(self.mouseX));
+                        if(Math.abs(vm.tcGraphs.zoomEnd - vm.tcGraphs.zoomStart) > 1000 * 60 * 5){
+                            if(vm.tcGraphs.zoomEnd < vm.tcGraphs.zoomStart){
+                                var tempStartZoon = vm.tcGraphs.zoomStart;
+                                vm.tcGraphs.zoomStart = vm.tcGraphs.zoomEnd;
+                                vm.tcGraphs.zoomEnd = tempStartZoon;
+                            }
+                            vm.tcGraphs.zoom();
+                        }else{
+                            vm.traceControls.panel.clicked = !vm.traceControls.panel.clicked;
                         }
-                        vm.tcGraphs.zoom();
+                        self.selectRect.remove();
                     }
-                    self.selectRect.remove();
                 }
             }
 
@@ -782,12 +788,12 @@
                 self.mouseY = d3.mouse(this)[1];
                 if(!vm.tcGraphs.mouseclicked){
                     if (self.xScale != null && self.mouseX >= self.data.margin.left && self.mouseX <= (self.data.width - self.data.margin.right)
-                        && self.mouseY >= self.data.margin.top && self.mouseY <= (self.data.height - self.data.margin.bottom)) {
-
-                        var timestamp = parseInt(self.xScale.invert(self.mouseX));
-                        vm.traceControls.updateAllTimelines(timestamp);
-                        vm.traceControls.moveTimeline();
-
+                        && self.mouseY >= self.data.margin.top && self.mouseY <= (self.data.height - self.data.margin.bottom )) {
+                        if(vm.traceControls.panel.clicked){
+                            var timestamp = parseInt(self.xScale.invert(self.mouseX));
+                            vm.traceControls.updateAllTimelines(timestamp);
+                            vm.traceControls.moveTimeline();
+                        }
                     }
                 }else{
                     var tempMouseX = angular.copy(self.mouseX);
@@ -804,10 +810,6 @@
                     }
                     self.selectRect.attr('width',selectRectWidth);
                 }
-            }
-
-            self.redraw = function () {
-                draw();
             }
 
             self.updateLine = function (x, chart) {
@@ -858,6 +860,10 @@
                 draw();
             }
 
+            self.redraw = function () {
+                draw();
+            }
+
             function draw() {
                 d3.selectAll(self.data.svg+" > *").remove();
                 self.xAxis = d3.axisBottom()
@@ -879,7 +885,7 @@
                     .scale(self.y1Scale)
                     .ticks(6)
 
-                self.y2Axis = d3.axisLeft()
+                self.y2Axis = d3.axisRight()
                     .scale(self.y2Scale)
                     .ticks(6)
 
@@ -951,7 +957,6 @@
 
 
                     self.focusText[idx] = self.vis.append("g")
-                        .attr("clip-path", "url(#main-clip)") // clip the rectangle
                     self.focusText[idx].append("rect")
                         .attr("width", 10)
                         .attr("height", 16)
@@ -967,7 +972,6 @@
                 self.focusLine = self.vis.append("line")
                     .attr('class', 'focus-line')
                     .attr("x1", -1000)
-                    .attr("clip-path", "url(#main-clip)") // clip the rectangle
                     .attr("x2", -1000)
                     .attr("y1", self.data.margin.top)
                     .attr("y2", (self.data.height - self.data.margin.top))
