@@ -15,7 +15,12 @@
         background: red !important;
     }
     .alarm-cont .geoc-body{top:50px}
-    #DataTables_Table_0_filter, .dataTables_filter{top:-15px !important;}
+    #DataTables_Table_0_filter, .dataTables_filter{
+        position: absolute !important;
+        top: -45px !important;
+        z-index: 999;
+        left: 271px !important;
+    }
 
     md-checkbox{
         position:relative !important;
@@ -29,6 +34,11 @@
     }
 
     .latlng:hover{cursor:pointer;}
+
+    .dataTables_filter label {
+
+    }
+
 </style>
 
 <div class="alarm-cont" >
@@ -37,7 +47,7 @@
         <span class="error-msg">{{vm.alarms.msg}}</span><br/>
 
         <div layout="row" layout-align="space-around center">
-            <div layout="row" class="input-fields" layout-align="space-around center" flex>
+            <div layout="row" class="input-fields" layout-align="space-around center" flex="70">
 
                 <div class="geo-mul-back" ng-show="vm.currPop" ng-click="vm.currPop = null"></div>
                 <md-input-container class="container-margin geo-multiSel">
