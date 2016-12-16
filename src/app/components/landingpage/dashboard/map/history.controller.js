@@ -734,9 +734,7 @@
                 .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height - 30))
                 //class to make it responsive
                 .classed("svg-content-responsive", true)
-                .on("contextmenu", function(d) {
-                    d3.event.preventDefault();
-                })
+                .on("contextmenu", function(d) { d3.event.preventDefault(); })
                 .on("mousemove", mouseHoverEvent)
                 .on("mousedown", graphStartDrag)
                 .on("mouseup", graphEndDrag)
