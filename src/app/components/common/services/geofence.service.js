@@ -19,9 +19,23 @@
             return requestService.firePost('/geofence/info', reqbody);
         };
 
+
+        vm.handleTrackHistory = function (resp) {
+            if(resp.data && resp.data.data)
+                return $q.resolve(resp.data.data);
+            return $q.reject(resp);
+        };
+
+
+        vm.handleFailure = function (resp) {
+            $log.log(resp);
+            $q.reject(resp);
+        };
+
         vm.getReportHistory = function (body) {
             var reqbody = {fenceinfo: body};
             return requestService.firePost('/reports/rtfence/trackhistory', reqbody);
+                //.then(vm.handleTrackHistory, vm.handleFailure);
         };
 
 
