@@ -206,16 +206,14 @@
                     continue;
                 }
                 var latlng = new google.maps.LatLng(position.latitude, position.longitude);
-                // latlng.id = vm.historyMap.deviceid;
-                // latlng.deviceid = vm.historyMap.deviceid;
-                latlng.gpstime = parseInt(position.gpstime);
-                latlng.speed = parseInt(position.speed.toFixed(2));
                 latlng.odometer = position.odometer;
                 latlng.heading = position.heading;
-                latlng.carbattery = parseInt(position.carbattery.toFixed(2));
-                latlng.devbattery = parseInt(position.devbattery.toFixed(2));
                 latlng.numsat = position.numsat;
                 latlng.ignstatus = position.ignstatus;
+                latlng.gpstime = parseInt(position.gpstime);
+                latlng.speed = parseInt(position.speed.toFixed(2));
+                latlng.carbattery = position.carbattery ? parseInt(position.carbattery.toFixed(2)) : 0;
+                latlng.devbattery = position.devbattery ? parseInt(position.devbattery.toFixed(2)) : 0;
                 path.push(latlng);
             }
 
