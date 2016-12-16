@@ -675,6 +675,7 @@
 
 
         vm.tcGraphs = {
+            mouseclicked : false,
             margin: {left: 50, right: 50, top: 20, bottom: 20},
             charts: [
                 {
@@ -706,6 +707,21 @@
             ]
         };
 
+        vm.tcGraphs.zoom = function () {
+            // Do getbounds here
+            for(var idx in vm.tcGraphs.charts){
+                vm.tcGraphs.charts[idx].object.xScale.domain([new Date(vm.tcGraphs.zoomStart), new Date(vm.tcGraphs.zoomEnd)]);
+                vm.tcGraphs.charts[idx].object.redraw();
+            }
+        }
+
+        vm.tcGraphs.restoreGraph = function () {
+            for(var idx in vm.tcGraphs.charts){
+                vm.tcGraphs.charts[idx].object.xScale.domain([new Date(vm.tcGraphs.charts[idx].object.axisScale.xl), new Date(vm.tcGraphs.charts[idx].object.axisScale.xh)]);
+                vm.tcGraphs.charts[idx].object.redraw();
+            }
+        }
+
         // var d3g1 = new d3Graph(data);
 
         function d3Graph(param) {
@@ -718,31 +734,80 @@
                 .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height - 30))
                 //class to make it responsive
                 .classed("svg-content-responsive", true)
-                .on("mousemove", mouseHoverEvent);
-            //     .on("click", graphDrag)
-            //
-            // function graphDrag() {
-            //     self.mouseX = d3.mouse(this)[0];
-            //     var timestamp = parseInt(self.xScale.invert(self.mouseX));
-            //     console.log(timestamp);
-            //     self.xScale.domain([new Date(timestamp), new Date(self.axisScale.xh)]);
-            //     // self.draw();
-            //     draw();
-            // }
+                .on("dblclick", restoreGraph)
+                .on("mousemove", mouseHoverEvent)
+                .on("mousedown", graphStartDrag)
+                .on("mouseup", graphEndDrag)
+
+            function restoreGraph() {
+                    // Double click
+                    vm.tcGraphs.restoreGraph();
+
+            }
+
+            function graphStartDrag() {
+                if(self.mouseX > self.data.margin.left && self.mouseX < self.data.width - self.data.margin.right){
+                    vm.tcGraphs.mouseclicked = true;
+                    vm.tcGraphs.zoomStartX = angular.copy(self.mouseX);
+                    vm.tcGraphs.zoomStart = parseInt(self.xScale.invert(self.mouseX));
+
+                    self.selectRect = self.vis.append('rect')
+                        .attr('x', vm.tcGraphs.zoomStartX)
+                        .attr('y', self.data.margin.top)
+                        .attr('width', 0)
+                        .attr('fill', 'rgba(255,0,0,0.2)')
+                        .attr('height', self.data.height -  self.data.margin.top -  self.data.margin.bottom)
+                }
+            }
+
+            function graphEndDrag() {
+                if(vm.tcGraphs.mouseclicked){
+                    vm.tcGraphs.mouseclicked = false;
+                    self.mouseX = d3.mouse(this)[0];
+                    vm.tcGraphs.zoomEnd = parseInt(self.xScale.invert(self.mouseX));
+                    if(Math.abs(vm.tcGraphs.zoomEnd - vm.tcGraphs.zoomStart) > 1000 * 60 * 5){
+                        if(vm.tcGraphs.zoomEnd < vm.tcGraphs.zoomStart){
+                            var tempStartZoon = vm.tcGraphs.zoomStart;
+                            vm.tcGraphs.zoomStart = vm.tcGraphs.zoomEnd;
+                            vm.tcGraphs.zoomEnd = tempStartZoon;
+                        }
+                        vm.tcGraphs.zoom();
+                    }
+                    self.selectRect.remove();
+                }
+            }
 
             function mouseHoverEvent() {
-                // var posSvg = Math.ceil($('#visualisation').offset().left);
-                // console.log(self.xScale.invert(d3.mouse(this)[0]) - self.xScale.invert(d3.event.pageX - posSvg));
                 self.mouseX = d3.mouse(this)[0];
                 self.mouseY = d3.mouse(this)[1];
-                if (self.xScale != null && self.mouseX >= self.data.margin.left && self.mouseX <= (self.data.width - self.data.margin.right)
-                    && self.mouseY >= self.data.margin.top && self.mouseY <= (self.data.height - self.data.margin.bottom)) {
+                if(!vm.tcGraphs.mouseclicked){
+                    if (self.xScale != null && self.mouseX >= self.data.margin.left && self.mouseX <= (self.data.width - self.data.margin.right)
+                        && self.mouseY >= self.data.margin.top && self.mouseY <= (self.data.height - self.data.margin.bottom)) {
 
-                    var timestamp = parseInt(self.xScale.invert(self.mouseX));
-                    vm.traceControls.updateAllTimelines(timestamp);
-                    vm.traceControls.moveTimeline();
+                        var timestamp = parseInt(self.xScale.invert(self.mouseX));
+                        vm.traceControls.updateAllTimelines(timestamp);
+                        vm.traceControls.moveTimeline();
 
+                    }
+                }else{
+                    var tempMouseX = angular.copy(self.mouseX);
+                    if(tempMouseX < self.data.margin.left)
+                        tempMouseX = self.data.margin.left;
+
+                    if(tempMouseX > self.data.width - self.data.margin.right)
+                        tempMouseX = self.data.width - self.data.margin.right;
+
+                    var selectRectWidth = tempMouseX - vm.tcGraphs.zoomStartX;
+                    if(vm.tcGraphs.zoomStartX > tempMouseX){
+                        selectRectWidth = vm.tcGraphs.zoomStartX - tempMouseX;
+                        self.selectRect.attr('x',tempMouseX);
+                    }
+                    self.selectRect.attr('width',selectRectWidth);
                 }
+            }
+
+            self.redraw = function () {
+                draw();
             }
 
             self.updateLine = function (x, chart) {
@@ -802,6 +867,14 @@
                         return d3.time.format('%H:%M')(new Date(d))
                     })
 
+                self.vis.append("clipPath")       // define a clip path
+                    .attr("id", "main-clip") // give the clipPath an ID
+                    .append("rect")
+                    .attr("x", self.data.margin.left)
+                    .attr("y", self.data.margin.top)
+                    .attr("width", self.data.width - self.data.margin.left - self.data.margin.right)
+                    .attr("height", self.data.height);
+
                 self.y1Axis = d3.svg.axis()
                     .scale(self.y1Scale)
                     .ticks(6)
@@ -831,7 +904,7 @@
 
                 self.vis.append("svg:g")
                     .attr("class", "axis")
-                    .attr("transform", "translate(" + self.xScale(self.axisScale.xh) + ",0)")
+                    .attr("transform", "translate(" + (self.data.width - self.data.margin.right) + ",0)")
                     .call(self.y2Axis);
 
                 self.lineGenY1 = d3.svg.line().x(function (d) {
@@ -848,6 +921,7 @@
                     self.vis.append('svg:path')
                         .attr('d', getYlineGen(self.data.graph[idx].yAxis, self.data.graph[idx].values))
                         .attr('stroke', self.data.graph[idx].color)
+                        .attr("clip-path", "url(#main-clip)") // clip the rectangle
                         .attr('stroke-width', self.data.graph[idx].strokeWidth)
                         .attr('fill', 'none');
                 }
@@ -864,6 +938,7 @@
                     self.focusCircle[idx] = self.vis.append("circle")
                         .attr('class', 'click-circle')
                         .attr("cx", -1000)
+                        .attr("clip-path", "url(#main-clip)") // clip the rectangle
                         .attr("cy", -1000)
                         .attr("fill", self.chart.graphs[idx].color)
                         .attr("r", 5);
@@ -872,11 +947,13 @@
                         .attr("x", self.data.margin.left + 10)
                         .attr('fill', self.chart.graphs[idx].color)
                         .attr('class', 'nameText')
+                        .attr("clip-path", "url(#main-clip)") // clip the rectangle
                         .attr("y", self.data.margin.top + 10 + (idx * 15))
                         .text(self.chart.graphs[idx].key);
 
 
                     self.focusText[idx] = self.vis.append("g")
+                        .attr("clip-path", "url(#main-clip)") // clip the rectangle
                     self.focusText[idx].append("rect")
                         .attr("width", 10)
                         .attr("height", 16)
@@ -892,6 +969,7 @@
                 self.focusLine = self.vis.append("line")
                     .attr('class', 'focus-line')
                     .attr("x1", -1000)
+                    .attr("clip-path", "url(#main-clip)") // clip the rectangle
                     .attr("x2", -1000)
                     .attr("y1", self.data.margin.top)
                     .attr("y2", (self.data.height - self.data.margin.top))
