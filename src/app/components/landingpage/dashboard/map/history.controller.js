@@ -1074,30 +1074,18 @@
         $log.log('HistoryTableController');
 
         var vm = this;
-        var dateFormat = 'DD-MM-YYYY HH:mm';
-
         dialogService.setTab(1);
 
+        var dateFormat = 'DD-MM-YYYY HH:mm';
         var historyData = [];
-        vm.jsonHistoryData = [];
         var tableContainer = document.getElementById('geo-table');
-
-        vm.historyMap = historyService.historyMap;
-
-        vm.multiSelect = vm.historyMap.multiSelect;
-
-        var MILLISEC = 1000;
-
-        var hrs24 = 86400 * MILLISEC;
-
-        var week = hrs24 * 7;
-        var timeLimit = week * 2;
-
         var table, data;
 
+        vm.jsonHistoryData = [];
+        vm.historyMap = historyService.historyMap;
+        vm.multiSelect = vm.historyMap.multiSelect;
         vm.disableDownload = true;
         vm.showLoading = false;
-
         vm.convertLatLngToAddr = true;
 
         $scope.getHistory = function () {
