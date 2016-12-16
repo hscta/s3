@@ -76,6 +76,8 @@
             rtgps.altitude = newData.altitude;
             rtgps.vehicleno = newData.vehicleno;
             rtgps.odometer = newData.odometer;
+            rtgps.carbattery = rtgps.carbattery ? rtgps.carbattery : 0;
+            rtgps.devbattery = rtgps.devbattery ? rtgps.devbattery : 0;
             rtgps.speed = parseFloat(parseFloat(newData.speed).toFixed(2));
             rtgps.direction = parseFloat(parseFloat(newData.direction).toFixed(2));
             rtgps.carbattery = parseFloat(parseFloat(newData.carbattery).toFixed(2));
