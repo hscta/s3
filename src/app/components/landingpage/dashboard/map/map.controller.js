@@ -708,6 +708,7 @@
                     selectedView.push({
                         "Vehicle No": rtgps.vehicleno,
                         "Device ID": rtgps.deviceid,
+                        "Chassis No": rtgps.meta.chassisno,
                         "Make": rtgps.meta.cartype,
                         "Last comm time": moment(rtgps.timestamp).format(dateFormat),
                         "odometer": rtgps.odometer,
