@@ -26,7 +26,7 @@
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.filterStr = mapService.filterStr;
         vm.excludeFilters = [
-            'icon', 'le', 'onroad', 'regno', 'team',
+            'icon', 'le', 'onroad', 'regno',
             'carbattery', 'devbattery', 'odometer',
             'latitude', 'longitude', 'altitude', 'direction', 'nosatellites',
             'speed', 'rpm'
@@ -341,7 +341,7 @@
         var COMPETITOR_HUB = 'competitor';
         var CITY_LIMIT = 'citylimit';
 
-        var DEFAULT_STROKE = 10;
+        var DEFAULT_STROKE = 6;
         var MIN_STROKE = 3;
 
 
@@ -717,7 +717,7 @@
                         "Ignition": rtgps.ignitionstatusStr,
                         "Vehicle Battery": rtgps.carbattery,
                         "Device Battery": rtgps.devbattery,
-                        "City": rtgps.meta.city,
+                        //"City": rtgps.meta.city,
                         "Team": rtgps.meta.team,
                         "Leasing Executive": rtgps.meta.le,
                         "Last Location": UNKNOWN,
