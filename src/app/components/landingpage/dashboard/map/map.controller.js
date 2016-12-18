@@ -25,7 +25,12 @@
         vm.markersByPath = vm.inMap.markers.markersByPath;
         vm.selectedFenceObj = vm.inMap.selectedFenceObj;
         vm.filterStr = mapService.filterStr;
-        vm.excludeFilters = ['icon', 'le', 'onroad', 'regno', 'team', 'carbattery', 'devbattery'];
+        vm.excludeFilters = [
+            'icon', 'le', 'onroad', 'regno', 'team',
+            'carbattery', 'devbattery', 'odometer',
+            'latitude', 'longitude', 'altitude', 'direction', 'nosatellites',
+            'speed', 'rpm'
+        ];
         vm.mainFilters = ['Running', 'Stopped', 'Active', 'Immobilized', 'Not Communicating', 'Device pullout'];
         vm.markerIconChangeTriggered = false;
         vm.zoomhappened = true;
@@ -259,21 +264,8 @@
                     return true;
                 }
 
-
                 if (rtgps[eachidx].constructor == Object) {
-                    for (var myMeta in rtgps[eachidx]) {
-                        if (vm.excludeFilters.indexOf(eachidx) != -1)
-                            continue;
-                        if (rtgps[eachidx][myMeta]) {
-                            var lowercasefilterStr = filterStr.toString().toLowerCase();
-                            // $log.log(rtgps[eachidx][myMeta]);
-                            var lowercaseMarkerStr = rtgps[eachidx][myMeta].toString().toLowerCase();
-
-                            if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                                return true;
-                            }
-                        }
-                    }
+                    return vm.matchesAnyMarkerData(rtgps[eachidx], filterStr);
                 }
             }
             cpuService.track('new_one');
@@ -716,13 +708,18 @@
                     selectedView.push({
                         "Vehicle No": rtgps.vehicleno,
                         "Device ID": rtgps.deviceid,
-                        "Last seen at": moment(rtgps.timestamp).format(dateFormat),
+                        "Make": rtgps.meta.cartype,
+                        "Last comm time": moment(rtgps.timestamp).format(dateFormat),
                         "odometer": rtgps.odometer,
                         "Ignition": rtgps.ignitionstatusStr,
                         "Mobility": rtgps.mobilistatusFilter,
                         "Vehicle Battery": rtgps.carbattery,
                         "Device Battery": rtgps.devbattery,
-                        "Last Location": UNKNOWN
+                        "City": rtgps.meta.city,
+                        "Team": rtgps.meta.team,
+                        "Leasing Executive": rtgps.meta.le,
+                        "Last Location": UNKNOWN,
+                        "LatLng": rtgps.latitude + "," + rtgps.longitude
                     });
 
                     latlngList.push([rtgps.latitude, rtgps.longitude]);
