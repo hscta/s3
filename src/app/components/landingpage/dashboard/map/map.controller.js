@@ -982,12 +982,21 @@
         };
 
 
+        vm.runStatsAtStart = function () {
+            for(var runtime = 5000; runtime < 15000; runtime+=5000) {
+                $timeout(vm.runStats, runtime);
+            }
+
+            $interval(vm.runStats, 15000);
+        };
+
+
         vm.init = function () {
             vm.loadMap();
             setMapHeight();
             vm.addListener();
 
-            $interval(vm.runStats, 5000);
+            vm.runStatsAtStart();
 
             markerInfowindow.addListener('domready', function () {
                 vm.onload();
