@@ -248,27 +248,31 @@
         };
 
 
-        vm.matchesAnyMarkerData = function (rtgps, filterStr) {
-            cpuService.track('new_one');
-            for (var eachidx in rtgps) {
-                if (vm.excludeFilters.indexOf(eachidx) != -1)
-                    continue;
+        vm.matchesAnyMarkerData = function (input, filterStr) {
+            var result = false;
 
-                if (rtgps[eachidx] == null)
-                    continue;
+            if (input.constructor == Object || input.constructor == Array) {
+                for (var eachidx in input) {
 
-                var lowercasefilterStr = filterStr.toString().toLowerCase();
-                var lowercaseMarkerStr = rtgps[eachidx].toString().toLowerCase();
+                    if (input[eachidx] == null)
+                        continue;
 
-                if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
-                    return true;
+                    result = result || vm.matchesAnyMarkerData(input[eachidx], filterStr);
                 }
 
-                if (rtgps[eachidx].constructor == Object) {
-                    return vm.matchesAnyMarkerData(rtgps[eachidx], filterStr);
-                }
+                return result;
             }
-            cpuService.track('new_one');
+
+            if (vm.excludeFilters.indexOf(input) != -1)
+                return false;
+
+            var lowercasefilterStr = filterStr.toString().toLowerCase();
+            var lowercaseMarkerStr = input.toString().toLowerCase();
+
+            if (lowercaseMarkerStr.includes(lowercasefilterStr)) {
+                return true;
+            }
+
             return false;
         };
 
@@ -327,6 +331,7 @@
             parkingLot: true,
             serviceStation: true,
             competitorHub: true,
+            tollplaza: true,
             cityLimits: false,
             carBattery: false,
             devBattery: false,
@@ -340,6 +345,7 @@
         var SERVICE_STATION = 'servicestation';
         var COMPETITOR_HUB = 'competitor';
         var CITY_LIMIT = 'citylimit';
+        var TOLL_PLAZA = 'tollplaza';
 
         var DEFAULT_STROKE = 6;
         var MIN_STROKE = 3;
@@ -514,7 +520,7 @@
                             vm.circlesByPath[idx].strokeWeight = getStroke(filterStr);
                             vm.circlesByPath[idx].strokeColor = getColor(filterStr);
                             vm.circlesByPath[idx].googleObject.setMap(vm.currentMap);
-                            startAnimation(vm.circlesByPath[idx]);
+                            //startAnimation(vm.circlesByPath[idx]);
                         }
                     }
                 }
@@ -524,7 +530,7 @@
                         vm.polygonsByPath[idx].googleObject.setMap(null);
                         if (checkFilterString(filterStr)) {
                             vm.polygonsByPath[idx].googleObject.setMap(vm.currentMap);
-                            startAnimation(vm.polygonsByPath[idx]);
+                            //startAnimation(vm.polygonsByPath[idx]);
                         }
                     }
                 }
@@ -546,31 +552,29 @@
 
         function getColor(str) {
             var type = getType(str);
+
             if (type == PARKING) {
                 return 'black';
             } else if (type == SERVICE_STATION) {
-                //return '#f89406';
                 return '#bc31ff';
             } else if (type == COMPETITOR_HUB) {
                 return 'red';
             } else if (type == CITY_LIMIT) {
                 return 'blue';
+            } else if (type == TOLL_PLAZA) {
+                return '#f37813';
             }
 
-            var x = "#bc31ff";
+            return '#31ff36';
         }
 
         function getStroke(str) {
             var type = getType(str);
-            if (type == PARKING) {
-                return DEFAULT_STROKE;
-            } else if (type == SERVICE_STATION) {
-                return DEFAULT_STROKE;
-            } else if (type == COMPETITOR_HUB) {
-                return DEFAULT_STROKE;
-            } else if (type == CITY_LIMIT) {
+            if (type == CITY_LIMIT) {
                 return MIN_STROKE;
             }
+
+            return DEFAULT_STROKE;
         }
 
 
@@ -601,6 +605,8 @@
                 return COMPETITOR_HUB;
             if (str.match(/citylimit/g) && str.match(/citylimit/g).length > 0)
                 return CITY_LIMIT;
+            if (str.match(/tollplaza/g) && str.match(/tollplaza/g).length > 0)
+                return TOLL_PLAZA;
 
             return null;
         }
@@ -625,8 +631,12 @@
                 return true;
             }
 
+            if (vm.geoFilters.competitorHub && str.match(/tollplaza/g) && str.match(/tollplaza/g).length > 0) {
+                // $log.log("vm.geoFilters.tollplaza = " + vm.geoFilters.tollplaza);
+                return true;
+            }
+
             if (vm.geoFilters.cityLimits && str.match(/citylimit/g) && str.match(/citylimit/g).length > 0) {
-                // $log.log("vm.geoFilters.cityLimits = ");
                 // $log.log(vm.geoFilters.cityLimits);
                 return true;
             }
@@ -977,7 +987,7 @@
             setMapHeight();
             vm.addListener();
 
-            $interval(vm.runStats, 10000);
+            $interval(vm.runStats, 5000);
 
             markerInfowindow.addListener('domready', function () {
                 vm.onload();
