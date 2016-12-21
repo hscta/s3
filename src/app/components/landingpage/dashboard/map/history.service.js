@@ -87,25 +87,18 @@
         };
 
         vm.clearMap = function () {
-
             if (vm.historyMap.startMarker) {
-
                 vm.historyMap.startMarker.setMap(null);
             }
-
             if (vm.historyMap.endMarker) {
-
                 vm.historyMap.endMarker.setMap(null);
             }
-
             if ('setMap' in vm.historyMap.trace) {
                 vm.historyMap.trace.setMap(null);
             }
-
             vm.traceControls.stopMotion();
             vm.traceControls.current = 0;
             vm.traceControls.moveTimeline();
-
         };
 
         vm.getHistoryData = function () {
@@ -223,40 +216,12 @@
 
             if (path.length > 0) {
                 path.sort(compare);
-
-                vm.historyMap.startMarker = new google.maps.Marker({
-                    position: path[0]
-                });
-
-                var lastBeacon = path[path.length - 1];
-                vm.historyMap.endMarker = new google.maps.Marker({
-                    position: lastBeacon,
-                    label: 'E',
-                    title: 'End point'
-                });
-
-                var midPoint = Math.floor(path.length / 2);
-
-                vm.historyMap.trace = new google.maps.Polyline({
-                    path: path,
-                    icons: [{
-                        icon: {
-                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
-                        },
-                        offset: '100px',
-                        repeat: '100px'
-                    }],
-                    strokeColor: "blue",
-                    strokeWeight: 2,
-                    strokeOpacity: 1
-                });
-
+                vm.drawPolylines(path, 0, path.length);
                 vm.historyMap.traceObj = path;
-
                 if (vm.historyMap.map != null && vm.historyMap.map.setCenter) {
-                    var latlng = new google.maps.LatLng(path[0].lat(), path[0].lng());
-                    vm.historyMap.map.setCenter(latlng);
-                    vm.historyMap.map.setZoom(11);
+                    // var latlng = new google.maps.LatLng(path[0].lat(), path[0].lng());
+                    // vm.historyMap.map.setCenter(latlng);
+                    // vm.historyMap.map.setZoom(11);
                     vm.historyMap.trace.setMap(vm.historyMap.map);
                     vm.historyMap.startMarker.setMap(vm.historyMap.map);
                     vm.historyMap.endMarker.setMap(vm.historyMap.map);
@@ -267,6 +232,56 @@
                 $rootScope.$broadcast('gotHistoryEventFailed');
             }
         };
+
+        vm.drawPolylines = function (path, startIdx, endIdx) {
+
+            path.splice(endIdx+1, path.length-endIdx-1);
+            path.splice(0,startIdx);
+
+            if (vm.historyMap.startMarker) {
+                vm.historyMap.startMarker.setMap(null);
+            }
+            if (vm.historyMap.endMarker) {
+                vm.historyMap.endMarker.setMap(null);
+            }
+            if ('setMap' in vm.historyMap.trace) {
+                vm.historyMap.trace.setMap(null);
+            }
+
+            vm.historyMap.startMarker = new google.maps.Marker({
+                position: path[0]
+            });
+            var lastBeacon = path[path.length - 1];
+            vm.historyMap.endMarker = new google.maps.Marker({
+                position: lastBeacon,
+                label: 'E',
+                title: 'End point'
+            });
+
+            vm.historyMap.trace = new google.maps.Polyline({
+                path: path,
+                icons: [{
+                    icon: {
+                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+                    },
+                    offset: '100px',
+                    repeat: '100px'
+                }],
+                strokeColor: "blue",
+                strokeWeight: 2,
+                strokeOpacity: 1
+            });
+
+            var bounds = new google.maps.LatLngBounds();
+            for (var idx in path) {
+                bounds.extend(path[idx]);
+            }
+            vm.historyMap.map.fitBounds(bounds);
+
+            vm.historyMap.trace.setMap(vm.historyMap.map);
+            vm.historyMap.startMarker.setMap(vm.historyMap.map);
+            vm.historyMap.endMarker.setMap(vm.historyMap.map);
+        }
 
         vm.getDefaultTime = function () {
             var dateFormat = 'YYYY-MM-DD HH:mm';

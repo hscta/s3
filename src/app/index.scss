@@ -2510,10 +2510,14 @@ md-virtual-repeat-container{
 .nameText{
     font-size: 70%;
 }
+.popText,
 .focusText{
     color:#aaa;
     font-size:70%;
     opacity:1;
+}
+.popText{
+    font-size: 120%;
 }
 .focusRect{
     opacity:0.9;
