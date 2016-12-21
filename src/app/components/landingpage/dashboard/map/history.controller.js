@@ -46,12 +46,15 @@
         }
 
         vm.getHistory = function () {
+            vm.gotData = false;
+            vm.loadingData = true;
+            setMapHeight();
             historyService.setData('getHistory', false);
             historyService.getHistoryData();
         };
 
         function setMapHeight() {
-            if (vm.gotHistory) {
+            if (vm.gotData) {
                 header_height = 160;
             } else {
                 header_height = 50;
@@ -500,6 +503,8 @@
 
         vm.gotHistoryEvent = function (event, data) {
             vm.gotHistory = historyService.getData('getHistory');
+            vm.gotData = true;
+            vm.loadingData = false;
             setMapHeight();
             generateTimeline(data);
             generateExpandedGraph();
@@ -507,6 +512,8 @@
         };
 
         vm.gotHistoryEventFailed = function () {
+            vm.gotData = false;
+            vm.loadingData = false;
             vm.gotHistory = historyService.getData('getHistory');
             setMapHeight();
         };
@@ -811,7 +818,8 @@
             }
 
             self.updateLine = function (x, chart) {
-
+                if(!self.xScale)
+                    return;
                 var timelineObject = vm.traceControls.timeline[vm.traceControls.current];
                 self.mouseX = self.xScale(x);
                 self.focusLine
@@ -1089,13 +1097,13 @@
         vm.convertLatLngToAddr = true;
 
         $scope.getHistory = function () {
+            historyService.setData('getHistory', false);
             historyData = [];
             vm.jsonHistoryData = [];
             vm.disableDownload = true;
             vm.showLoading = true;
             if (table)
                 table.clearChart(tableContainer);
-            historyService.setData('getHistory', false);
             historyService.getHistoryData();
         };
 

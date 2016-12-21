@@ -202,14 +202,14 @@
     </div>
 
     <md-dialog-content class="map-dialog-content"
-                       ng-class="{'expandedGraphs':vm.traceControls.expandedGraphs == 'full' && vm.gotHistory,
-                       'expandedGraphsHalf':vm.traceControls.expandedGraphs == 'half' && vm.gotHistory}">
+                       ng-class="{'expandedGraphs':vm.traceControls.expandedGraphs == 'full' && vm.gotData,
+                       'expandedGraphsHalf':vm.traceControls.expandedGraphs == 'half' && vm.gotData}">
         <div class="md-dialog-content historyMap map-dialog history-dialog">
 
             <div id="history_map" style="width:100%;height:500px"></div>
 
             <div class="tc_graphs">
-                <div class="tcg_buttons" ng-show="vm.gotHistory">
+                <div class="tcg_buttons" ng-show="vm.gotData">
                     <a class="tc_button tcb_abs waves-effect waves-light btn raised" ng-click="vm.toggleExpandedGraphs('close')">
                         <i class="fa fa-times" ng-if="vm.traceControls.expandedGraphs"></i>
                         <i class="fa fa-line-chart"  ng-if="!vm.traceControls.expandedGraphs"></i>
@@ -238,8 +238,23 @@
                 {{vm.traceControls.timeline[vm.traceControls.current].alarmData.alarmreason}}
             </div>
 
-            <div class="history-err" ng-show="!vm.gotHistory">{{vm.historyMap.errorMsg}}</div>
-            <div class="traceControls noselect" ng-class="{'active':vm.gotHistory}">
+            <div class="history-err" ng-show="!vm.gotData">
+                <span ng-hide="vm.loadingData">{{vm.historyMap.errorMsg}}</span>
+
+
+                <div  ng-show="vm.loadingData" ng-class="{'opacity_0':!vm.loadingData}" class="preloader-wrapper active" style="position: absolute; left: 50%; top:50%; margin:-20px;">
+                    <div class="spinner-layer spinner-red-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="traceControls noselect" ng-class="{'active':vm.gotData}">
                 <div class="tc_controls">
                     <a class="tc_button waves-effect waves-light btn raised" ng-click="vm.traceControls.togglePlay()"
                        ng-class="{'active':vm.traceControls.playing}">
