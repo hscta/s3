@@ -723,11 +723,7 @@
             charts: [
                 {
                     data: {svg: '#visualisation-parent', parent:true, margin: {left: 0, right: 0, top: 0, bottom: 0},},
-                    graphs: [{color: '#bdc3c7', key: 'Speed', type: 'line', item: 'speed', unit: 'kmph', yAxis: 1}],
-                },
-                {
-                    data: {svg: '#visualisation3'},
-                    graphs: [{color: '#2ecc71', key: 'GPS Signal', type: 'line', item: 'numsat', unit: '', yAxis: 1}],
+                    graphs: [{color: '#e74c3c', key: 'Speed', type: 'line', item: 'speed', unit: 'kmph', yAxis: 1}],
                 },
                 {
                     data: {svg: '#visualisation1'},
@@ -750,8 +746,12 @@
                             item: 'devbattery',
                             unit: 'v',
                             yAxis: 2
-                        }],
+                        }]
                 },
+                {
+                    data: {svg: '#visualisation3'},
+                    graphs: [{color: '#2ecc71', key: 'GPS Signal', type: 'line', item: 'numsat', unit: '', yAxis: 1}],
+                }
             ]
         };
 
@@ -1034,10 +1034,10 @@
                         self.vis.append("rect")
                             .attr("x", rectX)
                             .attr("width", rectWidth)
-                            .attr("height", 10)
+                            .attr("height", 5)
                             .attr("clip-path", "url(#main-clip"+self.data.svg+")") // clip the rectangle
                             .attr('fill', self.data.barCharts[idx].color)
-                            .attr("y", 2 + (idx * 12));
+                            .attr("y", 2 + (idx * 7));
                     }
                 }
 
