@@ -595,7 +595,7 @@
 
                         for (var idx in vm.tcGraphs.charts) {
                             if(vm.tcGraphs.charts[idx].data.parent){
-                                vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDivParent.height() - 10;
+                                vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDivParent.height() ;
                                 vm.tcGraphs.charts[idx].data.width = vm.traceControls.expDivParent.width();
                             }else{
                                 vm.tcGraphs.charts[idx].data.height = vm.traceControls.expDiv.height() - 30;
@@ -755,17 +755,55 @@
             ]
         };
 
-        vm.tcGraphs.zoom = function () {
+        vm.tcGraphs.zoom = function (animate) {
             // Do getbounds here
             vm.traceControls.startIndex = binSearch(vm.traceControls.timeline, vm.tcGraphs.zoomStart, 'gpstime');
             vm.traceControls.current = angular.copy(vm.traceControls.startIndex);
             vm.traceControls.endIndex = binSearch(vm.traceControls.timeline, vm.tcGraphs.zoomEnd, 'gpstime');
             var tempTimeline = angular.copy(vm.traceControls.timeline);
             historyService.drawPolylines(tempTimeline, vm.traceControls.startIndex, vm.traceControls.endIndex);
+            if(!animate){
+                for(var idx in vm.tcGraphs.charts){
+                    vm.tcGraphs.charts[idx].object.xScale.domain([new Date(vm.tcGraphs.zoomStart), new Date(vm.tcGraphs.zoomEnd)]);
+                    vm.tcGraphs.charts[idx].object.redraw();
+                }
+            }else{
+                var zStartInit = animate.x1;
+                var zEndInit = animate.x2;
+                var zStartTemp = vm.tcGraphs.zoomStart - zStartInit;
+                var zEndTemp = vm.tcGraphs.zoomEnd - zEndInit;
+                $interval(function () {
+                    zStartInit += zStartTemp / 4;
+                    zEndInit += zEndTemp / 4;
+                    for(var idx in vm.tcGraphs.charts){
+                        vm.tcGraphs.charts[idx].object.xScale.domain([new Date(zStartInit), new Date(zEndInit)]);
+                        vm.tcGraphs.charts[idx].object.redraw();
+                    }
+                },10, 4);
+            }
+        }
 
-            for(var idx in vm.tcGraphs.charts){
-                vm.tcGraphs.charts[idx].object.xScale.domain([new Date(vm.tcGraphs.zoomStart), new Date(vm.tcGraphs.zoomEnd)]);
-                vm.tcGraphs.charts[idx].object.redraw();
+        vm.tcGraphs.seekGraph = function (key) {
+            if(vm.tcGraphs.zoomEnd){
+                var parentGraph = vm.tcGraphs.charts[0].object;
+                var zMax = parentGraph.axisScale.xh;
+                var zMin = parentGraph.axisScale.xl;
+                var zoomAmount = (vm.tcGraphs.zoomEnd - vm.tcGraphs.zoomStart) / 2;
+                if(key == 1){// rightButton
+                    if(vm.tcGraphs.zoomEnd + zoomAmount > zMax){
+                        zoomAmount = zMax - vm.tcGraphs.zoomEnd;
+                    }
+                }else{ // left button
+                    if(vm.tcGraphs.zoomStart - zoomAmount < zMin){
+                        zoomAmount = vm.tcGraphs.zoomStart - zMin;
+                    }
+                    zoomAmount *= -1;
+                }
+                zoomAmount = parseInt(zoomAmount);
+                var anim = { x1 : vm.tcGraphs.zoomStart, x2 : vm.tcGraphs.zoomEnd}
+                vm.tcGraphs.zoomEnd += zoomAmount;
+                vm.tcGraphs.zoomStart += zoomAmount;
+                vm.tcGraphs.zoom(anim);
             }
         }
 
@@ -801,32 +839,33 @@
             function graphStartDrag() {
                 self.mouseX = d3.mouse(this)[0];
                 if(d3.event.button == 0){
-                    if(self.mouseX > self.data.margin.left && self.mouseX < self.data.width - self.data.margin.right){
-                        vm.tcGraphs.mouseclicked = true;
-                        vm.tcGraphs.zoomStartX = angular.copy(self.mouseX);
-                        vm.tcGraphs.zoomStart = parseInt(self.xScale.invert(self.mouseX));
+                    if(!vm.tcGraphs.mouseclicked) {
+                        if (self.mouseX > self.data.margin.left && self.mouseX < self.data.width - self.data.margin.right) {
+                            vm.tcGraphs.mouseclicked = true;
+                            vm.tcGraphs.zoomStartX = angular.copy(self.mouseX);
+                            vm.tcGraphs.zoomStart = parseInt(self.xScale.invert(self.mouseX));
 
-                        self.selectRect = self.vis.append('rect')
-                            .attr('x', vm.tcGraphs.zoomStartX)
-                            .attr('y', self.data.margin.top)
-                            .attr('width', 0)
-                            .attr('fill', 'rgba(255,0,0,0.2)')
-                            .attr('height', self.data.height -  self.data.margin.top -  self.data.margin.bottom)
+                            self.selectRect
+                                .attr('x', vm.tcGraphs.zoomStartX)
+                                .attr('y', self.data.margin.top)
+                                .attr('width', 0)
+                                .attr('fill', 'rgba(255,0,0,0.2)')
+                                .attr('height', self.data.height - self.data.margin.top - self.data.margin.bottom)
 
+                            //
+                            // self.timePopRight = self.vis.append("g")
+                            // self.timePopRight.append("rect")
+                            //     .attr("width", 10)
+                            //     .attr("height", 22)
+                            //     .attr('class', 'focusRect')
+                            //     .attr("y", 10);
+                            // self.timePopRight.append("text")
+                            //     .attr("x", 8)
+                            //     .attr('fill', '#444')
+                            //     .attr('class', 'popText')
+                            //     .attr("y", 28);
 
-
-                        self.timePopRight = self.vis.append("g")
-                        self.timePopRight.append("rect")
-                            .attr("width", 10)
-                            .attr("height", 22)
-                            .attr('class', 'focusRect')
-                            .attr("y", 10 );
-                        self.timePopRight.append("text")
-                            .attr("x", 8)
-                            .attr('fill', '#444')
-                            .attr('class', 'popText')
-                            .attr("y", 28 );
-
+                        }
                     }
                 }else if(d3.event.button == 2){
                     d3.event.preventDefault();
@@ -855,9 +894,11 @@
                             }else{
                                 vm.traceControls.panel.clicked = !vm.traceControls.panel.clicked;
                             }
+                            self.selectRect
+                                .attr('y',-1000)
+                            self.timePopRight
+                                .attr("transform", "translate(0,-1000)")
                         }
-                        self.selectRect.remove();
-                        self.timePopRight.remove();
                     }
                 }
             }
@@ -872,10 +913,6 @@
                             var timestamp = parseInt(self.xScale.invert(self.mouseX));
                             vm.traceControls.updateAllTimelines(timestamp);
                             vm.traceControls.moveTimeline();
-                        }
-                    }else{
-                        if(vm.traceControls.panel.clicked) {
-                            graphEndDrag();
                         }
                     }
                 }else{
@@ -907,6 +944,25 @@
                     self.timePopRight
                         .select("rect")
                         .attr("width", rectWidth)
+                }
+            }
+
+            function zoomGraphMouseEvent() {
+                if(vm.tcGraphs.mouseclicked) {
+                    vm.tcGraphs.mouseclicked = false;
+                    vm.tcGraphs.zoomEnd = parseInt(self.xScale.invert(self.mouseX));
+                    if (Math.abs(vm.tcGraphs.zoomEnd - vm.tcGraphs.zoomStart) > 1000 * 60 * 2) {
+                        if (vm.tcGraphs.zoomEnd < vm.tcGraphs.zoomStart) {
+                            var tempStartZoon = vm.tcGraphs.zoomStart;
+                            vm.tcGraphs.zoomStart = vm.tcGraphs.zoomEnd;
+                            vm.tcGraphs.zoomEnd = tempStartZoon;
+                        }
+                        vm.tcGraphs.zoom();
+                    }
+                    self.selectRect
+                        .attr('y',-1000)
+                    self.timePopRight
+                        .attr("transform", "translate(0,-1000)")
                 }
             }
 
@@ -970,7 +1026,7 @@
                         return d3.timeFormat('%H:%M')(new Date(d))
                     })
 
-                self.vis.append("clipPath")    // define a clip path
+                self.clipRect = self.vis.append("clipPath")    // define a clip path
                     .attr('x',0)
                     .attr('y',0)
                     .attr("id", "main-clip"+self.data.svg) // give the clipPath an ID
@@ -978,7 +1034,7 @@
                     .attr("x", self.data.margin.left)
                     .attr("y", self.data.margin.top)
                     .attr("width", self.data.width - self.data.margin.left - self.data.margin.right)
-                    .attr("height", self.data.height);
+                    .attr("height", self.data.height)
 
                 self.y1Axis = d3.axisLeft()
                     .scale(self.y1Scale)
@@ -1053,15 +1109,15 @@
                         .attr("cy", -1000)
                         .attr("fill", self.chart.graphs[idx].color)
                         .attr("r", 5);
-
-                    self.nameText[idx] = self.vis.append("text")
-                        .attr("x", self.data.margin.left + 10)
-                        .attr('fill', self.chart.graphs[idx].color)
-                        .attr('class', 'nameText')
-                        .attr("clip-path", "url(#main-clip"+self.data.svg+")") // clip the rectangle
-                        .attr("y", self.data.margin.top + 10 + (idx * 15))
-                        .text(self.chart.graphs[idx].key);
-
+                    if(!self.data.parent) {
+                        self.nameText[idx] = self.vis.append("text")
+                            .attr("x", self.data.margin.left + 10)
+                            .attr('fill', self.chart.graphs[idx].color)
+                            .attr('class', 'nameText')
+                            .attr("clip-path", "url(#main-clip" + self.data.svg + ")") // clip the rectangle
+                            .attr("y", self.data.margin.top + 10 + (idx * 15))
+                            .text(self.chart.graphs[idx].key);
+                    }
                     self.focusText[idx] = self.vis.append("g")
                     self.focusText[idx].append("rect")
                         .attr("width", 10)
@@ -1084,8 +1140,43 @@
                     .attr("y2", (self.data.height - self.data.margin.top))
                     .attr("stroke-width", 1)
                     .attr("stroke", "#ccc");
-                if(vm.traceControls.current)
-                    self.updateLine(vm.traceControls.timeline[vm.traceControls.current].gpstime, self.chart)
+
+
+                self.selectRect = self.vis.append('rect')
+                    .attr('x', vm.tcGraphs.zoomStartX)
+                    .attr('y', -1000)
+                    .attr('width', 0)
+                    .attr('fill', 'rgba(255,0,0,0.2)')
+                    .attr('height', self.data.height - self.data.margin.top - self.data.margin.bottom)
+
+
+                self.timePopRight = self.vis.append("g")
+                    .attr("transform", "translate(0,-1000)")
+                self.timePopRight.append("rect")
+                    .attr("width", 10)
+                    .attr("height", 22)
+                    .attr('class', 'focusRect')
+                    .attr("y", 10);
+                self.timePopRight.append("text")
+                    .attr("x", 8)
+                    .attr('fill', '#444')
+                    .attr('class', 'popText')
+                    .attr("y", 28);
+
+
+
+                self.vis.append("rect")
+                    .attr("x", self.data.margin.left)
+                    .attr("y", self.data.margin.top)
+                    .attr("fill", 'transparent')
+                    .attr("width", self.data.width - self.data.margin.left - self.data.margin.right)
+                    .attr("height", self.data.height -  self.data.margin.top -  self.data.margin.bottom - 1 )
+                    .on("mouseleave", function () {
+                        zoomGraphMouseEvent()
+                    })
+
+
+                self.updateLine(vm.traceControls.timeline[vm.traceControls.current].gpstime, self.chart)
             };
 
 
