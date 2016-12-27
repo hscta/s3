@@ -249,6 +249,7 @@
             }
 
             vm.historyMap.startMarker = new google.maps.Marker({
+                icon: 'assets/images/markers/red-marker.png',
                 position: path[0]
             });
             var lastBeacon = path[path.length - 1];

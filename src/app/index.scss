@@ -2555,3 +2555,21 @@ md-virtual-repeat-container{
 .opacity_0{
     opacity:0;
 }
+
+.visTrans{
+    @include transition(1s);
+}
+
+.downloadImage.active{
+    z-index: 100000;
+}
+.downloadImage{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:10000;
+    background: #fff;
+    z-index: -1;
+}
