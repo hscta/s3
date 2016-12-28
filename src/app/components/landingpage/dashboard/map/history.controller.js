@@ -929,6 +929,8 @@
 
         vm.tcGraphs.zoom = function (animate) {
             // Do getbounds here
+            historyService.setTime(vm.tcGraphs.zoomStart, vm.tcGraphs.zoomEnd);
+
             vm.traceControls.startIndex = binSearch(vm.traceControls.timeline, vm.tcGraphs.zoomStart, 'gpstime');
             vm.traceControls.current = angular.copy(vm.traceControls.startIndex);
             vm.traceControls.endIndex = binSearch(vm.traceControls.timeline, vm.tcGraphs.zoomEnd, 'gpstime');
@@ -989,6 +991,7 @@
         }
 
         vm.tcGraphs.restoreGraph = function () {
+            historyService.setTime(vm.tcGraphs.charts[0].object.axisScale.xl, vm.tcGraphs.charts[0].object.axisScale.xh);
             vm.tcGraphs.zoomEnd = null;
             vm.traceControls.startIndex = 0;
             vm.traceControls.endIndex = vm.traceControls.timeline.length;
@@ -1100,7 +1103,7 @@
 
                     var focusRecMargin = 0;
                     var focusTime = parseInt(self.xScale.invert(self.mouseX));
-                    var focusStr = moment.utc(focusTime).format('d MMM YY, h:mm:ss A');
+                    var focusStr = moment(focusTime).format('DD MMM YY, h:mm:ss A');
                     var rectWidth = ( focusStr.length * 9) + 5;
 
                     if (self.mouseX + rectWidth + 10 > self.data.width - self.data.margin.right) {
