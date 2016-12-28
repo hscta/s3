@@ -14,6 +14,178 @@
 
         var vm = this;
 
+
+        vm.downloadScreenShot = function () {
+            var mapWidth = $('#history_map').width();
+            var mapHeight = $('#history_map').height();
+            //$('#history_map [style*=transform]')[0]
+            //html2canvas(document.getElementById('history_map'), {"onrendered":function(canvas) {
+            var abcd = $('#history_map [style*=transform]');
+            var reqelem = abcd[0];
+            if (reqelem.style['z-index'] == '4') {
+                reqelem = abcd[1];
+            }
+            reqelem = $(reqelem);
+            var ignoreList = [
+                $('#history_map .gmnoprint img')[0],
+                $('#history_map .gm-style .gm-style-pbc .gm-style-pbt'),
+                $('#history_map > div > .gm-style > .gmnoprint > .gm-style-mtc'),
+                $('#history_map > div > .gm-style > .gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom')[0]
+            ]
+
+            for(var idx in ignoreList){
+                $(ignoreList[idx]).attr('data-html2canvas-ignore', 'true');
+            }
+
+            var transform=reqelem.css("transform")
+            var comp=transform.split(",") //split up the transform matrix
+            var mapleft=parseFloat(comp[4]) //get left value
+            if (isNaN(mapleft))
+                mapleft = 0;
+            var maptop=parseFloat(comp[5])  //get top value
+            if (isNaN(maptop))
+                maptop = 0;
+            reqelem.css({ //get the map container. not sure if stable
+                "transform":"none",
+                "left":mapleft,
+                "top":maptop,
+            });
+            if (abcd.length > 1){
+                $(abcd[1]).css({ //get the map container. not sure if stable
+                    "transform":"none",
+                    "left":mapleft,
+                    "top":maptop,
+                });
+            }
+
+            html2canvas($('#history_map'), {
+                "logging": true,
+                "onrendered":function(canvas) {
+                var mapImage = new Image();
+                    mapImage.src = canvas.toDataURL("image/png")
+
+                // window.open(mapImage);
+
+                    var mapImageObj = {
+                        height: mapHeight,
+                        width: mapWidth,
+                        image: mapImage
+                    }
+
+                    createCanvasForDownload(mapImageObj);
+                reqelem.css({
+                    left:0,
+                    top:0,
+                    "transform":transform
+                });
+                    if (abcd.length > 1){
+                        $(abcd[1]).css({ //get the map container. not sure if stable
+                            "transform":transform,
+                            "left":0,
+                            "top":0,
+                        });
+                    }
+            },
+                width : mapWidth,
+                height: mapHeight,
+                useCORS : true
+        });
+        }
+
+        function createCanvasForDownload(mapImage) {
+            var canParent = $('.downloadImage')
+
+            var dCanvas = document.createElement('canvas');
+            dCanvas.id     = "downloadImageCanvas";
+            dCanvas.width  = canParent.width();
+            dCanvas.height = canParent.height();
+            canParent.append(dCanvas);
+
+            var ctx = dCanvas.getContext("2d");
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canParent.width(), canParent.height());
+            ctx.drawImage(mapImage.image, 10, 10 , mapImage.width , mapImage.height);
+
+            renderSvgToCanvas({idx: 0, left: 10, top: mapImage.height + 20 , parent: true});
+            renderSvgToCanvas({idx: 1, left: mapImage.width, top: 0, childGraph:true});
+            renderSvgToCanvas({idx: 2, left: mapImage.width, top: 1, childGraph:true});
+            renderSvgToCanvas({idx: 3, left: mapImage.width, top: 2, childGraph:true});
+
+            var texts = [
+                moment.utc(vm.getCurrentPos().gpstime).format('d MMM YY, h:mm:ss A'),
+                'Ignition : ' + (vm.getCurrentPos().ignstatus ? 'On' : 'Off'),
+                'Speed : ' + vm.getCurrentPos().speed + 'kmph',
+                'Odometer : ' + vm.getCurrentPos().odometer + ' km',
+                vm.traceControls.selectedVehicle.rtgps.meta.cartype,
+            ];
+
+            for(var idx in texts){
+                var counter = texts.length - idx;
+                var tLeft = mapImage.width + 40;
+                ctx.font="12px gotham";
+                ctx.fillStyle = '#777';
+                var tTop = canParent.height() - 20 - ( 22 * counter );
+                ctx.fillText(texts[idx], tLeft, tTop);
+            }
+
+            var renderedImgCount = 0;
+            function afterImageRender() {
+                renderedImgCount++;
+                if(renderedImgCount >= 4){
+                    setTimeout(function () {
+                        var a = $("<a>")
+                            .attr("href", dCanvas.toDataURL("image/png"))
+                            .attr("download", "img.png")
+                            .appendTo("body");
+                        a[0].click();
+                    },100)
+                }
+            }
+
+            function renderSvgToCanvas(param) {
+
+                var idx = param.idx;
+                var left = param.left;
+                var top = param.top;
+
+                var svg = $(vm.tcGraphs.charts[idx].data.svg);
+                vm.tcGraphs.charts[idx].object.vis.attr("transform", "translate(0,0) scale(1, 0.69)");
+                vm.tcGraphs.charts[idx].object.visAxis.attr("transform", "translate(0,0) scale(1, 0.69)");
+
+                var svgHeight = svg.height();
+                var svgWidth  = svg.width();
+
+                if(param.childGraph){
+                    svgHeight = svgHeight - ( svgHeight * 0.05 );
+                    left += 20;
+                    svgWidth -= 20;
+                    top = ((svg.height() ) * top ) + 10;
+                }
+
+                if(param.parent){
+                    svgHeight = svgHeight + ( svgHeight * 0.2 );
+                    top = canParent.height() - svgHeight - 20;
+                    svgWidth = mapImage.width;
+                    ctx.strokeStyle = '#777';
+                    ctx.strokeRect(left, top, svgWidth, svgHeight);
+                }
+
+                var data = (new XMLSerializer()).serializeToString(svg[0]);
+                var DOMURL = window.URL || window.webkitURL || window;
+                var img = new Image();
+                var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+                var url = DOMURL.createObjectURL(svgBlob);
+                img.onload = function () {
+                    ctx.drawImage(img, left, top, svgWidth, svgHeight);
+                    vm.tcGraphs.charts[idx].object.vis.attr("transform", "translate(0,0) scale(1, 1)");
+                    vm.tcGraphs.charts[idx].object.visAxis.attr("transform", "translate(0,0) scale(1, 1)");
+                    afterImageRender();
+                };
+                img.src = url;
+            }
+
+        }
+
         $scope.getMatches = function (str) {
             var matchArray = [];
             if (str == null) str = '';
@@ -778,8 +950,10 @@
                     for(var idx in vm.tcGraphs.charts){
                         vm.tcGraphs.charts[idx].object.xScale.domain([new Date(zStartInit), new Date(zEndInit)]);
                         vm.tcGraphs.charts[idx].object.redraw();
+                        // vm.tcGraphs.charts[idx].object.vis.attr('transform', 'translate(100, 0)');
                     }
                 },10, 4);
+                // vm.tcGraphs.charts[idx].object.vis.attr('transform', 'translate(100, 0)');
             }
         }
 
@@ -824,8 +998,7 @@
             self.data = param.data;
             self.chart = param;
 
-
-            self.vis = d3.select(self.data.svg)
+            self.visP = d3.select(self.data.svg)
             //responsive SVG needs these 2 attributes and no width and height attr
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + self.data.width + " " + (self.data.height - 30))
@@ -835,6 +1008,7 @@
                 .on("mousemove", mouseHoverEvent)
                 .on("mousedown", graphStartDrag)
                 .on("mouseup", graphEndDrag)
+
 
             function graphStartDrag() {
                 self.mouseX = d3.mouse(this)[0];
@@ -939,7 +1113,13 @@
                         focusRecMargin = rectWidth + 15;
                     }
 
-                    self.timePopRight.attr("transform", "translate(" + (self.mouseX - focusRecMargin + 8) + "," + 30 + ")")
+                    var trasnX = self.mouseX - focusRecMargin + 8;
+                    if(trasnX < 10 + self.data.margin.left){
+                        trasnX = 10 + self.data.margin.left;
+                    }
+
+                    self.timePopRight
+                        .attr("transform", "translate(" + trasnX + "," + 30 + ")")
                         .select("text").text(focusStr);
                     self.timePopRight
                         .select("rect")
@@ -1019,14 +1199,8 @@
 
             function draw() {
                 d3.selectAll(self.data.svg+" > *").remove();
-                self.xAxis = d3.axisBottom()
-                    .scale(self.xScale)
-                    .ticks(5)
-                    .tickFormat(function(d) {
-                        return d3.timeFormat('%H:%M')(new Date(d))
-                    })
 
-                self.clipRect = self.vis.append("clipPath")    // define a clip path
+                self.clipRect = self.visP.append("clipPath")    // define a clip path
                     .attr('x',0)
                     .attr('y',0)
                     .attr("id", "main-clip"+self.data.svg) // give the clipPath an ID
@@ -1036,6 +1210,24 @@
                     .attr("width", self.data.width - self.data.margin.left - self.data.margin.right)
                     .attr("height", self.data.height)
 
+                self.vis = self.visP
+                    .append("svg:g")
+                    .attr('class', 'visTrans')
+                    .attr("clip-path", "url(#main-clip"+self.data.svg+")") // clip the rectangle
+                    .attr("transform", "translate(0,0) ");
+
+                self.visAxis = self.visP
+                    .append("svg:g")
+                    .attr('class', 'visTrans')
+                    .attr("transform", "translate(0,0) ");
+
+                self.xAxis = d3.axisBottom()
+                    .scale(self.xScale)
+                    .ticks(5)
+                    .tickFormat(function(d) {
+                        return d3.timeFormat('%H:%M')(new Date(d))
+                    })
+
                 self.y1Axis = d3.axisLeft()
                     .scale(self.y1Scale)
                     .ticks(6)
@@ -1044,19 +1236,28 @@
                     .scale(self.y2Scale)
                     .ticks(6)
 
-                self.vis.append("svg:g")
-                    .attr("class", "axis")
+                self.visAxis.append("svg:g")
+                    // .attr("class", "axis")
                     .attr("transform", "translate(0," + (self.data.height - self.data.margin.bottom) + ")")
+                    .attr('font-size','80%')
+                    .attr('font-family','gotham')
+                    .attr('shape-rendering','crispEdges')
                     .call(self.xAxis)
 
                 if(!self.chart.data.parent){
-                    self.vis.append("svg:g")
-                        .attr("class", "axis")
+                    self.visAxis.append("svg:g")
+                        // .attr("class", "axis")
+                        .attr('font-size','80%')
+                        .attr('font-family','gotham')
+                        .attr('shape-rendering','crispEdges')
                         .attr("transform", "translate(" + (self.data.margin.left) + ",0)")
                         .call(self.y1Axis);
 
-                    self.vis.append("svg:g")
-                        .attr("class", "axis")
+                    self.visAxis.append("svg:g")
+                        // .attr("class", "axis")
+                        .attr('font-size','80%')
+                        .attr('font-family','gotham')
+                        .attr('shape-rendering','crispEdges')
                         .attr("transform", "translate(" + (self.data.width - self.data.margin.right) + ",0)")
                         .call(self.y2Axis);
                 }
@@ -1075,7 +1276,6 @@
                     self.vis.append('svg:path')
                         .attr('d', getYlineGen(self.data.graph[idx].yAxis, self.data.graph[idx].values))
                         .attr('stroke', self.data.graph[idx].color)
-                        .attr("clip-path", "url(#main-clip"+self.data.svg+")") // clip the rectangle
                         .attr('stroke-width', self.data.graph[idx].strokeWidth)
                         .attr('fill', 'none');
                 }
@@ -1105,7 +1305,6 @@
                     self.focusCircle[idx] = self.vis.append("circle")
                         .attr('class', 'click-circle')
                         .attr("cx", -1000)
-                        .attr("clip-path", "url(#main-clip"+self.data.svg+")") // clip the rectangle
                         .attr("cy", -1000)
                         .attr("fill", self.chart.graphs[idx].color)
                         .attr("r", 5);
@@ -1113,8 +1312,9 @@
                         self.nameText[idx] = self.vis.append("text")
                             .attr("x", self.data.margin.left + 10)
                             .attr('fill', self.chart.graphs[idx].color)
-                            .attr('class', 'nameText')
-                            .attr("clip-path", "url(#main-clip" + self.data.svg + ")") // clip the rectangle
+                            .attr('font-size','70%')
+                            .attr('font-family','gotham')
+                            // .attr('class', 'nameText')
                             .attr("y", self.data.margin.top + 10 + (idx * 15))
                             .text(self.chart.graphs[idx].key);
                     }
@@ -1122,20 +1322,28 @@
                     self.focusText[idx].append("rect")
                         .attr("width", 10)
                         .attr("height", 16)
-                        .attr('class', 'focusRect')
+                        .attr('opacity', '0.9')
+                        .attr('fill', '#f5f5f5')
+                        .attr('stroke-width', 1)
+                        .attr('stroke', '#ccc')
+                        .attr('font-family','gotham')
+                        // .attr('class', 'focusRect')
                         .attr("y", -8 + (idx * 20));
 
                     self.focusText[idx].append("text")
                         .attr("x", 4)
                         .attr('fill', self.chart.graphs[idx].color)
-                        .attr('class', 'focusText')
+                        .attr('font-size','70%')
+                        .attr('font-family','gotham')
+                        // .attr('class', 'focusText')
                         .attr("y", 4 + (idx * 20));
                 }
                 self.focusLine = self.vis.append("line")
-                    .attr('class', 'focus-line')
+                    // .attr('class', 'focus-line')
+                    .attr('stroke', '#000')
+                    .attr('opacity', 0.5)
                     .attr("x1", -1000)
                     .attr("x2", -1000)
-                    .attr("clip-path", "url(#main-clip"+self.data.svg+")") // clip the rectangle
                     .attr("y1", self.data.margin.top)
                     .attr("y2", (self.data.height - self.data.margin.top))
                     .attr("stroke-width", 1)
@@ -1155,12 +1363,16 @@
                 self.timePopRight.append("rect")
                     .attr("width", 10)
                     .attr("height", 22)
-                    .attr('class', 'focusRect')
+                    .attr('font-size','70%')
+                    .attr('font-family','gotham')
+                    // .attr('class', 'focusRect')
                     .attr("y", 10);
                 self.timePopRight.append("text")
                     .attr("x", 8)
                     .attr('fill', '#444')
-                    .attr('class', 'popText')
+                    .attr('font-size','120%')
+                    .attr('font-family','gotham')
+                    // .attr('class', 'popText')
                     .attr("y", 28);
 
 

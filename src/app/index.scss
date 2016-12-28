@@ -2612,3 +2612,19 @@ md-virtual-repeat-container{
 .opacity_0{
     opacity:0;
 }
+
+.visTrans{
+    @include transition(1s);
+}
+
+.downloadImage{
+    position: absolute;
+    top:0;
+    left:-10000px;
+    width: 100%;
+    bottom:0;
+    z-index:10000;
+    background: #fff;
+    z-index: -100;
+    opacity: 0;
+}
