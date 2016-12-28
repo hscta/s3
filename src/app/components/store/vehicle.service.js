@@ -15,7 +15,7 @@
         vm.vehiclesByPath = {};
         vm.vehiclesByNumber = {};
         vm.listeners = {};
-        vm.noCommThreshold = 1000 * 60 * 3;
+        vm.noCommThreshold = 1000 * 3600 * 3;
 
 
         vm.addListener = function (key, listener) {
