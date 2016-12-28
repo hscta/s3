@@ -61,11 +61,6 @@
             html2canvas($('#history_map'), {
                 "logging": true,
                 "onrendered":function(canvas) {
-                // var a = $("<a>")
-                //     .attr("href", canvas.toDataURL("image/png"))
-                //     .attr("download", "img.png")
-                //     .appendTo("body");
-                // a[0].click();
                 var mapImage = new Image();
                     mapImage.src = canvas.toDataURL("image/png")
 
@@ -107,6 +102,8 @@
             canParent.append(dCanvas);
 
             var ctx = dCanvas.getContext("2d");
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canParent.width(), canParent.height());
             ctx.drawImage(mapImage.image, 10, 10 , mapImage.width , mapImage.height);
 
             renderSvgToCanvas({idx: 0, left: 10, top: mapImage.height + 20 , parent: true});
@@ -131,6 +128,20 @@
                 ctx.fillText(texts[idx], tLeft, tTop);
             }
 
+            var renderedImgCount = 0;
+            function afterImageRender() {
+                renderedImgCount++;
+                if(renderedImgCount >= 4){
+                    setTimeout(function () {
+                        var a = $("<a>")
+                            .attr("href", dCanvas.toDataURL("image/png"))
+                            .attr("download", "img.png")
+                            .appendTo("body");
+                        a[0].click();
+                    },100)
+                }
+            }
+
             function renderSvgToCanvas(param) {
 
                 var idx = param.idx;
@@ -145,7 +156,7 @@
                 var svgWidth  = svg.width();
 
                 if(param.childGraph){
-                    svgHeight = svgHeight + ( svgHeight * 0.05 );
+                    svgHeight = svgHeight - ( svgHeight * 0.05 );
                     left += 20;
                     svgWidth -= 20;
                     top = ((svg.height() ) * top ) + 10;
@@ -168,6 +179,7 @@
                     ctx.drawImage(img, left, top, svgWidth, svgHeight);
                     vm.tcGraphs.charts[idx].object.vis.attr("transform", "translate(0,0) scale(1, 1)");
                     vm.tcGraphs.charts[idx].object.visAxis.attr("transform", "translate(0,0) scale(1, 1)");
+                    afterImageRender();
                 };
                 img.src = url;
             }
