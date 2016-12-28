@@ -97,8 +97,8 @@
                 HYDERABAD: 'HYDERABAD',
                 PUNE: 'PUNE',
                 DELHI: 'DELHI',
-                CHENNAI: 'CHENNAI'
-
+                CHENNAI: 'CHENNAI',
+                KOLKATA: 'KOLKATA'
             };
 
 
@@ -131,6 +131,10 @@
                     id: vm.loc.CHENNAI,
                     notation: 'CHE',
                     latlng: {latitude: 13.075837, longitude: 80.206900}
+                }, {
+                    id: vm.loc.KOLKATA,
+                    notation: 'KOL',
+                    latlng: {latitude: 22.6754795, longitude: 88.0877022}
                 }
             ];
 
