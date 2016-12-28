@@ -977,11 +977,19 @@
                 var anim = { x1 : vm.tcGraphs.zoomStart, x2 : vm.tcGraphs.zoomEnd}
                 vm.tcGraphs.zoomEnd += zoomAmount;
                 vm.tcGraphs.zoomStart += zoomAmount;
+
+                var zStartTemp = vm.tcGraphs.zoomStart - anim.x1;
+                var zEndTemp = vm.tcGraphs.zoomEnd - anim.x2;
+                if(zStartTemp < 3000 && zEndTemp < 3000 && key == 1 || zStartTemp > -3000 && zEndTemp > -3000 && key < 1){
+                    return;
+                }
+
                 vm.tcGraphs.zoom(anim);
             }
         }
 
         vm.tcGraphs.restoreGraph = function () {
+            vm.tcGraphs.zoomEnd = null;
             vm.traceControls.startIndex = 0;
             vm.traceControls.endIndex = vm.traceControls.timeline.length;
             historyService.drawPolylines(vm.traceControls.timeline, vm.traceControls.startIndex, vm.traceControls.endIndex);
@@ -990,8 +998,6 @@
                 vm.tcGraphs.charts[idx].object.redraw();
             }
         }
-
-        // var d3g1 = new d3Graph(data);
 
         function d3Graph(param) {
             var self = this;
@@ -1017,7 +1023,7 @@
                         if (self.mouseX > self.data.margin.left && self.mouseX < self.data.width - self.data.margin.right) {
                             vm.tcGraphs.mouseclicked = true;
                             vm.tcGraphs.zoomStartX = angular.copy(self.mouseX);
-                            vm.tcGraphs.zoomStart = parseInt(self.xScale.invert(self.mouseX));
+                            vm.tcGraphs.zoomStartTemp = parseInt(self.xScale.invert(self.mouseX));
 
                             self.selectRect
                                 .attr('x', vm.tcGraphs.zoomStartX)
@@ -1025,20 +1031,6 @@
                                 .attr('width', 0)
                                 .attr('fill', 'rgba(255,0,0,0.2)')
                                 .attr('height', self.data.height - self.data.margin.top - self.data.margin.bottom)
-
-                            //
-                            // self.timePopRight = self.vis.append("g")
-                            // self.timePopRight.append("rect")
-                            //     .attr("width", 10)
-                            //     .attr("height", 22)
-                            //     .attr('class', 'focusRect')
-                            //     .attr("y", 10);
-                            // self.timePopRight.append("text")
-                            //     .attr("x", 8)
-                            //     .attr('fill', '#444')
-                            //     .attr('class', 'popText')
-                            //     .attr("y", 28);
-
                         }
                     }
                 }else if(d3.event.button == 2){
@@ -1052,12 +1044,14 @@
                     if(vm.tcGraphs.mouseclicked){
                         vm.tcGraphs.mouseclicked = false;
                         self.mouseX = d3.mouse(this)[0];
-                        vm.tcGraphs.zoomEnd = parseInt(self.xScale.invert(self.mouseX));
-                        if(Math.abs(vm.tcGraphs.zoomEnd - vm.tcGraphs.zoomStart) > 1000 * 60 * 2){
+                        vm.tcGraphs.zoomEndTemp = parseInt(self.xScale.invert(self.mouseX));
+                        if(Math.abs(vm.tcGraphs.zoomEndTemp - vm.tcGraphs.zoomStartTemp) > 1000 * 60 * 2){
+                            vm.tcGraphs.zoomStart = angular.copy(vm.tcGraphs.zoomStartTemp);
+                            vm.tcGraphs.zoomEnd = angular.copy(vm.tcGraphs.zoomEndTemp);
                             if(vm.tcGraphs.zoomEnd < vm.tcGraphs.zoomStart){
-                                var tempStartZoon = vm.tcGraphs.zoomStart;
-                                vm.tcGraphs.zoomStart = vm.tcGraphs.zoomEnd;
-                                vm.tcGraphs.zoomEnd = tempStartZoon;
+                                var tempStartZoom = vm.tcGraphs.zoomStart;
+                                vm.tcGraphs.zoomStart = angular.copy(vm.tcGraphs.zoomEnd);
+                                vm.tcGraphs.zoomEnd = tempStartZoom;
                             }
                             vm.tcGraphs.zoom();
                         }else{
@@ -1363,6 +1357,9 @@
                 self.timePopRight.append("rect")
                     .attr("width", 10)
                     .attr("height", 22)
+                    .attr('fill', '#f5f5f5')
+                    .attr('stroke-width', 1)
+                    .attr('stroke', '#ccc')
                     .attr('font-size','70%')
                     .attr('font-family','gotham')
                     // .attr('class', 'focusRect')
