@@ -15,6 +15,7 @@
         vm.vehiclesByPath = {};
         vm.vehiclesByNumber = {};
         vm.listeners = {};
+        vm.noCommThreshold = 1000 * 3600 * 3;
 
 
         vm.addListener = function (key, listener) {
@@ -123,7 +124,7 @@
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
-            var noCommThreshold = 8 * 3600 * 1000;
+            var noCommThreshold =  vm.noCommThreshold;
             if (currentTime - lastSeenAt > noCommThreshold) {
                 if(callback){
                     callback(marker);

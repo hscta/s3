@@ -2257,14 +2257,31 @@ div.dataTables_info {
          position: absolute;
          top:5px;
          bottom:5px;
-         left:190px;
-         right:250px;
+         left:200px;
+         right:220px;
          background:#fefefe;
-         overflow: hidden;
+         //overflow: hidden;
          border: 1px solid #ccc;
+         border-left:0;
+         border-right:0;
          @include borderBox();
          cursor:pointer;
-         @include border-radius(2px);
+         z-index: 100;
+         //@include border-radius(2px);
+         .tpc_graphContainer{
+             position: absolute;
+             left: 0;
+             right: 0;
+             top:0;
+             bottom:0;
+             width: 100%;
+             height: 100%;
+             overflow: hidden;
+             svg{
+                 position: absolute;
+                 top:0;
+             }
+         }
          .tc_carname{
              position: absolute;
              left:12px;
@@ -2322,6 +2339,45 @@ div.dataTables_info {
              width: 50px;
              @include transition(3s);
          }
+
+         .tcp_rightButton,
+         .tcp_leftButton{
+             position: absolute;
+             top:-1px;
+             bottom:-1px;
+             width: 20px;
+             background: #FFF;
+             height: auto;
+             padding:0;
+             margin:0;
+             line-height:100px;
+             font-size:90%;
+             color:#999;
+             border: 1px solid #ccc;
+         }
+         .tcp_leftButton:hover,
+         .tcp_rightButton:hover {
+             background-color: #1abc9c;
+             color:#fff;
+         }
+         .tcp_leftButton{
+             left:-20px;
+             @include border-radius(10px 0 0 10px);
+         }
+         .tcp_rightButton{
+             right: -20px;
+             @include border-radius(0 10px 10px 0);
+         }
+         .tcp_name{
+             width: 100px;
+             position: absolute;
+             left: -78px;
+             @include transform(rotate(-90deg));
+             top: 12px;
+             font-size: 80%;
+             opacity: 0.6;
+         }
+
      }
      .tc_info{
          position:absolute;
@@ -2543,6 +2599,7 @@ md-virtual-repeat-container{
 .noselect ,
 .noselect-me,
 .noselect *{
+    user-drag: none;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Chrome/Safari/Opera */
     -khtml-user-select: none; /* Konqueror */

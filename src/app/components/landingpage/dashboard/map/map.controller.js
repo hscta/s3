@@ -541,7 +541,7 @@
         function checkNoComm(marker, callback) {
             var currentTime = new Date().getTime();
             var lastSeenAt = marker.timestamp.getTime();
-            var noCommThreshold = 8 * 3600 * 1000;
+            var noCommThreshold = vehicleService.noCommThreshold;
             if (currentTime - lastSeenAt > noCommThreshold) {
                 if (callback) {
                     callback(marker);

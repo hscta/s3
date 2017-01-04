@@ -284,20 +284,25 @@
             vm.historyMap.endMarker.setMap(vm.historyMap.map);
         }
 
-        vm.getDefaultTime = function () {
+        vm.getDefaultTime = function (start, end) {
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
-            // setting time from 6:00 AM to 7:00 PM
+            if(start && end){
+                var startTime = moment(start).format(dateFormat);
+                var endTime = moment(end).format(dateFormat);
+            }else{
+                // setting time from 6:00 AM to 7:00 PM
 
-            var startTimeHour = 6;
-            var endTimeHour = 19;
-            if (moment().unix() - moment().hours(startTimeHour).unix() < 0) {
-                startTimeHour -= 24;
-                endTimeHour -= 24;
+                var startTimeHour = 6;
+                var endTimeHour = 19;
+                if (moment().unix() - moment().hours(startTimeHour).unix() < 0) {
+                    startTimeHour -= 24;
+                    endTimeHour -= 24;
+                }
+
+                var startTime = moment().hours(startTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
+                var endTime = moment().hours(endTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
             }
-
-            var startTime = moment().hours(startTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
-            var endTime = moment().hours(endTimeHour).minutes(0).seconds(0).milliseconds(0).format(dateFormat);
 
             return {
                 startTime: startTime,
@@ -364,14 +369,18 @@
             engine: {}
         };
 
-
-        vm.init = function () {
-            var defaultTime = vm.getDefaultTime();
+        vm.setTime = function(start, end){
+            var defaultTime = vm.getDefaultTime(start, end);
             vm.historyMap.startTime = defaultTime.startTime;
             vm.historyMap.endTime = defaultTime.endTime;
 
             vm.geoFenceReports.startTime = defaultTime.startTime;
             vm.geoFenceReports.endTime = defaultTime.endTime;
+        }
+
+
+        vm.init = function () {
+            vm.setTime();
         };
 
         vm.init();

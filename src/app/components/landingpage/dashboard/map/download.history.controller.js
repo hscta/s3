@@ -7,7 +7,7 @@
         .module('uiplatform')
         .controller('DownloadHistoryController', DownloadHistoryController)
 
-    function DownloadHistoryController(dialogService, userService, reportsService,
+    function DownloadHistoryController(dialogService, userService, reportsService,  vehicleService,
                                        intellicarAPI, $timeout, $log) {
 
         var vm = this;
@@ -87,7 +87,7 @@
                 var communication = 'Live';
                 var currentTime = new Date().getTime();
                 var lastSeenAt = csvData[idx].utctime;
-                var noCommThreshold = 8 * 3600 * 1000;
+                var noCommThreshold =  vehicleService.noCommThreshold;
                 if (currentTime - lastSeenAt > noCommThreshold) {
                     communication = 'No Comm';
                 }
