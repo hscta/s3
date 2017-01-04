@@ -9,6 +9,7 @@
         var vm = this;
         var innerHtml;
 
+
         vm.markerHeight = 12;
         vm.markerWidth = 12;
 

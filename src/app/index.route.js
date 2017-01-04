@@ -171,15 +171,6 @@
                     }
                 }
             })
-            .state('home.gridTest', { // this roiute is create to test and develop grid system
-                url: 'gridtest',
-                views: {
-                    'dialogview@home': {
-                        templateUrl: 'app/components/landingpage/dashboard/map/dialog/gridtest.html',
-                        controller: 'GridController as vm'
-                    }
-                }
-            })
             .state('home.downloadHistory', {
                 url: 'downloadHistory',
                 views: {
