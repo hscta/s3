@@ -167,12 +167,12 @@
             if (vm.filterStr.length == 0) {
                 vm.showAllMarkers();
                 vm.inMap.map.setZoom(11);
-
                 return;
             }
 
             /* center the map based on the first marker position that matches the filter */
             var centerMap = false;
+            var centerLatLng = null;
             if (vm.filterStr.length > 2) {
                 var matchedMarker = null;
                 for (var idx in vm.markersByPath) {
@@ -185,7 +185,7 @@
                         var maplng = Math.floor(vm.inMap.map.getCenter().lng());
 
                         if (lat == maplat && lng == maplng && !centerMap) {
-                            if (matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat() > 0.2) {
+                            if (Math.abs(matchedMarker.getPosition().lat() - vm.inMap.map.getCenter().lat()) > 0.2) {
                                 vm.inMap.map.setCenter(matchedMarker.getPosition());
                             }
 
@@ -194,14 +194,63 @@
                                 vm.inMap.map.setZoom(16);
                             }
 
+                            centerLatLng = matchedMarker.getPosition();
                             centerMap = true;
 
                         }
                     }
                 }
 
-                if (matchedMarker && !centerMap) {
-                    vm.inMap.map.setCenter(matchedMarker.getPosition());
+                for (var idx in vm.polygonsByPath) {
+                    if (centerMap)
+                        break;
+
+                    var fencePolygon = vm.polygonsByPath[idx];
+                    if (fencePolygon.control.info.tagdata.olafilter == 'citylimit')
+                        continue;
+                    if (!fencePolygon.control.info.name.toString().toLowerCase().includes(filterStr.toString().toLowerCase()))
+                        continue;
+
+                    for (var item in fencePolygon.path) {
+                        var latlng = fencePolygon.path[item];
+                        centerLatLng = new google.maps.LatLng(latlng.latitude, latlng.longitude);
+                        if (Math.abs(latlng.latitude - vm.inMap.map.getCenter().lat()) < 0.5 &&
+                            Math.abs(latlng.longitude - vm.inMap.map.getCenter().lng()) < 0.5) {
+                            //console.log("Centering map at ", fencePolygon.control.info.name);
+                            vm.inMap.map.setCenter(centerLatLng);
+                            vm.inMap.map.setZoom(16);
+                            centerMap = true;
+                            break;
+                        }
+                    }
+                }
+
+
+                for (var idx in vm.circlesByPath) {
+                    if (centerMap)
+                        break;
+
+                    var fenceCircle = vm.circlesByPath[idx];
+                    if (fenceCircle.control.info.tagdata.olafilter == 'citylimit')
+                        continue;
+                    if (!fenceCircle.control.info.name.toString().toLowerCase().includes(filterStr.toString().toLowerCase()))
+                        continue;
+
+                    var latlng = fenceCircle.center;
+                    centerLatLng = new google.maps.LatLng(latlng.latitude, latlng.longitude);
+                    if (Math.abs(latlng.latitude - vm.inMap.map.getCenter().lat()) < 0.5 &&
+                        Math.abs(latlng.longitude - vm.inMap.map.getCenter().lng()) < 0.5) {
+                        //console.log("Centering map at ", fenceCircle.control.info.name);
+                        vm.inMap.map.setCenter(centerLatLng);
+                        vm.inMap.map.setZoom(16);
+                        centerMap = true;
+                        break;
+                    }
+                }
+
+
+                if (!centerMap) {
+                    vm.inMap.map.setCenter(centerLatLng);
                     if (vm.mainFilters.indexOf(vm.filterStr) == -1)
                         vm.inMap.map.setZoom(16);
                 }
@@ -983,7 +1032,7 @@
 
 
         vm.runStatsAtStart = function () {
-            for(var runtime = 5000; runtime < 15000; runtime+=5000) {
+            for (var runtime = 5000; runtime < 15000; runtime += 5000) {
                 $timeout(vm.runStats, runtime);
             }
 
