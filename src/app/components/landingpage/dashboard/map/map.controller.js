@@ -812,6 +812,31 @@
                 fenceInfowindow.close();
             });
 
+            var searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
+
+            vm.inMap.map.controls[google.maps.ControlPosition.TOP_LEFT]
+                .push(document.getElementById('pac-input'));
+
+            google.maps.event.addListener(searchBox, 'places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function (place) {
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                vm.inMap.map.fitBounds(bounds);
+            })
+
             vm.lastZoomLevel = vm.inMap.map.getZoom();
         };
 
