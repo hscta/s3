@@ -249,7 +249,7 @@
                 }
 
 
-                if (!centerMap) {
+                if (centerLatLng && !centerMap) {
                     vm.inMap.map.setCenter(centerLatLng);
                     if (vm.mainFilters.indexOf(vm.filterStr) == -1)
                         vm.inMap.map.setZoom(16);
