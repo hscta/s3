@@ -319,11 +319,11 @@
 </div>
 
 
-<div id="marker_infowindow" layout="row" ng-non-bindable flex>
+<div id="marker_infowindow" layout="row" ng-non-bindable flex ng-cloak>
     <div layout="column" id="markerWindow" ng-cloak>
         <div class="info-w-header">
         </div>
-        <md-table-container style="min-height: 150px; max-height:150px; min-width:300px; max-width:300px;
+        <md-table-container style="min-height: 150px; max-height:175px; min-width:300px; max-width:300px;
                                 position: relative; overflow: hidden;">
             <table md-table md-row-select multiple class="trPadding" >
                 <tbody md-body>
@@ -361,7 +361,7 @@
                 </tr>
                 <tr md-row md-select-id="cartype" md-auto-select>
                     <td md-cell><strong>Make</strong></td>
-                    <td md-cell>{{clickedMarker.rtgps.meta.cartype}}</td>
+                    <td md-cell colspan="3" >{{clickedMarker.rtgps.meta.cartype}}</td>
                 </tr>
                 <tr md-row md-select-id="deviceid" md-auto-select>
                     <td md-cell><strong>Device ID</strong></td>
@@ -369,7 +369,7 @@
                 </tr>
                 </tbody>
             </table>
-        </md-table-container>
+        </md-table-container><br/>
         <div layout="row">
             <md-button class="infoWBtn md-raised md-small infoWBtn" ng-hide="hideMobilityControls"
                        ng-click="vm.mobilize(0)">
