@@ -159,23 +159,25 @@
         };
 
         vm.runFilters = function (filterStr) {
-            // $log.log("runFilters");
             vm.filterStr = filterStr;
             mapService.filterStr = filterStr;
             markerInfowindow.close();
 
             if (vm.filterStr.length == 0) {
                 vm.showAllMarkers();
-                vm.inMap.map.setZoom(11);
+                //vm.inMap.map.setZoom(11);
                 return;
             }
+
+            console.log("filter=", vm.filterStr);
 
             /* center the map based on the first marker position that matches the filter */
             var centerMap = false;
             var centerLatLng = null;
             var fenceMatch = false;
+            var matchedMarker = null;
+
             if (vm.filterStr.length > 2) {
-                var matchedMarker = null;
                 for (var idx in vm.markersByPath) {
                     var visible = vm.applyFilterToMarker(vehicleService.vehiclesByPath[idx].rtgps, filterStr);
                     if (visible) {
@@ -195,10 +197,9 @@
                                 vm.inMap.map.setZoom(16);
                             }
 
-                            centerLatLng = matchedMarker.getPosition();
                             centerMap = true;
-
                         }
+                        centerLatLng = matchedMarker.getPosition();
                     }
                 }
 
