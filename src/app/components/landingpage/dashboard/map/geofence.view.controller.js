@@ -241,6 +241,21 @@
                     }
                 }
             },
+            {
+                'id': 'fitBounds',
+                'name': 'Zoom to fit view',
+                'iconType': 'fa',
+                'icon': 'fa-crosshairs',
+                'type': 'button',
+                'historymap': false,
+                'data': {
+                    active: false,
+                    'type': 'function', 'independent': true, 'function': function (active) {
+                        vm.checkGeoFilters.set('fitBounds', false);
+                        geofenceViewService.fitBounds(false);
+                    }
+                }
+            },
             {'type': 'line', 'historymap': false},
             {
                 'id': 'downloadView',

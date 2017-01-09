@@ -226,6 +226,10 @@
 
         vm.downloadView = function(active) {
             $rootScope.$broadcast('downloadView', active);
+        };
+
+        vm.fitBounds = function (active) {
+            $rootScope.$broadcast('fitBounds', active);
         }
     }
 
