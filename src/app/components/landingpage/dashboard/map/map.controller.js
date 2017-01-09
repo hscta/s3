@@ -173,6 +173,7 @@
             /* center the map based on the first marker position that matches the filter */
             var centerMap = false;
             var centerLatLng = null;
+            var fenceMatch = false;
             if (vm.filterStr.length > 2) {
                 var matchedMarker = null;
                 for (var idx in vm.markersByPath) {
@@ -211,6 +212,7 @@
                     if (!fencePolygon.control.info.name.toString().toLowerCase().includes(filterStr.toString().toLowerCase()))
                         continue;
 
+                    fenceMatch = true;
                     for (var item in fencePolygon.path) {
                         var latlng = fencePolygon.path[item];
                         centerLatLng = new google.maps.LatLng(latlng.latitude, latlng.longitude);
@@ -236,6 +238,7 @@
                     if (!fenceCircle.control.info.name.toString().toLowerCase().includes(filterStr.toString().toLowerCase()))
                         continue;
 
+                    fenceMatch = true;
                     var latlng = fenceCircle.center;
                     centerLatLng = new google.maps.LatLng(latlng.latitude, latlng.longitude);
                     if (Math.abs(latlng.latitude - vm.inMap.map.getCenter().lat()) < 0.5 &&
@@ -248,6 +251,9 @@
                     }
                 }
 
+                if(fenceMatch) {
+                    vm.showAllMarkers();
+                }
 
                 if (centerLatLng && !centerMap) {
                     vm.inMap.map.setCenter(centerLatLng);
