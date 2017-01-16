@@ -20,8 +20,9 @@
         }
 
         vm.handleTrackHistory = function (resp) {
-            if(resp.data && resp.data.data)
+            if(resp.data && resp.data.data) {
                 return $q.resolve(resp.data.data);
+            }
             return $q.reject(resp);
         };
 
@@ -34,6 +35,11 @@
 
         vm.getDeviceLocation = function(body) {
             return requestService.firePost('/reports/rtgps/trackhistory', body)
+                .then(vm.handleTrackHistory, vm.handleFailure);
+        };
+
+        vm.getBatteryInfo = function(body) {
+            return requestService.firePost('/reports/battery/trackhistory', body)
                 .then(vm.handleTrackHistory, vm.handleFailure);
         };
 

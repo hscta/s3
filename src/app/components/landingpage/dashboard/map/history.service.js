@@ -140,10 +140,12 @@
                         starttime: starttime,
                         endtime: endtime
                     };
+
                     var gpsDataPromise = intellicarAPI.reportsService.getDeviceLocation(body);
                     var alarmDataPromise = intellicarAPI.myAlarmService.getAlarmInfo(body2);
+                    var batteryDataPromise = intellicarAPI.reportsService.getBatteryInfo(body);
 
-                    $q.all([gpsDataPromise, alarmDataPromise])
+                    $q.all([gpsDataPromise, alarmDataPromise, batteryDataPromise])
                         .then(vm.drawTrace, vm.handleGetLocationFailure);
 
                 } else {
@@ -166,6 +168,16 @@
             vm.historyMap.trace.path = [];
         };
 
+        vm.syncBatteryInfo = function (traceData, batteryData) {
+            for (var idx = 0, bidx = 0; idx < traceData.length && bidx < batteryData.length; bidx++) {
+                while (idx < traceData.length && bidx < batteryData.length &&
+                    parseInt(traceData[idx].gpstime) <= parseInt(batteryData[bidx].gpstime)) {
+                    traceData[idx].carbattery = batteryData[bidx].carbattery;
+                    traceData[idx].devbattery = batteryData[bidx].devbattery;
+                    idx++;
+                }
+            }
+        };
 
         vm.drawTrace = function (respArray) {
             vm.setData('getHistory', true);
@@ -175,13 +187,14 @@
             var alarmData = [];
             var path = [];
 
-            if(respArray == null) {
+            if (respArray == null) {
                 traceData = vm.historyMap.traceData;
                 alarmData = vm.historyMap.alarmData;
             } else {
-                if(respArray.length == 2) {
+                if (respArray.length == 3) {
                     traceData = vm.historyMap.traceData = respArray[0];
                     alarmData = vm.historyMap.alarmData = respArray[1];
+                    vm.syncBatteryInfo(traceData, respArray[2]);
                 } else {
                     return;
                 }
@@ -204,9 +217,9 @@
                 latlng.numsat = position.numsat;
                 latlng.ignstatus = position.ignstatus;
                 latlng.gpstime = parseInt(position.gpstime);
-                latlng.speed = parseInt(position.speed.toFixed(2));
-                latlng.carbattery = position.carbattery ? parseInt(position.carbattery.toFixed(2)) : 0;
-                latlng.devbattery = position.devbattery ? parseInt(position.devbattery.toFixed(2)) : 0;
+                latlng.speed = parseFloat(position.speed.toFixed(2));
+                latlng.carbattery = position.carbattery ? parseFloat(position.carbattery.toFixed(2)) : 0;
+                latlng.devbattery = position.devbattery ? parseFloat(position.devbattery.toFixed(2)) : 0;
                 path.push(latlng);
             }
 
@@ -226,8 +239,8 @@
                     vm.historyMap.startMarker.setMap(vm.historyMap.map);
                     vm.historyMap.endMarker.setMap(vm.historyMap.map);
                 }
-                $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path, alarm : alarmData});
-            }else{
+                $rootScope.$broadcast('gotHistoryEvent', {gotHistoryEvent: true, path: path, alarm: alarmData});
+            } else {
                 vm.historyMap.errorMsg = "No GPS Signal";
                 $rootScope.$broadcast('gotHistoryEventFailed');
             }
@@ -235,8 +248,8 @@
 
         vm.drawPolylines = function (path, startIdx, endIdx) {
 
-            path.splice(endIdx+1, path.length-endIdx-1);
-            path.splice(0,startIdx);
+            path.splice(endIdx + 1, path.length - endIdx - 1);
+            path.splice(0, startIdx);
 
             if (vm.historyMap.startMarker) {
                 vm.historyMap.startMarker.setMap(null);
@@ -287,10 +300,10 @@
         vm.getDefaultTime = function (start, end) {
             var dateFormat = 'YYYY-MM-DD HH:mm';
 
-            if(start && end){
+            if (start && end) {
                 var startTime = moment(start).format(dateFormat);
                 var endTime = moment(end).format(dateFormat);
-            }else{
+            } else {
                 // setting time from 6:00 AM to 7:00 PM
 
                 var startTimeHour = 6;
@@ -324,7 +337,7 @@
             SPEEDS: [2000, 1000, 500, 250, 125, 62, 31, 15, 8],
             speed: 4, // normal
             current: 0,
-            excludedAlarm : ['End_of_Over_speed', 'IGNITION_OFF', 'IGNITION_ON'],
+            excludedAlarm: ['End_of_Over_speed', 'IGNITION_OFF', 'IGNITION_ON'],
             togglePlay: function () {
                 vm.traceControls.isPointer();
                 if (vm.traceControls.playing) {
@@ -369,7 +382,7 @@
             engine: {}
         };
 
-        vm.setTime = function(start, end){
+        vm.setTime = function (start, end) {
             var defaultTime = vm.getDefaultTime(start, end);
             vm.historyMap.startTime = defaultTime.startTime;
             vm.historyMap.endTime = defaultTime.endTime;
