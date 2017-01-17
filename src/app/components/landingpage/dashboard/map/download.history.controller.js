@@ -117,18 +117,19 @@
 
 
             function getAddress(csvData, callback) {
-                var postBody = {data: []};
+                var postBody = [];
                 for (var idx in csvData) {
-                    postBody.data.push([csvData[idx].lat, csvData[idx].lng]);
+                    postBody.push([csvData[idx].lat, csvData[idx].lng]);
                 }
+
                 //console.log('im firing');
                 intellicarAPI.geocodeService.getAddress(postBody)
                     .then(function (resp) {
-                        callback(resp.data.data);
+                        callback(resp);
                     })
             }
 
-
+            vm.showLoading = false;
         }
 
     }
