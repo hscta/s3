@@ -911,14 +911,14 @@
                         unit: 'v',
                         yAxis: 1
                     },
-                        {
-                            color: '#e74c3c',
-                            key: 'Device battery',
-                            type: 'line',
-                            item: 'devbattery',
-                            unit: 'v',
-                            yAxis: 2
-                        }]
+                    {
+                        color: '#e74c3c',
+                        key: 'Device battery',
+                        type: 'line',
+                        item: 'devbattery',
+                        unit: 'v',
+                        yAxis: 2
+                    }]
                 },
                 {
                     data: {svg: '#visualisation3'},

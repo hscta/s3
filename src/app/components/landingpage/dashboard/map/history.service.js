@@ -174,6 +174,7 @@
                     parseInt(traceData[idx].gpstime) <= parseInt(batteryData[bidx].gpstime)) {
                     traceData[idx].carbattery = batteryData[bidx].carbattery;
                     traceData[idx].devbattery = batteryData[bidx].devbattery;
+                    vm.lastBattery = batteryData[bidx];
                     idx++;
                 }
             }
@@ -218,8 +219,8 @@
                 latlng.ignstatus = position.ignstatus;
                 latlng.gpstime = parseInt(position.gpstime);
                 latlng.speed = parseFloat(position.speed.toFixed(2));
-                latlng.carbattery = position.carbattery ? parseFloat(position.carbattery.toFixed(2)) : 0;
-                latlng.devbattery = position.devbattery ? parseFloat(position.devbattery.toFixed(2)) : 0;
+                latlng.carbattery = position.carbattery ? parseFloat(position.carbattery.toFixed(2)) : vm.lastBattery.carbattery;
+                latlng.devbattery = position.devbattery ? parseFloat(position.devbattery.toFixed(2)) : vm.lastBattery.devbattery;
                 path.push(latlng);
             }
 
