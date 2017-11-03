@@ -20,8 +20,6 @@
     "angular": "~1.5.3",
     "angular-bootstrap": "^2.0.1",
     "angular-ui-tree": "^2.22.1",
-    "angular-google-places-autocomplete": "^0.2.7",
-    "angular-google-maps": "^2.3.4",
     "angular-material-expansion-panel": "^0.6.1",
     "angular-ui-tree-filter": "^0.1.1",
     "angular-ui-utils": "^3.0.0",
