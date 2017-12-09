@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+
+
+<style>
+    .left-nav {border-right:1px solid #CCC;}
+    .right-nav {border-left:1px solid #CCC;}
+
+</style>
+
+<div class="mainHeader" ui-view="header"></div>
+
+	<div style="height: 100%;" draggable="false">
+	
+		<div layout="column" >
+			<div layout="row" layout-align="space-around center" flex-gt-sm flex-gt-xs>
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Customer Name</label>
+				<input type="text" ng-model="vm.customerName">
+				<p ng-if="vm.customerNameErr" style="color:red;">
+					{{vm.customerNameErr}}</p>
+			</md-input-container>
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Contact Person</label>
+				<input type="text" ng-model="vm.contactPerson">
+				<p ng-if="vm.contactPersonErr" style="color:red;">
+					{{vm.contactPersonErr}}</p>
+			</md-input-container>
+			</div>
+			
+			<div layout="row" layout-align="space-around center" flex-gt-sm flex-gt-xs>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>City</label>
+					<input type="text" ng-model="vm.city">
+					<p ng-if="vm.contactPersonErr" style="color:red;">
+					{{vm.cityErr}}</p>
+				</md-input-container>	
+				
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Pincode</label>
+					<input type="text" ng-model="vm.pincode">
+					<p ng-if="vm.pincodeErr" style="color:red;">
+					{{vm.pincodeErr}}</p>
+				</md-input-container>
+			</div>
+				
+		
+			<div layout="row" layout-align="space-around center" flex-gt-sm flex-gt-xs>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Issue</label>
+					<input type="text" ng-model="vm.issue">
+					<p ng-if="vm.priorityErr" style="color:red;">
+					{{vm.priorityErr}}</p>
+				</md-input-container>
+				
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Status</label>
+					<md-select ng-model="vm.status">
+						<md-option ng-repeat="stat in vm.statusList" 
+							value="{{stat}}">
+							{{stat}}
+						</md-option>
+					</md-select>
+					<p ng-if="vm.statusErr" style="color:red;">
+					{{vm.statusErr}}</p>
+				</md-input-container>
+			</div>
+		</div>
+		<div layout="row" layout-align="space-around center" flex-gt-sm flex-gt-xs>
+			<md-button class="md-accent 
+				md-raised" ng-click="vm.createTicket();">
+				Create
+			</md-button>
+		</div>
+		
+	</div>
+		<h4>Ticket Details</h4>
+		<table>
+			<thead>
+				<th>Id</th>
+				<th>Customer Name</th>
+				<th>Contact person</th>
+				<th>City</th>
+				<th>Pincode</th>
+				<th>Issue</th>
+				<th>Status</th>
+				<th>Assigned To</th>
+			</thead>
+			<tbody>	
+				<tr ng-repeat="ticket in vm.ticketList">
+					<td>{{ticket.id}}</td>
+					<td>{{ticket.customerName}}</td>
+					<td>{{ticket.contactPerson}}</td>
+					<td>{{ticket.city}}</td>
+					<td>{{ticket.pincode}}</td>
+					<td>{{ticket.issue}}</td>
+					<td>{{ticket.status}}</td>
+					<td>{{ticket.assignedTo}}</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+
+<div ui-view="footer"></div>
+
+
+<style>
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+	
+	.md-block input{margin-bottom:0px;}
+</style>

@@ -9,7 +9,7 @@
 
 
     function themeConfig($mdIconProvider, $mdThemingProvider ) {
-        $mdThemingProvider
+      /*\\  $mdThemingProvider
             .theme('default')
             .primaryPalette('defaultPrimary', {
                 'default': '600'
@@ -48,8 +48,9 @@
             'A700': '#E75753'
         });
 
-
+*/
         $mdIconProvider.icon('user', 'assets/images/user.svg', 64); 
+		
     }
 
 })();

@@ -9,9 +9,9 @@
         .module('uiplatform')
         .controller('HeaderController', HeaderController);
 
-    function HeaderController($rootScope, $scope, navService, $mdSidenav,$mdMenu, $mdBottomSheet,
+    function HeaderController($rootScope, $scope, $mdSidenav,$mdMenu, $mdBottomSheet,
                               $log, $q, $state, $stateParams,
-                            $mdToast, $document, loginService, userprefService) {
+                            $mdToast, $document) {
 
         $log.log('HeaderController');
         var vm = this;
@@ -34,22 +34,20 @@
         vm.left_nav_toggle = true;
 
         vm.userpref = function() {
-            return userprefService.userpref;
+            //return userprefService.userpref;
         };
+		
+		vm.logout = function () {
+			console.log('hiiiiiiiiiiiiii');
+			$state.go('login');
+		};
 
-        navService
-            .loadAllItems()
-            .then(function(menuItems) {
-                vm.menuItems = [].concat(menuItems);
-            });
-
+      
         vm.changePassword = function () {
 
         };
 
-        vm.logout = function () {
-            loginService.logout();
-        };
+      
 
         vm.toggleRightSidebar = function (){
             vm.right_nav_toggle = !vm.right_nav_toggle;

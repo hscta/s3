@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+
+
+<style>
+    .left-nav {border-right:1px solid #CCC;}
+    .right-nav {border-left:1px solid #CCC;}
+
+</style>
+
+<div class="mainHeader" ui-view="header"></div>
+<div class="left-nav" ui-view="leftnavtree"></div>
+  <md-button ng-click="toggleLeft()" class="md-raised">
+            Toggle Sidenav
+          </md-button>
+	<div style="height: 100%;" draggable="false">
+		<div layout="row" layout-align="space-around center" flex-gt-sm flex-gt-xs>
+			<div layout="row" class="input-fields" 
+				layout-align="space-around center" 
+				flex flex-gt-sm flex-gt-xs>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Username</label>
+					<input type="text" id="start_time" ng-model="vm.username">
+				</md-input-container>
+				
+				<md-input-container  class="md-block" flex-gt-sm>
+					<label>Roles</label>
+					<md-select ng-model="vm.role">
+						<md-option ng-repeat="role in vm.roles" 
+							value="{{role}}">
+							{{role}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+				<md-button class="md-accent 
+					md-raised" ng-click="vm.addUser();">Create</md-button>
+			</div>
+		</div>
+	</div>
+		<table>
+			<thead>
+				<th>Users</th>
+				<th>Role</th>
+			</thead>
+			<tbody>	
+				<tr ng-repeat="user in vm.users">
+					<td>{{user.username}}</td>
+					<td>{{user.role}}</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+
+<div ui-view="footer"></div>
+
+
+<style>
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+</style>

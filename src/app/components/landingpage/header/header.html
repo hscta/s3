@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 
-<md-toolbar class="icar-toolbar">
-    <div class="md-toolbar-tools icar-toolbar-tools" layout-align="start center">
+<md-toolbar>
+    <div class="my-header md-toolbar-tools icar-toolbar-tools" layout-align="start center">
         <div layout="row" layout-align="start center"  flex="30">
-            <md-button class="md-icon-button" aria-label="Icon" ng-click="vm.toggleLeftSidebar()">
+            <md-button class="md-icon-button" aria-label="Icon" 
+				ng-click="vm.toggleLeftSidebar()">
                 <md-tooltip>Left menu</md-tooltip>
                 <md-icon md-font-library="material-icons">dehaze</md-icon>
             </md-button>
-            <img ng-src="assets/logo.png" height="44" alt="Intellicar">
-        </div>
+			S3
+			
+		</div>
 
         <div id="centernav2" flex="40" layout-align="space-around center">
-            <div layout="row"  ng-if="vm.isManagementTab<0">
-                <!--<a ui-sref="home.dashboard" class="M9kDrd xyzabc">Dashboard</a>-->
-                <!--<a ui-sref="home.management" target="_blank" class="M9kDrd xyzabc">Management</a>-->
-                <!--<a ui-sref="home.reports" class="M9kDrd xyzabc">Reports</a>-->
+            <div layout="row">
+					
             </div>
         </div>
 
 
         <!--<span flex></span>-->
         <div layout="row" layout-align="end right"  flex="30" ng-keydown="vm.closeMdMenu($event)" tabindex="0">
+		
+		<md-button class="md-accent 
+					md-raised" ng-click="vm.logout();">Logout</md-button>
             <md-button class="md-icon-button" aria-label="notifications" ng-click="vm.toggleRightSidebar()">
                 <md-tooltip>Alerts</md-tooltip>
                 <md-icon md-font-library="material-icons">notifications</md-icon>
@@ -48,9 +51,10 @@
                     </div>
                 </md-menu-content>
             </md-menu>
-
-
-
         </div>
     </div>
 </md-toolbar>
+
+<style>
+	.my-header{color:#000;}
+</style>

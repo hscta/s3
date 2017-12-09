@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+
+<div class="mainHeader" ui-view="header"></div>
+
+<div id="main" >
+	<div layout="row" layout-align="center center"  
+		style="min-height: 500px">
+
+		<md-content layout="column" layout="center" flex="70">					
+			<md-input-container flex="50" >
+				<label>Username :</label>
+				<input required name="username" 
+					ng-model="vm.username">
+			   
+			</md-input-container>
+			<md-input-container flex="50">
+				<label>Password :</label>
+				<input required name="passwd" 
+					ng-model="vm.passwd">
+			</md-input-container>
+			
+			<md-button class="md-raised md-primary"
+				ng-click="vm.login()">Login</md-button>
+
+		</md-content>
+	</div>
+</div>
+
+<div ui-view="footer"></div>

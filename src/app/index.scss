@@ -10,7 +10,7 @@
 @font-face {
     font-family: 'Material Icons';
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     src: url(../../bower_components/material-design-iconfont/iconfont/MaterialIcons-Regular.eot); /* For IE6-8 */
     src: local('Material Icons'),
     local('MaterialIcons-Regular'),
@@ -85,7 +85,7 @@ $themeColor : #d1e934;
     font-family: 'Material Icons';
     font-weight: normal;
     font-style: normal;
-    font-size: 24px;  /* Preferred icon size */
+    font-size: 30px;  /* Preferred icon size */
     display: inline-block;
     width: 1em;
     height: 1em;
@@ -161,18 +161,11 @@ section.jumbotron {
 
 
 .icar-toolbar-tools {
-    max-height:44px;
     background: white;
     //color: black;
 }
-.icar-toolbar{
-    min-height:44px;
 
-}
 
-.icar-wrap-text {
-    white-space:nowrap;
-}
 
 //body{height:100%;}
 
